@@ -215,26 +215,28 @@
   .lanjut:hover{ opacity:0.92; }
 </style>
 
+
 <div class="kembali"><a href="https://claude.ai/code/artifact/eff7b693-41fe-43a5-a667-14e294c3e7d9">← Kembali ke SQL Mahir L3: enam pola wawancara</a></div>
 
 <nav class="nav" aria-label="Pilih hari">
-  <span class="lbl">SQL Mahir L4</span>
-  <button type="button" data-hari="1" aria-selected="true">P1</button>
-  <button type="button" data-hari="2" aria-selected="false">P2</button>
-  <button type="button" data-hari="3" aria-selected="false">P3</button>
-  <button type="button" data-hari="4" aria-selected="false">P4</button>
-  <button type="button" data-hari="5" aria-selected="false">P5</button>
-  <button type="button" data-hari="6" aria-selected="false">P6</button>
-  <button type="button" data-hari="7" aria-selected="false">P7</button>
+  <span class="lbl">SQL L4</span>
+  <button type="button" data-hari="1" aria-selected="true">1</button>
+  <button type="button" data-hari="2" aria-selected="false">2</button>
+  <button type="button" data-hari="3" aria-selected="false">3</button>
+  <button type="button" data-hari="4" aria-selected="false">4</button>
+  <button type="button" data-hari="5" aria-selected="false">5</button>
+  <button type="button" data-hari="6" aria-selected="false">6</button>
+  <button type="button" data-hari="7" aria-selected="false">7</button>
 </nav>
 
 <div class="page">
 
   <header>
-    <span class="eyebrow mono">SQL Mahir · Level 4 dari 5 · lanjutan dari Level 3</span>
+    <span class="eyebrow mono">SQL Mahir · Level 4 dari 5 · ditulis ulang mengikuti pola Bekal Python</span>
     <h1>SQL Mahir L4: cepat, dan tidak diam-diam salah</h1>
-    <p class="lede">Sampai Level 3, semua query-mu benar. Level ini soal dua hal yang baru terasa ketika datanya besar dan klienmu nyata: <strong>berapa lama query-nya jalan</strong>, dan <strong>apakah angkanya bisa dipercaya</strong> ketika ada yang gagal di tengah jalan.</p>
-    <p class="lede" style="margin-top:10px">Semua angka waktu di halaman ini <strong>diukur sungguhan</strong> pada tabel 800.000 baris yang akan kamu bikin sendiri di P1. Angkamu tidak akan sama persis dengan angkaku — mesinnya beda. Yang harus sama adalah <strong>polanya</strong>: yang mana yang <code>SCAN</code>, yang mana yang <code>SEARCH</code>, dan kira-kira berapa kali lipat bedanya.</p>
+    <p class="lede">Sampai Level 3 semua query-mu <strong>benar</strong>. Level ini soal dua hal yang baru terasa ketika datanya besar dan klienmu nyata: <strong>berapa lama query-nya jalan</strong>, dan <strong>apakah angkanya bisa dipercaya</strong> ketika ada yang gagal di tengah jalan.</p>
+    <p class="lede" style="margin-top:10px">Tujuh hari, 87 langkah. Hampir tiap langkah menyuruhmu menjalankan satu atau dua baris, lalu mencocokkan keluaranmu dengan kotak <strong>HARUS MUNCUL</strong>. Kamu tidak akan membaca satu pun klaim kinerja dari saya yang tidak bisa kamu ukur sendiri dalam semenit.</p>
+    <p class="lede" style="margin-top:10px">Semua angka di halaman ini keluar dari <strong>satu kali putaran skrip</strong> pada tabel 800.000 baris yang kamu bikin sendiri di Hari 1 (Python 3.11.15, SQLite 3.45.1). Angka <em>milidetik</em>-mu akan berbeda — mesinnya beda. Yang harus sama: jumlah barisnya, ukuran berkasnya, dan kata <strong>SCAN</strong> atau <strong>SEARCH</strong> di tiap rencana.</p>
 
     <div class="kemajuan">
       <span id="teks-kemajuan">0 dari 0 langkah</span>
@@ -242,313 +244,620 @@
     </div>
   </header>
 
-  <!-- ============ P1 ============ -->
   <section class="day aktif" data-hari="1">
     <div class="day-head">
-      <span class="n mono">SQL MAHIR L4 · 1</span>
+      <span class="n">HARI 1</span>
       <h2>800.000 baris, supaya lambat itu terasa</h2>
       <span class="waktu">± 60 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membaca <code>EXPLAIN QUERY PLAN</code>, membedakan <code>SCAN</code> dari <code>SEARCH</code>, dan membuktikan sendiri bahwa satu baris <code>CREATE INDEX</code> mengubah query 51 milidetik jadi 0,008 milidetik.</p>
-
-    <div class="bahaya">
-      <strong>Kenapa <code>senja.db</code> tidak dipakai di sini.</strong> Isinya 400 pesanan. Query apa pun di atasnya selesai dalam sepersekian milidetik, dengan atau tanpa index — jadi kamu tidak akan pernah <em>merasakan</em> bedanya, dan kamu akan menganggap semua nasihat kinerja itu teori. Kita bikin data yang cukup besar dulu.
-    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> membaca <code>EXPLAIN QUERY PLAN</code>, membedakan <code>SCAN</code> dari <code>SEARCH</code>, dan membuktikan sendiri bahwa satu baris <code>CREATE INDEX</code> mengubah query 39 milidetik jadi 0,006 milidetik.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
-        <h3>Bikin <code>besar.db</code></h3>
-        <span class="cek"><input type="checkbox" id="q1s1"><label for="q1s1">selesai</label></span>
+        <h3>Bikin tabel 800.000 baris</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-1"><label for="sql-mahir-l4-v2-1-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="aksi">Simpan ini sebagai <code>besar.py</code> di folder yang sama dengan <code>senja.db</code>, lalu jalankan <code>python besar.py</code>. Di Colab, tempel saja ke satu sel dan jalankan.</div>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, random, time
-from datetime import date, timedelta
-
-rng = random.Random(7)
-con = sqlite3.connect("besar.db")
-con.executescript("DROP TABLE IF EXISTS transaksi;")
-con.execute("""CREATE TABLE transaksi (
-  id INTEGER PRIMARY KEY, tanggal TEXT, cabang TEXT, pelanggan_id INTEGER,
-  produk TEXT, jumlah INTEGER, nilai INTEGER)""")
-
-cab = ["Kemang","Dago","Seturan","Renon","Seturan2"]
-prd = ["Kopi Susu","Americano","Teh Manis","Roti Bakar","Croissant","Cheesecake","Matcha Latte"]
-
-t0 = time.time()
-rows = []
-for i in range(1, 800001):
-    d = date(2023,1,1) + timedelta(days=rng.randrange(730))
-    j = rng.randint(1,4)
-    rows.append((i, d.isoformat(), cab[rng.randrange(5)], rng.randint(1,50000),
-                 prd[rng.randrange(7)], j, j*rng.choice([10000,15000,18000,22000,25000,26000,30000])))
-    if len(rows) == 100000:
-        con.executemany("INSERT INTO transaksi VALUES (?,?,?,?,?,?,?)", rows); rows=[]
-if rows: con.executemany("INSERT INTO transaksi VALUES (?,?,?,?,?,?,?)", rows)
-con.commit()
-
-print(f"dibuat dalam {time.time()-t0:.1f} detik")
-print("baris:", con.execute("SELECT COUNT(*) FROM transaksi").fetchone()[0])
-import os; print(f"ukuran berkas: {os.path.getsize('besar.db')/1e6:.1f} MB")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>baris: 800000
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil <code>besar.py</code> dari paket zip (<code>data-dan-skrip/sql-mahir/besar.py</code>), taruh di folder yang sama dengan <code>senja.db</code>, lalu jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python besar.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>dibuat dalam 3.6 detik
+baris: 800000
 ukuran berkas: 36.7 MB</code></pre></div>
-        </div>
-        <p><code>random.Random(7)</code> itu kuncinya: siapa pun yang menjalankan skrip ini dapat 800.000 baris yang <strong>persis sama</strong>. Jadi kalau nanti angka hasilmu beda dari angka di halaman ini, itu bukan karena datanya acak — itu karena ada yang salah ketik. Waktu "dibuat dalam ... detik" boleh beda; dua baris di kotak di atas tidak boleh.</p>
+<p>Baris <em>“dibuat dalam …”</em> boleh beda; mesinmu bukan mesinku. Dua baris di bawahnya <strong>tidak boleh beda</strong>.</p>
+        <div class="catatan"><strong>Kenapa bukan <code>senja.db</code>?</strong> Isinya 400 pesanan. Query apa pun di atasnya selesai dalam sepersekian milidetik, dengan atau tanpa index — jadi kamu tidak akan pernah <em>merasakan</em> bedanya, dan semua nasihat kinerja akan terdengar seperti teori.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">2</span>
-        <h3>Ukur query pertama, dan minta SQLite menjelaskan rencananya</h3>
-        <span class="cek"><input type="checkbox" id="q1s2"><label for="q1s2">selesai</label></span>
+        <h3>Sambungkan, dan hitung barisnya sendiri</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-2"><label for="sql-mahir-l4-v2-1-2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, time
-con = sqlite3.connect("besar.db")
-
-def ukur(sql, n=7):
-    """Jalankan n kali, ambil yang TERCEPAT. Yang tercepat, bukan rata-rata:
-    yang lambat biasanya karena mesinmu sedang sibuk urusan lain."""
-    waktu = []
-    for _ in range(n):
-        t = time.perf_counter()
-        hasil = con.execute(sql).fetchall()
-        waktu.append(time.perf_counter() - t)
-    return min(waktu) * 1000, hasil          # milidetik
-
-def rencana(sql):
-    for baris in con.execute("EXPLAIN QUERY PLAN " + sql):
-        print("   ", baris[3])
-
-Q = "SELECT COUNT(*) FROM transaksi WHERE pelanggan_id = 12345"
-ms, hasil = ukur(Q)
-print(f"{ms:.1f} ms   hasil = {hasil[0][0]}")
-rencana(Q)</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>51.6 ms   hasil = 15
-    SCAN transaksi</code></pre></div>
-        </div>
-        <p>Angka milidetiknya <strong>akan beda di mesinmu</strong> — 30 ms, 80 ms, terserah. <code>hasil = 15</code> harus sama. Dan barisnya harus <code>SCAN transaksi</code>.</p>
-        <p style="margin-top:8px"><strong>Dua kata yang perlu kamu kenali seumur hidup:</strong></p>
-        <div class="tabel-bungkus">
-          <table>
-            <thead><tr><th>Kata di rencana</th><th>Artinya</th><th>Rasanya</th></tr></thead>
-            <tbody>
-              <tr><td class="mono">SCAN t</td><td>SQLite membaca <strong>semua</strong> baris tabel <code>t</code> satu per satu, lalu membuang yang tidak cocok</td><td>Waktu naik lurus mengikuti jumlah baris. 2× data = 2× lama.</td></tr>
-              <tr><td class="mono">SEARCH t USING INDEX ...</td><td>SQLite melompat langsung ke baris yang dicari lewat index</td><td>Hampir tidak peduli tabelnya sebesar apa.</td></tr>
-              <tr><td class="mono">USE TEMP B-TREE FOR ...</td><td>SQLite terpaksa bikin tabel bantu sementara untuk mengurutkan atau mengelompokkan</td><td>Bukan bencana, tapi tanda ada urutan yang bisa dihemat lewat index.</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Ini pendalaman dari Minggu 9.</strong> Di M9 kamu sudah memakai <code>EXPLAIN QUERY PLAN</code> sekali untuk melihat bahwa query-mu jalan. Di sini kamu memakainya untuk <em>memutuskan</em>: rencana yang tertulis <code>SCAN</code> pada tabel besar adalah undangan untuk membuat index — dan sisa hari ini soal kapan undangan itu harus kamu tolak.
-        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka sesi Python baru (atau satu sel Colab). Semua langkah hari ini jalan di sesi yang sama, jadi jangan ditutup.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import sqlite3, time
+con = sqlite3.connect(&quot;besar.db&quot;)
+print(con.execute(&quot;SELECT COUNT(*) FROM transaksi&quot;).fetchone()[0])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>800000</code></pre></div>
+<p>Kamu tidak percaya keluaran <code>besar.py</code> begitu saja — kamu menghitung ulang dari sisi lain. Kebiasaan ini yang membedakan orang yang datanya bisa dipercaya.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">3</span>
-        <h3>Satu baris yang mengubah 51 ms jadi 0,008 ms</h3>
-        <span class="cek"><input type="checkbox" id="q1s3"><label for="q1s3">selesai</label></span>
+        <h3>Ukur satu query, pakai jam</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-3"><label for="sql-mahir-l4-v2-1-3">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>t = time.perf_counter()
-con.execute("CREATE INDEX idx_pel ON transaksi(pelanggan_id)")
-con.commit()
-print(f"membuat index: {time.perf_counter()-t:.2f} detik")
-
-ms, hasil = ukur(Q, n=50)
-print(f"{ms:.3f} ms   hasil = {hasil[0][0]}")
-rencana(Q)</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>membuat index: 0.44 detik
-0.008 ms   hasil = 15
-    SEARCH transaksi USING COVERING INDEX idx_pel (pelanggan_id=?)</code></pre></div>
-        </div>
-        <p>51,6 ms → 0,008 ms. Sekitar <strong>6.000 kali lebih cepat</strong>, dan jawabannya sama persis: 15. Modalnya satu baris perintah dan 0,44 detik sekali seumur hidup tabel itu.</p>
-        <p style="margin-top:8px">Perhatikan kata <strong>COVERING</strong>. Artinya SQLite tidak perlu menyentuh tabelnya sama sekali — semua yang dibutuhkan query ini (<code>pelanggan_id</code>, dan jumlah barisnya) sudah ada di dalam index. Kalau query-mu minta kolom lain, misalnya <code>SELECT nilai FROM ... WHERE pelanggan_id = 12345</code>, kata <code>COVERING</code> hilang dan SQLite bolak-balik ke tabel. Masih cepat, tapi tidak secepat ini.</p>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Kalimat yang bisa kamu pakai di wawancara:</strong> "Index itu daftar isi buku. Tanpa daftar isi, mencari satu bab berarti membalik semua halaman — itu <code>SCAN</code>. Dengan daftar isi, kamu langsung buka halaman 214 — itu <code>SEARCH</code>. Dan seperti daftar isi, index memakan halaman sendiri dan harus dicetak ulang tiap kali bukunya berubah." Tiga hari lagi kamu akan mengukur berapa persisnya harga "halaman sendiri" itu.
-        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tempel dan jalankan. <code>perf_counter</code> itu stopwatch bawaan Python.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>Q = &quot;SELECT COUNT(*) FROM transaksi WHERE pelanggan_id = 12345&quot;
+t = time.perf_counter()
+h = con.execute(Q).fetchall()
+print(f&quot;{(time.perf_counter()-t)*1000:.1f} ms   hasil = {h[0][0]}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>39.3 ms   hasil = 15</code></pre></div>
+<p>Angka milidetiknya <strong>akan beda di mesinmu</strong> — 20, 80, terserah. <code>hasil = 15</code> harus sama.</p>
       </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Jangan percaya satu kali ukur — ambil yang tercepat dari tujuh</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-4"><label for="sql-mahir-l4-v2-1-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bikin fungsi <code>ukur</code>, lalu panggil untuk <code>Q</code> yang sama.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def ukur(sql, n=7):
+    w = []
+    for _ in range(n):
+        t = time.perf_counter(); h = con.execute(sql).fetchall()
+        w.append(time.perf_counter() - t)
+    return min(w) * 1000, h
+
+ms, h = ukur(Q)
+print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>39.0 ms   hasil = 15</code></pre></div>
+<p><strong>Yang tercepat, bukan rata-rata.</strong> Yang lambat biasanya bukan salah query-nya — mesinmu sedang mengurus hal lain. Yang tercepat mendekati biaya query-nya yang sebenarnya.</p>
+        <div class="catatan">Fungsi <code>ukur</code> ini dipakai sampai Hari 4. Simpan selnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Minta SQLite menjelaskan rencananya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-5"><label for="sql-mahir-l4-v2-1-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sekarang tanya <em>bagaimana</em> ia mencarinya, bukan berapa lama.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def rencana(sql):
+    for b in con.execute(&quot;EXPLAIN QUERY PLAN &quot; + sql):
+        print(&quot;   &quot;, b[3])
+
+rencana(Q)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>    SCAN transaksi</code></pre></div>
+<p><strong>SCAN</strong> = SQLite membaca <em>semua</em> 800.000 baris satu per satu, lalu membuang yang tidak cocok. Itu sebabnya 39 milidetik.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Kata ketiga yang akan sering kamu lihat</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-6"><label for="sql-mahir-l4-v2-1-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan rencana untuk satu query pengelompokan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>rencana(&quot;SELECT produk, COUNT(*) FROM transaksi GROUP BY produk&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>    SCAN transaksi
+    USE TEMP B-TREE FOR GROUP BY</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kata di rencana</th>
+<th>Artinya</th>
+<th>Rasanya</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>SCAN t</code></td><td>membaca semua baris tabel <code>t</code></td><td>2× data = 2× lama</td></tr>
+              <tr><td><code>SEARCH t USING INDEX …</code></td><td>melompat langsung ke baris yang dicari</td><td>hampir tidak peduli tabelnya sebesar apa</td></tr>
+              <tr><td><code>USE TEMP B-TREE FOR …</code></td><td>bikin tabel bantu sementara untuk mengurutkan atau mengelompokkan</td><td>bukan bencana, tapi ada kerja yang mungkin bisa dihemat</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Tiga kata ini yang kamu baca seumur hidup. Sisa modul ini cuma memindahkan <code>SCAN</code> jadi <code>SEARCH</code>.</p>
+        <div class="catatan"><strong>Ini pendalaman dari Minggu 9.</strong> Di M9 kamu memakai <code>EXPLAIN QUERY PLAN</code> sekali, untuk melihat bahwa query-mu jalan. Di sini kamu memakainya untuk <em>memutuskan</em> — dan mulai Hari 4, untuk memutuskan kapan undangan membuat index harus kamu <em>tolak</em>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Satu baris perintah</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-7"><label for="sql-mahir-l4-v2-1-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat index untuk kolom yang barusan di-<code>SCAN</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>t = time.perf_counter()
+con.execute(&quot;CREATE INDEX idx_pel ON transaksi(pelanggan_id)&quot;)
+con.commit()
+print(f&quot;membuat index: {time.perf_counter()-t:.2f} detik&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>membuat index: 0.35 detik</code></pre></div>
+        <div class="bahaya"><strong>Yang normal tapi bikin panik:</strong> tidak ada yang tercetak selama 1–5 detik, dan berkas <code>besar.db</code> membesar. Dua-duanya benar.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Ukur lagi query yang sama persis</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-8"><label for="sql-mahir-l4-v2-1-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jangan ubah apa pun di <code>Q</code>. Ukur ulang, 50 kali.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>ms2, h = ukur(Q, n=50)
+print(f&quot;{ms2:.3f} ms   hasil = {h[0][0]}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>0.006 ms   hasil = 15</code></pre></div>
+<p>39,0 ms → 0,006 ms. Di mesinku <strong>6.513 kali lebih cepat</strong>, dan jawabannya sama persis: 15. Modalnya satu baris perintah dan 0,35 detik, sekali seumur hidup tabel itu.</p>
+        <div class="catatan">Kelipatanmu tidak akan 6.513. Yang penting: <strong>ribuan kali</strong>, bukan puluhan persen.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Lihat kenapa jadi cepat</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-9"><label for="sql-mahir-l4-v2-1-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Minta rencananya lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>rencana(Q)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>    SEARCH transaksi USING COVERING INDEX idx_pel (pelanggan_id=?)</code></pre></div>
+<p><code>SCAN</code> berubah jadi <code>SEARCH</code>. Kamu tidak menebaknya — kamu membacanya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Satu kata yang bisa hilang: COVERING</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-10"><label for="sql-mahir-l4-v2-1-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Query yang sama, tapi minta kolom lain.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>Q2 = &quot;SELECT SUM(nilai) FROM transaksi WHERE pelanggan_id = 12345&quot;
+m, h = ukur(Q2, n=50)
+print(f&quot;{m:.3f} ms   hasil = {h[0][0]}&quot;)
+rencana(Q2)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>0.009 ms   hasil = 745000
+    SEARCH transaksi USING INDEX idx_pel (pelanggan_id=?)</code></pre></div>
+<p>Kata <strong>COVERING</strong> hilang. Artinya: tadi semua yang dibutuhkan query sudah ada di dalam index; sekarang <code>nilai</code> tidak ada di sana, jadi SQLite bolak-balik ke tabelnya. Masih <code>SEARCH</code>, masih cepat — sedikit lebih mahal.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-11"><label for="sql-mahir-l4-v2-1-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Di kertas, tulis jawaban tiga pertanyaan ini <strong>tanpa melihat</strong>.</div>
+        <div class="kode"><pre><code>1. Perintah apa yang menunjukkan cara SQLite mencari baris?
+2. Dua kata yang membedakan &quot;membaca semua&quot; dari &quot;melompat langsung&quot;?
+3. Satu baris perintah yang mengubah yang pertama jadi yang kedua?</code></pre></div>
+<details><summary>Buka kunci jawaban</summary><p>1. <code>EXPLAIN QUERY PLAN &lt;query&gt;</code>. 2. <code>SCAN</code> dan <code>SEARCH</code>. 3. <code>CREATE INDEX nama ON tabel(kolom)</code>.</p></details>
+        <div class="catatan"><strong>Memanggil dari ingatan mengikat; membaca ulang tidak.</strong> Kalau ada yang tidak keluar, buka lagi langkahnya — lalu tutup dan tulis lagi.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> satu tabel 800.000 baris, dua fungsi (<code>ukur</code> dan <code>rencana</code>), dan satu pengukuran yang kamu lakukan sendiri — bukan klaim yang kamu baca.</p><p style="margin-top:8px">Kalimat untuk wawancara: <em>“Index itu daftar isi buku. Tanpa daftar isi, mencari satu bab berarti membalik semua halaman — itu SCAN. Dengan daftar isi, kamu langsung buka halaman 214 — itu SEARCH.”</em> Di Hari 4 kamu akan mengukur berapa harga “halaman daftar isi” itu.</p><p style="margin-top:8px">Besok: cara paling umum membunuh index yang sudah kamu punya — dan kamu akan melakukannya sendiri dulu supaya tahu rasanya.</p>
     </div>
   </section>
 
-  <!-- ============ P2 ============ -->
   <section class="day" data-hari="2">
     <div class="day-head">
-      <span class="n mono">SQL MAHIR L4 · 2</span>
+      <span class="n">HARI 2</span>
       <h2>Cara paling umum membunuh index yang sudah kamu punya</h2>
-      <span class="waktu">± 65 menit</span>
+      <span class="waktu">± 55 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali kapan sebuah <code>WHERE</code> membuat index-nya tidak terpakai, dan menulis ulang query itu jadi bentuk yang <em>hasilnya identik tapi 55 kali lebih cepat</em>.</p>
-
-    <p>Kebanyakan orang berhenti di "sudah saya kasih index kok masih lambat". Jawabannya hampir selalu sama: index-nya ada, tapi query-nya ditulis dengan cara yang membuat index itu tidak bisa dipakai. Hari ini dua bentuk yang paling sering terjadi.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengenali kapan sebuah <code>WHERE</code> membuat index-nya tidak terpakai, dan menulis ulang query itu jadi bentuk yang <strong>hasilnya identik tapi puluhan kali lebih cepat</strong>.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
-        <h3>Bentuk pertama: fungsi menempel di kolomnya</h3>
-        <span class="cek"><input type="checkbox" id="q2s1"><label for="q2s1">selesai</label></span>
+        <h3>Siapkan index tanggal</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-1"><label for="sql-mahir-l4-v2-2-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="aksi">Lanjutkan di sesi Python yang sama dengan P1 (fungsi <code>ukur</code> dan <code>rencana</code> masih hidup). Kalau kamu sudah menutupnya, jalankan ulang sel P1 langkah 2 dulu.</div>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>con.execute("CREATE INDEX idx_tgl ON transaksi(tanggal)")
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lanjutkan di sesi Python yang sama dengan Hari 1 — <code>ukur</code> dan <code>rencana</code> masih hidup. Kalau sudah kamu tutup, jalankan ulang langkah 2, 4, dan 5 Hari 1 dulu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>t = time.perf_counter()
+con.execute(&quot;CREATE INDEX idx_tgl ON transaksi(tanggal)&quot;)
 con.commit()
-
-A = "SELECT COUNT(*) FROM transaksi WHERE substr(tanggal,1,7) = '2024-01'"
-B = "SELECT COUNT(*) FROM transaksi WHERE tanggal &gt;= '2024-01-01' AND tanggal &lt; '2024-02-01'"
-
-for nama, sql in [("fungsi di kolom", A), ("rentang tanggal", B)]:
-    ms, hasil = ukur(sql)
-    print(f"{nama:16s} {ms:7.1f} ms   hasil = {hasil[0][0]}")
-    rencana(sql)</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>fungsi di kolom     78.8 ms   hasil = 33993
-    SCAN transaksi USING COVERING INDEX idx_tgl
-rentang tanggal      1.4 ms   hasil = 33993
-    SEARCH transaksi USING COVERING INDEX idx_tgl (tanggal&gt;? AND tanggal&lt;?)</code></pre></div>
-        </div>
-        <p><strong>33993 dan 33993.</strong> Jawaban dua query itu identik — sama-sama menghitung transaksi Januari 2024. Yang satu 78,8 ms, yang satu 1,4 ms. <strong>Sekitar 55 kali lipat</strong>, hanya karena cara menulisnya.</p>
-        <p style="margin-top:8px"><strong>Kenapa.</strong> Index <code>idx_tgl</code> menyimpan nilai <code>tanggal</code> dalam keadaan terurut: <code>2023-01-01</code>, <code>2023-01-02</code>, dan seterusnya. SQLite bisa melompat ke posisi <code>2024-01-01</code> lalu berhenti begitu lewat <code>2024-02-01</code>. Tapi begitu kamu tulis <code>substr(tanggal,1,7)</code>, yang dicari bukan lagi nilai yang tersimpan di index — melainkan hasil olahan dari nilai itu, dan SQLite tidak punya daftar terurut untuk hasil olahan. Satu-satunya cara tahu adalah menghitung <code>substr()</code> untuk <strong>ke-800.000 baris</strong>. Itulah <code>SCAN</code> yang muncul.</p>
-        <div class="bahaya" style="margin-top:12px">
-          <strong>Aturan yang berlaku di semua basis data, bukan cuma SQLite.</strong> Kalau kolom yang di-index kamu bungkus dengan fungsi apa pun — <code>substr()</code>, <code>UPPER()</code>, <code>DATE()</code>, <code>strftime()</code>, <code>CAST()</code>, bahkan <code>kolom * 1</code> — index untuk kolom itu berhenti berguna. Cara memperbaikinya selalu sama: <strong>pindahkan olahannya ke sisi kanan</strong>. Jangan <code>WHERE YEAR(tanggal) = 2024</code>, tulis <code>WHERE tanggal &gt;= '2024-01-01' AND tanggal &lt; '2025-01-01'</code>.
-        </div>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Perhatikan batas atasnya:</strong> <code>&lt; '2024-02-01'</code>, bukan <code>&lt;= '2024-01-31'</code>. Untuk teks tanggal polos keduanya sama. Tapi begitu kolomnya menyimpan jam juga (<code>2024-01-31 14:05</code>), <code>&lt;= '2024-01-31'</code> diam-diam membuang seluruh transaksi tanggal 31 setelah tengah malam. Pakai <strong>lebih-kecil-dari hari pertama bulan berikutnya</strong> sebagai kebiasaan, dan kesalahan itu tidak akan pernah terjadi padamu.
-        </div>
+print(f&quot;membuat index: {time.perf_counter()-t:.2f} detik&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>membuat index: 0.42 detik</code></pre></div>
+<p>Sekarang kolom <code>tanggal</code> punya index. Hari ini kamu akan membuatnya tidak berguna — dengan sengaja.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">2</span>
-        <h3>Bentuk kedua: <code>LIKE</code>, dan kenapa <code>'Kem%'</code> pun tidak menolong</h3>
-        <span class="cek"><input type="checkbox" id="q2s2"><label for="q2s2">selesai</label></span>
+        <h3>Tanyakan “berapa transaksi Januari 2024?” dengan cara yang biasa</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-2"><label for="sql-mahir-l4-v2-2-2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>con.execute("CREATE INDEX idx_cab ON transaksi(cabang)")
-con.commit()
-
-uji = [
-  ("sama dengan",     "SELECT COUNT(*) FROM transaksi WHERE cabang = 'Kemang'"),
-  ("LIKE 'Kem%'",     "SELECT COUNT(*) FROM transaksi WHERE cabang LIKE 'Kem%'"),
-  ("LIKE '%mang'",    "SELECT COUNT(*) FROM transaksi WHERE cabang LIKE '%mang'"),
-  ("rentang teks",    "SELECT COUNT(*) FROM transaksi WHERE cabang &gt;= 'Kem' AND cabang &lt; 'Ken'"),
-]
-for nama, sql in uji:
-    ms, hasil = ukur(sql)
-    print(f"{nama:14s} {ms:7.1f} ms   hasil = {hasil[0][0]}")
-    rencana(sql)</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>sama dengan       7.1 ms   hasil = 160457
-    SEARCH transaksi USING COVERING INDEX idx_cab (cabang=?)
-LIKE 'Kem%'      52.4 ms   hasil = 160457
-    SCAN transaksi USING COVERING INDEX idx_cab
-LIKE '%mang'     57.6 ms   hasil = 160457
-    SCAN transaksi USING COVERING INDEX idx_cab
-rentang teks      7.1 ms   hasil = 160457
-    SEARCH transaksi USING COVERING INDEX idx_cab (cabang&gt;? AND cabang&lt;?)</code></pre></div>
-        </div>
-        <p>Empat cara menanyakan hal yang sama, empat kali jawaban <strong>160457</strong>, tapi waktunya 7,1 / 52,4 / 57,6 / 7,1 ms.</p>
-        <p style="margin-top:8px"><code>LIKE '%mang'</code> memang mustahil dipercepat — kalau awal katanya tidak diketahui, tidak ada daftar terurut yang bisa menolong. Yang mengejutkan adalah <code>LIKE 'Kem%'</code>: <em>secara teori</em> awalannya jelas dan index-nya bisa dipakai, tapi hasil pengukurannya tetap <code>SCAN</code>.</p>
-        <div class="bahaya" style="margin-top:12px">
-          <strong>Ini jebakan SQLite yang spesifik, dan bagus untuk kamu tahu.</strong> Secara bawaan <code>LIKE</code> di SQLite <em>tidak peduli huruf besar-kecil</em> untuk huruf ASCII — <code>'kem%'</code> juga cocok dengan <code>Kemang</code>. Sementara index <code>idx_cab</code> dibangun dengan urutan yang <em>peduli</em> huruf besar-kecil. Karena dua aturan itu tidak cocok, SQLite menolak memakai index-nya dan memilih aman: baca semua. Kalau kolomnya dibuat dengan <code>COLLATE NOCASE</code>, atau kamu menyalakan <code>PRAGMA case_sensitive_like = ON</code>, barulah <code>LIKE 'Kem%'</code> bisa jadi <code>SEARCH</code>.
-        </div>
-        <p style="margin-top:12px">Yang perlu kamu bawa pulang bukan hafalan PRAGMA-nya. Yang perlu kamu bawa pulang: <strong>jangan pernah menebak apakah index-mu terpakai</strong>. Baris <code>rencana(sql)</code> itu murah dan tidak pernah bohong. Kalau kamu menuliskan asumsi "ini pasti pakai index" di laporan tanpa mengeceknya, kamu sedang menaruh nama baikmu di atas tebakan.</p>
-        <p style="margin-top:8px">Dan perhatikan penyelamatnya di baris keempat: <code>cabang &gt;= 'Kem' AND cabang &lt; 'Ken'</code>. Itu cara menulis "diawali Kem" sebagai <strong>rentang</strong>, dan rentang selalu bisa dipakai index. Trik yang sama seperti tanggal di langkah 1 — bentuk berbeda, prinsip identik.</p>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Cara ini yang paling sering ditulis orang. Jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>A = &quot;SELECT COUNT(*) FROM transaksi WHERE substr(tanggal,1,7) = &#x27;2024-01&#x27;&quot;
+ms, h = ukur(A)
+print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(A)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>52.6 ms   hasil = 33993
+    SCAN transaksi USING COVERING INDEX idx_tgl</code></pre></div>
+<p>Index-nya <em>disebut</em> di rencana, tapi kata di depannya <strong>SCAN</strong>. Index-nya ada; index-nya tidak menolong.</p>
       </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tanyakan hal yang sama, bentuk lain</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-3"><label for="sql-mahir-l4-v2-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jangan ubah pertanyaannya. Ubah cara menuliskannya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>B = &quot;SELECT COUNT(*) FROM transaksi WHERE tanggal &gt;= &#x27;2024-01-01&#x27; AND tanggal &lt; &#x27;2024-02-01&#x27;&quot;
+ms, h = ukur(B)
+print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(B)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>1.1 ms   hasil = 33993
+    SEARCH transaksi USING COVERING INDEX idx_tgl (tanggal&gt;? AND tanggal&lt;?)</code></pre></div>
+<p><strong>33993 dan 33993.</strong> Jawaban dua query itu identik. Yang satu 52,6 ms, yang satu 1,1 ms — <strong>sekitar 47 kali</strong>, hanya karena cara menulisnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Kenapa bentuk pertama membunuh index-nya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-4"><label for="sql-mahir-l4-v2-2-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tidak ada yang dijalankan di langkah ini. Baca dua kalimat, lalu lanjut.</div>
+<p>Index <code>idx_tgl</code> menyimpan nilai <code>tanggal</code> dalam keadaan <strong>terurut</strong>. SQLite bisa melompat ke <code>2024-01-01</code> lalu berhenti begitu lewat <code>2024-02-01</code>.</p><p>Begitu kamu tulis <code>substr(tanggal,1,7)</code>, yang dicari bukan lagi nilai yang tersimpan — melainkan <em>hasil olahan</em> dari nilai itu, dan tidak ada daftar terurut untuk hasil olahan. Satu-satunya cara tahu: hitung <code>substr()</code> untuk <strong>ke-800.000 baris</strong>.</p>
+        <div class="catatan"><strong>Berlaku di semua basis data, bukan cuma SQLite.</strong> <code>UPPER()</code>, <code>DATE()</code>, <code>strftime()</code>, <code>CAST()</code>, bahkan <code>kolom * 1</code> — semua membunuh index kolom itu. Obatnya selalu sama: <strong>pindahkan olahannya ke sisi kanan</strong>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Satu kebiasaan tanda baca yang menyelamatkanmu nanti</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-5"><label for="sql-mahir-l4-v2-2-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Perhatikan batas atas di query <code>B</code> tadi. Ia ditulis <code>&lt; '2024-02-01'</code>, bukan <code>&lt;= '2024-01-31'</code>.</div>
+        <div class="kode"><pre><code>-- AMAN     : selalu benar, jam ada atau tidak
+WHERE tanggal &gt;= &#x27;2024-01-01&#x27; AND tanggal &lt; &#x27;2024-02-01&#x27;
+-- BERBAHAYA: diam-diam membuang tanggal 31 kalau kolomnya menyimpan jam
+WHERE tanggal &gt;= &#x27;2024-01-01&#x27; AND tanggal &lt;= &#x27;2024-01-31&#x27;</code></pre></div>
+<p>Untuk teks tanggal polos keduanya sama. Tapi begitu kolomnya menyimpan jam juga (<code>2024-01-31 14:05</code>), yang kedua membuang seluruh transaksi tanggal 31 setelah tengah malam.</p>
+        <div class="bahaya">Ini jenis kesalahan yang <strong>tidak pernah memunculkan error</strong>. Angkanya cuma sedikit kurang, dan laporannya tetap terlihat wajar. Pakai <em>lebih-kecil-dari hari pertama bulan berikutnya</em> sebagai kebiasaan, dan ini tidak akan terjadi padamu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Bentuk kedua: mulai dari yang berhasil</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-6"><label for="sql-mahir-l4-v2-2-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bikin index untuk <code>cabang</code>, lalu ukur cara yang paling lugas.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;CREATE INDEX idx_cab ON transaksi(cabang)&quot;); con.commit()
+s = &quot;SELECT COUNT(*) FROM transaksi WHERE cabang = &#x27;Kemang&#x27;&quot;
+ms, h = ukur(s); print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(s)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>5.3 ms   hasil = 160457
+    SEARCH transaksi USING COVERING INDEX idx_cab (cabang=?)</code></pre></div>
+<p><code>SEARCH</code>. Ingat angka <strong>160457</strong> — tiga langkah berikutnya harus mengeluarkan angka yang sama.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Sekarang tanya hal yang sama pakai LIKE</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-7"><label for="sql-mahir-l4-v2-2-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Awalan katanya jelas: <code>'Kem%'</code>. Menurutmu index-nya terpakai?</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s = &quot;SELECT COUNT(*) FROM transaksi WHERE cabang LIKE &#x27;Kem%&#x27;&quot;
+ms, h = ukur(s); print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(s)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>37.5 ms   hasil = 160457
+    SCAN transaksi USING COVERING INDEX idx_cab</code></pre></div>
+<p>Jawabannya sama, waktunya <strong>tujuh kali lebih lama</strong>, dan rencananya <code>SCAN</code>. Secara teori awalannya jelas dan index-nya bisa dipakai. Hasil pengukurannya bilang tidak.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Kenapa 'Kem%' pun ditolak</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-8"><label for="sql-mahir-l4-v2-2-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca ini sekali, lalu lanjut ke langkah berikutnya.</div>
+<p>Secara bawaan <code>LIKE</code> di SQLite <strong>tidak peduli huruf besar-kecil</strong> untuk huruf ASCII — <code>'kem%'</code> juga cocok dengan <code>Kemang</code>. Sementara index <code>idx_cab</code> dibangun dengan urutan yang <strong>peduli</strong> huruf besar-kecil. Dua aturan itu tidak cocok, jadi SQLite memilih aman: baca semua.</p>
+<details><summary>Kalau kamu ingin index-nya tetap dipakai</summary><p>Ada dua caranya, dan dua-duanya harus diputuskan sebelum tabelnya diisi: kolomnya dibuat dengan <code>COLLATE NOCASE</code>, atau kamu menyalakan <code>PRAGMA case_sensitive_like = ON</code>. Barulah <code>LIKE 'Kem%'</code> bisa jadi <code>SEARCH</code>. Untuk pekerjaan sehari-hari, menulis ulangnya jadi rentang (langkah 10) lebih aman daripada mengubah setelan basis data.</p></details>
+        <div class="catatan"><strong>Yang dibawa pulang bukan PRAGMA-nya.</strong> Yang dibawa pulang: <em>jangan pernah menebak apakah index-mu terpakai.</em> Baris <code>rencana(sql)</code> itu murah dan tidak pernah bohong. Menulis asumsi “ini pasti pakai index” di laporan tanpa mengeceknya adalah menaruh nama baikmu di atas tebakan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Yang memang mustahil dipercepat</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-9"><label for="sql-mahir-l4-v2-2-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sekarang tanpa awalan yang diketahui.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s = &quot;SELECT COUNT(*) FROM transaksi WHERE cabang LIKE &#x27;%mang&#x27;&quot;
+ms, h = ukur(s); print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(s)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>42.0 ms   hasil = 160457
+    SCAN transaksi USING COVERING INDEX idx_cab</code></pre></div>
+<p>Yang ini <strong>tidak ada obatnya</strong>, dan bukan salah SQLite. Kalau awal katanya tidak diketahui, tidak ada daftar terurut yang bisa menolong — sama seperti mencari semua nama yang <em>berakhiran</em> “anto” di buku telepon.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Penyelamatnya: tulis “diawali Kem” sebagai rentang</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-10"><label for="sql-mahir-l4-v2-2-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Trik yang sama seperti tanggal di langkah 3.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s = &quot;SELECT COUNT(*) FROM transaksi WHERE cabang &gt;= &#x27;Kem&#x27; AND cabang &lt; &#x27;Ken&#x27;&quot;
+ms, h = ukur(s); print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(s)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>5.3 ms   hasil = 160457
+    SEARCH transaksi USING COVERING INDEX idx_cab (cabang&gt;? AND cabang&lt;?)</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Cara menanyakan</th>
+<th>Waktu di mesinku</th>
+<th>Rencananya</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>cabang = 'Kemang'</code></td><td>5,3 ms</td><td>SEARCH</td></tr>
+              <tr><td><code>LIKE 'Kem%'</code></td><td>37,5 ms</td><td>SCAN</td></tr>
+              <tr><td><code>LIKE '%mang'</code></td><td>42,0 ms</td><td>SCAN</td></tr>
+              <tr><td><code>&gt;= 'Kem' AND &lt; 'Ken'</code></td><td>5,3 ms</td><td>SEARCH</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Empat cara menanyakan hal yang sama, empat kali jawaban <strong>160457</strong>, dan delapan kali selisih waktu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-11"><label for="sql-mahir-l4-v2-2-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Tulis di kertas, tanpa melihat.</div>
+        <div class="kode"><pre><code>1. Dua bentuk WHERE yang membuat index berhenti berguna?
+2. Bentuk pengganti untuk &quot;bulan Januari 2024&quot;?
+3. Bentuk pengganti untuk &quot;cabang diawali Kem&quot;?
+4. Satu baris yang membuktikan tebakanmu benar atau salah?</code></pre></div>
+<details><summary>Buka kunci jawaban</summary><p>1. Fungsi yang menempel di kolom (<code>substr(tanggal,…)</code>), dan <code>LIKE</code>. 2. <code>tanggal &gt;= '2024-01-01' AND tanggal &lt; '2024-02-01'</code>. 3. <code>cabang &gt;= 'Kem' AND cabang &lt; 'Ken'</code>. 4. <code>rencana(sql)</code> — dan lihat kata pertamanya.</p></details>
+        <div class="catatan">Jawaban 2 dan 3 bentuknya sama: <strong>rentang</strong>. Satu prinsip, dua penampilan.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> satu aturan yang berlaku di semua basis data — <em>jangan bungkus kolom yang di-index dengan apa pun</em> — dan satu bentuk pengganti yang selalu bisa dipakai: <strong>rentang</strong>.</p><p style="margin-top:8px">Dan satu kebiasaan: kamu sudah dua hari tidak pernah menyimpulkan apa pun tanpa menjalankan <code>rencana()</code> dulu.</p><p style="margin-top:8px">Besok: index atas dua kolom, dan kenapa urutan kolomnya bukan selera.</p>
     </div>
   </section>
 
-  <!-- ============ P3 ============ -->
   <section class="day" data-hari="3">
     <div class="day-head">
-      <span class="n mono">SQL MAHIR L4 · 3</span>
+      <span class="n">HARI 3</span>
       <h2>Index gabungan, dan aturan kolom terkiri</h2>
       <span class="waktu">± 60 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> merancang index atas dua kolom atau lebih, dan tahu urutan kolomnya <strong>bukan</strong> selera — urutan yang salah membuat index-nya diam saja ketika paling dibutuhkan.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> merancang index atas dua kolom atau lebih, dan tahu urutan kolomnya <strong>bukan selera</strong> — urutan yang salah membuat index-nya diam saja ketika paling dibutuhkan.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
-        <h3>Buktikan aturannya</h3>
-        <span class="cek"><input type="checkbox" id="q3s1"><label for="q3s1">selesai</label></span>
+        <h3>Bersihkan dulu, supaya yang diukur cuma satu hal</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-1"><label for="sql-mahir-l4-v2-3-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="aksi">Hapus dulu ketiga index kemarin, supaya yang kita ukur benar-benar cuma index gabungan yang baru.</div>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>for nama in ["idx_pel", "idx_tgl", "idx_cab"]:
-    con.execute(f"DROP INDEX IF EXISTS {nama}")
-con.execute("CREATE INDEX idx_ct ON transaksi(cabang, tanggal)")   # cabang DULU, tanggal KEDUA
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hapus ketiga index kemarin. Masih di sesi Python yang sama.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for n in [&quot;idx_pel&quot;, &quot;idx_tgl&quot;, &quot;idx_cab&quot;]:
+    con.execute(f&quot;DROP INDEX IF EXISTS {n}&quot;)
 con.commit()
-
-uji = [
-  ("cabang saja (kolom ke-1)",   "SELECT COUNT(*) FROM transaksi WHERE cabang = 'Kemang'"),
-  ("cabang lalu tanggal (1+2)",  "SELECT COUNT(*) FROM transaksi WHERE cabang = 'Kemang' AND tanggal &gt;= '2024-01-01'"),
-  ("tanggal saja (kolom ke-2)",  "SELECT COUNT(*) FROM transaksi WHERE tanggal &gt;= '2024-01-01'"),
-]
-for nama, sql in uji:
-    ms, hasil = ukur(sql)
-    print(f"{nama:26s} {ms:7.1f} ms   hasil = {hasil[0][0]}")
-    rencana(sql)</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>cabang saja (kolom ke-1)       7.3 ms   hasil = 160457
-    SEARCH transaksi USING COVERING INDEX idx_ct (cabang=?)
-cabang lalu tanggal (1+2)      3.7 ms   hasil = 80224
-    SEARCH transaksi USING COVERING INDEX idx_ct (cabang=? AND tanggal&gt;?)
-tanggal saja (kolom ke-2)     46.5 ms   hasil = 400090
-    SCAN transaksi USING COVERING INDEX idx_ct</code></pre></div>
-        </div>
-        <p>Satu index, tiga nasib berbeda:</p>
-        <ul>
-          <li><strong>Kolom pertama saja</strong> → <code>SEARCH</code>. Bisa.</li>
-          <li><strong>Kolom pertama lalu kedua</strong> → <code>SEARCH</code> dengan dua syarat sekaligus, dan justru paling cepat karena barisnya paling sedikit.</li>
-          <li><strong>Kolom kedua saja, tanpa yang pertama</strong> → <code>SCAN</code>. Index-nya ada, tapi tidak menolong sama sekali.</li>
-        </ul>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Gambarannya: buku telepon.</strong> Buku telepon diurutkan berdasarkan <em>nama belakang, lalu nama depan</em> — persis sebuah index gabungan. Mencari "Wijaya" gampang. Mencari "Wijaya, Andi" lebih gampang lagi. Tapi mencari <em>semua orang bernama depan Andi</em> berarti membaca seluruh buku, karena Andi tersebar di semua halaman. Itulah <code>SCAN</code> di baris ketiga.
-        </div>
-        <p style="margin-top:12px"><strong>Aturan kolom terkiri:</strong> index atas <code>(A, B, C)</code> bisa dipakai untuk <code>A</code>, untuk <code>A+B</code>, dan untuk <code>A+B+C</code> — tapi tidak untuk <code>B</code> saja, tidak untuk <code>C</code> saja, dan tidak untuk <code>B+C</code>. Kolom paling kiri harus selalu ikut disebut di <code>WHERE</code>.</p>
+print(con.execute(&quot;SELECT COUNT(*) FROM sqlite_master WHERE type=&#x27;index&#x27;&quot;).fetchone()[0])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>0</code></pre></div>
+<p>Nol index. Kalau punyamu bukan nol, ada yang belum terhapus — dan seluruh pengukuran hari ini akan salah baca.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">2</span>
-        <h3>Latihan: rancang index untuk tiga query nyata</h3>
-        <span class="cek"><input type="checkbox" id="q3s2"><label for="q3s2">selesai</label></span>
+        <h3>Bikin satu index atas dua kolom</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-2"><label for="sql-mahir-l4-v2-3-2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Ini yang benar-benar ditanyakan di wawancara: bukan "apa itu index", tapi "tabelnya besar, query-nya begini, index apa yang kamu bikin". Jawab dulu di kepala, baru buka kuncinya.</p>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Perhatikan urutannya: <code>cabang</code> dulu, <code>tanggal</code> kedua.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;CREATE INDEX idx_ct ON transaksi(cabang, tanggal)&quot;)
+con.commit()</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tidak ada yang tercetak. Itu memang benar.</p></div>
+<p>Tiga langkah berikutnya menanyakan tiga hal berbeda ke <strong>satu index yang sama ini</strong>. Nasibnya akan berbeda-beda.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tanya pakai kolom pertama saja</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-3"><label for="sql-mahir-l4-v2-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s = &quot;SELECT COUNT(*) FROM transaksi WHERE cabang = &#x27;Kemang&#x27;&quot;
+ms, h = ukur(s); print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(s)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>5.7 ms   hasil = 160457
+    SEARCH transaksi USING COVERING INDEX idx_ct (cabang=?)</code></pre></div>
+<p><code>SEARCH</code>. Index <code>(cabang, tanggal)</code> melayani pertanyaan yang cuma menyebut <code>cabang</code>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tanya pakai kedua kolomnya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-4"><label for="sql-mahir-l4-v2-3-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambah satu syarat.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s = &quot;SELECT COUNT(*) FROM transaksi WHERE cabang = &#x27;Kemang&#x27; AND tanggal &gt;= &#x27;2024-01-01&#x27;&quot;
+ms, h = ukur(s); print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(s)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>2.8 ms   hasil = 80224
+    SEARCH transaksi USING COVERING INDEX idx_ct (cabang=? AND tanggal&gt;?)</code></pre></div>
+<p><code>SEARCH</code> dengan <strong>dua syarat sekaligus</strong>, dan justru <em>lebih cepat</em> daripada langkah sebelumnya — karena barisnya lebih sedikit.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Sekarang kolom kedua saja, tanpa yang pertama</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-5"><label for="sql-mahir-l4-v2-3-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ini yang penting. Jalankan dan lihat kata pertamanya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s = &quot;SELECT COUNT(*) FROM transaksi WHERE tanggal &gt;= &#x27;2024-01-01&#x27;&quot;
+ms, h = ukur(s); print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)
+rencana(s)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>35.6 ms   hasil = 400090
+    SCAN transaksi USING COVERING INDEX idx_ct</code></pre></div>
+<p><strong>SCAN.</strong> Index-nya ada, kolomnya ada di dalamnya, dan tetap tidak menolong sama sekali.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Aturannya, dan gambarannya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-6"><label for="sql-mahir-l4-v2-3-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca sekali. Ini satu-satunya hal yang harus kamu hafal hari ini.</div>
+        <div class="hasil"><span class="tag">ATURANNYA</span>
+          <p><strong>Aturan kolom terkiri.</strong> Index atas <code>(A, B, C)</code> bisa dipakai untuk <code>A</code>, untuk <code>A+B</code>, dan untuk <code>A+B+C</code> — <strong>tapi tidak untuk <code>B</code> saja, tidak untuk <code>C</code> saja, dan tidak untuk <code>B+C</code>.</strong> Kolom paling kiri harus selalu ikut disebut di <code>WHERE</code>.</p></div>
+<p><strong>Buku telepon.</strong> Ia diurutkan menurut <em>nama belakang, lalu nama depan</em> — persis sebuah index gabungan. Mencari “Wijaya” gampang. “Wijaya, Andi” lebih gampang lagi. Tapi mencari <em>semua orang bernama depan Andi</em> berarti membaca seluruh buku, karena Andi tersebar di semua halaman. Itulah <code>SCAN</code> di langkah 5.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Latihan: rancang index untuk tiga query nyata</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-7"><label for="sql-mahir-l4-v2-3-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ini yang benar-benar ditanyakan di wawancara. <strong>Jawab dulu di kepala</strong>, baru buka kuncinya.</div>
         <div class="kode"><pre><code>-- Q1  laporan harian satu cabang
 SELECT * FROM transaksi WHERE cabang = ? AND tanggal = ?
 
@@ -558,633 +867,1163 @@ WHERE tanggal &gt;= ? AND tanggal &lt; ? GROUP BY cabang
 
 -- Q3  riwayat satu pelanggan, terbaru dulu
 SELECT * FROM transaksi WHERE pelanggan_id = ? ORDER BY tanggal DESC</code></pre></div>
-        <details>
-          <summary>Buka kunci jawaban</summary>
-          <p style="margin-top:10px"><strong>Q1 → <code>(cabang, tanggal)</code>.</strong> Dua-duanya disebut dengan <code>=</code>, jadi urutannya sebenarnya bebas. Tapi taruh yang <strong>lebih banyak variasinya</strong> di depan kalau ragu — dan di sini <code>idx_ct</code> yang sudah kamu punya sudah pas.</p>
-          <p style="margin-top:10px"><strong>Q2 → <code>(tanggal, cabang)</code>, urutannya kebalikan Q1.</strong> Di sini <code>tanggal</code> yang jadi penyaring, <code>cabang</code> cuma pengelompok. Kalau kamu paksakan pakai <code>idx_ct</code> yang sudah ada, <code>tanggal</code> ada di posisi kedua tanpa <code>cabang</code> di <code>WHERE</code> — persis kasus <code>SCAN</code> 46,5 ms tadi. <strong>Pelajarannya: dua query yang menyebut kolom yang sama persis bisa butuh dua index yang berbeda.</strong></p>
-          <p style="margin-top:8px">Diukur: dengan hanya <code>idx_ct</code> yang ada, Q2 jalan <strong>134,4 ms</strong> dan rencananya <code>SCAN transaksi USING INDEX idx_ct</code>. Tambahkan <code>idx_tc ON transaksi(tanggal, cabang)</code> dan jadi <strong>65,8 ms</strong> dengan <code>SEARCH transaksi USING INDEX idx_tc (tanggal&gt;? AND tanggal&lt;?)</code>. Dua kali lipat — bukan enam ribu kali seperti P1, karena query ini memang harus menyentuh 34 ribu baris apa pun caranya. <strong>Index tidak membuat pekerjaan besar jadi kecil; ia cuma menghapus pekerjaan yang sia-sia.</strong></p>
-          <p style="margin-top:10px"><strong>Q3 → <code>(pelanggan_id, tanggal)</code>.</strong> Yang halus di sini: <code>tanggal</code> masuk bukan karena ada di <code>WHERE</code>, tapi karena ada di <code>ORDER BY</code>. Index menyimpan nilainya sudah terurut, jadi SQLite bisa membaca hasilnya langsung dalam urutan yang benar dan <strong>melewati langkah pengurutan sama sekali</strong>. Kalau index-nya cuma <code>(pelanggan_id)</code>, kamu akan lihat <code>USE TEMP B-TREE FOR ORDER BY</code> di rencananya — itu biaya yang bisa dihapus.</p>
-          <div class="aksi" style="margin-top:10px">Buktikan sendiri: bikin <code>idx_p1 ON transaksi(pelanggan_id)</code> dan <code>idx_p2 ON transaksi(pelanggan_id, tanggal)</code> bergantian, lalu jalankan <code>rencana()</code> untuk Q3. Jangan percaya paragraf di atas — buktikan.</div>
-          <div class="hasil" style="margin-top:10px">
-            <span class="tag">HARUS MUNCUL</span>
-            <div class="kode"><pre><code>idx(pelanggan_id)         SEARCH transaksi USING INDEX idx_p1 (pelanggan_id=?)
-                          USE TEMP B-TREE FOR ORDER BY
-idx(pelanggan_id,tanggal) SEARCH transaksi USING INDEX idx_p2 (pelanggan_id=?)</code></pre></div>
-          </div>
-          <p style="margin-top:8px">Baris <code>USE TEMP B-TREE FOR ORDER BY</code> ada di yang pertama dan hilang di yang kedua. Itu satu langkah kerja yang lenyap, bukan karena query-nya diubah, tapi karena datanya sudah tersimpan dalam urutan yang kebetulan dibutuhkan.</p>
-        </details>
+<details><summary>Buka kunci jawaban</summary><p><strong>Q1 → <code>(cabang, tanggal)</code>.</strong> Dua-duanya disebut dengan <code>=</code>, jadi urutannya sebenarnya bebas — kalau ragu, taruh yang <strong>lebih banyak variasinya</strong> di depan. <code>idx_ct</code> yang sudah kamu punya sudah pas.</p><p><strong>Q2 → <code>(tanggal, cabang)</code>, kebalikan Q1.</strong> Di sini <code>tanggal</code> yang menyaring, <code>cabang</code> cuma pengelompok. Langkah 8 mengukurnya.</p><p><strong>Q3 → <code>(pelanggan_id, tanggal)</code>.</strong> <code>tanggal</code> masuk bukan karena ada di <code>WHERE</code>, tapi karena ada di <code>ORDER BY</code>. Langkah 10 dan 11 membuktikannya.</p></details>
+        <div class="catatan"><strong>Q1 dan Q2 menyebut kolom yang sama persis dan butuh dua index yang berbeda.</strong> Itu bagian yang paling sering salah dijawab.</div>
       </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Ukur Q2 dengan index yang salah urutan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-8"><label for="sql-mahir-l4-v2-3-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Pakai <code>idx_ct</code> yang sudah ada. <code>tanggal</code> ada di posisi kedua, dan <code>cabang</code> tidak ada di <code>WHERE</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>Q2 = &quot;&quot;&quot;SELECT cabang, SUM(nilai) FROM transaksi
+WHERE tanggal &gt;= &#x27;2024-01-01&#x27; AND tanggal &lt; &#x27;2024-02-01&#x27; GROUP BY cabang&quot;&quot;&quot;
+ms, h = ukur(Q2); print(f&quot;{ms:.1f} ms   {len(h)} baris&quot;)
+rencana(Q2)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>104.6 ms   5 baris
+    SCAN transaksi USING INDEX idx_ct</code></pre></div>
+<p>Persis kasus <code>SCAN</code> di langkah 5, sekarang di query yang sungguhan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Tambahkan index dengan urutan yang benar</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-9"><label for="sql-mahir-l4-v2-3-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jangan hapus <code>idx_ct</code>. Tambahkan yang kedua, lalu ukur query yang sama persis.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;CREATE INDEX idx_tc ON transaksi(tanggal, cabang)&quot;); con.commit()
+ms, h = ukur(Q2); print(f&quot;{ms:.1f} ms   {len(h)} baris&quot;)
+rencana(Q2)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>48.1 ms   5 baris
+    SEARCH transaksi USING INDEX idx_tc (tanggal&gt;? AND tanggal&lt;?)
+    USE TEMP B-TREE FOR GROUP BY</code></pre></div>
+<p>104,6 → 48,1 ms. <strong>Dua kali lipat</strong> — bukan enam ribu kali seperti Hari 1, karena query ini memang harus menyentuh 34 ribu baris apa pun caranya.</p>
+        <div class="catatan"><strong>Index tidak membuat pekerjaan besar jadi kecil.</strong> Ia cuma menghapus pekerjaan yang sia-sia. Kalau pekerjaannya memang besar, index tidak akan menyulapnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Q3: lihat biaya pengurutan yang tersembunyi</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-10"><label for="sql-mahir-l4-v2-3-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hapus <code>idx_tc</code>, bikin index satu kolom, lalu minta rencananya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;DROP INDEX idx_tc&quot;)
+Q3 = &quot;SELECT * FROM transaksi WHERE pelanggan_id = 12345 ORDER BY tanggal DESC&quot;
+con.execute(&quot;CREATE INDEX idx_p1 ON transaksi(pelanggan_id)&quot;); con.commit()
+rencana(Q3)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>    SEARCH transaksi USING INDEX idx_p1 (pelanggan_id=?)
+    USE TEMP B-TREE FOR ORDER BY</code></pre></div>
+<p>Barisnya ketemu lewat <code>SEARCH</code>, bagus. Tapi ada baris kedua: SQLite masih harus <strong>mengurutkan hasilnya sendiri</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Hapus biaya itu dengan menambah satu kolom ke index</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-11"><label for="sql-mahir-l4-v2-3-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Query-nya <strong>tidak diubah sama sekali</strong>. Cuma index-nya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;DROP INDEX idx_p1&quot;)
+con.execute(&quot;CREATE INDEX idx_p2 ON transaksi(pelanggan_id, tanggal)&quot;); con.commit()
+rencana(Q3)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>    SEARCH transaksi USING INDEX idx_p2 (pelanggan_id=?)</code></pre></div>
+<p>Baris <code>USE TEMP B-TREE FOR ORDER BY</code> <strong>hilang</strong>. Satu langkah kerja lenyap — bukan karena query-nya diubah, tapi karena datanya sudah tersimpan dalam urutan yang kebetulan dibutuhkan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Bereskan, lalu ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-12"><label for="sql-mahir-l4-v2-3-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hapus index terakhir supaya Hari 4 mulai dari keadaan yang sama denganku. Lalu tutup halaman ini dan jawab di kertas.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;DROP INDEX idx_p2&quot;); con.commit()
+
+# 1. Index (A, B, C) bisa dipakai untuk WHERE apa saja?
+# 2. Kenapa Q1 dan Q2 butuh index berbeda padahal kolomnya sama?
+# 3. Kapan sebuah kolom masuk index bukan karena ada di WHERE?</code></pre></div>
+<details><summary>Buka kunci jawaban</summary><p>1. <code>A</code>, <code>A+B</code>, <code>A+B+C</code> — kolom terkiri harus selalu ikut. 2. Yang menyaring di Q1 adalah <code>cabang</code>, di Q2 adalah <code>tanggal</code>; yang menyaring harus di depan. 3. Kalau ia ada di <code>ORDER BY</code> — index menyimpannya sudah terurut.</p></details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> satu aturan (kolom terkiri), satu gambaran (buku telepon), dan tiga pengukuran yang membuktikannya — termasuk satu kasus di mana index yang benar cuma memberi dua kali lipat, bukan ribuan.</p><p style="margin-top:8px">Tiga hari terakhir isinya alasan untuk <em>membuat</em> index. Besok alasan untuk <strong>tidak</strong> — dengan angka, bukan perasaan.</p>
     </div>
   </section>
 
-  <!-- ============ P4 ============ -->
   <section class="day" data-hari="4">
     <div class="day-head">
-      <span class="n mono">SQL MAHIR L4 · 4</span>
+      <span class="n">HARI 4</span>
       <h2>Harga sebuah index, dalam megabita dan detik</h2>
-      <span class="waktu">± 55 menit</span>
+      <span class="waktu">± 50 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjawab "kenapa tidak semua kolom di-index saja?" dengan angka, bukan dengan perasaan.</p>
-
-    <p>Tiga hari terakhir isinya alasan untuk membuat index. Hari ini alasan untuk <em>tidak</em>. Kalau index selalu menguntungkan, basis data pasti sudah membuatnya sendiri diam-diam. Ia tidak melakukan itu, dan ada sebabnya.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menjawab “kenapa tidak semua kolom di-index saja?” dengan <strong>angka yang kamu ukur sendiri</strong>, bukan dengan perasaan.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
-        <h3>Ukur harganya sendiri</h3>
-        <span class="cek"><input type="checkbox" id="q4s1"><label for="q4s1">selesai</label></span>
+        <h3>Bikin salinan yang boleh kamu rusak</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-1"><label for="sql-mahir-l4-v2-4-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="aksi">Skrip ini bekerja di salinan <code>coba.db</code>, jadi <code>besar.db</code>-mu tidak tersentuh. Jalankan sebagai berkas terpisah atau satu sel penuh.</div>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, time, os, shutil
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hari ini semua bekerja di <code>coba.db</code>, jadi <code>besar.db</code>-mu tidak tersentuh. Sesi Python baru boleh.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import sqlite3, time, os, shutil
+shutil.copy(&quot;besar.db&quot;, &quot;coba.db&quot;)
+c = sqlite3.connect(&quot;coba.db&quot;)
+c.execute(&quot;DROP INDEX IF EXISTS idx_ct&quot;)
+c.execute(&quot;VACUUM&quot;)
+print(f&quot;tanpa index apa pun : {os.path.getsize(&#x27;coba.db&#x27;)/1e6:.1f} MB&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>tanpa index apa pun : 36.7 MB</code></pre></div>
+<p><code>VACUUM</code> merapikan berkasnya supaya ukurannya jujur — tanpa itu, ruang bekas index yang dihapus masih terhitung.</p>
+        <div class="bahaya"><code>VACUUM</code> menulis ulang seluruh berkas. Lambat 1–5 detik itu wajar, dan tidak ada yang tercetak selama itu.</div>
+      </div>
+    </div>
 
-shutil.copy("besar.db", "coba.db")
-c = sqlite3.connect("coba.db")
-c.execute("DROP INDEX IF EXISTS idx_ct")
-c.execute("VACUUM")                       # rapikan, supaya ukurannya jujur
-print(f"tanpa index apa pun : {os.path.getsize('coba.db')/1e6:.1f} MB")
-
-def tulis(con, n=50000):
-    baris = [(1000000+i, "2024-06-01", "Kemang", 7, "Kopi Susu", 1, 22000) for i in range(n)]
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ukur berapa lama menulis 50.000 baris</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-2"><label for="sql-mahir-l4-v2-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bikin fungsi <code>tulis</code>, lalu panggil sekali.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def tulis(con, n=50000):
+    baris = [(1000000+i, &quot;2024-06-01&quot;, &quot;Kemang&quot;, 7, &quot;Kopi Susu&quot;, 1, 22000)
+             for i in range(n)]
     t = time.perf_counter()
-    con.executemany("INSERT INTO transaksi VALUES (?,?,?,?,?,?,?)", baris)
+    con.executemany(&quot;INSERT INTO transaksi VALUES (?,?,?,?,?,?,?)&quot;, baris)
     con.commit()
     return time.perf_counter() - t
 
 t_tanpa = tulis(c)
-c.execute("DELETE FROM transaksi WHERE id &gt;= 1000000"); c.commit()
-
-for nama, kolom in [("idx_ct","cabang, tanggal"), ("idx_pel","pelanggan_id"), ("idx_prd","produk")]:
-    t = time.perf_counter()
-    c.execute(f"CREATE INDEX {nama} ON transaksi({kolom})"); c.commit()
-    print(f"waktu buat {nama:8s}: {time.perf_counter()-t:.2f} detik")
-
-c.execute("VACUUM")
-print(f"dengan 3 index      : {os.path.getsize('coba.db')/1e6:.1f} MB")
-t_dgn = tulis(c)
-
-print(f"\ntulis 50.000 baris tanpa index : {t_tanpa:.2f} detik")
-print(f"tulis 50.000 baris dgn 3 index : {t_dgn:.2f} detik")
-print(f"perlambatan                    : {t_dgn/t_tanpa:.1f}x")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>tanpa index apa pun : 36.7 MB
-waktu buat idx_ct  : 0.99 detik
-waktu buat idx_pel : 0.45 detik
-waktu buat idx_prd : 0.46 detik
-dengan 3 index      : 81.7 MB
-
-tulis 50.000 baris tanpa index : 0.07 detik
-tulis 50.000 baris dgn 3 index : 0.21 detik
-perlambatan                    : 2.9x</code></pre></div>
-        </div>
-        <p>Tiga index membuat berkasnya <strong>36,7 MB → 81,7 MB</strong>. Lebih dari dua kali lipat, dan index-nya sendiri makan 45 MB — lebih besar daripada datanya. Menulis 50.000 baris jadi <strong>2,9 kali lebih lama</strong>, karena tiap baris baru harus disisipkan ke tiga daftar terurut, bukan cuma ditempel di ujung tabel.</p>
-        <p style="margin-top:8px">Waktu di mesinmu akan beda. Yang tidak boleh beda: <strong>36.7 MB</strong> dan <strong>81.7 MB</strong> — itu ukuran berkas, bukan kecepatan, jadi angkanya sama di mana pun.</p>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">2</span>
-        <h3>Jadi kapan bikin index, kapan tidak</h3>
-        <span class="cek"><input type="checkbox" id="q4s2"><label for="q4s2">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <div class="tabel-bungkus">
-          <table>
-            <thead><tr><th>Bikin index kalau…</th><th>Jangan, kalau…</th></tr></thead>
-            <tbody>
-              <tr>
-                <td>Kolomnya sering muncul di <code>WHERE</code>, <code>JOIN … ON</code>, atau <code>ORDER BY</code></td>
-                <td>Kolomnya jarang atau tidak pernah dipakai menyaring</td>
-              </tr>
-              <tr>
-                <td>Tabelnya besar (puluhan ribu baris ke atas)</td>
-                <td>Tabelnya kecil — di bawah beberapa ribu baris, <code>SCAN</code> sudah cukup cepat dan index cuma menambah beban</td>
-              </tr>
-              <tr>
-                <td>Nilainya banyak variasinya (<code>pelanggan_id</code>: 50.000 nilai berbeda)</td>
-                <td>Nilainya sedikit variasinya (<code>status</code>: cuma "selesai" dan "batal") — melompat ke setengah tabel bukan lompatan</td>
-              </tr>
-              <tr>
-                <td>Datanya lebih sering dibaca daripada ditulis — laporan, dasbor, analisis</td>
-                <td>Datanya masuk terus-menerus dan jarang dibaca — pencatatan mentah</td>
-              </tr>
-              <tr>
-                <td>Kamu sudah lihat <code>SCAN</code> di <code>EXPLAIN QUERY PLAN</code> pada query yang memang lambat</td>
-                <td>Kamu belum mengukur apa pun dan cuma merasa "biar cepat"</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="bahaya" style="margin-top:14px">
-          <strong>Baris terakhir itu yang paling sering dilanggar, termasuk oleh orang berpengalaman.</strong> Membuat index tanpa mengukur dulu adalah menebak. Urutannya selalu: <em>query terasa lambat → <code>ukur()</code> → <code>rencana()</code> → lihat <code>SCAN</code>-nya di mana → baru bikin index → ukur lagi untuk membuktikan bedanya.</em> Kalau langkah terakhirnya kamu lewati, kamu tidak tahu index-mu berguna atau cuma menambah 15 MB.
-        </div>
-        <div class="catatan" style="margin-top:14px">
-          <strong>Untuk pekerjaan klienmu nanti.</strong> Kalau data klien datang sebagai Excel lalu kamu muat ke SQLite (persis alur <strong>Bekal Data Klien</strong>), urutan yang benar adalah: <em>muat semua barisnya dulu, baru <code>CREATE INDEX</code> di akhir.</em> Membuat index dulu lalu memasukkan 800.000 baris ke dalamnya jauh lebih lambat daripada memasukkan dulu lalu membangun index sekali jadi — dan itu persis yang diukur di langkah 1: 0,44 detik untuk membangun sekali, lawan perlambatan 2,9× di tiap penulisan.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ P5 ============ -->
-  <section class="day" data-hari="5">
-    <div class="day-head">
-      <span class="n mono">SQL MAHIR L4 · 5</span>
-      <h2>Lambat karena bentuk query-nya, bukan karena index</h2>
-      <span class="waktu">± 60 menit</span>
-    </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali <em>subquery berkorelasi</em> di rencana eksekusi, dan menulis ulangnya jadi CTE — perubahan yang hari ini akan kamu ukur sebagai <strong>1.036 kali lebih cepat</strong>.</p>
-
-    <p>Ada jenis kelambatan yang tidak bisa disembuhkan index apa pun, karena penyebabnya bukan cara mencari barisnya — melainkan berapa <em>kali</em> pekerjaan yang sama diulang.</p>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">1</span>
-        <h3>Query yang mengulang pekerjaannya 10.000 kali</h3>
-        <span class="cek"><input type="checkbox" id="q5s1"><label for="q5s1">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <div class="aksi">Kita pakai tabel 10.000 baris, bukan 800.000. Kamu akan tahu alasannya begitu melihat angkanya. Skrip ini bikin berkas <code>q2.db</code> sendiri dan menghapusnya di akhir.</div>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, time, os
-
-if os.path.exists("q2.db"): os.remove("q2.db")
-c = sqlite3.connect("q2.db")
-c.execute("ATTACH 'besar.db' AS b")
-c.execute("CREATE TABLE kecil AS SELECT * FROM b.transaksi WHERE id &lt;= 10000")
-c.commit(); c.execute("DETACH b")
-
-# Pertanyaannya: di tiap cabang, berapa transaksi yang nilainya
-# di atas rata-rata cabang ITU SENDIRI?
-
-korelasi = """SELECT cabang, COUNT(*) AS di_atas_rata FROM kecil t1
-WHERE nilai &gt; (SELECT AVG(nilai) FROM kecil t2 WHERE t2.cabang = t1.cabang)
-GROUP BY cabang ORDER BY cabang"""
-
-cte = """WITH rata AS (SELECT cabang, AVG(nilai) AS r FROM kecil GROUP BY cabang)
-SELECT t.cabang, COUNT(*) AS di_atas_rata FROM kecil t
-JOIN rata ON rata.cabang = t.cabang
-WHERE t.nilai &gt; rata.r
-GROUP BY t.cabang ORDER BY t.cabang"""
-
-for nama, sql, n in [("subquery berkorelasi", korelasi, 1), ("CTE sekali hitung", cte, 5)]:
-    w = []
-    for _ in range(n):
-        t = time.perf_counter(); hasil = c.execute(sql).fetchall(); w.append(time.perf_counter()-t)
-    print(f"\n{nama}: {min(w)*1000:.1f} ms")
-    for x in hasil: print("   ", x)
-    for p in c.execute("EXPLAIN QUERY PLAN " + sql): print("   plan:", p[3])</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>subquery berkorelasi: 7874.7 ms
-    ('Dago', 869)
-    ('Kemang', 879)
-    ('Renon', 877)
-    ('Seturan', 933)
-    ('Seturan2', 881)
-   plan: SCAN t1
-   plan: CORRELATED SCALAR SUBQUERY 1
-   plan: SCAN t2
-   plan: USE TEMP B-TREE FOR GROUP BY
-
-CTE sekali hitung: 7.6 ms
-    ('Dago', 869)
-    ('Kemang', 879)
-    ('Renon', 877)
-    ('Seturan', 933)
-    ('Seturan2', 881)
-   plan: CO-ROUTINE rata
-   plan: SCAN kecil
-   plan: USE TEMP B-TREE FOR GROUP BY
-   plan: SCAN t
-   plan: SEARCH rata USING AUTOMATIC COVERING INDEX (cabang=?)
-   plan: USE TEMP B-TREE FOR GROUP BY</code></pre></div>
-        </div>
-        <p><strong>7.874,7 ms lawan 7,6 ms.</strong> Hampir 8 detik, lawan kurang dari sepersepuluh detik. Angka hasilnya sepuluh-sepuluhnya identik: 869, 879, 877, 933, 881.</p>
-        <p style="margin-top:8px"><strong>Kata kuncinya ada di rencana: <code>CORRELATED SCALAR SUBQUERY</code>.</strong> "Correlated" artinya subquery itu menyebut <code>t1.cabang</code> — sesuatu dari baris yang sedang diproses di luar. Karena jawabannya berbeda untuk tiap baris, SQLite tidak bisa menghitungnya sekali lalu menyimpannya. Ia harus menjalankan ulang <code>AVG</code> atas 10.000 baris, untuk <strong>tiap satu dari 10.000 baris</strong>. Itu 100 juta pembacaan untuk menjawab pertanyaan yang sebenarnya cuma butuh <strong>lima</strong> angka rata-rata.</p>
-        <p style="margin-top:8px">Versi CTE menghitung kelima rata-rata itu sekali, menyimpannya, lalu menempelkannya lewat <code>JOIN</code>. Pekerjaan yang sama, sekali saja.</p>
-        <div class="aksi" style="margin-top:12px">Sekarang jawab sendiri kenapa aku menyuruhmu memakai 10.000 baris, bukan 800.000. Jalankan query yang sama di beberapa ukuran tabel dan lihat polanya. Skrip ini butuh sekitar <strong>3 menit</strong> — biarkan jalan.</div>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>print(f"{'baris':&gt;8} {'berkorelasi':&gt;14} {'CTE':&gt;10}   kelipatan")
-c.execute("ATTACH 'besar.db' AS b")          # sambungkan lagi, tadi sudah di-DETACH
-
-for n in [2500, 5000, 10000, 20000, 40000]:
-    c.execute("DROP TABLE IF EXISTS kecil")
-    c.execute(f"CREATE TABLE kecil AS SELECT * FROM b.transaksi WHERE id &lt;= {n}")
-    c.commit()
-    t = time.perf_counter(); rk = c.execute(korelasi).fetchall(); tk = time.perf_counter()-t
-    w = []
-    for _ in range(5):
-        t = time.perf_counter(); rc = c.execute(cte).fetchall(); w.append(time.perf_counter()-t)
-    tc = min(w)
-    print(f"{n:&gt;8} {tk*1000:&gt;12.1f}ms {tc*1000:&gt;8.1f}ms   {tk/tc:&gt;8.0f}x   sama={rk==rc}")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>   baris    berkorelasi        CTE   kelipatan
-    2500        486.2ms      1.8ms        267x   sama=True
-    5000       1915.3ms      3.7ms        519x   sama=True
-   10000       7769.7ms      7.5ms       1039x   sama=True
-   20000      32208.4ms     14.9ms       2166x   sama=True
-   40000     132668.7ms     33.8ms       3923x   sama=True</code></pre></div>
-        </div>
-        <p>Baca kolom <strong>berkorelasi</strong> dari atas ke bawah: 486, 1.915, 7.770, 32.208, 132.669. Tiap kali jumlah barisnya <em>dua kali lipat</em>, waktunya jadi sekitar <strong>empat kali lipat</strong>. Itu tanda beban yang naik seperti kuadrat.</p>
-        <p style="margin-top:8px">Sekarang kolom <strong>CTE</strong>: 1,8 → 3,7 → 7,5 → 14,9 → 33,8. Dua kali baris, dua kali waktu. Lurus.</p>
-        <p style="margin-top:8px">Dan kolom terakhir: <code>sama=True</code> di kelima baris. Semua ini bukan soal jawaban yang berbeda — jawabannya selalu identik. Yang berbeda cuma berapa lama menunggunya.</p>
-        <div class="bahaya" style="margin-top:12px">
-          <strong>Ekstrapolasinya menakutkan, dan itu memang intinya.</strong> Dari 40.000 baris ke 800.000 adalah 20 kali lipat, jadi untuk beban kuadrat kalikan waktunya sekitar 400: <strong>132,7 detik × 400 ≈ 15 jam</strong>. Itu perkiraan, bukan pengukuran — aku tidak menjalankannya sampai selesai, dan kamu juga sebaiknya tidak. Yang penting kamu lihat: query ini <em>tampak sehat</em> di data contoh 2.500 baris (setengah detik, siapa yang peduli), lalu menggantung semalaman ketika dijalankan di data klien yang sebenarnya. Kelambatan yang tumbuh seperti ini tidak akan tertolong index apa pun — index memperbaiki cara mencari baris, bukan berapa kali pekerjaan yang sama diulang.
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">2</span>
-        <h3>Cara mengenalinya sebelum menjalankannya</h3>
-        <span class="cek"><input type="checkbox" id="q5s2"><label for="q5s2">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Tandanya bisa dilihat dari teks query-nya sendiri, tanpa menjalankan apa pun: <strong>ada <code>SELECT</code> di dalam kurung, dan di dalam kurung itu disebut nama tabel dari luar.</strong></p>
-        <div class="kode"><pre><code>-- BERKORELASI (mahal): 'p' di dalam kurung datang dari luar kurung
-SELECT p.nama,
-       (SELECT COUNT(*) FROM pesanan WHERE pelanggan_id = p.id) AS jumlah_pesanan
-FROM pelanggan p
-
--- TIDAK berkorelasi (murah): isi kurung berdiri sendiri, dihitung sekali
-SELECT nama FROM produk
-WHERE harga &gt; (SELECT AVG(harga) FROM produk)</code></pre></div>
-        <p style="margin-top:10px">Yang kedua aman — SQLite menghitungnya sekali lalu memakai hasilnya berulang-ulang. Yang pertama adalah bentuk yang kamu ukur tadi.</p>
-        <div class="aksi" style="margin-top:12px">Tulis ulang query berkorelasi di atas (pelanggan + jumlah pesanan) supaya tidak berkorelasi lagi, jalankan di <code>senja.db</code>, lalu bandingkan hasilnya dengan versi aslinya. Baru buka kuncinya.</div>
-        <details>
-          <summary>Buka kunci jawaban</summary>
-          <div class="kode" style="margin-top:10px">
-            <button class="salin" type="button">Salin</button>
-            <pre><code>import sqlite3, pandas as pd
-s = sqlite3.connect("senja.db")
-
-lama = """SELECT p.nama,
-       (SELECT COUNT(*) FROM pesanan WHERE pelanggan_id = p.id) AS jumlah_pesanan
-FROM pelanggan p ORDER BY jumlah_pesanan DESC, p.nama LIMIT 5"""
-
-baru = """SELECT p.nama, COUNT(o.id) AS jumlah_pesanan
-FROM pelanggan p
-LEFT JOIN pesanan o ON o.pelanggan_id = p.id
-GROUP BY p.id, p.nama ORDER BY jumlah_pesanan DESC, p.nama LIMIT 5"""
-
-print(pd.read_sql(lama, s)); print(); print(pd.read_sql(baru, s))</code></pre>
-          </div>
-          <div class="hasil" style="margin-top:10px">
-            <span class="tag">HARUS MUNCUL</span>
-            <div class="kode"><pre><code>     nama  jumlah_pesanan
-0    Rina              32
-1    Lita              30
-2   Dimas              26
-3  Hendra              26
-4    Bayu              25
-
-     nama  jumlah_pesanan
-0    Rina              32
-1    Lita              30
-2   Dimas              26
-3  Hendra              26
-4    Bayu              25</code></pre></div>
-          </div>
-          <p style="margin-top:10px">Identik. Di <code>senja.db</code> yang cuma 20 pelanggan, dua-duanya selesai seketika dan kamu tidak akan pernah tahu bedanya. Di tabel pelanggan berisi 200.000 baris, yang pertama menjalankan 200.000 <code>COUNT</code> terpisah dan yang kedua menjalankan satu <code>JOIN</code>. <strong>Itulah sebabnya kebiasaan ini harus kamu bangun sekarang, di data kecil, di saat tidak ada bedanya</strong> — karena di saat bedanya terasa, kamu sudah di depan klien.</p>
-          <p style="margin-top:10px"><strong>Perhatikan <code>LEFT JOIN</code>, bukan <code>JOIN</code>.</strong> Versi berkorelasi memberi angka 0 untuk pelanggan yang belum pernah pesan; <code>JOIN</code> biasa akan menghilangkan mereka dari daftar sama sekali. Di <code>senja.db</code> ada tiga pelanggan seperti itu — Bagus, Vira, dan Andi (id 18, 19, 20), yang kamu temukan di Level 1. Menulis ulang query demi kecepatan <strong>tidak boleh diam-diam mengubah jawabannya</strong>, dan cara memastikannya cuma satu: bandingkan hasil kedua versi, seperti yang baru saja kamu lakukan.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ P6 ============ -->
-  <section class="day" data-hari="6">
-    <div class="day-head">
-      <span class="n mono">SQL MAHIR L4 · 6</span>
-      <h2>Transaksi: Rp 400.000 yang menguap di antara dua baris perintah</h2>
-      <span class="waktu">± 70 menit</span>
-    </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memakai <code>BEGIN</code>/<code>COMMIT</code>/<code>ROLLBACK</code> dengan sadar, dan tahu satu setelan bawaan SQLite yang diam-diam mengizinkan data rusak masuk ke basis datamu.</p>
-
-    <p>Ini bagian yang paling dekat dengan latar belakangmu. Kalau kamu pernah membuat jurnal, kamu sudah paham prinsipnya jauh sebelum tahu istilahnya: <strong>debit dan kredit dicatat bersama-sama atau tidak sama sekali.</strong> Setengah jurnal bukan jurnal setengah benar — ia jurnal yang salah. SQL punya nama untuk itu: <em>transaksi</em>.</p>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">1</span>
-        <h3>Lihat uangnya hilang</h3>
-        <span class="cek"><input type="checkbox" id="q6s1"><label for="q6s1">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, shutil
-shutil.copy("senja.db", "tx.db")
-
-# isolation_level=None artinya: JANGAN urus transaksi untukku, aku yang pegang kendali.
-con = sqlite3.connect("tx.db", isolation_level=None)
-
-con.executescript("""
-DROP TABLE IF EXISTS kas;
-CREATE TABLE kas (
-  akun  TEXT PRIMARY KEY,
-  saldo INTEGER NOT NULL CHECK (saldo &gt;= 0)   -- saldo kas tidak boleh minus
-);
-INSERT INTO kas VALUES ('Kas Besar', 5000000), ('Kas Kecil', 300000);
-""")
-
-def saldo():
-    return dict(con.execute("SELECT akun, saldo FROM kas").fetchall())
-
-print("saldo awal   :", saldo(), "total", sum(saldo().values()))
-
-# Pindahkan Rp 400.000 dari Kas Besar, lalu keluarkan Rp 900.000 dari Kas Kecil.
-# Yang kedua akan ditolak CHECK, karena Kas Kecil cuma punya 300.000.
-try:
-    con.execute("UPDATE kas SET saldo = saldo - 400000 WHERE akun = 'Kas Besar'")
-    con.execute("UPDATE kas SET saldo = saldo - 900000 WHERE akun = 'Kas Kecil'")
-except sqlite3.IntegrityError as e:
-    print("\nerror        :", e)
-
-print("saldo sesudah:", saldo(), "total", sum(saldo().values()))</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>saldo awal   : {'Kas Besar': 5000000, 'Kas Kecil': 300000} total 5300000
-
-error        : CHECK constraint failed: saldo &gt;= 0
-saldo sesudah: {'Kas Besar': 4600000, 'Kas Kecil': 300000} total 4900000</code></pre></div>
-        </div>
-        <p>Lihat totalnya: <strong>5.300.000 → 4.900.000</strong>. Rp 400.000 hilang dari muka bumi. Tidak dicuri, tidak salah hitung — perintah pertama berhasil, perintah kedua ditolak, dan tidak ada yang membatalkan yang pertama.</p>
-        <div class="bahaya" style="margin-top:12px">
-          <strong>Inilah bentuk kesalahan yang tidak akan ketahuan dari laporan.</strong> Tidak ada baris merah, tidak ada pesan gagal di dasbor. Yang ada cuma angka yang sedikit kurang benar, dan program yang <em>terlihat</em> jalan lancar. Kalau ini terjadi di skrip harian yang kamu pasang untuk klien (Minggu 11), ia akan mengulang kesalahannya tiap hari tanpa satu pun yang menyadarinya, sampai ada yang mencoba merekonsiliasi dan tidak ketemu.
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">2</span>
-        <h3>Bungkus dengan transaksi, jalankan lagi</h3>
-        <span class="cek"><input type="checkbox" id="q6s2"><label for="q6s2">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>con.execute("UPDATE kas SET saldo = 5000000 WHERE akun = 'Kas Besar'")   # kembalikan
-print("saldo awal   :", saldo(), "total", sum(saldo().values()))
-
-try:
-    con.execute("BEGIN")                                     # &lt;-- satu baris ini
-    con.execute("UPDATE kas SET saldo = saldo - 400000 WHERE akun = 'Kas Besar'")
-    con.execute("UPDATE kas SET saldo = saldo - 900000 WHERE akun = 'Kas Kecil'")
-    con.execute("COMMIT")                                    # &lt;-- dan satu ini
-except sqlite3.IntegrityError as e:
-    con.execute("ROLLBACK")                                  # &lt;-- dan penyelamatnya
-    print("\nerror        :", e, "-&gt; ROLLBACK")
-
-print("saldo sesudah:", saldo(), "total", sum(saldo().values()))</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>saldo awal   : {'Kas Besar': 5000000, 'Kas Kecil': 300000} total 5300000
-
-error        : CHECK constraint failed: saldo &gt;= 0 -&gt; ROLLBACK
-saldo sesudah: {'Kas Besar': 5000000, 'Kas Kecil': 300000} total 5300000</code></pre></div>
-        </div>
-        <p>Error yang sama persis. Tapi totalnya <strong>5.300.000 dan tetap 5.300.000</strong>. <code>ROLLBACK</code> membatalkan juga <code>UPDATE</code> pertama yang sudah terlanjur berhasil, seolah-olah tidak pernah terjadi.</p>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Tiga kata, satu janji.</strong> <code>BEGIN</code> berkata "mulai sekarang, semua yang kulakukan menggantung dulu". <code>COMMIT</code> berkata "semuanya berhasil, tuliskan permanen". <code>ROLLBACK</code> berkata "ada yang gagal, kembalikan seperti sebelum <code>BEGIN</code>". Tidak ada keadaan setengah jalan yang bisa dilihat orang lain, dan tidak ada keadaan setengah jalan yang tertinggal kalau listrik mati di tengahnya.
-        </div>
-        <div class="bahaya" style="margin-top:12px">
-          <strong>Ini menempel langsung ke <code>try</code>/<code>except</code> yang kamu pelajari di Bekal Kirim Hasil.</strong> Pola yang benar selalu berbentuk: <code>try:</code> → <code>BEGIN</code> … kerja … <code>COMMIT</code>; <code>except:</code> → <code>ROLLBACK</code> lalu <code>raise</code>. Jangan pernah menelan error-nya diam-diam. <code>ROLLBACK</code> menyelamatkan <em>datanya</em>; <code>raise</code> yang menyelamatkan <em>kamu</em>, karena tanpa itu skripmu tetap melapor "selesai" padahal tidak ada yang tersimpan.
-        </div>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Kapan ini penting dalam pekerjaan nyata.</strong> Setiap kali satu kejadian bisnis butuh <strong>lebih dari satu perintah</strong>: mencatat pembayaran (masuk ke tabel pembayaran <em>dan</em> ubah status pesanan), memuat ulang data bulanan (hapus bulan lama <em>lalu</em> masukkan yang baru — bayangkan kalau berhenti di antara keduanya), atau memperbaiki data hasil rekonsiliasi. Kalau satu perintah saja, SQLite sudah membungkusnya sendiri; kamu tidak perlu berbuat apa-apa.
-        </div>
+print(f&quot;tanpa index : {t_tanpa:.2f} detik&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>tanpa index : 0.06 detik</code></pre></div>
+<p>Ini angka pembandingnya. Simpan <code>t_tanpa</code> — dipakai lagi di langkah 6.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">3</span>
-        <h3>Setelan bawaan yang mengizinkan data rusak masuk</h3>
-        <span class="cek"><input type="checkbox" id="q6s3"><label for="q6s3">selesai</label></span>
+        <h3>Kembalikan seperti semula</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-3"><label for="sql-mahir-l4-v2-4-3">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Sekarang sesuatu yang membuat banyak orang terkejut ketika pertama kali tahu.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, shutil
-shutil.copy("senja.db", "fk.db")
-c = sqlite3.connect("fk.db")
-
-print("foreign_keys bawaan  :", c.execute("PRAGMA foreign_keys").fetchone()[0])
-
-c.executescript("""
-DROP TABLE IF EXISTS anak;
-DROP TABLE IF EXISTS induk;
-CREATE TABLE induk (id INTEGER PRIMARY KEY, nama TEXT);
-CREATE TABLE anak  (id INTEGER PRIMARY KEY,
-                    induk_id INTEGER REFERENCES induk(id),   -- jelas-jelas ditulis
-                    catatan TEXT);
-INSERT INTO induk VALUES (1, 'Sari');
-""")
-
-c.execute("INSERT INTO anak VALUES (99, 777, 'induk 777 tidak ada')")
-c.commit()
-print("baris yatim tersimpan:", c.execute("SELECT * FROM anak").fetchall())
-
-c.execute("PRAGMA foreign_keys = ON")
-print("\nsesudah PRAGMA ON    :", c.execute("PRAGMA foreign_keys").fetchone()[0])
-try:
-    c.execute("INSERT INTO anak VALUES (100, 888, 'induk 888 tidak ada')")
-except sqlite3.IntegrityError as e:
-    print("ditolak              :", e)
-
-print("cek yang sudah masuk :", c.execute("PRAGMA foreign_key_check").fetchall())</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>foreign_keys bawaan  : 0
-baris yatim tersimpan: [(99, 777, 'induk 777 tidak ada')]
-
-sesudah PRAGMA ON    : 1
-ditolak              : FOREIGN KEY constraint failed
-cek yang sudah masuk : [('anak', 99, 'induk', 0)]</code></pre></div>
-        </div>
-        <p><strong><code>foreign_keys</code> bawaannya 0 — mati.</strong> Kamu menuliskan <code>REFERENCES induk(id)</code> dengan jelas, SQLite membacanya dengan jelas, dan tetap menerima baris yang menunjuk induk nomor 777 yang tidak pernah ada. Aturannya tercatat tapi tidak ditegakkan.</p>
-        <p style="margin-top:8px">Sekali <code>PRAGMA foreign_keys = ON</code>, baris berikutnya ditolak. Tapi perhatikan baris terakhir: <code>PRAGMA foreign_key_check</code> menemukan baris nomor 99 yang <strong>sudah terlanjur masuk sebelumnya</strong>. Menyalakan aturan tidak membersihkan pelanggaran lama — ia cuma menghentikan yang baru.</p>
-        <div class="bahaya" style="margin-top:12px">
-          <strong>Yang harus kamu ubah dalam kebiasaanmu, mulai hari ini.</strong> Setelan ini <em>tidak</em> tersimpan di dalam berkas basis datanya; ia harus dinyalakan ulang <strong>di tiap koneksi baru</strong>. Jadi tepat setelah <code>sqlite3.connect(...)</code>, biasakan menulis <code>con.execute("PRAGMA foreign_keys = ON")</code>. Dan ketika kamu menerima basis data dari orang lain, jalankan <code>PRAGMA foreign_key_check</code> sekali sebelum percaya apa pun di dalamnya — hasilnya kosong berarti bersih, hasilnya berisi berarti kamu baru saja menemukan masalah yang tidak diketahui pemiliknya sendiri.
-        </div>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Kenapa bawaannya mati?</strong> Karena kompatibilitas: dukungan foreign key baru ditambahkan ke SQLite pada 2009, dan menyalakannya secara bawaan akan membuat basis data lama yang sudah punya baris yatim tiba-tiba gagal dibuka. Basis data besar seperti PostgreSQL menegakkannya sejak awal tanpa perlu diminta. Ini termasuk hal yang enak disebut di wawancara: bukan sekadar tahu apa itu foreign key, tapi tahu bahwa <em>ada</em>-nya aturan dan <em>ditegakkan</em>-nya aturan adalah dua hal berbeda.
-        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hapus 50.000 baris tadi, supaya perbandingan nanti adil.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.execute(&quot;DELETE FROM transaksi WHERE id &gt;= 1000000&quot;); c.commit()
+print(&quot;sisa baris:&quot;, c.execute(&quot;SELECT COUNT(*) FROM transaksi&quot;).fetchone()[0])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>sisa baris: 800000</code></pre></div>
+<p>Kalau angkamu bukan 800000, jangan lanjut — ulangi dari langkah 1.</p>
       </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Bikin tiga index sekaligus, dan catat waktunya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-4"><label for="sql-mahir-l4-v2-4-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan. Tiga index yang wajar untuk tabel ini.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for nama, kolom in [(&quot;idx_ct&quot;,&quot;cabang, tanggal&quot;), (&quot;idx_pel&quot;,&quot;pelanggan_id&quot;),
+                    (&quot;idx_prd&quot;,&quot;produk&quot;)]:
+    t = time.perf_counter()
+    c.execute(f&quot;CREATE INDEX {nama} ON transaksi({kolom})&quot;); c.commit()
+    print(f&quot;waktu buat {nama:8s}: {time.perf_counter()-t:.2f} detik&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>waktu buat idx_ct  : 0.70 detik
+waktu buat idx_pel : 0.35 detik
+waktu buat idx_prd : 0.36 detik</code></pre></div>
+<p>Sekali seumur hidup tabel itu, satu setengah detik total. Murah — sejauh ini.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Sekarang lihat harganya di berkas</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-5"><label for="sql-mahir-l4-v2-4-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Rapikan lagi, lalu ukur ukurannya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.execute(&quot;VACUUM&quot;)
+print(f&quot;dengan 3 index      : {os.path.getsize(&#x27;coba.db&#x27;)/1e6:.1f} MB&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>dengan 3 index      : 81.7 MB</code></pre></div>
+<p><strong>36,7 MB → 81,7 MB.</strong> Index-nya sendiri makan <strong>45 MB</strong> — lebih besar daripada datanya.</p>
+        <div class="catatan">Angka waktu di mesinmu akan beda. <strong>36.7 dan 81.7 tidak boleh beda</strong> — itu ukuran berkas, bukan kecepatan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Dan harganya di setiap penulisan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-6"><label for="sql-mahir-l4-v2-4-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis 50.000 baris yang sama persis, sekarang dengan tiga index terpasang.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>t_dgn = tulis(c)
+print(f&quot;dgn 3 index : {t_dgn:.2f} detik&quot;)
+print(f&quot;perlambatan : {t_dgn/t_tanpa:.1f}x&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>dgn 3 index : 0.17 detik
+perlambatan : 3.0x</code></pre></div>
+<p><strong>Tiga kali lebih lama</strong>, karena tiap baris baru harus disisipkan ke tiga daftar terurut — bukan cuma ditempel di ujung tabel.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Jawab pertanyaan yang tadi tidak bisa kamu jawab</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-7"><label for="sql-mahir-l4-v2-4-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca tabel ini pelan-pelan. Tiap barisnya sekarang punya angka di belakangnya.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Bikin index kalau…</th>
+<th>Jangan, kalau…</th>
+</tr></thead>
+            <tbody>
+              <tr><td>kolomnya sering muncul di <code>WHERE</code>, <code>JOIN … ON</code>, atau <code>ORDER BY</code></td><td>kolomnya jarang dipakai menyaring</td></tr>
+              <tr><td>tabelnya besar (puluhan ribu baris ke atas)</td><td>tabelnya kecil — di bawah beberapa ribu baris, <code>SCAN</code> sudah cukup cepat</td></tr>
+              <tr><td>nilainya banyak variasinya (<code>pelanggan_id</code>: 50.000 nilai berbeda)</td><td>nilainya sedikit variasinya (<code>status</code>: cuma “selesai” dan “batal”) — melompat ke setengah tabel bukan lompatan</td></tr>
+              <tr><td>datanya lebih sering dibaca daripada ditulis — laporan, dasbor, analisis</td><td>datanya masuk terus-menerus dan jarang dibaca — pencatatan mentah</td></tr>
+              <tr><td>kamu sudah <em>melihat</em> <code>SCAN</code> di rencananya</td><td>kamu belum mengukur apa pun dan cuma merasa “biar cepat”</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Baris terakhir yang paling sering dilanggar</strong>, termasuk oleh orang berpengalaman. Membuat index tanpa mengukur dulu adalah menebak — dengan biaya 45 MB dan 3× perlambatan tulis.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Hafalkan urutannya, bukan aturannya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-8"><label for="sql-mahir-l4-v2-4-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis lima langkah ini di tempat yang kamu lihat tiap hari.</div>
+        <div class="kode"><pre><code>1. query terasa lambat
+2. ukur(sql)          -&gt; berapa lama sebenarnya
+3. rencana(sql)       -&gt; SCAN-nya di mana
+4. CREATE INDEX ...   -&gt; baru sekarang
+5. ukur(sql) lagi     -&gt; buktikan bedanya</code></pre></div>
+<p>Langkah 5 yang paling sering dilewati. Kalau kamu melewatinya, kamu tidak tahu index-mu berguna atau cuma menambah 15 MB.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Satu aturan untuk pekerjaan klienmu nanti</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-9"><label for="sql-mahir-l4-v2-4-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca sekali. Ini menempel langsung ke alur <em>Bekal Data Klien</em>.</div>
+        <div class="hasil"><span class="tag">URUTAN YANG BENAR</span>
+          <p>Kalau data klien datang sebagai Excel lalu kamu muat ke SQLite: <strong>muat semua barisnya dulu, baru <code>CREATE INDEX</code> di akhir.</strong></p></div>
+<p>Alasannya persis dua angka yang barusan kamu ukur: membangun index sekali jadi memakan <strong>0,35 detik</strong>; membiarkannya terpasang selama pemuatan memperlambat tiap penulisan <strong>3 kali</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Bereskan, lalu ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-4-10"><label for="sql-mahir-l4-v2-4-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hapus salinannya, lalu tutup halaman ini dan jawab di kertas.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.close(); os.remove(&quot;coba.db&quot;)
+
+# 1. Dua harga yang dibayar tiap index?
+# 2. Kenapa kolom &quot;status&quot; (2 nilai) buruk untuk di-index?
+# 3. Kalau memuat 800.000 baris ke tabel baru, index dibuat kapan?</code></pre></div>
+<details><summary>Buka kunci jawaban</summary><p>1. <strong>Ruang</strong> (36,7 → 81,7 MB) dan <strong>kecepatan menulis</strong> (3×). 2. Melompat ke setengah tabel bukan lompatan — SQLite tetap membaca ratusan ribu baris. 3. <strong>Sesudah</strong> semua baris masuk, bukan sebelum.</p></details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> dua angka yang membuat semua nasihat index jadi masuk akal — <strong>+45 MB</strong> dan <strong>3× lebih lambat menulis</strong> — dan urutan lima langkah yang membuatmu tidak pernah menebak.</p><p style="margin-top:8px">Kalau index selalu menguntungkan, basis data pasti sudah membuatnya sendiri diam-diam. Ia tidak melakukan itu, dan sekarang kamu tahu sebabnya.</p><p style="margin-top:8px">Besok: kelambatan yang <strong>tidak bisa disembuhkan index apa pun</strong>. Siapkan waktu — satu langkahnya sengaja dibuat menunggu.</p>
     </div>
   </section>
 
-  <!-- ============ P7 ============ -->
-  <section class="day" data-hari="7">
+  <section class="day" data-hari="5">
     <div class="day-head">
-      <span class="n mono">SQL MAHIR L4 · 7</span>
-      <h2>View, snapshot, dan menguji SQL sebelum klien yang mengujinya</h2>
-      <span class="waktu">± 80 menit</span>
+      <span class="n">HARI 5</span>
+      <h2>Lambat karena bentuk query-nya, bukan karena index</h2>
+      <span class="waktu">± 75 menit (satu langkah menunggu 3 menit)</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memilih antara <code>VIEW</code> dan tabel ringkasan dengan alasan yang bisa kamu ucapkan, dan punya satu berkas uji mutu yang berteriak sebelum angkanya sampai ke klien.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengenali <strong>subquery berkorelasi</strong> di rencana eksekusi, menulis ulangnya jadi CTE, dan mengukur sendiri bahwa bebannya tumbuh seperti kuadrat — kelambatan yang tidak bisa disembuhkan index apa pun.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
-        <h3>View lawan tabel ringkasan: 11.464 kali lebih cepat, dengan satu harga</h3>
-        <span class="cek"><input type="checkbox" id="q7s1"><label for="q7s1">selesai</label></span>
+        <h3>Bikin tabel 10.000 baris — sengaja kecil</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-1"><label for="sql-mahir-l4-v2-5-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Sebuah <code>VIEW</code> adalah query yang diberi nama. Ia tidak menyimpan data apa pun — tiap kali kamu menyebutnya, query di baliknya dijalankan lagi dari awal.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, time, shutil
-shutil.copy("besar.db", "vw.db")
-c = sqlite3.connect("vw.db")
-
-c.execute("""CREATE VIEW ringkas AS
-SELECT cabang, substr(tanggal,1,7) AS bulan,
-       COUNT(*) AS transaksi, SUM(nilai) AS omzet
-FROM transaksi GROUP BY cabang, substr(tanggal,1,7)""")
-
-def ukur(sql, n=5):
-    w = []
-    for _ in range(n):
-        t = time.perf_counter(); r = c.execute(sql).fetchall(); w.append(time.perf_counter()-t)
-    return min(w)*1000, r
-
-ms_v, r_v = ukur("SELECT * FROM ringkas WHERE cabang='Kemang' ORDER BY bulan")
-print(f"VIEW  : {ms_v:8.1f} ms   {len(r_v)} baris")
-
-t = time.perf_counter()
-c.execute("CREATE TABLE ringkas_snapshot AS SELECT * FROM ringkas"); c.commit()
-buat = time.perf_counter() - t
-
-ms_t, r_t = ukur("SELECT * FROM ringkas_snapshot WHERE cabang='Kemang' ORDER BY bulan", n=9)
-print(f"TABEL : {ms_t:8.3f} ms   {len(r_t)} baris   (sekali buat {buat:.2f} detik)")
-print("isi sama?", r_v == r_t)</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>VIEW  :    382.3 ms   24 baris
-TABEL :    0.033 ms   24 baris   (sekali buat 2.02 detik)
-isi sama? True</code></pre></div>
-        </div>
-        <p>Isi yang sama persis, 24 baris, tapi 382,3 ms lawan 0,033 ms — sekitar <strong>11.000 kali</strong>. Masuk akal: view harus meringkas ulang 800.000 baris tiap kali dipanggil; tabel snapshot cuma membaca 24 baris yang sudah jadi.</p>
-        <p style="margin-top:8px">Sekarang harganya.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>c.execute("INSERT INTO transaksi VALUES (9000001,'2024-06-01','Kemang',7,'Kopi Susu',1,22000)")
-c.commit()
-
-v = c.execute("SELECT omzet FROM ringkas          WHERE cabang='Kemang' AND bulan='2024-06'").fetchone()[0]
-s = c.execute("SELECT omzet FROM ringkas_snapshot WHERE cabang='Kemang' AND bulan='2024-06'").fetchone()[0]
-print(f"view    : {v}")
-print(f"snapshot: {s}")
-print(f"selisih : {v-s}")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>view    : 338587000
-snapshot: 338565000
-selisih : 22000</code></pre></div>
-        </div>
-        <p>Satu transaksi Rp 22.000 masuk. View langsung tahu; snapshot tidak, dan tidak akan pernah tahu sampai ada yang membangunnya ulang. <strong>Itulah seluruh pertukarannya: kecepatan ditukar dengan kesegaran.</strong></p>
-        <div class="tabel-bungkus" style="margin-top:12px">
-          <table>
-            <thead><tr><th></th><th class="mono">VIEW</th><th>Tabel snapshot</th></tr></thead>
-            <tbody>
-              <tr><td>Kecepatan baca</td><td>selambat query aslinya</td><td>secepat tabel kecil</td></tr>
-              <tr><td>Kesegaran</td><td>selalu terbaru</td><td>sesegar terakhir kali dibangun</td></tr>
-              <tr><td>Ruang berkas</td><td>nol</td><td>sebesar hasilnya</td></tr>
-              <tr><td>Pakai untuk</td><td>menyembunyikan query rumit; data yang harus akurat detik ini</td><td>dasbor, laporan bulanan, apa pun yang dibaca berkali-kali dari data yang sudah tidak berubah</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Istilah yang akan kamu dengar: <em>materialized view</em>.</strong> Itu tabel snapshot yang dibangun ulang otomatis oleh basis datanya sendiri — PostgreSQL punya (<code>CREATE MATERIALIZED VIEW</code> lalu <code>REFRESH</code>), BigQuery punya, SQLite <strong>tidak</strong>. Di SQLite kamu membangunnya sendiri: <code>DROP TABLE</code> lalu <code>CREATE TABLE … AS SELECT * FROM view</code>, dijalankan terjadwal — persis pola skrip harian di Minggu 11. Jadi kamu sudah punya alatnya; yang baru cuma namanya.
-        </div>
-        <div class="bahaya" style="margin-top:12px">
-          <strong>Aturan yang menyelamatkan reputasi:</strong> tabel snapshot apa pun harus membawa <strong>kapan ia dibangun</strong>. Tambahkan satu kolom <code>dibangun_pada</code> berisi waktu pembuatannya, dan cetak tanggal itu di kaki tiap laporan. Klien yang melihat "data per 3 September 08:00" tahu persis apa yang ia baca. Klien yang melihat angka tanpa keterangan waktu akan menganggapnya angka hari ini — dan ketika ternyata bukan, yang disalahkan adalah kamu, bukan snapshot-nya.
-        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sesi Python baru. Skrip ini bikin <code>q2.db</code> sendiri.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import sqlite3, time, os
+if os.path.exists(&quot;q2.db&quot;): os.remove(&quot;q2.db&quot;)
+c = sqlite3.connect(&quot;q2.db&quot;)
+c.execute(&quot;ATTACH &#x27;besar.db&#x27; AS b&quot;)
+c.execute(&quot;CREATE TABLE kecil AS SELECT * FROM b.transaksi WHERE id &lt;= 10000&quot;)
+c.commit(); c.execute(&quot;DETACH b&quot;)
+print(&quot;baris:&quot;, c.execute(&quot;SELECT COUNT(*) FROM kecil&quot;).fetchone()[0])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>baris: 10000</code></pre></div>
+<p>Sepuluh ribu, bukan 800.000. Kamu akan tahu alasannya begitu melihat angka di langkah 3.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">2</span>
-        <h3>Berkas uji mutu: biar SQL yang menemukan kesalahannya, bukan klien</h3>
-        <span class="cek"><input type="checkbox" id="q7s2"><label for="q7s2">selesai</label></span>
+        <h3>Tulis dua versi dari satu pertanyaan yang sama</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-2"><label for="sql-mahir-l4-v2-5-2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Di Bekal Kirim Hasil kamu belajar membuat skrip yang gagal dengan berisik. Sekarang isinya: <strong>sekumpulan query yang seharusnya tidak mengembalikan baris apa pun.</strong> Kalau salah satu mengembalikan baris, ada yang rusak.</p>
-        <div class="aksi">Simpan ini sebagai <code>uji_mutu.py</code> di sebelah <code>senja.db</code>, lalu jalankan <code>python uji_mutu.py</code>.</div>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, sys
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Pertanyaannya: <em>di tiap cabang, berapa transaksi yang nilainya di atas rata-rata cabang itu sendiri?</em> Tempel dua-duanya, jangan dijalankan dulu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>korelasi = &quot;&quot;&quot;SELECT cabang, COUNT(*) AS di_atas_rata FROM kecil t1
+WHERE nilai &gt; (SELECT AVG(nilai) FROM kecil t2 WHERE t2.cabang = t1.cabang)
+GROUP BY cabang ORDER BY cabang&quot;&quot;&quot;
 
-# batas = berapa banyak baris bermasalah yang MASIH boleh ada.
-# 0  = harus bersih.
-# &gt;0 = utang yang sudah kita tahu dan sudah kita sepakati dengan klien.
-#      Angkanya tidak boleh naik tanpa kita sadari.
-PEMERIKSAAN = [
- dict(nama="Pesanan tanpa pelanggan", batas=12,
-      sql="SELECT id FROM pesanan WHERE pelanggan_id IS NULL"),
- dict(nama="Produk tanpa harga beli", batas=2,
-      sql="SELECT id, nama FROM produk WHERE harga_beli IS NULL"),
- dict(nama="Pelanggan tanpa kota", batas=6,
-      sql="SELECT id, nama FROM pelanggan WHERE kota IS NULL"),
- dict(nama="Item menunjuk pesanan hantu", batas=0,
-      sql="""SELECT i.id FROM item i
-             LEFT JOIN pesanan p ON p.id = i.pesanan_id WHERE p.id IS NULL"""),
- dict(nama="Jumlah atau harga tidak masuk akal", batas=0,
-      sql="SELECT id FROM item WHERE jumlah &lt;= 0 OR harga_saat_itu &lt;= 0"),
- dict(nama="Pesanan selesai yang hilang dari kasir", batas=0,
-      sql="""SELECT id FROM pesanan WHERE status = 'selesai'
-             AND id NOT IN (SELECT id FROM pesanan_kasir)"""),
- dict(nama="Struk kasir tanpa pesanan", batas=0,
-      sql="""SELECT id FROM pesanan_kasir
-             WHERE id NOT IN (SELECT id FROM pesanan)"""),
- dict(nama="Nilai pesanan beda antara sistem dan kasir", batas=0,
-      sql="""SELECT p.id, k.nilai - SUM(i.jumlah * i.harga_saat_itu) AS selisih
-             FROM pesanan p
-             JOIN item i          ON i.pesanan_id = p.id
-             JOIN pesanan_kasir k ON k.id = p.id
-             GROUP BY p.id HAVING selisih &lt;&gt; 0"""),
-]
+cte = &quot;&quot;&quot;WITH rata AS (SELECT cabang, AVG(nilai) AS r FROM kecil GROUP BY cabang)
+SELECT t.cabang, COUNT(*) AS di_atas_rata FROM kecil t
+JOIN rata ON rata.cabang = t.cabang
+WHERE t.nilai &gt; rata.r
+GROUP BY t.cabang ORDER BY t.cabang&quot;&quot;&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tidak ada yang tercetak. Dua variabel tersimpan.</p></div>
+<p>Bedanya cuma di mana rata-ratanya dihitung. Versi pertama menghitungnya <em>di dalam</em> <code>WHERE</code>; versi kedua menghitungnya sekali di depan.</p>
+      </div>
+    </div>
 
-con = sqlite3.connect("senja.db")
-gagal = 0
-for p in PEMERIKSAAN:
-    baris = con.execute(p["sql"]).fetchall()
-    n, batas = len(baris), p["batas"]
-    if n &gt; batas:
-        gagal += 1
-        print(f"GAGAL  {p['nama']}: {n} baris (batas {batas})")
-        for b in baris[:3]:
-            print(f"          {b}")
-    elif n == batas and batas &gt; 0:
-        print(f"utang  {p['nama']}: {n} baris (sesuai batas {batas})")
-    else:
-        print(f"bersih {p['nama']}")
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Jalankan yang pertama, dan tunggu</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-3"><label for="sql-mahir-l4-v2-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan. Lalu duduk dan perhatikan berapa lama.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>t = time.perf_counter(); rk = c.execute(korelasi).fetchall()
+print(f&quot;{(time.perf_counter()-t)*1000:.1f} ms&quot;)
+for x in rk: print(&quot;   &quot;, x)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>6200.6 ms
+    ('Dago', 869)
+    ('Kemang', 879)
+    ('Renon', 877)
+    ('Seturan', 933)
+    ('Seturan2', 881)</code></pre></div>
+        <div class="bahaya"><strong>Yang normal tapi bikin panik:</strong> 3–15 detik tanpa apa pun di layar. Jangan tekan Ctrl-C. Itu memang inti pelajarannya.</div>
+      </div>
+    </div>
 
-print(f"\n{len(PEMERIKSAAN) - gagal} lolos, {gagal} gagal")
-sys.exit(1 if gagal else 0)          # kode keluar 1 = skrip terjadwal ikut gagal</code></pre>
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tanya kenapa</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-4"><label for="sql-mahir-l4-v2-5-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Minta rencananya. Cari kata yang belum pernah kamu lihat.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for p in c.execute(&quot;EXPLAIN QUERY PLAN &quot; + korelasi): print(&quot;   &quot;, p[3])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>    SCAN t1
+    CORRELATED SCALAR SUBQUERY 1
+    SCAN t2
+    USE TEMP B-TREE FOR GROUP BY</code></pre></div>
+<p><strong>CORRELATED</strong> artinya subquery itu menyebut <code>t1.cabang</code> — sesuatu dari baris yang sedang diproses di luar. Jawabannya beda untuk tiap baris, jadi SQLite tidak bisa menghitungnya sekali lalu menyimpannya.</p>
+        <div class="catatan"><code>SCAN t2</code> di dalam <code>SCAN t1</code>: menjalankan ulang <code>AVG</code> atas 10.000 baris, untuk <strong>tiap satu dari 10.000 baris</strong>. Itu 100 juta pembacaan untuk menjawab pertanyaan yang sebenarnya cuma butuh <strong>lima</strong> angka.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Jalankan yang kedua</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-5"><label for="sql-mahir-l4-v2-5-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Query yang menjawab pertanyaan yang sama persis.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>w = []
+for _ in range(5):
+    t = time.perf_counter(); rc = c.execute(cte).fetchall(); w.append(time.perf_counter()-t)
+print(f&quot;{min(w)*1000:.1f} ms&quot;)
+print(&quot;sama?&quot;, rk == rc)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>6.0 ms
+sama? True</code></pre></div>
+<p><strong>6.200,6 ms lawan 6,0 ms</strong> — sekitar seribu kali. Dan <code>sama? True</code>: angka hasilnya sepuluh-sepuluhnya identik. Yang berbeda cuma berapa lama menunggunya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Lihat rencananya juga</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-6"><label for="sql-mahir-l4-v2-5-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bandingkan dengan rencana di langkah 4.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for p in c.execute(&quot;EXPLAIN QUERY PLAN &quot; + cte): print(&quot;   &quot;, p[3])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>    CO-ROUTINE rata
+    SCAN kecil
+    USE TEMP B-TREE FOR GROUP BY
+    SCAN t
+    SEARCH rata USING AUTOMATIC COVERING INDEX (cabang=?)
+    USE TEMP B-TREE FOR GROUP BY</code></pre></div>
+<p>Rencananya <em>lebih panjang</em>, dan seribu kali lebih cepat. <strong>Panjang rencana bukan ukuran biaya.</strong> Yang mahal adalah <code>CORRELATED</code> — pekerjaan yang diulang, bukan pekerjaan yang banyak.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Buktikan polanya di lima ukuran tabel</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-7"><label for="sql-mahir-l4-v2-5-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Skrip ini butuh sekitar <strong>3 menit</strong>. Jalankan, lalu tinggalkan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.execute(&quot;ATTACH &#x27;besar.db&#x27; AS b&quot;)
+print(f&quot;{&#x27;baris&#x27;:&gt;8} {&#x27;berkorelasi&#x27;:&gt;14} {&#x27;CTE&#x27;:&gt;10}   kelipatan&quot;)
+for n in [2500, 5000, 10000, 20000, 40000]:
+    c.execute(&quot;DROP TABLE IF EXISTS kecil&quot;)
+    c.execute(f&quot;CREATE TABLE kecil AS SELECT * FROM b.transaksi WHERE id &lt;= {n}&quot;)
+    c.commit()
+    t = time.perf_counter(); rk = c.execute(korelasi).fetchall(); tk = time.perf_counter()-t
+    w = []
+    for _ in range(5):
+        t = time.perf_counter(); rc = c.execute(cte).fetchall(); w.append(time.perf_counter()-t)
+    print(f&quot;{n:&gt;8} {tk*1000:&gt;12.1f}ms {min(w)*1000:&gt;8.1f}ms   {tk/min(w):&gt;8.0f}x   sama={rk==rc}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>   baris    berkorelasi        CTE   kelipatan
+    2500        382.6ms      1.4ms        273x   sama=True
+    5000       1582.8ms      2.7ms        580x   sama=True
+   10000       6247.2ms      5.7ms       1095x   sama=True
+   20000      25134.3ms     11.4ms       2206x   sama=True
+   40000     106286.7ms     24.9ms       4275x   sama=True</code></pre></div>
+        <div class="bahaya">Baris terakhir sendirian makan <strong>106 detik</strong>. Itu memang disengaja — kamu perlu <em>menunggunya</em>, bukan membaca angkanya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Baca kedua kolom itu dari atas ke bawah</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-8"><label for="sql-mahir-l4-v2-5-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bandingkan dua deret angka ini. Tidak ada yang dijalankan.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Baris jadi 2× lipat</th>
+<th>Berkorelasi</th>
+<th>CTE</th>
+</tr></thead>
+            <tbody>
+              <tr><td>382 → 1.583</td><td><strong>4× lipat</strong></td><td>1,4 → 2,7 = 2× lipat</td></tr>
+              <tr><td>1.583 → 6.247</td><td><strong>4× lipat</strong></td><td>2,7 → 5,7 = 2× lipat</td></tr>
+              <tr><td>6.247 → 25.134</td><td><strong>4× lipat</strong></td><td>5,7 → 11,4 = 2× lipat</td></tr>
+              <tr><td>25.134 → 106.287</td><td><strong>4× lipat</strong></td><td>11,4 → 24,9 = 2× lipat</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="kode"><pre><code>utang  Pesanan tanpa pelanggan: 12 baris (sesuai batas 12)
+<p>Dua kali baris → <strong>empat</strong> kali waktu. Itu tanda beban yang naik seperti kuadrat. Kolom CTE: dua kali baris → dua kali waktu. Lurus.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Hitung sendiri kenapa aku tidak menjalankannya di 800.000</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-9"><label for="sql-mahir-l4-v2-5-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu perkalian di kalkulator.</div>
+        <div class="kode"><pre><code>800000 / 40000        # = 20 kali lipat barisnya
+20 * 20               # = 400 kali lipat waktunya (karena kuadrat)
+106.3 * 400 / 3600    # jam</code></pre></div>
+        <div class="hasil"><span class="tag">HITUNGANMU HARUS MENDEKATI</span>
+          <pre><code>± 11,8 jam</code></pre></div>
+<p>Itu <strong>perkiraan, bukan pengukuran</strong> — aku tidak menjalankannya sampai selesai, dan kamu juga sebaiknya tidak.</p>
+        <div class="catatan"><strong>Inilah bentuk kegagalan yang paling berbahaya.</strong> Query ini <em>tampak sehat</em> di data contoh 2.500 baris — 0,4 detik, siapa yang peduli — lalu menggantung semalaman di data klien yang sebenarnya. Dan tidak ada index yang bisa menolongnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Kenali bentuknya tanpa menjalankan apa pun</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-10"><label for="sql-mahir-l4-v2-5-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca dua query ini dan cari bedanya sendiri sebelum membaca kalimat di bawahnya.</div>
+        <div class="kode"><pre><code>-- BERKORELASI (mahal): &#x27;p&#x27; di dalam kurung datang dari luar kurung
+SELECT p.nama,
+       (SELECT COUNT(*) FROM pesanan WHERE pelanggan_id = p.id) AS jumlah
+FROM pelanggan p
+
+-- TIDAK berkorelasi (murah): isi kurung berdiri sendiri
+SELECT nama FROM produk
+WHERE harga &gt; (SELECT AVG(harga) FROM produk)</code></pre></div>
+        <div class="hasil"><span class="tag">YANG DICARI</span>
+          <p>Tandanya: ada <code>SELECT</code> di dalam kurung, <strong>dan di dalam kurung itu disebut nama tabel dari luar</strong>.</p></div>
+<p>Yang kedua aman — dihitung sekali, hasilnya dipakai berulang. Yang pertama adalah bentuk yang barusan kamu ukur.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Latihan: tulis ulang yang mahal itu</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-11"><label for="sql-mahir-l4-v2-5-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ubah query berkorelasi di atas supaya tidak berkorelasi lagi, jalankan di <code>senja.db</code>, lalu bandingkan hasilnya. <strong>Baru</strong> buka kuncinya.</div>
+<details><summary>Buka kunci jawaban</summary>        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import sqlite3, pandas as pd
+s = sqlite3.connect(&quot;senja.db&quot;)
+baru = &quot;&quot;&quot;SELECT p.nama, COUNT(o.id) AS jumlah_pesanan
+FROM pelanggan p
+LEFT JOIN pesanan o ON o.pelanggan_id = p.id
+GROUP BY p.id, p.nama ORDER BY jumlah_pesanan DESC, p.nama LIMIT 5&quot;&quot;&quot;
+print(pd.read_sql(baru, s))</code></pre></div></details>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>     nama  jumlah_pesanan
+0    Rina              32
+1    Lita              30
+2   Dimas              26
+3  Hendra              26
+4    Bayu              25</code></pre></div>
+<p>Identik dengan versi berkorelasinya. Di <code>senja.db</code> yang cuma 20 pelanggan, dua-duanya selesai seketika — <strong>dan itu justru masalahnya</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Satu jebakan di jawaban itu: LEFT, bukan JOIN biasa</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-12"><label for="sql-mahir-l4-v2-5-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan ini untuk melihat apa yang hilang kalau <code>LEFT</code> dilupakan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(s.execute(&quot;&quot;&quot;SELECT p.id, p.nama FROM pelanggan p
+LEFT JOIN pesanan o ON o.pelanggan_id = p.id
+WHERE o.id IS NULL ORDER BY p.id&quot;&quot;&quot;).fetchall())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>[(18, 'Bagus'), (19, 'Vira'), (20, 'Andi')]</code></pre></div>
+<p>Tiga pelanggan yang belum pernah pesan — yang kamu temukan di Level 1. Versi berkorelasi memberi mereka angka <strong>0</strong>. <code>JOIN</code> biasa <strong>menghilangkan mereka dari daftar sama sekali</strong>: 17 baris, bukan 20.</p>
+        <div class="bahaya"><strong>Menulis ulang query demi kecepatan tidak boleh diam-diam mengubah jawabannya.</strong> Cara memastikannya cuma satu, dan kamu sudah melakukannya di langkah 5: <code>sama? True</code>. Bandingkan hasil kedua versi, selalu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">13</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-5-13"><label for="sql-mahir-l4-v2-5-13">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hapus <code>q2.db</code>, tutup halaman ini, jawab di kertas.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.close(); os.remove(&quot;q2.db&quot;)
+
+# 1. Kata apa di rencana yang berarti &quot;pekerjaan ini diulang tiap baris&quot;?
+# 2. Kalau baris jadi 2x dan waktu jadi 4x, apa artinya?
+# 3. Kenapa index tidak menolong kasus ini?
+# 4. Satu hal yang wajib dicek setelah menulis ulang query demi kecepatan?</code></pre></div>
+<details><summary>Buka kunci jawaban</summary><p>1. <code>CORRELATED SCALAR SUBQUERY</code>. 2. Bebannya kuadrat — data 20× lipat berarti waktu ±400× lipat. 3. Index memperbaiki <em>cara mencari baris</em>, bukan <em>berapa kali pekerjaan yang sama diulang</em>. 4. Bahwa hasilnya masih identik.</p></details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 5 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> satu kata yang harus kamu cari di tiap rencana (<code>CORRELATED</code>), satu tanda yang bisa kamu lihat dari teks query-nya saja, dan satu tabel lima baris yang kamu ukur sendiri selama tiga menit menunggu.</p><p style="margin-top:8px">Kebiasaan ini harus kamu bangun <strong>sekarang, di data kecil, di saat tidak ada bedanya</strong> — karena di saat bedanya terasa, kamu sudah di depan klien.</p><p style="margin-top:8px">Besok berhenti soal kecepatan. Besok soal <strong>Rp 400.000 yang menguap di antara dua baris perintah</strong> — dan itu bagian yang paling dekat dengan latar belakangmu.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 6</span>
+      <h2>Transaksi: Rp 400.000 yang menguap di antara dua baris perintah</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> memakai <code>BEGIN</code>/<code>COMMIT</code>/<code>ROLLBACK</code> dengan sadar, dan menemukan sendiri satu setelan bawaan SQLite yang diam-diam mengizinkan data rusak masuk ke basis datamu.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin dua akun kas</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-1"><label for="sql-mahir-l4-v2-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sesi Python baru. Ini bekerja di salinan <code>tx.db</code>, <code>senja.db</code>-mu aman.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import sqlite3, shutil
+shutil.copy(&quot;senja.db&quot;, &quot;tx.db&quot;)
+con = sqlite3.connect(&quot;tx.db&quot;, isolation_level=None)
+con.executescript(&quot;&quot;&quot;
+CREATE TABLE kas (akun TEXT PRIMARY KEY,
+                  saldo INTEGER NOT NULL CHECK (saldo &gt;= 0));
+INSERT INTO kas VALUES (&#x27;Kas Besar&#x27;, 5000000), (&#x27;Kas Kecil&#x27;, 300000);
+&quot;&quot;&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tidak ada yang tercetak. Itu memang benar.</p></div>
+<p><code>CHECK (saldo &gt;= 0)</code> artinya: saldo kas tidak boleh minus. <code>isolation_level=None</code> artinya: <em>jangan urus transaksi untukku, aku yang pegang kendali</em> — hari ini kamu yang pegang.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Catat saldo awalnya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-2"><label for="sql-mahir-l4-v2-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bikin fungsi <code>saldo</code>, lalu cetak totalnya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def saldo():
+    return dict(con.execute(&quot;SELECT akun, saldo FROM kas&quot;).fetchall())
+
+print(&quot;saldo:&quot;, saldo())
+print(&quot;total:&quot;, sum(saldo().values()))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>saldo: {'Kas Besar': 5000000, 'Kas Kecil': 300000}
+total: 5300000</code></pre></div>
+<p><strong>5.300.000.</strong> Ingat angka ini. Empat langkah lagi ia akan berubah tanpa ada yang mencuri apa pun.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Perintah pertama: keluarkan Rp 400.000 dari Kas Besar</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-3"><label for="sql-mahir-l4-v2-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;UPDATE kas SET saldo = saldo - 400000 WHERE akun = &#x27;Kas Besar&#x27;&quot;)
+print(&quot;saldo:&quot;, saldo())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>saldo: {'Kas Besar': 4600000, 'Kas Kecil': 300000}</code></pre></div>
+<p>Berhasil. Uangnya sudah keluar dari Kas Besar dan <strong>belum masuk ke mana pun</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Perintah kedua: keluarkan Rp 900.000 dari Kas Kecil</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-4"><label for="sql-mahir-l4-v2-6-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Kas Kecil cuma punya 300.000, jadi ini akan ditolak. Jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>try:
+    con.execute(&quot;UPDATE kas SET saldo = saldo - 900000 WHERE akun = &#x27;Kas Kecil&#x27;&quot;)
+except sqlite3.IntegrityError as e:
+    print(&quot;error:&quot;, e)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>error: CHECK constraint failed: saldo &gt;= 0</code></pre></div>
+<p>Ditolak, seperti seharusnya. Basis datanya melakukan tugasnya dengan benar.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Sekarang hitung totalnya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-5"><label for="sql-mahir-l4-v2-6-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ini langkah yang penting. Jalankan, lalu bandingkan dengan langkah 2.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;saldo:&quot;, saldo())
+print(&quot;total:&quot;, sum(saldo().values()))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>saldo: {'Kas Besar': 4600000, 'Kas Kecil': 300000}
+total: 4900000</code></pre></div>
+<p><strong>5.300.000 → 4.900.000.</strong> Rp 400.000 hilang dari muka bumi. Tidak dicuri, tidak salah hitung — perintah pertama berhasil, perintah kedua ditolak, dan <strong>tidak ada yang membatalkan yang pertama</strong>.</p>
+        <div class="bahaya"><strong>Bentuk kesalahan yang tidak akan ketahuan dari laporan.</strong> Tidak ada baris merah, tidak ada pesan gagal di dasbor — cuma angka yang sedikit kurang benar, dan program yang <em>terlihat</em> jalan lancar. Di skrip harian yang kamu pasang untuk klien (Minggu 11), ia akan mengulang kesalahannya tiap hari sampai ada yang mencoba merekonsiliasi.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Kamu sudah paham prinsipnya sejak sebelum tahu istilahnya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-6"><label for="sql-mahir-l4-v2-6-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca satu kalimat ini, lalu lanjut.</div>
+        <div class="hasil"><span class="tag">YANG SUDAH KAMU TAHU</span>
+          <p><strong>Debit dan kredit dicatat bersama-sama, atau tidak sama sekali.</strong> Setengah jurnal bukan jurnal yang setengah benar — ia jurnal yang salah.</p></div>
+<p>SQL punya nama untuk aturan itu: <strong>transaksi</strong>. Tiga baris perintah berikutnya adalah seluruh isinya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Ulangi kejadian yang sama, dibungkus transaksi</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-7"><label for="sql-mahir-l4-v2-6-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Kembalikan saldonya dulu, lalu jalankan tiga <code>UPDATE</code> yang sama persis — dengan tiga baris tambahan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;UPDATE kas SET saldo = 5000000 WHERE akun = &#x27;Kas Besar&#x27;&quot;)
+try:
+    con.execute(&quot;BEGIN&quot;)                                     # &lt;-- satu baris ini
+    con.execute(&quot;UPDATE kas SET saldo = saldo - 400000 WHERE akun = &#x27;Kas Besar&#x27;&quot;)
+    con.execute(&quot;UPDATE kas SET saldo = saldo - 900000 WHERE akun = &#x27;Kas Kecil&#x27;&quot;)
+    con.execute(&quot;COMMIT&quot;)                                    # &lt;-- dan satu ini
+except sqlite3.IntegrityError as e:
+    con.execute(&quot;ROLLBACK&quot;)                                  # &lt;-- dan penyelamatnya
+    print(&quot;error:&quot;, e, &quot;-&gt; ROLLBACK&quot;)
+print(&quot;total:&quot;, sum(saldo().values()))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>error: CHECK constraint failed: saldo &gt;= 0 -&gt; ROLLBACK
+total: 5300000</code></pre></div>
+<p><strong>Error yang sama persis. Totalnya tetap 5.300.000.</strong> <code>ROLLBACK</code> membatalkan juga <code>UPDATE</code> pertama yang sudah terlanjur berhasil, seolah-olah tidak pernah terjadi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Tiga kata, satu janji</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-8"><label for="sql-mahir-l4-v2-6-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca sekali. Ini yang harus keluar dari mulutmu di wawancara.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kata</th>
+<th>Janjinya</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>BEGIN</code></td><td>mulai sekarang, semua yang kulakukan menggantung dulu</td></tr>
+              <tr><td><code>COMMIT</code></td><td>semuanya berhasil — tuliskan permanen</td></tr>
+              <tr><td><code>ROLLBACK</code></td><td>ada yang gagal — kembalikan seperti sebelum <code>BEGIN</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Tidak ada keadaan setengah jalan yang bisa dilihat orang lain, dan tidak ada keadaan setengah jalan yang tertinggal <strong>kalau listrik mati di tengahnya</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Pola yang benar, dan satu baris yang sering dilupakan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-9"><label for="sql-mahir-l4-v2-6-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin pola ini ke catatanmu. Ia menempel langsung ke <code>try</code>/<code>except</code> dari <em>Bekal Kirim Hasil</em>.</div>
+        <div class="kode"><pre><code>try:
+    con.execute(&quot;BEGIN&quot;)
+    ...                      # kerjanya di sini
+    con.execute(&quot;COMMIT&quot;)
+except Exception:
+    con.execute(&quot;ROLLBACK&quot;)
+    raise                    # &lt;-- jangan pernah dihapus</code></pre></div>
+        <div class="bahaya"><code>ROLLBACK</code> menyelamatkan <strong>datanya</strong>; <code>raise</code> yang menyelamatkan <strong>kamu</strong>. Tanpa <code>raise</code>, skripmu tetap melapor “selesai” padahal tidak ada yang tersimpan — dan kamu baru tahu berbulan-bulan kemudian.</div>
+<p><strong>Kapan ini perlu:</strong> setiap kali satu kejadian bisnis butuh <em>lebih dari satu perintah</em> — mencatat pembayaran (tulis ke tabel pembayaran <em>dan</em> ubah status pesanan), memuat ulang data bulanan (hapus bulan lama <em>lalu</em> masukkan yang baru). Kalau cuma satu perintah, SQLite sudah membungkusnya sendiri.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Sekarang bagian yang membuat orang terkejut</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-10"><label for="sql-mahir-l4-v2-6-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salinan baru. Cetak satu setelan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>shutil.copy(&quot;senja.db&quot;, &quot;fk.db&quot;)
+c = sqlite3.connect(&quot;fk.db&quot;)
+print(&quot;foreign_keys bawaan:&quot;, c.execute(&quot;PRAGMA foreign_keys&quot;).fetchone()[0])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>foreign_keys bawaan: 0</code></pre></div>
+<p>Nol berarti <strong>mati</strong>. Simpan keheranan itu sampai langkah 12.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Bikin dua tabel yang jelas-jelas bertaut</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-11"><label for="sql-mahir-l4-v2-6-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Perhatikan baris <code>REFERENCES induk(id)</code> — ditulis dengan jelas.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.executescript(&quot;&quot;&quot;
+CREATE TABLE induk (id INTEGER PRIMARY KEY, nama TEXT);
+CREATE TABLE anak  (id INTEGER PRIMARY KEY,
+                    induk_id INTEGER REFERENCES induk(id),
+                    catatan TEXT);
+INSERT INTO induk VALUES (1, &#x27;Sari&#x27;);
+&quot;&quot;&quot;)
+print(&quot;induk:&quot;, c.execute(&quot;SELECT * FROM induk&quot;).fetchall())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>induk: [(1, 'Sari')]</code></pre></div>
+<p>Satu induk, nomor 1. Tabel <code>anak</code> hanya boleh menunjuk induk yang ada.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Coba masukkan baris yatim</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-12"><label for="sql-mahir-l4-v2-6-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Induk nomor 777 tidak pernah ada. Jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.execute(&quot;INSERT INTO anak VALUES (99, 777, &#x27;induk 777 tidak ada&#x27;)&quot;)
+c.commit()
+print(&quot;tersimpan:&quot;, c.execute(&quot;SELECT * FROM anak&quot;).fetchall())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>tersimpan: [(99, 777, 'induk 777 tidak ada')]</code></pre></div>
+<p><strong>Diterima.</strong> Kamu menuliskan <code>REFERENCES induk(id)</code> dengan jelas, SQLite membacanya dengan jelas, dan tetap menyimpan baris yang menunjuk induk yang tidak ada. <em>Aturannya tercatat tapi tidak ditegakkan.</em></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">13</span>
+        <h3>Nyalakan, lalu coba lagi</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-13"><label for="sql-mahir-l4-v2-6-13">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu baris PRAGMA, lalu ulangi dengan induk 888 yang juga tidak ada.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.execute(&quot;PRAGMA foreign_keys = ON&quot;)
+print(&quot;sesudah ON:&quot;, c.execute(&quot;PRAGMA foreign_keys&quot;).fetchone()[0])
+try:
+    c.execute(&quot;INSERT INTO anak VALUES (100, 888, &#x27;induk 888 tidak ada&#x27;)&quot;)
+except sqlite3.IntegrityError as e:
+    print(&quot;ditolak:&quot;, e)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>sesudah ON: 1
+ditolak: FOREIGN KEY constraint failed</code></pre></div>
+<p>Sekarang ditolak. Aturan yang sama, tabel yang sama — bedanya cuma satu baris PRAGMA.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">14</span>
+        <h3>Periksa yang sudah terlanjur masuk</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-14"><label for="sql-mahir-l4-v2-6-14">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Menyalakan aturan tidak membersihkan pelanggaran lama. Buktikan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(c.execute(&quot;PRAGMA foreign_key_check&quot;).fetchall())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>[('anak', 99, 'induk', 0)]</code></pre></div>
+<p>Baris nomor 99 masih di sana. <strong>Menyalakan aturan cuma menghentikan yang baru.</strong></p>
+        <div class="catatan"><strong>Dua kebiasaan baru, mulai hari ini.</strong> (1) Setelan ini <em>tidak</em> tersimpan di dalam berkasnya — ia harus dinyalakan ulang <strong>di tiap koneksi baru</strong>, jadi tulis <code>con.execute("PRAGMA foreign_keys = ON")</code> tepat setelah <code>connect</code>. (2) Ketika menerima basis data dari orang lain, jalankan <code>PRAGMA foreign_key_check</code> sekali <em>sebelum</em> mempercayai apa pun di dalamnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">15</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-15"><label for="sql-mahir-l4-v2-6-15">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Jawab empat pertanyaan di kertas.</div>
+        <div class="kode"><pre><code>1. Tiga kata yang menjamin &quot;semua atau tidak sama sekali&quot;?
+2. Satu baris yang wajib ikut di blok except selain ROLLBACK?
+3. Berapa nilai bawaan PRAGMA foreign_keys di SQLite?
+4. Perintah untuk memeriksa baris yatim yang sudah terlanjur masuk?</code></pre></div>
+<details><summary>Buka kunci jawaban</summary><p>1. <code>BEGIN</code>, <code>COMMIT</code>, <code>ROLLBACK</code>. 2. <code>raise</code>. 3. <strong>0</strong> — mati, dan harus dinyalakan di tiap koneksi baru. 4. <code>PRAGMA foreign_key_check</code>.</p></details>
+        <div class="catatan"><strong>Bagus untuk wawancara:</strong> bukan sekadar tahu apa itu foreign key, tapi tahu bahwa <em>ada</em>-nya aturan dan <em>ditegakkan</em>-nya aturan adalah dua hal berbeda. SQLite mematikannya demi kompatibilitas dengan basis data lama yang sudah terlanjur punya baris yatim; PostgreSQL menegakkannya sejak awal tanpa perlu diminta.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 6 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> satu kejadian yang kamu saksikan sendiri (Rp 400.000 menguap), tiga kata yang mencegahnya, dan satu baris PRAGMA yang mulai sekarang ikut di tiap <code>connect</code> yang kamu tulis.</p><p style="margin-top:8px">Hari ini bukan soal kecepatan sama sekali. Ia soal <strong>angka yang bisa dipercaya</strong> — dan itu bagian pekerjaanmu yang paling dekat dengan enam tahun terakhirmu.</p><p style="margin-top:8px">Besok, hari terakhir: memilih antara <code>VIEW</code> dan tabel ringkasan, dan satu berkas uji mutu yang berteriak <em>sebelum</em> angkanya sampai ke klien.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 7</span>
+      <h2>View, snapshot, dan menguji SQL sebelum klien yang mengujinya</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> memilih antara <code>VIEW</code> dan tabel ringkasan dengan alasan yang bisa kamu ucapkan, dan punya satu berkas uji mutu yang berteriak <strong>sebelum</strong> angkanya sampai ke klien.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin sebuah VIEW</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-1"><label for="sql-mahir-l4-v2-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sesi Python baru, salinan <code>vw.db</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import sqlite3, time, shutil
+shutil.copy(&quot;besar.db&quot;, &quot;vw.db&quot;)
+c = sqlite3.connect(&quot;vw.db&quot;)
+c.execute(&quot;&quot;&quot;CREATE VIEW ringkas AS
+SELECT cabang, substr(tanggal,1,7) AS bulan,
+       COUNT(*) AS transaksi, SUM(nilai) AS omzet
+FROM transaksi GROUP BY cabang, substr(tanggal,1,7)&quot;&quot;&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tidak ada yang tercetak.</p></div>
+<p>Sebuah <code>VIEW</code> adalah <strong>query yang diberi nama</strong>. Ia tidak menyimpan data apa pun — tiap kali kamu menyebutnya, query di baliknya dijalankan lagi dari awal.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ukur berapa lama membacanya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-2"><label for="sql-mahir-l4-v2-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bikin fungsi ukur lagi (sesi ini baru), lalu panggil.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def ukur(sql, n=5):
+    w = []
+    for _ in range(n):
+        t = time.perf_counter(); r = c.execute(sql).fetchall(); w.append(time.perf_counter()-t)
+    return min(w)*1000, r
+
+mv, rv = ukur(&quot;SELECT * FROM ringkas WHERE cabang=&#x27;Kemang&#x27; ORDER BY bulan&quot;)
+print(f&quot;VIEW  : {mv:8.1f} ms   {len(rv)} baris&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>VIEW  :    319.8 ms   24 baris</code></pre></div>
+<p>24 baris hasil, 320 milidetik. Ia harus meringkas ulang 800.000 baris <strong>tiap kali dipanggil</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Bikin tabel ringkasan dari view yang sama</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-3"><label for="sql-mahir-l4-v2-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu perintah, dan catat berapa lama sekali-buatnya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>t = time.perf_counter()
+c.execute(&quot;CREATE TABLE ringkas_snapshot AS SELECT * FROM ringkas&quot;); c.commit()
+print(f&quot;sekali buat: {time.perf_counter()-t:.2f} detik&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>sekali buat: 1.72 detik</code></pre></div>
+<p>Sekarang hasil ringkasannya tersimpan sebagai tabel biasa — 24 baris, sudah jadi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Ukur tabel itu, dan pastikan isinya sama</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-4"><label for="sql-mahir-l4-v2-7-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Query yang sama persis, cuma nama tabelnya beda.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>mt, rt = ukur(&quot;SELECT * FROM ringkas_snapshot WHERE cabang=&#x27;Kemang&#x27; ORDER BY bulan&quot;, n=9)
+print(f&quot;TABEL : {mt:8.3f} ms   {len(rt)} baris&quot;)
+print(&quot;isi sama?&quot;, rv == rt)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>TABEL :    0.033 ms   24 baris
+isi sama? True</code></pre></div>
+<p>319,8 ms lawan 0,033 ms — sekitar <strong>sepuluh ribu kali</strong>, isi identik. Masuk akal: yang satu meringkas 800.000 baris, yang satu membaca 24 baris yang sudah jadi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Sekarang harganya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-5"><label for="sql-mahir-l4-v2-7-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Masukkan satu transaksi baru senilai Rp 22.000, lalu tanya kedua-duanya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>c.execute(&quot;INSERT INTO transaksi VALUES (9000001,&#x27;2024-06-01&#x27;,&#x27;Kemang&#x27;,7,&#x27;Kopi Susu&#x27;,1,22000)&quot;)
+c.commit()
+v = c.execute(&quot;SELECT omzet FROM ringkas          WHERE cabang=&#x27;Kemang&#x27; AND bulan=&#x27;2024-06&#x27;&quot;).fetchone()[0]
+s = c.execute(&quot;SELECT omzet FROM ringkas_snapshot WHERE cabang=&#x27;Kemang&#x27; AND bulan=&#x27;2024-06&#x27;&quot;).fetchone()[0]
+print(f&quot;view    : {v}\nsnapshot: {s}\nselisih : {v-s}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>view    : 338587000
+snapshot: 338565000
+selisih : 22000</code></pre></div>
+<p>View langsung tahu. Snapshot tidak, <strong>dan tidak akan pernah tahu</strong> sampai ada yang membangunnya ulang.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Seluruh pertukarannya, dalam satu tabel</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-6"><label for="sql-mahir-l4-v2-7-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca sekali. Kamu barusan mengukur ketiga baris pertamanya sendiri.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th></th>
+<th>VIEW</th>
+<th>Tabel snapshot</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Kecepatan baca</td><td>selambat query aslinya (319,8 ms)</td><td>secepat tabel kecil (0,033 ms)</td></tr>
+              <tr><td>Kesegaran</td><td>selalu terbaru</td><td>sesegar terakhir kali dibangun</td></tr>
+              <tr><td>Ruang berkas</td><td>nol</td><td>sebesar hasilnya</td></tr>
+              <tr><td>Pakai untuk</td><td>menyembunyikan query rumit; data yang harus akurat detik ini</td><td>dasbor, laporan bulanan, apa pun yang dibaca berkali-kali dari data yang sudah tidak berubah</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p><strong>Kecepatan ditukar dengan kesegaran.</strong> Tidak ada pilihan yang benar untuk semua kasus — yang ada cuma pilihan yang kamu ambil dengan sadar.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Satu istilah, dan satu aturan yang menyelamatkan reputasi</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-7"><label for="sql-mahir-l4-v2-7-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca dua paragraf ini, lalu lanjut ke bagian uji mutu.</div>
+<p>Tabel snapshot yang dibangun ulang otomatis oleh basis datanya sendiri punya nama: <strong>materialized view</strong>. PostgreSQL punya, BigQuery punya, <strong>SQLite tidak</strong>. Di SQLite kamu membangunnya sendiri: <code>DROP TABLE</code> lalu <code>CREATE TABLE … AS SELECT * FROM view</code>, dijalankan terjadwal — persis pola skrip harian di Minggu 11. Alatnya sudah kamu punya; yang baru cuma namanya.</p>
+        <div class="bahaya"><strong>Tabel snapshot apa pun harus membawa kapan ia dibangun.</strong> Tambahkan kolom <code>dibangun_pada</code>, dan cetak tanggal itu di kaki tiap laporan. Klien yang melihat “data per 3 September 08:00” tahu persis apa yang ia baca. Klien yang melihat angka tanpa keterangan waktu akan menganggapnya angka hari ini — dan ketika ternyata bukan, yang disalahkan adalah kamu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Jalankan berkas uji mutu</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-8"><label for="sql-mahir-l4-v2-7-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil <code>uji_mutu.py</code> dari paket zip (<code>data-dan-skrip/sql-mahir/</code>), taruh di sebelah <code>senja.db</code>, lalu jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python uji_mutu.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>utang  Pesanan tanpa pelanggan: 12 baris (sesuai batas 12)
 utang  Produk tanpa harga beli: 2 baris (sesuai batas 2)
 utang  Pelanggan tanpa kota: 6 baris (sesuai batas 6)
 bersih Item menunjuk pesanan hantu
@@ -1201,81 +2040,163 @@ GAGAL  Nilai pesanan beda antara sistem dan kasir: 2 baris (batas 0)
           (199, -25000)
 
 5 lolos, 3 gagal</code></pre></div>
-        </div>
-        <p>Tujuh baris keluaran, dan tiap satunya adalah kalimat yang bisa kamu kirim ke klien apa adanya. Perhatikan tiga kelompoknya:</p>
-        <ul>
-          <li><strong>bersih</strong> — tidak ada masalah, dan kamu sekarang <em>tahu</em> itu, bukan berasumsi.</li>
-          <li><strong>utang</strong> — masalah yang sudah kamu ketahui dan sepakati: 12 pesanan tanpa pelanggan, 6 pelanggan tanpa kota. Angkanya dipatok. Kalau besok jadi 13, statusnya berubah jadi <strong>GAGAL</strong> dan kamu akan tahu di hari yang sama, bukan tiga bulan kemudian.</li>
-          <li><strong>GAGAL</strong> — tiga hal yang harus ditanyakan ke klien hari ini juga: tiga pesanan selesai yang tidak ada struknya, dua struk yang tidak ada pesanannya, dan dua pesanan yang nilainya beda Rp 50.000 dan Rp 25.000 antara dua sistem.</li>
-        </ul>
-        <div class="catatan" style="margin-top:12px">
-          <strong>Kolom "batas" itu yang membedakan pemeriksaan yang dipakai orang dari yang diabaikan orang.</strong> Pemeriksaan yang menyala merah tiap hari karena masalah lama yang belum bisa diperbaiki akan berhenti dibaca dalam seminggu. Dengan batas, merah selalu berarti <em>sesuatu berubah hari ini</em> — dan merah yang berarti langsung akan selalu dibaca.
-        </div>
+<p>Isinya <strong>sekumpulan query yang seharusnya tidak mengembalikan baris apa pun</strong>. Kalau salah satu mengembalikan baris, ada yang rusak.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">3</span>
-        <h3>Kesalahan yang hampir kubuat, dan kenapa itu penting</h3>
-        <span class="cek"><input type="checkbox" id="q7s3"><label for="q7s3">selesai</label></span>
+        <span class="num">9</span>
+        <h3>Periksa kode keluarnya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-9"><label for="sql-mahir-l4-v2-7-9">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Versi pertama pemeriksaan rekonsiliasi di atas kutulis lebih sederhana — tanpa syarat <code>status = 'selesai'</code>:</p>
-        <div class="kode"><pre><code>-- versi pertama, yang KELIHATANNYA lebih benar karena lebih menyeluruh
-SELECT 'hanya di pesanan' AS sisi, id FROM pesanan
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Langsung setelah perintah tadi, di terminal yang sama.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>echo $?          # Linux / Mac
+echo %ERRORLEVEL%   # Windows</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>1</code></pre></div>
+<p>Angka 1 berarti gagal. Ini yang membuat skrip terjadwal di Minggu 11 ikut berhenti dan memberitahumu — <strong>bukan cuma mencetak sesuatu yang tidak ada yang membaca</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Baca tiga kelompok keluarannya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-10"><label for="sql-mahir-l4-v2-7-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat lagi keluaran langkah 8. Ada tiga kata di kolom kiri.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kata</th>
+<th>Artinya</th>
+<th>Yang kamu lakukan</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>bersih</code></td><td>tidak ada masalah — dan kamu sekarang <em>tahu</em>, bukan berasumsi</td><td>tidak ada</td></tr>
+              <tr><td><code>utang</code></td><td>masalah yang sudah kamu ketahui dan sepakati dengan klien</td><td>tidak ada, selama angkanya tidak naik</td></tr>
+              <tr><td><code>GAGAL</code></td><td>sesuatu yang belum kamu ketahui</td><td>tanyakan ke klien hari ini juga</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Tiga <code>GAGAL</code> di atas adalah tiga kalimat yang bisa kamu kirim apa adanya: tiga pesanan selesai yang tidak ada struknya, dua struk yang tidak ada pesanannya, dan dua pesanan yang nilainya beda Rp 50.000 dan Rp 25.000 antara dua sistem.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Kenapa ada kolom “batas”</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-11"><label for="sql-mahir-l4-v2-7-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka <code>uji_mutu.py</code> dan cari kata <code>batas</code>.</div>
+        <div class="kode"><pre><code>dict(nama=&quot;Pesanan tanpa pelanggan&quot;, batas=12,
+     sql=&quot;SELECT id FROM pesanan WHERE pelanggan_id IS NULL&quot;)</code></pre></div>
+<p>Batas = <strong>berapa banyak baris bermasalah yang masih boleh ada</strong>. <code>0</code> berarti harus bersih. Di atas nol berarti utang yang sudah disepakati — angkanya dipatok, dan <strong>kalau besok jadi 13, statusnya berubah jadi GAGAL</strong>.</p>
+        <div class="catatan"><strong>Kolom ini yang membedakan pemeriksaan yang dipakai orang dari yang diabaikan orang.</strong> Pemeriksaan yang menyala merah tiap hari karena masalah lama akan berhenti dibaca dalam seminggu. Dengan batas, merah selalu berarti <em>sesuatu berubah hari ini</em>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Kesalahan yang hampir kubuat — jalankan versi pertamaku</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-12"><label for="sql-mahir-l4-v2-7-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Versi pertama pemeriksaan rekonsiliasi kutulis lebih sederhana, tanpa syarat <code>status = 'selesai'</code>. Jalankan di <code>senja.db</code> <strong>sebelum</strong> membaca langkah berikutnya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s = sqlite3.connect(&quot;senja.db&quot;)
+r = s.execute(&quot;&quot;&quot;SELECT &#x27;hanya di pesanan&#x27; AS sisi, id FROM pesanan
 WHERE id NOT IN (SELECT id FROM pesanan_kasir)
 UNION ALL
-SELECT 'hanya di kasir', id FROM pesanan_kasir
-WHERE id NOT IN (SELECT id FROM pesanan)</code></pre></div>
-        <div class="aksi">Jalankan itu di <code>senja.db</code> sebelum melihat hasilku. Berapa baris yang keluar, dan menurutmu berapa yang benar-benar masalah?</div>
-        <details>
-          <summary>Buka hasilnya</summary>
-          <div class="hasil" style="margin-top:10px">
-            <span class="tag">HARUS MUNCUL</span>
-            <div class="kode"><pre><code>43 baris bermasalah
-  ('hanya di pesanan', 7)
-  ('hanya di pesanan', 8)
-  ('hanya di pesanan', 19)</code></pre></div>
-          </div>
-          <p style="margin-top:10px"><strong>43 baris.</strong> Tapi ketika kutelusuri satu per satu, 38 di antaranya adalah pesanan berstatus <code>'batal'</code> — dan pesanan batal memang <em>seharusnya</em> tidak punya struk kasir. Itu bukan kerusakan; itu cara kerja bisnisnya.</p>
-          <div class="kode" style="margin-top:10px">
-            <button class="salin" type="button">Salin</button>
-            <pre><code>import sqlite3
-c = sqlite3.connect("senja.db")
-print(c.execute("""SELECT status, COUNT(*) FROM pesanan
-WHERE id NOT IN (SELECT id FROM pesanan_kasir) GROUP BY status""").fetchall())</code></pre>
-          </div>
-          <div class="hasil" style="margin-top:10px">
-            <span class="tag">HARUS MUNCUL</span>
-            <div class="kode"><pre><code>[('batal', 38), ('selesai', 3)]</code></pre></div>
-          </div>
-          <p style="margin-top:10px">38 kebisingan, 3 masalah sungguhan. Pemeriksaan yang membangunkanmu 43 kali untuk 3 hal yang benar akan kamu matikan dalam dua minggu — dan hari kamu mematikannya adalah hari ketiga masalah itu jadi tak terlihat selamanya.</p>
-          <p style="margin-top:10px"><strong>Karena itu syarat <code>status = 'selesai'</code> ditambahkan.</strong> Dan perhatikan dari mana syarat itu datang: bukan dari SQL, bukan dari data. Ia datang dari memahami bahwa pesanan batal tidak menghasilkan struk. <strong>Pemeriksaan mutu yang bagus selalu berisi satu potong pengetahuan bisnis</strong>, dan itulah bagian yang tidak bisa disalin dari internet.</p>
-        </details>
+SELECT &#x27;hanya di kasir&#x27;, id FROM pesanan_kasir
+WHERE id NOT IN (SELECT id FROM pesanan)&quot;&quot;&quot;).fetchall()
+print(len(r), &quot;baris bermasalah&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>43 baris bermasalah</code></pre></div>
+<p>43. Terlihat lebih menyeluruh daripada versi yang cuma menemukan 5. <strong>Menurutmu berapa yang benar-benar masalah?</strong></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">13</span>
+        <h3>Pecah menurut statusnya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-13"><label for="sql-mahir-l4-v2-7-13">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu query yang mengubah seluruh kesimpulan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(s.execute(&quot;&quot;&quot;SELECT status, COUNT(*) FROM pesanan
+WHERE id NOT IN (SELECT id FROM pesanan_kasir) GROUP BY status&quot;&quot;&quot;).fetchall())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>[('batal', 38), ('selesai', 3)]</code></pre></div>
+<p><strong>38 kebisingan, 3 masalah sungguhan.</strong> Pesanan batal memang <em>seharusnya</em> tidak punya struk kasir. Itu bukan kerusakan; itu cara kerja bisnisnya.</p>
+        <div class="bahaya">Pemeriksaan yang membangunkanmu <strong>43 kali untuk 3 hal yang benar</strong> akan kamu matikan dalam dua minggu — dan hari kamu mematikannya adalah hari ketiga masalah itu jadi tak terlihat selamanya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">14</span>
+        <h3>Dari mana syarat itu datang</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-14"><label for="sql-mahir-l4-v2-7-14">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca satu kalimat ini. Ini bagian yang paling penting di seluruh Level 4.</div>
+        <div class="hasil"><span class="tag">YANG HARUS KAMU BAWA</span>
+          <p>Syarat <code>status = 'selesai'</code> tidak datang dari SQL, dan tidak datang dari datanya. Ia datang dari <strong>memahami bahwa pesanan batal tidak menghasilkan struk</strong>.</p></div>
+<p><strong>Pemeriksaan mutu yang bagus selalu berisi satu potong pengetahuan bisnis</strong> — dan itulah bagian yang tidak bisa disalin dari internet, dan bagian yang kamu sudah punya dari enam tahun terakhirmu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">15</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-15"><label for="sql-mahir-l4-v2-7-15">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Lima pertanyaan, di kertas.</div>
+        <div class="kode"><pre><code>1. VIEW menyimpan datanya atau tidak?
+2. Satu kolom yang wajib ada di tiap tabel snapshot?
+3. Berkas uji mutu isinya query yang seharusnya mengembalikan apa?
+4. Fungsi kolom &quot;batas&quot;?
+5. Kenapa 43 baris temuan lebih buruk daripada 3?</code></pre></div>
+<details><summary>Buka kunci jawaban</summary><p>1. Tidak — ia query yang diberi nama, dijalankan ulang tiap kali disebut. 2. <code>dibangun_pada</code>, dan tanggalnya dicetak di kaki laporan. 3. <strong>Nol baris.</strong> Ada baris berarti ada yang rusak. 4. Memisahkan utang yang sudah disepakati dari kejadian baru, supaya merah selalu berarti sesuatu berubah hari ini. 5. Karena 38 di antaranya bukan masalah, dan pemeriksaan yang berisik akan dimatikan orang.</p></details>
       </div>
     </div>
 
     <div class="selesai-hari">
       <h3>SQL Mahir Level 4 selesai</h3>
-      <p>Sekarang kamu bisa menjawab tiga pertanyaan yang membedakan analis dari orang yang bisa menulis <code>SELECT</code>: <em>kenapa query ini lambat</em> (baca rencananya, jangan menebak), <em>apa yang terjadi kalau gagal di tengah</em> (bungkus dengan transaksi), dan <em>bagaimana aku tahu angkanya benar</em> (jalankan berkas uji mutu sebelum mengirim, bukan sesudah ditanya).</p>
-      <p style="margin-top:10px">Dan satu kebiasaan yang lebih penting daripada semua isi halaman ini: <strong>tiap angka di sini kamu ukur sendiri.</strong> Tidak ada satu pun yang kamu terima karena ada yang bilang begitu. Itu cara kerja yang akan membuatmu dipercaya, jauh setelah angka-angka spesifiknya kamu lupakan.</p>
-      <div class="catatan" style="margin-top:14px">
-        <strong>Berikutnya di <a href="https://claude.ai/code/artifact/7044e726-f69e-4b48-a3d5-b6e277c79164">Level 5</a>, yang terakhir:</strong> ujian dan wawancara — soal SQL live coding yang benar-benar diberikan, cara menjelaskan jawabanmu sambil menulisnya, membaca soal yang sengaja ambigu, dan satu latihan penutup yang menggabungkan kelima level.
-      </div>
+      <p>Sekarang kamu bisa menjawab tiga pertanyaan yang membedakan analis dari orang yang bisa menulis <code>SELECT</code>: <strong>kenapa query ini lambat</strong> (baca rencananya, jangan menebak), <strong>apa yang terjadi kalau gagal di tengah</strong> (bungkus dengan transaksi), dan <strong>bagaimana aku tahu angkanya benar</strong> (jalankan berkas uji mutu sebelum mengirim, bukan sesudah ditanya).</p><p style="margin-top:8px">Dan satu kebiasaan yang lebih penting daripada seluruh isi halaman ini: <strong>tiap angka di sini kamu ukur sendiri.</strong> Tidak ada satu pun yang kamu terima karena ada yang bilang begitu. Itu cara kerja yang akan membuatmu dipercaya, jauh setelah angka-angka spesifiknya kamu lupakan.</p><p style="margin-top:8px"><strong>Berikutnya di Level 5</strong>, yang terakhir: ujian dan wawancara — soal SQL <em>live coding</em> yang benar-benar diberikan, cara menjelaskan jawabanmu sambil menulisnya, membaca soal yang sengaja ambigu, dan satu latihan penutup yang menggabungkan kelima level.</p>
           <a class="lanjut" href="https://claude.ai/code/artifact/7044e726-f69e-4b48-a3d5-b6e277c79164">Lanjut ke SQL Mahir L5: ujian & wawancara →</a>
 </div>
   </section>
 
   <footer>
-    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua angka waktu, ukuran berkas, dan keluaran di halaman ini dihasilkan dengan menjalankan kodenya sungguhan pada <code>besar.db</code> (800.000 baris) dan <code>senja.db</code>.</p>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Dua skrip yang dipakai modul ini — <code>besar.py</code> (pembuat tabel 800.000 baris) dan <code>uji_mutu.py</code> (delapan pemeriksaan mutu) — ada di <code>data-dan-skrip/sql-mahir/</code> di paket zip.</p>
+    <p style="margin-top:10px"><strong>Dari mana angkanya.</strong> Tidak ada angka di halaman ini yang saya tulis dari ingatan. Seluruhnya keluar dari satu berkas <code>replay.py</code> yang menjalankan ulang ketujuh hari ini berurutan, dari <code>besar.db</code> yang baru dibuat, dan keluarannya disalin apa adanya ke tiap kotak HARUS MUNCUL. Kalau ada kotak yang tidak cocok dengan hasilmu di luar angka milidetik, itu kesalahan saya — dan kamu berhak menganggapnya begitu.</p>
     <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
   </footer>
 </div>
 
 <script>
 (function(){
-  var KUNCI = "sql-mahir-l4-v1";
+  var KUNCI = "sql-mahir-l4-v2";
   function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
   function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
 

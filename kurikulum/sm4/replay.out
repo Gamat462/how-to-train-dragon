@@ -1,0 +1,267 @@
+
+########## H1.1  python besar.py
+dibuat dalam 3.6 detik
+baris: 800000
+ukuran berkas: 36.7 MB
+
+########## H1.2  sambungkan & hitung
+800000
+
+########## H1.3  ukur sekali dengan perf_counter
+39.3 ms   hasil = 15
+
+########## H1.4  fungsi ukur()
+39.0 ms   hasil = 15
+
+########## H1.5  rencananya
+    SCAN transaksi
+
+########## H1.6  rencana query pengelompokan
+    SCAN transaksi
+    USE TEMP B-TREE FOR GROUP BY
+
+########## H1.7  CREATE INDEX
+membuat index: 0.35 detik
+
+########## H1.8  ukur ulang
+0.006 ms   hasil = 15
+(kelipatan 6513x)
+
+########## H1.9  rencana sesudah index
+    SEARCH transaksi USING COVERING INDEX idx_pel (pelanggan_id=?)
+
+########## H1.10 minta kolom lain
+0.009 ms   hasil = 745000
+    SEARCH transaksi USING INDEX idx_pel (pelanggan_id=?)
+
+########## H2.1  index tanggal
+membuat index: 0.42 detik
+
+########## H2.2  fungsi menempel di kolom
+52.6 ms   hasil = 33993
+    SCAN transaksi USING COVERING INDEX idx_tgl
+
+########## H2.3  rentang tanggal
+1.1 ms   hasil = 33993
+    SEARCH transaksi USING COVERING INDEX idx_tgl (tanggal>? AND tanggal<?)
+(kelipatan 47x)
+
+########## H2.4  index cabang + sama dengan
+5.3 ms   hasil = 160457
+    SEARCH transaksi USING COVERING INDEX idx_cab (cabang=?)
+
+########## H2.5  LIKE 'Kem%'
+37.5 ms   hasil = 160457
+    SCAN transaksi USING COVERING INDEX idx_cab
+
+########## H2.6  LIKE '%mang'
+42.0 ms   hasil = 160457
+    SCAN transaksi USING COVERING INDEX idx_cab
+
+########## H2.7  rentang teks
+5.3 ms   hasil = 160457
+    SEARCH transaksi USING COVERING INDEX idx_cab (cabang>? AND cabang<?)
+(empat cara: 5.3 / 37.5 / 42.0 / 5.3 ms)
+
+########## H3.1  hapus index kemarin
+index tersisa: 0
+
+########## H3.2  index gabungan (cabang, tanggal)
+idx_ct dibuat
+
+########## H3.3  kolom ke-1 saja
+5.7 ms   hasil = 160457
+    SEARCH transaksi USING COVERING INDEX idx_ct (cabang=?)
+
+########## H3.4  kolom ke-1 lalu ke-2
+2.8 ms   hasil = 80224
+    SEARCH transaksi USING COVERING INDEX idx_ct (cabang=? AND tanggal>?)
+
+########## H3.5  kolom ke-2 saja
+35.6 ms   hasil = 400090
+    SCAN transaksi USING COVERING INDEX idx_ct
+
+########## H3.6  Q2 dengan idx_ct saja
+104.6 ms   5 baris
+    SCAN transaksi USING INDEX idx_ct
+
+########## H3.7  Q2 sesudah idx_tc
+48.1 ms   5 baris
+    SEARCH transaksi USING INDEX idx_tc (tanggal>? AND tanggal<?)
+    USE TEMP B-TREE FOR GROUP BY
+(kelipatan 2.2x)
+
+########## H3.8  ORDER BY dengan idx(pelanggan_id)
+    SEARCH transaksi USING INDEX idx_p1 (pelanggan_id=?)
+    USE TEMP B-TREE FOR ORDER BY
+
+########## H3.9  ORDER BY dengan idx(pelanggan_id, tanggal)
+    SEARCH transaksi USING INDEX idx_p2 (pelanggan_id=?)
+
+########## H4.1  salinan tanpa index
+tanpa index apa pun : 36.7 MB
+
+########## H4.2  tulis 50.000 baris tanpa index
+tanpa index : 0.06 detik
+
+########## H4.3  hapus lagi
+sisa baris: 800000
+
+########## H4.4  bikin tiga index
+waktu buat idx_ct  : 0.70 detik
+waktu buat idx_pel : 0.35 detik
+waktu buat idx_prd : 0.36 detik
+
+########## H4.5  ukuran berkas sesudahnya
+dengan 3 index      : 81.7 MB
+
+########## H4.6  tulis lagi, sekarang dengan index
+dgn 3 index : 0.17 detik
+perlambatan : 3.0x
+
+########## H5.1  tabel kecil 10.000 baris
+baris: 10000
+
+########## H5.2  jalankan yang berkorelasi (sabar)
+6200.6 ms
+    ('Dago', 869)
+    ('Kemang', 879)
+    ('Renon', 877)
+    ('Seturan', 933)
+    ('Seturan2', 881)
+
+########## H5.3  rencananya
+    SCAN t1
+    CORRELATED SCALAR SUBQUERY 1
+    SCAN t2
+    USE TEMP B-TREE FOR GROUP BY
+
+########## H5.4  versi CTE
+6.0 ms
+    ('Dago', 869)
+    ('Kemang', 879)
+    ('Renon', 877)
+    ('Seturan', 933)
+    ('Seturan2', 881)
+sama? True
+(kelipatan 1036x)
+
+########## H5.5  rencana CTE
+    CO-ROUTINE rata
+    SCAN kecil
+    USE TEMP B-TREE FOR GROUP BY
+    SCAN t
+    SEARCH rata USING AUTOMATIC COVERING INDEX (cabang=?)
+    USE TEMP B-TREE FOR GROUP BY
+
+########## H5.6  tabel skala (± 3 menit)
+   baris    berkorelasi        CTE   kelipatan
+    2500        382.6ms      1.4ms        273x   sama=True
+    5000       1582.8ms      2.7ms        580x   sama=True
+   10000       6247.2ms      5.7ms       1095x   sama=True
+   20000      25134.3ms     11.4ms       2206x   sama=True
+   40000     106286.7ms     24.9ms       4275x   sama=True
+
+########## H5.7  latihan senja.db — dua versi
+     nama  jumlah_pesanan
+0    Rina              32
+1    Lita              30
+2   Dimas              26
+3  Hendra              26
+4    Bayu              25
+
+     nama  jumlah_pesanan
+0    Rina              32
+1    Lita              30
+2   Dimas              26
+3  Hendra              26
+4    Bayu              25
+
+########## H5.8  pelanggan yang belum pernah pesan
+[(18, 'Bagus'), (19, 'Vira'), (20, 'Andi')]
+JOIN biasa menyisakan: 17 dari 20
+
+########## H6.1  tabel kas
+saldo: {'Kas Besar': 5000000, 'Kas Kecil': 300000}
+total: 5300000
+
+########## H6.2  perintah pertama
+saldo: {'Kas Besar': 4600000, 'Kas Kecil': 300000}
+
+########## H6.3  perintah kedua ditolak
+error: CHECK constraint failed: saldo >= 0
+
+########## H6.4  hitung totalnya
+saldo: {'Kas Besar': 4600000, 'Kas Kecil': 300000}
+total: 4900000
+
+########## H6.5  kembalikan lalu bungkus BEGIN/COMMIT
+total sebelum: 5300000
+error: CHECK constraint failed: saldo >= 0 -> ROLLBACK
+saldo: {'Kas Besar': 5000000, 'Kas Kecil': 300000}
+total sesudah: 5300000
+
+########## H6.6  foreign_keys bawaan
+foreign_keys bawaan: 0
+
+########## H6.7  dua tabel bertaut
+induk: [(1, 'Sari')]
+
+########## H6.8  baris yatim tetap masuk
+tersimpan: [(99, 777, 'induk 777 tidak ada')]
+
+########## H6.9  nyalakan PRAGMA
+sesudah ON: 1
+ditolak: FOREIGN KEY constraint failed
+
+########## H6.10 periksa pelanggaran lama
+[('anak', 99, 'induk', 0)]
+
+########## H7.1  bikin VIEW
+view dibuat
+
+########## H7.2  ukur VIEW
+VIEW  :    319.8 ms   24 baris
+baris pertama: ('Kemang', '2023-01', 6692, 349071000)
+
+########## H7.3  bikin snapshot
+sekali buat: 1.72 detik
+
+########## H7.4  ukur snapshot
+TABEL :    0.033 ms   24 baris
+isi sama? True
+(kelipatan 9823x)
+
+########## H7.5  satu transaksi baru
+view    : 338587000
+snapshot: 338565000
+selisih : 22000
+
+########## H7.6  python uji_mutu.py
+utang  Pesanan tanpa pelanggan: 12 baris (sesuai batas 12)
+utang  Produk tanpa harga beli: 2 baris (sesuai batas 2)
+utang  Pelanggan tanpa kota: 6 baris (sesuai batas 6)
+bersih Item menunjuk pesanan hantu
+bersih Jumlah atau harga tidak masuk akal
+GAGAL  Pesanan selesai yang hilang dari kasir: 3 baris (batas 0)
+          (7,)
+          (88,)
+          (251,)
+GAGAL  Struk kasir tanpa pesanan: 2 baris (batas 0)
+          (9001,)
+          (9002,)
+GAGAL  Nilai pesanan beda antara sistem dan kasir: 2 baris (batas 0)
+          (12, 50000)
+          (199, -25000)
+
+5 lolos, 3 gagal
+kode keluar: 1
+
+########## H7.7  versi pertama rekonsiliasi
+43 baris bermasalah
+    ('hanya di pesanan', 7)
+    ('hanya di pesanan', 8)
+    ('hanya di pesanan', 19)
+
+########## H7.8  pecah menurut status
+[('batal', 38), ('selesai', 3)]
