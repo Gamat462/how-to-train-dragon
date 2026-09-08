@@ -15,7 +15,7 @@ PostgreSQL/Cockroach Driver. Bukan lagi Colab + SQLite.
 - Basis data latihan jalur SQL: `sql/senja.sql` (dibuat oleh
   `sql/buat_senja_sql.py` dari `sql/gen_final.py`, datanya identik dengan versi
   SQLite lama supaya angka di L1–L5 tetap cocok).
-- Modul yang sudah dipindah: **SQL Mahir L1**. Sisanya masih SQLite/Colab.
+- Modul yang sudah dipindah: **SQL Mahir L1 dan L2**. Sisanya masih SQLite/Colab.
 
 ### Cara menghasilkan keluaran modul
 
@@ -93,7 +93,7 @@ python3 _mulai.py                # menulis MULAI-DI-SINI.html + URUTAN-BELAJAR.m
 
 ## Yang sudah memenuhi standar (jarak 0,00)
 
-Bekal Python (acuan) · SQL Mahir L4 · Python Produksi.
+Bekal Python (acuan) · SQL Mahir L1 · SQL Mahir L2 · SQL Mahir L4 · SQL Mahir L5 · Python Produksi.
 
 Studi Kasus Nyata, Minggu 11, Minggu 14, dan Jalur S2 dulu berjarak 0,00 —
 tapi terhadap standar yang **belum punya Bagian B**. Setelah Bagian B
