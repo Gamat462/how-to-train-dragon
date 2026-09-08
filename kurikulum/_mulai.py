@@ -1,5 +1,6 @@
 import os, html, pathlib
-os.chdir('/tmp/claude-0/-home-user-how-to-train-dragon/10410e99-6fc8-5544-93e1-5420df84173a/scratchpad')
+# Pindah ke folder skrip ini, bukan ke jalur mutlak sesi lama.
+os.chdir(pathlib.Path(__file__).resolve().parent)
 exec(open('_urutan.py').read())
 OUT = pathlib.Path("paket/Rute-Data-Analyst")
 

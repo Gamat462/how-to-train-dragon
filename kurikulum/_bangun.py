@@ -1,5 +1,8 @@
 import os, re, shutil, pathlib
-BASE = pathlib.Path("/tmp/claude-0/-home-user-how-to-train-dragon/10410e99-6fc8-5544-93e1-5420df84173a/scratchpad")
+# Akar = folder tempat skrip ini berada, bukan jalur mutlak.
+# Sebelumnya jalur scratchpad ditulis mati di sini, sehingga menjalankannya
+# dari klon repo diam-diam menulis ke folder sesi lama — bukan ke klonnya.
+BASE = pathlib.Path(__file__).resolve().parent
 os.chdir(BASE)
 exec(open('_peta.py').read())
 exec(open('_slug.py').read())
