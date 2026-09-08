@@ -40,6 +40,14 @@ D = OUT / "data-dan-skrip"
 for f in ["gen_final.py", "besar.py", "uji_mutu.py"]:
     shutil.copy(BASE / "sql" / f, D / "sql-mahir" / f)
 
+(D / "python-produksi").mkdir()
+(D / "python-produksi" / "laporan").mkdir()
+(D / "python-produksi" / "tests").mkdir()
+for f in ["__init__.py", "bersih.py", "hitung.py", "cli.py"]:
+    shutil.copy(BASE / "pp-berkas" / "laporan" / f, D / "python-produksi" / "laporan" / f)
+shutil.copy(BASE / "pp-berkas" / "tests" / "test_bersih.py",
+            D / "python-produksi" / "tests" / "test_bersih.py")
+
 (D / "studi-kasus").mkdir()
 for f in sorted((BASE / "kasus").glob("gen_k*.py")) + sorted((BASE / "kasus").glob("sol_k*.py")):
     shutil.copy(f, D / "studi-kasus" / f.name)
