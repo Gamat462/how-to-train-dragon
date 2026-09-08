@@ -11,20 +11,20 @@ Modul diterbitkan sebagai Claude artifact dan juga dipaket sebagai zip offline.
 2. **Bahasa Indonesia** di seluruh materi, tanpa istilah teknis yang tidak dijelaskan.
 3. **Skema rata-rata, bukan batas atas.** Untuk angka gaji, biaya, dan peluang —
    pakai median/rata-rata bersumber, jangan angka terbaik yang pernah dilaporkan orang.
-4. **Bentuk pengajaran mengikuti `kurikulum/pembangun/_pola.md`.** Baca berkas itu
+4. **Bentuk pengajaran mengikuti `kurikulum/_pola.md`.** Baca berkas itu
    sebelum menulis atau menulis ulang modul mana pun. Isinya standar terukur,
    bukan selera.
 
 ## Alur kerja menulis ulang satu modul
 
 ```
-cd kurikulum/pembangun
+cd kurikulum
 python3 ukur.py                  # peringkat modul terburuk, jarak dari _pola.md
 # pilih yang jaraknya paling besar, lalu:
-#   1. baca modul lamanya di ../sumber/<berkas>.html — pertahankan seluruh substansinya
+#   1. baca modul lamanya di minggu1/<berkas>.html — pertahankan seluruh substansinya
 #   2. jalankan kodenya sungguhan; tiap kotak HARUS MUNCUL diisi keluaran nyata
 #   3. tulis pembangunnya di <slug>/h1.py .. h7.py + bangun.py (pola: sk/, m11/, m14/, s2/)
-python3 <slug>/bangun.py         # menulis ulang ../sumber/<berkas>.html
+python3 <slug>/bangun.py         # menulis ulang minggu1/<berkas>.html
 python3 _rantai.py               # memperbaiki tombol kembali/lanjut antar modul
 python3 ukur.py                  # wajib 0.00 sebelum diterbitkan
 ```
@@ -42,16 +42,16 @@ python3 _mulai.py                # menulis MULAI-DI-SINI.html + URUTAN-BELAJAR.m
 
 | Berkas | Isi |
 |---|---|
-| `pembangun/_pola.md` | standar penulisan, diturunkan dengan mengukur |
-| `pembangun/ukur.py` | mengukur tiap modul terhadap standar itu |
-| `pembangun/_gen.py` | generator HTML (`bangun`, `kode`, `tabel`, `blok`) |
-| `pembangun/_peta.py` | artifact-id → berkas, judul, jumlah hari |
-| `pembangun/_urutan.py` | urutan 44 modul + fase |
-| `pembangun/_rantai.py` | memperbaiki rantai navigasi antar modul |
-| `pembangun/_bangun.py` | menyusun paket zip offline |
-| `pembangun/{sk,m11,m14,s2}/` | pembangun modul yang sudah ditulis ulang |
-| `sumber/*.html` | 65 sumber modul (yang diterbitkan sebagai artifact) |
-| `data-skrip/` | skrip & data latihan yang ikut di dalam zip |
+| `_pola.md` | standar penulisan, diturunkan dengan mengukur |
+| `ukur.py` | mengukur tiap modul terhadap standar itu |
+| `_gen.py` | generator HTML (`bangun`, `kode`, `tabel`, `blok`) |
+| `_peta.py` | artifact-id → berkas, judul, jumlah hari |
+| `_urutan.py` | urutan 44 modul + fase |
+| `_rantai.py` | memperbaiki rantai navigasi antar modul |
+| `_bangun.py` | menyusun paket zip offline |
+| `{sk,m11,m14,s2}/` | pembangun modul yang sudah ditulis ulang |
+| `minggu1/*.html` | 65 sumber modul (yang diterbitkan sebagai artifact) |
+| `{m11,m14,s2}-berkas/`, `kasus/` | skrip & data latihan yang ikut di dalam zip |
 
 ## Yang sudah memenuhi standar (jarak 0,00)
 
