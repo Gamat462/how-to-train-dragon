@@ -1,0 +1,16 @@
+produk_id,nama_produk,kategori,harga,biaya_modal,tanggal_rilis
+P01,Kopi Susu Gula Aren,Minuman Kopi,22000,9000,2024-01-01
+P02,Americano,Minuman Kopi,18000,6000,2024-01-01
+P03,Cappuccino,Minuman Kopi,25000,10000,2024-01-01
+P04,Latte,Minuman Kopi,25000,10500,2024-01-01
+P05,Espresso,Minuman Kopi,15000,5000,2024-01-01
+P06,Matcha Latte,Minuman Non-Kopi,28000,13000,2024-06-01
+P07,Cokelat Panas,Minuman Non-Kopi,24000,10000,2024-01-01
+P08,Teh Tarik,Minuman Non-Kopi,18000,6500,2025-01-15
+P09,Roti Bakar Cokelat,Makanan,15000,7000,2024-01-01
+P10,Croissant Butter,Makanan,20000,11000,2024-01-01
+P11,Nasi Goreng Senja,Makanan,35000,17000,2024-09-01
+P12,Pisang Goreng,Makanan,14000,5500,2024-01-01
+P13,Donat Gula,Makanan,12000,5000,2025-03-01
+P14,Kopi Susu Botol 1L,Merchandise,65000,28000,2025-06-01
+P15,Tumbler Senja,Merchandise,95000,52000,2025-06-01

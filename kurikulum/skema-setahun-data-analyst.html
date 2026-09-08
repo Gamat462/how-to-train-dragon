@@ -1,0 +1,429 @@
+<title>Skema Setahun Data Analyst</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.6;
+    padding:40px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+
+  .page{
+    max-width:900px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:28px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+
+  .ladder{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:26px 0 8px; }
+  @media (max-width:640px){ .ladder{ grid-template-columns:repeat(2,1fr); } }
+  .rung{
+    display:block; text-decoration:none; color:inherit;
+    border:1px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--surface-2);
+  }
+  .rung:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .rung .q{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.08em; color:var(--ink-soft); }
+  .rung .lvl{ font-family:"Fraunces", serif; font-weight:600; font-size:1.05rem; display:block; margin:2px 0 4px; }
+  .rung .desc{ font-size:0.8rem; color:var(--ink-soft); }
+  .rung.r1{ border-bottom:3px solid var(--line); }
+  .rung.r2{ border-bottom:3px solid var(--teal-soft); }
+  .rung.r3{ border-bottom:3px solid var(--teal); }
+  .rung.r4{ border-bottom:3px solid var(--gold); }
+
+  .intensity{
+    display:flex; flex-wrap:wrap; gap:14px; align-items:baseline;
+    background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin-bottom:40px;
+  }
+  .intensity .num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; font-size:1.35rem; font-weight:600; color:var(--teal); }
+  .intensity .label{ font-size:0.88rem; color:var(--ink-soft); max-width:60ch; }
+
+  section{ margin-bottom:44px; }
+  section > h2{ font-size:1.32rem; font-weight:600; margin-bottom:6px; }
+  .section-note{ color:var(--ink-soft); font-size:0.9rem; max-width:62ch; margin-bottom:18px; }
+
+  /* Glossary */
+  .glossary{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  @media (max-width:640px){ .glossary{ grid-template-columns:1fr; } }
+  .glossary li{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.88rem; color:var(--ink-soft); }
+  .glossary li strong{ display:block; color:var(--ink); font-weight:600; font-family:"IBM Plex Mono", monospace; font-size:0.82rem; margin-bottom:2px; }
+
+  /* Matrix */
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.86rem; }
+  table.matrix{ min-width:720px; }
+  th, td{ text-align:left; padding:10px 13px; border-bottom:1px solid var(--line); vertical-align:top; }
+  thead th{
+    background:var(--surface-2); font-family:"IBM Plex Mono", monospace;
+    font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft);
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.skill{ font-weight:600; white-space:nowrap; }
+  td.mahir{ background:var(--gold-soft); }
+
+  /* Quarters & months */
+  .quarter{ margin-top:36px; scroll-margin-top:16px; }
+  .quarter-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:10px; border-bottom:2px solid var(--line); margin-bottom:14px;
+  }
+  .quarter-head .q{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.08em; color:var(--gold); }
+  .quarter-head h2{ font-size:1.5rem; font-weight:600; }
+  .quarter-head .range{ font-size:0.86rem; color:var(--ink-soft); }
+  .quarter-goal{ font-size:0.95rem; color:var(--ink-soft); max-width:64ch; margin-bottom:18px; }
+  .quarter-goal strong{ color:var(--ink); font-weight:600; }
+
+  .months{ display:flex; flex-direction:column; gap:16px; }
+  .month{ border:1px solid var(--line); border-radius:14px; background:var(--surface-2); overflow:hidden; }
+  .month-head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; padding:14px 18px 10px; }
+  .month-head .n{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.08em; color:var(--teal); }
+  .month-head h3{ font-size:1.1rem; font-weight:600; }
+  .weeks{ list-style:none; margin:0; padding:0 18px 4px; }
+  .weeks li{
+    display:grid; grid-template-columns:48px 1fr; gap:10px;
+    padding:9px 0; border-top:1px dashed var(--line); font-size:0.9rem;
+  }
+  .weeks .w{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--ink-soft); padding-top:3px; }
+  .weeks li strong{ font-weight:600; }
+  .weeks li span.sub{ color:var(--ink-soft); }
+  .source{
+    margin:8px 18px 0; padding:10px 14px; font-size:0.86rem;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  }
+  .source .tag, .milestone .tag{
+    font-family:"IBM Plex Mono", monospace; font-size:0.64rem; letter-spacing:0.08em; margin-right:8px;
+  }
+  .source .tag{ color:var(--teal); }
+  .milestone{
+    margin:8px 18px 16px; padding:10px 14px; font-size:0.88rem;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+  }
+  .milestone .tag{ color:var(--gold); }
+  .milestone.check{ border-color:var(--gold); }
+
+  .rubric{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  @media (max-width:640px){ .rubric{ grid-template-columns:1fr; } }
+  .rubric li{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-size:0.9rem; color:var(--ink-soft); }
+  .rubric li strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:3px; }
+  .rubric li .q{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.08em; color:var(--gold); }
+
+  .buffer{ border:1px dashed var(--line); border-radius:12px; padding:14px 18px; font-size:0.9rem; color:var(--ink-soft); background:var(--surface); margin-top:16px; }
+  .buffer strong{ color:var(--ink); }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<div style="max-width:900px;margin:0 auto 18px;background:var(--gold-soft);border:1px solid var(--gold);border-radius:16px;padding:16px 20px;font-size:0.9rem;line-height:1.55">
+  <strong style="font-family:'Fraunces',Georgia,serif;color:var(--gold);display:block;margin-bottom:6px">Ini versi awal rencana — temponya sudah tidak berlaku.</strong>
+  <p style="margin:0 0 8px">Halaman ini menyebar materi ke 52 minggu dengan asumsi kamu belajar sambil bekerja. Setelah kamu resign dan bisa belajar penuh waktu, temponya diganti <a href="https://claude.ai/code/artifact/f333a8b3-8341-4a10-b69e-4c603671830e"><strong>Rencana 17 Minggu</strong></a>, dan seluruh materinya kini sudah ditulis lengkap sebagai modul terpandu hari demi hari di <a href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">indeks rute</a> — bukan lagi daftar topik yang harus kamu cari sendiri sumbernya.</p>
+  <p style="margin:0"><strong>Yang masih berguna di halaman ini:</strong> daftar sumber belajar gratis di tiap bulan, dan empat ukuran "lolos ujian diri" di bagian bawah. <strong>Yang sudah digantikan:</strong> urutan 12 bulan, Bulan 01 yang berbasis Excel, dan jam belajar 15–20 per minggu.</p>
+</div>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Dokumen 3</span>
+    <h1>Skema Setahun</h1>
+    <p class="lede">Rencana belajar 12 bulan dari benar-benar nol sampai mahir. Tiap minggu ada satu hal yang dipelajari, tiap bulan ada satu hasil nyata, tiap 3 bulan ada ujian kecil untuk diri sendiri. Semua sumber belajar di sini gratis.</p>
+
+    <nav class="ladder" aria-label="Tingkatan">
+      <a class="rung r1" href="#q1"><span class="q mono">BULAN 1–3</span><span class="lvl">Pemula</span><span class="desc">Excel, angka-angka dasar, dan bahasa database (SQL)</span></a>
+      <a class="rung r2" href="#q2"><span class="q mono">BULAN 4–6</span><span class="lvl">Menengah</span><span class="desc">Python, cara menguji ide dengan data, membuat dashboard</span></a>
+      <a class="rung r3" href="#q3"><span class="q mono">BULAN 7–9</span><span class="lvl">Lanjutan</span><span class="desc">Kerja seperti analis sungguhan: rapi, otomatis, paham bisnis</span></a>
+      <a class="rung r4" href="#q4"><span class="q mono">BULAN 10–12</span><span class="lvl">Mahir</span><span class="desc">Prediksi dengan data, proyek besar, cari kerja di SG/AU</span></a>
+    </nav>
+
+    <div class="intensity">
+      <span class="num">15–20</span>
+      <span class="label">jam per minggu. Ini lebih padat dari jadwal harian sebelumnya (14 jam), karena tujuannya sampai mahir. Kalau cuma bisa 14 jam, tidak apa-apa — rencana ini jadi 15–18 bulan. Yang penting jangan ada materi yang dilompati.</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="istilah-h">
+    <h2 id="istilah-h">Istilah yang akan sering muncul</h2>
+    <p class="section-note">Baca ini dulu supaya tidak bingung. Tidak perlu dihafal — nanti terbiasa sendiri.</p>
+    <ul class="glossary">
+      <li><strong>SQL</strong>Bahasa untuk "bertanya" ke database. Contoh: "berapa total penjualan bulan lalu per kota?"</li>
+      <li><strong>Python / pandas</strong>Bahasa pemrograman + alatnya untuk mengolah tabel data yang besar. Anggap Excel yang jauh lebih kuat.</li>
+      <li><strong>Dashboard</strong>Halaman berisi grafik-grafik yang selalu terbarui, supaya orang bisa lihat kondisi bisnis sekilas.</li>
+      <li><strong>EDA</strong>Exploratory Data Analysis — "mengenal" data dulu sebelum menganalisis: ada apa saja, ada yang aneh tidak.</li>
+      <li><strong>A/B test</strong>Membandingkan dua versi (misalnya tombol merah vs biru) ke dua kelompok orang, lalu lihat mana yang hasilnya lebih baik.</li>
+      <li><strong>Tableau / Power BI</strong>Dua aplikasi untuk membuat dashboard. Sering diminta di lowongan Singapura dan Australia.</li>
+      <li><strong>GitHub</strong>Tempat menyimpan dan memamerkan hasil kerja (kode, notebook). Ini "portofolio" kamu nanti.</li>
+      <li><strong>Portofolio</strong>Kumpulan proyek yang bisa dilihat orang lain — bukti bahwa kamu bisa, bukan cuma bilang bisa.</li>
+      <li><strong>Pipeline</strong>Rangkaian langkah otomatis: data mentah masuk → dibersihkan → jadi tabel rapi → tampil di dashboard.</li>
+      <li><strong>Machine learning</strong>Membuat komputer belajar pola dari data lama untuk menebak hal baru — misalnya siapa pelanggan yang akan berhenti.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="matrix-h">
+    <h2 id="matrix-h">Apa yang bisa kamu lakukan di tiap tingkat</h2>
+    <p class="section-note">Cara mengukur "sudah naik tingkat": bukan berapa video yang sudah ditonton, tapi apa yang bisa kamu kerjakan sendiri.</p>
+    <div class="table-wrap">
+      <table class="matrix">
+        <thead><tr><th>Kemampuan</th><th>Pemula</th><th>Menengah</th><th>Lanjutan</th><th>Mahir</th></tr></thead>
+        <tbody>
+          <tr><td class="skill">SQL</td><td>Mengambil dan menjumlahkan data</td><td>Membandingkan antar baris, query bertingkat</td><td>Query cepat untuk data besar</td><td class="mahir">Merancang struktur data untuk tim</td></tr>
+          <tr><td class="skill">Python</td><td>Belum</td><td>Membersihkan dan mengenal data</td><td>Membuat laporan berjalan otomatis</td><td class="mahir">Membuat model prediksi</td></tr>
+          <tr><td class="skill">Statistik</td><td>Rata-rata, sebaran</td><td>Menguji "apakah ini kebetulan?"</td><td>Merancang eksperimen yang benar</td><td class="mahir">Menjelaskan sebab-akibat dengan hati-hati</td></tr>
+          <tr><td class="skill">Dashboard</td><td>Grafik di Excel</td><td>Dashboard Tableau &amp; Power BI</td><td>Dashboard yang dipakai tim tiap hari</td><td class="mahir">Dashboard untuk pimpinan + cerita di baliknya</td></tr>
+          <tr><td class="skill">Bisnis</td><td>Tahu apa itu KPI</td><td>Paham pelanggan datang, bertahan, pergi</td><td>Hitung untung-rugi per pelanggan</td><td class="mahir">Memberi rekomendasi ke pimpinan</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================= Q1 ================= -->
+  <section class="quarter" id="q1" aria-labelledby="q1-h">
+    <div class="quarter-head">
+      <span class="q">TINGKAT 1</span>
+      <h2 id="q1-h">Pemula</h2>
+      <span class="range">Bulan 1–3 · Minggu 1–12</span>
+    </div>
+    <p class="quarter-goal"><strong>Di akhir 3 bulan ini kamu bisa:</strong> mengambil data mentah, membersihkannya, menjawab pertanyaan bisnis pakai SQL, dan menyajikannya dalam dashboard Excel.</p>
+
+    <div class="months">
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 01</span><h3>Kenalan dengan data &amp; Excel</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 1</span><div><strong>Cara berpikir pakai data.</strong> <span class="sub">Apa itu tabel, baris, kolom. Cara mengubah pertanyaan bisnis jadi angka yang bisa dihitung. Buat akun GitHub dan file jurnal belajar.</span></div></li>
+          <li><span class="w">Mgg 2</span><div><strong>Rumus Excel yang penting.</strong> <span class="sub">SUMIFS, COUNTIFS, XLOOKUP. Cukup ini dulu — 80% pekerjaan analis di Excel pakai rumus-rumus ini.</span></div></li>
+          <li><span class="w">Mgg 3</span><div><strong>Pivot table &amp; grafik.</strong> <span class="sub">Meringkas ribuan baris jadi satu tabel kecil, lalu memilih grafik yang tepat.</span></div></li>
+          <li><span class="w">Mgg 4</span><div><strong>Proyek kecil pertama.</strong> <span class="sub">Buat dashboard penjualan toko dari dataset gratis, tulis 5 temuan dalam satu halaman.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>Google Data Analytics Certificate di Coursera (kursus 1–3, bisa audit gratis) · YouTube "Excel for Data Analysis" oleh Leila Gharani atau Kevin Stratvert.</div>
+        <div class="milestone"><span class="tag">HASIL BULAN INI</span>Satu file Excel dashboard + ringkasan 5 temuan, diunggah ke GitHub.</div>
+      </article>
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 02</span><h3>Angka dasar &amp; mulai SQL</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 5</span><div><strong>Statistik dasar.</strong> <span class="sub">Rata-rata, median, sebaran, nilai ekstrem — dan kenapa "rata-rata" sering menyesatkan.</span></div></li>
+          <li><span class="w">Mgg 6</span><div><strong>Korelasi bukan sebab-akibat.</strong> <span class="sub">Es krim laris dan orang tenggelam sama-sama naik di musim panas — bukan berarti es krim menyebabkan tenggelam.</span></div></li>
+          <li><span class="w">Mgg 7</span><div><strong>SQL dasar.</strong> <span class="sub">SELECT, WHERE, GROUP BY, ORDER BY. Ini cara "bertanya" ke database.</span></div></li>
+          <li><span class="w">Mgg 8</span><div><strong>Menggabungkan tabel (JOIN).</strong> <span class="sub">Tabel pelanggan + tabel pesanan = siapa beli apa. Latihan 30 soal mudah.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>StatQuest (YouTube, Josh Starmer) untuk statistik dengan gambar · SQLZoo dan Mode SQL Tutorial untuk SQL, keduanya gratis dan langsung praktik di browser.</div>
+        <div class="milestone"><span class="tag">HASIL BULAN INI</span>30 soal SQL tingkat mudah selesai tanpa melihat jawaban.</div>
+      </article>
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 03</span><h3>SQL lebih dalam &amp; proyek pertama</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 9</span><div><strong>Window function.</strong> <span class="sub">Rumus SQL untuk membandingkan baris dengan baris lain — misalnya "penjualan bulan ini vs bulan lalu" atau "peringkat produk".</span></div></li>
+          <li><span class="w">Mgg 10</span><div><strong>Query bertingkat (CTE) &amp; tanggal.</strong> <span class="sub">Memecah query panjang jadi langkah-langkah yang mudah dibaca. Mengolah tanggal.</span></div></li>
+          <li><span class="w">Mgg 11</span><div><strong>Bagaimana database disusun.</strong> <span class="sub">Kenapa data dipecah jadi banyak tabel, dan cara membaca "peta" database perusahaan.</span></div></li>
+          <li><span class="w">Mgg 12</span><div><strong>Proyek.</strong> <span class="sub">Analisis data toko online: 10 pertanyaan bisnis, 10 query SQL, satu laporan temuan.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>StrataScratch atau LeetCode (bagian Database) untuk latihan soal · dataset gratis "Brazilian E-Commerce (Olist)" di Kaggle untuk proyek.</div>
+        <div class="milestone check"><span class="tag">UJIAN DIRI 1</span>Kerjakan 20 soal SQL tingkat sedang dalam 90 menit. Lalu ceritakan hasil proyekmu 5 menit ke teman yang tidak paham data — kalau dia mengerti, kamu lolos.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= Q2 ================= -->
+  <section class="quarter" id="q2" aria-labelledby="q2-h">
+    <div class="quarter-head">
+      <span class="q">TINGKAT 2</span>
+      <h2 id="q2-h">Menengah</h2>
+      <span class="range">Bulan 4–6 · Minggu 13–24</span>
+    </div>
+    <p class="quarter-goal"><strong>Di akhir 3 bulan ini kamu bisa:</strong> mengolah data dengan Python, menguji ide dengan A/B test yang benar, dan membuat dashboard di Tableau dan Power BI.</p>
+
+    <div class="months">
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 04</span><h3>Python untuk data</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 13</span><div><strong>Python dasar.</strong> <span class="sub">Variabel, list, perulangan, fungsi. Pakai Google Colab — tidak perlu instal apa-apa.</span></div></li>
+          <li><span class="w">Mgg 14</span><div><strong>pandas.</strong> <span class="sub">Semua yang sudah bisa di SQL (filter, group, join) sekarang dilakukan di Python. Rasanya akan familiar.</span></div></li>
+          <li><span class="w">Mgg 15</span><div><strong>Membersihkan data kotor.</strong> <span class="sub">Data kosong, format salah, baris ganda. Ini 60% pekerjaan analis sungguhan.</span></div></li>
+          <li><span class="w">Mgg 16</span><div><strong>EDA + grafik.</strong> <span class="sub">Mengenal dataset baru secara sistematis, lalu menggambarnya dengan matplotlib/seaborn.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>Kaggle Learn: "Python" lalu "Pandas" (gratis, singkat, langsung praktik) · buku gratis "Python for Data Analysis" (Wes McKinney) bab 5–10.</div>
+        <div class="milestone"><span class="tag">HASIL BULAN INI</span>Notebook EDA dari data terbuka Singapura (data.gov.sg) atau Australia (data.gov.au), diunggah ke GitHub dengan penjelasan.</div>
+      </article>
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 05</span><h3>Menguji ide dengan data</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 17</span><div><strong>Peluang &amp; sebaran.</strong> <span class="sub">Kurva normal, dan kenapa kalau kita ambil sampel berkali-kali hasilnya cenderung ke tengah.</span></div></li>
+          <li><span class="w">Mgg 18</span><div><strong>Uji hipotesis.</strong> <span class="sub">Cara menjawab "apakah beda ini nyata atau cuma kebetulan?" — uji-t, chi-square, p-value.</span></div></li>
+          <li><span class="w">Mgg 19</span><div><strong>Seberapa yakin kita?</strong> <span class="sub">Confidence interval, ukuran efek, dan jebakan umum (berhenti tes terlalu cepat, tes terlalu banyak hal).</span></div></li>
+          <li><span class="w">Mgg 20</span><div><strong>A/B test lengkap.</strong> <span class="sub">Hitung berapa orang yang dibutuhkan, jalankan simulasi, tulis keputusan: lanjut atau tidak.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>StatQuest playlist "Statistics Fundamentals" · Khan Academy "Statistics and Probability" · Kaggle dataset "A/B Testing" untuk praktik.</div>
+        <div class="milestone"><span class="tag">HASIL BULAN INI</span>Laporan A/B test: "apakah halaman checkout baru menaikkan pembelian?" lengkap dengan rekomendasi.</div>
+      </article>
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 06</span><h3>Membuat dashboard</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 21</span><div><strong>Grafik yang benar.</strong> <span class="sub">Kapan pakai batang, garis, atau tabel. Cara membuat grafik yang langsung dimengerti tanpa dijelaskan.</span></div></li>
+          <li><span class="w">Mgg 22</span><div><strong>Tableau.</strong> <span class="sub">Hubungkan data, buat perhitungan, susun dashboard, publikasikan di Tableau Public (gratis).</span></div></li>
+          <li><span class="w">Mgg 23</span><div><strong>Power BI.</strong> <span class="sub">Power Query untuk membersihkan, DAX dasar untuk menghitung (CALCULATE, perbandingan waktu).</span></div></li>
+          <li><span class="w">Mgg 24</span><div><strong>Proyek.</strong> <span class="sub">Dua dashboard publik bertema Singapura/Australia — misalnya transportasi umum atau harga properti.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>Tableau Free Training Videos (situs resmi Tableau) · Microsoft Learn "PL-300 learning path" (gratis, resmi) · buku "Storytelling with Data" (Cole Nussbaumer).</div>
+        <div class="milestone check"><span class="tag">UJIAN DIRI 2</span>Latihan soal PL-300 skor minimal 70%. Lalu jelaskan hasil A/B test-mu dalam 3 menit tanpa menyebut kata "p-value" — kalau bisa, kamu lolos.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= Q3 ================= -->
+  <section class="quarter" id="q3" aria-labelledby="q3-h">
+    <div class="quarter-head">
+      <span class="q">TINGKAT 3</span>
+      <h2 id="q3-h">Lanjutan</h2>
+      <span class="range">Bulan 7–9 · Minggu 25–36</span>
+    </div>
+    <p class="quarter-goal"><strong>Di akhir 3 bulan ini kamu bisa:</strong> bekerja seperti analis di tim sungguhan — query yang cepat, data yang rapi dan terperiksa, laporan yang jalan sendiri, dan paham angka-angka bisnis.</p>
+
+    <div class="months">
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 07</span><h3>SQL untuk data besar &amp; menata data</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 25</span><div><strong>Query yang cepat.</strong> <span class="sub">Kenapa query lambat dan cara memperbaikinya. Coba BigQuery (gratis untuk latihan) untuk data jutaan baris.</span></div></li>
+          <li><span class="w">Mgg 26</span><div><strong>dbt.</strong> <span class="sub">Alat untuk merapikan data bertahap: mentah → setengah bersih → siap pakai. Plus pengecekan otomatis.</span></div></li>
+          <li><span class="w">Mgg 27</span><div><strong>Satu definisi untuk semua.</strong> <span class="sub">Supaya "pendapatan" di dashboard A sama dengan di dashboard B. Cek data segar dan tidak aneh.</span></div></li>
+          <li><span class="w">Mgg 28</span><div><strong>Proyek.</strong> <span class="sub">Pipeline kecil: data mentah → dbt → dashboard yang terbarui sendiri.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>dbt Learn "dbt Fundamentals" (gratis, resmi) · Google BigQuery sandbox + dataset publik Google · YouTube "Use The Index, Luke" untuk optimasi.</div>
+        <div class="milestone"><span class="tag">HASIL BULAN INI</span>Repository dbt dengan 5+ model, pengecekan otomatis, dan dokumentasi yang bisa dibaca orang lain.</div>
+      </article>
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 08</span><h3>Python lanjutan &amp; otomatisasi</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 29</span><div><strong>Kode yang rapi.</strong> <span class="sub">Memecah kode jadi file-file kecil, virtual environment, git branch dan pull request.</span></div></li>
+          <li><span class="w">Mgg 30</span><div><strong>Laporan otomatis.</strong> <span class="sub">Ambil data dari API atau database, olah, kirim — semua tanpa disentuh, dijadwalkan.</span></div></li>
+          <li><span class="w">Mgg 31</span><div><strong>Aplikasi data sederhana.</strong> <span class="sub">plotly untuk grafik interaktif, Streamlit untuk membuat halaman web dari Python dalam hitungan menit.</span></div></li>
+          <li><span class="w">Mgg 32</span><div><strong>Proyek.</strong> <span class="sub">Laporan mingguan yang terkirim otomatis tiap Senin + aplikasi Streamlit yang bisa dibuka orang lain.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>"Automate the Boring Stuff with Python" (buku gratis online) · dokumentasi Streamlit "Get started" · GitHub Skills (kursus git interaktif gratis).</div>
+        <div class="milestone"><span class="tag">HASIL BULAN INI</span>Satu laporan yang berjalan sendiri tiap Senin pagi.</div>
+      </article>
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 09</span><h3>Angka-angka bisnis</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 33</span><div><strong>Metrik produk.</strong> <span class="sub">Berapa yang datang, berapa yang bertahan, berapa yang pergi, berapa nilai satu pelanggan seumur hidup.</span></div></li>
+          <li><span class="w">Mgg 34</span><div><strong>Melacak perilaku pengguna.</strong> <span class="sub">Cara aplikasi mencatat "tombol ini diklik" — dan cara merancang pencatatan yang berguna.</span></div></li>
+          <li><span class="w">Mgg 35</span><div><strong>Meramal angka.</strong> <span class="sub">Menebak penjualan bulan depan dari pola bulan-bulan lalu. Mulai dari yang sederhana.</span></div></li>
+          <li><span class="w">Mgg 36</span><div><strong>Studi kasus industri.</strong> <span class="sub">Pilih satu: fintech, e-commerce, atau logistik — industri besar di Singapura dan Australia.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>Blog Amplitude &amp; Mixpanel (gratis, banyak contoh nyata) · Kaggle Learn "Time Series" · Lenny's Newsletter untuk cara berpikir produk.</div>
+        <div class="milestone check"><span class="tag">UJIAN DIRI 3</span>Presentasikan satu studi kasus lengkap 10 menit ke teman/mentor yang boleh menyela dan bertanya "kenapa?". Kalau kamu bisa menjawab tanpa gugup, lolos.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= Q4 ================= -->
+  <section class="quarter" id="q4" aria-labelledby="q4-h">
+    <div class="quarter-head">
+      <span class="q">TINGKAT 4</span>
+      <h2 id="q4-h">Mahir</h2>
+      <span class="range">Bulan 10–12 · Minggu 37–48</span>
+    </div>
+    <p class="quarter-goal"><strong>Di akhir 3 bulan ini kamu punya:</strong> satu proyek besar yang membedakanmu dari lulusan kursus biasa, portofolio yang sudah dicek praktisi, dan lamaran yang sedang berjalan ke Singapura/Australia.</p>
+
+    <div class="months">
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 10</span><h3>Prediksi dengan data</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 37</span><div><strong>Regresi.</strong> <span class="sub">Model paling dasar: "kalau X naik 1, Y naik berapa?" Cara membaca dan mempercayainya.</span></div></li>
+          <li><span class="w">Mgg 38</span><div><strong>Model pohon keputusan.</strong> <span class="sub">Random forest dan gradient boosting dengan scikit-learn. Cara menguji model dengan jujur.</span></div></li>
+          <li><span class="w">Mgg 39</span><div><strong>Mengelompokkan pelanggan.</strong> <span class="sub">Clustering dan RFM: mana pelanggan setia, mana yang hampir hilang, mana yang baru.</span></div></li>
+          <li><span class="w">Mgg 40</span><div><strong>Proyek.</strong> <span class="sub">Model "siapa yang akan berhenti berlangganan" + penjelasan: kenapa, dan apa yang harus dilakukan.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>Kaggle Learn "Intro to Machine Learning" dan "Intermediate ML" · StatQuest playlist "Machine Learning" · dataset "Telco Customer Churn" di Kaggle.</div>
+        <div class="milestone"><span class="tag">HASIL BULAN INI</span>Notebook model + memo 1 halaman untuk pimpinan yang tidak menyebut satu pun nama algoritma.</div>
+      </article>
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 11</span><h3>Proyek besar &amp; portofolio</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 41</span><div><strong>Pilih bidang.</strong> <span class="sub">Fintech, e-commerce, logistik, atau kesehatan. Pelajari angka-angka khas bidang itu.</span></div></li>
+          <li><span class="w">Mgg 42</span><div><strong>Proyek besar, bagian 1.</strong> <span class="sub">Dari data mentah bidang pilihanmu: rapikan, analisis, buat model kalau perlu.</span></div></li>
+          <li><span class="w">Mgg 43</span><div><strong>Proyek besar, bagian 2.</strong> <span class="sub">Dashboard untuk pimpinan, penjelasan tertulis, video 3 menit menjelaskan proyekmu.</span></div></li>
+          <li><span class="w">Mgg 44</span><div><strong>Rapikan semuanya.</strong> <span class="sub">Situs portofolio sederhana, GitHub dibersihkan, LinkedIn dalam Bahasa Inggris, CV satu halaman.</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>GitHub Pages atau Notion untuk situs portofolio (gratis) · contoh portofolio analis di Tableau Public "Viz of the Day" · template CV dari Harvard Office of Career Services.</div>
+        <div class="milestone"><span class="tag">HASIL BULAN INI</span>Portofolio dicek minimal 2 orang yang sudah bekerja sebagai analis (cari di komunitas data atau LinkedIn).</div>
+      </article>
+
+      <article class="month">
+        <div class="month-head"><span class="n mono">BULAN 12</span><h3>Cari kerja di Singapura / Australia</h3></div>
+        <ul class="weeks">
+          <li><span class="w">Mgg 45</span><div><strong>Riset lowongan.</strong> <span class="sub">Baca 30 lowongan di MyCareersFuture (SG) dan Seek (AU). Catat skill yang paling sering diminta. Pilih 15 perusahaan target.</span></div></li>
+          <li><span class="w">Mgg 46</span><div><strong>Latihan wawancara.</strong> <span class="sub">SQL langsung di depan pewawancara, studi kasus dadakan, cerita pengalaman (format STAR).</span></div></li>
+          <li><span class="w">Mgg 47</span><div><strong>Melamar.</strong> <span class="sub">5–10 lamaran per minggu yang benar-benar cocok, bukan asal kirim. Ikut komunitas data SG/AU di LinkedIn.</span></div></li>
+          <li><span class="w">Mgg 48</span><div><strong>Tawaran &amp; visa.</strong> <span class="sub">Pahami Employment Pass / S Pass (Singapura) dan visa subclass 482 (Australia) sebelum bilang "ya".</span></div></li>
+        </ul>
+        <div class="source"><span class="tag">BELAJAR DARI</span>StrataScratch untuk soal wawancara SQL · YouTube "Data Interview Pro" · situs resmi mom.gov.sg dan immi.homeaffairs.gov.au untuk visa.</div>
+        <div class="milestone check"><span class="tag">UJIAN AKHIR</span>Minimal 3 wawancara dengan perusahaan di Singapura atau Australia, dan satu tugas take-home yang lolos ke tahap berikutnya.</div>
+      </article>
+
+    </div>
+
+    <div class="buffer">
+      <strong>Minggu 49–52: cadangan.</strong> Empat minggu ini sengaja dikosongkan — untuk mengejar yang tertinggal, mengulang ujian diri yang belum lolos, atau memperdalam proyek besar. Kalau tidak terpakai, itu bonus.
+    </div>
+  </section>
+
+  <section aria-labelledby="rubric-h">
+    <h2 id="rubric-h">Cara tahu kamu benar-benar lolos ujian diri</h2>
+    <p class="section-note">Sudah menonton semua video bukan berarti lolos. Pakai 4 ukuran ini, jujur ke diri sendiri.</p>
+    <ul class="rubric">
+      <li><span class="q">UKURAN 1</span><strong>Tanpa contekan</strong>Bisa mengerjakan tugas yang mirip dari nol, tanpa membuka catatan lama atau tutorial.</li>
+      <li><span class="q">UKURAN 2</span><strong>Tepat waktu</strong>Selesai dalam batas waktu. Cepat berarti paham, bukan hafal.</li>
+      <li><span class="q">UKURAN 3</span><strong>Bisa dijelaskan</strong>Orang yang bukan orang data bisa mengerti penjelasanmu, dan kamu bisa jawab saat ditanya "kenapa?".</li>
+      <li><span class="q">UKURAN 4</span><strong>Ada buktinya</strong>Hasilnya bisa dibuka orang lain lewat link (GitHub / Tableau Public). Kalau tidak ada link, belum dihitung.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Kalau satu bulan terasa mustahil, biasanya yang salah adalah jumlah jam belajarnya, bukan urutannya. Geser jadwalnya — jangan lompati materinya.</p>
+    <p class="closing">Setahun dari sekarang, kamu bukan lagi orang yang "sedang belajar data" — kamu analis yang sedang mencari tim.</p>
+  </footer>
+
+</div>

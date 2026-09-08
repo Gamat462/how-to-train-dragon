@@ -1,0 +1,398 @@
+<title>Rencana 29 Minggu</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4;
+    --surface:#FDFBF5;
+    --surface-2:#EAE2CC;
+    --ink:#1C2430;
+    --ink-soft:#5B6472;
+    --line:#DCD3B9;
+    --teal:#0F6E63;
+    --teal-soft:#E1EEEA;
+    --gold:#9C6B25;
+    --gold-soft:#F1E4C8;
+    --review:#3E5C78;
+    --review-soft:#E2E8EE;
+    --rest:#4B7A55;
+    --rest-soft:#E4EEE1;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --review:#8FB0CE; --review-soft:rgba(143,176,206,0.14);
+      --rest:#8FC79A; --rest-soft:rgba(143,199,154,0.14);
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --review:#8FB0CE; --review-soft:rgba(143,176,206,0.14);
+    --rest:#8FC79A; --rest-soft:rgba(143,199,154,0.14);
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif;
+    line-height:1.55;
+    padding:40px 20px 80px;
+  }
+  h1,h2,h3{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+
+  .page{
+    max-width:860px;
+    margin:0 auto;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 20px 32px; } }
+
+  header{ margin-bottom:36px; }
+  .eyebrow{
+    font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--teal); display:block; margin-bottom:10px;
+  }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{
+    margin-top:12px; max-width:60ch; color:var(--ink-soft); font-size:0.98rem;
+  }
+
+  section{ margin-bottom:44px; }
+  section > h2{ font-size:1.32rem; font-weight:600; margin-bottom:6px; }
+  .section-note{ color:var(--ink-soft); font-size:0.88rem; max-width:60ch; margin-bottom:18px; }
+
+  /* ---------- Principles ---------- */
+  .principle-list{
+    list-style:none; margin:0; padding:0;
+    display:grid; grid-template-columns:repeat(2,1fr); gap:12px;
+  }
+  @media (max-width:600px){ .principle-list{ grid-template-columns:1fr; } }
+  .principle-list li{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    font-size:0.9rem;
+    color:var(--ink-soft);
+  }
+  .principle-list strong{ color:var(--ink); display:block; margin-bottom:3px; font-weight:600; }
+
+  /* ---------- Timetable ---------- */
+  .day-group-title{
+    font-size:1.02rem; font-weight:600; margin:22px 0 10px;
+    display:flex; align-items:baseline; gap:8px;
+  }
+  .day-group-title .mono{ font-size:0.78rem; color:var(--ink-soft); font-weight:400; }
+  .timetable{
+    width:100%; border-collapse:collapse; font-size:0.9rem; margin-bottom:6px;
+  }
+  .timetable th{
+    text-align:left; padding:8px 12px; font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--ink-soft); border-bottom:1px solid var(--line);
+  }
+  .timetable td{
+    padding:12px 12px; border-bottom:1px solid var(--line); vertical-align:top;
+  }
+  .timetable td.time{
+    font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums;
+    white-space:nowrap; color:var(--ink-soft); width:1%;
+  }
+  .timetable td.activity strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .timetable td.activity span{ color:var(--ink-soft); font-size:0.86rem; }
+  .timetable tr.blank td{
+    font-style:italic; color:var(--ink-soft); background:var(--surface-2);
+  }
+  .timetable tr:last-child td{ border-bottom:none; }
+  .status{
+    font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em;
+    text-transform:uppercase; padding:3px 9px; border-radius:999px; white-space:nowrap;
+  }
+  .status.fokus{ background:var(--teal-soft); color:var(--teal); }
+  .status.proyek{ background:var(--gold-soft); color:var(--gold); }
+  .status.review{ background:var(--review-soft); color:var(--review); }
+  .status.istirahat{ background:var(--rest-soft); color:var(--rest); }
+
+  .hours-stat{
+    display:flex; align-items:baseline; gap:10px;
+    background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin-top:8px;
+  }
+  .hours-stat .num{
+    font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums;
+    font-size:1.4rem; font-weight:600; color:var(--teal);
+  }
+  .hours-stat .label{ font-size:0.86rem; color:var(--ink-soft); }
+
+  /* ---------- Phase map ---------- */
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+  table.phases{ width:100%; border-collapse:collapse; font-size:0.86rem; min-width:600px; }
+  table.phases th, table.phases td{ text-align:left; padding:11px 15px; border-bottom:1px solid var(--line); vertical-align:top; }
+  table.phases thead th{
+    background:var(--surface-2); font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft);
+  }
+  table.phases td.leg{ font-family:"IBM Plex Mono", monospace; color:var(--gold); white-space:nowrap; }
+  table.phases tbody tr:last-child td{ border-bottom:none; }
+
+  /* ---------- Day one ---------- */
+  .day-one{
+    background:var(--surface-2); border:1px dashed var(--line);
+    border-radius:16px; padding:24px 26px;
+  }
+  .tag{
+    display:inline-block; font-size:0.68rem; letter-spacing:0.08em;
+    color:var(--gold); margin-bottom:10px;
+  }
+  .day-one h2{ margin-bottom:14px; font-size:1.24rem; }
+  .checklist{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; }
+  .checklist li{
+    display:flex; gap:10px; align-items:flex-start; font-size:0.92rem;
+  }
+  .checklist .box{
+    flex:none; width:15px; height:15px; margin-top:3px;
+    border:1.5px solid var(--teal); border-radius:4px;
+  }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; }
+  .closing{
+    font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink);
+  }
+
+  .catatan{
+    background:var(--gold-soft); border:1px solid var(--line); border-radius:12px;
+    padding:14px 18px; margin-top:16px; font-size:0.9rem; color:var(--ink-soft);
+  }
+  .catatan strong{ color:var(--gold); }
+  .catatan.sibuk{ background:#F6E2DD; }
+  :root:not([data-theme="light"]) .catatan.sibuk{ background:rgba(232,138,118,0.14); }
+  :root[data-theme="dark"] .catatan.sibuk{ background:rgba(232,138,118,0.14); }
+  .catatan.sibuk strong{ color:#A33A2A; }
+  :root:not([data-theme="light"]) .catatan.sibuk strong{ color:#E88A76; }
+  :root[data-theme="dark"] .catatan.sibuk strong{ color:#E88A76; }
+  .status.sibuk{ background:#F6E2DD; color:#A33A2A; }
+  :root:not([data-theme="light"]) .status.sibuk{ background:rgba(232,138,118,0.14); color:#E88A76; }
+  :root[data-theme="dark"] .status.sibuk{ background:rgba(232,138,118,0.14); color:#E88A76; }
+  table.phases td.hari{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .principle-list.satu{ grid-template-columns:1fr; }
+</style>
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Penuh waktu · dari nol sampai dibayar</span>
+    <h1>Rencana 29 Minggu: Belajar Sambil Mulai Menghasilkan</h1>
+    <p class="lede">Kamu sudah resign. Itu berarti dua hal sekaligus: waktumu penuh, dan jam berdetak. Rencana ini disusun bukan mengelilingi kalender, tapi mengelilingi satu pertanyaan — <strong>kapan kamu boleh mulai menerima uang, dan untuk pekerjaan apa.</strong></p>
+  </header>
+
+  <section aria-labelledby="prinsip-h">
+    <h2 id="prinsip-h">Empat keputusan yang menyusun rencana ini</h2>
+    <ul class="principle-list">
+      <li><strong>Dua hari materi per hari, bukan tiga</strong>Modul-modul ini punya pengulangan berjarak bawaan (ulang +1 hari, +3 hari, +7 hari). Kalau kamu memampatkan tiga hari materi ke satu hari kalender, jarak itu ikut memampat dan ingatannya tidak sempat mengendap. Dua per hari adalah batas di mana rancangannya masih bekerja.</li>
+      <li><strong>Separuh hari untuk belajar, separuh untuk menghasilkan</strong>Pagi materi, sore proyek dan mencari klien. Mencari klien butuh waktu <em>kalender</em>, bukan waktu belajar — kalau baru dimulai setelah semua materi selesai, kamu menganggur dua bulan lebih lama tanpa alasan.</li>
+      <li><strong>Kamu tidak perlu selesai untuk mulai dibayar</strong>Setelah minggu ke-6 kamu sudah bisa mengerjakan pekerjaan dashboard yang dibayar. Bab-bab berikutnya menaikkan tarif dan memperluas jenis pekerjaan, bukan syarat untuk memulai.</li>
+      <li><strong>Freelance dulu, lamaran belakangan — atau keduanya</strong>Freelance memberi pemasukan lebih cepat dan sekaligus <em>menjadi</em> portofoliomu. Klien nyata di CV lebih kuat daripada proyek latihan, dan itu mempercepat lamaran kerja penuh waktu kalau nanti kamu mau.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="fase-h">
+    <h2 id="fase-h">Enam fase, dan apa yang bisa dijual di tiap ujungnya</h2>
+    <p class="section-note">282 hari materi (8 Bekal Python + 6 Bekal Data Klien + 5 Studi Kasus Nyata + 4 Bekal Rahasia Klien + 5 Bekal Kirim Hasil + 105 jalur utama + 35 migas + 35 SQL Mahir + 14 SQL &amp; Python Produksi + 17 Pintu B, Ujian, Proyek Buta &amp; Jalur S2 + 28 Bekal Matematika S2 + 20 Excel, alat &amp; bahasa kantor), dua per hari, lima hari seminggu = <strong>29 minggu kerja</strong>. Kolom terakhir adalah yang paling penting buatmu sekarang.</p>
+    <div class="table-wrap">
+      <table class="phases">
+        <thead><tr><th>Fase</th><th>Materi</th><th>Hari</th><th>Selesai di minggu</th><th>Yang sudah bisa kamu jual</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="leg"><strong>1</strong><br>Fondasi</td>
+            <td>Bekal Python<br>Minggu 1–5</td>
+            <td class="hari">43</td>
+            <td class="hari">5</td>
+            <td><strong>Rapikan data &amp; laporan sederhana.</strong> Klien kirim Excel berantakan, kamu kembalikan bersih + ringkasan berangka. Pekerjaan paling banyak tersedia, tarif paling rendah — tapi ini pintu masuknya.</td>
+          </tr>
+          <tr>
+            <td class="leg"><strong>2</strong><br>Bisa dijual</td>
+            <td>Minggu 6–8<br><a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a">Bekal Data Klien</a><br><a href="https://claude.ai/code/artifact/e87748bf-c615-4461-951e-248010b4ae34">Studi Kasus Nyata</a><br><a href="https://claude.ai/code/artifact/e653810a-9c48-4b3e-af6e-8d439618c677">Bekal Rahasia Klien</a></td>
+            <td class="hari">32</td>
+            <td class="hari">8</td>
+            <td><strong>Berkas klien dirapikan + dashboard.</strong> <a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a">Bekal Data Klien</a> membuatmu bisa menerima berkas Excel berantakan dari siapa pun dan mengembalikannya bersih + berangka — jasa termurah tapi paling banyak tersedia. Tableau/Power BI/plotly yang bisa dibuka klien di browser. Ini jenis pekerjaan yang paling sering dicari UMKM dan paling mudah dijelaskan harganya. <em>Titik masuk freelance yang sesungguhnya.</em></td>
+          </tr>
+          <tr>
+            <td class="leg"><strong>3</strong><br>Naik kelas</td>
+            <td>Minggu 9–13<br><a href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760">Bekal Kirim Hasil</a></td>
+            <td class="hari">44</td>
+            <td class="hari">12</td>
+            <td><strong>Laporan otomatis yang benar-benar sampai &amp; analisis lanjutan.</strong> <a href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760">Bekal Kirim Hasil</a> menutup langkah terakhirnya: laporan masuk email klien, dan kamu tahu kalau ia rusak. Pipeline yang berjalan sendiri tiap minggu, uji A/B, model prediksi sederhana. Tarif naik karena hasilnya berulang, bukan sekali pakai.</td>
+          </tr>
+          <tr>
+            <td class="leg"><strong>4</strong><br>Spesialisasi</td>
+            <td>Minggu 14–15<br>Migas L1–5</td>
+            <td class="hari">49</td>
+            <td class="hari">17</td>
+            <td><strong>Spesialis domain.</strong> Rekonsiliasi, cost recovery, analisis cadangan. Ceruk sempit, saingan sedikit, tarif jauh di atas pekerjaan dashboard umum — dan latar auditmu jadi alasan orang memilihmu.</td>
+          </tr>
+          <tr>
+            <td class="leg"><strong>5</strong><br>Mahir SQL</td>
+            <td>SQL Mahir L1–5<br><a href="https://claude.ai/code/artifact/15ba1f07-96fd-4636-b694-f2cf31f020cd">SQL Produksi</a><br><a href="https://claude.ai/code/artifact/e5ebbbde-69c2-4a12-a118-9eaa29210949">Python Produksi</a></td>
+            <td class="hari">49</td>
+            <td class="hari">22</td>
+            <td><strong>Lolos tes SQL, dan tahu angkamu benar.</strong> Level 1–3 adalah yang diuji di live coding — pola dedup, top-N per kelompok, gaps-and-islands. Level 4 (index, transaksi, uji mutu data) yang membedakanmu dari kandidat lain yang juga bisa window function. Level 5 mengubah semuanya jadi jawaban wawancara dan satu ujian akhir berbentuk brief klien.</td>
+          </tr>
+          <tr>
+            <td class="leg"><strong>6</strong><br>Siap diterjunkan</td>
+            <td><a href="https://claude.ai/code/artifact/ffcc437e-1901-484c-a73b-128865461cd1">Bekal Excel Kantor</a><br><a href="https://claude.ai/code/artifact/f1e55d95-3ab1-4904-b378-ff0886a08852">Bekal Alat Kantor</a><br><a href="https://claude.ai/code/artifact/746fbb14-8c40-41a3-9882-5af02e150b66">Bahasa Inggris Kerja</a><br><a href="https://claude.ai/code/artifact/2427d59c-05e9-4074-98fd-eaa65ca2758e">Menulis untuk Manajemen</a><br><a href="https://claude.ai/code/artifact/9e8025f8-28cb-48cd-bee3-809b610567a6">Jalur Pintu B</a><br><a href="https://claude.ai/code/artifact/b20c546a-92f3-480f-81ae-4ba51728dc69">Ujian Bernilai</a><br><a href="https://claude.ai/code/artifact/61355282-6fe8-4f54-bd99-18ff4ae63d28">Proyek Buta</a><br><a href="https://claude.ai/code/artifact/d70b6a53-5f3a-483d-83e4-79aba530fdb0">Jalur S2 Luar Negeri</a></td>
+            <td class="hari">37</td>
+            <td class="hari">26</td>
+            <td><strong>Alat &amp; bahasa yang diminta lowongan, lalu diuji.</strong> Excel disebut di 3 dari 5 lowongan nyata dan bernilai nol di kurikulum ini; Metabase, Looker Studio, dan Airflow juga nol; bahasa Inggris cuma 5 sebutan lewat. Empat modul pertama menutup itu. Empat sisanya: tahu ke mana melamar, punya angka objektif, pernah dikritik orang. Delapan hal yang tidak menambah kemampuan teknis sama sekali — dan justru empat hal yang menentukan apakah kemampuan itu terpakai. Ditutup Jalur S2: menimbang kuliah di luar negeri dengan angka, bukan perasaan.</td>
+          </tr>
+          <tr>
+            <td class="leg"><strong>7</strong><br>Bekal Matematika S2</td>
+            <td><a href="https://claude.ai/code/artifact/f6784136-a13e-47e9-9eae-0264bd514182">MAT L1 Probabilitas</a><br><a href="https://claude.ai/code/artifact/f5079d99-9181-47a2-9ce4-7747feca52a3">MAT L2 Aljabar Linear</a><br><a href="https://claude.ai/code/artifact/6dc7de48-3ed0-4126-8455-a2c82e7bad4c">MAT L3 Optimisasi</a><br><a href="https://claude.ai/code/artifact/bf6f3e02-66dc-40a4-a649-f1c260029d36">MAT L4 Deep Learning</a></td>
+            <td class="hari">28</td>
+            <td class="hari">29</td>
+            <td><strong>Menutup empat topik yang pemindaian 49 modul laporkan bernilai nol.</strong> Dipetakan ke mata kuliah <em>wajib</em> yang nyata: DATASCI W203, MAST90138, DSA5103, DSA5106, COMP90051. Ini yang membuatmu bisa <em>mengikuti</em> kuliah S2 — bukan yang membuatmu memenuhi syarat administratifnya. Diletakkan paling akhir dengan sengaja: tenggat beasiswa lebih dulu, matematika tidak punya tenggat.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="catatan" style="margin-bottom:12px">
+      <strong>Fase 5 boleh ditarik maju.</strong> Kalau kamu mengincar posisi kantoran dan tes SQL-nya sudah di depan mata, kerjakan <strong>SQL Mahir L1–L3</strong> tepat setelah Minggu 6 (di situ window function baru diajarkan) alih-alih menunggu minggu ke-18. Konsekuensinya jujur: 21 hari materi pindah ke depan, jadi fase 3 dan 4 mundur sekitar dua minggu. Kalau yang kamu kejar adalah klien freelance lebih dulu, biarkan urutannya seperti di tabel — fase 2 sudah membuatmu bisa dibayar di minggu ke-7.
+    </div>
+    <div class="catatan">
+      <strong>Baca ulang kolom terakhir baris kedua.</strong> Minggu ke-8, bukan ke-17. Itu selisih lebih dari dua bulan pemasukan — dan buat orang yang baru resign, dua bulan itu bukan detail.
+    </div>
+  </section>
+
+  <section aria-labelledby="ritme-h">
+    <h2 id="ritme-h">Satu hari kerja</h2>
+    <p class="section-note">Bukan jadwal orang kantoran yang belajar di sela-sela. Ini jadwal orang yang <em>pekerjaannya</em> sedang berpindah.</p>
+    <table class="timetable">
+      <thead><tr><th>Waktu</th><th>Aktivitas</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="time">08.00–08.20</td>
+          <td class="activity"><strong>Baca ulang</strong><span>Catatan tulis tangan kemarin. Tanpa laptop.</span></td>
+          <td><span class="status review">Ulang</span></td>
+        </tr>
+        <tr>
+          <td class="time">08.20–09.45</td>
+          <td class="activity"><strong>Hari materi pertama</strong><span>Satu "Hari" penuh dari modul, centang tiap langkah sampai habis.</span></td>
+          <td><span class="status fokus">Inti</span></td>
+        </tr>
+        <tr>
+          <td class="time">10.00–11.30</td>
+          <td class="activity"><strong>Hari materi kedua</strong><span>Berhenti di sini. Hari ketiga akan terasa produktif tapi tidak mengendap.</span></td>
+          <td><span class="status fokus">Inti</span></td>
+        </tr>
+        <tr class="blank">
+          <td class="time">—</td>
+          <td class="activity">Istirahat siang — sungguhan, bukan sambil buka laptop</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="time">13.30–15.30</td>
+          <td class="activity"><strong>Proyek &amp; portofolio</strong><span>Rapikan proyek modul jadi layak dilihat orang: README, tangkapan layar, tautan hidup.</span></td>
+          <td><span class="status proyek">Proyek</span></td>
+        </tr>
+        <tr>
+          <td class="time">15.30–16.30</td>
+          <td class="activity"><strong>Mencari klien</strong><span>Mulai minggu ke-5. Sebelum itu, pakai slot ini untuk menambah proyek portofolio.</span></td>
+          <td><span class="status proyek">Klien</span></td>
+        </tr>
+        <tr>
+          <td class="time">16.30–16.45</td>
+          <td class="activity"><strong>Jurnal tiga baris</strong><span>Apa yang dipelajari, di mana macet, target besok.</span></td>
+          <td><span class="status review">Ulang</span></td>
+        </tr>
+        <tr>
+          <td class="time">Sabtu–Minggu</td>
+          <td class="activity"><strong>Libur, atau kerjaan klien</strong><span>Begitu ada klien, akhir pekan jadi slot pengerjaan. Sebelum itu: benar-benar libur.</span></td>
+          <td><span class="status istirahat">Istirahat</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="hours-stat">
+      <span class="num">29</span>
+      <span class="label">minggu · 2 hari materi/hari · ±3 jam belajar + ±3 jam proyek dan klien tiap hari kerja.</span>
+    </div>
+    <div class="catatan">
+      <strong>Godaan terbesarmu adalah mempercepat jadi 3–4 hari materi per hari.</strong> Rasanya seperti kemajuan, dan minggu pertama memang terasa lancar. Yang runtuh adalah bagian yang tidak kelihatan: ulangan berjarak di Hari 4, 10, 19, 25 dan seterusnya dirancang dengan asumsi ada jeda semalam di antara materi. Kalau ingin lebih cepat, tambah <em>hari</em> (Sabtu), jangan tambah <em>materi per hari</em>.
+    </div>
+  </section>
+
+  <section aria-labelledby="fl-h">
+    <h2 id="fl-h">Jalur paralel: mencari klien sambil belajar</h2>
+    <p class="section-note">Materi mengajarkan cara menganalisis data. Ia tidak mengajarkan cara dibayar untuk itu — dan dua hal itu perlu dikerjakan bersamaan, bukan berurutan. <a href="https://claude.ai/code/artifact/c1664d77-5877-4da8-ade7-764018718b5c"><strong>Jalur Freelance</strong></a> berisi dua belas hari untuk bagian yang kedua.</p>
+    <div class="tabel-bungkus">
+      <table>
+        <thead><tr><th>Minggu</th><th>Hari freelance</th><th>Yang dikerjakan</th></tr></thead>
+        <tbody>
+          <tr><td class="hari">5–6</td><td class="mono">F1–F2</td><td>Tentukan apa yang dijual, hitung tarif dasar</td></tr>
+          <tr><td class="hari">7</td><td class="mono">F3</td><td>Halaman portofolio dari proyek dashboard M8 (M8 selesai di minggu ini)</td></tr>
+          <tr><td class="hari">8–9</td><td class="mono">F4–F5</td><td>Hubungi jaringanmu sendiri, percakapan klien pertama</td></tr>
+          <tr><td class="hari">10–12</td><td class="mono">F6–F8</td><td>Proposal, kerjakan proyek, kirim invoice</td></tr>
+          <tr><td class="hari">13–16</td><td class="mono">F9–F12</td><td>Platform, penghasilan berulang, naikkan tarif, rencana 90 hari</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="catatan">
+      <strong>Mulai di minggu ke-5, bukan lebih awal dan bukan setelah selesai.</strong> Lebih awal: belum ada yang bisa ditunjukkan. Setelah minggu 15: kamu kehilangan sepuluh minggu yang seharusnya dipakai menunggu balasan orang — dan menunggu balasan itu bagian yang paling makan waktu kalender, bukan bagian yang makan tenaga.
+      <p style="margin-top:8px">Satu hari freelance per minggu sudah cukup. Sisanya tetap materi.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="bekal-h">
+    <h2 id="bekal-h">Apa yang sudah kamu punya dari KAP, dan di mana ia terpakai</h2>
+    <p class="section-note">Kamu keluar dari KAP, tapi kemampuannya ikut keluar bersamamu. Tiap baris menunjuk hari yang benar-benar ada di modulnya.</p>
+    <div class="table-wrap">
+      <table class="phases">
+        <thead><tr><th>Yang sudah kamu kuasai</th><th>Namanya di dunia data</th><th>Di mana</th></tr></thead>
+        <tbody>
+          <tr><td>Rekonsiliasi saldo &amp; tie-out</td><td>Test rekonsiliasi otomatis, uji keutuhan data</td><td class="leg">M10 H67<br>Migas H12, H23</td></tr>
+          <tr><td>Materialitas — kapan selisih layak dilaporkan</td><td>Effect size, confidence interval, ambang praktis</td><td class="leg">M7 H43–44<br>Migas H22</td></tr>
+          <tr><td>Sampling &amp; risiko sampling</td><td>Central Limit Theorem, power, ukuran sampel</td><td class="leg">M4 H24<br>M7 H48</td></tr>
+          <tr><td>Skeptisisme profesional</td><td>Bias seleksi, p-hacking, mengintip hasil A/B</td><td class="leg">M7 H45–46<br>Migas H11</td></tr>
+          <tr><td>Kertas kerja yang bisa ditelusuri ulang</td><td>Notebook terdokumentasi, dokumentasi dbt</td><td class="leg">M3 H21<br>M10 H68</td></tr>
+          <tr><td>Jejak atas setiap perubahan</td><td>Riwayat commit git, pull request</td><td class="leg">M11 H71</td></tr>
+          <tr><td>Bahasa temuan yang berhati-hati</td><td>Menyatakan batasan &amp; ketidakpastian di laporan</td><td class="leg">M12 H82<br>Migas H35</td></tr>
+          <tr><td><strong>Surat penugasan &amp; ruang lingkup</strong></td><td><strong>Proposal freelance &amp; batas pekerjaan</strong> — keunggulan yang tidak disadari sebagian besar freelancer pemula</td><td class="leg"><a href="https://claude.ai/code/artifact/c1664d77-5877-4da8-ade7-764018718b5c">Jalur Freelance</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="catatan">
+      <strong>Baris terakhir itu keunggulan nyata, bukan penghiburan.</strong> Alasan paling sering freelancer data rugi bukan karena kurang mahir — tapi karena ruang lingkup pekerjaan melebar tanpa batas dan tanpa tambahan bayaran. Kamu sudah bertahun-tahun bekerja dengan surat penugasan yang menyebut apa yang termasuk dan apa yang tidak. Refleks itu langsung terpakai di hari pertama kamu freelance.
+    </div>
+  </section>
+
+  <section class="day-one" aria-labelledby="hari1-h">
+    <span class="tag mono">MINGGU PERTAMA</span>
+    <h2 id="hari1-h">Lima hal yang dikerjakan minggu ini</h2>
+    <ul class="checklist">
+      <li><span class="box"></span>Buat akun <strong>GitHub</strong> (nama pengguna profesional — akan jadi alamat portofoliomu) dan pastikan bisa masuk <strong>Google Colab</strong>.</li>
+      <li><span class="box"></span>Siapkan <strong>buku catatan fisik</strong>. Tiap modul menyuruhmu menulis tangan di akhir hari; itu disengaja dan jangan diganti aplikasi.</li>
+      <li><span class="box"></span>Mulai <strong>Minggu Pertama Hari 1</strong>. SQL dulu — Python belum dibutuhkan sama sekali.</li>
+      <li><span class="box"></span>Tandai: <strong>selesai Hari 14 → Bekal Python 8 hari</strong>, baru Minggu 3. Melewatinya berarti menabrak tembok di Hari 24.</li>
+      <li><span class="box"></span>Tandai juga: <strong>selesai Modul M6 → <a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a">Bekal Data Klien</a> 6 hari</strong>. Tanpa itu kamu tidak bisa membuka berkas Excel yang dikirim klien — dan itu bentuk berkas yang hampir selalu kamu terima.</li>
+      <li><span class="box"></span>Dan sebelum klien pertama: <strong><a href="https://claude.ai/code/artifact/e653810a-9c48-4b3e-af6e-8d439618c677">Bekal Rahasia Klien</a> 4 hari</strong>. Kurikulum ini mengajarimu menerbitkan semuanya ke tempat publik — benar untuk portofolio, kebocoran untuk data klien.</li>
+      <li><span class="box"></span>Buka <strong><a href="https://claude.ai/code/artifact/c1664d77-5877-4da8-ade7-764018718b5c">Jalur Freelance</a></strong> dan baca bagian pertamanya saja — sisanya dikerjakan mulai minggu ke-5. Yang penting kamu tahu ke mana semua ini bermuara.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p class="closing">Kamu tidak sedang belajar dulu lalu bekerja nanti. Mulai minggu keenam, keduanya berjalan bersamaan — dan itu memang cara paling cepat untuk keduanya.</p>
+  </footer>
+
+</div>

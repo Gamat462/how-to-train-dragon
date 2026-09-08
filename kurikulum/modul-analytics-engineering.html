@@ -1,0 +1,1033 @@
+<title>Modul Analytics Engineering</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.62;
+    padding:20px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.86em; background:var(--code-bg); padding:2px 6px; border-radius:6px; }
+  pre{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.8rem; line-height:1.5;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; overflow-x:auto; margin:0 0 12px;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .out{ border-left:3px solid var(--teal); }
+
+  .nav{
+    position:sticky; top:0; z-index:5; max-width:880px; margin:0 auto 24px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; padding:8px 10px; flex-wrap:wrap;
+  }
+  .nav .brand{ font-family:"Fraunces", serif; font-weight:600; font-size:0.95rem; padding:6px 10px; margin-right:auto; }
+  .nav a{ text-decoration:none; color:var(--ink-soft); font-size:0.8rem; font-weight:500; padding:6px 10px; border-radius:999px; }
+  .nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .nav a:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav .sep{ width:1px; height:18px; background:var(--line); margin:0 4px; }
+
+  .page{
+    max-width:880px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:32px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+  .needs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+  @media (max-width:600px){ .needs{ grid-template-columns:1fr; } }
+  .needs div{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.86rem; color:var(--ink-soft); }
+  .needs strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:2px; }
+
+  .part{
+    margin:52px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--line);
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  }
+  .part .q{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .part h2{ font-size:1.6rem; font-weight:600; }
+  .part .range{ font-size:0.86rem; color:var(--ink-soft); }
+
+  section{ margin-bottom:48px; scroll-margin-top:84px; }
+  section > h2{ font-size:1.36rem; font-weight:600; margin-bottom:4px; }
+  .week-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:8px; }
+  .goal{ color:var(--ink-soft); font-size:0.92rem; max-width:62ch; margin-bottom:22px; padding-left:14px; border-left:3px solid var(--teal); }
+  .goal strong{ color:var(--ink); }
+  h3{ font-size:1.08rem; font-weight:600; margin:26px 0 10px; }
+  h4{ font-size:0.98rem; font-weight:600; margin:18px 0 6px; }
+  .prose{ max-width:68ch; }
+  .prose p{ margin-bottom:12px; font-size:0.95rem; }
+  .prose ul, .prose ol{ margin:0 0 12px; padding-left:22px; font-size:0.95rem; }
+  .prose li{ margin-bottom:6px; }
+  .concept{ background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin:14px 0 18px; font-size:0.92rem; max-width:70ch; }
+  .concept strong{ color:var(--teal); }
+  .tip{ background:var(--gold-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .tip strong{ color:var(--gold); }
+  .warn{ background:var(--alert-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .warn strong{ color:var(--alert); }
+
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; margin:12px 0 16px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.84rem; }
+  th, td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.num, th.num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; text-align:right; }
+  table.wrap td{ white-space:normal; }
+
+  .block{ border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; background:var(--surface-2); }
+  .block h4{ margin:0 0 6px; font-family:"IBM Plex Mono", monospace; font-size:0.92rem; color:var(--teal); }
+  .block .use{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:10px; }
+  .block pre{ margin-bottom:8px; }
+  .block .result{ font-size:0.88rem; }
+
+  .tree{
+    font-family:"IBM Plex Mono", monospace; font-size:0.78rem; line-height:1.65;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:16px 18px; overflow-x:auto; margin:12px 0;
+  }
+  .tree .c{ color:var(--ink-soft); }
+
+  .flow{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:16px 0; }
+  .flow .n{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface-2); font-size:0.86rem; flex:1 1 auto; min-width:120px;
+  }
+  .flow .n strong{ display:block; font-family:"IBM Plex Mono", monospace; font-size:0.7rem; color:var(--teal); letter-spacing:0.06em; }
+  .flow .a{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  .exercise{ border:1px dashed var(--gold); border-radius:14px; padding:18px 20px; margin:22px 0 0; background:var(--surface); }
+  .exercise h3{ margin:0 0 4px; }
+  .exercise .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.1em; color:var(--gold); }
+  .exercise ol{ margin:10px 0 0; padding-left:22px; font-size:0.93rem; }
+  .exercise li{ margin-bottom:8px; }
+  details{ margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  summary{ cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--teal); }
+  summary:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; border-radius:4px; }
+  details .answer{ margin-top:10px; font-size:0.9rem; }
+  details .answer ol{ padding-left:22px; margin:0; }
+  details .answer li{ margin-bottom:12px; }
+  details .answer pre{ margin:6px 0; }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .steps li{ display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem; }
+  .steps li::before{ counter-increment:step; content:counter(step, decimal-leading-zero); font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px; }
+  .steps li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .steps li span{ color:var(--ink-soft); }
+
+  .checklist{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .checklist li{ display:flex; gap:10px; align-items:flex-start; font-size:0.92rem; }
+  .checklist .box{ flex:none; width:15px; height:15px; margin-top:4px; border:1.5px solid var(--teal); border-radius:4px; }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<nav class="nav" aria-label="Bagian modul">
+  <span class="brand">Analytics Engineering</span>
+  <a href="#w1">SQL besar</a><a href="#w2">Optimasi</a>
+  <span class="sep"></span>
+  <a href="#w3">dbt</a><a href="#w4">Test &amp; docs</a>
+  <span class="sep"></span>
+  <a href="#w5">git</a><a href="#w6">Otomasi</a>
+  <span class="sep"></span>
+  <a href="#w7">Streamlit</a><a href="#w8">Proyek</a>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Materi · Bulan 7–8</span>
+    <h1>Analytics Engineering</h1>
+    <p class="lede">Sampai sekarang kamu menganalisis data yang sudah rapi, di notebook, sendirian. Dua bulan ini kamu belajar bekerja seperti analis di tim: query yang tidak menghabiskan anggaran, transformasi yang diuji otomatis, kode yang di-review orang lain, dan laporan yang jalan sendiri tiap Senin pagi tanpa kamu sentuh.</p>
+
+    <div class="needs">
+      <div><strong>Kenapa penting</strong>Ini yang membedakan gaji analis junior dan menengah di Singapura/Australia. Iklan lowongan menyebutnya "analytics engineering" atau "modern data stack".</div>
+      <div><strong>Alat</strong>BigQuery sandbox (gratis, tanpa kartu kredit), dbt Core, git + GitHub, Streamlit Community Cloud.</div>
+      <div><strong>Prasyarat</strong>SQL sampai window function, pandas, dan satu proyek yang sudah ada di GitHub.</div>
+    </div>
+  </header>
+
+  <div class="part"><span class="q">BAGIAN A</span><h2>SQL untuk data besar</h2><span class="range">Minggu 1–2</span></div>
+
+  <!-- ================= W1 ================= -->
+  <section id="w1" aria-labelledby="w1-h">
+    <span class="week-tag">Minggu 1</span>
+    <h2 id="w1-h">Pindah ke BigQuery: dari 24 baris ke ratusan juta</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> bekerja dengan tabel yang jauh lebih besar daripada memori laptopmu, dan tahu berapa biaya tiap query yang kamu jalankan.</p>
+
+    <div class="prose">
+      <p>Dataset kedai kopi bagus untuk belajar sintaks, tapi menyembunyikan separuh pekerjaan analis sungguhan: <strong>di kantor, tabelmu tidak muat di memori dan tiap query ada harganya.</strong> BigQuery memberimu lingkungan itu secara gratis untuk belajar.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>Buka BigQuery sandbox</strong><span>Kunjungi console.cloud.google.com/bigquery. Masuk dengan akun Google, buat proyek baru. Sandbox tidak minta kartu kredit; batasnya 1 TB query per bulan — sangat banyak untuk belajar.</span></li>
+      <li><strong>Buka dataset publik</strong><span>Di panel Explorer, klik "+ Add" → "Public datasets". Cari <code>bigquery-public-data</code>. Yang paling berguna untuk latihan: <code>google_trends</code>, <code>new_york_taxi_trips</code>, dan <code>stackoverflow</code>.</span></li>
+      <li><strong>Perhatikan penaksir biaya</strong><span>Di kanan atas editor query ada tulisan "This query will process X GB". <strong>Selalu baca angka itu sebelum menekan Run.</strong> Ini kebiasaan yang membedakan analis yang dipercaya dan yang tidak.</span></li>
+    </ol>
+
+    <div class="block">
+      <h4>Query pertama, dan pelajaran biaya</h4>
+<pre><code>-- JANGAN jalankan ini: memproses ratusan GB
+SELECT * FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`;
+
+-- Ini yang benar: sebutkan kolom, batasi baris
+SELECT pickup_datetime, trip_distance, total_amount
+FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`
+WHERE DATE(pickup_datetime) = '2022-03-15'
+LIMIT 1000;</code></pre>
+      <div class="warn" style="margin-bottom:0"><strong>BigQuery menagih berdasarkan kolom yang dibaca, bukan baris yang dikembalikan.</strong> Itu sebabnya <code>SELECT *</code> mahal dan <code>LIMIT</code> <em>tidak</em> menurunkan biaya sama sekali — dia tetap membaca seluruh kolom lalu membuang sisanya. Ini pertanyaan wawancara yang sering dipakai untuk memisahkan orang yang benar-benar pernah pakai BigQuery dari yang cuma menulisnya di CV.</div>
+    </div>
+
+    <div class="prose">
+      <h3>Perbedaan sintaks yang akan mengejutkanmu</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Hal</th><th>PostgreSQL / SQLite</th><th>BigQuery</th></tr></thead>
+        <tbody>
+          <tr><td>Nama tabel</td><td><code>penjualan</code></td><td><code>`proyek.dataset.penjualan`</code> (backtick)</td></tr>
+          <tr><td>Bulan dari tanggal</td><td><code>substr(tgl,1,7)</code></td><td><code>FORMAT_DATE('%Y-%m', tgl)</code></td></tr>
+          <tr><td>Sekarang</td><td><code>NOW()</code></td><td><code>CURRENT_TIMESTAMP()</code></td></tr>
+          <tr><td>Pembagian aman</td><td><code>a / NULLIF(b,0)</code></td><td><code>SAFE_DIVIDE(a, b)</code></td></tr>
+          <tr><td>Alias di GROUP BY</td><td>Sebagian boleh</td><td>Boleh, dan sangat membantu</td></tr>
+          <tr><td>Kolom bersarang</td><td>Tidak ada</td><td><code>UNNEST(array_kolom)</code> — sering muncul di data event</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block">
+      <h4>UNNEST: struktur data yang belum pernah kamu temui</h4>
+      <p class="use">Data event modern (Google Analytics, Firebase) menyimpan banyak nilai dalam satu sel berbentuk array. UNNEST "membuka" array itu jadi baris-baris.</p>
+<pre><code>-- Satu baris pesanan berisi array item
+-- pesanan_id | items
+-- 1          | [{produk:'Kopi Susu', qty:2}, {produk:'Croissant', qty:1}]
+
+SELECT
+  p.pesanan_id,
+  item.produk,
+  item.qty
+FROM pesanan AS p,
+UNNEST(p.items) AS item;
+
+-- Hasilnya 2 baris dari 1 baris asli</code></pre>
+      <p class="result">Kalau kamu melamar posisi yang menyebut "GA4" atau "event data", ini konsep yang wajib kamu kuasai. Latihannya ada di dataset publik <code>bigquery-public-data.ga4_obfuscated_sample_ecommerce</code>.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 1</span>
+      <h3>Lima query di data nyata</h3>
+      <ol>
+        <li>Buka dataset taksi New York. Sebelum menjalankan apa pun, catat berapa GB yang diproses oleh <code>SELECT *</code> vs <code>SELECT pickup_datetime</code> saja. Berapa kali lipat bedanya?</li>
+        <li>Rata-rata jarak dan tarif per hari selama Maret 2022. Urutkan dari hari termahal.</li>
+        <li>Sepuluh jam tersibuk dalam sehari (pakai <code>EXTRACT(HOUR FROM pickup_datetime)</code>).</li>
+        <li>Berapa persen perjalanan yang tarifnya di atas 50 dolar? Pakai <code>SAFE_DIVIDE</code>.</li>
+        <li>Buat satu query yang <em>sengaja mahal</em>, lihat taksirannya, lalu tulis ulang supaya biayanya turun minimal 90%. Catat apa yang kamu ubah.</li>
+      </ol>
+      <details>
+        <summary>Petunjuk soal 5</summary>
+        <div class="answer">
+          <p>Tiga cara paling ampuh menurunkan biaya, urut dari yang paling besar dampaknya:</p>
+          <ol>
+            <li><strong>Sebutkan kolom, jangan <code>SELECT *</code>.</strong> Di tabel dengan 20 kolom, memilih 3 kolom bisa memangkas biaya sampai 85%.</li>
+            <li><strong>Saring kolom partisi di WHERE.</strong> Tabel besar biasanya dipartisi per tanggal. <code>WHERE DATE(pickup_datetime) = '2022-03-15'</code> membuat BigQuery hanya membaca satu hari, bukan setahun.</li>
+            <li><strong>Jangan pakai <code>LIMIT</code> untuk hemat.</strong> Itu tidak bekerja. Untuk melihat contoh data dengan murah, klik tab "Preview" di antarmuka — itu gratis.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= W2 ================= -->
+  <section id="w2" aria-labelledby="w2-h">
+    <span class="week-tag">Minggu 2</span>
+    <h2 id="w2-h">Kenapa query lambat, dan cara memperbaikinya</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membaca rencana eksekusi query, dan menulis ulang query lambat jadi cepat — keterampilan yang langsung terlihat oleh tim mana pun.</p>
+
+    <div class="prose">
+      <h3>1. Membaca rencana eksekusi</h3>
+      <p>Database tidak menjalankan query-mu sesuai urutan yang kamu tulis. Dia membuat <em>rencana</em>. Kalau query lambat, rencananya yang harus dilihat, bukan ditebak-tebak.</p>
+    </div>
+
+    <div class="block">
+      <h4>EXPLAIN di PostgreSQL</h4>
+<pre><code>EXPLAIN ANALYZE
+SELECT kota, SUM(total)
+FROM penjualan
+WHERE tanggal &gt;= '2026-03-01'
+GROUP BY kota;</code></pre>
+      <p class="result">Yang dicari dalam keluarannya: <strong>Seq Scan</strong> (membaca seluruh tabel — buruk pada tabel besar) versus <strong>Index Scan</strong> (langsung ke baris yang relevan — bagus). Juga perhatikan <code>rows</code> taksiran vs aktual: kalau selisihnya besar, statistik tabelnya usang dan perencana mengambil keputusan buruk.</p>
+      <p class="result">Di BigQuery tidak ada EXPLAIN; yang setara adalah tab <strong>Execution details</strong> setelah query selesai, plus penaksir byte sebelum menjalankan.</p>
+    </div>
+
+    <div class="prose">
+      <h3>2. Index: kenapa satu query bisa 1000× lebih cepat</h3>
+      <p>Index itu seperti daftar isi buku. Tanpa index, database membaca setiap halaman untuk mencari satu kata.</p>
+    </div>
+
+    <div class="block">
+      <h4>Membuat dan menguji index</h4>
+<pre><code>-- sebelum
+EXPLAIN ANALYZE SELECT * FROM penjualan WHERE kota = 'Bandung';
+-- Seq Scan ... execution time: 42 ms
+
+CREATE INDEX idx_penjualan_kota ON penjualan(kota);
+
+-- sesudah
+EXPLAIN ANALYZE SELECT * FROM penjualan WHERE kota = 'Bandung';
+-- Index Scan ... execution time: 0.4 ms</code></pre>
+      <div class="tip" style="margin-bottom:0"><strong>Kapan index membantu, kapan tidak:</strong> membantu untuk kolom yang sering muncul di <code>WHERE</code>, <code>JOIN ... ON</code>, dan <code>ORDER BY</code>. Tidak membantu — malah merugikan — kalau kolomnya punya sedikit nilai unik (misalnya kolom yang isinya cuma "Ya"/"Tidak"), atau kalau query-mu tetap mengambil sebagian besar tabel. Tiap index juga memperlambat penulisan data baru, jadi bukan barang gratis.</div>
+    </div>
+
+    <div class="prose">
+      <h3>3. Partisi dan clustering di BigQuery</h3>
+      <p>BigQuery tidak punya index seperti PostgreSQL. Gantinya dua hal ini, dan keduanya menentukan biaya.</p>
+      <ul>
+        <li><strong>Partisi</strong> memecah tabel per tanggal. Query yang menyaring tanggal hanya membaca partisi yang relevan. Ini penghematan terbesar.</li>
+        <li><strong>Clustering</strong> mengurutkan data di dalam partisi berdasarkan kolom tertentu (misalnya kota). Membuat penyaringan kolom itu jauh lebih murah.</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <h4>Membuat tabel terpartisi</h4>
+<pre><code>CREATE TABLE `proyekku.kedai.penjualan_besar`
+PARTITION BY DATE(tanggal)
+CLUSTER BY kota, produk
+AS SELECT * FROM `proyekku.kedai.penjualan_mentah`;
+
+-- Sekarang query ini hanya membaca satu hari, bukan seluruh tabel:
+SELECT SUM(total) FROM `proyekku.kedai.penjualan_besar`
+WHERE DATE(tanggal) = '2026-03-18';</code></pre>
+      <div class="warn" style="margin-bottom:0"><strong>Jebakan yang sering terjadi:</strong> membungkus kolom partisi dengan fungsi akan <em>membatalkan</em> manfaat partisi. <code>WHERE DATE(tanggal) = '2026-03-18'</code> bekerja kalau partisinya dibuat dengan <code>DATE(tanggal)</code>, tetapi <code>WHERE FORMAT_DATE('%Y-%m', tanggal) = '2026-03'</code> akan memaksa pembacaan seluruh tabel. Ganti jadi rentang: <code>WHERE tanggal BETWEEN '2026-03-01' AND '2026-03-31'</code>.</div>
+    </div>
+
+    <div class="prose">
+      <h3>4. Lima pola query lambat dan perbaikannya</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Pola lambat</th><th>Kenapa lambat</th><th>Perbaikan</th></tr></thead>
+        <tbody>
+          <tr><td><code>SELECT *</code></td><td>Membaca semua kolom</td><td>Sebutkan kolom yang benar-benar dipakai</td></tr>
+          <tr><td>Fungsi di kolom WHERE<br><code>WHERE YEAR(tgl) = 2026</code></td><td>Membatalkan index/partisi</td><td><code>WHERE tgl BETWEEN '2026-01-01' AND '2026-12-31'</code></td></tr>
+          <tr><td><code>DISTINCT</code> untuk menambal JOIN ganda</td><td>Menyembunyikan bug, dan mahal</td><td>Perbaiki JOIN-nya; agregasi dulu sebelum JOIN</td></tr>
+          <tr><td>JOIN tabel besar penuh, baru disaring</td><td>Menggabung baris yang akan dibuang</td><td>Saring di CTE dulu, baru JOIN</td></tr>
+          <tr><td><code>ORDER BY</code> tanpa <code>LIMIT</code> di tabel besar</td><td>Mengurutkan jutaan baris untuk dilihat 20</td><td>Selalu pasangkan dengan LIMIT</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="block">
+      <h4>Contoh nyata: saring dulu, gabung kemudian</h4>
+<pre><code>-- LAMBAT: menggabungkan semuanya baru menyaring
+SELECT p.*, pr.harga
+FROM penjualan p
+JOIN produk pr ON p.produk = pr.produk
+WHERE p.tanggal &gt;= '2026-03-01';
+
+-- CEPAT: menyaring dulu di CTE, yang digabung jauh lebih sedikit
+WITH maret AS (
+  SELECT * FROM penjualan WHERE tanggal &gt;= '2026-03-01'
+)
+SELECT m.*, pr.harga
+FROM maret m
+JOIN produk pr ON m.produk = pr.produk;</code></pre>
+      <p class="result">Pada tabel kecil, perencana query yang baik akan mengoptimalkan keduanya jadi sama. Pada tabel ratusan juta baris dengan JOIN berlapis, perbedaannya bisa dari 4 menit jadi 8 detik.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 2</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Muat data kedai ke PostgreSQL (pakai db-fiddle atau instal lokal). Jalankan <code>EXPLAIN ANALYZE</code> pada query filter kota. Buat index, jalankan lagi. Catat kedua waktunya.</li>
+        <li>Di BigQuery, tulis dua versi query yang sama pada data taksi: satu yang membatalkan partisi (pakai fungsi di WHERE), satu yang memanfaatkannya. Bandingkan taksiran GB-nya.</li>
+        <li>Ambil satu query dari proyek SQL-mu sebelumnya. Tulis ulang memakai pola "saring dulu di CTE". Apakah hasilnya identik? Buktikan dengan membandingkan <code>COUNT(*)</code> dan <code>SUM</code>.</li>
+        <li>Cari satu query di proyekmu yang memakai <code>DISTINCT</code>. Telusuri kenapa dipakai — apakah menutupi JOIN yang menggandakan baris? Perbaiki akarnya.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="part"><span class="q">BAGIAN B</span><h2>dbt: menata transformasi</h2><span class="range">Minggu 3–4</span></div>
+
+  <!-- ================= W3 ================= -->
+  <section id="w3" aria-labelledby="w3-h">
+    <span class="week-tag">Minggu 3</span>
+    <h2 id="w3-h">dbt: dari tumpukan query jadi pipeline</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menyusun transformasi data bertingkat yang bisa dijalankan ulang dengan satu perintah, dan menjelaskan kenapa itu lebih baik daripada 30 query yang berserakan.</p>
+
+    <div class="prose">
+      <h3>Masalah yang diselesaikan dbt</h3>
+      <p>Setelah beberapa bulan bekerja, timmu akan punya puluhan query yang saling bergantung. Query B memakai hasil query A. Seseorang mengubah A, dan B diam-diam salah selama tiga minggu sampai ada yang sadar. Tidak ada yang tahu urutan menjalankannya. Definisi "pendapatan" berbeda di tiga dashboard.</p>
+      <p><strong>dbt menyelesaikan ini dengan satu ide sederhana:</strong> tiap transformasi adalah satu file SQL yang menghasilkan satu tabel, dan file itu menyebut ketergantungannya secara eksplisit. dbt lalu mencari tahu sendiri urutan menjalankannya.</p>
+    </div>
+
+    <div class="flow">
+      <div class="n"><strong>SUMBER</strong>Tabel mentah dari sistem kasir</div>
+      <span class="a">→</span>
+      <div class="n"><strong>STAGING</strong>Dibersihkan, nama kolom diseragamkan</div>
+      <span class="a">→</span>
+      <div class="n"><strong>INTERMEDIATE</strong>Digabung, dihitung</div>
+      <span class="a">→</span>
+      <div class="n"><strong>MART</strong>Siap dipakai dashboard</div>
+    </div>
+
+    <ol class="steps">
+      <li><strong>Pasang dbt</strong><span><code>pip install dbt-bigquery</code> (atau <code>dbt-postgres</code>). Lalu <code>dbt init kedai_analytics</code> — ini membuat kerangka proyeknya.</span></li>
+      <li><strong>Atur koneksi</strong><span>File <code>~/.dbt/profiles.yml</code>. Untuk BigQuery, cara termudah adalah autentikasi <code>oauth</code> lewat gcloud. <strong>Jangan pernah menaruh kredensial di dalam folder proyek</strong> — nanti ikut ter-commit ke GitHub.</span></li>
+      <li><strong>Jalankan <code>dbt debug</code></strong><span>Memastikan koneksi berhasil sebelum menulis apa pun.</span></li>
+    </ol>
+
+    <div class="prose"><h3>Struktur proyek</h3></div>
+    <div class="tree">kedai_analytics/
+├── dbt_project.yml          <span class="c">← pengaturan proyek</span>
+├── models/
+│   ├── staging/
+│   │   ├── _sources.yml     <span class="c">← mendaftarkan tabel mentah</span>
+│   │   ├── stg_penjualan.sql
+│   │   └── stg_produk.sql
+│   ├── intermediate/
+│   │   └── int_penjualan_dengan_laba.sql
+│   └── marts/
+│       ├── _schema.yml      <span class="c">← test &amp; dokumentasi</span>
+│       ├── fct_penjualan_harian.sql
+│       └── dim_produk.sql
+└── tests/                   <span class="c">← test khusus buatan sendiri</span></div>
+
+    <div class="block">
+      <h4>Mendaftarkan sumber — <code>models/staging/_sources.yml</code></h4>
+<pre><code>version: 2
+
+sources:
+  - name: kasir
+    database: proyekku
+    schema: kedai_mentah
+    tables:
+      - name: penjualan
+      - name: produk</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Model staging — <code>stg_penjualan.sql</code></h4>
+      <p class="use">Satu tugas saja: bersihkan dan seragamkan. Tanpa logika bisnis, tanpa JOIN.</p>
+<pre><code>with sumber as (
+    select * from {{ source('kasir', 'penjualan') }}
+)
+
+select
+    id                              as penjualan_id,
+    cast(tanggal as date)           as tanggal,
+    trim(initcap(produk))           as produk,
+    trim(initcap(kota))             as kota,
+    cast(jumlah as int64)           as jumlah,
+    cast(total as numeric)          as total
+from sumber
+where jumlah is not null</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Model intermediate — <code>int_penjualan_dengan_laba.sql</code></h4>
+      <p class="use">Di sinilah <code>ref()</code> muncul. Ini yang membuat dbt tahu urutan menjalankan.</p>
+<pre><code>with penjualan as (
+    select * from {{ ref('stg_penjualan') }}
+),
+
+produk as (
+    select * from {{ ref('stg_produk') }}
+)
+
+select
+    p.penjualan_id,
+    p.tanggal,
+    p.produk,
+    p.kota,
+    p.jumlah,
+    p.total,
+    pr.harga,
+    pr.biaya_modal,
+    p.jumlah * (pr.harga - pr.biaya_modal) as laba
+from penjualan p
+left join produk pr on p.produk = pr.produk</code></pre>
+      <div class="concept" style="margin-bottom:0"><strong><code>ref()</code> adalah inti dbt.</strong> Kamu tidak pernah menulis nama tabel secara langsung. Dengan <code>ref()</code>, dbt membangun grafik ketergantungan otomatis, tahu urutan yang benar, dan bisa menjalankan ulang hanya bagian yang terpengaruh saat kamu mengubah satu model. Ini juga yang memungkinkan lingkungan pengembangan dan produksi memakai kode yang sama persis.</div>
+    </div>
+
+    <div class="block">
+      <h4>Model mart — <code>fct_penjualan_harian.sql</code></h4>
+<pre><code>{{ config(materialized='table') }}
+
+select
+    tanggal,
+    kota,
+    count(*)          as jumlah_transaksi,
+    sum(jumlah)       as total_porsi,
+    sum(total)        as omzet,
+    sum(laba)         as laba,
+    safe_divide(sum(laba), sum(total)) as margin
+from {{ ref('int_penjualan_dengan_laba') }}
+group by tanggal, kota</code></pre>
+      <p class="result"><code>materialized</code> menentukan bentuk hasilnya: <code>view</code> (hemat penyimpanan, dihitung tiap kali dibuka — bagus untuk staging), <code>table</code> (dihitung sekali, cepat dibaca — bagus untuk mart), atau <code>incremental</code> (hanya menambah baris baru — untuk tabel yang sangat besar).</p>
+    </div>
+
+    <div class="block">
+      <h4>Menjalankan</h4>
+<pre><code>dbt run                              # jalankan semua model, urutan otomatis
+dbt run --select stg_penjualan+      # model ini dan semua yang bergantung padanya
+dbt run --select +fct_penjualan_harian   # model ini dan semua yang dibutuhkannya
+dbt build                            # run + test sekaligus</code></pre>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 3</span>
+      <h3>Bangun proyek dbt pertamamu</h3>
+      <ol>
+        <li>Muat data kedai (penjualan, produk, cabang) ke BigQuery atau PostgreSQL sebagai tabel mentah.</li>
+        <li>Buat proyek dbt dengan tiga lapis: 3 model staging, 1 intermediate, 2 mart.</li>
+        <li>Jalankan <code>dbt run</code>. Perbaiki sampai semuanya hijau.</li>
+        <li>Ubah satu model staging (misalnya tambah kolom). Jalankan <code>dbt run --select stg_penjualan+</code> dan amati model mana saja yang ikut dijalankan ulang.</li>
+        <li>Buat satu mart baru: <code>fct_produk_bulanan</code> dengan omzet, porsi, dan margin per produk per bulan.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= W4 ================= -->
+  <section id="w4" aria-labelledby="w4-h">
+    <span class="week-tag">Minggu 4</span>
+    <h2 id="w4-h">Test dan dokumentasi: yang membuat orang percaya datamu</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membuat data yang memeriksa dirinya sendiri, sehingga kesalahan tertangkap sebelum sampai ke dashboard pimpinan.</p>
+
+    <div class="prose">
+      <p>Pertanyaan yang paling sering merusak reputasi analis: <em>"angka ini benar tidak?"</em> Kalau jawabanmu selalu "sebentar saya cek dulu", kamu akan menghabiskan separuh waktumu memeriksa ulang. Test otomatis mengubah jawabannya jadi "ya, diperiksa tiap pagi jam 6".</p>
+    </div>
+
+    <div class="block">
+      <h4>Test bawaan — <code>models/marts/_schema.yml</code></h4>
+<pre><code>version: 2
+
+models:
+  - name: fct_penjualan_harian
+    description: "Ringkasan penjualan harian per kota, sumber untuk dashboard utama."
+    columns:
+      - name: tanggal
+        description: "Tanggal transaksi."
+        tests:
+          - not_null
+      - name: kota
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Jakarta', 'Bandung', 'Surabaya']
+      - name: omzet
+        tests:
+          - not_null
+
+  - name: dim_produk
+    columns:
+      - name: produk
+        tests:
+          - unique
+          - not_null</code></pre>
+      <p class="result">Empat test bawaan menutup sebagian besar kebutuhan: <code>unique</code>, <code>not_null</code>, <code>accepted_values</code>, dan <code>relationships</code> (memastikan tiap nilai ada di tabel lain — mendeteksi produk yatim piatu yang tidak ada di master).</p>
+    </div>
+
+    <div class="block">
+      <h4>Test buatan sendiri — <code>tests/omzet_tidak_negatif.sql</code></h4>
+      <p class="use">Test dbt adalah query yang <em>seharusnya tidak mengembalikan baris apa pun</em>. Kalau ada baris keluar, test gagal.</p>
+<pre><code>-- Test gagal kalau query ini mengembalikan baris
+select
+    tanggal,
+    kota,
+    omzet
+from {{ ref('fct_penjualan_harian') }}
+where omzet &lt; 0</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Test rekonsiliasi: yang paling berharga</h4>
+      <p class="use">Memastikan total di mart cocok dengan total di sumber. Kalau JOIN-mu menggandakan baris, test ini menangkapnya.</p>
+<pre><code>-- tests/rekonsiliasi_omzet.sql
+with dari_mart as (
+    select sum(omzet) as total from {{ ref('fct_penjualan_harian') }}
+),
+dari_sumber as (
+    select sum(total) as total from {{ ref('stg_penjualan') }}
+)
+select m.total as mart, s.total as sumber
+from dari_mart m, dari_sumber s
+where abs(m.total - s.total) &gt; 1</code></pre>
+      <div class="tip" style="margin-bottom:0"><strong>Test inilah yang harus kamu sebut saat wawancara.</strong> Test <code>not_null</code> dangkal dan semua orang punya; test rekonsiliasi menunjukkan kamu paham bahwa bahaya terbesar dalam transformasi data adalah baris yang diam-diam berlipat ganda.</div>
+    </div>
+
+    <div class="block">
+      <h4>Menjalankan test dan membuat dokumentasi</h4>
+<pre><code>dbt test                    # jalankan semua test
+dbt build                   # run + test, berhenti kalau ada yang gagal
+
+dbt docs generate           # buat situs dokumentasi
+dbt docs serve              # buka di browser</code></pre>
+      <p class="result"><code>dbt docs</code> menghasilkan situs berisi seluruh model, kolom, deskripsi, dan <strong>diagram ketergantungan</strong> yang bisa diklik. Tangkapan layar diagram itu di README GitHub-mu adalah salah satu hal paling meyakinkan yang bisa dilihat perekrut — dia menunjukkan kamu berpikir soal sistem, bukan cuma query.</p>
+    </div>
+
+    <div class="prose">
+      <h3>Data freshness: apakah datanya masih segar?</h3>
+    </div>
+<pre><code># di _sources.yml
+sources:
+  - name: kasir
+    tables:
+      - name: penjualan
+        loaded_at_field: dimuat_pada
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}</code></pre>
+    <div class="prose">
+      <p>Lalu <code>dbt source freshness</code> akan memberi peringatan kalau data kasir berhenti masuk. Ini menangkap kelas kegagalan yang paling menyakitkan: dashboard yang <em>terlihat</em> normal padahal angkanya beku sejak tiga hari lalu.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 4</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Tambahkan minimal 8 test ke proyek dbt-mu, termasuk satu test rekonsiliasi buatan sendiri.</li>
+        <li>Rusak datanya dengan sengaja — masukkan baris dengan kota "Medan" yang tidak ada di daftar, atau produk yang tidak ada di master. Jalankan <code>dbt test</code>. Apakah tertangkap?</li>
+        <li>Isi deskripsi untuk semua model dan minimal 10 kolom. Jalankan <code>dbt docs generate &amp;&amp; dbt docs serve</code>.</li>
+        <li>Ambil tangkapan layar diagram ketergantungan (lineage graph) dan taruh di README GitHub-mu.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="part"><span class="q">BAGIAN C</span><h2>Kode yang layak di-review</h2><span class="range">Minggu 5–6</span></div>
+
+  <!-- ================= W5 ================= -->
+  <section id="w5" aria-labelledby="w5-h">
+    <span class="week-tag">Minggu 5</span>
+    <h2 id="w5-h">git yang sebenarnya: branch, pull request, review</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> bekerja dengan alur kerja git yang dipakai tim data profesional — bukan sekadar mengunggah file lewat antarmuka web GitHub.</p>
+
+    <div class="prose">
+      <p>Sampai sekarang kamu mungkin mengunggah file lewat tombol "Add file" di GitHub. Itu cukup untuk portofolio, tapi di tim, mengubah kode langsung di cabang utama adalah pelanggaran serius. Ini alur yang sebenarnya.</p>
+    </div>
+
+    <div class="block">
+      <h4>Alur kerja harian</h4>
+<pre><code># 1. Mulai dari kondisi terbaru
+git checkout main
+git pull origin main
+
+# 2. Buat cabang untuk pekerjaanmu
+git checkout -b feat/tambah-mart-produk-bulanan
+
+# 3. Kerjakan, lalu periksa apa yang berubah
+git status
+git diff
+
+# 4. Simpan perubahan dengan pesan yang menjelaskan KENAPA
+git add models/marts/fct_produk_bulanan.sql
+git commit -m "Tambah mart produk bulanan untuk dashboard margin
+
+Tim produk butuh margin per produk per bulan. Dihitung dari
+int_penjualan_dengan_laba supaya definisi labanya konsisten
+dengan mart harian."
+
+# 5. Kirim ke GitHub
+git push -u origin feat/tambah-mart-produk-bulanan
+
+# 6. Buka pull request di GitHub, minta review
+
+# 7. Setelah disetujui dan digabung, bersihkan
+git checkout main
+git pull origin main
+git branch -d feat/tambah-mart-produk-bulanan</code></pre>
+    </div>
+
+    <div class="prose">
+      <h3>Menulis pesan commit yang berguna</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Buruk</th><th>Baik</th><th>Kenapa</th></tr></thead>
+        <tbody>
+          <tr><td><code>update</code></td><td><code>Perbaiki JOIN ganda di mart harian</code></td><td>Enam bulan lagi kamu perlu tahu apa yang berubah</td></tr>
+          <tr><td><code>fix bug</code></td><td><code>Ganti inner join jadi left join supaya produk tanpa penjualan tetap muncul</code></td><td>Menjelaskan keputusan, bukan cuma tindakan</td></tr>
+          <tr><td><code>asdfgh</code></td><td><code>Tambah test rekonsiliasi omzet mart vs sumber</code></td><td>Riwayat commit adalah dokumentasi</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <div class="warn"><strong>Tiga hal yang tidak boleh masuk git:</strong> kredensial (password database, kunci API), data mentah berukuran besar, dan file keluaran (<code>.csv</code> hasil, gambar hasil render). Buat file <code>.gitignore</code> sejak hari pertama. Kalau kredensial pernah ter-commit, menghapusnya di commit berikutnya <em>tidak cukup</em> — dia tetap ada di riwayat, dan kunci itu harus dianggap bocor lalu diganti.</div>
+    </div>
+
+    <div class="block">
+      <h4><code>.gitignore</code> untuk proyek data</h4>
+<pre><code># kredensial
+.env
+profiles.yml
+*.json          # kunci service account
+
+# data
+data/raw/
+*.csv
+*.parquet
+
+# python
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+
+# dbt
+target/
+dbt_packages/
+logs/</code></pre>
+    </div>
+
+    <div class="prose">
+      <h3>Menyusun proyek Python yang rapi</h3>
+      <p>Notebook bagus untuk eksplorasi, buruk untuk sesuatu yang dijalankan berulang. Begitu kode dipakai lebih dari sekali, pindahkan ke file <code>.py</code>.</p>
+    </div>
+    <div class="tree">laporan_kedai/
+├── .gitignore
+├── README.md
+├── requirements.txt        <span class="c">← daftar pustaka + versinya</span>
+├── .env.example            <span class="c">← contoh, tanpa nilai rahasia</span>
+├── src/
+│   ├── ambil_data.py       <span class="c">← koneksi &amp; query</span>
+│   ├── olah.py             <span class="c">← transformasi</span>
+│   └── laporan.py          <span class="c">← buat grafik &amp; kirim</span>
+└── notebooks/
+    └── eksplorasi.ipynb    <span class="c">← coret-coretan, bukan produksi</span></div>
+
+    <div class="block">
+      <h4>Lingkungan virtual dan daftar pustaka</h4>
+<pre><code>python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install pandas matplotlib python-dotenv sqlalchemy
+pip freeze &gt; requirements.txt
+
+# orang lain (atau server) tinggal menjalankan:
+pip install -r requirements.txt</code></pre>
+      <p class="result">Tanpa <code>requirements.txt</code>, kodemu jalan di laptopmu dan gagal di tempat lain. Ini penyebab nomor satu keluhan "di komputer saya jalan kok".</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 5</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Ubah salah satu proyek lamamu jadi struktur folder di atas, dengan <code>.gitignore</code> dan <code>requirements.txt</code>.</li>
+        <li>Kerjakan satu perubahan lewat alur lengkap: branch → commit → push → pull request → merge. Tulis deskripsi PR yang menjelaskan apa dan kenapa.</li>
+        <li>Review PR-mu sendiri sebelum menggabungkan. Baca diff-nya baris demi baris seolah kamu orang lain. Catat apa yang kamu temukan.</li>
+        <li>Buat <code>.env.example</code> dan pindahkan semua kredensial ke <code>.env</code> yang tidak ter-commit. Buktikan dengan <code>git status</code> bahwa <code>.env</code> tidak muncul.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= W6 ================= -->
+  <section id="w6" aria-labelledby="w6-h">
+    <span class="week-tag">Minggu 6</span>
+    <h2 id="w6-h">Laporan yang berjalan sendiri</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> satu laporan yang terkirim otomatis tiap Senin pagi tanpa kamu sentuh — dan kemampuan menjelaskan cara membuatnya di wawancara.</p>
+
+    <div class="block">
+      <h4>Skrip laporan yang lengkap</h4>
+<pre><code># src/laporan.py
+import os
+from datetime import date, timedelta
+
+import pandas as pd
+import matplotlib
+matplotlib.use("Agg")                    # penting: tanpa layar, di server
+import matplotlib.pyplot as plt
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def ambil_data():
+    engine = create_engine(os.environ["DATABASE_URL"])
+    query = """
+        SELECT tanggal, kota, omzet, laba
+        FROM fct_penjualan_harian
+        WHERE tanggal &gt;= %(mulai)s
+    """
+    mulai = date.today() - timedelta(days=28)
+    return pd.read_sql(query, engine, params={"mulai": mulai})
+
+def buat_grafik(df, path="omzet_mingguan.png"):
+    mingguan = df.set_index("tanggal").resample("W")["omzet"].sum()
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(mingguan.index, mingguan.values, marker="o",
+            linewidth=2, color="#009688")
+    ax.set_ylim(0, None)
+    ax.set_title("Omzet mingguan, 4 minggu terakhir", loc="left", fontsize=13)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    return path
+
+def ringkasan(df):
+    minggu_ini = df[df.tanggal &gt;= pd.Timestamp.today() - pd.Timedelta(days=7)]
+    minggu_lalu = df[(df.tanggal &gt;= pd.Timestamp.today() - pd.Timedelta(days=14)) &
+                     (df.tanggal &lt;  pd.Timestamp.today() - pd.Timedelta(days=7))]
+    a, b = minggu_ini.omzet.sum(), minggu_lalu.omzet.sum()
+    delta = (a - b) / b * 100 if b else 0
+    return f"Omzet minggu ini: Rp {a:,.0f} ({delta:+.1f}% vs minggu lalu)"
+
+if __name__ == "__main__":
+    df = ambil_data()
+    gambar = buat_grafik(df)
+    print(ringkasan(df))
+    # langkah berikutnya: kirim lewat email atau Slack</code></pre>
+      <div class="tip" style="margin-bottom:0"><strong><code>matplotlib.use("Agg")</code> wajib</strong> untuk skrip yang berjalan di server. Tanpa itu, matplotlib mencoba membuka jendela grafis yang tidak ada, dan skripnya gagal — kesalahan klasik yang membuat orang bingung berjam-jam.</div>
+    </div>
+
+    <div class="block">
+      <h4>Mengirim ke Slack</h4>
+<pre><code>import requests
+
+def kirim_slack(teks, gambar_path=None):
+    webhook = os.environ["SLACK_WEBHOOK_URL"]
+    requests.post(webhook, json={"text": teks}, timeout=30)</code></pre>
+      <p class="result">Buat webhook di Slack: Apps → Incoming Webhooks → Add to Slack, pilih channel, salin URL-nya ke <code>.env</code>. Untuk mengirim gambar butuh Slack API token (<code>files.upload</code>); untuk latihan, mengirim teks dan angka saja sudah cukup.</p>
+    </div>
+
+    <div class="block">
+      <h4>Menjadwalkan dengan GitHub Actions</h4>
+      <p class="use">Cara gratis dan paling mudah dipamerkan di portofolio: penjadwalannya terlihat langsung di repositorimu.</p>
+<pre><code># .github/workflows/laporan-mingguan.yml
+name: Laporan Mingguan
+
+on:
+  schedule:
+    - cron: "0 1 * * 1"      # Senin 01:00 UTC = 08:00 WIB
+  workflow_dispatch:          # bisa dijalankan manual juga
+
+jobs:
+  laporan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - run: python src/laporan.py
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}</code></pre>
+      <div class="warn" style="margin-bottom:0"><strong>Perhatikan zona waktu:</strong> cron di GitHub Actions selalu UTC. WIB adalah UTC+7, jadi untuk jalan jam 8 pagi WIB tulis jam 1 UTC. Singapura UTC+8, Sydney UTC+10 atau +11 saat daylight saving. Salah zona waktu adalah bug paling umum di penjadwalan, dan pewawancara suka menanyakannya.</div>
+    </div>
+
+    <div class="prose">
+      <p>Kredensial disimpan di GitHub: Settings → Secrets and variables → Actions → New repository secret. Nilainya tidak pernah terlihat di log, bahkan olehmu sendiri setelah disimpan.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 6</span>
+      <h3>Bangun laporan otomatismu</h3>
+      <ol>
+        <li>Tulis skrip yang mengambil data, membuat satu grafik, dan mencetak ringkasan tiga baris.</li>
+        <li>Jalankan lokal sampai berhasil. Pastikan tidak ada kredensial di dalam kode.</li>
+        <li>Buat workflow GitHub Actions. Jalankan manual dulu lewat <code>workflow_dispatch</code> sampai hijau.</li>
+        <li>Pasang jadwal mingguan. Hitung zona waktunya dengan benar untuk jam 8 pagi waktu setempat.</li>
+        <li>Buat skripnya gagal dengan sengaja (misalnya salah nama kolom). Lihat bagaimana Actions melaporkan kegagalan. Tambahkan penanganan error supaya pesannya jelas.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="part"><span class="q">BAGIAN D</span><h2>Aplikasi data</h2><span class="range">Minggu 7–8</span></div>
+
+  <!-- ================= W7 ================= -->
+  <section id="w7" aria-labelledby="w7-h">
+    <span class="week-tag">Minggu 7</span>
+    <h2 id="w7-h">Streamlit: dari notebook jadi aplikasi</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> mengubah analisis jadi aplikasi web yang bisa dipakai orang non-teknis, hanya dengan Python.</p>
+
+    <div class="prose">
+      <p>Streamlit mengubah skrip Python jadi halaman web. Tidak perlu HTML, CSS, atau JavaScript. Untuk analis, ini cara tercepat membuat sesuatu yang bisa <em>dipakai</em> orang lain, bukan sekadar dibaca.</p>
+    </div>
+
+    <div class="block">
+      <h4>Aplikasi lengkap dalam satu file</h4>
+<pre><code># app.py
+import pandas as pd
+import streamlit as st
+import plotly.express as px
+
+st.set_page_config(page_title="Dashboard Kedai Senja", layout="wide")
+
+@st.cache_data(ttl=3600)          # simpan hasil 1 jam, jangan query tiap klik
+def muat_data():
+    return pd.read_csv("data/penjualan.csv", parse_dates=["tanggal"])
+
+df = muat_data()
+
+st.title("Dashboard Kedai Kopi Senja")
+
+# --- filter di sidebar ---
+with st.sidebar:
+    st.header("Filter")
+    kota = st.multiselect("Kota", sorted(df.kota.unique()),
+                          default=sorted(df.kota.unique()))
+    rentang = st.date_input("Rentang tanggal",
+                            value=(df.tanggal.min(), df.tanggal.max()))
+
+mask = df.kota.isin(kota)
+if len(rentang) == 2:
+    mask &amp;= df.tanggal.between(pd.Timestamp(rentang[0]), pd.Timestamp(rentang[1]))
+d = df[mask]
+
+if d.empty:
+    st.warning("Tidak ada data untuk filter ini. Longgarkan filternya.")
+    st.stop()
+
+# --- angka utama ---
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Omzet",      f"Rp {d.total.sum():,.0f}")
+c2.metric("Transaksi",  f"{len(d):,}")
+c3.metric("Rata-rata",  f"Rp {d.total.mean():,.0f}")
+c4.metric("Porsi",      f"{d.jumlah.sum():,}")
+
+# --- grafik ---
+kiri, kanan = st.columns(2)
+
+with kiri:
+    bulanan = d.groupby(d.tanggal.dt.to_period("M").astype(str))["total"].sum()
+    fig = px.line(x=bulanan.index, y=bulanan.values, markers=True,
+                  labels={"x": "Bulan", "y": "Omzet"},
+                  title="Omzet per bulan")
+    fig.update_yaxes(rangemode="tozero")
+    st.plotly_chart(fig, use_container_width=True)
+
+with kanan:
+    per_produk = d.groupby("produk")["total"].sum().sort_values()
+    fig = px.bar(x=per_produk.values, y=per_produk.index, orientation="h",
+                 labels={"x": "Omzet", "y": ""},
+                 title="Omzet per produk",
+                 color_discrete_sequence=["#009688"])
+    st.plotly_chart(fig, use_container_width=True)
+
+# --- tabel &amp; unduhan ---
+with st.expander("Lihat data mentah"):
+    st.dataframe(d, use_container_width=True)
+    st.download_button("Unduh CSV", d.to_csv(index=False),
+                       "penjualan_terfilter.csv", "text/csv")</code></pre>
+      <p class="result">Jalankan dengan <code>streamlit run app.py</code>. Perhatikan tiga hal yang membuatnya terasa profesional: <code>@st.cache_data</code> supaya tidak lambat, penanganan kondisi kosong dengan pesan yang membantu, dan tombol unduh — karena orang selalu ingin membawa datanya ke Excel.</p>
+    </div>
+
+    <div class="block">
+      <h4>Menerbitkan gratis</h4>
+<pre><code># requirements.txt harus ada di repositori
+streamlit
+pandas
+plotly</code></pre>
+      <p class="result">Lalu buka share.streamlit.io, hubungkan repositori GitHub-mu, pilih <code>app.py</code>. Dalam dua menit aplikasimu punya URL publik. <strong>Ini tautan hidup yang bisa diklik perekrut</strong> — jauh lebih berkesan daripada tangkapan layar.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 7</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Bangun aplikasi di atas dengan datamu sendiri. Jalankan lokal.</li>
+        <li>Tambahkan satu filter lagi (kategori produk) dan pastikan semua grafik ikut bereaksi.</li>
+        <li>Tambahkan pembanding di <code>st.metric</code> — parameter <code>delta</code> menampilkan panah naik/turun. Bandingkan dengan periode sebelumnya.</li>
+        <li>Terbitkan ke Streamlit Community Cloud. Uji tautannya dari HP.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= W8 ================= -->
+  <section id="w8" aria-labelledby="w8-h">
+    <span class="week-tag">Minggu 8 · Proyek</span>
+    <h2 id="w8-h">Proyek: pipeline lengkap dari mentah ke dashboard</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> satu proyek yang menunjukkan seluruh rantai kerja analis modern — dan inilah proyek yang paling sering membuat pelamar dipanggil wawancara.</p>
+
+    <div class="prose">
+      <p>Semua bagian sudah kamu pelajari terpisah. Minggu ini menyatukannya jadi satu sistem yang berjalan sendiri.</p>
+    </div>
+
+    <div class="flow">
+      <div class="n"><strong>1. SUMBER</strong>CSV / API masuk ke gudang data</div>
+      <span class="a">→</span>
+      <div class="n"><strong>2. DBT</strong>staging → intermediate → mart, dengan test</div>
+      <span class="a">→</span>
+      <div class="n"><strong>3. JADWAL</strong>GitHub Actions tiap hari</div>
+      <span class="a">→</span>
+      <div class="n"><strong>4. TAMPILAN</strong>Streamlit publik</div>
+    </div>
+
+    <div class="prose">
+      <h3>Yang harus ada</h3>
+    </div>
+    <ol class="steps">
+      <li><strong>Data yang lebih besar dari contoh</strong><span>Minimal puluhan ribu baris. Pilihan bagus untuk target SG/AU: "Resale Flat Prices" dari data.gov.sg (ratusan ribu baris, dimensi waktu dan lokasi), atau dataset taksi NYC di BigQuery.</span></li>
+      <li><strong>Proyek dbt dengan tiga lapis</strong><span>Minimal 6 model, 10 test termasuk satu rekonsiliasi, dan semua model punya deskripsi.</span></li>
+      <li><strong>Penjadwalan otomatis</strong><span>GitHub Actions yang menjalankan <code>dbt build</code>, dengan lencana status (badge) di README yang menunjukkan hijau.</span></li>
+      <li><strong>Dashboard publik</strong><span>Streamlit yang membaca hasil mart, dengan filter dan tombol unduh.</span></li>
+      <li><strong>README yang menjual</strong><span>Diagram alur, tangkapan layar lineage dbt, tautan hidup ke dashboard, dan bagian "keputusan desain" yang menjelaskan kenapa kamu memilih struktur itu.</span></li>
+    </ol>
+
+    <div class="prose">
+      <div class="concept"><strong>Kenapa proyek ini bernilai tinggi:</strong> hampir semua pelamar posisi analis punya notebook berisi analisis. Sangat sedikit yang bisa menunjukkan data yang bertransformasi sendiri, menguji dirinya, dan menyajikan hasilnya lewat tautan yang hidup. Proyek ini menempatkanmu di kelompok kedua, dan itulah yang membuat CV-mu tidak berhenti di saringan pertama.</div>
+    </div>
+
+    <div class="exercise" style="border-color:var(--teal)">
+      <span class="tag" style="color:var(--teal)">CHECKLIST PROYEK</span>
+      <h3>Selesai kalau semua tercentang</h3>
+      <ul class="checklist">
+        <li><span class="box"></span><code>dbt build</code> berjalan hijau dari nol di mesin lain (uji dengan clone ulang ke folder baru).</li>
+        <li><span class="box"></span>Minimal 10 test, termasuk satu rekonsiliasi total mart vs sumber.</li>
+        <li><span class="box"></span>GitHub Actions berjalan terjadwal, lencana statusnya hijau di README.</li>
+        <li><span class="box"></span>Dashboard Streamlit hidup dan bisa dibuka dari HP.</li>
+        <li><span class="box"></span>Tidak ada satu pun kredensial di repositori (periksa seluruh riwayat, bukan hanya kondisi terakhir).</li>
+        <li><span class="box"></span>README punya diagram alur, tangkapan layar lineage, dan tautan hidup.</li>
+        <li><span class="box"></span>Kamu bisa menjelaskan tiap keputusan desain selama 5 menit tanpa membuka kode.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>Modul berikutnya: <strong>Product &amp; Business Analytics</strong> (Bulan 9) — cohort, retention, LTV, dan peramalan. Bagian di mana kamu berhenti jadi orang yang menjalankan query, dan mulai jadi orang yang menjawab pertanyaan bisnis.</p>
+    <p class="closing">Setelah dua bulan ini, kerjamu tidak lagi terlihat seperti tugas kuliah.</p>
+  </footer>
+
+</div>

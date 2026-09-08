@@ -1,0 +1,725 @@
+<title>Rute Data Analyst Lengkap</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.6;
+    padding:40px 20px 80px;
+  }
+  h1,h2,h3{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+
+  .page{
+    max-width:900px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:44px 46px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:28px 20px 34px; } }
+
+  header{ margin-bottom:34px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(2rem, 5vw, 2.7rem); font-weight:600; }
+  .lede{ margin-top:14px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:26px; }
+  @media (max-width:600px){ .stats{ grid-template-columns:repeat(2,1fr); } }
+  .stat{ background:var(--teal-soft); border-radius:14px; padding:14px 16px; }
+  .stat .num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; font-size:1.45rem; font-weight:600; color:var(--teal); display:block; }
+  .stat .lab{ font-size:0.78rem; color:var(--ink-soft); }
+
+  section{ margin-bottom:42px; }
+  section > h2{ font-size:1.3rem; font-weight:600; margin-bottom:4px; }
+  .note{ color:var(--ink-soft); font-size:0.9rem; max-width:64ch; margin-bottom:20px; }
+
+  .cards{ display:flex; flex-direction:column; gap:12px; }
+  a.card{
+    display:grid; grid-template-columns:58px 1fr auto; gap:16px; align-items:center;
+    text-decoration:none; color:inherit;
+    background:var(--surface-2); border:1px solid var(--line); border-radius:14px;
+    padding:16px 18px; transition:border-color .15s ease, transform .08s ease;
+  }
+  a.card:hover{ border-color:var(--teal); }
+  a.card:active{ transform:scale(0.995); }
+  a.card:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  a.card .idx{
+    font-family:"IBM Plex Mono", monospace; font-size:0.72rem; color:var(--gold);
+    letter-spacing:0.04em; text-align:center; line-height:1.35;
+  }
+  a.card .idx b{ display:block; font-size:1.15rem; font-weight:600; color:var(--teal); }
+  a.card h3{ font-size:1.06rem; font-weight:600; margin-bottom:3px; }
+  a.card p{ font-size:0.87rem; color:var(--ink-soft); }
+  a.card .arrow{ color:var(--ink-soft); font-size:1.1rem; }
+  a.card .tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  a.card .tag{
+    font-family:"IBM Plex Mono", monospace; font-size:0.66rem; padding:2px 8px;
+    border-radius:999px; background:var(--surface); border:1px solid var(--line); color:var(--ink-soft);
+  }
+  @media (max-width:600px){
+    a.card{ grid-template-columns:46px 1fr; }
+    a.card .arrow{ display:none; }
+  }
+
+  .plan a.card .idx b{ color:var(--gold); }
+  .migas a.card .idx b{ color:var(--gold); }
+
+  .howto{ counter-reset:s; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .howto li{
+    display:grid; grid-template-columns:32px 1fr; gap:12px; align-items:start;
+    background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem;
+  }
+  .howto li::before{ counter-increment:s; content:counter(s); font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px; }
+  .howto li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .howto li span{ color:var(--ink-soft); }
+
+  .tip{ background:var(--gold-soft); border-radius:12px; padding:14px 18px; font-size:0.9rem; max-width:70ch; }
+  .tip strong{ color:var(--gold); }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Indeks lengkap · Pintu masuk tunggal</span>
+    <h1>Rute Data Analyst</h1>
+    <p class="lede">Dari benar-benar nol sampai siap melamar sebagai data analyst — <strong>dan sampai bisa dibayar sebagai freelancer</strong>. Semuanya dituntun hari demi hari: buka apa, ketik apa, apa yang harus muncul di layarmu. Dikerjakan penuh waktu dengan dua hari materi per hari kerja, seluruhnya memakan <strong>29 minggu</strong>.</p>
+
+    <div class="stats">
+      <div class="stat"><span class="num">294</span><span class="lab">hari dituntun</span></div>
+      <div class="stat"><span class="num">29</span><span class="lab">minggu penuh waktu</span></div>
+      <div class="stat"><span class="num">35</span><span class="lab">hari jalur migas</span></div>
+      <div class="stat"><span class="num">12</span><span class="lab">hari jalur freelance</span></div>
+      <div class="stat"><span class="num">10+</span><span class="lab">proyek portofolio</span></div>
+    </div>
+  </header>
+
+  <section class="mulai">
+    <h2>Mulai di sini — dituntun hari demi hari</h2>
+    <p class="note"><strong>Belum pernah menulis satu baris kode seumur hidup?</strong> Kerjakan Minggu 1-2 (SQL, tidak butuh Python sama sekali), lalu <strong>Bekal Python</strong> di bawah, baru Minggu 3. Melewati Bekal berarti kamu akan menabrak tembok di Hari 24. <br><br>Kalau kamu belum pernah menulis satu baris kode, <strong>jangan lompat ke bagian Materi di bawah.</strong> Kelima belas minggu ini menyebutkan persis apa yang harus dibuka, diketik, dan apa yang harus muncul di layarmu — dengan ceklis yang tersimpan otomatis di browser, dari SELECT pertamamu sampai negosiasi tawaran kerja.</p>
+    <div class="cards">
+      <a class="card" href="https://claude.ai/code/artifact/df7c645b-ee38-4ee1-b60c-499ee6055467">
+        <span class="idx"><b>M1</b>hari 1–7</span>
+        <span>
+          <h3>Minggu Pertama — SQL dari nol</h3>
+          <p>sqliteonline.com, data 20 baris, SELECT sampai GROUP BY. Hari 4 sengaja tanpa materi baru — ulangan dari ingatan.</p>
+          <span class="tags"><span class="tag">SELECT</span><span class="tag">WHERE</span><span class="tag">GROUP BY</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/b2c56e91-5737-4cf3-9cd9-f865551bed10">
+        <span class="idx"><b>M2</b>hari 8–14</span>
+        <span>
+          <h3>Minggu Kedua — JOIN &amp; data sungguhan</h3>
+          <p>Gabung dua tabel, jebakan LEFT JOIN, lalu pindah ke 151.088 baris data asli. Proyek pertama naik ke GitHub di Hari 14.</p>
+          <span class="tags"><span class="tag">JOIN</span><span class="tag">data besar</span><span class="tag">GitHub</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/36da060f-fd96-4381-88b7-7500c6b6ecdf">
+        <span class="idx"><b>🐍</b>8 hari</span>
+        <span>
+          <h3>Bekal Python — dari benar-benar nol</h3>
+          <p><strong>Kerjakan di antara Hari 14 dan Hari 15.</strong> Kurikulum ini mengajari SQL dan pandas dari nol, tapi bahasa Python-nya sendiri dipakai begitu saja mulai Hari 24 (<code>for</code>, <code>f"..."</code>, <code>[x for x in ...]</code>). Delapan hari ini menutup lubang itu: sel Colab, variabel, membaca pesan error, list, dictionary, if/else, perulangan, fungsi.</p>
+          <span class="tags"><span class="tag">wajib kalau kamu 0</span><span class="tag">error</span><span class="tag">for</span><span class="tag">def</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/e672ec75-7caf-45aa-b90c-726ce55d46b7">
+        <span class="idx"><b>M3</b>hari 15–21</span>
+        <span>
+          <h3>Minggu Ketiga — Python &amp; pandas</h3>
+          <p>Alat kedua, dengan tabel padanan SQL↔pandas supaya dua minggu sebelumnya terpakai lagi, bukan diulang dari nol. Proyek kedua: notebook dengan grafik.</p>
+          <span class="tags"><span class="tag">pandas</span><span class="tag">merge</span><span class="tag">matplotlib</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/7709a33d-1165-48f7-9534-e29934144e94">
+        <span class="idx"><b>M4</b>hari 22–28</span>
+        <span>
+          <h3>Minggu Keempat — Statistik &amp; A/B Test</h3>
+          <p>Mean vs median saat ada outlier, simulasi Central Limit Theorem yang kamu buktikan sendiri, lalu A/B test sungguhan pada 8.000 pengguna dengan jebakan metrik yang bertabrakan.</p>
+          <span class="tags"><span class="tag">scipy</span><span class="tag">p-value</span><span class="tag">A/B test</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/0ebf361e-700d-4314-84d8-fd0bdc7b0dd0">
+        <span class="idx"><b>M5</b>hari 29–35</span>
+        <span>
+          <h3>Minggu Kelima — Visualisasi Data</h3>
+          <p>Grafik yang jujur vs yang menyesatkan (sumbu yang dipotong bisa membesar-besarkan selisih kecil), rolling average, korelasi bukan sebab-akibat, ditutup dashboard 4-panel.</p>
+          <span class="tags"><span class="tag">matplotlib</span><span class="tag">sumbu jujur</span><span class="tag">dashboard</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/7a1dae30-ebd4-4de7-bbce-722bbbf0be7e">
+        <span class="idx"><b>M6</b>hari 36–42</span>
+        <span>
+          <h3>Minggu Keenam — SQL Lanjutan</h3>
+          <p>Window function (RANK, LAG, running total), CTE berlapis, dan membersihkan data yang benar-benar kotor (duplikat, teks tidak konsisten, angka berformat teks) pada data sungguhan.</p>
+          <span class="tags"><span class="tag">window function</span><span class="tag">CTE</span><span class="tag">data kotor</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a">
+        <span class="idx"><b>🧹</b>6 hari</span>
+        <span>
+          <h3>Bekal Data Klien — berkas Excel dari orang sungguhan</h3>
+          <p><strong>Kerjakan setelah Minggu 6, sebelum menerima klien pertama.</strong> Semua modul lain memakai data yang sudah rapi. Berkas yang dikirim klien tidak: banyak sheet, baris judul, "22.000" yang terbaca 22,0 tanpa error, satu cabang dengan empat ejaan, tanggal campur aduk, dan baris "TOTAL" yang menyamar jadi transaksi. Enam hari ini sampai mengirim balik Excel berisi data bersih + ringkasan + catatan perubahan.</p>
+          <span class="tags"><span class="tag">read_excel</span><span class="tag">uji identitas</span><span class="tag">to_datetime</span><span class="tag">duplikat</span><span class="tag">ExcelWriter</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/e87748bf-c615-4461-951e-248010b4ae34">
+        <span class="idx"><b>🗂️</b>5 kasus</span>
+        <span>
+          <h3>Studi Kasus Nyata — lima berkas klien yang berantakan</h3>
+          <p><strong>Lanjutan langsung Bekal Data Klien.</strong> Lima kasus dari lima jenis usaha — toko bangunan, klinik, kontraktor, yayasan, distributor — masing-masing dengan kekacauan yang benar-benar terjadi: kolom <code>float64</code> yang diam-diam kehilangan tiga nol, CSV titik-koma buatan Excel Indonesia, <code>merge</code> yang meledak jadi 4.041 baris, 95 sel bertuliskan "LUNAS" yang menyembunyikan Rp 45 juta, dan Rp 424 juta setoran bank yang bukan pelunasan piutang.</p>
+          <span class="tags"><span class="tag">data kotor</span><span class="tag">merge</span><span class="tag">melt</span><span class="tag">rekonsiliasi</span><span class="tag">aging</span><span class="tag">portofolio</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/007d7e74-727a-40b9-a698-4835977d084a">
+        <span class="idx"><b>M7</b>hari 43–49</span>
+        <span>
+          <h3>Minggu Ketujuh — Statistik Lanjutan</h3>
+          <p>Confidence interval, effect size (Cohen's d), dan bukti simulasi kenapa mengintip hasil A/B test berulang kali membesar-besarkan tingkat false positive dari 5% ke 26%+.</p>
+          <span class="tags"><span class="tag">confidence interval</span><span class="tag">effect size</span><span class="tag">power</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/62446bd7-6166-47dc-b19d-9359b7ea8b99">
+        <span class="idx"><b>M8</b>hari 50–56</span>
+        <span>
+          <h3>Minggu Kedelapan — Visualisasi Lanjutan &amp; BI</h3>
+          <p>matplotlib gaya presentasi, seaborn, plotly interaktif, lalu Tableau Public dan konsep DAX Power BI — dua nama yang muncul di sebagian besar lowongan data analyst SG/AU.</p>
+          <span class="tags"><span class="tag">seaborn</span><span class="tag">plotly</span><span class="tag">Tableau</span><span class="tag">Power BI</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/e653810a-9c48-4b3e-af6e-8d439618c677">
+        <span class="idx"><b>🔒</b>4 hari</span>
+        <span>
+          <h3>Bekal Rahasia Klien — apa yang boleh naik ke internet</h3>
+          <p><strong>Kerjakan sebelum klien pertama.</strong> Modul M2 menyuruh pilih repo Public, M8 menerbitkan ke Tableau Public, M11 ke URL publik — semuanya benar untuk portofolio, dan semuanya jadi kebocoran begitu datanya milik klien. Empat hari ini menarik garisnya, plus cara membuat data pengganti supaya kamu tetap punya portofolio.</p>
+          <span class="tags"><span class="tag">Tableau Public</span><span class="tag">data pengganti</span><span class="tag">write_html</span><span class="tag">izin tertulis</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/fea52a73-a3eb-400b-8630-d09ccc516fcf">
+        <span class="idx"><b>M9</b>hari 57–63</span>
+        <span>
+          <h3>Minggu Kesembilan — SQL Data Besar</h3>
+          <p>BigQuery sandbox gratis, kesadaran biaya query di data ratusan juta baris, EXPLAIN ANALYZE, index, partisi/clustering, dan lima pola query lambat yang paling umum.</p>
+          <span class="tags"><span class="tag">BigQuery</span><span class="tag">index</span><span class="tag">partisi</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/26a3ee5f-9d8a-4679-9977-37c06da48459">
+        <span class="idx"><b>M10</b>hari 64–70</span>
+        <span>
+          <h3>Minggu Kesepuluh — dbt</h3>
+          <p>Pipeline transformasi tiga lapis (staging/intermediate/marts), <code>ref()</code>, test otomatis termasuk rekonsiliasi, dan dokumentasi dengan diagram ketergantungan.</p>
+          <span class="tags"><span class="tag">dbt</span><span class="tag">test</span><span class="tag">dokumentasi</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/b38ca0a5-abff-4b2d-b657-06b6503d0cb4">
+        <span class="idx"><b>M11</b>hari 71–77</span>
+        <span>
+          <h3>Minggu Kesebelas — Git, Otomasi &amp; Streamlit</h3>
+          <p>Alur branch/pull request yang sebenarnya, laporan yang berjalan sendiri lewat GitHub Actions, aplikasi Streamlit, ditutup proyek pipeline lengkap dari data mentah sampai dashboard publik.</p>
+          <span class="tags"><span class="tag">git</span><span class="tag">GitHub Actions</span><span class="tag">Streamlit</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760">
+        <span class="idx"><b>📬</b>5 hari</span>
+        <span>
+          <h3>Bekal Kirim Hasil — sampai ke klien, dan tetap hidup</h3>
+          <p><strong>Kerjakan setelah Minggu 11.</strong> Laporan otomatis M11 berhenti di <code>print()</code> dan satu PNG di server — tidak ada yang sampai ke klien. Lima hari ini mengirimnya lewat email, menulis isinya supaya dibaca, mengajarkan <code>try/except</code> (yang tidak muncul di mana pun sebelumnya), dan menahan pengiriman saat datanya tidak wajar. Termasuk kegagalan paling berbahaya: tabel kosong yang menjumlah jadi Rp 0 tanpa satu pun error.</p>
+          <span class="tags"><span class="tag">smtplib</span><span class="tag">try/except</span><span class="tag">lampiran</span><span class="tag">gagal diam-diam</span><span class="tag">serah terima</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/fbf23eb1-4965-46e5-b3d5-b839c25fdfae">
+        <span class="idx"><b>M12</b>hari 78–84</span>
+        <span>
+          <h3>Minggu Kedua Belas — Product Analytics</h3>
+          <p>Analisis kohor (alat paling tajam analis produk), menemukan segmen pelanggan tersembunyi, LTV/CAC, payback period, dan peramalan yang diuji jujur terhadap metode sederhana.</p>
+          <span class="tags"><span class="tag">kohor</span><span class="tag">LTV/CAC</span><span class="tag">peramalan</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/1c78fa92-69e9-4546-a3b1-075eabd3e5c8">
+        <span class="idx"><b>M13</b>hari 85–91</span>
+        <span>
+          <h3>Minggu Ketiga Belas — Machine Learning</h3>
+          <p>Model churn (regresi logistik, random forest), evaluasi jujur (baseline, presisi/recall/AUC), dan mengubah keluaran model jadi rekomendasi bisnis berupa rupiah — bukan sekadar skor akurasi.</p>
+          <span class="tags"><span class="tag">scikit-learn</span><span class="tag">churn</span><span class="tag">nilai bisnis</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/595c379b-9f99-4c29-9c03-ab4450b5414c">
+        <span class="idx"><b>M14</b>hari 92–98</span>
+        <span>
+          <h3>Minggu Keempat Belas — Portofolio &amp; CV</h3>
+          <p>Memoles capstone jadi proyek unggulan, README yang dibaca sampai habis, profil GitHub, CV yang lolos ATS, LinkedIn, dan empat pola SQL yang paling sering keluar di wawancara.</p>
+          <span class="tags"><span class="tag">capstone</span><span class="tag">CV</span><span class="tag">SQL wawancara</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/010bd5cc-8f09-449b-b3de-7bba52005d31">
+        <span class="idx"><b>M15</b>hari 99–105 · Terakhir</span>
+        <span>
+          <h3>Minggu Kelima Belas — Wawancara &amp; Lamaran</h3>
+          <p>Wawancara studi kasus, cerita perilaku STAR, strategi melamar ke SG/AU, visa dengan angka terkini, negosiasi tawaran — sampai checklist kelulusan.</p>
+          <span class="tags"><span class="tag">wawancara</span><span class="tag">visa</span><span class="tag">negosiasi</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+    <p class="tip" style="margin-top:14px"><strong>Sudah pernah pakai SQL/Python sebelumnya?</strong> Boleh langsung ke bagian Materi di bawah — modul 01 di sana (SQL &amp; pandas 8 minggu) mengulang dasar-dasarnya sekilas lalu masuk ke bagian yang lebih dalam: window function, CTE, data kotor.</p>
+  </section>
+
+  <section class="migas">
+    <h2>Jalur spesialisasi migas — dituntun hari demi hari</h2>
+    <p class="note">Jalur terpisah 5 minggu (Hari 1–35) memakai basis data Blok Cendana: 64 sumur, 70.602 baris produksi harian, 42 bulan laporan PSC. Format sama seperti minggu-minggu di atas — buka apa, ketik apa, apa yang harus muncul. <strong>Kerjakan setelah Minggu 3 jalur utama selesai</strong>, karena mulai Level 3 sudah memakai window function dan Python.</p>
+    <div class="cards">
+      <a class="card" href="https://claude.ai/code/artifact/70d5a371-10fd-485b-909f-e7e62d8ac4f0">
+        <span class="idx"><b>L1</b>hari 1–7</span>
+        <span>
+          <h3>Fondasi — mengenal blok &amp; alur PSC</h3>
+          <p>Pasang basis datanya, kenali 4 lapangan, hafal empat angka jangkar (20,08 juta bbl kumulatif, lifting cost $14,35/bbl, government take 70,5%), lalu watercut dan mekanika bagi hasil.</p>
+          <span class="tags"><span class="tag">SELECT</span><span class="tag">watercut</span><span class="tag">PSC</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/24fee33e-bafb-459c-8560-4a848e1257a8">
+        <span class="idx"><b>L2</b>hari 8–14</span>
+        <span>
+          <h3>Perbandingan yang adil &amp; bias seleksi</h3>
+          <p>Lifting cost per barel (OPEX saja, jangan CAPEX), uptime, anti-join, dan hari yang paling penting: kenapa evaluasi workover yang kelihatan meyakinkan sebenarnya salah.</p>
+          <span class="tags"><span class="tag">JOIN</span><span class="tag">bias seleksi</span><span class="tag">rekonsiliasi</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/5fc399f9-833f-48f5-88a2-57b9b9f7963c">
+        <span class="idx"><b>L3</b>hari 15–21</span>
+        <span>
+          <h3>Window function di data sungguhan</h3>
+          <p>LAG dan jebakan WHERE-sebelum-window, ROW_NUMBER per lapangan, kumulatif, Pareto yang ternyata 11 dari 20 sumur (bukan 80/20), dan pergeseran pangsa produksi.</p>
+          <span class="tags"><span class="tag">LAG</span><span class="tag">PARTITION BY</span><span class="tag">Pareto</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/35f58664-afca-4799-8bb3-0e39d0025823">
+        <span class="idx"><b>L4</b>hari 22–28</span>
+        <span>
+          <h3>Rekonsiliasi PSC &amp; ekonomi</h3>
+          <p>Uji identitas gross = FTP + cost recovery + ETS untuk 42 bulan, bahasa materialitas audit, efektivitas workover yang diukur benar, payback, dan nilai kerugian downtime dalam dolar.</p>
+          <span class="tags"><span class="tag">cost recovery</span><span class="tag">materialitas</span><span class="tag">payback</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/59473952-fe59-4f21-b945-840ac06a7cee">
+        <span class="idx"><b>L5</b>hari 29–35</span>
+        <span>
+          <h3>Cadangan, sensitivitas &amp; keputusan $3 juta</h3>
+          <p>Decline curve analysis lima tahap yang sengaja gagal empat kali dulu — dari 50,5 juta bbl yang salah sampai 17,6 juta bbl yang benar. Ditutup memo satu halaman untuk keputusan belanja modal.</p>
+          <span class="tags"><span class="tag">Arps DCA</span><span class="tag">sensitivitas</span><span class="tag">memo keputusan</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+    <p class="tip" style="margin-top:14px"><strong>Kenapa jalur ini berharga kalau latar belakangmu audit.</strong> Cost recovery, materialitas, dan rekonsiliasi adalah pekerjaan yang sudah kamu kenal — di sini keduanya bertemu dengan SQL dan Python. Memo Hari 35 dan grafik lima tahap DCA masuk ke portofoliomu di Minggu 14, dan jadi bahan cerita wawancara di Minggu 15.</p>
+  </section>
+
+  <section>
+    <h2>Jalur SQL Mahir — dari nol sampai tingkat lanjut</h2>
+    <p class="note">SQL sudah diajarkan di lima modul jalur utama: <strong>M1</strong> (dasar), <strong>M2</strong> (JOIN), <strong>M6</strong> (window function &amp; CTE), <strong>M9</strong> (data besar &amp; optimasi), <strong>M10</strong> (dbt). Itu membawamu dari nol sampai <em>mahir menengah</em>. Jalur ini melanjutkannya ke tingkat yang ditanyakan untuk posisi di atas pemula — dimulai dari hal-hal yang membuat query <strong>diam-diam salah</strong>.</p>
+    <div class="tabel-bungkus" style="margin-bottom:16px">
+      <table>
+        <thead><tr><th>Tingkat</th><th>Isinya</th><th>Dari mana</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nol → dasar</strong></td><td>SELECT, WHERE, GROUP BY, tanggal</td><td class="mono">Modul M1</td></tr>
+          <tr><td><strong>Dasar → menengah</strong></td><td>JOIN, data besar, window function, CTE</td><td class="mono">Modul M2, M6</td></tr>
+          <tr><td><strong>Menengah → kokoh</strong></td><td>Aturan NULL, jebakan NOT IN, lima JOIN, self join, HAVING, operasi himpunan</td><td class="mono">SQL Mahir L1</td></tr>
+          <tr><td><strong>Kokoh → lanjut</strong></td><td>Frame window function, LAST_VALUE, peringkat, recursive CTE</td><td class="mono">SQL Mahir L2</td></tr>
+          <tr><td><strong>Lanjut → pola kerja</strong></td><td>Deduplikasi, top-N per kelompok, gaps-and-islands, sesi, pivot, funnel</td><td class="mono">SQL Mahir L3</td></tr>
+          <tr><td><strong>Pola → produksi</strong></td><td>EXPLAIN QUERY PLAN, rancang index, transaksi, view, uji mutu data</td><td class="mono">SQL Mahir L4</td></tr>
+          <tr><td><strong>Produksi → mahir</strong></td><td>Live coding, soal ambigu, pertanyaan lisan, ujian akhir berbentuk brief klien</td><td class="mono">SQL Mahir L5</td></tr>
+          <tr><td><strong>Mahir → tim data</strong></td><td>Partisi di data warehouse, pipeline dbt</td><td class="mono">Modul M9, M10</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cards">
+      <a class="card" href="https://claude.ai/code/artifact/caff475b-354e-4331-84f9-d7fd36fe51b4">
+        <span class="idx"><b>L1</b>7 hari</span>
+        <span>
+          <h3>SQL Mahir L1 — dasar yang bolong</h3>
+          <p>Tujuh hal yang tidak pernah disinggung M1–M6, dan semuanya membuat query salah <em>tanpa pesan error</em>: <code>NULL = NULL</code> yang bukan benar, <code>NOT IN</code> yang menjawab nol padahal jawabannya tiga, JOIN yang melipatgandakan baris, <code>UNION</code> yang menelan transaksi kembar. Ditutup dengan tie-out dua sistem yang menjelaskan tiap rupiah selisihnya.</p>
+          <span class="tags"><span class="tag">NULL</span><span class="tag">NOT EXISTS</span><span class="tag">HAVING</span><span class="tag">EXCEPT</span><span class="tag">rekonsiliasi</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/07cb0fb0-1240-471b-85b7-f691b8a585bd">
+        <span class="idx"><b>L2</b>7 hari</span>
+        <span>
+          <h3>SQL Mahir L2 — window function sampai tuntas</h3>
+          <p>M6 memberi nama-nama fungsinya; level ini memberi <strong>frame</strong> — bagian yang menentukan jawabannya. <code>RANGE</code> ternyata bawaannya, bukan <code>ROWS</code>, dan bedanya satu hari penuh pada running total. Plus jebakan <code>LAST_VALUE</code>, beda <code>RANK</code>/<code>DENSE_RANK</code>, dan recursive CTE untuk hierarki dan deret tanggal.</p>
+          <span class="tags"><span class="tag">ROWS vs RANGE</span><span class="tag">LAST_VALUE</span><span class="tag">NTILE</span><span class="tag">RECURSIVE</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/eff7b693-41fe-43a5-a667-14e294c3e7d9">
+        <span class="idx"><b>L3</b>7 hari</span>
+        <span>
+          <h3>SQL Mahir L3 — enam pola yang benar-benar ditanyakan</h3>
+          <p>Level 1 dan 2 memberi bahannya; ini memberi resepnya. Deduplikasi, top-N per kelompok, gaps-and-islands, sesionisasi, pivot, dan funnel — enam bentuk soal yang muncul berulang di wawancara dan di pekerjaan. Tiap pola punya satu keputusan yang <strong>bukan milik SQL</strong>: ambang mana, baris mana yang dibuang, tahap apa yang dihitung.</p>
+          <span class="tags"><span class="tag">dedup</span><span class="tag">top-N</span><span class="tag">gaps &amp; islands</span><span class="tag">sesionisasi</span><span class="tag">funnel</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/2d44eed8-d057-4afc-b429-974231efea42">
+        <span class="idx"><b>L4</b>7 hari</span>
+        <span>
+          <h3>SQL Mahir L4 — cepat, dan tidak diam-diam salah</h3>
+          <p>Kamu bikin tabel <strong>800.000 baris</strong> lalu mengukur sendiri: satu index mengubah 51,6 ms jadi 0,008 ms; satu <code>substr()</code> di <code>WHERE</code> membuatnya 55× lebih lambat; satu subquery berkorelasi 1.036× lebih lambat daripada CTE dengan hasil identik. Ditutup transaksi (Rp 400.000 yang menguap tanpa <code>ROLLBACK</code>) dan berkas uji mutu berambang.</p>
+          <span class="tags"><span class="tag">EXPLAIN</span><span class="tag">index</span><span class="tag">transaksi</span><span class="tag">view</span><span class="tag">uji mutu</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/7044e726-f69e-4b48-a3d5-b6e277c79164">
+        <span class="idx"><b>L5</b>7 hari</span>
+        <span>
+          <h3>SQL Mahir L5 — ujian, wawancara, dan buktinya</h3>
+          <p>Sembilan soal live coding berwaktu dengan kunci yang dijalankan sungguhan, sepuluh pertanyaan lisan beserta kalimat jawabannya, satu soal sengaja ambigu yang punya <strong>enam jawaban benar dari 24.007 sampai 50.000</strong>, dan ujian akhir berbentuk brief klien yang jawaban benarnya dimulai dengan menolak menjawabnya. Ditutup rubrik penilaian diri.</p>
+          <span class="tags"><span class="tag">live coding</span><span class="tag">soal ambigu</span><span class="tag">wawancara</span><span class="tag">ujian akhir</span><span class="tag">rubrik</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/15ba1f07-96fd-4636-b694-f2cf31f020cd">
+        <span class="idx"><b>P1</b>7 hari</span>
+        <span>
+          <h3>SQL Produksi — kosakata yang tidak dimiliki SQLite</h3>
+          <p>Kantor tidak memakai SQLite. Delapan kemampuan yang <strong>nol kemunculan</strong> di 44 modul sebelumnya: <code>ROLLUP</code> untuk subtotal tanpa UNION, <code>QUALIFY</code>, <code>LATERAL</code>, <code>generate_series</code> untuk kalender yang menolak kehilangan hari, <code>percentile_cont</code>, <code>FILTER</code>, <code>ON CONFLICT</code> supaya skrip aman dijalankan dua kali, dan JSON. Dijalankan di DuckDB, ditutup peta pindahan ke PostgreSQL &amp; BigQuery.</p>
+          <span class="tags"><span class="tag">ROLLUP</span><span class="tag">QUALIFY</span><span class="tag">LATERAL</span><span class="tag">upsert</span><span class="tag">JSON</span><span class="tag">DuckDB</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/e5ebbbde-69c2-4a12-a118-9eaa29210949">
+        <span class="idx"><b>P2</b>7 hari</span>
+        <span>
+          <h3>Python Produksi — dari sel notebook jadi alat</h3>
+          <p>Hasil cacahan 44 modul: <code>logging</code> nol, <code>argparse</code> nol, <code>yield</code> nol, <code>chunksize</code> nol, modul sendiri nol. Tujuh hari menutupnya, dengan angka yang diukur: memori <strong>183 MB → 18,4 MB</strong>, vektorisasi <strong>270× lebih cepat</strong> dari <code>.apply</code> di 800.000 baris — tapi cuma 1,4× untuk logika bercabang, jadi jangan pukul rata.</p>
+          <span class="tags"><span class="tag">paket &amp; modul</span><span class="tag">pytest</span><span class="tag">dtype</span><span class="tag">vektorisasi</span><span class="tag">chunksize</span><span class="tag">logging</span><span class="tag">argparse</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/ffcc437e-1901-484c-a73b-128865461cd1">
+        <span class="idx"><b>&#128215;</b>7 hari</span>
+        <span>
+          <h3>Bekal Excel Kantor — alat yang paling sering diminta</h3>
+          <p>Excel disebut namanya di <strong>3 dari 5 lowongan nyata</strong> — di GOTO Group dan Adi Sarana ia satu-satunya alat yang disebut. Di 41 modul pengajaran ini: <strong>nol sebutan</strong> rumus dan pivot. Tujuh hari menutupnya, dengan batas yang diukur (500.000 baris = 57 detik menulis, 85× lebih lambat dari csv) dan satu selisih <strong>Rp 3,43 miliar</strong> antara XLOOKUP dan <code>merge</code>.</p>
+          <span class="tags"><span class="tag">pivot</span><span class="tag">XLOOKUP</span><span class="tag">SUMIFS</span><span class="tag">Power Query</span><span class="tag">sel pemeriksa</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/f1e55d95-3ab1-4904-b378-ff0886a08852">
+        <span class="idx"><b>&#129520;</b>5 hari</span>
+        <span>
+          <h3>Bekal Alat Kantor — Sheets, Looker, Metabase, Airflow</h3>
+          <p>Satu lowongan Moladin menyebut lima alat; tiga di antaranya bernilai <strong>nol</strong> di kurikulum ini. Lima hari ini menutupnya: <code>QUERY()</code> Sheets diadu dengan SQL, kesalahan “rata-rata dari rata-rata” yang membuat angka <strong>19,56× terlalu tinggi</strong>, dan membaca DAG Airflow dengan <code>ast</code> — tanpa memasang Airflow.</p>
+          <span class="tags"><span class="tag">QUERY</span><span class="tag">Looker Studio</span><span class="tag">Metabase</span><span class="tag">baca DAG</span><span class="tag">Apps Script</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/746fbb14-8c40-41a3-9882-5af02e150b66">
+        <span class="idx"><b>&#128483;</b>5 hari</span>
+        <span>
+          <h3>Bekal Bahasa Inggris Kerja</h3>
+          <p>Seluruh lowongan yang dikutip kurikulum ini ditulis dalam bahasa Inggris — untuk pekerjaan di Jakarta. Di 41 modul: <strong>5 sebutan lewat</strong>. Lima hari ini disusun dari <strong>639 kata lowongan sungguhan</strong> jadi daftar <strong>44 kata inti</strong>, plus sepuluh frasa yang artinya bukan yang tertulis (<em>“a plus point”</em> berarti tidak wajib) dan empat jawaban wawancara dari pengalamanmu sendiri.</p>
+          <span class="tags"><span class="tag">44 kata inti</span><span class="tag">email temuan</span><span class="tag">STAR</span><span class="tag">wawancara</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/2427d59c-05e9-4074-98fd-eaa65ca2758e">
+        <span class="idx"><b>&#9997;</b>3 hari</span>
+        <span>
+          <h3>Menulis untuk Manajemen</h3>
+          <p><em>Executive summary</em> muncul <strong>3 kali</strong> di 41 modul. Tiga hari ini bekerja atas satu tabel nyata 5 cabang × 8 bulan, tempat <strong>satu baris</strong> yang penting dan 39 sisanya latar: empat cabang bergerak −3,8% sampai +3,9%, satu turun <strong>28,2%</strong>. Ditutup empat bantahan yang pasti datang, termasuk “bisa dibikin lebih bagus?”.</p>
+          <span class="tags"><span class="tag">memo 1 halaman</span><span class="tag">daftar buang</span><span class="tag">mempertahankan angka</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/9e8025f8-28cb-48cd-bee3-809b610567a6">
+        <span class="idx"><b>🚪</b>3 hari</span>
+        <span>
+          <h3>Jalur Pintu B — melamar ke tempat pengalamanmu dihitung</h3>
+          <p>Kata <em>audit analytics</em> muncul <strong>nol kali</strong> di 46 modul sebelumnya. Padahal di situ selisihnya: median analis data <strong>Rp 6 juta</strong> lawan analitik audit <strong>Rp 14–25 juta</strong>. Membedah lowongan PwC &amp; EY yang nyata (Python ternyata cuma <em>“a plus point”</em>), kamus istilah KAP ke bahasa lowongan, dan empat pertanyaan wawancara yang pasti muncul.</p>
+          <span class="tags"><span class="tag">Risk Assurance</span><span class="tag">CV</span><span class="tag">LinkedIn</span><span class="tag">negosiasi</span><span class="tag">jaringan KAP</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/b20c546a-92f3-480f-81ae-4ba51728dc69">
+        <span class="idx"><b>📝</b>60 poin</span>
+        <span>
+          <h3>Ujian Bernilai — angka objektif pertamamu</h3>
+          <p>801 centang sebelumnya semuanya laporan diri sendiri. Ini menggantinya: <strong>22 soal, 90 menit, 60 poin</strong> — SQL, Python, dan penilaian. Kunci baru boleh dibuka setelah jawaban tertulis. Termasuk soal menemukan bug yang lolos 11 uji: <code>ke_angka("(1.500)")</code> mengembalikan 1500, padahal kurung akuntansi berarti negatif.</p>
+          <span class="tags"><span class="tag">berwaktu</span><span class="tag">berskor</span><span class="tag">rubrik</span><span class="tag">ulangi 3 bulan</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/61355282-6fe8-4f54-bd99-18ff4ae63d28">
+        <span class="idx"><b>🕶️</b>5 hari</span>
+        <span>
+          <h3>Proyek Buta — tanpa kunci jawaban, dengan tenggat</h3>
+          <p>190 kunci jawaban di modul lain; di sini <strong>nol</strong>. Datanya pun dikirim sebagai berkas jadi, bukan skrip pembuat, supaya jawabannya tidak bisa dibaca dari kodenya. Tiga klien — koperasi, apotek, retail lima gerai — masing-masing menyimpan satu temuan yang tidak diminta. Ditutup dengan hal yang belum pernah dilatih sama sekali: <strong>hasil kerjamu dikritik manusia lain</strong>.</p>
+          <span class="tags"><span class="tag">tanpa kunci</span><span class="tag">tenggat</span><span class="tag">verifikasi mandiri</span><span class="tag">code review</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/d70b6a53-5f3a-483d-83e4-79aba530fdb0">
+        <span class="idx"><b>&#127891;</b>7 hari</span>
+        <span>
+          <h3>Jalur S2 Luar Negeri — silabus, biaya, keputusan</h3>
+          <p>Tujuh kampus dibedah sampai kode mata kuliahnya (DSA5103, MAST90138, COMP90051, ISYE 6501, W207), lalu 49 modulmu dipindai terhadapnya: <strong>empat topik bernilai nol</strong> — probabilitas formal, aljabar linear, optimisasi, deep learning. Biayanya dihitung dalam rupiah dengan kurs 6 September 2026, dan pertanyaannya dibalik: <strong>berapa kenaikan gaji yang harus terjadi supaya modalnya kembali?</strong> Tanpa beasiswa Rp 26,2 juta/bulan; dengan beasiswa Rp 2,8 juta.</p>
+          <span class="tags"><span class="tag">silabus nyata</span><span class="tag">biaya rupiah</span><span class="tag">syarat impas</span><span class="tag">LPDP &middot; Chevening &middot; AAS</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/f6784136-a13e-47e9-9eae-0264bd514182">
+        <span class="idx"><b>&#127922;</b>7 hari</span>
+        <span>
+          <h3>MAT L1 — Probabilitas formal</h3>
+          <p>Pemindaian 49 modul melaporkan probabilitas formal muncul di <strong>nol modul</strong>. Tujuh hari menutupnya: nilai harapan, empat distribusi wajib, dan Bayes dalam versi auditor — <strong>uji yang 90% sensitif ternyata hanya 32,1% benar ketika ia berbunyi.</strong> Ditutup teorema limit pusat diuji pada data yang kemencengannya 2,006 sampai runtuh jadi 0,173.</p>
+          <span class="tags"><span class="tag">DATASCI W203</span><span class="tag">ISYE 6739</span><span class="tag">Bayes</span><span class="tag">Simpson</span><span class="tag">CLT</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/f5079d99-9181-47a2-9ce4-7747feca52a3">
+        <span class="idx"><b>&#129518;</b>7 hari</span>
+        <span>
+          <h3>MAT L2 — Aljabar linear terapan</h3>
+          <p>Regresi berhenti jadi kotak hitam: kamu menulis β = (XᵀX)⁻¹Xᵀy sendiri dan hasilnya cocok dengan <code>lstsq</code> sampai 6,1 × 10⁻¹⁰. Puncaknya <strong>PCA dihitung dari nol</strong>, diadu dengan sklearn — selisih <strong>4,44 × 10⁻¹⁶</strong>. Plus multikolinearitas yang <code>matrix_rank</code> gagal tangkap tapi <code>cond</code> tangkap.</p>
+          <span class="tags"><span class="tag">MAST90138</span><span class="tag">eigen</span><span class="tag">PCA</span><span class="tag">kovarian</span><span class="tag">cond</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/6dc7de48-3ed0-4126-8455-a2c82e7bad4c">
+        <span class="idx"><b>&#128201;</b>7 hari</span>
+        <span>
+          <h3>MAT L3 — Optimisasi numerik</h3>
+          <p>Mesin yang melatih setiap model, ditulis dari nol. Aturan learning rate <em>diturunkan</em>, bukan dihafal: jarak ke jawaban dikali |1−2·lr| tiap langkah. Pembakuan fitur menurunkan condition number <strong>4.022 → 1,02</strong>. Dan satu pengukuran yang membantah cerita populer: rumus tertutup <strong>menang di setiap ukuran</strong> yang bisa diukur.</p>
+          <span class="tags"><span class="tag">DSA5103</span><span class="tag">gradient descent</span><span class="tag">konveks</span><span class="tag">Lagrange</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/bf6f3e02-66dc-40a4-a649-f1c260029d36">
+        <span class="idx"><b>&#129504;</b>7 hari</span>
+        <span>
+          <h3>MAT L4 — Deep learning dari nol</h3>
+          <p>Backpropagation diturunkan dengan tangan lalu dibuktikan benar sampai <strong>10⁻¹¹</strong>, dan jaringanmu punya jumlah parameter yang sama persis dengan sklearn: <strong>17</strong>. Ditutup uji jujur yang jarang ditunjukkan: dari 9 ke <strong>132.609 parameter</strong>, akurasi uji cuma naik 3,8 poin persen — dan regresi logistik 3 parameter tertinggal 4,04 poin.</p>
+          <span class="tags"><span class="tag">DSA5106</span><span class="tag">COMP90051</span><span class="tag">backprop</span><span class="tag">XOR</span><span class="tag">overfitting</span></span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+    <p class="tip" style="margin-top:14px"><strong>Kerjakan setelah Modul M6 — atau di fase 5, sesuai jadwal.</strong> Level 1 memakai basis data latihan sendiri (7 tabel, dibuat sekali di Hari 1) dan dijalankan di Colab dengan <code>sqlite3</code> — pola yang sama seperti jalur migas. Level 2 dan 3 memakai basis data yang sama; Level 4 menambah satu tabel 800.000 baris yang kamu bikin sendiri untuk mengukur kinerja, dan Level 5 memakai keduanya. <strong>Kelima level + SQL Produksi = 42 hari.</strong> Tiap angka di kelimanya dihasilkan dengan menjalankan query-nya sungguhan, bukan dari ingatan.</p>
+  </section>
+
+  <section>
+    <h2>Jalur freelance — dituntun hari demi hari</h2>
+    <p class="note">Semua modul di atas mengajarkan cara menganalisis data. Tidak satu pun mengajarkan cara <strong>dibayar</strong> untuk itu. Dua belas hari ini menutup lubang tersebut. <strong>Mulai di minggu kalender ke-5</strong>, satu hari freelance per minggu, dikerjakan berbarengan dengan materi — bukan setelahnya.</p>
+    <div class="cards">
+      <a class="card" href="https://claude.ai/code/artifact/c1664d77-5877-4da8-ade7-764018718b5c">
+        <span class="idx"><b>💼</b>12 hari</span>
+        <span>
+          <h3>Jalur Freelance — dari nol klien sampai dibayar</h3>
+          <p>Menentukan jasa yang benar-benar dibeli orang, menghitung tarif dasar tanpa menebak, halaman portofolio, klien pertama dari jaringanmu sendiri, proposal dengan bagian "yang tidak termasuk", invoice dan cara menagih, penghasilan bulanan berulang, dan kapan tarif boleh dinaikkan — dihitung, bukan dirasakan.</p>
+          <span class="tags"><span class="tag">tarif</span><span class="tag">proposal</span><span class="tag">invoice</span><span class="tag">klien pertama</span><span class="tag">win rate</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+    <p class="tip" style="margin-top:14px"><strong>Bagian yang paling terpakai dari latar auditmu ada di sini, bukan di modul teknis.</strong> Alasan paling sering freelancer data rugi bukan kurang mahir — tapi ruang lingkup melebar tanpa batas dan tanpa tambahan bayaran. Menulis apa yang termasuk dan apa yang tidak sudah jadi refleksmu bertahun-tahun. Satu jasa di Hari F10 — pemeriksaan konsistensi angka antar sumber — hampir tidak punya saingan karena butuh cara berpikir yang tidak diajarkan kursus data mana pun.</p>
+  </section>
+
+  <section class="plan">
+    <h2>Rencana</h2>
+    <p class="note"><strong>Satu rencana yang berlaku sekarang, dan tiga dokumen lama yang disimpan sebagai referensi.</strong> Tiga yang terakhir disusun ketika kamu masih bekerja di KAP — jadwalnya paruh waktu (90 menit tiap malam, 9–12 bulan) dan masih menyebut Excel serta sertifikat Coursera. Isi risetnya masih berguna; jadwalnya tidak lagi berlaku.</p>
+    <div class="cards">
+      <a class="card" href="https://claude.ai/code/artifact/f333a8b3-8341-4a10-b69e-4c603671830e">
+        <span class="idx"><b>★</b>berlaku</span>
+        <span>
+          <h3>Rencana 29 Minggu — yang kamu ikuti</h3>
+          <p>Penuh waktu, 2 hari materi per hari kerja: enam fase, apa yang sudah bisa dijual di ujung tiap fase, ritme satu hari kerja, pemetaan kemampuan KAP-mu ke hari-hari modulnya, dan jalur freelance paralel mulai minggu ke-5.</p>
+          <span class="tags"><span class="tag">penuh waktu</span><span class="tag">29 minggu</span><span class="tag">freelance paralel</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/83f08225-e6a6-46f9-9e63-5dc4bd9fb1f7">
+        <span class="idx"><b>◷</b>referensi</span>
+        <span>
+          <h3>Rute Data Analyst <em>(versi awal)</em></h3>
+          <p>Peta 8 leg dengan jadwal paruh waktu yang sudah digantikan. <strong>Yang masih terpakai:</strong> daftar sertifikasi yang diakui pasar, dan perbandingan pasar kerja Singapura vs Australia — bagian itu tidak tergantung jadwal.</p>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/3a77a21e-5ef7-414c-a16e-3ebfc931926b">
+        <span class="idx"><b>◷</b>referensi</span>
+        <span>
+          <h3>Skema Setahun <em>(versi awal)</em></h3>
+          <p>52 minggu, 4 tingkat. Temponya jauh lebih lambat daripada rencana 29 minggu. <strong>Yang masih terpakai:</strong> daftar sumber belajar gratis dan bentuk ujian diri tiap kuartal.</p>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="card" href="https://claude.ai/code/artifact/82b73f76-cd26-427b-9aee-bb7ffe05fb48">
+        <span class="idx"><b>◷</b>referensi</span>
+        <span>
+          <h3>Buku Rute <em>(gabungan versi awal)</em></h3>
+          <p>Ketiga dokumen versi awal dalam satu halaman bernavigasi. Berguna untuk membaca risetnya berurutan — bukan untuk menentukan jadwal harianmu.</p>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Materi lanjutan</h2>
+    <p class="note">Minggu 1–15 di atas sudah menuntunmu penuh dari nol sampai siap melamar. Modul-modul di bawah ini kini berfungsi sebagai <strong>referensi tambahan</strong> — dibuka ulang untuk pendalaman kasus yang lebih kompleks atau sebagai rujukan cepat sebelum wawancara, bukan urutan belajar yang wajib diikuti lagi.</p>
+    <div class="cards">
+
+      <a class="card" href="https://claude.ai/code/artifact/e1b8a424-63b9-4dc3-82aa-aa8bb13decb5">
+        <span class="idx"><b>01</b>bln 1–2</span>
+        <span>
+          <h3>SQL &amp; Python pandas — pendalaman lanjut</h3>
+          <p>Window function, CTE, dan data kotor sudah kamu kuasai di Minggu 6 — baca sekilas bagian itu. Modul ini melangkah lebih jauh: EDA terstruktur end-to-end dan kasus SQL/pandas yang lebih kompleks.</p>
+          <span class="tags"><span class="tag">EDA</span><span class="tag">kasus kompleks</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card" href="https://claude.ai/code/artifact/ee0a9356-8cba-4c75-8bc8-bcf1cacf22b2">
+        <span class="idx"><b>02</b>bln 3</span>
+        <span>
+          <h3>Statistik Inferensial &amp; A/B Testing — referensi</h3>
+          <p>Isinya sudah kamu kuasai penuh di Minggu 4 dan 7 (uji-t, CI, effect size, peeking, power). Modul ini kini berfungsi sebagai referensi terstruktur satu halaman untuk dibuka ulang sebelum wawancara, bukan materi baru untuk dipelajari.</p>
+          <span class="tags"><span class="tag">scipy</span><span class="tag">p-value</span><span class="tag">A/B test</span><span class="tag">power</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card" href="https://claude.ai/code/artifact/de7bb9b6-0dbf-46cf-87f2-50d6bfc2324a">
+        <span class="idx"><b>03</b>bln 4</span>
+        <span>
+          <h3>Visualisasi &amp; Business Intelligence — referensi</h3>
+          <p>Isinya sudah kamu kuasai penuh di Minggu 5 dan 8 (matplotlib, seaborn, plotly, Tableau, DAX). Modul ini kini berfungsi sebagai referensi terstruktur satu halaman untuk dibuka ulang, bukan materi baru.</p>
+          <span class="tags"><span class="tag">matplotlib</span><span class="tag">plotly</span><span class="tag">Tableau</span><span class="tag">Power BI</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card" href="https://claude.ai/code/artifact/479c1635-d7eb-478b-86d9-adbe0e9df084">
+        <span class="idx"><b>04</b>bln 5–6</span>
+        <span>
+          <h3>Analytics Engineering — referensi</h3>
+          <p>Seluruh isinya (BigQuery, dbt, git, GitHub Actions, Streamlit) sudah kamu kuasai penuh di Minggu 9-11. Modul ini kini berfungsi sebagai referensi terstruktur satu halaman, bukan materi baru.</p>
+          <span class="tags"><span class="tag">BigQuery</span><span class="tag">dbt</span><span class="tag">git</span><span class="tag">Streamlit</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card" href="https://claude.ai/code/artifact/cf300cca-518f-453d-a3fe-a356d21e09ea">
+        <span class="idx"><b>05</b>bln 7</span>
+        <span>
+          <h3>Product &amp; Business Analytics — referensi</h3>
+          <p>Isinya sudah kamu kuasai penuh di Minggu 12 (kohor, LTV/CAC, peramalan). Modul ini kini berfungsi sebagai referensi terstruktur satu halaman, bukan materi baru.</p>
+          <span class="tags"><span class="tag">kohor</span><span class="tag">retensi</span><span class="tag">LTV/CAC</span><span class="tag">peramalan</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card" href="https://claude.ai/code/artifact/5abc1987-e82a-44ca-8d96-73f1faf2220e">
+        <span class="idx"><b>06</b>bln 8</span>
+        <span>
+          <h3>Machine Learning untuk Analis — referensi</h3>
+          <p>Isinya sudah kamu kuasai penuh di Minggu 13 (model churn, evaluasi, nilai bisnis, RFM, kebocoran data). Modul ini kini berfungsi sebagai referensi terstruktur satu halaman, bukan materi baru.</p>
+          <span class="tags"><span class="tag">scikit-learn</span><span class="tag">churn</span><span class="tag">presisi/recall</span><span class="tag">nilai bisnis</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card" href="https://claude.ai/code/artifact/ddb16409-f834-4484-9434-c54682526918">
+        <span class="idx"><b>07</b>bln 9–12</span>
+        <span>
+          <h3>Capstone &amp; Pencarian Kerja — referensi</h3>
+          <p>Isinya sudah kamu kuasai penuh di Minggu 14-15 (capstone, README, CV, wawancara SQL, strategi melamar, visa, negosiasi). Modul ini kini berfungsi sebagai referensi terstruktur satu halaman.</p>
+          <span class="tags"><span class="tag">capstone</span><span class="tag">CV</span><span class="tag">wawancara</span><span class="tag">visa</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="card" href="https://claude.ai/code/artifact/0bd92934-cb00-4b7d-91a1-53a77d0ef5a3">
+        <span class="idx"><b>+</b>opsional</span>
+        <span>
+          <h3>Kenalan dengan Data &amp; Excel</h3>
+          <p>Modul spreadsheet dari versi awal rencana. Bukan jalur utama, tapi berguna kalau kamu ingin dasar berpikir data sebelum menyentuh kode, atau kalau tempat kerjamu masih memakai Excel.</p>
+          <span class="tags"><span class="tag">Excel</span><span class="tag">pivot table</span></span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>Cara memakainya</h2>
+    <ol class="howto">
+      <li><strong>Mulai dari Minggu Pertama, bukan dari Materi</strong><span>Meski kamu sudah tahu istilah "database" atau "spreadsheet" — kalau belum pernah menulis SELECT sendiri, mulai dari Hari 1. Fondasinya harus terbentuk sebagai kebiasaan, bukan cuma pernah dibaca.</span></li>
+      <li><strong>Baca Buku Rute sekali, jangan dihafal</strong><span>Cukup tahu bentuk perjalanan 12 bulannya. Kamu akan kembali ke sana tiap bulan.</span></li>
+      <li><strong>Pasang jadwal hariannya minggu ini juga</strong><span>Blok waktunya di kalender. Rencana tanpa jadwal berakhir jadi dokumen yang dibaca sekali.</span></li>
+      <li><strong>Kerjakan berurutan, jangan melompat</strong><span>Tiap minggu dan modul menganggap yang sebelumnya sudah selesai. Melompat terasa lebih cepat tapi berakhir jauh lebih lambat.</span></li>
+      <li><strong>Kerjakan latihannya sebelum membuka kunci jawaban</strong><span>Jawaban yang dibaca tanpa dicoba akan terasa jelas dan langsung hilang. Yang diperjuangkan dulu akan bertahan.</span></li>
+      <li><strong>Unggah tiap proyek ke GitHub begitu selesai</strong><span>Jangan menunggu sampai rapi. Portofolio dibangun bertahap sejak Hari 14, bukan disiapkan di akhir.</span></li>
+      <li><strong>Tinjau ulang tiap 3 bulan</strong><span>Pakai ujian diri di Skema Setahun. Kalau belum lolos, ulangi bagiannya — jangan lanjut karena merasa harus mengejar jadwal.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="tip"><strong>Satu dataset, dua belas bulan.</strong> Hampir semua modul memakai data Kedai Kopi Senja yang sama — mulai dari 24 baris di spreadsheet, lalu masuk ke database, lalu jadi 8.000 baris data keanggotaan, lalu jadi eksperimen A/B dan model churn. Itu disengaja: dengan konteks yang tetap, seluruh perhatianmu bisa dipakai untuk memahami tekniknya, bukan untuk mengenali data baru setiap kali.</p>
+  </section>
+
+  <footer>
+    <p>Angka-angka di seluruh materi ini dihitung dengan menjalankan kodenya sungguhan, bukan dikira-kira — jadi kalau hasilmu berbeda, ada langkah yang perlu diperiksa. Ketentuan visa dan angka gaji berubah dari waktu ke waktu; selalu periksa ulang di situs resmi sebelum mengambil keputusan. Jalur spesialisasi migas kini juga sudah dituntun penuh, Hari 1 sampai Hari 35 — lihat bagiannya di atas, dikerjakan setelah Minggu 3 jalur utama selesai.</p>
+    <p class="closing">Semuanya sudah lengkap: Bekal Python (8 hari), jalur utama Minggu 1–15 (Hari 1–105), Bekal Data Klien (6 hari), Bekal Rahasia Klien (4 hari), Bekal Kirim Hasil (5 hari), jalur migas Level 1–5 (Hari 1–35), SQL Mahir Level 1–5 (35 hari), Studi Kasus Nyata (5 kasus), SQL &amp; Python Produksi (14 hari), Pintu B + Ujian + Proyek Buta + Jalur S2 Luar Negeri (17 hari), Bekal Matematika S2 L1–L4 (28 hari), Excel &amp; alat &amp; bahasa kantor (20 hari), dan Jalur Freelance (12 hari) — 294 hari terpandu. Mulai dari Hari 1, hari ini.</p>
+  </footer>
+
+</div>

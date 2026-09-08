@@ -1,0 +1,610 @@
+<title>Modul 1 Data dan Excel</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.62;
+    padding:20px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.86em;
+    background:var(--code-bg); padding:2px 6px; border-radius:6px;
+  }
+  pre{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.82rem; line-height:1.5;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+
+  .nav{
+    position:sticky; top:0; z-index:5; max-width:860px; margin:0 auto 24px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; padding:8px 10px; flex-wrap:wrap;
+  }
+  .nav .brand{ font-family:"Fraunces", serif; font-weight:600; font-size:0.95rem; padding:6px 10px; margin-right:auto; }
+  .nav a{ text-decoration:none; color:var(--ink-soft); font-size:0.82rem; font-weight:500; padding:6px 11px; border-radius:999px; }
+  .nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .nav a:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+
+  .page{
+    max-width:860px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:32px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+
+  .needs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+  @media (max-width:600px){ .needs{ grid-template-columns:1fr; } }
+  .needs div{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.86rem; color:var(--ink-soft); }
+  .needs strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:2px; }
+
+  section{ margin-bottom:48px; scroll-margin-top:84px; }
+  section > h2{ font-size:1.36rem; font-weight:600; margin-bottom:4px; }
+  .week-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:8px; }
+  .goal{ color:var(--ink-soft); font-size:0.92rem; max-width:62ch; margin-bottom:22px; padding-left:14px; border-left:3px solid var(--teal); }
+  .goal strong{ color:var(--ink); }
+
+  h3{ font-size:1.08rem; font-weight:600; margin:26px 0 10px; }
+  h4{ font-size:0.98rem; font-weight:600; margin:18px 0 6px; }
+  .prose{ max-width:66ch; }
+  .prose p{ margin-bottom:12px; font-size:0.95rem; }
+  .prose ul, .prose ol{ margin:0 0 12px; padding-left:22px; font-size:0.95rem; }
+  .prose li{ margin-bottom:6px; }
+
+  .concept{
+    background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin:14px 0 18px; font-size:0.92rem; max-width:70ch;
+  }
+  .concept strong{ color:var(--teal); }
+  .tip{
+    background:var(--gold-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch;
+  }
+  .tip strong{ color:var(--gold); }
+
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; margin:12px 0 16px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.84rem; }
+  th, td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; text-align:right; }
+  th.num{ text-align:right; }
+  table.wrap td{ white-space:normal; }
+
+  .formula{
+    border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; background:var(--surface-2);
+  }
+  .formula h4{ margin:0 0 6px; font-family:"IBM Plex Mono", monospace; font-size:0.92rem; color:var(--teal); }
+  .formula .use{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:10px; }
+  .formula pre{ margin-bottom:8px; }
+  .formula .result{ font-size:0.88rem; }
+  .formula .result strong{ font-family:"IBM Plex Mono", monospace; font-weight:600; }
+
+  .exercise{
+    border:1px dashed var(--gold); border-radius:14px; padding:18px 20px; margin:22px 0 0; background:var(--surface);
+  }
+  .exercise h3{ margin:0 0 4px; }
+  .exercise .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.1em; color:var(--gold); }
+  .exercise ol{ margin:10px 0 0; padding-left:22px; font-size:0.93rem; }
+  .exercise li{ margin-bottom:8px; }
+  details{ margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  summary{ cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--teal); }
+  summary:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; border-radius:4px; }
+  details .answer{ margin-top:10px; font-size:0.9rem; }
+  details .answer ol{ padding-left:22px; margin:0; }
+  details .answer li{ margin-bottom:8px; }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .steps li{
+    display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start;
+    background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem;
+  }
+  .steps li::before{
+    counter-increment:step; content:counter(step, decimal-leading-zero);
+    font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px;
+  }
+  .steps li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .steps li span{ color:var(--ink-soft); }
+
+  .checklist{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .checklist li{ display:flex; gap:10px; align-items:flex-start; font-size:0.92rem; }
+  .checklist .box{ flex:none; width:15px; height:15px; margin-top:4px; border:1.5px solid var(--teal); border-radius:4px; }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<nav class="nav" aria-label="Bagian modul">
+  <span class="brand">Modul 1</span>
+  <a href="#dataset">Dataset</a>
+  <a href="#m1">Mgg 1</a>
+  <a href="#m2">Mgg 2</a>
+  <a href="#m3">Mgg 3</a>
+  <a href="#m4">Mgg 4 · Proyek</a>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Materi · Bulan 1 dari 12</span>
+    <h1>Kenalan dengan Data &amp; Excel</h1>
+    <p class="lede">Empat minggu pertama. Tidak ada coding di sini — cuma cara berpikir, rumus spreadsheet yang benar-benar dipakai analis tiap hari, dan satu proyek kecil yang jadi isi pertama portofoliomu. Semua contoh memakai satu dataset yang sama, supaya kamu tidak perlu ganti-ganti konteks.</p>
+
+    <div class="needs">
+      <div><strong>Alat</strong>Google Sheets (gratis) atau Excel. Semua rumus di sini jalan di keduanya.</div>
+      <div><strong>Data</strong>Dataset "Kedai Kopi Senja" di bawah — salin sekali, dipakai empat minggu.</div>
+      <div><strong>Waktu</strong>Sekitar 15 jam/minggu, mengikuti Jadwal Harian: 30 menit pagi, 75 menit malam, 3 jam Sabtu.</div>
+    </div>
+  </header>
+
+  <!-- ================= DATASET ================= -->
+  <section id="dataset" aria-labelledby="dataset-h">
+    <h2 id="dataset-h">Dataset latihan: Kedai Kopi Senja</h2>
+    <p class="goal">Kedai kopi kecil dengan dua cabang (Jakarta dan Bandung), empat produk, dan catatan penjualan Januari–Maret 2026. Datanya sengaja kecil (24 baris) supaya kamu bisa cek hitungan dengan tangan kalau ragu.</p>
+
+    <h3>Cara memasukkan ke Google Sheets</h3>
+    <ol class="steps">
+      <li><strong>Buka spreadsheet baru</strong><span>sheets.new di browser. Beri nama "Kedai Kopi Senja".</span></li>
+      <li><strong>Salin teks di kotak bawah</strong><span>Semua barisnya, termasuk baris judul kolom.</span></li>
+      <li><strong>Tempel di sel A1</strong><span>Lalu pilih menu <em>Data → Pisahkan teks ke kolom</em> (Split text to columns). Pilih pemisah: koma.</span></li>
+      <li><strong>Cek hasilnya</strong><span>Harus ada 7 kolom dan 25 baris (1 judul + 24 data). Kalau angka tampil sebagai teks (rata kiri), blok kolomnya dan ubah format ke Angka.</span></li>
+    </ol>
+
+    <h3>Data (format CSV)</h3>
+<pre><code>Tanggal,Produk,Kategori,Jumlah,Harga_Satuan,Total,Kota
+2026-01-03,Kopi Susu,Minuman,12,22000,264000,Jakarta
+2026-01-03,Roti Bakar,Makanan,5,15000,75000,Jakarta
+2026-01-05,Americano,Minuman,8,18000,144000,Bandung
+2026-01-08,Croissant,Makanan,6,20000,120000,Bandung
+2026-01-12,Kopi Susu,Minuman,15,22000,330000,Bandung
+2026-01-15,Roti Bakar,Makanan,9,15000,135000,Jakarta
+2026-01-20,Americano,Minuman,10,18000,180000,Jakarta
+2026-01-27,Croissant,Makanan,4,20000,80000,Jakarta
+2026-02-02,Kopi Susu,Minuman,18,22000,396000,Jakarta
+2026-02-04,Americano,Minuman,7,18000,126000,Bandung
+2026-02-09,Roti Bakar,Makanan,11,15000,165000,Bandung
+2026-02-11,Croissant,Makanan,8,20000,160000,Jakarta
+2026-02-16,Kopi Susu,Minuman,20,22000,440000,Bandung
+2026-02-19,Americano,Minuman,12,18000,216000,Jakarta
+2026-02-24,Roti Bakar,Makanan,6,15000,90000,Jakarta
+2026-02-27,Croissant,Makanan,5,20000,100000,Bandung
+2026-03-01,Kopi Susu,Minuman,22,22000,484000,Jakarta
+2026-03-05,Americano,Minuman,9,18000,162000,Bandung
+2026-03-09,Roti Bakar,Makanan,13,15000,195000,Jakarta
+2026-03-13,Croissant,Makanan,7,20000,140000,Jakarta
+2026-03-18,Kopi Susu,Minuman,25,22000,550000,Bandung
+2026-03-22,Americano,Minuman,11,18000,198000,Jakarta
+2026-03-26,Roti Bakar,Makanan,8,15000,120000,Bandung
+2026-03-30,Croissant,Makanan,9,20000,180000,Bandung</code></pre>
+
+    <h3>Arti tiap kolom</h3>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Kolom</th><th>Isi</th><th>Jenis data</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Tanggal</td><td>Kapan transaksi terjadi</td><td>Tanggal</td></tr>
+          <tr><td class="mono">Produk</td><td>Nama barang yang dijual</td><td>Teks / kategori</td></tr>
+          <tr><td class="mono">Kategori</td><td>Minuman atau Makanan</td><td>Teks / kategori</td></tr>
+          <tr><td class="mono">Jumlah</td><td>Berapa porsi terjual</td><td>Angka (bulat)</td></tr>
+          <tr><td class="mono">Harga_Satuan</td><td>Harga per porsi, dalam rupiah</td><td>Angka (uang)</td></tr>
+          <tr><td class="mono">Total</td><td>Jumlah × Harga_Satuan</td><td>Angka (uang)</td></tr>
+          <tr><td class="mono">Kota</td><td>Cabang mana</td><td>Teks / kategori</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tip"><strong>Catatan:</strong> di dunia nyata datanya jutaan baris dan tidak serapi ini. Tapi cara berpikirnya persis sama — makanya kita mulai dari yang kecil.</p>
+  </section>
+
+  <!-- ================= MINGGU 1 ================= -->
+  <section id="m1" aria-labelledby="m1-h">
+    <span class="week-tag">Minggu 1</span>
+    <h2 id="m1-h">Cara berpikir pakai data</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> melihat tabel dan langsung tahu apa yang bisa ditanyakan dari tabel itu — dan apa yang tidak bisa.</p>
+
+    <div class="prose">
+      <h3>1. Tabel, baris, kolom</h3>
+      <p>Hampir semua data yang akan kamu temui berbentuk tabel. Aturannya sederhana:</p>
+      <ul>
+        <li><strong>Satu baris = satu kejadian.</strong> Di dataset kita, satu baris = satu transaksi penjualan.</li>
+        <li><strong>Satu kolom = satu sifat</strong> dari kejadian itu: kapan, apa, berapa, di mana.</li>
+        <li><strong>Baris pertama = nama kolom.</strong> Bukan data, tapi label.</li>
+      </ul>
+      <div class="concept"><strong>Kenapa ini penting:</strong> kalau kamu tahu "satu baris itu apa", kamu langsung tahu apa yang bisa dihitung. Baris = transaksi, berarti kamu bisa menghitung <em>jumlah transaksi</em>. Kalau baris = pelanggan, kamu bisa menghitung <em>jumlah pelanggan</em>. Salah paham soal ini adalah sumber kesalahan analisis nomor satu.</div>
+
+      <h3>2. Empat jenis data</h3>
+      <p>Tiap kolom punya jenis, dan jenisnya menentukan apa yang boleh dilakukan padanya:</p>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Jenis</th><th>Contoh di dataset</th><th>Bisa apa</th><th>Tidak bisa apa</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Angka</strong></td><td>Jumlah, Total</td><td>Dijumlah, dirata-rata, dibandingkan besar-kecil</td><td>—</td></tr>
+          <tr><td><strong>Kategori</strong></td><td>Produk, Kota, Kategori</td><td>Dihitung berapa kali muncul, dikelompokkan</td><td>Dijumlah — "Jakarta + Bandung" tidak ada artinya</td></tr>
+          <tr><td><strong>Tanggal</strong></td><td>Tanggal</td><td>Diurutkan, dikelompokkan per bulan, dihitung selisih hari</td><td>Dirata-rata secara langsung (jarang berguna)</td></tr>
+          <tr><td><strong>Teks bebas</strong></td><td>(tidak ada di dataset ini) — misalnya kolom "Catatan"</td><td>Dicari kata tertentu</td><td>Hampir semua hitungan</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h3>3. Dari pertanyaan bisnis ke angka</h3>
+      <p>Ini inti pekerjaan analis. Pemilik kedai tidak akan bertanya "berapa SUMIFS kolom F?" — dia bertanya dengan bahasa manusia. Tugasmu menerjemahkannya:</p>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Pertanyaan pemilik</th><th>Terjemahan ke data</th><th>Kolom yang dipakai</th></tr></thead>
+        <tbody>
+          <tr><td>"Produk mana yang paling laku?"</td><td>Jumlahkan <em>Jumlah</em> per <em>Produk</em>, urutkan dari terbesar</td><td>Produk, Jumlah</td></tr>
+          <tr><td>"Cabang mana yang lebih menghasilkan?"</td><td>Jumlahkan <em>Total</em> per <em>Kota</em></td><td>Kota, Total</td></tr>
+          <tr><td>"Penjualan naik atau turun?"</td><td>Jumlahkan <em>Total</em> per bulan, bandingkan bulan ke bulan</td><td>Tanggal, Total</td></tr>
+          <tr><td>"Orang lebih suka minuman atau makanan?"</td><td>Tergantung maksudnya: <em>porsi</em> (Jumlah) atau <em>uang</em> (Total)? Tanya balik.</td><td>Kategori, Jumlah atau Total</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <div class="tip"><strong>Kebiasaan analis yang baik:</strong> kalau pertanyaannya ambigu (seperti contoh terakhir), <em>tanya balik</em> sebelum menghitung. "Paling laku" bisa berarti paling banyak porsi atau paling banyak uang — dan jawabannya bisa berbeda.</div>
+
+      <h3>4. Yang tidak bisa dijawab dataset ini</h3>
+      <p>Sama pentingnya: tahu batas data. Dari dataset kita, kamu <strong>tidak bisa</strong> menjawab:</p>
+      <ul>
+        <li>"Siapa pelanggan setia?" — tidak ada kolom pelanggan.</li>
+        <li>"Berapa untungnya?" — tidak ada kolom biaya/modal. Total itu omzet, bukan laba.</li>
+        <li>"Jam berapa paling ramai?" — kolom Tanggal tidak punya jam.</li>
+      </ul>
+      <p>Analis pemula sering memaksakan jawaban. Analis yang baik bilang: "Data ini tidak bisa menjawab itu — kita butuh kolom X."</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 1</span>
+      <h3>Terjemahkan pertanyaan</h3>
+      <ol>
+        <li>Buka dataset. Tulis <strong>5 pertanyaan bisnis</strong> yang bisa dijawab dari data ini (jangan pakai yang sudah ada di tabel atas).</li>
+        <li>Untuk tiap pertanyaan, tulis kolom mana yang dipakai dan operasinya (jumlahkan? hitung? bandingkan?).</li>
+        <li>Tulis <strong>2 pertanyaan</strong> yang <em>tidak bisa</em> dijawab, dan kolom apa yang kurang.</li>
+        <li>Buat akun GitHub (github.com) kalau belum. Buat repository baru bernama <code>portofolio-data-analyst</code>, centang "Add a README". Tulis satu kalimat di README: siapa kamu dan tujuanmu.</li>
+      </ol>
+      <details>
+        <summary>Contoh jawaban (bandingkan setelah mengerjakan sendiri)</summary>
+        <div class="answer">
+          <ol>
+            <li>Contoh pertanyaan yang bisa dijawab: "Rata-rata nilai satu transaksi berapa?" (Total, rata-rata) · "Berapa transaksi terjadi di Bandung?" (Kota, hitung) · "Croissant lebih laku di kota mana?" (Produk + Kota, jumlahkan Jumlah) · "Bulan mana Americano paling laku?" (Tanggal + Produk, jumlahkan Jumlah) · "Berapa persen omzet dari minuman?" (Kategori, Total, bagi dengan total keseluruhan).</li>
+            <li>Yang tidak bisa dijawab: "Berapa pelanggan baru bulan ini?" (butuh kolom ID pelanggan) · "Produk mana yang marginnya paling tinggi?" (butuh kolom biaya produksi).</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 2 ================= -->
+  <section id="m2" aria-labelledby="m2-h">
+    <span class="week-tag">Minggu 2</span>
+    <h2 id="m2-h">Rumus spreadsheet yang benar-benar dipakai</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menjawab pertanyaan "berapa total X untuk Y" dan "berapa kali Z terjadi" dengan satu rumus — tanpa memfilter manual.</p>
+
+    <div class="prose">
+      <p>Excel punya ratusan rumus. Analis pakai sekitar sepuluh. Ini yang penting, urut dari yang paling sering dipakai. Semua contoh menganggap data ada di sheet dengan kolom A–G, baris 2–25 (baris 1 judul).</p>
+      <div class="concept"><strong>Cara membaca rumus:</strong> <code>=SUMIFS(F2:F25, B2:B25, "Kopi Susu")</code> dibaca: "jumlahkan kolom F, <em>tapi hanya</em> baris yang kolom B-nya berisi Kopi Susu". Rentang pertama = yang dijumlah, pasangan berikutnya = syaratnya.</div>
+    </div>
+
+    <div class="formula">
+      <h4>SUM · AVERAGE · COUNT</h4>
+      <p class="use">Dasar dari segalanya. Jumlah, rata-rata, dan hitung berapa sel berisi angka.</p>
+<pre><code>=SUM(F2:F25)        → total omzet semua transaksi
+=AVERAGE(F2:F25)    → rata-rata nilai satu transaksi
+=COUNT(F2:F25)      → berapa transaksi (menghitung sel berisi angka)</code></pre>
+      <p class="result">Hasil: <strong>5.050.000</strong> · <strong>210.417</strong> · <strong>24</strong></p>
+    </div>
+
+    <div class="formula">
+      <h4>SUMIFS — jumlahkan dengan syarat</h4>
+      <p class="use">Rumus paling penting untuk analis. "Berapa total penjualan untuk produk/kota/bulan tertentu?" Bisa lebih dari satu syarat.</p>
+<pre><code>=SUMIFS(F2:F25, B2:B25, "Kopi Susu")
+→ total omzet Kopi Susu
+
+=SUMIFS(F2:F25, B2:B25, "Kopi Susu", G2:G25, "Bandung")
+→ total omzet Kopi Susu, hanya di Bandung
+
+=SUMIFS(D2:D25, C2:C25, "Makanan")
+→ total PORSI makanan (kolom D, bukan F)</code></pre>
+      <p class="result">Hasil: <strong>2.464.000</strong> · <strong>1.320.000</strong> · <strong>91</strong></p>
+    </div>
+
+    <div class="formula">
+      <h4>COUNTIFS — hitung dengan syarat</h4>
+      <p class="use">"Berapa kali sesuatu terjadi?" Bukan jumlah uangnya, tapi jumlah barisnya.</p>
+<pre><code>=COUNTIFS(G2:G25, "Jakarta")
+→ berapa transaksi di Jakarta
+
+=COUNTIFS(G2:G25, "Jakarta", C2:C25, "Minuman")
+→ berapa transaksi minuman di Jakarta
+
+=COUNTIFS(D2:D25, "&gt;=10")
+→ berapa transaksi dengan 10 porsi atau lebih</code></pre>
+      <p class="result">Hasil: <strong>13</strong> · <strong>6</strong> · <strong>11</strong></p>
+      <p class="tip" style="margin-bottom:0"><strong>Perhatikan:</strong> syarat angka seperti <code>"&gt;=10"</code> ditulis dalam tanda kutip.</p>
+    </div>
+
+    <div class="formula">
+      <h4>AVERAGEIFS — rata-rata dengan syarat</h4>
+      <p class="use">Sama seperti SUMIFS, tapi hasilnya rata-rata.</p>
+<pre><code>=AVERAGEIFS(D2:D25, B2:B25, "Kopi Susu")
+→ rata-rata porsi Kopi Susu per transaksi</code></pre>
+      <p class="result">Hasil: <strong>18,67</strong> (112 porsi ÷ 6 transaksi)</p>
+    </div>
+
+    <div class="formula">
+      <h4>XLOOKUP — cari nilai dari tabel lain</h4>
+      <p class="use">Kamu punya tabel harga terpisah, dan mau "menarik" harga ke tabel transaksi. Ini menggantikan VLOOKUP lama (yang masih akan kamu temui di kantor).</p>
+<pre><code>Misal di sheet "Harga" ada:  A: Produk   B: Harga
+=XLOOKUP(B2, Harga!A:A, Harga!B:B)
+→ cari nilai B2 (nama produk) di kolom A sheet Harga,
+  kembalikan nilai di kolom B baris yang sama
+
+Versi lama yang sama fungsinya:
+=VLOOKUP(B2, Harga!A:B, 2, FALSE)</code></pre>
+      <p class="result">Kalau XLOOKUP tidak ada di versi Excel-mu, pakai <code>=INDEX(Harga!B:B, MATCH(B2, Harga!A:A, 0))</code>.</p>
+    </div>
+
+    <div class="formula">
+      <h4>IF — kalau ... maka ...</h4>
+      <p class="use">Membuat kolom baru berdasarkan aturan. Contoh: tandai transaksi besar.</p>
+<pre><code>=IF(F2&gt;=300000, "Besar", "Biasa")
+→ tulis "Besar" kalau Total ≥ 300.000, selain itu "Biasa"
+
+=IF(D2&gt;=20, "Ramai", IF(D2&gt;=10, "Sedang", "Sepi"))
+→ IF bertingkat: tiga kategori</code></pre>
+    </div>
+
+    <div class="formula">
+      <h4>MONTH · TEXT — mengolah tanggal</h4>
+      <p class="use">Untuk mengelompokkan per bulan, kamu butuh kolom "Bulan" dulu.</p>
+<pre><code>=MONTH(A2)            → 1, 2, atau 3
+=TEXT(A2, "yyyy-mm")  → "2026-01" (lebih rapi untuk pengelompokan)
+
+Lalu:
+=SUMIFS(F2:F25, H2:H25, "2026-02")   → omzet Februari
+(anggap kolom H berisi hasil TEXT di atas)</code></pre>
+      <p class="result">Omzet per bulan: Jan <strong>1.328.000</strong> · Feb <strong>1.693.000</strong> · Mar <strong>2.029.000</strong></p>
+    </div>
+
+    <div class="formula">
+      <h4>TRIM · PROPER — membersihkan teks</h4>
+      <p class="use">Data dari lapangan sering punya spasi lebih ("Jakarta ") atau huruf tidak konsisten ("jakarta"). Rumus SUMIFS akan menganggap itu kota yang berbeda!</p>
+<pre><code>=TRIM(G2)      → hapus spasi berlebih di awal/akhir
+=PROPER(G2)    → "jakarta" jadi "Jakarta"
+=TRIM(PROPER(G2))   → keduanya sekaligus</code></pre>
+    </div>
+
+    <div class="prose">
+      <h3>Tiga kesalahan pemula</h3>
+      <ul>
+        <li><strong>Rentang tidak sama panjang.</strong> <code>SUMIFS(F2:F25, B2:B30, ...)</code> akan error. Semua rentang harus sama ukurannya.</li>
+        <li><strong>Lupa tanda kutip untuk teks.</strong> <code>B2:B25, Kopi Susu</code> salah — harus <code>"Kopi Susu"</code>.</li>
+        <li><strong>Menjumlahkan kolom yang salah.</strong> "Paling laku" pakai kolom Jumlah (porsi). "Paling menghasilkan" pakai kolom Total (rupiah). Ini beda pertanyaan.</li>
+      </ul>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 2</span>
+      <h3>Delapan soal rumus</h3>
+      <ol>
+        <li>Total omzet Americano.</li>
+        <li>Berapa transaksi terjadi di Bandung?</li>
+        <li>Total porsi Croissant yang terjual di Jakarta.</li>
+        <li>Rata-rata Total per transaksi untuk kategori Makanan.</li>
+        <li>Berapa transaksi yang Total-nya di atas 200.000?</li>
+        <li>Omzet Bandung di bulan Maret (buat kolom bulan dulu).</li>
+        <li>Buat kolom baru "Ukuran": "Besar" kalau Jumlah ≥ 15, selain itu "Kecil". Berapa transaksi "Besar"?</li>
+        <li>Persentase omzet yang berasal dari Minuman (total minuman ÷ total semua).</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><code>=SUMIFS(F2:F25, B2:B25, "Americano")</code> → <strong>1.026.000</strong></li>
+            <li><code>=COUNTIFS(G2:G25, "Bandung")</code> → <strong>11</strong></li>
+            <li><code>=SUMIFS(D2:D25, B2:B25, "Croissant", G2:G25, "Jakarta")</code> → <strong>19</strong> (4 + 8 + 7)</li>
+            <li><code>=AVERAGEIFS(F2:F25, C2:C25, "Makanan")</code> → <strong>130.000</strong> (1.560.000 ÷ 12)</li>
+            <li><code>=COUNTIFS(F2:F25, "&gt;200000")</code> → <strong>7</strong></li>
+            <li>Kolom H: <code>=TEXT(A2,"yyyy-mm")</code>, lalu <code>=SUMIFS(F2:F25, G2:G25, "Bandung", H2:H25, "2026-03")</code> → <strong>1.012.000</strong> (162 + 550 + 120 + 180 ribu)</li>
+            <li>Kolom I: <code>=IF(D2&gt;=15, "Besar", "Kecil")</code>, lalu <code>=COUNTIFS(I2:I25, "Besar")</code> → <strong>5</strong> (semua Kopi Susu kecuali yang 12 porsi)</li>
+            <li><code>=SUMIFS(F2:F25, C2:C25, "Minuman") / SUM(F2:F25)</code> → 3.490.000 ÷ 5.050.000 = <strong>69,1%</strong></li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 3 ================= -->
+  <section id="m3" aria-labelledby="m3-h">
+    <span class="week-tag">Minggu 3</span>
+    <h2 id="m3-h">Pivot table &amp; memilih grafik</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> meringkas ratusan baris jadi satu tabel kecil dalam 30 detik, dan memilih grafik yang langsung dimengerti orang tanpa dijelaskan.</p>
+
+    <div class="prose">
+      <h3>1. Pivot table: SUMIFS tanpa mengetik rumus</h3>
+      <p>Minggu lalu kamu menulis satu rumus SUMIFS untuk satu angka. Kalau mau omzet <em>tiap</em> produk di <em>tiap</em> bulan, itu 12 rumus. Pivot table melakukannya sekaligus, dengan drag-and-drop.</p>
+      <div class="concept"><strong>Cara berpikirnya:</strong> pivot punya tiga kotak. <strong>Baris</strong> = mau dikelompokkan berdasarkan apa (ke bawah). <strong>Kolom</strong> = dikelompokkan berdasarkan apa (ke samping). <strong>Nilai</strong> = angka apa yang dihitung, dan bagaimana (SUM, COUNT, AVERAGE).</div>
+    </div>
+
+    <h3>Langkah di Google Sheets</h3>
+    <ol class="steps">
+      <li><strong>Blok seluruh data</strong><span>Klik sel A1, lalu Ctrl+A (atau Cmd+A di Mac).</span></li>
+      <li><strong>Sisipkan → Tabel pivot</strong><span>Pilih "Sheet baru". Akan muncul panel editor di kanan.</span></li>
+      <li><strong>Baris: tambahkan Produk</strong><span>Sekarang ada 4 baris: Americano, Croissant, Kopi Susu, Roti Bakar.</span></li>
+          <li><strong>Nilai: tambahkan Total</strong><span>Pastikan ringkasannya SUM. Sekarang kamu punya omzet per produk — sama seperti 4 rumus SUMIFS.</span></li>
+      <li><strong>Kolom: tambahkan Kota</strong><span>Tabel jadi 4 baris × 2 kolom. Omzet tiap produk di tiap kota, plus totalnya.</span></li>
+      <li><strong>Ganti Nilai jadi Jumlah</strong><span>Sekarang kamu lihat porsi, bukan rupiah. Perhatikan urutan produknya berubah — ini pelajaran minggu 1 lagi: "paling laku" ≠ "paling menghasilkan".</span></li>
+    </ol>
+
+    <div class="prose">
+      <p style="margin-top:16px">Hasil yang seharusnya kamu dapat di langkah 5:</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Produk</th><th class="num">Bandung</th><th class="num">Jakarta</th><th class="num">Total</th></tr></thead>
+        <tbody>
+          <tr><td>Americano</td><td class="num">432.000</td><td class="num">594.000</td><td class="num">1.026.000</td></tr>
+          <tr><td>Croissant</td><td class="num">400.000</td><td class="num">380.000</td><td class="num">780.000</td></tr>
+          <tr><td>Kopi Susu</td><td class="num">1.320.000</td><td class="num">1.144.000</td><td class="num">2.464.000</td></tr>
+          <tr><td>Roti Bakar</td><td class="num">285.000</td><td class="num">495.000</td><td class="num">780.000</td></tr>
+          <tr><td><strong>Total</strong></td><td class="num"><strong>2.437.000</strong></td><td class="num"><strong>2.613.000</strong></td><td class="num"><strong>5.050.000</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h3>2. Memilih grafik</h3>
+      <p>Aturan praktisnya cuma empat. Kalau kamu ikuti ini saja, grafikmu sudah lebih baik dari 80% grafik di kantor.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Kalau mau menunjukkan</th><th>Pakai</th><th>Contoh dari dataset</th><th>Jangan</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Perbandingan</strong> antar kategori</td><td>Grafik batang (bar)</td><td>Omzet per produk</td><td>Pie chart kalau lebih dari 3 kategori — mata sulit membandingkan irisan</td></tr>
+          <tr><td><strong>Perubahan</strong> dari waktu ke waktu</td><td>Grafik garis (line)</td><td>Omzet per bulan</td><td>Batang untuk tren panjang — jadi terlalu ramai</td></tr>
+          <tr><td><strong>Bagian dari keseluruhan</strong>, 2–3 bagian</td><td>Batang bertumpuk, atau angka persen saja</td><td>Minuman 69% vs Makanan 31%</td><td>Pie 3D. Selalu.</td></tr>
+          <tr><td><strong>Angka pasti</strong> yang perlu dibaca</td><td>Tabel</td><td>Tabel pivot di atas</td><td>Grafik — orang akan tetap bertanya "angkanya berapa?"</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <h3>3. Tiga hal yang membuat grafik jelek jadi bagus</h3>
+      <ul>
+        <li><strong>Judul yang menyatakan temuan,</strong> bukan nama kolom. Bukan "Omzet per Produk", tapi "Kopi Susu menyumbang hampir separuh omzet".</li>
+        <li><strong>Urutkan batang dari terbesar ke terkecil.</strong> Kecuali sumbunya waktu atau urutan alami (Senin–Minggu).</li>
+        <li><strong>Buang yang tidak perlu:</strong> garis kisi tebal, bayangan, warna-warni. Satu warna untuk semua batang, warna berbeda hanya untuk yang mau ditonjolkan.</li>
+      </ul>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 3</span>
+      <h3>Tiga pivot, tiga grafik</h3>
+      <ol>
+        <li>Pivot: omzet (Total) per <strong>bulan</strong>. Kamu perlu kolom bulan dulu (Minggu 2). Buat grafik garisnya. Beri judul yang menyatakan temuan.</li>
+        <li>Pivot: porsi (Jumlah) per <strong>Produk</strong>, diurutkan dari terbanyak. Buat grafik batang. Bandingkan urutannya dengan pivot omzet per produk — produk mana yang posisinya berubah?</li>
+        <li>Pivot: omzet per <strong>Kategori</strong> per <strong>Kota</strong>. Kota mana yang lebih "kota makanan"? Tulis jawabannya satu kalimat, dengan angka.</li>
+        <li>Untuk tiap grafik, tanya diri sendiri: kalau ini ditunjukkan ke pemilik kedai tanpa penjelasan, apa dia langsung paham? Kalau tidak, perbaiki judul atau urutannya.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li>Jan 1.328.000 → Feb 1.693.000 → Mar 2.029.000. Naik 27% lalu 20%. Judul contoh: "Omzet naik tiap bulan, Maret 53% lebih tinggi dari Januari".</li>
+            <li>Porsi: Kopi Susu 112, Americano 57, Roti Bakar 52, Croissant 39. Omzet: Kopi Susu, Americano, lalu Roti Bakar dan Croissant <em>seri</em> (780.000). Roti Bakar lebih banyak porsi tapi omzetnya sama dengan Croissant — karena harganya lebih murah.</li>
+            <li>Makanan: Bandung 685.000 dari 2.437.000 (28%); Jakarta 875.000 dari 2.613.000 (33%). Jakarta sedikit lebih "kota makanan", tapi bedanya tipis — jangan ambil kesimpulan besar dari 24 baris.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 4 ================= -->
+  <section id="m4" aria-labelledby="m4-h">
+    <span class="week-tag">Minggu 4 · Proyek</span>
+    <h2 id="m4-h">Proyek kecil pertama: dashboard Kedai Kopi Senja</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> satu file yang bisa kamu tunjukkan ke orang lain dan bilang "ini analisis saya". Isi pertama portofoliomu.</p>
+
+    <div class="prose">
+      <p>Semua bahan sudah ada dari tiga minggu sebelumnya. Minggu ini tentang <em>menyusunnya</em> supaya orang lain bisa membaca — dan itu keterampilan tersendiri.</p>
+      <h3>Yang harus dibuat</h3>
+    </div>
+    <ol class="steps">
+      <li><strong>Sheet "Data"</strong><span>Dataset asli + kolom tambahan (Bulan, Ukuran). Jangan diubah-ubah lagi setelah ini.</span></li>
+      <li><strong>Sheet "Ringkasan"</strong><span>Empat angka besar di atas: Total Omzet, Jumlah Transaksi, Rata-rata per Transaksi, Produk Terlaris. Pakai rumus, bukan diketik manual.</span></li>
+      <li><strong>Tiga grafik di sheet yang sama</strong><span>Omzet per bulan (garis), omzet per produk (batang, urut), omzet per kota per kategori (batang bertumpuk). Tiap grafik berjudul temuan.</span></li>
+      <li><strong>Sheet "Temuan"</strong><span>Lima kalimat. Format tiap kalimat: <em>[apa yang terjadi] + [angkanya] + [artinya buat kedai]</em>. Lihat contoh di bawah.</span></li>
+      <li><strong>Satu rekomendasi</strong><span>Di bawah lima temuan. Satu saja, yang paling kamu yakini, dan sebutkan angka pendukungnya.</span></li>
+    </ol>
+
+    <div class="prose">
+      <h3>Contoh format temuan</h3>
+      <div class="concept">
+        <p style="margin-bottom:8px"><strong>Lemah:</strong> "Kopi Susu adalah produk terlaris."</p>
+        <p style="margin-bottom:0"><strong>Kuat:</strong> "Kopi Susu menyumbang 49% omzet (2,46 juta dari 5,05 juta) dengan hanya 6 transaksi — artinya kedai sangat bergantung pada satu produk, dan gangguan pasokan susu akan langsung terasa."</p>
+      </div>
+      <p>Bedanya: yang kuat punya angka, punya pembanding, dan punya "jadi kenapa". Lima temuanmu harus seperti yang kuat.</p>
+
+      <h3>Kalau butuh dataset lebih besar</h3>
+      <p>24 baris cukup untuk belajar, tapi kalau kamu mau proyeknya terasa lebih nyata, cari "Superstore Sales" di Kaggle (±10.000 baris, kolom serupa: tanggal, produk, kategori, region, sales). Semua langkah di atas berlaku sama persis — cuma angkanya lebih besar.</p>
+
+      <h3>Unggah ke GitHub</h3>
+    </div>
+    <ol class="steps">
+      <li><strong>Unduh file-nya</strong><span>Di Sheets: File → Unduh → Microsoft Excel (.xlsx). Beri nama <code>01-kedai-kopi-senja.xlsx</code>.</span></li>
+      <li><strong>Buka repository portofolio-data-analyst di GitHub</strong><span>Klik "Add file" → "Upload files". Seret file-nya. Klik "Commit changes".</span></li>
+      <li><strong>Tulis di README</strong><span>Tambahkan bagian "Proyek 1 — Kedai Kopi Senja": satu paragraf tentang datanya, alatnya (Google Sheets), dan tiga temuan utama. Pakai bahasa Inggris kalau bisa — recruiter SG/AU akan membacanya.</span></li>
+      <li><strong>Cek dari HP</strong><span>Buka link repository-mu dari browser HP. Kalau README terbaca jelas di layar kecil, sudah bagus.</span></li>
+    </ol>
+
+    <div class="exercise">
+      <span class="tag">CHECKLIST SELESAI</span>
+      <h3>Modul 1 dianggap selesai kalau semua ini tercentang</h3>
+      <ul class="checklist">
+        <li><span class="box"></span>Semua angka di sheet Ringkasan berasal dari rumus, bukan diketik.</li>
+        <li><span class="box"></span>Tiga grafik, tiap judul menyatakan temuan (bukan nama kolom).</li>
+        <li><span class="box"></span>Lima temuan, tiap temuan punya angka dan "artinya buat kedai".</li>
+        <li><span class="box"></span>Satu rekomendasi dengan angka pendukung.</li>
+        <li><span class="box"></span>File ada di GitHub dan README-nya menjelaskan proyek ini.</li>
+        <li><span class="box"></span>Kamu bisa menjelaskan proyek ini 3 menit ke seseorang tanpa membuka file.</li>
+      </ul>
+      <details>
+        <summary>Contoh lima temuan (lihat setelah menulis versimu sendiri)</summary>
+        <div class="answer">
+          <ol>
+            <li>Omzet naik tiap bulan: 1,33 juta → 1,69 juta → 2,03 juta. Maret 53% di atas Januari — kedai sedang tumbuh, bukan stagnan.</li>
+            <li>Kopi Susu menyumbang 49% omzet dari hanya 25% transaksi. Ketergantungan tinggi pada satu produk.</li>
+            <li>Roti Bakar dan Croissant menghasilkan omzet persis sama (780.000), tapi Roti Bakar butuh 52 porsi vs Croissant 39. Croissant lebih "efisien" per porsi karena harganya lebih tinggi.</li>
+            <li>Bandung menjual lebih banyak Kopi Susu (1,32 juta) daripada Jakarta (1,14 juta) meski total omzetnya lebih kecil. Pelanggan Bandung lebih fokus ke satu produk.</li>
+            <li>Rata-rata satu transaksi 210 ribu. Transaksi di atas 300 ribu semuanya Kopi Susu — pembelian besar (kemungkinan pesanan grup/kantor) hanya terjadi untuk produk itu.</li>
+          </ol>
+          <p style="margin-top:10px"><strong>Rekomendasi contoh:</strong> Coba paket "Kopi Susu + Croissant" untuk pesanan besar. Kopi Susu sudah menarik pembelian grup, dan Croissant punya nilai per porsi tertinggi di kategori makanan (20.000) — ini cara menaikkan omzet makanan tanpa menambah porsi yang harus dibuat.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <p>Modul berikutnya: <strong>Modul 2 — Angka dasar &amp; mulai SQL</strong> (Bulan 2). Dataset Kedai Kopi Senja yang sama akan dipindahkan ke database, dan semua pertanyaan minggu ini akan kamu jawab ulang dengan SQL — supaya terasa bahwa SQL cuma cara lain untuk SUMIFS.</p>
+    <p class="closing">Kalau Modul 1 sudah ada di GitHub, kamu sudah punya sesuatu yang 90% "orang yang mau belajar data" tidak pernah punya.</p>
+  </footer>
+
+</div>

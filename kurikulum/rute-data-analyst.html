@@ -1,0 +1,605 @@
+<title>Rute Data Analyst</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4;
+    --surface:#FDFBF5;
+    --surface-2:#EAE2CC;
+    --ink:#1C2430;
+    --ink-soft:#5B6472;
+    --line:#DCD3B9;
+    --teal:#0F6E63;
+    --teal-soft:#E1EEEA;
+    --gold:#9C6B25;
+    --gold-soft:#F1E4C8;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D;
+      --surface:#1A2029;
+      --surface-2:#212939;
+      --ink:#EDE9DD;
+      --ink-soft:#98A2B3;
+      --line:#303A4B;
+      --teal:#5BCBB7;
+      --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F;
+      --gold-soft:rgba(224,174,95,0.14);
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D;
+    --surface:#1A2029;
+    --surface-2:#212939;
+    --ink:#EDE9DD;
+    --ink-soft:#98A2B3;
+    --line:#303A4B;
+    --teal:#5BCBB7;
+    --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F;
+    --gold-soft:rgba(224,174,95,0.14);
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif;
+    line-height:1.55;
+    padding:40px 20px 80px;
+  }
+  h1,h2,h3{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+
+  .pass{
+    max-width:880px;
+    margin:0 auto;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:36px 40px 44px;
+  }
+  @media (max-width:600px){
+    .pass{ padding:26px 20px 32px; }
+  }
+
+  /* ---------- Header: boarding-pass strip ---------- */
+  .ticket-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+  }
+  .route{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-wrap:wrap;
+    margin:14px 0 22px;
+  }
+  .route .city{
+    font-size:clamp(1.5rem, 4vw, 2.35rem);
+    font-weight:600;
+    letter-spacing:0.01em;
+  }
+  .route .arrow{
+    color:var(--teal);
+    font-size:1.3rem;
+    font-family:"IBM Plex Mono", monospace;
+  }
+  .ticket-fields{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+  }
+  @media (max-width:600px){
+    .ticket-fields{ grid-template-columns:repeat(2,1fr); }
+  }
+  .field{ display:flex; flex-direction:column; gap:4px; }
+  .field-label{ font-size:0.68rem; letter-spacing:0.09em; color:var(--ink-soft); }
+  .field-value{ font-size:0.95rem; font-weight:500; }
+
+  .perforation{
+    border-top:2px dashed var(--line);
+    margin:28px 0 32px;
+  }
+
+  /* ---------- Stat strip ---------- */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:30px;
+  }
+  @media (max-width:600px){
+    .stats{ grid-template-columns:repeat(2,1fr); }
+  }
+  .stat{
+    background:var(--teal-soft);
+    border-radius:14px;
+    padding:16px 16px 14px;
+  }
+  .stat .num{
+    font-family:"IBM Plex Mono", monospace;
+    font-variant-numeric:tabular-nums;
+    font-size:1.5rem;
+    font-weight:600;
+    color:var(--teal);
+    display:block;
+  }
+  .stat .label{ font-size:0.78rem; color:var(--ink-soft); }
+
+  .intro{
+    max-width:62ch;
+    color:var(--ink-soft);
+    font-size:0.98rem;
+    margin-bottom:40px;
+  }
+  .intro strong{ color:var(--ink); font-weight:600; }
+
+  section > h2{
+    font-size:1.4rem;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .section-note{
+    color:var(--ink-soft);
+    font-size:0.88rem;
+    margin-bottom:20px;
+    max-width:60ch;
+  }
+  section{ margin-bottom:46px; }
+
+  /* ---------- Itinerary / legs ---------- */
+  .legs{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+  }
+  .leg{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:14px;
+    position:relative;
+  }
+  .leg-marker{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .leg-marker .dot{
+    width:11px; height:11px;
+    border-radius:50%;
+    background:var(--teal);
+    box-shadow:0 0 0 4px var(--teal-soft);
+    flex:none;
+  }
+  .leg-marker .rail{
+    width:1px;
+    flex:1;
+    background:var(--line);
+    margin-top:6px;
+  }
+  .leg:last-child .leg-marker .rail{ display:none; }
+  .leg-marker .code{
+    font-size:0.68rem;
+    color:var(--ink-soft);
+    margin-top:8px;
+    writing-mode:vertical-rl;
+    text-orientation:mixed;
+  }
+  .leg-card{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 20px 20px;
+  }
+  .leg-duration{
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--teal);
+  }
+  .leg-card h3{
+    font-size:1.12rem;
+    font-weight:600;
+    margin:4px 0 8px;
+  }
+  .leg-card p{ font-size:0.92rem; color:var(--ink-soft); }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .chip{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    padding:4px 10px;
+    border-radius:999px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+  }
+  .deliverable{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px dashed var(--line);
+    font-size:0.88rem;
+  }
+  .deliverable .tag{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    color:var(--gold);
+    margin-right:6px;
+  }
+
+  /* ---------- Certifications ---------- */
+  .certs-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px,1fr));
+    gap:14px;
+  }
+  .cert-card{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    display:flex;
+    gap:14px;
+    background:var(--surface);
+  }
+  .cert-badge{
+    flex:none;
+    width:42px; height:42px;
+    border-radius:50%;
+    border:1.5px dashed var(--gold);
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.72rem;
+    font-weight:600;
+  }
+  .cert-card h4{
+    font-family:"Fraunces", serif;
+    font-size:1rem;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .cert-card p{ font-size:0.85rem; color:var(--ink-soft); margin:0; }
+
+  /* ---------- Market table ---------- */
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:0.88rem;
+    min-width:560px;
+  }
+  th, td{
+    text-align:left;
+    padding:12px 16px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  thead th{
+    background:var(--surface-2);
+    font-family:"IBM Plex Mono", monospace;
+    font-size:0.7rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.figure{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; }
+  .table-foot{ font-size:0.78rem; color:var(--ink-soft); margin-top:10px; }
+
+  /* ---------- Checklist ---------- */
+  .checklist{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .checklist li{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--surface-2);
+    font-size:0.92rem;
+  }
+  .checklist .box{
+    flex:none;
+    width:16px; height:16px;
+    margin-top:2px;
+    border:1.5px solid var(--teal);
+    border-radius:4px;
+  }
+
+  footer.note{
+    border-top:1px solid var(--line);
+    padding-top:22px;
+    font-size:0.82rem;
+    color:var(--ink-soft);
+  }
+  footer.note .closing{
+    font-family:"Fraunces", serif;
+    font-size:1.05rem;
+    color:var(--ink);
+    font-weight:600;
+    margin-top:14px;
+  }
+</style>
+
+<div style="max-width:880px;margin:0 auto 18px;background:var(--gold-soft);border:1px solid var(--gold);border-radius:16px;padding:16px 20px;font-size:0.9rem;line-height:1.55">
+  <strong style="font-family:'Fraunces',Georgia,serif;color:var(--gold);display:block;margin-bottom:6px">Ini versi awal rencana — jadwalnya sudah tidak berlaku.</strong>
+  <p style="margin:0 0 8px">Halaman ini disusun ketika kamu masih bekerja di KAP: temponya paruh waktu, 9–12 bulan, 10–15 jam belajar seminggu. Setelah kamu resign, jadwalnya diganti <a href="https://claude.ai/code/artifact/f333a8b3-8341-4a10-b69e-4c603671830e"><strong>Rencana 17 Minggu</strong></a> — penuh waktu, dengan jalur freelance berjalan paralel sejak minggu ke-5.</p>
+  <p style="margin:0"><strong>Yang masih berlaku di halaman ini:</strong> daftar sertifikasi dan perbandingan pasar kerja Singapura vs Australia — dua bagian itu tidak tergantung tempo belajarmu. <strong>Yang sudah digantikan:</strong> pembagian 8 leg, dashboard Excel di Leg 01, dan urutan bulanannya. Urutan yang dipakai sekarang ada di <a href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">indeks rute</a>.</p>
+</div>
+
+<div class="pass">
+
+  <header>
+    <div class="ticket-top">
+      <span class="mono">Boarding pass · rencana karier</span>
+      <span class="mono">No. DA-2026</span>
+    </div>
+    <div class="route">
+      <span class="city">JAKARTA</span>
+      <span class="arrow mono">──✈──</span>
+      <span class="city">SINGAPURA / SYDNEY</span>
+    </div>
+    <div class="ticket-fields">
+      <div class="field">
+        <span class="mono field-label">PENUMPANG</span>
+        <span class="field-value">Calon Data Analyst</span>
+      </div>
+      <div class="field">
+        <span class="mono field-label">KELAS</span>
+        <span class="field-value">Entry → Junior</span>
+      </div>
+      <div class="field">
+        <span class="mono field-label">DURASI</span>
+        <span class="field-value">9–12 bulan</span>
+      </div>
+      <div class="field">
+        <span class="mono field-label">KEBERANGKATAN</span>
+        <span class="field-value">Mulai sekarang</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="perforation"></div>
+
+  <section class="stats" aria-label="Ringkasan rencana">
+    <div class="stat"><span class="num">9–12</span><span class="label">bulan, paruh waktu</span></div>
+    <div class="stat"><span class="num">10–15</span><span class="label">jam belajar / minggu</span></div>
+    <div class="stat"><span class="num">8</span><span class="label">proyek portofolio</span></div>
+    <div class="stat"><span class="num">3</span><span class="label">sertifikasi inti</span></div>
+  </section>
+
+  <p class="intro">
+    Peta ini terbagi jadi <strong>8 leg perjalanan</strong> yang berurutan — dari statistik dasar sampai siap melamar ke Singapura atau Australia. Ikuti urutannya, tapi sesuaikan kecepatan dengan waktu belajarmu. Yang menentukan lolos wawancara bukan sertifikat, tapi <strong>bukti kerja</strong>: tiap leg wajib menghasilkan sesuatu yang bisa ditaruh di portofolio.
+  </p>
+
+  <section aria-labelledby="itinerary-h">
+    <h2 id="itinerary-h">Rencana perjalanan</h2>
+    <p class="section-note">Delapan leg, satu arah: fondasi → tools inti → penyampaian insight → siap kerja.</p>
+
+    <ol class="legs">
+
+      <li class="leg">
+        <div class="leg-marker"><span class="dot"></span><span class="rail"></span><span class="code mono">LEG 01</span></div>
+        <div class="leg-card">
+          <span class="leg-duration mono">Bulan 1–2</span>
+          <h3>Fondasi data &amp; statistik praktis</h3>
+          <p>Spreadsheet tingkat lanjut (pivot table, lookup, pembersihan data), statistik deskriptif, distribusi &amp; korelasi, serta literasi metrik bisnis (KPI, funnel, retention).</p>
+          <div class="chips">
+            <span class="chip">Google Sheets / Excel</span>
+            <span class="chip">Google Data Analytics — modul 1–3</span>
+          </div>
+          <div class="deliverable"><span class="tag mono">PORTOFOLIO</span>Dashboard Excel dari dataset ritel publik + ringkasan insight satu halaman.</div>
+        </div>
+      </li>
+
+      <li class="leg">
+        <div class="leg-marker"><span class="dot"></span><span class="rail"></span><span class="code mono">LEG 02</span></div>
+        <div class="leg-card">
+          <span class="leg-duration mono">Bulan 2–3</span>
+          <h3>SQL &amp; database</h3>
+          <p>SELECT–JOIN–subquery, window function, CTE, agregasi berlapis, dan dasar desain skema relasional.</p>
+          <div class="chips">
+            <span class="chip">PostgreSQL</span>
+            <span class="chip">BigQuery sandbox</span>
+            <span class="chip">SQLZoo · Mode SQL Tutorial</span>
+          </div>
+          <div class="deliverable"><span class="tag mono">PORTOFOLIO</span>Analisis dataset e-commerce dengan 10+ query terstruktur dan laporan temuan.</div>
+        </div>
+      </li>
+
+      <li class="leg">
+        <div class="leg-marker"><span class="dot"></span><span class="rail"></span><span class="code mono">LEG 03</span></div>
+        <div class="leg-card">
+          <span class="leg-duration mono">Bulan 3–5</span>
+          <h3>Python untuk analisis data</h3>
+          <p>Python dasar, pandas &amp; numpy, exploratory data analysis (EDA), visualisasi dengan matplotlib/seaborn, dan notebook yang rapi &amp; reproducible.</p>
+          <div class="chips">
+            <span class="chip">Jupyter / Colab</span>
+            <span class="chip">pandas · numpy</span>
+            <span class="chip">GitHub</span>
+          </div>
+          <div class="deliverable"><span class="tag mono">PORTOFOLIO</span>Studi EDA end-to-end memakai data terbuka LTA DataMall (SG) atau data.gov.au — dipublikasikan di GitHub dengan README.</div>
+        </div>
+      </li>
+
+      <li class="leg">
+        <div class="leg-marker"><span class="dot"></span><span class="rail"></span><span class="code mono">LEG 04</span></div>
+        <div class="leg-card">
+          <span class="leg-duration mono">Bulan 5–6</span>
+          <h3>Statistik inferensial &amp; A/B testing</h3>
+          <p>Hypothesis testing, confidence interval, uji-t &amp; chi-square, regresi linear dasar, dan cara merancang eksperimen A/B yang valid.</p>
+          <div class="chips">
+            <span class="chip">Python — scipy / statsmodels</span>
+          </div>
+          <div class="deliverable"><span class="tag mono">PORTOFOLIO</span>Laporan A/B test simulasi, misalnya perubahan alur checkout terhadap conversion rate.</div>
+        </div>
+      </li>
+
+      <li class="leg">
+        <div class="leg-marker"><span class="dot"></span><span class="rail"></span><span class="code mono">LEG 05</span></div>
+        <div class="leg-card">
+          <span class="leg-duration mono">Bulan 6–7</span>
+          <h3>Visualisasi &amp; business intelligence</h3>
+          <p>Prinsip desain dashboard, data storytelling, calculated field &amp; DAX dasar — dua tool BI paling sering diminta di iklan lowongan SG dan AU.</p>
+          <div class="chips">
+            <span class="chip">Tableau Public</span>
+            <span class="chip">Power BI</span>
+          </div>
+          <div class="deliverable"><span class="tag mono">PORTOFOLIO</span>Dua dashboard interaktif dipublikasikan online, tema industri transportasi atau ritel.</div>
+        </div>
+      </li>
+
+      <li class="leg">
+        <div class="leg-marker"><span class="dot"></span><span class="rail"></span><span class="code mono">LEG 06</span></div>
+        <div class="leg-card">
+          <span class="leg-duration mono">Bulan 7–8</span>
+          <h3>Studi kasus bisnis &amp; domain acumen</h3>
+          <p>Metrik lintas industri (CAC, LTV, churn), cara mengomunikasikan insight ke stakeholder non-teknis, dan dasar product analytics.</p>
+          <div class="chips">
+            <span class="chip">Studi kasus fintech / e-commerce / logistik</span>
+          </div>
+          <div class="deliverable"><span class="tag mono">PORTOFOLIO</span>Satu studi kasus lengkap: pertanyaan bisnis → analisis → rekomendasi, disajikan sebagai laporan naratif.</div>
+        </div>
+      </li>
+
+      <li class="leg">
+        <div class="leg-marker"><span class="dot"></span><span class="rail"></span><span class="code mono">LEG 07</span></div>
+        <div class="leg-card">
+          <span class="leg-duration mono">Bulan 8–9</span>
+          <h3>Portofolio &amp; personal brand</h3>
+          <p>Rapikan repository GitHub, susun situs portofolio ringkas, tulis ulang profil LinkedIn dalam Bahasa Inggris, dan mulai terhubung dengan praktisi data di Singapura/Australia.</p>
+          <div class="chips">
+            <span class="chip">LinkedIn</span>
+            <span class="chip">Situs portofolio</span>
+          </div>
+          <div class="deliverable"><span class="tag mono">PORTOFOLIO</span>Situs portofolio berisi 4+ proyek terpilih, siap ditautkan di CV.</div>
+        </div>
+      </li>
+
+      <li class="leg">
+        <div class="leg-marker"><span class="dot"></span><span class="code mono">LEG 08</span></div>
+        <div class="leg-card">
+          <span class="leg-duration mono">Bulan 9–12</span>
+          <h3>Pencarian kerja &amp; kesiapan visa</h3>
+          <p>Melamar aktif, latihan wawancara teknis (SQL langsung, studi kasus di tempat), riset perusahaan target, dan memahami jalur visa yang relevan sebelum bernegosiasi tawaran kerja.</p>
+          <div class="chips">
+            <span class="chip">MyCareersFuture · Seek · LinkedIn</span>
+          </div>
+          <div class="deliverable"><span class="tag mono">TARGET</span>Minimal 5 lamaran bertarget per minggu, plus daftar 15 perusahaan prioritas di SG/AU.</div>
+        </div>
+      </li>
+
+    </ol>
+  </section>
+
+  <section aria-labelledby="certs-h">
+    <h2 id="certs-h">Sertifikasi yang diakui pasar SG/AU</h2>
+    <p class="section-note">Dikerjakan paralel mulai Leg 01–02, bukan menunggu kurikulum selesai. Sertifikat memperkuat CV, portofolio yang membuktikannya.</p>
+    <div class="certs-grid">
+      <div class="cert-card">
+        <span class="cert-badge">GDA</span>
+        <div>
+          <h4>Google Data Analytics Professional Certificate</h4>
+          <p>Pengakuan luas secara global, titik masuk yang baik sejak Leg 01.</p>
+        </div>
+      </div>
+      <div class="cert-card">
+        <span class="cert-badge">PL300</span>
+        <div>
+          <h4>Microsoft PL-300 (Power BI Data Analyst Associate)</h4>
+          <p>Banyak dicari perusahaan berbasis Microsoft stack di Australia &amp; Singapura.</p>
+        </div>
+      </div>
+      <div class="cert-card">
+        <span class="cert-badge">TDS</span>
+        <div>
+          <h4>Tableau Desktop Specialist</h4>
+          <p>Melengkapi kemampuan visualisasi; sering muncul sebagai syarat di iklan lowongan SG.</p>
+        </div>
+      </div>
+      <div class="cert-card">
+        <span class="cert-badge">CLD</span>
+        <div>
+          <h4>AWS Cloud Practitioner / Google Cloud Digital Leader</h4>
+          <p>Opsional, nilai tambah — banyak perusahaan SG &amp; AU sudah migrasi ke cloud.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="market-h">
+    <h2 id="market-h">Singapura vs Australia: peta jalan kerja</h2>
+    <p class="section-note">Gambaran umum untuk riset awal — bukan nasihat imigrasi.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Aspek</th><th>Singapura</th><th>Australia</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Platform lowongan</td>
+            <td>MyCareersFuture.gov.sg, LinkedIn, Glints</td>
+            <td>Seek.com.au, LinkedIn, Indeed</td>
+          </tr>
+          <tr>
+            <td>Jalur kerja utama</td>
+            <td>Employment Pass (dinilai lewat kerangka COMPASS) atau S Pass untuk posisi lebih junior</td>
+            <td>Visa Skills in Demand (subclass 482) disponsori pemberi kerja, atau jalur skilled migration bila okupasi masuk daftar</td>
+          </tr>
+          <tr>
+            <td>Estimasi gaji entry-level*</td>
+            <td class="figure">SGD 3.500–5.000 / bulan</td>
+            <td class="figure">AUD 65.000–85.000 / tahun</td>
+          </tr>
+          <tr>
+            <td>Tools yang paling dicari</td>
+            <td>Excel, SQL, Tableau, Power BI</td>
+            <td>Power BI, SQL, Looker, Python</td>
+          </tr>
+          <tr>
+            <td>Catatan</td>
+            <td>Syarat gaji minimum Employment Pass disesuaikan berkala oleh MOM</td>
+            <td>Jalur skilled migration umumnya perlu skills assessment dari ACS untuk okupasi ICT</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-foot">*Angka indikatif dari riset umum, bukan angka resmi — cek ulang di MyCareersFuture/Seek sebelum menegosiasikan tawaran.</p>
+  </section>
+
+  <section aria-labelledby="checklist-h">
+    <h2 id="checklist-h">Checklist portofolio sebelum melamar</h2>
+    <ul class="checklist">
+      <li><span class="box"></span>Minimal 4 proyek publik di GitHub, tiap proyek punya README yang menjelaskan pertanyaan bisnis, proses, dan insight.</li>
+      <li><span class="box"></span>Dua dashboard interaktif online (Tableau Public / Power BI) yang bisa diklik recruiter tanpa instalasi apa pun.</li>
+      <li><span class="box"></span>Satu studi kasus end-to-end disajikan sebagai laporan naratif, bukan hanya kode.</li>
+      <li><span class="box"></span>Profil LinkedIn berbahasa Inggris dengan headline yang menyebut "Data Analyst" dan tools utama.</li>
+      <li><span class="box"></span>CV internasional satu halaman, format ramah ATS.</li>
+    </ul>
+  </section>
+
+  <footer class="note">
+    <p>Ketentuan visa dan gaji berubah dari waktu ke waktu. Verifikasi syarat Employment Pass/S Pass terbaru di <span class="mono">mom.gov.sg</span>, dan syarat visa kerja/skilled migration terbaru di <span class="mono">immi.homeaffairs.gov.au</span> sebelum mengambil keputusan.</p>
+    <p class="closing">Untuk urutan yang berlaku sekarang, buka <a href="https://claude.ai/code/artifact/f333a8b3-8341-4a10-b69e-4c603671830e">Rencana 17 Minggu</a>.</p>
+  </footer>
+
+</div>

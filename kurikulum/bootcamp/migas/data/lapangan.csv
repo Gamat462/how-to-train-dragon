@@ -1,0 +1,5 @@
+lapangan_id,nama_lapangan,tipe,wilayah,tahun_onstream,reservoir
+F01,Cendana Utara,Onshore,Jawa Barat,1998,Sandstone
+F02,Cendana Selatan,Onshore,Jawa Barat,2005,Sandstone
+F03,Meranti,Offshore Shallow,Laut Jawa,2012,Carbonate
+F04,Gaharu,Offshore Shallow,Laut Jawa,2019,Carbonate

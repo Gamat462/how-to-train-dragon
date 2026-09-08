@@ -1,0 +1,667 @@
+<title>Modul Product Analytics</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --h0:#0F6E63; --h1:#3E9083; --h2:#7DB3A6; --h3:#B4D2C8; --h4:#DDE9E3;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --h0:#5BCBB7; --h1:#3FA595; --h2:#2E7C70; --h3:#26584F; --h4:#203934;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --h0:#5BCBB7; --h1:#3FA595; --h2:#2E7C70; --h3:#26584F; --h4:#203934;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.62;
+    padding:20px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.86em; background:var(--code-bg); padding:2px 6px; border-radius:6px; }
+  pre{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.8rem; line-height:1.5;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; overflow-x:auto; margin:0 0 12px;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .out{ border-left:3px solid var(--teal); }
+
+  .nav{
+    position:sticky; top:0; z-index:5; max-width:880px; margin:0 auto 24px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; padding:8px 10px; flex-wrap:wrap;
+  }
+  .nav .brand{ font-family:"Fraunces", serif; font-weight:600; font-size:0.95rem; padding:6px 10px; margin-right:auto; }
+  .nav a{ text-decoration:none; color:var(--ink-soft); font-size:0.8rem; font-weight:500; padding:6px 10px; border-radius:999px; }
+  .nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .nav a:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+
+  .page{
+    max-width:880px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:32px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+  .needs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+  @media (max-width:600px){ .needs{ grid-template-columns:1fr; } }
+  .needs div{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.86rem; color:var(--ink-soft); }
+  .needs strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:2px; }
+
+  section{ margin-bottom:48px; scroll-margin-top:84px; }
+  section > h2{ font-size:1.36rem; font-weight:600; margin-bottom:4px; }
+  .week-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:8px; }
+  .goal{ color:var(--ink-soft); font-size:0.92rem; max-width:62ch; margin-bottom:22px; padding-left:14px; border-left:3px solid var(--teal); }
+  .goal strong{ color:var(--ink); }
+  h3{ font-size:1.08rem; font-weight:600; margin:26px 0 10px; }
+  h4{ font-size:0.98rem; font-weight:600; margin:18px 0 6px; }
+  .prose{ max-width:68ch; }
+  .prose p{ margin-bottom:12px; font-size:0.95rem; }
+  .prose ul, .prose ol{ margin:0 0 12px; padding-left:22px; font-size:0.95rem; }
+  .prose li{ margin-bottom:6px; }
+  .concept{ background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin:14px 0 18px; font-size:0.92rem; max-width:70ch; }
+  .concept strong{ color:var(--teal); }
+  .tip{ background:var(--gold-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .tip strong{ color:var(--gold); }
+  .warn{ background:var(--alert-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .warn strong{ color:var(--alert); }
+
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; margin:12px 0 16px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.84rem; }
+  th, td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.num, th.num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; text-align:right; }
+  table.wrap td{ white-space:normal; }
+
+  /* tabel kohor berwarna */
+  table.cohort td.c{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; text-align:right; color:var(--ink); }
+  table.cohort td.h0{ background:var(--h0); color:#fff; font-weight:600; }
+  table.cohort td.h1{ background:var(--h1); color:#fff; }
+  table.cohort td.h2{ background:var(--h2); }
+  table.cohort td.h3{ background:var(--h3); }
+  table.cohort td.h4{ background:var(--h4); }
+  table.cohort td.na{ color:var(--ink-soft); text-align:center; }
+  :root[data-theme="dark"] table.cohort td.h2,
+  :root[data-theme="dark"] table.cohort td.h3,
+  :root[data-theme="dark"] table.cohort td.h4{ color:var(--ink); }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) table.cohort td.h2,
+    :root:not([data-theme="light"]) table.cohort td.h3,
+    :root:not([data-theme="light"]) table.cohort td.h4{ color:var(--ink); }
+  }
+
+  .block{ border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; background:var(--surface-2); }
+  .block h4{ margin:0 0 6px; font-family:"IBM Plex Mono", monospace; font-size:0.92rem; color:var(--teal); }
+  .block .use{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:10px; }
+  .block pre{ margin-bottom:8px; }
+  .block .result{ font-size:0.88rem; }
+
+  .funnel{ display:flex; flex-direction:column; gap:6px; margin:16px 0; }
+  .funnel .row{ display:grid; grid-template-columns:150px 1fr 90px; gap:12px; align-items:center; font-size:0.86rem; }
+  .funnel .bar{ height:26px; border-radius:5px; background:var(--teal); }
+  .funnel .drop{ font-family:"IBM Plex Mono", monospace; font-size:0.78rem; color:var(--alert); text-align:right; }
+  .funnel .lab{ color:var(--ink-soft); }
+  @media (max-width:600px){ .funnel .row{ grid-template-columns:110px 1fr 78px; font-size:0.8rem; } }
+
+  .exercise{ border:1px dashed var(--gold); border-radius:14px; padding:18px 20px; margin:22px 0 0; background:var(--surface); }
+  .exercise h3{ margin:0 0 4px; }
+  .exercise .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.1em; color:var(--gold); }
+  .exercise ol{ margin:10px 0 0; padding-left:22px; font-size:0.93rem; }
+  .exercise li{ margin-bottom:8px; }
+  details{ margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  summary{ cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--teal); }
+  summary:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; border-radius:4px; }
+  details .answer{ margin-top:10px; font-size:0.9rem; }
+  details .answer ol{ padding-left:22px; margin:0; }
+  details .answer li{ margin-bottom:12px; }
+  details .answer pre{ margin:6px 0; }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .steps li{ display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem; }
+  .steps li::before{ counter-increment:step; content:counter(step, decimal-leading-zero); font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px; }
+  .steps li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .steps li span{ color:var(--ink-soft); }
+
+  .checklist{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .checklist li{ display:flex; gap:10px; align-items:flex-start; font-size:0.92rem; }
+  .checklist .box{ flex:none; width:15px; height:15px; margin-top:4px; border:1.5px solid var(--teal); border-radius:4px; }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<nav class="nav" aria-label="Bagian modul">
+  <span class="brand">Product Analytics</span>
+  <a href="#setup">Data</a>
+  <a href="#w1">Mgg 1 · Metrik</a>
+  <a href="#w2">Mgg 2 · Kohor</a>
+  <a href="#w3">Mgg 3 · LTV</a>
+  <a href="#w4">Mgg 4 · Peramalan</a>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Materi · Bulan 9</span>
+    <h1>Product &amp; Business Analytics</h1>
+    <p class="lede">Bulan ini kamu berhenti jadi orang yang menjalankan query dan mulai jadi orang yang menjawab pertanyaan bisnis. Retensi, nilai seumur hidup pelanggan, dan peramalan — tiga hal yang paling sering ditanyakan di wawancara analis produk, dan paling jarang dikuasai pelamar junior.</p>
+
+    <div class="needs">
+      <div><strong>Kasus</strong>Kedai Kopi Senja meluncurkan aplikasi keanggotaan. 4.570 pelanggan mendaftar dalam 6 bulan.</div>
+      <div><strong>Alat</strong>pandas dan matplotlib. Tidak ada pustaka baru sampai minggu 4.</div>
+      <div><strong>Pertanyaan besar</strong>Layakkah kedai membayar untuk mendapatkan pelanggan baru? Berapa maksimalnya?</div>
+    </div>
+  </header>
+
+  <!-- ================= SETUP ================= -->
+  <section id="setup" aria-labelledby="setup-h">
+    <h2 id="setup-h">Data: pelanggan aplikasi keanggotaan</h2>
+    <p class="goal">Tiap baris = satu pelanggan yang bertransaksi di satu bulan. <code>kohor</code> adalah bulan pertama dia mendaftar, <code>bulan_ke</code> adalah jarak bulan sejak pendaftaran. Struktur ini adalah bentuk baku untuk analisis retensi.</p>
+
+<pre><code>import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(11)
+BULAN = pd.period_range("2025-07", "2025-12", freq="M")
+N_BARU = [500, 620, 700, 850, 900, 1000]
+
+baris = []; uid = 0
+for i, bln in enumerate(BULAN):
+    for _ in range(N_BARU[i]):
+        uid += 1
+        setia = rng.random() &lt; (0.22 + 0.015*i)     # dua tipe pelanggan
+        p_tetap = 0.90 if setia else 0.42
+        baris.append((uid, bln, 0, rng.normal(78000, 22000)))
+        aktif = True
+        for m in range(1, len(BULAN)-i):
+            if not aktif or rng.random() &gt; p_tetap:
+                aktif = False
+                continue
+            baris.append((uid, bln, m, rng.normal(78000 + 3500*m, 22000)))
+
+df = pd.DataFrame(baris, columns=["user_id", "kohor", "bulan_ke", "nilai"])
+df["nilai"] = df["nilai"].clip(15000, None).round(-2)
+
+print(len(df), "baris,", df.user_id.nunique(), "pelanggan")</code></pre>
+<pre class="out"><code>8093 baris, 4570 pelanggan</code></pre>
+
+    <div class="prose">
+      <div class="tip"><strong>Perhatikan cara data ini dibuat:</strong> ada dua tipe pelanggan — yang setia (90% bertahan tiap bulan) dan yang coba-coba (42%). Kamu tidak akan tahu tipe siapa dari data yang kamu terima; kamu harus <em>menemukannya</em>. Itulah inti pekerjaan minggu ini, dan itu juga bagaimana kenyataan bekerja: rata-rata selalu menyembunyikan dua populasi yang berbeda.</div>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 1 ================= -->
+  <section id="w1" aria-labelledby="w1-h">
+    <span class="week-tag">Minggu 1</span>
+    <h2 id="w1-h">Metrik yang benar, dan metrik yang menipu</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membedakan metrik yang menuntun tindakan dari metrik yang cuma enak dilihat, dan membangun funnel yang menunjukkan di mana orang berhenti.</p>
+
+    <div class="prose">
+      <h3>1. Vanity metric vs metrik yang bisa ditindaklanjuti</h3>
+      <p>Ini pembeda pertama antara analis dan pembuat laporan.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Metrik menipu</th><th>Kenapa menipu</th><th>Gantinya</th></tr></thead>
+        <tbody>
+          <tr><td>Total pengguna terdaftar</td><td>Hanya bisa naik. Tidak pernah memberi kabar buruk.</td><td>Pengguna aktif bulanan, dan retensi per kohor</td></tr>
+          <tr><td>Total unduhan aplikasi</td><td>Mengukur iklan, bukan produk</td><td>Persentase yang menyelesaikan transaksi pertama</td></tr>
+          <tr><td>Rata-rata semua pelanggan</td><td>Mencampur dua populasi berbeda jadi satu angka yang tidak menggambarkan siapa pun</td><td>Median, dan pecahan per segmen</td></tr>
+          <tr><td>Total pendapatan bulan ini</td><td>Tidak memisahkan pelanggan baru dan lama</td><td>Pendapatan baru vs berulang vs yang hilang</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <div class="concept"><strong>Ujian sederhana:</strong> kalau angka ini turun besok, apakah kamu tahu harus berbuat apa? Kalau tidak, itu bukan metrik yang berguna — itu hiasan dashboard.</div>
+
+      <h3>2. Funnel: menemukan di mana orang menyerah</h3>
+      <p>Funnel mengukur berapa banyak orang yang lolos tiap tahap. Yang penting bukan angka tiap tahap, tapi <strong>persentase yang gugur di antara dua tahap</strong>.</p>
+    </div>
+
+    <div class="funnel">
+      <div class="row"><span class="lab">Buka aplikasi</span><span class="bar" style="width:100%"></span><span class="drop">10.000</span></div>
+      <div class="row"><span class="lab">Lihat menu</span><span class="bar" style="width:72%"></span><span class="drop">−28%</span></div>
+      <div class="row"><span class="lab">Tambah ke keranjang</span><span class="bar" style="width:41%"></span><span class="drop">−43%</span></div>
+      <div class="row"><span class="lab">Mulai checkout</span><span class="bar" style="width:33%"></span><span class="drop">−20%</span></div>
+      <div class="row"><span class="lab">Bayar berhasil</span><span class="bar" style="width:12%"></span><span class="drop">−64%</span></div>
+    </div>
+
+    <div class="prose">
+      <p>Dari gambar ini, satu tahap langsung menonjol: <strong>64% orang yang sudah membuka halaman pembayaran gagal menyelesaikannya.</strong> Itu bukan masalah pemasaran; itu masalah teknis atau kepercayaan. Perbaikan di sana bernilai jauh lebih besar daripada menambah iklan di atas funnel — dan kamu menemukannya hanya karena melihat persentase antar tahap, bukan angka mutlaknya.</p>
+    </div>
+
+    <div class="block">
+      <h4>Menghitung funnel dengan SQL</h4>
+<pre><code>WITH tahap AS (
+  SELECT
+    COUNT(DISTINCT CASE WHEN peristiwa = 'buka_app'    THEN user_id END) AS t1_buka,
+    COUNT(DISTINCT CASE WHEN peristiwa = 'lihat_menu'  THEN user_id END) AS t2_menu,
+    COUNT(DISTINCT CASE WHEN peristiwa = 'tambah_cart' THEN user_id END) AS t3_cart,
+    COUNT(DISTINCT CASE WHEN peristiwa = 'checkout'    THEN user_id END) AS t4_checkout,
+    COUNT(DISTINCT CASE WHEN peristiwa = 'bayar_ok'    THEN user_id END) AS t5_bayar
+  FROM peristiwa
+  WHERE tanggal &gt;= '2026-01-01'
+)
+SELECT
+  t1_buka, t2_menu, t3_cart, t4_checkout, t5_bayar,
+  ROUND(100.0 * t2_menu     / t1_buka,     1) AS lolos_1_ke_2,
+  ROUND(100.0 * t5_bayar    / t4_checkout, 1) AS lolos_4_ke_5,
+  ROUND(100.0 * t5_bayar    / t1_buka,     1) AS konversi_total
+FROM tahap;</code></pre>
+      <div class="warn" style="margin-bottom:0"><strong>Jebakan funnel yang paling sering terjadi:</strong> query di atas menghitung orang yang melakukan tiap peristiwa, <em>tanpa memastikan urutannya</em>. Seseorang yang membuka checkout hari ini tapi menambah keranjang minggu lalu tetap terhitung di kedua tahap. Funnel yang benar harus mengikat peristiwa ke satu sesi dan memaksa urutan waktu. Kalau pewawancara menanyakan "apa yang salah dengan funnel ini", itulah jawabannya.</div>
+    </div>
+
+    <div class="prose">
+      <h3>3. Metrik keterlibatan</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Metrik</th><th>Artinya</th><th>Kapan dipakai</th></tr></thead>
+        <tbody>
+          <tr><td><strong>DAU / MAU</strong></td><td>Pengguna aktif harian dibagi bulanan. Disebut "stickiness".</td><td>Produk yang diharapkan dipakai tiap hari. 20% sudah bagus; 50%+ luar biasa.</td></tr>
+          <tr><td><strong>Activation rate</strong></td><td>Persentase pendaftar yang mencapai momen bernilai pertama</td><td>Selalu. Ini metrik terpenting untuk produk baru.</td></tr>
+          <tr><td><strong>Frekuensi</strong></td><td>Rata-rata transaksi per pengguna aktif per bulan</td><td>Untuk memisahkan "lebih banyak orang" dari "orang yang sama lebih sering"</td></tr>
+          <tr><td><strong>Churn bulanan</strong></td><td>Persentase yang aktif bulan lalu tapi tidak bulan ini</td><td>Bisnis langganan. Kebalikan dari retensi.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <div class="tip"><strong>Soal "momen bernilai pertama":</strong> tiap produk punya tindakan yang, kalau dilakukan pengguna baru, membuatnya jauh lebih mungkin bertahan. Tugas analis adalah menemukannya dari data — bandingkan tindakan minggu pertama antara pengguna yang bertahan 3 bulan dan yang tidak. Ini analisis yang sangat disukai pewawancara karena menunjukkan kamu berpikir soal sebab, bukan cuma laporan.</div>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 1</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Hitung jumlah pelanggan aktif per bulan kalender dari <code>df</code> (bukan per kohor). Apakah tumbuh?</li>
+        <li>Hitung rata-rata transaksi per pelanggan aktif tiap bulan. Apakah pertumbuhan datang dari lebih banyak orang atau orang yang sama lebih sering?</li>
+        <li>Ambil satu produk digital yang kamu pakai tiap hari. Tulis funnel 5 tahapnya, dan tebak di tahap mana kebocoran terbesarnya.</li>
+        <li>Untuk tiap metrik menipu di tabel pertama, cari satu contoh nyata di berita atau laporan perusahaan yang memakainya.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban soal 1 dan 2</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>df["bulan_kalender"] = df.kohor + df.bulan_ke      # Period + int = Period
+aktif = df.groupby("bulan_kalender").user_id.nunique()
+print(aktif)</code></pre>Naik terus, karena tiap bulan ada kohor baru yang lebih besar <em>ditambah</em> sisa kohor lama. Ini contoh angka yang terlihat sehat padahal belum tentu — pertumbuhannya bisa saja hanya berasal dari akuisisi, sementara retensinya memburuk. Minggu depan kita bongkar.</li>
+            <li><pre><code>trx = df.groupby("bulan_kalender").size()
+(trx / aktif).round(2)</code></pre>Angkanya mendekati 1,0 karena data ini satu baris per pelanggan per bulan. Di data nyata, rasio ini naik-turun dan sangat berguna: pertumbuhan pendapatan dari frekuensi lebih murah daripada dari akuisisi.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 2 ================= -->
+  <section id="w2" aria-labelledby="w2-h">
+    <span class="week-tag">Minggu 2</span>
+    <h2 id="w2-h">Analisis kohor: alat paling tajam yang kamu punya</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membuat dan membaca matriks retensi kohor — dan menjawab pertanyaan yang tidak bisa dijawab metrik lain: apakah produknya membaik dari waktu ke waktu?</p>
+
+    <div class="prose">
+      <p>Total pengguna aktif naik tiap bulan. Kedengarannya bagus. Tapi itu bisa terjadi <em>sambil</em> produkmu memburuk, asalkan kamu terus membeli pelanggan baru lebih cepat daripada kehilangan yang lama. Analisis kohor membongkar ilusi itu dengan mengikuti tiap kelompok pendaftar secara terpisah.</p>
+    </div>
+
+    <div class="block">
+      <h4>Membuat matriks retensi</h4>
+<pre><code># ukuran tiap kohor di bulan ke-0
+ukuran = df[df.bulan_ke == 0].groupby("kohor").user_id.nunique()
+
+# jumlah yang masih aktif di tiap bulan_ke
+aktif = df.groupby(["kohor", "bulan_ke"]).user_id.nunique().unstack()
+
+# ubah jadi persentase
+retensi = (aktif.div(ukuran, axis=0) * 100).round(1)
+retensi</code></pre>
+<pre class="out"><code>bulan_ke      0     1     2     3     4     5
+kohor
+2025-07   100.0  52.4  31.2  20.0  15.4  11.8
+2025-08   100.0  54.2  33.7  23.1  16.5   NaN
+2025-09   100.0  56.7  35.7  26.4   NaN   NaN
+2025-10   100.0  55.3  33.8   NaN   NaN   NaN
+2025-11   100.0  54.4   NaN   NaN   NaN   NaN
+2025-12   100.0   NaN   NaN   NaN   NaN   NaN</code></pre>
+    </div>
+
+    <div class="prose"><h3>Cara membacanya</h3></div>
+    <div class="table-wrap">
+      <table class="cohort">
+        <thead><tr><th>Kohor</th><th class="num">Ukuran</th><th class="num">Bln 0</th><th class="num">Bln 1</th><th class="num">Bln 2</th><th class="num">Bln 3</th><th class="num">Bln 4</th><th class="num">Bln 5</th></tr></thead>
+        <tbody>
+          <tr><td>Jul 2025</td><td class="c">500</td><td class="c h0">100</td><td class="c h1">52,4</td><td class="c h2">31,2</td><td class="c h3">20,0</td><td class="c h3">15,4</td><td class="c h4">11,8</td></tr>
+          <tr><td>Agu 2025</td><td class="c">620</td><td class="c h0">100</td><td class="c h1">54,2</td><td class="c h2">33,7</td><td class="c h3">23,1</td><td class="c h3">16,5</td><td class="na">—</td></tr>
+          <tr><td>Sep 2025</td><td class="c">700</td><td class="c h0">100</td><td class="c h1">56,7</td><td class="c h2">35,7</td><td class="c h3">26,4</td><td class="na">—</td><td class="na">—</td></tr>
+          <tr><td>Okt 2025</td><td class="c">850</td><td class="c h0">100</td><td class="c h1">55,3</td><td class="c h2">33,8</td><td class="na">—</td><td class="na">—</td><td class="na">—</td></tr>
+          <tr><td>Nov 2025</td><td class="c">900</td><td class="c h0">100</td><td class="c h1">54,4</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td></tr>
+          <tr><td>Des 2025</td><td class="c">1.000</td><td class="c h0">100</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="na">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p><strong>Baca ke kanan</strong> untuk melihat nasib satu kelompok seiring waktu. <strong>Baca ke bawah</strong> untuk membandingkan kelompok pada usia yang sama — dan di situlah jawaban pertanyaan "apakah kami membaik?" berada.</p>
+      <ul>
+        <li><strong>Kurvanya melandai.</strong> Penurunan terbesar terjadi di bulan pertama (100 → ~55), lalu makin melambat. Antara bulan 4 dan 5 hanya turun 15,4 → 11,8. Ini bentuk yang sehat: ada inti pelanggan yang benar-benar bertahan.</li>
+        <li><strong>Kolom bulan 3 membaik:</strong> Juli 20,0% → Agustus 23,1% → September 26,4%. Kohor yang lebih baru bertahan lebih baik pada usia yang sama. Produk atau mutu akuisisinya membaik.</li>
+        <li><strong>Kolom bulan 1 tidak menunjukkan pola jelas</strong> (52,4 sampai 56,7 tanpa arah tegas). Perbaikannya baru terasa setelah bulan pertama.</li>
+      </ul>
+      <div class="concept"><strong>Bentuk kurva retensi adalah pertanyaan hidup-mati sebuah produk.</strong> Kalau kurvamu melandai di angka berapa pun di atas nol, kamu punya inti pengguna yang benar-benar butuh produkmu, dan bisnisnya bisa dibangun. Kalau kurvanya terus turun sampai nol, tidak ada jumlah iklan yang bisa menyelamatkan — kamu hanya menuang air ke ember bocor. Kalimat itu, dengan grafiknya, adalah salah satu jawaban wawancara paling kuat yang bisa kamu siapkan.</div>
+
+      <h3>Rata-rata menyembunyikan segalanya</h3>
+      <p>Retensi rata-rata di bulan 3 adalah 23,2%. Sekarang pecah menurut tipe pelanggan:</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Segmen</th><th class="num">Retensi bulan 3</th><th>Artinya</th></tr></thead>
+        <tbody>
+          <tr><td>Semua pelanggan</td><td class="num">23,2%</td><td>Angka yang biasanya dilaporkan</td></tr>
+          <tr><td>Pelanggan setia</td><td class="num">73,8%</td><td>Produk sangat cocok untuk mereka</td></tr>
+          <tr><td>Pelanggan coba-coba</td><td class="num">8,0%</td><td>Datang sekali, pergi</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>Angka 23,2% tidak menggambarkan siapa pun. Tidak ada pelanggan yang "23% bertahan" — yang ada adalah dua kelompok yang sangat berbeda. <strong>Keputusan bisnisnya juga jadi berbeda:</strong> kalau kamu percaya angka rata-rata, kamu akan mencoba memperbaiki produk untuk semua orang. Kalau kamu melihat pecahannya, pertanyaannya berubah jadi "apa ciri pelanggan setia, dan bagaimana kita mendapatkan lebih banyak orang seperti itu?" — pertanyaan yang jauh lebih murah dijawab.</p>
+      <div class="tip"><strong>Cara menemukan segmen kalau labelnya tidak ada</strong> (dan di dunia nyata memang tidak ada): bandingkan perilaku bulan pertama antara yang bertahan dan yang tidak. Berapa transaksi di minggu pertama? Produk apa yang dibeli pertama kali? Lewat kanal mana mereka datang? Perbedaan yang paling tajam biasanya menunjuk ke definisi segmen yang berguna.</div>
+    </div>
+
+    <div class="block">
+      <h4>Membuat peta panas retensi</h4>
+<pre><code>import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig, ax = plt.subplots(figsize=(9, 4.5))
+sns.heatmap(retensi, annot=True, fmt=".1f", cmap="YlGnBu",
+            vmin=0, vmax=60, cbar_kws={"label": "% bertahan"}, ax=ax)
+ax.set_title("Kohor yang lebih baru bertahan lebih baik di bulan ke-3",
+             loc="left", fontsize=13, pad=12)
+ax.set_xlabel("Bulan sejak mendaftar")
+ax.set_ylabel("Kohor pendaftaran")
+fig.tight_layout()</code></pre>
+      <p class="result"><code>vmin=0, vmax=60</code> penting: tanpa batas tetap, skala warnanya berubah tiap kali datanya diperbarui, dan perbandingan antar waktu jadi menyesatkan. Bulan ke-0 sengaja tidak dimasukkan dalam rentang warna karena selalu 100 dan akan mendominasi seluruh skala.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 2</span>
+      <h3>Lima soal</h3>
+      <ol>
+        <li>Bangun matriks retensi dari nol. Cocokkan angkamu dengan tabel di atas.</li>
+        <li>Buat matriks kedua berisi <em>pendapatan</em> per kohor per bulan_ke, bukan jumlah pengguna. Apakah polanya sama?</li>
+        <li>Hitung retensi rata-rata tiap bulan_ke (rata-rata tiap kolom). Buat grafik garisnya. Di bulan ke berapa kurvanya mulai melandai?</li>
+        <li>Kalau kohor Desember mengikuti pola rata-rata, berapa perkiraan pelanggan yang masih aktif di bulan ke-3? Berapa nilai rupiah yang mereka bawa?</li>
+        <li>Tulis tiga kalimat untuk pemilik kedai yang menjelaskan apa yang kamu temukan, tanpa memakai kata "kohor" atau "retensi".</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban soal 3 dan 4</summary>
+        <div class="answer">
+          <ol>
+            <li><strong>Soal 3:</strong> <code>retensi.mean()</code> → 100 · 54,6 · 33,6 · 23,2 · 16,0 · 11,8. Penurunan antar bulan: −45,4 · −21,0 · −10,4 · −7,2 · −4,2. Penurunannya mengecil terus, dan mulai jelas melandai setelah <strong>bulan ke-3</strong>.</li>
+            <li><strong>Soal 4:</strong> 1.000 pelanggan × 23,2% = sekitar <strong>232 pelanggan</strong> aktif di bulan ke-3. Dengan ARPU bulan ke-3 sebesar Rp 88.690, itu sekitar <strong>Rp 20,6 juta</strong> pendapatan dari kohor itu saja di bulan tersebut. Perkiraan ini masuk akal <em>kalau</em> kohor Desember berperilaku seperti rata-rata — padahal tren menunjukkan kohor baru lebih baik, jadi angka ini kemungkinan sedikit terlalu rendah. Menyebutkan ketidakpastian seperti itu adalah tanda analis yang matang.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 3 ================= -->
+  <section id="w3" aria-labelledby="w3-h">
+    <span class="week-tag">Minggu 3</span>
+    <h2 id="w3-h">LTV, CAC, dan pertanyaan "boleh belanja iklan berapa?"</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menghitung nilai seumur hidup pelanggan dari data retensi, dan menjawab pertanyaan paling praktis di bisnis mana pun — berapa maksimal yang boleh dibayar untuk satu pelanggan baru.</p>
+
+    <div class="prose">
+      <h3>1. LTV dibangun dari retensi</h3>
+      <p>Nilai seumur hidup pelanggan (LTV) bukan angka ajaib. Dia hanya penjumlahan: untuk tiap bulan, berapa peluang pelanggan masih ada, dikali berapa yang dia belanjakan.</p>
+    </div>
+
+    <div class="block">
+      <h4>Menghitung LTV langkah demi langkah</h4>
+<pre><code>r    = retensi.mean()                        # retensi rata-rata per bulan_ke
+arpu = df.groupby("bulan_ke").nilai.mean()   # belanja rata-rata per bulan_ke
+
+kum = 0
+for m in range(len(r)):
+    kontribusi = (r[m] / 100) * arpu[m]
+    kum += kontribusi
+    print(f"bulan {m}: retensi {r[m]:5.1f}%  ARPU {arpu[m]:8,.0f}"
+          f"  kontribusi {kontribusi:8,.0f}  kumulatif {kum:9,.0f}")</code></pre>
+<pre class="out"><code>bulan 0: retensi 100.0%  ARPU   78,306  kontribusi   78,306  kumulatif    78,306
+bulan 1: retensi  54.6%  ARPU   81,254  kontribusi   44,365  kumulatif   122,671
+bulan 2: retensi  33.6%  ARPU   84,732  kontribusi   28,470  kumulatif   151,141
+bulan 3: retensi  23.2%  ARPU   88,690  kontribusi   20,576  kumulatif   171,717
+bulan 4: retensi  16.0%  ARPU   93,528  kontribusi   14,964  kumulatif   186,681
+bulan 5: retensi  11.8%  ARPU   97,337  kontribusi   11,486  kumulatif   198,167</code></pre>
+      <p class="result">Dua hal menarik. Pertama, <strong>ARPU naik seiring usia pelanggan</strong> (78rb → 97rb): yang bertahan justru berbelanja lebih banyak. Kedua, <strong>lebih dari separuh LTV datang dari bulan 0 dan 1 saja</strong> — artinya perbaikan di pengalaman awal bernilai jauh lebih besar daripada di bulan-bulan berikutnya.</p>
+    </div>
+
+    <div class="prose">
+      <div class="warn"><strong>LTV kotor bukan LTV.</strong> Angka Rp 198.167 di atas adalah omzet, bukan keuntungan. Kalau margin kotor kedai 55%, LTV yang sebenarnya adalah <strong>Rp 108.992</strong>. Melaporkan LTV kotor lalu membandingkannya dengan biaya akuisisi adalah kesalahan yang membuat banyak bisnis membakar uang selama bertahun-tahun sambil merasa untung.</div>
+
+      <h3>2. LTV/CAC: rasio yang menentukan</h3>
+      <p>CAC (biaya akuisisi pelanggan) = total belanja pemasaran ÷ jumlah pelanggan baru. Rasionya menentukan apakah bisnis boleh mempercepat belanja iklan.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th class="num">CAC</th><th class="num">LTV/CAC</th><th>Penilaian</th><th>Tindakan</th></tr></thead>
+        <tbody>
+          <tr><td class="num">Rp 30.000</td><td class="num">3,63</td><td><strong style="color:var(--teal)">Sehat</strong></td><td>Tambah belanja iklan, selama rasionya bertahan</td></tr>
+          <tr><td class="num">Rp 50.000</td><td class="num">2,18</td><td><strong style="color:var(--gold)">Waspada</strong></td><td>Bisa jalan, tapi tidak ada ruang untuk salah</td></tr>
+          <tr><td class="num">Rp 80.000</td><td class="num">1,36</td><td><strong style="color:var(--alert)">Bahaya</strong></td><td>Nyaris tidak menutup biaya. Perbaiki retensi dulu, jangan tambah iklan</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>Patokan industri: <strong>LTV/CAC ≥ 3</strong> dianggap sehat. Di bawah 1 berarti tiap pelanggan baru membuat perusahaan rugi — dan menambah iklan justru mempercepat kerugian.</p>
+      <div class="tip"><strong>Yang sering dilupakan: waktu balik modal (payback period).</strong> LTV/CAC 3 terdengar bagus, tapi kalau butuh 14 bulan untuk menutup CAC, perusahaan harus menalangi uang itu dulu. Dari tabel LTV di atas dengan margin 55%: kumulatif margin bulan 0 adalah Rp 43.068, bulan 1 Rp 67.469. Jadi dengan CAC Rp 50.000, modalnya kembali di <strong>bulan ke-1</strong>. Itu angka yang bagus, dan menyebutkannya di wawancara menunjukkan kamu berpikir seperti orang keuangan, bukan hanya seperti analis.</div>
+
+      <h3>3. Kehati-hatian yang wajib disebutkan</h3>
+      <ul>
+        <li><strong>Data kita cuma 6 bulan.</strong> LTV Rp 198 ribu adalah nilai 6 bulan, bukan seumur hidup. Karena kurvanya masih melandai di 11,8%, nilai sebenarnya lebih tinggi — tapi kita belum bisa membuktikannya.</li>
+        <li><strong>Kohor baru belum matang.</strong> Kohor Desember baru punya satu titik data. Memasukkannya ke rata-rata membuat angka bulan-bulan awal terlalu berbobot.</li>
+        <li><strong>Uang masa depan bernilai lebih kecil.</strong> Untuk perhitungan yang lebih ketat, arus kas bulan ke-12 perlu didiskontokan. Untuk analisis sehari-hari ini sering diabaikan, tapi ketahuilah bahwa itu penyederhanaan.</li>
+        <li><strong>CAC harus mencakup semuanya:</strong> belanja iklan, gaji tim pemasaran, diskon perkenalan. CAC yang hanya menghitung biaya iklan selalu terlalu kecil.</li>
+      </ul>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 3</span>
+      <h3>Lima soal</h3>
+      <ol>
+        <li>Hitung LTV memakai <em>hanya</em> kohor Juli dan Agustus (yang paling matang). Apakah lebih tinggi atau lebih rendah dari rata-rata semua kohor? Kenapa?</li>
+        <li>Hitung waktu balik modal untuk CAC Rp 30.000, Rp 50.000, dan Rp 80.000, memakai margin 55%.</li>
+        <li>Kalau kedai bisa menaikkan retensi bulan ke-1 dari 54,6% jadi 60% (dan bulan-bulan setelahnya ikut naik sebanding), berapa LTV barunya? Berapa persen kenaikannya?</li>
+        <li>Bandingkan: menaikkan retensi bulan 1 sebesar 5 poin persen, versus menaikkan ARPU sebesar 10% di semua bulan. Mana yang lebih besar dampaknya ke LTV?</li>
+        <li>Tulis rekomendasi satu paragraf untuk pemilik kedai yang sedang mempertimbangkan belanja iklan Rp 50 juta untuk mendapat 1.000 pelanggan baru. Sertakan angkanya.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban soal 2 dan 5</summary>
+        <div class="answer">
+          <ol>
+            <li><strong>Soal 2 — margin kumulatif (55%):</strong> bulan 0 = Rp 43.068 · bulan 1 = Rp 67.469 · bulan 2 = Rp 83.128 · bulan 3 = Rp 94.444. Maka: CAC Rp 30.000 balik modal di <strong>bulan 0</strong> (langsung); CAC Rp 50.000 di <strong>bulan 1</strong>; CAC Rp 80.000 di <strong>bulan 2</strong>. Ketiganya tergolong cepat — bisnis dengan payback di bawah 12 bulan umumnya dianggap nyaman.</li>
+            <li><strong>Soal 5 — contoh rekomendasi:</strong> "Belanja Rp 50 juta untuk 1.000 pelanggan berarti CAC Rp 50.000 per pelanggan. Dari data 6 bulan terakhir, tiap pelanggan menghasilkan Rp 198.000 omzet, atau sekitar Rp 109.000 margin — rasio 2,2 kali biaya akuisisi, dengan modal kembali dalam sebulan. Angka ini layak dijalankan, tapi belum lapang: patokan sehat adalah 3 kali. Saya menyarankan menjalankan setengahnya dulu (Rp 25 juta) sambil memantau apakah pelanggan dari kanal iklan bertahan sebaik pelanggan yang datang sendiri — kalau retensinya lebih rendah, rasio sebenarnya akan di bawah 2 dan sisa anggarannya sebaiknya dialihkan untuk memperbaiki pengalaman bulan pertama."</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 4 ================= -->
+  <section id="w4" aria-labelledby="w4-h">
+    <span class="week-tag">Minggu 4 · Proyek</span>
+    <h2 id="w4-h">Peramalan: menebak besok dengan jujur</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membuat ramalan yang bisa dipertanggungjawabkan, dan — yang lebih penting — membuktikan bahwa ramalanmu lebih baik daripada tebakan sederhana.</p>
+
+    <div class="prose">
+      <div class="concept"><strong>Aturan pertama peramalan:</strong> selalu bandingkan dengan metode terbodoh yang masuk akal. Model rumit yang kalah dari "pakai angka minggu lalu" adalah model yang gagal, seberapa pun canggihnya. Banyak proyek peramalan tidak pernah melakukan perbandingan ini, dan itulah kenapa banyak model produksi sebenarnya lebih buruk daripada tidak ada model.</div>
+
+      <h3>1. Data harian dengan pola mingguan</h3>
+    </div>
+
+<pre><code>rng = np.random.default_rng(5)
+tgl = pd.date_range("2025-01-01", "2025-12-31", freq="D")
+tren = np.linspace(4_000_000, 6_400_000, len(tgl))
+efek_hari = {0:-0.10, 1:-0.12, 2:-0.06, 3:0.02, 4:0.14, 5:0.24, 6:0.12}
+musiman = np.array([efek_hari[d.dayofweek] for d in tgl])
+derau = rng.normal(0, 0.05, len(tgl))
+s = pd.Series((tren * (1 + musiman + derau)).round(-3), index=tgl, name="omzet")
+
+nama = ["Sen","Sel","Rab","Kam","Jum","Sab","Min"]
+for d in range(7):
+    v = s[s.index.dayofweek == d].mean()
+    print(f"{nama[d]}: {v:>12,.0f}  ({(v/s.mean()-1)*100:+5.1f}%)")</code></pre>
+<pre class="out"><code>Sen:    4,629,865  (-13.7%)
+Sel:    4,552,288  (-15.1%)
+Rab:    4,909,302  ( -8.5%)
+Kam:    5,333,404  ( -0.5%)
+Jum:    5,861,808  ( +9.3%)
+Sab:    6,446,577  (+20.2%)
+Min:    5,813,385  ( +8.4%)</code></pre>
+
+    <div class="prose">
+      <p>Sabtu 20% di atas rata-rata, Selasa 15% di bawah. <strong>Model apa pun yang mengabaikan pola ini akan salah besar setiap hari</strong> — dan itulah yang akan kita buktikan.</p>
+
+      <h3>2. Menguji empat metode secara adil</h3>
+      <p>Sisihkan 28 hari terakhir. Latih dengan sisanya, ramalkan 28 hari itu, lalu bandingkan dengan kenyataan.</p>
+    </div>
+
+    <div class="block">
+      <h4>Empat metode, dari terbodoh ke terbaik</h4>
+<pre><code>latih, uji = s[:-28], s[-28:]
+
+def mape(aktual, ramal):
+    return np.mean(np.abs((aktual - ramal) / aktual)) * 100
+
+# 1. naive: pakai nilai terakhir
+p1 = pd.Series(latih.iloc[-1], index=uji.index)
+
+# 2. rata-rata 28 hari terakhir
+p2 = pd.Series(latih[-28:].mean(), index=uji.index)
+
+# 3. seasonal naive: pakai nilai hari yang sama minggu lalu
+p3 = pd.Series([latih.iloc[-7 + (i % 7)] for i in range(28)], index=uji.index)
+
+# 4. tren linear + faktor hari
+X = np.arange(len(latih))
+koef = np.polyfit(X, latih.values, 1)
+faktor = {d: latih[latih.index.dayofweek == d].mean() / latih.mean()
+          for d in range(7)}
+dasar = np.polyval(koef, np.arange(len(latih), len(latih) + 28))
+p4 = pd.Series([dasar[i] * faktor[uji.index[i].dayofweek] for i in range(28)],
+               index=uji.index)
+
+for nm, p in [("naive", p1), ("rata-rata 28 hari", p2),
+              ("seasonal naive", p3), ("tren + faktor hari", p4)]:
+    print(f"{nm:22s} MAPE {mape(uji, p):5.2f}%")</code></pre>
+<pre class="out"><code>naive                  MAPE 12.95%
+rata-rata 28 hari      MAPE 11.58%
+seasonal naive         MAPE  5.14%
+tren + faktor hari     MAPE  3.50%</code></pre>
+      <p class="result"><strong>Lompatan terbesar terjadi saat kita mulai memperhitungkan hari dalam seminggu</strong> — dari 11,58% ke 5,14%, lebih dari setengahnya hilang. Menambahkan tren memperbaikinya lagi jadi 3,50%. Pelajarannya: memahami pola dalam datamu memberi hasil jauh lebih besar daripada mengganti model dengan yang lebih canggih.</p>
+    </div>
+
+    <div class="prose">
+      <h3>3. Memilih ukuran kesalahan</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Ukuran</th><th>Artinya</th><th>Pakai kalau</th></tr></thead>
+        <tbody>
+          <tr><td><strong>MAE</strong></td><td>Rata-rata selisih mutlak, dalam satuan asli (rupiah)</td><td>Kamu ingin menjelaskan ke orang bisnis: "meleset rata-rata Rp 222 ribu per hari"</td></tr>
+          <tr><td><strong>MAPE</strong></td><td>Rata-rata selisih dalam persen</td><td>Membandingkan antar produk atau cabang berbeda ukuran</td></tr>
+          <tr><td><strong>RMSE</strong></td><td>Menghukum kesalahan besar lebih berat</td><td>Meleset jauh sekali jauh lebih buruk daripada meleset sedikit beberapa kali</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p class="warn"><strong>MAPE punya cacat yang harus kamu tahu:</strong> dia pecah kalau nilai aktualnya nol atau mendekati nol (pembagian dengan nol), dan dia menghukum ramalan yang terlalu tinggi lebih ringan daripada yang terlalu rendah. Untuk data yang sering bernilai nol, pakai MAE.</p>
+
+      <h3>4. Kapan naik ke model yang lebih canggih</h3>
+      <p>Setelah metode sederhana, langkah berikutnya adalah Prophet (dari Meta) atau SARIMA. Keduanya berguna kalau kamu punya beberapa pola musiman sekaligus (mingguan <em>dan</em> tahunan), atau hari libur yang berpengaruh besar.</p>
+    </div>
+
+<pre><code># pip install prophet
+from prophet import Prophet
+
+d = s.reset_index()
+d.columns = ["ds", "y"]                      # Prophet mewajibkan nama ini
+m = Prophet(weekly_seasonality=True, yearly_seasonality=False)
+m.fit(d[:-28])
+
+masa_depan = m.make_future_dataframe(periods=28)
+ramalan = m.predict(masa_depan)
+ramalan[["ds", "yhat", "yhat_lower", "yhat_upper"]].tail()</code></pre>
+
+    <div class="prose">
+      <p>Kelebihan Prophet: dia memberi <strong>rentang ketidakpastian</strong> (<code>yhat_lower</code> dan <code>yhat_upper</code>), bukan satu angka. Selalu tampilkan rentang itu di grafikmu. Ramalan berupa satu garis tunggal memberi kesan kepastian yang tidak kamu punya — dan itu jenis kebohongan yang paling mudah dilakukan tanpa sadar.</p>
+      <div class="tip"><strong>Ujilah Prophet dengan cara yang sama</strong> seperti empat metode di atas. Kalau MAPE-nya tidak lebih baik dari 3,50% milik "tren + faktor hari", pakai yang sederhana. Model sederhana yang bisa kamu jelaskan ke atasan mengalahkan model rumit yang tidak bisa kamu pertanggungjawabkan.</div>
+    </div>
+
+    <div class="exercise" style="border-color:var(--teal)">
+      <span class="tag" style="color:var(--teal)">PROYEK: LAPORAN KESEHATAN BISNIS</span>
+      <h3>Notebook lengkap: retensi, LTV, dan ramalan</h3>
+      <div class="prose">
+        <p>File <code>05-kesehatan-bisnis-kedai.ipynb</code>. Ini proyek yang paling dekat dengan pekerjaan analis produk sungguhan, dan yang paling sering jadi bahan diskusi saat wawancara.</p>
+      </div>
+      <ol class="steps">
+        <li><strong>Bagian 1 — Keadaan sekarang</strong><span>Pengguna aktif per bulan, pertumbuhan, dan pemisahan pendapatan: dari pelanggan baru, berulang, dan yang hilang.</span></li>
+        <li><strong>Bagian 2 — Retensi</strong><span>Matriks kohor, peta panas, kurva retensi rata-rata. Jawab dengan tegas: apakah kurvanya melandai, dan apakah kohor baru membaik?</span></li>
+        <li><strong>Bagian 3 — Segmentasi</strong><span>Temukan sendiri kelompok pelanggan yang retensinya berbeda tajam. Bandingkan perilaku bulan pertama mereka.</span></li>
+        <li><strong>Bagian 4 — Ekonomi unit</strong><span>LTV kotor dan bersih, waktu balik modal, tabel LTV/CAC untuk beberapa skenario CAC.</span></li>
+        <li><strong>Bagian 5 — Ramalan</strong><span>Ramal 28 hari ke depan, dengan minimal tiga metode pembanding dan tabel MAPE. Tampilkan rentang ketidakpastiannya.</span></li>
+        <li><strong>Bagian 6 — Rekomendasi</strong><span>Tiga rekomendasi, tiap satu dengan angka pendukung dan perkiraan dampaknya. Sebutkan juga batasan analisis ini.</span></li>
+      </ol>
+      <ul class="checklist">
+        <li><span class="box"></span>Setiap angka penting disertai pembanding atau rentang, bukan berdiri sendiri.</li>
+        <li><span class="box"></span>Ada minimal satu temuan yang hanya muncul setelah data dipecah per segmen.</li>
+        <li><span class="box"></span>Ramalan diuji terhadap metode sederhana, dan hasilnya dilaporkan apa adanya.</li>
+        <li><span class="box"></span>Bagian batasan ditulis jujur — termasuk hal yang tidak bisa dijawab data ini.</li>
+        <li><span class="box"></span>Notebook berjalan bersih dari atas ke bawah, ada di GitHub, README diperbarui.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>Modul berikutnya: <strong>Machine Learning untuk Analis</strong> (Bulan 10) — memprediksi pelanggan mana yang akan berhenti, dan yang lebih penting, menjelaskan kenapa dengan bahasa yang dimengerti pimpinan.</p>
+    <p class="closing">Analis yang bisa bilang "boleh belanja iklan sampai Rp 36 ribu per pelanggan, ini hitungannya" bernilai jauh lebih besar daripada yang cuma bisa membuat grafik.</p>
+  </footer>
+
+</div>

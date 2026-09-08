@@ -1,0 +1,644 @@
+<title>Modul Visualisasi dan BI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --c1:#009688; --c2:#B0651A;   /* warna grafik, lolos uji buta warna */
+    --grid:#D3CBB4;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --c1:#00A896; --c2:#C87A20;
+      --grid:#333D4D;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --c1:#00A896; --c2:#C87A20;
+    --grid:#333D4D;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.62;
+    padding:20px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.86em; background:var(--code-bg); padding:2px 6px; border-radius:6px; }
+  pre{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.8rem; line-height:1.5;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; overflow-x:auto; margin:0 0 12px;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .out{ border-left:3px solid var(--teal); }
+
+  .nav{
+    position:sticky; top:0; z-index:5; max-width:880px; margin:0 auto 24px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; padding:8px 10px; flex-wrap:wrap;
+  }
+  .nav .brand{ font-family:"Fraunces", serif; font-weight:600; font-size:0.95rem; padding:6px 10px; margin-right:auto; }
+  .nav a{ text-decoration:none; color:var(--ink-soft); font-size:0.8rem; font-weight:500; padding:6px 10px; border-radius:999px; }
+  .nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .nav a:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+
+  .page{
+    max-width:880px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:32px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+  .needs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+  @media (max-width:600px){ .needs{ grid-template-columns:1fr; } }
+  .needs div{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.86rem; color:var(--ink-soft); }
+  .needs strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:2px; }
+
+  section{ margin-bottom:48px; scroll-margin-top:84px; }
+  section > h2{ font-size:1.36rem; font-weight:600; margin-bottom:4px; }
+  .week-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:8px; }
+  .goal{ color:var(--ink-soft); font-size:0.92rem; max-width:62ch; margin-bottom:22px; padding-left:14px; border-left:3px solid var(--teal); }
+  .goal strong{ color:var(--ink); }
+  h3{ font-size:1.08rem; font-weight:600; margin:26px 0 10px; }
+  h4{ font-size:0.98rem; font-weight:600; margin:18px 0 6px; }
+  .prose{ max-width:68ch; }
+  .prose p{ margin-bottom:12px; font-size:0.95rem; }
+  .prose ul, .prose ol{ margin:0 0 12px; padding-left:22px; font-size:0.95rem; }
+  .prose li{ margin-bottom:6px; }
+  .concept{ background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin:14px 0 18px; font-size:0.92rem; max-width:70ch; }
+  .concept strong{ color:var(--teal); }
+  .tip{ background:var(--gold-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .tip strong{ color:var(--gold); }
+  .warn{ background:var(--alert-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .warn strong{ color:var(--alert); }
+
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; margin:12px 0 16px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.84rem; }
+  th, td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  table.wrap td{ white-space:normal; }
+
+  .block{ border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; background:var(--surface-2); }
+  .block h4{ margin:0 0 6px; font-family:"IBM Plex Mono", monospace; font-size:0.92rem; color:var(--teal); }
+  .block .use{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:10px; }
+  .block pre{ margin-bottom:8px; }
+  .block .result{ font-size:0.88rem; }
+
+  /* --- figure: perbandingan grafik --- */
+  .figpair{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:18px 0; }
+  @media (max-width:640px){ .figpair{ grid-template-columns:1fr; } }
+  .fig{ border:1px solid var(--line); border-radius:14px; padding:14px 16px 12px; background:var(--surface-2); }
+  .fig svg{ display:block; width:100%; height:auto; }
+  .fig .cap{ font-size:0.82rem; color:var(--ink-soft); margin-top:8px; }
+  .fig .lbl{ font-family:"IBM Plex Mono", monospace; font-size:0.64rem; letter-spacing:0.08em; text-transform:uppercase; display:block; margin-bottom:8px; }
+  .fig.bad .lbl{ color:var(--alert); }
+  .fig.good .lbl{ color:var(--teal); }
+  .fig .cap strong{ color:var(--ink); }
+  .svgtxt{ font-family:"IBM Plex Sans", sans-serif; font-size:9px; fill:var(--ink-soft); }
+  .svgval{ font-family:"IBM Plex Mono", monospace; font-size:9px; fill:var(--ink); }
+  .svgttl{ font-family:"IBM Plex Sans", sans-serif; font-size:10px; font-weight:600; fill:var(--ink); }
+
+  .exercise{ border:1px dashed var(--gold); border-radius:14px; padding:18px 20px; margin:22px 0 0; background:var(--surface); }
+  .exercise h3{ margin:0 0 4px; }
+  .exercise .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.1em; color:var(--gold); }
+  .exercise ol{ margin:10px 0 0; padding-left:22px; font-size:0.93rem; }
+  .exercise li{ margin-bottom:8px; }
+  details{ margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  summary{ cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--teal); }
+  summary:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; border-radius:4px; }
+  details .answer{ margin-top:10px; font-size:0.9rem; }
+  details .answer ol{ padding-left:22px; margin:0; }
+  details .answer li{ margin-bottom:12px; }
+  details .answer pre{ margin:6px 0; }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .steps li{ display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem; }
+  .steps li::before{ counter-increment:step; content:counter(step, decimal-leading-zero); font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px; }
+  .steps li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .steps li span{ color:var(--ink-soft); }
+
+  .checklist{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .checklist li{ display:flex; gap:10px; align-items:flex-start; font-size:0.92rem; }
+  .checklist .box{ flex:none; width:15px; height:15px; margin-top:4px; border:1.5px solid var(--teal); border-radius:4px; }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<nav class="nav" aria-label="Bagian modul">
+  <span class="brand">Visualisasi &amp; BI</span>
+  <a href="#w1">Mgg 1 · Prinsip</a>
+  <a href="#w2">Mgg 2 · matplotlib</a>
+  <a href="#w3">Mgg 3 · Dashboard</a>
+  <a href="#w4">Mgg 4 · Tableau/BI</a>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Materi · Bulan 6</span>
+    <h1>Visualisasi &amp; Business Intelligence</h1>
+    <p class="lede">Analisis yang tidak dimengerti orang lain sama nilainya dengan analisis yang tidak pernah dikerjakan. Bulan ini kamu belajar membuat grafik yang benar dan jujur — sebagian besar di Python, ditutup dengan Tableau dan Power BI secukupnya untuk lolos saringan lowongan di Singapura dan Australia.</p>
+
+    <div class="needs">
+      <div><strong>Utama</strong>matplotlib, seaborn, dan plotly di Google Colab.</div>
+      <div><strong>Pelengkap</strong>Tableau Public dan Power BI Desktop, keduanya gratis.</div>
+      <div><strong>Data</strong>Kedai Kopi Senja dari modul SQL/pandas, plus hasil A/B test dari modul statistik.</div>
+    </div>
+  </header>
+
+  <!-- ================= MINGGU 1 ================= -->
+  <section id="w1" aria-labelledby="w1-h">
+    <span class="week-tag">Minggu 1</span>
+    <h2 id="w1-h">Memilih bentuk, dan tidak berbohong</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> memilih jenis grafik dari sifat pertanyaannya, bukan dari selera; dan mengenali grafik yang menyesatkan — termasuk yang kamu buat sendiri tanpa sadar.</p>
+
+    <div class="prose">
+      <h3>1. Bentuk grafik ditentukan oleh tugas datanya</h3>
+      <p>Jangan mulai dari "grafik apa yang bagus". Mulai dari "apa tugas angka ini". Ada lima tugas, dan tiap tugas punya jawabannya.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Tugas data</th><th>Pertanyaan yang dijawab</th><th>Bentuk</th><th>Contoh di kedai</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Besaran</strong></td><td>Mana yang lebih besar?</td><td>Batang horizontal, diurutkan</td><td>Omzet per produk</td></tr>
+          <tr><td><strong>Perubahan waktu</strong></td><td>Naik atau turun?</td><td>Garis</td><td>Omzet per bulan</td></tr>
+          <tr><td><strong>Sebaran</strong></td><td>Bentuknya seperti apa, ada yang aneh?</td><td>Histogram, box plot</td><td>Sebaran nilai transaksi</td></tr>
+          <tr><td><strong>Hubungan</strong></td><td>Apakah dua hal bergerak bersama?</td><td>Scatter plot</td><td>Jumlah porsi vs nilai transaksi</td></tr>
+          <tr><td><strong>Satu angka penting</strong></td><td>Berapa angkanya?</td><td><strong>Bukan grafik.</strong> Angka besar saja</td><td>"Omzet Maret: Rp 2,03 juta"</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <div class="concept"><strong>Baris terakhir itu yang paling sering dilanggar.</strong> Kalau kamu hanya punya satu atau dua angka, grafik justru memperlambat pembaca. Tulis angkanya besar-besar dengan label yang jelas. Analis pemula membuat grafik untuk segalanya; analis berpengalaman tahu kapan tidak perlu.</div>
+
+      <h3>2. Sumbu yang dipotong: cara paling umum grafik berbohong</h3>
+      <p>Data yang sama, dua kesan yang sangat berbeda. Yang kiri membuat pertumbuhan terlihat meledak; yang kanan menunjukkan pertumbuhan yang sebenarnya — bagus, tapi tidak dramatis.</p>
+    </div>
+
+    <div class="figpair">
+      <div class="fig bad">
+        <span class="lbl mono">Menyesatkan</span>
+        <svg viewBox="0 0 260 200" role="img" aria-label="Grafik batang omzet empat bulan dengan sumbu Y dimulai dari 1200, membuat pertumbuhan tampak sangat curam">
+          <text x="8" y="14" class="svgttl">Omzet meledak!</text>
+          <line x1="42" y1="30" x2="252" y2="30" stroke="var(--grid)" stroke-width="1"/>
+          <line x1="42" y1="80" x2="252" y2="80" stroke="var(--grid)" stroke-width="1"/>
+          <line x1="42" y1="130" x2="252" y2="130" stroke="var(--grid)" stroke-width="1"/>
+          <line x1="42" y1="180" x2="252" y2="180" stroke="var(--ink-soft)" stroke-width="1"/>
+          <text x="36" y="33" text-anchor="end" class="svgtxt">2200</text>
+          <text x="36" y="83" text-anchor="end" class="svgtxt">1900</text>
+          <text x="36" y="133" text-anchor="end" class="svgtxt">1600</text>
+          <text x="36" y="183" text-anchor="end" class="svgtxt">1300</text>
+          <rect x="56"  y="175.3" width="34" height="4.7"   fill="var(--c2)" rx="2"/>
+          <rect x="106" y="114.5" width="34" height="65.5"  fill="var(--c2)" rx="2"/>
+          <rect x="156" y="58.5"  width="34" height="121.5" fill="var(--c2)" rx="2"/>
+          <rect x="206" y="38.3"  width="34" height="141.7" fill="var(--c2)" rx="2"/>
+          <text x="73"  y="193" text-anchor="middle" class="svgtxt">Jan</text>
+          <text x="123" y="193" text-anchor="middle" class="svgtxt">Feb</text>
+          <text x="173" y="193" text-anchor="middle" class="svgtxt">Mar</text>
+          <text x="223" y="193" text-anchor="middle" class="svgtxt">Apr</text>
+        </svg>
+        <p class="cap">Sumbu mulai dari <strong>1300</strong>. Batang Januari nyaris hilang, April terlihat 30 kali lebih besar. Kesan: pertumbuhan luar biasa.</p>
+      </div>
+      <div class="fig good">
+        <span class="lbl mono">Jujur</span>
+        <svg viewBox="0 0 260 200" role="img" aria-label="Grafik batang omzet empat bulan yang sama dengan sumbu Y dimulai dari nol, menunjukkan pertumbuhan yang stabil">
+          <text x="8" y="14" class="svgttl">Omzet naik 62% sejak Januari</text>
+          <line x1="42" y1="30" x2="252" y2="30" stroke="var(--grid)" stroke-width="1"/>
+          <line x1="42" y1="80" x2="252" y2="80" stroke="var(--grid)" stroke-width="1"/>
+          <line x1="42" y1="130" x2="252" y2="130" stroke="var(--grid)" stroke-width="1"/>
+          <line x1="42" y1="180" x2="252" y2="180" stroke="var(--ink-soft)" stroke-width="1"/>
+          <text x="36" y="33" text-anchor="end" class="svgtxt">2200</text>
+          <text x="36" y="83" text-anchor="end" class="svgtxt">1467</text>
+          <text x="36" y="133" text-anchor="end" class="svgtxt">733</text>
+          <text x="36" y="183" text-anchor="end" class="svgtxt">0</text>
+          <rect x="56"  y="89.5" width="34" height="90.5"  fill="var(--c1)" rx="2"/>
+          <rect x="106" y="64.6" width="34" height="115.4" fill="var(--c1)" rx="2"/>
+          <rect x="156" y="41.7" width="34" height="138.3" fill="var(--c1)" rx="2"/>
+          <rect x="206" y="33.4" width="34" height="146.6" fill="var(--c1)" rx="2"/>
+          <text x="73"  y="193" text-anchor="middle" class="svgtxt">Jan</text>
+          <text x="123" y="193" text-anchor="middle" class="svgtxt">Feb</text>
+          <text x="173" y="193" text-anchor="middle" class="svgtxt">Mar</text>
+          <text x="223" y="193" text-anchor="middle" class="svgtxt">Apr</text>
+        </svg>
+        <p class="cap">Sumbu mulai dari <strong>0</strong>. Pertumbuhannya tetap terlihat jelas dan tetap kabar baik — tanpa melebih-lebihkan.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <div class="warn"><strong>Aturannya:</strong> grafik <em>batang</em> harus selalu mulai dari nol, karena mata membandingkan panjang batang. Grafik <em>garis</em> boleh tidak mulai dari nol, karena yang dibaca adalah kemiringannya, bukan panjangnya — tapi kalau kamu memotongnya, katakan dengan jelas di label sumbu.</div>
+
+      <h3>3. Diurutkan dan satu warna</h3>
+      <p>Dua perbaikan kecil yang paling banyak berpengaruh: urutkan batangnya, dan berhenti memberi warna berbeda untuk tiap batang.</p>
+    </div>
+
+    <div class="figpair">
+      <div class="fig bad">
+        <span class="lbl mono">Sulit dibaca</span>
+        <svg viewBox="0 0 260 190" role="img" aria-label="Grafik batang porsi per produk urut abjad dengan empat warna berbeda dan tanpa label angka">
+          <text x="8" y="14" class="svgttl">Porsi per Produk</text>
+          <line x1="8" y1="170" x2="252" y2="170" stroke="var(--ink-soft)" stroke-width="1"/>
+          <rect x="24"  y="103.8" width="40" height="66.2" fill="#D94F4F" rx="2"/>
+          <rect x="80"  y="124.7" width="40" height="45.3" fill="#4F72D9" rx="2"/>
+          <rect x="136" y="40"    width="40" height="130"  fill="#D9C24F" rx="2"/>
+          <rect x="192" y="109.6" width="40" height="60.4" fill="#8B4FD9" rx="2"/>
+          <text x="44"  y="183" text-anchor="middle" class="svgtxt">Americano</text>
+          <text x="100" y="183" text-anchor="middle" class="svgtxt">Croissant</text>
+          <text x="156" y="183" text-anchor="middle" class="svgtxt">Kopi Susu</text>
+          <text x="212" y="183" text-anchor="middle" class="svgtxt">Roti Bakar</text>
+        </svg>
+        <p class="cap">Urut abjad, empat warna tanpa makna, tanpa angka. Untuk tahu peringkat kedua, mata harus membandingkan bolak-balik. <strong>Warnanya juga tidak lolos uji buta warna.</strong></p>
+      </div>
+      <div class="fig good">
+        <span class="lbl mono">Langsung terbaca</span>
+        <svg viewBox="0 0 260 190" role="img" aria-label="Grafik batang porsi per produk diurutkan dari terbanyak dengan satu warna dan label angka di tiap batang">
+          <text x="8" y="14" class="svgttl">Kopi Susu 2× lipat produk lain</text>
+          <line x1="8" y1="170" x2="252" y2="170" stroke="var(--ink-soft)" stroke-width="1"/>
+          <rect x="24"  y="40"    width="40" height="130"  fill="var(--c1)" rx="2"/>
+          <rect x="80"  y="103.8" width="40" height="66.2" fill="var(--c1)" rx="2"/>
+          <rect x="136" y="109.6" width="40" height="60.4" fill="var(--c1)" rx="2"/>
+          <rect x="192" y="124.7" width="40" height="45.3" fill="var(--c1)" rx="2"/>
+          <text x="44"  y="34"  text-anchor="middle" class="svgval">112</text>
+          <text x="100" y="98"  text-anchor="middle" class="svgval">57</text>
+          <text x="156" y="104" text-anchor="middle" class="svgval">52</text>
+          <text x="212" y="119" text-anchor="middle" class="svgval">39</text>
+          <text x="44"  y="183" text-anchor="middle" class="svgtxt">Kopi Susu</text>
+          <text x="100" y="183" text-anchor="middle" class="svgtxt">Americano</text>
+          <text x="156" y="183" text-anchor="middle" class="svgtxt">Roti Bakar</text>
+          <text x="212" y="183" text-anchor="middle" class="svgtxt">Croissant</text>
+        </svg>
+        <p class="cap">Diurutkan, satu warna, angka langsung di batang, judul menyatakan temuan. Tidak ada yang perlu dijelaskan lisan.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>4. Aturan warna yang dipakai analis profesional</h3>
+      <ul>
+        <li><strong>Satu warna</strong> kalau semua batang mewakili hal yang sama. Warna berbeda hanya kalau warnanya <em>menyampaikan informasi</em>.</li>
+        <li><strong>Warna untuk menonjolkan:</strong> semua abu-abu, satu batang berwarna — itu cara terkuat mengarahkan perhatian.</li>
+        <li><strong>Jangan pakai pelangi</strong> untuk angka berurutan. Untuk besaran, pakai satu warna dari muda ke tua.</li>
+        <li><strong>Hijau/merah bukan satu-satunya penanda.</strong> Sekitar 1 dari 12 pria mengalami buta warna merah-hijau. Selalu tambahkan label atau ikon, jangan mengandalkan warna saja.</li>
+        <li><strong>Jangan pernah dua sumbu Y</strong> dalam satu grafik. Dua skala berbeda membuat orang melihat "persilangan" yang sebenarnya hanya akibat pilihan skala. Kalau perlu dua ukuran, buat dua grafik.</li>
+      </ul>
+      <div class="tip"><strong>Warna di modul ini bukan tebakan.</strong> Dua warna grafik yang dipakai di atas sudah diuji terhadap tiga jenis buta warna (protanopia, deuteranopia, tritanopia) dan lolos ambang keterbedaan. Kamu akan belajar melakukan pemeriksaan yang sama di minggu 3.</div>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 1</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Cari tiga grafik di berita atau laporan tahunan perusahaan. Untuk masing-masing: apa tugas datanya, apakah bentuknya tepat, dan apakah sumbunya jujur?</li>
+        <li>Ambil grafik terburuk dari tiga itu. Tulis tiga perbaikan spesifik.</li>
+        <li>Untuk lima pertanyaan berikut, tentukan bentuk grafiknya: (a) apakah pelanggan Bandung belanja lebih besar dari Jakarta, (b) apakah omzet tumbuh, (c) berapa omzet kemarin, (d) apakah transaksi besar cenderung terjadi di akhir bulan, (e) seperti apa sebaran nilai transaksi.</li>
+        <li>Jelaskan dalam satu paragraf kenapa grafik dengan dua sumbu Y berbahaya, dan apa gantinya.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban soal 3</summary>
+        <div class="answer">
+          <ol>
+            <li><strong>(a)</strong> Besaran → batang, dua kota, diurutkan. Atau box plot kalau mau menunjukkan sebarannya juga.</li>
+            <li><strong>(b)</strong> Perubahan waktu → garis.</li>
+            <li><strong>(c)</strong> Satu angka → bukan grafik. Tulis angkanya besar dengan pembanding kecil di bawahnya ("naik 12% dari kemarin").</li>
+            <li><strong>(d)</strong> Hubungan antara tanggal dan nilai → scatter plot, atau garis rata-rata per tanggal kalau datanya cukup banyak.</li>
+            <li><strong>(e)</strong> Sebaran → histogram. Kalau ingin membandingkan sebaran antar kota, box plot berdampingan.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 2 ================= -->
+  <section id="w2" aria-labelledby="w2-h">
+    <span class="week-tag">Minggu 2</span>
+    <h2 id="w2-h">matplotlib &amp; seaborn: alat kerja harian</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membuat grafik siap presentasi dari pandas, dan mengendalikan setiap detailnya — bukan sekadar menerima keluaran bawaan yang jelek.</p>
+
+    <div class="prose">
+      <h3>1. Tiga cara membuat grafik, dan kapan memakai yang mana</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Cara</th><th>Contoh</th><th>Pakai kalau</th></tr></thead>
+        <tbody>
+          <tr><td><code>.plot()</code> dari pandas</td><td><code>df.groupby("bulan")["total"].sum().plot()</code></td><td>Eksplorasi cepat untuk diri sendiri</td></tr>
+          <tr><td><strong>matplotlib</strong> langsung</td><td><code>fig, ax = plt.subplots()</code></td><td>Grafik final yang perlu dikendalikan penuh</td></tr>
+          <tr><td><strong>seaborn</strong></td><td><code>sns.boxplot(data=df, x=…, y=…)</code></td><td>Grafik statistik (sebaran, hubungan) dalam satu baris</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>Ketiganya matplotlib di baliknya, jadi bisa dicampur: buat dengan seaborn, rapikan dengan matplotlib.</p>
+      <div class="concept"><strong>Pola yang harus jadi kebiasaan:</strong> <code>fig, ax = plt.subplots()</code> lalu semua perintah lewat <code>ax</code>. Cara lama (<code>plt.bar()</code> langsung) bekerja untuk satu grafik, tapi langsung kacau begitu kamu butuh beberapa panel. Mulai dengan kebiasaan yang benar.</div>
+    </div>
+
+    <div class="block">
+      <h4>Grafik batang yang layak dipresentasikan</h4>
+<pre><code>import matplotlib.pyplot as plt
+
+porsi = df.groupby("produk")["jumlah"].sum().sort_values()
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.barh(porsi.index, porsi.values, color="#009688")
+
+# angka langsung di ujung batang
+for i, v in enumerate(porsi.values):
+    ax.text(v + 2, i, str(v), va="center", fontsize=10)
+
+ax.set_title("Kopi Susu terjual 2× lipat produk lain", fontsize=13, pad=12, loc="left")
+ax.set_xlabel("Porsi terjual")
+ax.spines[["top", "right", "bottom"]].set_visible(False)   # buang bingkai
+ax.tick_params(bottom=False)
+ax.set_xticks([])                                          # angka sudah di batang
+fig.tight_layout()
+plt.show()</code></pre>
+      <p class="result">Enam baris terakhir itu yang membedakan grafik "keluaran mentah" dari "siap dikirim ke atasan". Batang <em>horizontal</em> (<code>barh</code>) dipakai karena nama produknya panjang — tidak perlu memiringkan label.</p>
+    </div>
+
+    <div class="block">
+      <h4>Grafik garis dengan penanda dan anotasi</h4>
+<pre><code>bulanan = df.groupby("bulan")["total"].sum()
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(bulanan.index.astype(str), bulanan.values,
+        marker="o", linewidth=2, color="#009688")
+
+ax.set_ylim(0, bulanan.max() * 1.15)          # batang & garis bisnis: mulai dari 0
+ax.set_title("Omzet naik tiap bulan, Maret 53% di atas Januari",
+             fontsize=13, pad=12, loc="left")
+ax.set_ylabel("Rupiah")
+ax.grid(axis="y", alpha=0.3)                  # grid tipis saja
+ax.spines[["top", "right"]].set_visible(False)
+
+# tandai titik terakhir
+ax.annotate(f"{bulanan.iloc[-1]:,.0f}",
+            xy=(2, bulanan.iloc[-1]), xytext=(0, 10),
+            textcoords="offset points", ha="center", fontweight="bold")
+fig.tight_layout()</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Beberapa panel sekaligus (small multiples)</h4>
+      <p class="use">Ini pengganti yang benar untuk grafik dua sumbu Y. Dua ukuran berbeda, dua panel, satu sumbu waktu.</p>
+<pre><code>fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+
+df.groupby("bulan")["total"].sum().plot(ax=axes[0], marker="o", color="#009688")
+axes[0].set_title("Omzet (Rp)", loc="left")
+axes[0].set_ylim(0, None)
+
+df.groupby("bulan")["jumlah"].sum().plot(ax=axes[1], marker="o", color="#B0651A")
+axes[1].set_title("Porsi terjual", loc="left")
+axes[1].set_ylim(0, None)
+
+for a in axes:
+    a.spines[["top", "right"]].set_visible(False)
+    a.grid(axis="y", alpha=0.3)
+    a.set_xlabel("")
+
+fig.suptitle("Omzet dan volume tumbuh seiring", fontsize=14, x=0.02, ha="left")
+fig.tight_layout()</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>seaborn untuk grafik statistik</h4>
+<pre><code>import seaborn as sns
+sns.set_theme(style="whitegrid")
+
+# sebaran nilai transaksi per kota
+fig, ax = plt.subplots(figsize=(7, 4))
+sns.boxplot(data=df, x="kota", y="total", ax=ax,
+            palette=["#009688", "#B0651A"], width=0.5)
+ax.set_title("Bandung punya transaksi besar yang lebih ekstrem", loc="left")
+
+# hubungan dua angka
+sns.scatterplot(data=df, x="jumlah", y="total", hue="kategori", s=80)
+
+# histogram dua kelompok bertumpuk (dari data A/B test)
+sns.histplot(data=ab[ab.konversi==1], x="nilai_pesanan",
+             hue="grup", bins=25, element="step")</code></pre>
+      <p class="result">Box plot membaca: garis tengah = median, kotak = 50% data di tengah, garis panjang = jangkauan, titik terpisah = outlier. Ini grafik terbaik untuk membandingkan sebaran beberapa kelompok sekaligus, dan sering muncul di wawancara.</p>
+    </div>
+
+    <div class="prose">
+      <h3>2. Menyimpan gambar dengan benar</h3>
+    </div>
+<pre><code>fig.savefig("omzet_bulanan.png", dpi=150, bbox_inches="tight")   # untuk slide
+fig.savefig("omzet_bulanan.svg", bbox_inches="tight")            # untuk web, tajam di segala ukuran</code></pre>
+    <div class="prose">
+      <p><code>bbox_inches="tight"</code> mencegah label terpotong — tanpa itu, judul panjang sering hilang separuh. <code>dpi=150</code> minimum supaya tidak buram saat dipresentasikan.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 2</span>
+      <h3>Lima grafik</h3>
+      <ol>
+        <li>Batang horizontal laba per produk (butuh <code>merge</code> dengan tabel produk dari modul sebelumnya), diurutkan, dengan angka di batang, judul menyatakan temuan.</li>
+        <li>Garis omzet per bulan untuk dua kota dalam satu grafik. Beri warna berbeda dan legenda, plus label langsung di ujung tiap garis.</li>
+        <li>Dua panel berdampingan: omzet per bulan dan margin per bulan.</li>
+        <li>Box plot nilai transaksi per kategori. Apa yang kamu simpulkan dari perbedaan kotaknya?</li>
+        <li>Ambil satu grafik yang sudah kamu buat, dan buat versi "menonjolkan": semua batang abu-abu kecuali satu yang paling penting.</li>
+      </ol>
+      <details>
+        <summary>Petunjuk untuk soal 2 dan 5</summary>
+        <div class="answer">
+          <ol>
+            <li><strong>Soal 2 — label di ujung garis</strong> lebih baik daripada legenda karena mata tidak perlu bolak-balik:
+<pre><code>for kota, warna in [("Jakarta", "#009688"), ("Bandung", "#B0651A")]:
+    s = df[df.kota == kota].groupby("bulan")["total"].sum()
+    ax.plot(s.index.astype(str), s.values, marker="o", color=warna, linewidth=2)
+    ax.text(2.05, s.iloc[-1], kota, color=warna, va="center", fontweight="bold")
+ax.set_xlim(-0.2, 2.6)     # sisakan ruang untuk label</code></pre></li>
+            <li><strong>Soal 5 — menonjolkan satu batang:</strong>
+<pre><code>warna = ["#009688" if p == "Kopi Susu" else "#C9C2AE" for p in porsi.index]
+ax.barh(porsi.index, porsi.values, color=warna)</code></pre>Teknik ini disebut <em>highlighting</em>, dan hampir selalu membuat grafik presentasi lebih kuat daripada memberi warna semua batang.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 3 ================= -->
+  <section id="w3" aria-labelledby="w3-h">
+    <span class="week-tag">Minggu 3</span>
+    <h2 id="w3-h">Grafik interaktif &amp; menyusun dashboard</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membuat grafik yang bisa di-hover dan di-zoom dengan plotly, dan menyusun beberapa grafik jadi satu dashboard yang punya alur baca.</p>
+
+    <div class="block">
+      <h4>plotly: matplotlib yang bisa disentuh</h4>
+<pre><code>import plotly.express as px
+
+fig = px.bar(porsi.reset_index(), x="jumlah", y="produk", orientation="h",
+             title="Kopi Susu terjual 2× lipat produk lain",
+             color_discrete_sequence=["#009688"], text="jumlah")
+fig.update_layout(yaxis={"categoryorder": "total ascending"},
+                  plot_bgcolor="white", showlegend=False)
+fig.show()
+
+# garis dengan hover yang berguna
+fig = px.line(bulanan.reset_index(), x="bulan", y="total", markers=True,
+              title="Omzet naik tiap bulan")
+fig.update_traces(hovertemplate="%{x}<br>Rp %{y:,.0f}<extra></extra>")
+fig.update_yaxes(rangemode="tozero")
+fig.show()</code></pre>
+      <p class="result"><code>hovertemplate</code> penting: bawaan plotly menampilkan angka mentah tanpa format. Tooltip yang bagus menyebut nama dimensi dan nilai yang sudah diformat — itu bagian dari desain, bukan detail teknis.</p>
+    </div>
+
+    <div class="block">
+      <h4>Menyimpan sebagai HTML yang bisa dibagikan</h4>
+<pre><code>fig.write_html("dashboard_kedai.html", include_plotlyjs="cdn")</code></pre>
+      <p class="result">File ini bisa dibuka siapa pun di browser, tetap interaktif, tanpa perlu Python. Ini cara termurah membagikan hasil kerja — dan bisa langsung diunggah ke GitHub Pages untuk jadi tautan di portofoliomu.</p>
+    </div>
+
+    <div class="prose">
+      <h3>1. Dashboard bukan kumpulan grafik</h3>
+      <p>Kesalahan paling umum: menempelkan delapan grafik di satu halaman dan menyebutnya dashboard. Dashboard yang baik punya <strong>urutan baca</strong>, dari umum ke rinci.</p>
+    </div>
+    <ol class="steps">
+      <li><strong>Baris atas: angka utama</strong><span>Tiga sampai lima angka besar. Omzet, transaksi, rata-rata, laba. Tiap angka disertai pembanding ("+27% vs bulan lalu") — angka tanpa pembanding tidak bisa dinilai.</span></li>
+      <li><strong>Baris kedua: tren</strong><span>Satu grafik garis besar. Ini menjawab "sedang naik atau turun".</span></li>
+      <li><strong>Baris ketiga: rincian</strong><span>Dua sampai tiga grafik yang memecah angka utama: per produk, per kota, per kategori.</span></li>
+      <li><strong>Paling bawah: tabel</strong><span>Untuk orang yang mau angka pastinya. Selalu sediakan — akan selalu ada yang bertanya.</span></li>
+      <li><strong>Filter di satu tempat</strong><span>Semua kontrol (rentang tanggal, kota) di satu baris di atas, bukan tersebar. Pengguna harus tahu di mana mencarinya.</span></li>
+    </ol>
+
+    <div class="prose">
+      <h3>2. Memeriksa warna secara terukur, bukan dikira-kira</h3>
+      <p>Kamu tidak bisa menilai apakah dua warna terbedakan oleh orang buta warna hanya dengan melihat. Periksa dengan alat.</p>
+      <ul>
+        <li><strong>Cepat:</strong> buka situs Coblis (color blindness simulator), unggah gambar grafikmu, lihat versi deuteranopia dan protanopia. Kalau dua seri jadi mirip, ganti.</li>
+        <li><strong>Dari Python:</strong> pasang <code>colorspacious</code>, lalu simulasikan dan hitung jarak warnanya.</li>
+        <li><strong>Paling mudah:</strong> pakai palet yang sudah teruji. <code>sns.color_palette("colorblind")</code> di seaborn sudah dirancang untuk ini.</li>
+      </ul>
+      <div class="tip"><strong>Aturan cadangan yang selalu aman:</strong> jangan pernah menyampaikan informasi lewat warna saja. Tambahkan label langsung, bentuk penanda yang berbeda, atau pola garis. Kalau grafikmu tetap terbaca saat dicetak hitam-putih, grafikmu aman untuk semua orang.</div>
+
+      <h3>3. Tiga pertanyaan sebelum mengirim dashboard</h3>
+      <ol>
+        <li><strong>Siapa yang membuka ini, dan keputusan apa yang mereka ambil?</strong> Dashboard tanpa jawaban untuk pertanyaan ini tidak akan dipakai.</li>
+        <li><strong>Apa yang mereka lihat dalam 5 detik pertama?</strong> Kalau jawabannya "tergantung", tata letaknya belum benar.</li>
+        <li><strong>Apa yang harus mereka lakukan kalau angkanya jelek?</strong> Dashboard yang baik mengarahkan ke tindakan, bukan hanya melaporkan.</li>
+      </ol>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 3</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Buat versi plotly dari tiga grafik matplotlib minggu lalu. Simpan sebagai satu file HTML.</li>
+        <li>Rancang tata letak dashboard kedai di kertas dulu — kotak-kotak saja, tanpa data. Tentukan angka utama apa yang di baris atas dan kenapa.</li>
+        <li>Ambil satu grafik dengan dua warna. Jalankan lewat simulator buta warna. Apakah lolos? Kalau tidak, perbaiki dan uji ulang.</li>
+        <li>Tulis tiga jawaban untuk "tiga pertanyaan sebelum mengirim" di atas, untuk dashboard kedai ini.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 4 ================= -->
+  <section id="w4" aria-labelledby="w4-h">
+    <span class="week-tag">Minggu 4 · Proyek</span>
+    <h2 id="w4-h">Tableau &amp; Power BI: secukupnya untuk dipekerjakan</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> satu dashboard publik di Tableau dan satu di Power BI — cukup untuk lolos saringan lowongan, tanpa menghabiskan berbulan-bulan di alat yang bukan keahlian utamamu.</p>
+
+    <div class="prose">
+      <p>Kamu memilih jalur SQL dan Python, dan itu pilihan yang tepat untuk jangka panjang. Tapi kenyataan pasar kerja: sebagian besar iklan lowongan analis di Singapura dan Australia menyebut Tableau atau Power BI, dan banyak sistem penyaring otomatis mencari kata itu di CV. Jadi bagian ini bukan tentang menguasai; ini tentang <strong>cukup mahir untuk lolos saringan dan mengerjakan pekerjaan hari pertama</strong>.</p>
+      <div class="concept"><strong>Kabar baiknya:</strong> semua konsepnya sudah kamu kuasai. Tableau dan Power BI pada dasarnya adalah pandas <code>groupby</code> dan <code>pivot_table</code> dengan antarmuka seret-dan-lepas. Yang perlu dipelajari hanya nama-nama tombolnya.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Yang sudah kamu tahu</th><th>Namanya di Tableau</th><th>Namanya di Power BI</th></tr></thead>
+        <tbody>
+          <tr><td>Kolom kategori (produk, kota)</td><td>Dimension</td><td>Dimension / kolom</td></tr>
+          <tr><td>Kolom angka (total, jumlah)</td><td>Measure</td><td>Measure</td></tr>
+          <tr><td><code>groupby("produk")["total"].sum()</code></td><td>Seret Produk ke Rows, SUM(Total) ke Columns</td><td>Seret ke sumbu, atur agregasi Sum</td></tr>
+          <tr><td>Kolom baru <code>df["laba"] = …</code></td><td>Calculated Field</td><td>Calculated Column (DAX)</td></tr>
+          <tr><td>Agregat yang bereaksi ke filter</td><td>LOD Expression</td><td>Measure dengan <code>CALCULATE</code></td></tr>
+          <tr><td><code>merge</code> dua tabel</td><td>Relationship / Join di Data Source</td><td>Model view, tarik garis antar tabel</td></tr>
+          <tr><td>Filter <code>df[df.kota=="X"]</code></td><td>Filter shelf</td><td>Slicer / Filter pane</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h3>Jalur tercepat: Tableau Public dalam 6 jam</h3>
+    </div>
+    <ol class="steps">
+      <li><strong>Pasang Tableau Public (gratis) dan unggah data</strong><span>Ekspor <code>df</code> dari Colab: <code>df.to_csv("kedai.csv", index=False)</code>. Di Tableau: Connect → Text file.</span></li>
+      <li><strong>Buat 3 sheet dasar</strong><span>Batang omzet per produk, garis omzet per bulan, peta panas produk × kota. Tiap sheet: seret dimension ke Rows, measure ke Columns.</span></li>
+      <li><strong>Buat 1 calculated field</strong><span>Analysis → Create Calculated Field. Isi: <code>SUM([Total]) / SUM([Jumlah])</code> untuk harga rata-rata per porsi. Ini setara membuat kolom turunan di pandas.</span></li>
+      <li><strong>Gabungkan jadi Dashboard</strong><span>Tab Dashboard baru, seret ketiga sheet. Ikuti urutan baca dari minggu 3: angka besar di atas, tren, lalu rincian.</span></li>
+      <li><strong>Tambahkan filter yang berlaku ke semua</strong><span>Klik kanan filter → Apply to Worksheets → All Using This Data Source. Ini yang membuatnya terasa seperti dashboard sungguhan.</span></li>
+      <li><strong>Terbitkan ke Tableau Public</strong><span>File → Save to Tableau Public. Salin tautannya ke README GitHub dan profil LinkedIn.</span></li>
+    </ol>
+
+    <div class="prose">
+      <h3>Power BI: yang perlu ditambahkan</h3>
+      <p>Power BI Desktop gratis tapi hanya untuk Windows. Kalau kamu memakai Mac atau Linux, dua pilihan: pakai layanan Power BI di browser (fungsinya lebih terbatas tapi cukup untuk belajar), atau fokuskan waktu ke Tableau saja dan cukup <em>memahami</em> konsep DAX untuk wawancara.</p>
+      <p>Yang membedakan Power BI: bahasa rumusnya, <strong>DAX</strong>. Tiga pola ini sudah menutup sebagian besar kebutuhan pemula:</p>
+    </div>
+<pre><code>-- total penjualan (measure dasar)
+Total Omzet = SUM(penjualan[total])
+
+-- agregat dengan syarat, setara SUMIFS atau df[df.kota=="Jakarta"]
+Omzet Jakarta = CALCULATE([Total Omzet], penjualan[kota] = "Jakarta")
+
+-- perbandingan dengan periode sebelumnya, setara LAG atau .shift()
+Omzet Bulan Lalu =
+CALCULATE([Total Omzet], DATEADD(penjualan[tanggal], -1, MONTH))</code></pre>
+    <div class="prose">
+      <div class="tip"><strong>Untuk wawancara:</strong> yang paling sering ditanya bukan sintaks DAX, tapi <em>konsep konteks filter</em> — bahwa sebuah measure menghitung ulang dirinya tergantung filter yang aktif di halaman. Kalau kamu bisa menjelaskan itu dengan analogi <code>groupby</code>, kamu sudah di atas rata-rata pelamar junior.</div>
+    </div>
+
+    <div class="exercise" style="border-color:var(--teal)">
+      <span class="tag" style="color:var(--teal)">PROYEK: DASHBOARD PUBLIK</span>
+      <h3>Dua dashboard, dua tautan</h3>
+      <div class="prose">
+        <p>Buat dashboard yang sama dua kali: satu di Python (plotly, disimpan HTML dan diunggah ke GitHub Pages), satu di Tableau Public. Membuat hal yang sama di dua alat mempercepat pemahaman, dan memberimu dua tautan untuk CV.</p>
+        <p><strong>Naikkan tingkat kesulitannya:</strong> ganti data kedai dengan data terbuka yang relevan untuk target kerjamu. Untuk Singapura, "Resale Flat Prices" di data.gov.sg (harga rumah HDB, ratusan ribu baris, ada dimensi waktu, lokasi, dan ukuran) adalah bahan dashboard yang sangat bagus dan langsung dikenali recruiter di sana. Untuk Australia, data ABS atau data.gov.au.</p>
+      </div>
+      <ul class="checklist">
+        <li><span class="box"></span>Baris atas berisi 3–5 angka utama, tiap satu dengan pembanding.</li>
+        <li><span class="box"></span>Ada tren waktu, rincian per dimensi, dan tabel angka pasti.</li>
+        <li><span class="box"></span>Tiap judul grafik menyatakan temuan, bukan nama kolom.</li>
+        <li><span class="box"></span>Semua sumbu batang mulai dari nol; tidak ada grafik dua sumbu Y.</li>
+        <li><span class="box"></span>Sudah diuji lewat simulator buta warna.</li>
+        <li><span class="box"></span>Ada filter yang berlaku ke seluruh dashboard.</li>
+        <li><span class="box"></span>Dua tautan hidup: GitHub Pages dan Tableau Public, keduanya ada di README.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>Modul berikutnya: <strong>Analytics Engineering</strong> (Bulan 7–8) — SQL untuk data jutaan baris, dbt, git yang benar, dan membuat laporan yang berjalan sendiri tanpa kamu sentuh.</p>
+    <p class="closing">Grafik yang jujur dan langsung dimengerti adalah keterampilan yang lebih langka daripada yang kamu kira.</p>
+  </footer>
+
+</div>

@@ -1,0 +1,781 @@
+<title>Modul Capstone dan Pencarian Kerja</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.62;
+    padding:20px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.86em; background:var(--code-bg); padding:2px 6px; border-radius:6px; }
+  pre{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.8rem; line-height:1.5;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; overflow-x:auto; margin:0 0 12px;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .out{ border-left:3px solid var(--teal); }
+
+  .nav{
+    position:sticky; top:0; z-index:5; max-width:880px; margin:0 auto 24px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; padding:8px 10px; flex-wrap:wrap;
+  }
+  .nav .brand{ font-family:"Fraunces", serif; font-weight:600; font-size:0.95rem; padding:6px 10px; margin-right:auto; }
+  .nav a{ text-decoration:none; color:var(--ink-soft); font-size:0.8rem; font-weight:500; padding:6px 10px; border-radius:999px; }
+  .nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .nav a:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav .sep{ width:1px; height:18px; background:var(--line); margin:0 4px; }
+
+  .page{
+    max-width:880px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:32px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+
+  .part{
+    margin:52px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--line);
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  }
+  .part .q{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .part h2{ font-size:1.6rem; font-weight:600; }
+  .part .range{ font-size:0.86rem; color:var(--ink-soft); }
+
+  section{ margin-bottom:48px; scroll-margin-top:84px; }
+  section > h2{ font-size:1.36rem; font-weight:600; margin-bottom:4px; }
+  .week-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:8px; }
+  .goal{ color:var(--ink-soft); font-size:0.92rem; max-width:62ch; margin-bottom:22px; padding-left:14px; border-left:3px solid var(--teal); }
+  .goal strong{ color:var(--ink); }
+  h3{ font-size:1.08rem; font-weight:600; margin:26px 0 10px; }
+  h4{ font-size:0.98rem; font-weight:600; margin:18px 0 6px; }
+  .prose{ max-width:68ch; }
+  .prose p{ margin-bottom:12px; font-size:0.95rem; }
+  .prose ul, .prose ol{ margin:0 0 12px; padding-left:22px; font-size:0.95rem; }
+  .prose li{ margin-bottom:6px; }
+  .concept{ background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin:14px 0 18px; font-size:0.92rem; max-width:70ch; }
+  .concept strong{ color:var(--teal); }
+  .tip{ background:var(--gold-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .tip strong{ color:var(--gold); }
+  .warn{ background:var(--alert-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .warn strong{ color:var(--alert); }
+
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; margin:12px 0 16px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.84rem; }
+  th, td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.num, th.num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; text-align:right; }
+  table.wrap td{ white-space:normal; }
+
+  .block{ border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; background:var(--surface-2); }
+  .block h4{ margin:0 0 6px; font-family:"IBM Plex Mono", monospace; font-size:0.92rem; color:var(--teal); }
+  .block .use{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:10px; }
+  .block pre{ margin-bottom:8px; }
+  .block .result{ font-size:0.88rem; }
+
+  .qa{ border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:14px 0; background:var(--surface-2); }
+  .qa .q{ font-weight:600; font-size:0.95rem; margin-bottom:8px; }
+  .qa .q .n{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; color:var(--gold); margin-right:8px; letter-spacing:0.06em; }
+
+  .exercise{ border:1px dashed var(--gold); border-radius:14px; padding:18px 20px; margin:22px 0 0; background:var(--surface); }
+  .exercise h3{ margin:0 0 4px; }
+  .exercise .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.1em; color:var(--gold); }
+  .exercise ol{ margin:10px 0 0; padding-left:22px; font-size:0.93rem; }
+  .exercise li{ margin-bottom:8px; }
+  details{ margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  summary{ cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--teal); }
+  summary:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; border-radius:4px; }
+  details .answer{ margin-top:10px; font-size:0.9rem; }
+  details .answer ol{ padding-left:22px; margin:0; }
+  details .answer li{ margin-bottom:12px; }
+  details .answer pre{ margin:6px 0; }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .steps li{ display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem; }
+  .steps li::before{ counter-increment:step; content:counter(step, decimal-leading-zero); font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px; }
+  .steps li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .steps li span{ color:var(--ink-soft); }
+
+  .checklist{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .checklist li{ display:flex; gap:10px; align-items:flex-start; font-size:0.92rem; }
+  .checklist .box{ flex:none; width:15px; height:15px; margin-top:4px; border:1.5px solid var(--teal); border-radius:4px; }
+
+  .compare{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+  @media (max-width:640px){ .compare{ grid-template-columns:1fr; } }
+  .compare > div{ border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-size:0.88rem; background:var(--surface-2); }
+  .compare .lbl{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase; display:block; margin-bottom:8px; }
+  .compare .no .lbl{ color:var(--alert); }
+  .compare .yes .lbl{ color:var(--teal); }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.1rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<nav class="nav" aria-label="Bagian modul">
+  <span class="brand">Capstone &amp; Kerja</span>
+  <a href="#w1">Capstone</a><a href="#w2">Portofolio</a>
+  <span class="sep"></span>
+  <a href="#w3">CV &amp; LinkedIn</a>
+  <span class="sep"></span>
+  <a href="#w4">SQL wawancara</a><a href="#w5">Studi kasus</a><a href="#w6">Behavioral</a>
+  <span class="sep"></span>
+  <a href="#w7">Melamar</a><a href="#w8">Visa &amp; tawaran</a>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Materi · Bulan 11–12</span>
+    <h1>Capstone &amp; Pencarian Kerja</h1>
+    <p class="lede">Dua bulan terakhir. Semua kemampuan sudah ada; sekarang soal membuktikannya kepada orang yang belum pernah bertemu kamu. Satu proyek unggulan, portofolio yang meyakinkan, dan proses lamaran yang berjalan — untuk Singapura atau Australia.</p>
+  </header>
+
+  <div class="part"><span class="q">BAGIAN A</span><h2>Capstone</h2><span class="range">Minggu 1–2</span></div>
+
+  <!-- ================= W1 ================= -->
+  <section id="w1" aria-labelledby="w1-h">
+    <span class="week-tag">Minggu 1–2</span>
+    <h2 id="w1-h">Proyek unggulan yang membuatmu diingat</h2>
+    <p class="goal"><strong>Setelah bagian ini kamu punya:</strong> satu proyek yang cukup dalam untuk dibicarakan 30 menit di wawancara, dan cukup jelas untuk dimengerti dalam 30 detik oleh perekrut.</p>
+
+    <div class="prose">
+      <h3>1. Memilih proyek: tiga syarat</h3>
+      <p>Kebanyakan portofolio berisi proyek Titanic dan Iris. Perekrut sudah melihatnya ribuan kali dan melewatinya tanpa membaca. Capstone-mu harus lolos tiga syarat:</p>
+      <ul>
+        <li><strong>Data nyata dan berantakan,</strong> bukan dataset kompetisi yang sudah bersih. Kalau tidak ada bagian membersihkan data, proyeknya tidak menunjukkan pekerjaan yang sesungguhnya.</li>
+        <li><strong>Pertanyaan bisnis yang jelas,</strong> bukan "eksplorasi data X". Judul yang bagus berbentuk pertanyaan atau temuan, bukan nama dataset.</li>
+        <li><strong>Relevan dengan pasar tujuanmu.</strong> Kalau melamar ke Singapura, data Singapura. Perekrut di sana langsung mengenali konteksnya dan itu membuat percakapan wawancara jauh lebih lancar.</li>
+      </ul>
+    </div>
+
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Sumber data</th><th>Untuk</th><th>Ide pertanyaan</th></tr></thead>
+        <tbody>
+          <tr><td><strong>data.gov.sg</strong> — Resale Flat Prices</td><td>Singapura</td><td>Faktor apa yang paling menentukan harga rumah HDB, dan bagaimana pengaruhnya berubah setelah pandemi?</td></tr>
+          <tr><td><strong>LTA DataMall</strong> — data transportasi</td><td>Singapura</td><td>Jalur MRT mana yang paling padat, dan apakah stasiun baru mengurangi beban jalur lama?</td></tr>
+          <tr><td><strong>data.gov.au</strong> / ABS</td><td>Australia</td><td>Bagaimana pola sewa berubah antar wilayah, dan wilayah mana yang paling cepat berubah?</td></tr>
+          <tr><td><strong>BigQuery public datasets</strong></td><td>Keduanya</td><td>Data besar yang menunjukkan kamu bisa bekerja di skala jutaan baris</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <div class="concept"><strong>Satu proyek dalam mengalahkan lima proyek dangkal.</strong> Perekrut tidak membaca kelimanya. Mereka membuka satu, dan kalau itu bagus, mereka memanggilmu. Habiskan dua minggu penuh untuk satu proyek, bukan tiga hari untuk lima.</div>
+
+      <h3>2. Susunan proyek yang meyakinkan</h3>
+    </div>
+
+    <ol class="steps">
+      <li><strong>Pertanyaan bisnis di paling atas</strong><span>Satu kalimat. "Apa yang paling memengaruhi harga rumah HDB di Singapura, dan apakah pengaruhnya berubah lima tahun terakhir?"</span></li>
+      <li><strong>Data dan pembersihannya</strong><span>Dari mana, berapa baris, apa yang rusak, dan apa yang kamu putuskan terhadapnya. Bagian ini sering dilewati orang, dan justru bagian ini yang paling menunjukkan pengalaman.</span></li>
+      <li><strong>Pipeline, bukan sekadar notebook</strong><span>Kalau kamu sudah mengerjakan modul analytics engineering, pakai dbt dan penjadwalan. Ini pembeda terbesar dari pelamar lain.</span></li>
+      <li><strong>Analisis berlapis</strong><span>Mulai dari deskriptif, naik ke perbandingan antar kelompok, lalu ke model atau uji statistik kalau relevan.</span></li>
+      <li><strong>Hasil yang bisa diklik</strong><span>Dashboard Streamlit atau Tableau Public yang hidup. Perekrut jauh lebih mungkin membuka tautan daripada menjalankan notebook.</span></li>
+      <li><strong>Temuan dan rekomendasi</strong><span>Lima temuan berangka, tiga rekomendasi, dan satu bagian batasan yang jujur.</span></li>
+    </ol>
+
+    <div class="prose">
+      <div class="tip"><strong>Bagian batasan adalah senjata rahasia.</strong> Hampir tidak ada pelamar junior yang menuliskannya. Menulis "analisis ini tidak bisa membuktikan sebab-akibat karena tidak ada eksperimen; korelasi yang saya temukan mungkin dijelaskan oleh faktor lokasi yang tidak saya ukur" langsung menempatkanmu di kelompok yang berbeda. Itu menunjukkan kamu tahu batas dari pekerjaanmu sendiri.</div>
+    </div>
+  </section>
+
+  <!-- ================= W2 ================= -->
+  <section id="w2" aria-labelledby="w2-h">
+    <h2 id="w2-h">Portofolio dan README yang dibaca sampai habis</h2>
+    <p class="goal"><strong>Setelah bagian ini:</strong> repositori GitHub-mu bisa dinilai dalam 60 detik oleh orang yang belum pernah mendengar namamu.</p>
+
+    <div class="prose">
+      <h3>1. Anggap README sebagai halaman penjualan</h3>
+      <p>Perekrut memberi 30–60 detik untuk tiap kandidat. Yang menentukan bukan kualitas kodemu — mereka jarang membacanya — tapi apakah README-mu membuat mereka ingin membaca lebih lanjut.</p>
+    </div>
+
+    <div class="compare">
+      <div class="no">
+        <span class="lbl">README yang diabaikan</span>
+        <p><code># Analisis Data HDB</code></p>
+        <p style="margin-top:8px">Proyek ini menganalisis data harga rumah di Singapura menggunakan Python, pandas, dan matplotlib.</p>
+        <p style="margin-top:8px"><strong>Cara menjalankan:</strong><br><code>pip install -r requirements.txt</code></p>
+        <p style="margin-top:8px; color:var(--ink-soft)">Tidak ada temuan, tidak ada gambar, tidak ada tautan. Pembaca tidak tahu apakah ini bagus.</p>
+      </div>
+      <div class="yes">
+        <span class="lbl">README yang membuat dipanggil</span>
+        <p><strong>Lokasi menentukan 61% harga HDB — tapi pengaruhnya menurun sejak 2020</strong></p>
+        <p style="margin-top:8px">Analisis 240.000 transaksi rumah HDB Singapura (2017–2024) untuk menjawab: faktor apa yang paling menentukan harga, dan apakah berubah setelah pandemi?</p>
+        <p style="margin-top:8px"><strong>Tiga temuan utama:</strong> jarak ke MRT kehilangan pengaruh sejak kerja jarak jauh · sisa masa sewa jadi lebih menentukan · selisih antar wilayah menyempit 18%.</p>
+        <p style="margin-top:8px">[Dashboard langsung] · [Notebook] · gambar dashboard di sini</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>2. Kerangka README</h3>
+    </div>
+<pre><code># [Temuan utama sebagai judul, bukan nama dataset]
+
+[Satu paragraf: pertanyaan bisnis, data apa, dan jawabannya]
+
+**[Lihat dashboard →](tautan)** &nbsp;|&nbsp; **[Baca notebook →](tautan)**
+
+![tangkapan layar dashboard](gambar/dashboard.png)
+
+## Temuan
+1. **[Temuan berangka]** — [kenapa penting]
+2. ...
+
+## Data
+Sumber, jumlah baris, rentang waktu. Masalah yang ditemukan dan
+keputusan yang diambil terhadapnya.
+
+## Cara kerjanya
+[Diagram alur: sumber → transformasi → dashboard]
+Alat: dbt, BigQuery, Python, Streamlit.
+
+## Menjalankan sendiri
+[3–4 baris perintah yang benar-benar berhasil]
+
+## Batasan
+[Apa yang tidak bisa dijawab analisis ini, dan kenapa]</code></pre>
+
+    <div class="prose">
+      <div class="warn"><strong>Uji README-mu:</strong> minta seseorang yang bukan orang data membacanya selama 60 detik, lalu tutup layarnya dan tanya apa isinya. Kalau dia tidak bisa menyebutkan satu temuan pun, README-mu belum selesai.</div>
+
+      <h3>3. Merapikan profil GitHub</h3>
+      <ul>
+        <li><strong>Sematkan (pin) 4 repositori terbaik.</strong> Sisanya dijadikan privat atau diarsipkan. Repositori berisi latihan setengah jadi merugikanmu.</li>
+        <li><strong>Tiap repositori butuh deskripsi satu baris</strong> dan topik (tag). Tanpa itu, halaman profilmu terlihat kosong.</li>
+        <li><strong>Buat README profil</strong> (repositori dengan nama sama dengan usernamemu). Isi: siapa kamu, apa yang kamu cari, dan tautan ke tiga proyek terbaik.</li>
+        <li><strong>Riwayat commit yang wajar.</strong> Satu commit raksasa berisi seluruh proyek terlihat seperti unggahan, bukan pekerjaan. Commit bertahap menunjukkan proses.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="part"><span class="q">BAGIAN B</span><h2>CV, LinkedIn, dan wawancara</h2><span class="range">Minggu 3–6</span></div>
+
+  <!-- ================= W3 ================= -->
+  <section id="w3" aria-labelledby="w3-h">
+    <span class="week-tag">Minggu 3</span>
+    <h2 id="w3-h">CV yang lolos mesin dan meyakinkan manusia</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> CV satu halaman berbahasa Inggris yang lolos penyaring otomatis dan membuat perekrut membaca sampai bawah.</p>
+
+    <div class="prose">
+      <h3>1. Aturan format yang tidak bisa ditawar</h3>
+      <p>Sebagian besar lamaran di Singapura dan Australia lewat sistem penyaring otomatis (ATS) sebelum dilihat manusia. Sistem itu membaca teks, bukan tata letak.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Lakukan</th><th>Hindari</th><th>Alasan</th></tr></thead>
+        <tbody>
+          <tr><td>Satu kolom, dari atas ke bawah</td><td>Dua kolom, sidebar</td><td>ATS sering membaca kolom secara acak sehingga kalimatnya tercampur</td></tr>
+          <tr><td>Judul bagian standar: Experience, Education, Skills, Projects</td><td>Judul kreatif seperti "My Journey"</td><td>ATS mencari kata kunci baku</td></tr>
+          <tr><td>Kirim sebagai PDF</td><td>Gambar, tabel rumit, ikon</td><td>Teks di dalam gambar tidak terbaca sama sekali</td></tr>
+          <tr><td>Satu halaman</td><td>Dua halaman untuk pengalaman kurang dari 5 tahun</td><td>Perekrut memindai 7 detik; halaman kedua jarang dibuka</td></tr>
+          <tr><td>Salin kata dari iklan lowongan</td><td>Sinonim kreatif</td><td>Kalau iklannya menulis "Power BI", tulis "Power BI", bukan "Microsoft BI tools"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h3>2. Menulis poin pengalaman: rumus tiga bagian</h3>
+      <p><strong>Tindakan + cara + hasil berangka.</strong> Bagian ketiga yang paling sering hilang, dan justru itu yang dinilai.</p>
+    </div>
+
+    <div class="compare">
+      <div class="no">
+        <span class="lbl">Lemah</span>
+        <p>• Responsible for creating dashboards and reports using Tableau</p>
+        <p style="margin-top:10px">• Analysed customer data using SQL and Python</p>
+        <p style="margin-top:10px; color:var(--ink-soft)">Menjelaskan tugas, bukan dampak. Semua pelamar menulis hal yang sama.</p>
+      </div>
+      <div class="yes">
+        <span class="lbl">Kuat</span>
+        <p>• Built an automated Tableau dashboard replacing 6 hours of manual weekly reporting, now used by 12 people across 3 teams</p>
+        <p style="margin-top:10px">• Identified that 38% of churn came from one acquisition channel, leading to a budget reallocation that cut cost per retained customer by 22%</p>
+        <p style="margin-top:10px; color:var(--ink-soft)">Angka membuat klaimnya bisa dipercaya dan memberi bahan pertanyaan wawancara yang kamu kuasai.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <div class="tip"><strong>Belum punya pengalaman kerja di bidang data?</strong> Pakai proyekmu. Tulis bagian <em>Projects</em> tepat di bawah <em>Summary</em>, sebelum <em>Experience</em>, dan perlakukan tiap proyek seperti pekerjaan: apa yang dibangun, dengan alat apa, dan apa temuannya dalam angka. Pengalaman kerja di bidang lain tetap dicantumkan, tapi tulis ulang poinnya untuk menonjolkan bagian yang berkaitan dengan data, proses, dan pengambilan keputusan.</div>
+
+      <h3>3. Susunan CV untuk pelamar pindah karier</h3>
+    </div>
+<pre><code>NAMA LENGKAP
+Kota, Negara · email · nomor telepon · linkedin.com/in/… · github.com/…
+
+SUMMARY
+Data analyst with strong SQL and Python skills, focused on
+[domain]. Built [proyek paling mengesankan dalam satu klausa].
+Seeking analyst roles in Singapore. [Sebutkan status visa kalau
+menguntungkan — misalnya "eligible for..." atau "open to relocation"]
+
+SKILLS
+SQL (window functions, query optimisation, BigQuery) · Python
+(pandas, scikit-learn) · dbt · Tableau · Power BI · Git · A/B testing
+
+PROJECTS
+Judul temuan — [tautan dashboard] [tautan repo]
+• Apa yang dibangun, di data apa, berapa besar
+• Temuan utama dengan angka
+• Alat dan alasan memilihnya
+
+[dua proyek lagi]
+
+EXPERIENCE
+[Pekerjaan sebelumnya, poin yang ditulis ulang menonjolkan sisi analitis]
+
+EDUCATION / CERTIFICATIONS
+Google Data Analytics Professional Certificate · Microsoft PL-300</code></pre>
+
+    <div class="prose">
+      <h3>4. LinkedIn: apa yang benar-benar berpengaruh</h3>
+      <ul>
+        <li><strong>Headline</strong> adalah bagian terpenting — itu yang muncul di hasil pencarian perekrut. Sebutkan jabatan dan alat: <em>"Data Analyst | SQL · Python · dbt · Tableau | Open to opportunities in Singapore"</em>.</li>
+        <li><strong>Lokasi.</strong> Kalau kamu serius pindah, pertimbangkan menyetel lokasi ke kota tujuan dan menjelaskannya di bagian About. Banyak perekrut menyaring berdasarkan lokasi lebih dulu.</li>
+        <li><strong>About</strong> ditulis sebagai paragraf orang pertama, bukan daftar kata kunci. Tiga paragraf: apa yang kamu kerjakan, bukti terbaikmu, apa yang kamu cari.</li>
+        <li><strong>Featured</strong> — sematkan dashboard dan repositori di sini. Bagian ini punya gambar besar dan paling sering diklik.</li>
+        <li><strong>Aktivitas.</strong> Menulis satu unggahan pendek tiap kali menyelesaikan proyek jauh lebih berguna daripada membagikan artikel orang lain. Ceritakan satu temuan dan satu hal yang kamu pelajari.</li>
+      </ul>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 3</span>
+      <h3>Empat tugas</h3>
+      <ol>
+        <li>Tulis CV satu halaman mengikuti kerangka di atas. Uji lewat pemeriksa ATS gratis mana pun, dan pastikan semua bagian terbaca.</li>
+        <li>Ambil 10 iklan lowongan analis di Singapura atau Australia. Catat kata kunci yang muncul di 5 atau lebih. Pastikan semuanya ada di CV-mu — kalau kamu memang menguasainya.</li>
+        <li>Tulis ulang tiap poin pengalamanmu dengan rumus tindakan + cara + hasil berangka. Kalau tidak punya angkanya, cari perkiraan yang jujur.</li>
+        <li>Perbarui LinkedIn: headline, About, Featured. Minta satu orang membaca dan menyebutkan apa yang dia ingat.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================= W4 ================= -->
+  <section id="w4" aria-labelledby="w4-h">
+    <span class="week-tag">Minggu 4</span>
+    <h2 id="w4-h">Wawancara SQL: soal yang benar-benar keluar</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menulis SQL di depan orang sambil menjelaskan yang kamu lakukan — keterampilan yang berbeda dari sekadar bisa SQL sendirian.</p>
+
+    <div class="prose">
+      <div class="concept"><strong>Yang dinilai bukan hanya jawabannya.</strong> Pewawancara menilai apakah kamu bertanya soal hal yang ambigu, apakah kamu menjelaskan rencana sebelum mengetik, dan apakah kamu memeriksa kasus khusus. Kandidat yang langsung mengetik dalam diam sering kalah dari kandidat yang berpikir keras walau jawabannya sedikit lebih lambat.</div>
+
+      <h3>Empat soal khas, dengan pola yang bisa kamu pakai ulang</h3>
+      <p>Semua soal memakai dua tabel: <code>pesanan(id, user_id, tanggal, nilai)</code> dan <code>pengguna(id, nama, tanggal_daftar, kota)</code>.</p>
+    </div>
+
+    <div class="qa">
+      <p class="q"><span class="n mono">SOAL 1</span>Cari pelanggan yang belanja di bulan Januari tapi tidak di bulan Februari.</p>
+      <details open>
+        <summary>Jawaban dan pola yang diuji</summary>
+        <div class="answer">
+<pre><code>SELECT DISTINCT p.user_id
+FROM pesanan p
+WHERE p.tanggal &gt;= '2026-01-01' AND p.tanggal &lt; '2026-02-01'
+  AND p.user_id NOT IN (
+      SELECT user_id FROM pesanan
+      WHERE tanggal &gt;= '2026-02-01' AND tanggal &lt; '2026-03-01'
+  );
+
+-- Versi yang lebih aman terhadap NULL dan biasanya lebih cepat:
+SELECT DISTINCT j.user_id
+FROM pesanan j
+LEFT JOIN pesanan f
+  ON j.user_id = f.user_id
+ AND f.tanggal &gt;= '2026-02-01' AND f.tanggal &lt; '2026-03-01'
+WHERE j.tanggal &gt;= '2026-01-01' AND j.tanggal &lt; '2026-02-01'
+  AND f.user_id IS NULL;</code></pre>
+          <p><strong>Yang diuji:</strong> pola anti-join. <strong>Nilai tambah:</strong> sebutkan bahwa <code>NOT IN</code> berbahaya kalau subquery-nya bisa menghasilkan NULL — seluruh hasilnya jadi kosong tanpa peringatan. Menyebutkan itu hampir selalu membuat pewawancara mencatat sesuatu.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="qa">
+      <p class="q"><span class="n mono">SOAL 2</span>Untuk tiap kota, cari 3 pelanggan dengan total belanja terbesar.</p>
+      <details>
+        <summary>Jawaban</summary>
+        <div class="answer">
+<pre><code>WITH total AS (
+    SELECT u.kota, u.id AS user_id, u.nama, SUM(p.nilai) AS belanja
+    FROM pesanan p
+    JOIN pengguna u ON p.user_id = u.id
+    GROUP BY u.kota, u.id, u.nama
+),
+peringkat AS (
+    SELECT *,
+           ROW_NUMBER() OVER (PARTITION BY kota ORDER BY belanja DESC) AS rn
+    FROM total
+)
+SELECT kota, nama, belanja
+FROM peringkat
+WHERE rn &lt;= 3
+ORDER BY kota, belanja DESC;</code></pre>
+          <p><strong>Yang diuji:</strong> window function dengan PARTITION BY, dan pemahaman bahwa hasil window tidak bisa disaring langsung di WHERE sehingga butuh CTE. <strong>Pertanyaan lanjutan yang hampir pasti datang:</strong> "bagaimana kalau ada nilai seri di posisi ketiga?" Jawab: <code>ROW_NUMBER</code> memilih sembarang satu, <code>RANK</code> menyertakan semua yang seri sehingga bisa keluar lebih dari 3 baris. Pilihannya tergantung apa yang diinginkan bisnis — dan menanyakan balik hal itu adalah jawaban terbaik.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="qa">
+      <p class="q"><span class="n mono">SOAL 3</span>Hitung retensi bulan pertama: dari pelanggan yang mendaftar tiap bulan, berapa persen yang belanja lagi di bulan berikutnya?</p>
+      <details>
+        <summary>Jawaban</summary>
+        <div class="answer">
+<pre><code>WITH kohor AS (
+    SELECT id AS user_id,
+           DATE_TRUNC('month', tanggal_daftar) AS bulan_daftar
+    FROM pengguna
+),
+aktivitas AS (
+    SELECT DISTINCT k.user_id, k.bulan_daftar,
+           DATE_TRUNC('month', p.tanggal) AS bulan_aktif
+    FROM kohor k
+    JOIN pesanan p ON p.user_id = k.user_id
+)
+SELECT
+    k.bulan_daftar,
+    COUNT(DISTINCT k.user_id) AS ukuran_kohor,
+    COUNT(DISTINCT a.user_id) AS kembali_bulan_1,
+    ROUND(100.0 * COUNT(DISTINCT a.user_id)
+                / COUNT(DISTINCT k.user_id), 1) AS retensi_persen
+FROM kohor k
+LEFT JOIN aktivitas a
+       ON a.user_id = k.user_id
+      AND a.bulan_aktif = k.bulan_daftar + INTERVAL '1 month'
+GROUP BY k.bulan_daftar
+ORDER BY k.bulan_daftar;</code></pre>
+          <p><strong>Yang diuji:</strong> soal ini yang paling sering memisahkan kandidat. Kuncinya adalah LEFT JOIN — kalau memakai INNER JOIN, kohor yang tidak punya satu pun pelanggan kembali akan hilang dari hasil dan retensinya terlihat lebih baik daripada kenyataan. Sebutkan alasan itu dengan lantang saat mengerjakan.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="qa">
+      <p class="q"><span class="n mono">SOAL 4</span>Hitung selisih hari antara dua pesanan berturut-turut untuk tiap pelanggan.</p>
+      <details>
+        <summary>Jawaban</summary>
+        <div class="answer">
+<pre><code>SELECT
+    user_id,
+    tanggal,
+    LAG(tanggal) OVER (PARTITION BY user_id ORDER BY tanggal) AS pesanan_sebelumnya,
+    tanggal - LAG(tanggal) OVER (PARTITION BY user_id ORDER BY tanggal) AS jeda_hari
+FROM pesanan
+ORDER BY user_id, tanggal;
+
+-- Lanjutan yang sering diminta: rata-rata jeda per pelanggan
+WITH jeda AS (
+    SELECT user_id,
+           tanggal - LAG(tanggal) OVER (PARTITION BY user_id ORDER BY tanggal) AS d
+    FROM pesanan
+)
+SELECT user_id, AVG(d) AS rata_jeda_hari
+FROM jeda
+WHERE d IS NOT NULL          -- baris pertama tiap pelanggan selalu NULL
+GROUP BY user_id;</code></pre>
+          <p><strong>Yang diuji:</strong> LAG dengan partisi, dan kesadaran bahwa baris pertama tiap pelanggan menghasilkan NULL. Kandidat yang lupa menyaring NULL akan mendapat rata-rata yang salah tanpa sadar.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="prose">
+      <h3>Cara mengerjakan soal SQL di depan orang</h3>
+    </div>
+    <ol class="steps">
+      <li><strong>Ulangi soalnya dengan kalimatmu sendiri</strong><span>"Jadi saya perlu mencari pelanggan yang aktif di satu bulan tapi tidak di bulan berikutnya — benar?" Ini menangkap salah paham sebelum kamu menulis 20 baris yang salah.</span></li>
+      <li><strong>Tanyakan hal yang ambigu</strong><span>Apakah pesanan yang dibatalkan dihitung? Zona waktu apa yang dipakai? Bagaimana kalau seri? Pertanyaan seperti ini bernilai poin, bukan mengurangi.</span></li>
+      <li><strong>Ucapkan rencananya sebelum mengetik</strong><span>"Saya akan mengumpulkan dulu per pelanggan di CTE, lalu memberi peringkat per kota, lalu menyaring tiga teratas."</span></li>
+      <li><strong>Tulis bertahap</strong><span>Mulai dari SELECT sederhana, tunjukkan hasilnya, baru tambah lapisan. Jangan menulis query 30 baris sekaligus lalu berharap benar.</span></li>
+      <li><strong>Periksa kasus khusus di akhir</strong><span>NULL, nilai seri, pembagian nol, pelanggan tanpa pesanan sama sekali. Menyebutkannya walau tidak sempat menanganinya tetap bernilai.</span></li>
+    </ol>
+
+    <div class="prose">
+      <p class="tip"><strong>Tempat berlatih:</strong> StrataScratch dan DataLemur berisi soal asli dari perusahaan teknologi. Kerjakan minimal 40 soal tingkat sedang, dan biasakan mengucapkan penalaranmu keras-keras — berlatih dalam hati tidak menyiapkanmu untuk bicara sambil berpikir.</p>
+    </div>
+  </section>
+
+  <!-- ================= W5 ================= -->
+  <section id="w5" aria-labelledby="w5-h">
+    <span class="week-tag">Minggu 5</span>
+    <h2 id="w5-h">Wawancara studi kasus dan tugas bawa pulang</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menghadapi pertanyaan terbuka seperti "angka pengguna aktif turun 15%, apa yang kamu lakukan?" dengan kerangka yang jelas.</p>
+
+    <div class="prose">
+      <h3>1. Kerangka untuk "metrik X turun, kenapa?"</h3>
+      <p>Ini jenis soal paling umum di wawancara analis produk. Yang dinilai adalah keteraturan berpikirmu, bukan apakah kamu menebak jawaban yang benar.</p>
+    </div>
+
+    <ol class="steps">
+      <li><strong>Pastikan dulu angkanya benar</strong><span>Sebelum mencari sebab di dunia nyata, tanya: apakah ada perubahan pada cara pengukurannya? Pipeline data rusak? Definisi metriknya berubah? Sangat sering jawabannya berhenti di sini, dan pewawancara menghargai kandidat yang memeriksanya lebih dulu.</span></li>
+      <li><strong>Pastikan penurunannya nyata</strong><span>Seberapa besar dibanding naik-turun biasa? Apakah ini pola musiman, akhir pekan, atau hari libur? Bandingkan dengan periode yang sama tahun lalu.</span></li>
+      <li><strong>Persempit dengan memecah data</strong><span>Per platform, wilayah, kanal akuisisi, versi aplikasi, pengguna baru vs lama. Turun merata di semua segmen menunjuk sebab yang luas; turun tajam di satu segmen menunjuk sebab yang spesifik.</span></li>
+      <li><strong>Persempit waktunya</strong><span>Turun mendadak di satu hari menunjuk peristiwa tunggal — rilis produk, gangguan, perubahan harga. Turun perlahan menunjuk perubahan perilaku atau pesaing.</span></li>
+      <li><strong>Susun hipotesis dan cara mengujinya</strong><span>Sebutkan 2–3 kemungkinan, dan untuk tiap satu, data apa yang akan membuktikan atau menyangkalnya.</span></li>
+      <li><strong>Tutup dengan rekomendasi</strong><span>Apa yang kamu periksa lebih dulu dan kenapa, serta apa yang kamu sampaikan ke tim hari ini juga.</span></li>
+    </ol>
+
+    <div class="prose">
+      <div class="tip"><strong>Ucapkan langkah 1 dengan jelas.</strong> Sebagian besar kandidat langsung melompat ke tebakan tentang perilaku pengguna. Kandidat yang bertanya "apakah kita yakin ini bukan masalah pencatatan data?" langsung terdengar seperti orang yang pernah bekerja di tim data sungguhan — karena dalam pengalaman nyata, penyebabnya memang sering di situ.</div>
+
+      <h3>2. Soal "metrik apa yang akan kamu pakai?"</h3>
+      <p>Contoh: "Kami meluncurkan fitur pesan antar. Bagaimana kamu mengukur keberhasilannya?" Jawab dengan tiga lapis:</p>
+      <ul>
+        <li><strong>Satu metrik utama</strong> yang paling dekat dengan tujuan fitur. Misalnya persentase pesanan yang memakai antar, atau pendapatan per pengguna aktif.</li>
+        <li><strong>Metrik pendukung</strong> yang menjelaskan pergerakan metrik utama: waktu antar, tingkat pembatalan, ulasan.</li>
+        <li><strong>Metrik penjaga</strong> yang harus tidak memburuk: margin per pesanan, beban dapur, kepuasan pelanggan yang datang langsung ke kedai.</li>
+      </ul>
+      <p>Lapisan ketiga itu yang paling sering dilupakan pelamar, dan paling dihargai — karena menunjukkan kamu paham bahwa fitur baru bisa merusak hal lain.</p>
+
+      <h3>3. Tugas bawa pulang (take-home)</h3>
+      <p>Biasanya diberi 3–7 hari dengan dataset dan pertanyaan terbuka. Ini tahap dengan tingkat kegagalan tertinggi, dan hampir selalu karena alasan yang sama.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Kesalahan umum</th><th>Yang seharusnya</th></tr></thead>
+        <tbody>
+          <tr><td>Menyerahkan notebook penuh kode tanpa narasi</td><td>Dokumen yang bisa dibaca dari atas ke bawah; kode jadi lampiran</td></tr>
+          <tr><td>Menjawab semua yang mungkin dijawab</td><td>Jawab pertanyaan yang diminta, dalam, lalu sebut yang lain sebagai langkah lanjutan</td></tr>
+          <tr><td>Melompat ke machine learning</td><td>Analisis deskriptif dulu; model hanya kalau memang dibutuhkan pertanyaannya</td></tr>
+          <tr><td>Tidak menyebut satu pun batasan</td><td>Bagian batasan singkat yang jujur</td></tr>
+          <tr><td>Tidak memberi rekomendasi</td><td>Tutup dengan tindakan yang disarankan, beserta angkanya</td></tr>
+          <tr><td>Menghabiskan 30 jam untuk tugas 4 jam</td><td>Hormati batas waktunya; sebutkan apa yang akan kamu kerjakan kalau waktunya lebih panjang</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p class="warn"><strong>Susunan penyerahan yang hampir selalu berhasil:</strong> satu halaman ringkasan berisi jawaban dan rekomendasi di paling depan · analisis pendukung dengan grafik · catatan metodologi dan batasan · lampiran kode. Perekrut sering hanya membaca halaman pertama; pastikan halaman itu berdiri sendiri.</p>
+    </div>
+  </section>
+
+  <!-- ================= W6 ================= -->
+  <section id="w6" aria-labelledby="w6-h">
+    <span class="week-tag">Minggu 6</span>
+    <h2 id="w6-h">Wawancara perilaku dan cerita pindah karier</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> enam cerita siap pakai, dan jawaban yang meyakinkan untuk pertanyaan "kenapa pindah dari bidang lama?"</p>
+
+    <div class="prose">
+      <h3>1. Format STAR</h3>
+      <p><strong>Situation</strong> (keadaan, ringkas) · <strong>Task</strong> (tugasmu) · <strong>Action</strong> (yang kamu lakukan, bagian terpanjang) · <strong>Result</strong> (hasil berangka). Sebagian besar orang menghabiskan terlalu banyak waktu di S dan T, lalu kehabisan waktu di A dan R — padahal di situlah nilainya.</p>
+
+      <h3>2. Enam cerita yang harus kamu siapkan</h3>
+      <ul>
+        <li>Saat kamu menemukan sesuatu yang mengejutkan di data</li>
+        <li>Saat kamu harus menjelaskan hal teknis ke orang non-teknis</li>
+        <li>Saat kamu membuat kesalahan dan cara kamu memperbaikinya</li>
+        <li>Saat kamu tidak setuju dengan seseorang, dan bagaimana selesainya</li>
+        <li>Saat kamu harus mengerjakan sesuatu dengan data yang buruk atau tidak lengkap</li>
+        <li>Proyek yang paling kamu banggakan, dan alasannya</li>
+      </ul>
+      <p>Cerita boleh berasal dari proyek pribadi, pekerjaan lama di bidang mana pun, atau kegiatan organisasi. Yang penting nyata dan punya hasil yang bisa disebut.</p>
+      <div class="tip"><strong>Cerita "kesalahan" adalah yang paling menentukan.</strong> Jawaban buruk: "saya terlalu perfeksionis". Jawaban baik: kesalahan nyata, dampaknya, cara kamu menemukannya, cara memperbaikinya, dan kebiasaan apa yang kamu ubah setelahnya. Contoh yang kuat untuk analis: sebuah angka yang salah karena JOIN yang menggandakan baris, lalu kamu menambahkan test rekonsiliasi supaya tidak terulang. Itu menunjukkan kejujuran sekaligus kemampuan teknis.</div>
+
+      <h3>3. Menjawab "kenapa pindah karier?"</h3>
+      <p>Ini pasti ditanyakan. Kerangka yang bekerja: <strong>jembatan, bukan pelarian.</strong></p>
+    </div>
+
+    <div class="compare">
+      <div class="no">
+        <span class="lbl">Melemahkan</span>
+        <p>"Saya bosan di pekerjaan lama dan bidang data sedang berkembang, gajinya juga lebih bagus."</p>
+        <p style="margin-top:10px; color:var(--ink-soft)">Terdengar seperti melarikan diri, dan tidak menjelaskan kenapa kamu akan bertahan.</p>
+      </div>
+      <div class="yes">
+        <span class="lbl">Menguatkan</span>
+        <p>"Di pekerjaan saya sebelumnya, bagian yang paling saya nikmati adalah ketika harus mencari tahu kenapa angka penjualan cabang tertentu berbeda. Saya mulai belajar SQL untuk menjawabnya sendiri, dan makin lama bagian itu yang paling saya tunggu. Setahun terakhir saya membangun [proyek] untuk memastikan bahwa saya benar-benar menyukai pekerjaannya, bukan hanya idenya."</p>
+        <p style="margin-top:10px; color:var(--ink-soft)">Menunjukkan kesinambungan, bukti nyata, dan bahwa keputusannya sudah diuji.</p>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Pengalaman di bidang lama adalah aset, bukan beban. Analis yang pernah bekerja di keuangan, ritel, kesehatan, atau logistik membawa pemahaman domain yang tidak dimiliki lulusan baru — dan banyak perusahaan justru mencari itu. Sebutkan secara eksplisit.</p>
+
+      <h3>4. Pertanyaan yang harus kamu ajukan balik</h3>
+      <ul>
+        <li>"Seperti apa alur data di sini — dari sumber sampai dashboard?"</li>
+        <li>"Bagaimana keputusan biasanya diambil? Apakah tim data terlibat sejak awal atau diminta setelahnya?"</li>
+        <li>"Berapa banyak waktu analis di sini habis untuk membersihkan data dibanding menganalisisnya?"</li>
+        <li>"Apa satu hal yang ingin kalian perbaiki dari tim data tahun ini?"</li>
+      </ul>
+      <p>Pertanyaan ketiga sangat berguna untukmu sendiri: jawabannya memberi tahu apakah kamu akan menghabiskan setahun memperbaiki pipeline atau benar-benar menganalisis.</p>
+    </div>
+  </section>
+
+  <div class="part"><span class="q">BAGIAN C</span><h2>Melamar, visa, dan tawaran</h2><span class="range">Minggu 7–8</span></div>
+
+  <!-- ================= W7 ================= -->
+  <section id="w7" aria-labelledby="w7-h">
+    <span class="week-tag">Minggu 7</span>
+    <h2 id="w7-h">Strategi melamar ke Singapura dan Australia</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> proses lamaran yang berjalan teratur, dan pemahaman jujur tentang tantangan melamar dari luar negeri.</p>
+
+    <div class="prose">
+      <div class="warn"><strong>Kenyataan yang perlu diketahui di depan:</strong> melamar dari luar negeri jauh lebih sulit daripada melamar dari dalam negeri. Banyak perusahaan menyaring kandidat yang butuh sponsor visa sejak tahap awal, terutama untuk posisi junior. Ini bukan alasan untuk berhenti, tapi alasan untuk mengatur harapan dan memilih sasaran dengan cermat: perusahaan besar dan multinasional jauh lebih terbiasa mengurus sponsor daripada perusahaan kecil.</div>
+
+      <h3>1. Urutan sasaran, dari peluang tertinggi</h3>
+    </div>
+
+    <ol class="steps">
+      <li><strong>Perusahaan multinasional yang punya kantor di Indonesia dan di SG/AU</strong><span>Jalur pindah internal adalah cara paling mudah. Masuk dulu di Indonesia, bangun rekam jejak, lalu ajukan pindah. Lebih lambat, tapi tingkat keberhasilannya jauh lebih tinggi.</span></li>
+      <li><strong>Perusahaan teknologi regional dengan kantor pusat di Singapura</strong><span>Banyak yang sudah biasa mempekerjakan lintas negara Asia Tenggara dan punya proses sponsor yang mapan.</span></li>
+      <li><strong>Perusahaan yang secara eksplisit menyebut visa sponsorship</strong><span>Di Seek, gunakan kata kunci "visa sponsorship". Di LinkedIn, saring lowongan dan baca deskripsinya — banyak yang menyebut secara terbuka.</span></li>
+      <li><strong>Posisi jarak jauh untuk perusahaan SG/AU</strong><span>Jalur tidak langsung: bekerja jarak jauh dulu, bangun kepercayaan, lalu bicarakan relokasi setelah setahun.</span></li>
+    </ol>
+
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Tempat mencari</th><th>Singapura</th><th>Australia</th></tr></thead>
+        <tbody>
+          <tr><td>Papan lowongan utama</td><td>MyCareersFuture.gov.sg, LinkedIn, Glints, NodeFlair</td><td>Seek.com.au, LinkedIn, Indeed</td></tr>
+          <tr><td>Perusahaan yang banyak merekrut analis</td><td>Perbankan, e-commerce regional, fintech, logistik</td><td>Perbankan, ritel, pertambangan, layanan kesehatan, sektor publik</td></tr>
+          <tr><td>Komunitas</td><td>Grup data di LinkedIn, meetup di Singapura</td><td>Meetup data di Sydney/Melbourne, komunitas dbt</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <h3>2. Mengatur proses lamaran seperti proyek data</h3>
+      <p>Buat spreadsheet pelacak: perusahaan, posisi, tanggal melamar, sumber, status, kontak, catatan, tanggal tindak lanjut. Ini bukan formalitas — setelah 40 lamaran kamu tidak akan ingat mana yang sudah dibalas, dan pelacak ini juga memberimu data untuk dianalisis sendiri.</p>
+      <div class="tip"><strong>Analisis proses lamaranmu sendiri.</strong> Setelah 30 lamaran, hitung tingkat responsnya per sumber, per jenis perusahaan, per versi CV. Kalau tingkat responsnya di bawah 5%, masalahnya ada di CV atau pemilihan sasaran — bukan di jumlah lamaran. Menambah lamaran dengan CV yang sama hanya memperbesar penolakan. Ini penerapan nyata dari yang kamu pelajari setahun ini.</div>
+
+      <h3>3. Menjangkau langsung</h3>
+      <p>Melamar lewat portal saja punya peluang kecil. Yang jauh lebih efektif: menemukan analis atau manajer data di perusahaan sasaran, lalu mengirim pesan singkat.</p>
+    </div>
+<pre><code>Halo [Nama],
+
+Saya melihat [perusahaan] sedang mencari data analyst. Saya sedang
+beralih ke bidang data setelah [latar belakang singkat], dan baru
+menyelesaikan proyek yang menganalisis [topik yang relevan dengan
+industri mereka] — [tautan].
+
+Kalau berkenan, saya ingin bertanya singkat tentang seperti apa
+pekerjaan tim data di [perusahaan]. Saya juga sedang melamar posisi
+[nama posisi] di sana.
+
+Terima kasih,
+[Nama]</code></pre>
+    <div class="prose">
+      <p>Pendek, spesifik, menyertakan bukti, dan tidak langsung meminta pekerjaan. Kirim dalam bahasa Inggris untuk perusahaan di SG/AU. Tingkat balasannya jauh lebih tinggi daripada lamaran lewat portal, dan satu balasan sering lebih berharga daripada dua puluh lamaran.</p>
+    </div>
+  </section>
+
+  <!-- ================= W8 ================= -->
+  <section id="w8" aria-labelledby="w8-h">
+    <span class="week-tag">Minggu 8</span>
+    <h2 id="w8-h">Visa, gaji, dan menerima tawaran</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> memahami jalur visa yang relevan, menilai tawaran secara utuh, dan bernegosiasi tanpa merusak hubungan.</p>
+
+    <div class="prose">
+      <div class="warn"><strong>Bacalah bagian ini sebagai peta untuk riset, bukan sebagai nasihat imigrasi.</strong> Aturan visa di kedua negara berubah cukup sering — syarat gaji minimum, daftar okupasi, dan kerangka penilaian semuanya pernah direvisi dalam beberapa tahun terakhir. Sebelum mengambil keputusan apa pun, periksa langsung di <span class="mono">mom.gov.sg</span> untuk Singapura dan <span class="mono">immi.homeaffairs.gov.au</span> untuk Australia. Untuk kasus yang rumit, konsultasikan dengan agen imigrasi terdaftar.</div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Aspek</th><th>Singapura</th><th>Australia</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Jalur utama lewat pemberi kerja</strong></td><td>Employment Pass (EP) untuk posisi profesional; S Pass untuk tingkat lebih junior</td><td>Visa Skills in Demand (subclass 482), disponsori pemberi kerja yang terakreditasi</td></tr>
+          <tr><td><strong>Siapa yang mengurus</strong></td><td>Pemberi kerja yang mengajukan, bukan pelamar</td><td>Pemberi kerja harus terdaftar sebagai sponsor</td></tr>
+          <tr><td><strong>Penilaian tambahan</strong></td><td>Kerangka COMPASS menilai beberapa faktor sekaligus (gaji vs pasar, kualifikasi, keberagaman perusahaan, komitmen SG); minimal 40 poin dari 80 untuk lolos</td><td>Okupasi harus ada di daftar yang berlaku; hampir selalu perlu skills assessment (untuk peran data/ICT lewat ACS — Australian Computer Society)</td></tr>
+          <tr><td><strong>Angka gaji minimum EP</strong></td><td>Mulai S$5.600/bulan untuk kebanyakan sektor (S$6.200 untuk jasa keuangan), naik bertahap seiring usia hingga S$10.700 (S$11.800 jasa keuangan) di usia 45+. EP dengan gaji di atas S$22.500/bulan otomatis bebas dari penilaian COMPASS. Angka ini terjadwal naik lagi ke S$6.000/S$6.600 mulai Januari 2027.</td><td>Tidak ada satu angka gaji minimum tunggal — TSMIT (Temporary Skilled Migration Income Threshold) jadi acuan dasar untuk subclass 482, tapi employer biasanya membayar sesuai gaji pasar untuk okupasinya</td></tr>
+          <tr><td><strong>Okupasi yang relevan</strong></td><td>Tidak ada daftar okupasi formal seperti Australia — yang dinilai adalah kecocokan gaji dan kualifikasi dengan peran</td><td>ICT Business Analyst (kode ANZSCO 261111) dan Systems Analyst (261112) — dua kode terdekat dengan "Data Analyst" — keduanya masuk MLTSSL/CSOL sehingga bisa lewat subclass 189, 190, maupun 491</td></tr>
+          <tr><td><strong>Jalur mandiri</strong></td><td>Tidak ada jalur migrasi terampil mandiri seperti Australia</td><td>Skilled Independent (189) dan Skilled Nominated (190) berbasis poin, tanpa perlu sponsor perusahaan</td></tr>
+          <tr><td><strong>Yang perlu diperiksa lebih dulu</strong></td><td>Angka gaji minimum EP <em>saat kamu melamar</em> — pemerintah SG merevisinya secara berkala (terakhir berlaku efektif Januari 2025, revisi berikutnya Januari 2027), jadi jangan andalkan angka di atas tanpa mengonfirmasi ulang</td><td>Australia baru merombak daftar okupasinya: MLTSSL/STSOL/ROL lama sedang digantikan kerangka CSOL (Core Skills Occupation List) yang diperbarui — cek versi terbaru di situs Jobs and Skills Australia sebelum submit EOI</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <div class="tip"><strong>Untuk Australia, pertimbangkan jalur poin secara serius.</strong> Berbeda dengan Singapura, Australia punya jalur migrasi terampil yang tidak membutuhkan tawaran kerja. Prosesnya panjang dan berbiaya, tapi kalau berhasil kamu bisa melamar kerja sebagai penduduk tetap — dan itu menghilangkan hambatan terbesar dalam proses lamaran. Banyak orang menjalankan dua jalur sekaligus: melamar kerja sambil memproses skills assessment lewat ACS untuk kode 261111/261112.</div>
+
+      <h3>1. Menilai tawaran secara utuh</h3>
+      <p>Gaji pokok hanya sebagian. Yang perlu dihitung:</p>
+      <ul>
+        <li><strong>Singapura:</strong> gaji pokok, bonus tahunan (sering ada bonus bulan ke-13), kontribusi CPF (hanya berlaku untuk warga dan penduduk tetap, tidak untuk pemegang EP), asuransi kesehatan, dan tunjangan relokasi.</li>
+        <li><strong>Australia:</strong> "package" biasanya sudah termasuk superannuation (dana pensiun wajib). Tanyakan apakah angka yang disebut sudah termasuk atau belum — selisihnya cukup besar. Perhatikan juga tarif pajak yang berbeda untuk penduduk dan bukan penduduk pajak.</li>
+        <li><strong>Keduanya:</strong> biaya hidup, terutama sewa tempat tinggal, jauh lebih tinggi daripada di Indonesia. Bandingkan gaji bersih setelah pajak dan sewa, bukan angka kotornya.</li>
+      </ul>
+
+      <h3>2. Menegosiasi tawaran</h3>
+    </div>
+    <ol class="steps">
+      <li><strong>Riset kisarannya dulu</strong><span>Laporan gaji di MyCareersFuture, data Seek, Glassdoor, dan laporan gaji tahunan dari perusahaan rekrutmen. Ketahui angkanya sebelum ditanya.</span></li>
+      <li><strong>Tunda menyebut angka lebih dulu kalau bisa</strong><span>"Saya ingin memahami cakupan pekerjaannya lebih dulu. Boleh saya tahu kisaran anggaran untuk posisi ini?"</span></li>
+      <li><strong>Kalau harus menyebut, berikan rentang berbasis riset</strong><span>Letakkan angka yang kamu inginkan di sepertiga bawah rentang yang kamu sebut.</span></li>
+      <li><strong>Negosiasikan setelah ada tawaran tertulis</strong><span>Posisi tawarmu paling kuat setelah mereka memutuskan menginginkanmu, bukan sebelumnya.</span></li>
+      <li><strong>Minta satu hal utama, dengan alasan</strong><span>"Berdasarkan riset saya untuk peran serupa di Singapura, dan mengingat pengalaman saya di [domain], saya berharap di kisaran X. Apakah itu memungkinkan?"</span></li>
+      <li><strong>Kalau gaji tidak bisa naik, tanyakan yang lain</strong><span>Tunjangan relokasi, anggaran pelatihan, tanggal mulai, hari kerja fleksibel, atau peninjauan gaji dalam 6 bulan.</span></li>
+    </ol>
+
+    <div class="prose">
+      <p class="concept"><strong>Negosiasi yang sopan hampir tidak pernah merugikan.</strong> Perusahaan mengharapkannya, dan menariknya kembali karena satu pertanyaan sopan adalah hal yang sangat jarang terjadi. Yang merugikan adalah negosiasi lewat ultimatum atau berbohong soal tawaran lain.</p>
+    </div>
+
+    <div class="exercise" style="border-color:var(--teal)">
+      <span class="tag" style="color:var(--teal)">CHECKLIST AKHIR</span>
+      <h3>Kamu siap melamar kalau semua ini tercentang</h3>
+      <ul class="checklist">
+        <li><span class="box"></span>Capstone selesai, dengan dashboard hidup yang bisa diklik.</li>
+        <li><span class="box"></span>Empat repositori tersemat di GitHub, tiap satu dengan README yang menyatakan temuan.</li>
+        <li><span class="box"></span>CV satu halaman, lolos pemeriksa ATS, tiap poin punya angka.</li>
+        <li><span class="box"></span>LinkedIn dengan headline yang jelas, About yang ditulis manusia, dan bagian Featured terisi.</li>
+        <li><span class="box"></span>40 soal SQL tingkat sedang selesai, dan kamu terbiasa mengerjakannya sambil bicara.</li>
+        <li><span class="box"></span>Enam cerita STAR siap, termasuk cerita kesalahan yang jujur.</li>
+        <li><span class="box"></span>Jawaban "kenapa pindah karier" sudah dilatih sampai terdengar wajar.</li>
+        <li><span class="box"></span>Daftar 15 perusahaan sasaran, dengan alasan tiap satu.</li>
+        <li><span class="box"></span>Pelacak lamaran berjalan, dan kamu meninjau tingkat responsnya tiap 30 lamaran.</li>
+        <li><span class="box"></span>Sudah membaca syarat visa terbaru langsung dari situs resmi kedua negara.</li>
+      </ul>
+    </div>
+
+    <div class="prose">
+      <h3>Kalau setahun berlalu dan belum dapat</h3>
+      <p>Ini kemungkinan yang nyata, dan bukan berarti gagal. Yang perlu dilakukan: periksa datanya. Kalau lamaranmu tidak pernah dibalas, masalahnya di CV atau pemilihan sasaran. Kalau sering wawancara awal tapi berhenti di tahap teknis, latih SQL dan studi kasus lebih dalam. Kalau lolos teknis tapi berhenti di tahap akhir, biasanya soal komunikasi atau kecocokan — minta umpan balik dan latih penyampaian.</p>
+      <p>Dan pertimbangkan jalur yang lebih panjang tapi lebih pasti: mengambil posisi analis di Indonesia lebih dulu. Dua tahun pengalaman kerja nyata mengubah profilmu jauh lebih besar daripada portofolio terbaik sekalipun, dan membuka jalur pindah internal yang jauh lebih mudah daripada melamar dari nol.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Ini modul terakhir dari seri Rute Data Analyst. Dua belas bulan, dari tidak pernah menulis satu baris SQL sampai siap duduk di wawancara sebagai kandidat yang serius.</p>
+    <p class="closing">Yang membedakan bukan siapa yang paling berbakat, tapi siapa yang masih mengerjakan Leg 08 di bulan kesebelas.</p>
+  </footer>
+
+</div>

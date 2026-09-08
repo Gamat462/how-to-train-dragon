@@ -1,0 +1,653 @@
+<title>Modul Machine Learning untuk Analis</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.62;
+    padding:20px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.86em; background:var(--code-bg); padding:2px 6px; border-radius:6px; }
+  pre{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.8rem; line-height:1.5;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; overflow-x:auto; margin:0 0 12px;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .out{ border-left:3px solid var(--teal); }
+
+  .nav{
+    position:sticky; top:0; z-index:5; max-width:880px; margin:0 auto 24px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; padding:8px 10px; flex-wrap:wrap;
+  }
+  .nav .brand{ font-family:"Fraunces", serif; font-weight:600; font-size:0.95rem; padding:6px 10px; margin-right:auto; }
+  .nav a{ text-decoration:none; color:var(--ink-soft); font-size:0.8rem; font-weight:500; padding:6px 10px; border-radius:999px; }
+  .nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .nav a:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+
+  .page{
+    max-width:880px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:32px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+  .needs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+  @media (max-width:600px){ .needs{ grid-template-columns:1fr; } }
+  .needs div{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.86rem; color:var(--ink-soft); }
+  .needs strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:2px; }
+
+  section{ margin-bottom:48px; scroll-margin-top:84px; }
+  section > h2{ font-size:1.36rem; font-weight:600; margin-bottom:4px; }
+  .week-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:8px; }
+  .goal{ color:var(--ink-soft); font-size:0.92rem; max-width:62ch; margin-bottom:22px; padding-left:14px; border-left:3px solid var(--teal); }
+  .goal strong{ color:var(--ink); }
+  h3{ font-size:1.08rem; font-weight:600; margin:26px 0 10px; }
+  h4{ font-size:0.98rem; font-weight:600; margin:18px 0 6px; }
+  .prose{ max-width:68ch; }
+  .prose p{ margin-bottom:12px; font-size:0.95rem; }
+  .prose ul, .prose ol{ margin:0 0 12px; padding-left:22px; font-size:0.95rem; }
+  .prose li{ margin-bottom:6px; }
+  .concept{ background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin:14px 0 18px; font-size:0.92rem; max-width:70ch; }
+  .concept strong{ color:var(--teal); }
+  .tip{ background:var(--gold-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .tip strong{ color:var(--gold); }
+  .warn{ background:var(--alert-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .warn strong{ color:var(--alert); }
+
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; margin:12px 0 16px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.84rem; }
+  th, td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.num, th.num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; text-align:right; }
+  table.wrap td{ white-space:normal; }
+  tr.win td{ background:var(--teal-soft); font-weight:600; }
+  tr.lose td{ color:var(--ink-soft); }
+  td.pos{ color:var(--teal); font-weight:600; }
+  td.neg{ color:var(--alert); font-weight:600; }
+
+  /* matriks kebingungan */
+  .cm{ display:grid; grid-template-columns:auto 1fr 1fr; gap:6px; max-width:520px; margin:14px 0 18px; font-size:0.86rem; }
+  .cm div{ padding:12px 14px; border-radius:10px; border:1px solid var(--line); }
+  .cm .hdr{ background:transparent; border:none; font-family:"IBM Plex Mono", monospace; font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); display:flex; align-items:flex-end; }
+  .cm .ok{ background:var(--teal-soft); }
+  .cm .bad{ background:var(--alert-soft); }
+  .cm .n{ font-family:"IBM Plex Mono", monospace; font-size:1.2rem; font-weight:600; display:block; }
+  .cm .l{ font-size:0.76rem; color:var(--ink-soft); }
+
+  .block{ border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; background:var(--surface-2); }
+  .block h4{ margin:0 0 6px; font-family:"IBM Plex Mono", monospace; font-size:0.92rem; color:var(--teal); }
+  .block .use{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:10px; }
+  .block pre{ margin-bottom:8px; }
+  .block .result{ font-size:0.88rem; }
+
+  .exercise{ border:1px dashed var(--gold); border-radius:14px; padding:18px 20px; margin:22px 0 0; background:var(--surface); }
+  .exercise h3{ margin:0 0 4px; }
+  .exercise .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.1em; color:var(--gold); }
+  .exercise ol{ margin:10px 0 0; padding-left:22px; font-size:0.93rem; }
+  .exercise li{ margin-bottom:8px; }
+  details{ margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  summary{ cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--teal); }
+  summary:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; border-radius:4px; }
+  details .answer{ margin-top:10px; font-size:0.9rem; }
+  details .answer ol{ padding-left:22px; margin:0; }
+  details .answer li{ margin-bottom:12px; }
+  details .answer pre{ margin:6px 0; }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .steps li{ display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem; }
+  .steps li::before{ counter-increment:step; content:counter(step, decimal-leading-zero); font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px; }
+  .steps li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .steps li span{ color:var(--ink-soft); }
+
+  .checklist{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .checklist li{ display:flex; gap:10px; align-items:flex-start; font-size:0.92rem; }
+  .checklist .box{ flex:none; width:15px; height:15px; margin-top:4px; border:1.5px solid var(--teal); border-radius:4px; }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<nav class="nav" aria-label="Bagian modul">
+  <span class="brand">ML untuk Analis</span>
+  <a href="#setup">Data</a>
+  <a href="#w1">Mgg 1 · Dasar</a>
+  <a href="#w2">Mgg 2 · Evaluasi</a>
+  <a href="#w3">Mgg 3 · Nilai bisnis</a>
+  <a href="#w4">Mgg 4 · Proyek</a>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Materi · Bulan 10</span>
+    <h1>Machine Learning untuk Analis</h1>
+    <p class="lede">Kamu tidak sedang belajar jadi ilmuwan data. Kamu belajar cukup ML untuk menjawab satu jenis pertanyaan yang sering datang ke analis: <em>pelanggan mana yang akan pergi, dan apa yang harus kita lakukan?</em> Bagian tersulitnya ternyata bukan melatih model — tapi membuktikan bahwa model itu menghasilkan uang.</p>
+
+    <div class="needs">
+      <div><strong>Alat</strong><code>scikit-learn</code>, sudah terpasang di Google Colab.</div>
+      <div><strong>Kasus</strong>Memprediksi pelanggan aplikasi Kedai Kopi Senja yang akan berhenti dalam 60 hari.</div>
+      <div><strong>Prasyarat</strong>Modul statistik (paham p-value, sampel, dan bahaya menyimpulkan berlebihan).</div>
+    </div>
+  </header>
+
+  <!-- ================= SETUP ================= -->
+  <section id="setup" aria-labelledby="setup-h">
+    <h2 id="setup-h">Data: perilaku 30 hari pertama</h2>
+    <p class="goal">Untuk tiap pelanggan, kita punya perilakunya di 30 hari pertama, dan label apakah dia akhirnya berhenti. Tugas model: menebak label itu untuk pelanggan baru yang belum kita tahu nasibnya.</p>
+
+<pre><code>import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(21)
+N = 5000
+
+trx_30d       = rng.poisson(3.2, N)
+hari_terakhir = rng.integers(1, 60, N)
+nilai_avg     = rng.normal(78000, 25000, N).clip(15000)
+pakai_promo   = rng.random(N) &lt; 0.38
+kanal         = rng.choice(["organik", "iklan", "referral"], N, p=[0.45, 0.40, 0.15])
+produk_beda   = rng.integers(1, 6, N)
+
+logit = (-0.55
+         - 0.42*trx_30d
+         + 0.055*hari_terakhir
+         - 0.30*produk_beda
+         + 0.55*(kanal == "iklan")
+         - 0.45*(kanal == "referral")
+         + 0.25*pakai_promo
+         - 0.0000035*(nilai_avg - 78000))
+churn = (rng.random(N) &lt; 1/(1 + np.exp(-logit))).astype(int)
+
+df = pd.DataFrame({
+    "trx_30d": trx_30d,
+    "hari_sejak_transaksi_terakhir": hari_terakhir,
+    "nilai_rata2": nilai_avg.round(-2),
+    "pakai_promo": pakai_promo.astype(int),
+    "kanal": kanal,
+    "jumlah_produk_beda": produk_beda,
+    "churn": churn,
+})
+
+print(df.shape, "| churn rate:", f"{df.churn.mean()*100:.1f}%")
+print(df.groupby("kanal").churn.mean().round(3))</code></pre>
+<pre class="out"><code>(5000, 7) | churn rate: 33.2%
+
+kanal
+iklan       0.385
+organik     0.313
+referral    0.246</code></pre>
+
+    <div class="prose">
+      <p>Sudah ada satu temuan sebelum model apa pun dilatih: <strong>pelanggan dari referral paling jarang pergi (24,6%), dari iklan paling sering (38,5%)</strong>. Kalau kamu menggabungkan ini dengan pelajaran LTV bulan lalu, artinya CAC untuk kanal iklan seharusnya dipatok lebih rendah daripada kanal referral — karena pelanggannya bernilai lebih kecil.</p>
+      <div class="tip"><strong>Kebiasaan yang benar:</strong> selalu jalankan analisis sederhana dulu (<code>groupby</code> + rata-rata) sebelum melatih model. Sering kali temuan terpentingnya sudah muncul di situ, dan modelnya hanya menambah sedikit. Analis yang langsung melompat ke model sering melewatkan yang mudah.</div>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 1 ================= -->
+  <section id="w1" aria-labelledby="w1-h">
+    <span class="week-tag">Minggu 1</span>
+    <h2 id="w1-h">Dua model yang cukup untuk hampir semua kebutuhan analis</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> melatih regresi logistik dan random forest, dan menjelaskan isi kepalanya ke orang non-teknis.</p>
+
+    <div class="prose">
+      <h3>1. Memisahkan data latih dan uji — bagian yang tidak boleh dilewati</h3>
+    </div>
+
+    <div class="block">
+      <h4>Persiapan</h4>
+<pre><code>from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import LogisticRegression
+
+X = pd.get_dummies(df.drop(columns="churn"), columns=["kanal"], drop_first=True)
+y = df.churn
+
+X_latih, X_uji, y_latih, y_uji = train_test_split(
+    X, y, test_size=0.25, random_state=42, stratify=y)
+
+print(X_latih.shape, X_uji.shape)</code></pre>
+<pre class="out"><code>(3750, 7) (1250, 7)</code></pre>
+      <p class="result"><code>stratify=y</code> memastikan proporsi churn sama di kedua bagian. Tanpa itu, kebetulan pembagian bisa membuat data uji punya komposisi yang jauh berbeda, dan hasil evaluasimu jadi menyesatkan.</p>
+      <div class="warn" style="margin-bottom:0"><strong>Data uji itu suci.</strong> Kamu hanya boleh menyentuhnya sekali, di akhir, untuk melaporkan hasil. Kalau kamu mencoba sepuluh model dan memilih yang skornya paling bagus di data uji, kamu sebenarnya sedang menyesuaikan diri ke data uji itu — dan angka yang kamu laporkan akan lebih optimistis daripada kenyataan. Untuk memilih antar model, pakai <em>cross-validation</em> di data latih.</div>
+    </div>
+
+    <div class="block">
+      <h4>Model 1: Regresi logistik</h4>
+      <p class="use">Model paling sederhana untuk memprediksi ya/tidak. Kelebihan terbesarnya: kamu bisa membaca isinya.</p>
+<pre><code>lr = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))
+lr.fit(X_latih, y_latih)
+
+prob = lr.predict_proba(X_uji)[:, 1]      # peluang churn, 0 sampai 1
+pred = lr.predict(X_uji)                  # keputusan ya/tidak (ambang 0,5)
+
+koef = pd.Series(lr[-1].coef_[0], index=X.columns).sort_values()
+print(np.exp(koef).round(3))              # odds ratio</code></pre>
+<pre class="out"><code>trx_30d                          0.450
+jumlah_produk_beda               0.628
+kanal_referral                   0.748
+kanal_organik                    0.808
+nilai_rata2                      0.894
+pakai_promo                      1.142
+hari_sejak_transaksi_terakhir    2.548</code></pre>
+      <p class="result"><strong>Cara membaca odds ratio:</strong> nilai di atas 1 menaikkan peluang churn, di bawah 1 menurunkannya. Karena fiturnya sudah distandarkan, angka ini berarti "per satu simpangan baku". Jadi: tiap satu simpangan baku tambahan pada <em>jarak dari transaksi terakhir</em>, peluang churn menjadi <strong>2,5 kali lipat</strong>. Sementara tiap satu simpangan baku tambahan <em>jumlah transaksi</em> memangkas peluangnya menjadi <strong>0,45 kali</strong>.</p>
+    </div>
+
+    <div class="prose">
+      <div class="concept"><strong>Inilah kenapa regresi logistik sering menang di dunia nyata:</strong> kamu bisa duduk bersama pemilik kedai dan bilang "pelanggan yang belum belanja lama jauh lebih mungkin hilang, dan pelanggan yang mencoba banyak jenis produk jauh lebih mungkin bertahan". Kalimat itu langsung berubah jadi tindakan. Model yang tidak bisa dijelaskan sering berakhir tidak dipakai, seberapa pun akurat.</div>
+
+      <h3>2. Model 2: Random forest</h3>
+      <p>Kumpulan banyak pohon keputusan yang memberi suara bersama. Lebih kuat menangkap pola berliku, tapi lebih sulit dijelaskan.</p>
+    </div>
+
+    <div class="block">
+      <h4>Melatih dan melihat fitur terpenting</h4>
+<pre><code>from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier(n_estimators=300, min_samples_leaf=5, random_state=42)
+rf.fit(X_latih, y_latih)
+
+penting = pd.Series(rf.feature_importances_, index=X.columns)
+print(penting.sort_values(ascending=False).round(3))</code></pre>
+<pre class="out"><code>hari_sejak_transaksi_terakhir    0.401
+trx_30d                          0.213
+nilai_rata2                      0.202
+jumlah_produk_beda               0.112
+pakai_promo                      0.027
+kanal_organik                    0.025
+kanal_referral                   0.019</code></pre>
+      <p class="result"><code>min_samples_leaf=5</code> mencegah pohon menghafal data latih. Tanpa pembatas seperti ini, random forest akan mendapat akurasi hampir sempurna di data latih dan jelek di data uji — itulah <em>overfitting</em>.</p>
+      <div class="warn" style="margin-bottom:0"><strong>Hati-hati membaca <code>feature_importances_</code>.</strong> Ukuran ini cenderung memihak fitur dengan banyak nilai berbeda. Perhatikan <code>nilai_rata2</code> mendapat 0,202 — terlihat penting — padahal di regresi logistik pengaruhnya paling lemah (odds ratio 0,894, hampir 1). Yang benar adalah regresi logistik: kita tahu dari cara data dibuat bahwa pengaruh <code>nilai_rata2</code> memang sangat kecil. Untuk pengukuran yang lebih jujur, pakai <code>permutation_importance</code>.</div>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 1</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Latih kedua model. Bandingkan urutan fitur terpenting dari keduanya. Di mana mereka tidak sepakat?</li>
+        <li>Jalankan <code>permutation_importance</code> pada random forest. Apakah <code>nilai_rata2</code> tetap terlihat penting?</li>
+        <li>Latih ulang random forest tanpa <code>min_samples_leaf</code>. Bandingkan akurasi di data latih dan data uji. Berapa besar jaraknya?</li>
+        <li>Tulis tiga kalimat menjelaskan isi model regresi logistik kepada pemilik kedai, tanpa kata "koefisien", "odds", atau "model".</li>
+      </ol>
+      <details>
+        <summary>Petunjuk soal 2 dan 3</summary>
+        <div class="answer">
+          <ol>
+            <li><strong>Soal 2:</strong> <pre><code>from sklearn.inspection import permutation_importance
+hasil = permutation_importance(rf, X_uji, y_uji, n_repeats=10, random_state=42)
+pd.Series(hasil.importances_mean, index=X.columns).sort_values(ascending=False)</code></pre>Cara ini mengukur seberapa turun kinerja model saat satu kolom diacak. Karena diukur di data uji, hasilnya jauh lebih jujur — dan <code>nilai_rata2</code> akan turun peringkatnya secara mencolok.</li>
+            <li><strong>Soal 3:</strong> tanpa pembatas, akurasi data latih akan mendekati 99% sementara data uji tetap di sekitar 73–75%. Jarak sebesar itu adalah tanda overfitting yang jelas. Model itu menghafal, bukan belajar.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 2 ================= -->
+  <section id="w2" aria-labelledby="w2-h">
+    <span class="week-tag">Minggu 2</span>
+    <h2 id="w2-h">Evaluasi: kenapa akurasi hampir selalu menipu</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membaca matriks kebingungan, menjelaskan presisi dan recall dengan bahasa manusia, dan tahu kapan akurasi tidak boleh dipakai sama sekali.</p>
+
+    <div class="prose">
+      <h3>1. Pembanding yang wajib: model terbodoh</h3>
+    </div>
+
+    <div class="block">
+      <h4>Baseline</h4>
+<pre><code>from sklearn.dummy import DummyClassifier
+
+dummy = DummyClassifier(strategy="most_frequent").fit(X_latih, y_latih)
+print(f"baseline (selalu tebak 'bertahan'): {dummy.score(X_uji, y_uji)*100:.1f}%")
+print(f"regresi logistik:                   {lr.score(X_uji, y_uji)*100:.1f}%")</code></pre>
+<pre class="out"><code>baseline (selalu tebak 'bertahan'): 66.8%
+regresi logistik:                   75.2%</code></pre>
+      <div class="concept" style="margin-bottom:0"><strong>Model yang tidak melihat data sama sekali sudah benar 66,8% waktu</strong>, cukup dengan selalu menebak "tidak churn". Model kita 75,2%. Kedengarannya bagus? Kenaikannya hanya 8,4 poin persen. <strong>Kalau seseorang melaporkan "akurasi model saya 75%" tanpa menyebut baseline, dia belum melaporkan apa pun.</strong> Ini pertanyaan wawancara yang sangat sering dipakai, dan sangat sering menjatuhkan pelamar.</div>
+    </div>
+
+    <div class="prose">
+      <h3>2. Matriks kebingungan: empat angka yang menjelaskan segalanya</h3>
+      <p>Dari 1.250 pelanggan di data uji (415 di antaranya benar-benar churn), inilah hasil model pada ambang bawaan 0,5:</p>
+    </div>
+
+    <div class="cm">
+      <div class="hdr"></div>
+      <div class="hdr">Model bilang: bertahan</div>
+      <div class="hdr">Model bilang: churn</div>
+
+      <div class="hdr" style="align-items:center">Nyatanya bertahan</div>
+      <div class="ok"><span class="n">737</span><span class="l">Benar. Tidak diganggu.</span></div>
+      <div class="bad"><span class="n">98</span><span class="l">Alarm palsu. Voucher terbuang.</span></div>
+
+      <div class="hdr" style="align-items:center">Nyatanya churn</div>
+      <div class="bad"><span class="n">212</span><span class="l">Terlewat. Pelanggan hilang diam-diam.</span></div>
+      <div class="ok"><span class="n">203</span><span class="l">Tertangkap. Bisa diselamatkan.</span></div>
+    </div>
+
+    <div class="prose">
+      <p>Dua jenis kesalahan itu <strong>tidak sama harganya</strong>, dan itulah inti seluruh minggu ini. Alarm palsu memboroskan biaya voucher. Yang terlewat berarti kehilangan seluruh nilai pelanggan. Model yang bagus untuk satu situasi bisa buruk untuk situasi lain, tergantung mana yang lebih mahal.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Ukuran</th><th class="num">Nilai</th><th>Artinya dalam bahasa manusia</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Akurasi</strong></td><td class="num">75,2%</td><td>Dari semua tebakan, berapa yang benar. Menipu kalau kelasnya timpang.</td></tr>
+          <tr><td><strong>Presisi</strong> (churn)</td><td class="num">67,4%</td><td>Dari yang ditandai akan churn, 67% benar-benar churn. Sisanya voucher terbuang.</td></tr>
+          <tr><td><strong>Recall</strong> (churn)</td><td class="num">48,9%</td><td>Dari semua yang benar-benar churn, kita hanya menangkap separuhnya.</td></tr>
+          <tr><td><strong>F1</strong></td><td class="num">0,567</td><td>Rata-rata harmonik presisi dan recall. Berguna untuk membandingkan model, sulit dijelaskan ke bisnis.</td></tr>
+          <tr><td><strong>AUC</strong></td><td class="num">0,797</td><td>Peluang model memberi skor lebih tinggi ke pelanggan yang benar-benar churn daripada yang tidak. 0,5 = tebakan acak.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <div class="tip"><strong>Cara mengingat presisi vs recall:</strong> presisi menjawab <em>"kalau model bilang ya, seberapa sering dia benar?"</em> Recall menjawab <em>"dari semua kasus nyata, seberapa banyak yang kita temukan?"</em> Menaikkan yang satu hampir selalu menurunkan yang lain.</div>
+
+      <h3>3. Yang canggih tidak selalu menang</h3>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Model</th><th class="num">Akurasi</th><th class="num">AUC</th><th class="num">Presisi</th><th class="num">Recall</th></tr></thead>
+        <tbody>
+          <tr class="win"><td>Regresi logistik</td><td class="num">75,2%</td><td class="num">0,797</td><td class="num">0,674</td><td class="num">0,489</td></tr>
+          <tr><td>Random forest</td><td class="num">75,0%</td><td class="num">0,780</td><td class="num">0,689</td><td class="num">0,448</td></tr>
+          <tr class="lose"><td>Baseline (tebak mayoritas)</td><td class="num">66,8%</td><td class="num">0,500</td><td class="num">—</td><td class="num">0,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p><strong>Regresi logistik mengalahkan random forest</strong> di AUC (0,797 vs 0,780) dan recall. Ini bukan kebetulan yang aneh — ini sering terjadi. Data ini memang dibuat dengan hubungan yang lurus, dan regresi logistik adalah bentuk yang tepat untuk itu. Random forest membuang kekuatannya mencari lekukan yang tidak ada.</p>
+      <div class="concept">Pilih model yang paling sederhana yang bekerja cukup baik. Kalau regresi logistik seri dengan random forest, <strong>pilih regresi logistik</strong> — karena bisa dijelaskan, lebih cepat, dan lebih mudah dirawat. "Saya mencoba model yang lebih rumit dan ternyata tidak lebih baik, jadi saya pakai yang sederhana" adalah salah satu kalimat terbaik yang bisa kamu ucapkan di wawancara.</div>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 2</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Hitung sendiri presisi dan recall dari empat angka matriks kebingungan. Cocokkan dengan <code>classification_report</code>.</li>
+        <li>Untuk tiap situasi, tentukan mana yang lebih penting — presisi atau recall — dan jelaskan alasannya: (a) menyaring email spam, (b) mendeteksi penipuan kartu kredit, (c) memilih pelanggan untuk dikirimi voucher mahal, (d) skrining awal penyakit serius.</li>
+        <li>Buat grafik kurva ROC untuk kedua model dalam satu gambar.</li>
+        <li>Tambahkan <code>class_weight="balanced"</code> pada regresi logistik. Bagaimana perubahan presisi dan recall-nya? Apa yang sebenarnya dilakukan parameter itu?</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban soal 1, 2, dan 4</summary>
+        <div class="answer">
+          <ol>
+            <li><strong>Soal 1:</strong> Presisi = TP/(TP+FP) = 203/(203+98) = 203/301 = <strong>0,674</strong>. Recall = TP/(TP+FN) = 203/(203+212) = 203/415 = <strong>0,489</strong>. Akurasi = (737+203)/1250 = <strong>0,752</strong>.</li>
+            <li><strong>Soal 2:</strong> (a) <em>Presisi</em> — email penting yang masuk folder spam jauh lebih menyakitkan daripada satu spam lolos. (b) <em>Recall</em> — penipuan yang lolos berbiaya besar; verifikasi tambahan pada transaksi wajar hanya merepotkan sedikit. (c) <em>Presisi</em> — tiap alarm palsu langsung membakar biaya voucher. (d) <em>Recall</em> — melewatkan penyakit jauh lebih berbahaya daripada memeriksa ulang orang sehat.</li>
+            <li><strong>Soal 4:</strong> <code>class_weight="balanced"</code> membuat model menghukum kesalahan pada kelas minoritas lebih berat, sehingga model lebih berani menandai churn. Akibatnya <strong>recall naik tajam, presisi turun</strong>. Efeknya mirip menurunkan ambang keputusan — dan itulah topik minggu depan.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 3 ================= -->
+  <section id="w3" aria-labelledby="w3-h">
+    <span class="week-tag">Minggu 3</span>
+    <h2 id="w3-h">Dari model ke keputusan: berapa rupiah yang dihasilkannya?</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> mengubah keluaran model jadi rekomendasi bisnis dengan angka rupiah — kemampuan yang membedakan analis dari orang yang sekadar menjalankan <code>sklearn</code>.</p>
+
+    <div class="prose">
+      <h3>1. Ambang 0,5 itu pilihan sembarang</h3>
+      <p>Model menghasilkan peluang, bukan keputusan. Angka 0,5 hanyalah bawaan pustaka, bukan jawaban yang benar. Menggesernya mengubah segalanya.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="num">Ambang</th><th class="num">Ditandai</th><th class="num">Presisi</th><th class="num">Recall</th><th>Sifatnya</th></tr></thead>
+        <tbody>
+          <tr><td class="num">0,3</td><td class="num">576</td><td class="num">0,543</td><td class="num">0,754</td><td>Jaring lebar: menangkap banyak, banyak juga salahnya</td></tr>
+          <tr><td class="num">0,4</td><td class="num">428</td><td class="num">0,610</td><td class="num">0,629</td><td>Seimbang</td></tr>
+          <tr><td class="num">0,5</td><td class="num">301</td><td class="num">0,674</td><td class="num">0,489</td><td>Bawaan pustaka</td></tr>
+          <tr><td class="num">0,6</td><td class="num">205</td><td class="num">0,698</td><td class="num">0,345</td><td>Lebih hati-hati</td></tr>
+          <tr><td class="num">0,7</td><td class="num">110</td><td class="num">0,764</td><td class="num">0,202</td><td>Hanya yang paling yakin</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>Model yang sama, tanpa dilatih ulang, bisa menandai 576 orang atau 110 orang. Pertanyaannya: <strong>mana yang benar?</strong> Jawabannya tidak ada di dalam model. Jawabannya ada di ekonomi kampanyenya.</p>
+
+      <h3>2. Menghitung nilai bisnisnya</h3>
+      <p>Andaikan kedai mengirim voucher Rp 25.000 ke tiap pelanggan yang ditandai. Voucher berhasil menahan 30% dari mereka yang memang akan pergi. Nilai satu pelanggan yang selamat adalah margin LTV dari bulan lalu: Rp 109.000.</p>
+    </div>
+
+    <div class="block">
+      <h4>Menghitung untung-rugi tiap ambang</h4>
+<pre><code>from sklearn.metrics import confusion_matrix
+
+BIAYA, EFEKTIF, NILAI = 25_000, 0.30, 109_000
+
+for t in (0.3, 0.4, 0.5, 0.6, 0.7, 0.8):
+    pred = (prob &gt;= t).astype(int)
+    tn, fp, fn, tp = confusion_matrix(y_uji, pred).ravel()
+    biaya   = pred.sum() * BIAYA
+    manfaat = tp * EFEKTIF * NILAI
+    print(f"ambang {t}: ditandai {pred.sum():4d}  biaya {biaya:>11,}"
+          f"  manfaat {manfaat:>11,.0f}  laba {manfaat-biaya:>12,.0f}")</code></pre>
+<pre class="out"><code>ambang 0.3: ditandai  576  biaya  14,400,000  manfaat  10,235,100  laba   -4,164,900
+ambang 0.4: ditandai  428  biaya  10,700,000  manfaat   8,534,700  laba   -2,165,300
+ambang 0.5: ditandai  301  biaya   7,525,000  manfaat   6,638,100  laba     -886,900
+ambang 0.6: ditandai  205  biaya   5,125,000  manfaat   4,676,100  laba     -448,900
+ambang 0.7: ditandai  110  biaya   2,750,000  manfaat   2,746,800  laba       -3,200
+ambang 0.8: ditandai   41  biaya   1,025,000  manfaat     915,600  laba     -109,400</code></pre>
+      <div class="warn" style="margin-bottom:0"><strong>Rugi di semua ambang.</strong> Modelnya bagus — AUC 0,797, jauh di atas tebakan acak — tapi kampanyenya tetap membakar uang. Kalau kamu berhenti di "AUC saya 0,80" dan menyerahkannya ke tim pemasaran, kamu baru saja merekomendasikan sesuatu yang merugikan perusahaan.</div>
+    </div>
+
+    <div class="prose">
+      <h3>3. Rumus presisi impas</h3>
+      <div class="concept"><strong>presisi impas = biaya ÷ (efektivitas × nilai)</strong><br>
+      Untuk kasus ini: 25.000 ÷ (0,30 × 109.000) = <strong>0,765</strong>. Artinya kampanye baru menguntungkan kalau presisi model melebihi 76,5%. Presisi tertinggi yang bisa dicapai model kita adalah 76,4% — persis di bawah garis. Rumus satu baris ini memberi tahu jawabannya <em>sebelum</em> kamu melatih model apa pun, dan itu membuatnya sangat berharga.</div>
+
+      <h3>4. Yang harus diubah: intervensinya, bukan modelnya</h3>
+      <p>Karena presisi impas terlalu tinggi, jalan keluarnya bukan mencari model yang lebih canggih. Jalan keluarnya adalah membuat intervensinya lebih murah. Kalau kedai mengganti voucher Rp 25.000 dengan pesan pengingat plus voucher kecil Rp 10.000 dengan efektivitas sama:</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th class="num">Ambang</th><th class="num">Ditandai</th><th class="num">Biaya</th><th class="num">Manfaat</th><th class="num">Laba bersih</th><th class="num">ROI</th></tr></thead>
+        <tbody>
+          <tr class="win"><td class="num">0,3</td><td class="num">576</td><td class="num">5.760.000</td><td class="num">10.235.100</td><td class="num pos">+4.475.100</td><td class="num">78%</td></tr>
+          <tr><td class="num">0,4</td><td class="num">428</td><td class="num">4.280.000</td><td class="num">8.534.700</td><td class="num pos">+4.254.700</td><td class="num">99%</td></tr>
+          <tr><td class="num">0,5</td><td class="num">301</td><td class="num">3.010.000</td><td class="num">6.638.100</td><td class="num pos">+3.628.100</td><td class="num">121%</td></tr>
+          <tr><td class="num">0,6</td><td class="num">205</td><td class="num">2.050.000</td><td class="num">4.676.100</td><td class="num pos">+2.626.100</td><td class="num">128%</td></tr>
+          <tr><td class="num">0,7</td><td class="num">110</td><td class="num">1.100.000</td><td class="num">2.746.800</td><td class="num pos">+1.646.800</td><td class="num">150%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose">
+      <p>Sekarang semuanya untung, dan <strong>ambang terbaiknya berpindah dari 0,7 ke 0,3</strong>. Ketika intervensinya murah, kamu justru ingin menebar jaring selebar mungkin. Presisi impas turun jadi 0,306, dan hampir semua ambang melewatinya.</p>
+      <div class="tip"><strong>Perhatikan perbedaan laba bersih dan ROI.</strong> Ambang 0,7 punya ROI tertinggi (150%) tapi laba terkecil (Rp 1,6 juta). Ambang 0,3 punya ROI terendah tapi laba terbesar (Rp 4,5 juta). Mana yang dipilih tergantung apakah anggarannya terbatas. Kalau uangnya ada, kejar laba bersih. Kalau anggaran dijatah, kejar ROI. Menyebutkan pembedaan ini di wawancara menunjukkan kamu berpikir seperti pengambil keputusan.</div>
+      <p>Sebagai pembanding terakhir: mengirim ke <em>semua</em> 1.250 pelanggan tanpa model menghasilkan laba Rp 1.070.500. Model dengan ambang 0,3 menghasilkan Rp 4.475.100. <strong>Nilai tambah model itu sekitar Rp 3,4 juta</strong> — dan angka itulah yang harus ada di kalimat pertama laporanmu, bukan AUC.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 3</span>
+      <h3>Lima soal</h3>
+      <ol>
+        <li>Hitung presisi impas untuk tiga skenario: voucher Rp 15.000 efektif 25%; pesan gratis efektif 10%; telepon Rp 40.000 efektif 50%. Mana yang layak dijalankan dengan model ini?</li>
+        <li>Buat grafik laba bersih terhadap ambang untuk dua skenario biaya dalam satu gambar. Di mana puncaknya masing-masing?</li>
+        <li>Kalau nilai pelanggan yang selamat naik jadi Rp 200.000 (karena LTV membaik), apakah voucher Rp 25.000 jadi layak? Hitung presisi impasnya.</li>
+        <li>Buat prioritas: alih-alih ambang tetap, urutkan pelanggan menurut <em>peluang churn × nilai pelanggan</em>. Ambil 200 teratas. Apakah labanya lebih besar daripada ambang 0,3?</li>
+        <li>Tulis ringkasan satu paragraf untuk pemilik kedai, dimulai dari angka rupiah, bukan dari model.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban soal 1 dan 3</summary>
+        <div class="answer">
+          <ol>
+            <li><strong>Soal 1:</strong> (a) 15.000 ÷ (0,25 × 109.000) = <strong>0,550</strong> — layak, presisi model melewatinya di ambang 0,4 ke atas. (b) 0 ÷ apa pun = <strong>0</strong> — selalu layak, karena tidak ada biaya; kirim ke semua orang yang ditandai. (c) 40.000 ÷ (0,50 × 109.000) = <strong>0,734</strong> — sangat ketat, hanya lolos di ambang 0,7. Perhatikan bahwa intervensi yang lebih efektif membolehkan biaya lebih tinggi, tapi tidak sebebas yang dikira.</li>
+            <li><strong>Soal 3:</strong> 25.000 ÷ (0,30 × 200.000) = <strong>0,417</strong>. Sekarang layak dari ambang 0,4 ke atas. Pelajarannya penting: <strong>menaikkan nilai pelanggan mengubah kelayakan kampanye tanpa menyentuh model sama sekali.</strong> Sering kali cara terbaik membuat model berguna adalah memperbaiki ekonominya, bukan algoritmanya.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 4 ================= -->
+  <section id="w4" aria-labelledby="w4-h">
+    <span class="week-tag">Minggu 4 · Proyek</span>
+    <h2 id="w4-h">Segmentasi, kebocoran data, dan proyek akhir</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> proyek ML yang berakhir dengan rekomendasi berupa rupiah, bukan grafik metrik — dan kemampuan mengenali kesalahan yang membuat model palsu terlihat sempurna.</p>
+
+    <div class="prose">
+      <h3>1. Segmentasi dengan clustering</h3>
+      <p>Berbeda dengan model churn yang punya jawaban benar untuk dipelajari, clustering mencari kelompok tanpa diberi tahu apa pun. Untuk analis, kegunaan terbesarnya adalah RFM.</p>
+    </div>
+
+    <div class="block">
+      <h4>RFM: cara paling praktis mengelompokkan pelanggan</h4>
+<pre><code># Recency, Frequency, Monetary — dihitung dari data transaksi
+rfm = df.assign(
+    R = pd.qcut(df.hari_sejak_transaksi_terakhir, 4, labels=[4,3,2,1]).astype(int),
+    F = pd.qcut(df.trx_30d.rank(method="first"),  4, labels=[1,2,3,4]).astype(int),
+    M = pd.qcut(df.nilai_rata2,                   4, labels=[1,2,3,4]).astype(int),
+)
+rfm["skor"] = rfm.R + rfm.F + rfm.M
+
+def label(baris):
+    if baris.skor &gt;= 10:                    return "Juara"
+    if baris.R &gt;= 3 and baris.F &lt;= 2:       return "Baru, berpotensi"
+    if baris.R &lt;= 2 and baris.F &gt;= 3:       return "Berisiko hilang"
+    if baris.skor &lt;= 5:                     return "Hampir hilang"
+    return "Perlu perhatian"
+
+rfm["segmen"] = rfm.apply(label, axis=1)
+rfm.groupby("segmen").agg(jumlah=("skor","size"), churn=("churn","mean")).round(3)</code></pre>
+      <p class="result">RFM sering mengalahkan k-means untuk keperluan bisnis, karena segmennya <strong>punya nama yang dimengerti orang</strong> dan langsung menyarankan tindakan. "Berisiko hilang" adalah instruksi; "Cluster 3" bukan.</p>
+    </div>
+
+    <div class="prose">
+      <h3>2. Kebocoran data: kesalahan yang paling memalukan</h3>
+      <p>Kebocoran terjadi saat model diam-diam melihat informasi yang di dunia nyata belum tersedia saat prediksi dibuat. Gejalanya khas: <strong>akurasi luar biasa tinggi, dan orang di sekitarmu terkesan.</strong> Lalu model gagal total saat dipakai.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Bentuk kebocoran</th><th>Contoh di kasus ini</th><th>Cara menghindari</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Fitur dari masa depan</strong></td><td>Memakai "jumlah transaksi bulan ke-3" untuk memprediksi churn di bulan ke-3</td><td>Semua fitur harus berasal dari sebelum titik prediksi. Gambar garis waktunya.</td></tr>
+          <tr><td><strong>Akibat, bukan sebab</strong></td><td>Memakai "sudah menutup akun" sebagai fitur</td><td>Tanya: apakah kolom ini <em>hasil</em> dari hal yang diprediksi?</td></tr>
+          <tr><td><strong>Standarisasi sebelum pemisahan</strong></td><td><code>StandardScaler</code> dijalankan pada seluruh data sebelum <code>train_test_split</code></td><td>Bungkus dengan <code>Pipeline</code>, seperti contoh di modul ini</td></tr>
+          <tr><td><strong>Duplikat lintas bagian</strong></td><td>Pelanggan yang sama muncul di data latih dan uji</td><td>Pisahkan berdasarkan ID pelanggan, bukan baris</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <div class="warn"><strong>Aturan praktis:</strong> kalau akurasimu di atas 95% pada masalah bisnis yang sulit, jangan senang dulu — curigai kebocoran. Masalah nyata jarang semudah itu. Menemukan kebocoran di pekerjaanmu sendiri dan melaporkannya adalah tanda analis yang bisa dipercaya.</div>
+
+      <h3>3. Validasi silang untuk memilih model</h3>
+    </div>
+<pre><code>from sklearn.model_selection import cross_val_score
+
+for nama, model in [("logistik", lr), ("random forest", rf)]:
+    skor = cross_val_score(model, X_latih, y_latih, cv=5, scoring="roc_auc")
+    print(f"{nama:15s} AUC {skor.mean():.3f} ± {skor.std():.3f}")</code></pre>
+    <div class="prose">
+      <p>Ini membagi data latih jadi 5 bagian dan menguji 5 kali. Kamu mendapat rata-rata <em>dan</em> sebaran. Kalau simpangannya besar, hasilmu tidak stabil dan tidak boleh dipercaya terlalu jauh. Pakai ini untuk memilih model; simpan data uji untuk laporan akhir saja.</p>
+    </div>
+
+    <div class="exercise" style="border-color:var(--teal)">
+      <span class="tag" style="color:var(--teal)">PROYEK: MODEL CHURN + MEMO PIMPINAN</span>
+      <h3>Dua berkas: notebook dan satu halaman</h3>
+      <div class="prose">
+        <p>File <code>06-model-churn.ipynb</code> berisi seluruh pekerjaan teknis, dan <code>06-memo-churn.md</code> berisi satu halaman untuk pimpinan. Berkas kedua itu yang paling menentukan.</p>
+      </div>
+      <ol class="steps">
+        <li><strong>Analisis sederhana dulu</strong><span>Tingkat churn per kanal, per kelompok perilaku. Tunjukkan apa yang sudah bisa diketahui tanpa model.</span></li>
+        <li><strong>Baseline lalu dua model</strong><span>Dummy, regresi logistik, random forest. Dipilih lewat cross-validation, bukan lewat data uji.</span></li>
+        <li><strong>Evaluasi lengkap</strong><span>Matriks kebingungan, presisi/recall, AUC, kurva ROC. Bandingkan semuanya dengan baseline.</span></li>
+        <li><strong>Penjelasan model</strong><span>Odds ratio atau permutation importance, diterjemahkan jadi kalimat bahasa Indonesia biasa.</span></li>
+        <li><strong>Analisis nilai bisnis</strong><span>Tabel laba bersih terhadap ambang, minimal dua skenario biaya, plus presisi impas.</span></li>
+        <li><strong>Memo satu halaman</strong><span>Kalimat pertama harus berupa rekomendasi dan angka rupiah. Tidak boleh ada satu pun nama algoritma di seluruh memo.</span></li>
+      </ol>
+      <ul class="checklist">
+        <li><span class="box"></span>Baseline dilaporkan berdampingan dengan hasil model.</li>
+        <li><span class="box"></span>Ambang dipilih berdasarkan hitungan rupiah, bukan dibiarkan 0,5.</li>
+        <li><span class="box"></span>Ada perbandingan eksplisit: berapa nilai tambah model dibanding tanpa model sama sekali.</li>
+        <li><span class="box"></span>Bagian batasan menyebut kebocoran data yang sudah diperiksa.</li>
+        <li><span class="box"></span>Memo tidak menyebut "random forest", "AUC", atau "regresi logistik".</li>
+        <li><span class="box"></span>Notebook berjalan bersih dari atas ke bawah, ada di GitHub.</li>
+      </ul>
+    </div>
+
+    <div class="exercise" style="margin-top:18px">
+      <span class="tag">PERTANYAAN WAWANCARA</span>
+      <h3>Latih dengan suara keras</h3>
+      <ol>
+        <li>Model churn kamu akurasinya 75%. Apakah itu bagus?</li>
+        <li>Kapan kamu memilih regresi logistik dan kapan random forest?</li>
+        <li>Jelaskan presisi dan recall ke manajer pemasaran.</li>
+        <li>Bagaimana kamu memutuskan ambang untuk kampanye retensi?</li>
+        <li>Apa itu kebocoran data, dan bagaimana kamu memeriksanya?</li>
+        <li>Model kami akurasinya 98%. Apa reaksi pertamamu?</li>
+      </ol>
+      <details>
+        <summary>Kerangka jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li>Balik bertanya soal baseline. "Kalau 67% pelanggan bertahan, menebak 'semua bertahan' sudah 67% akurat. Jadi 75% berarti kenaikannya 8 poin. Yang lebih penting: berapa presisi dan recall-nya, dan berapa nilainya dalam rupiah?"</li>
+            <li>Logistik kalau butuh penjelasan, datanya sedang, dan hubungannya cenderung lurus. Random forest kalau ada interaksi antar fitur dan lekukan yang jelas, dan penjelasan tidak jadi syarat. Sebutkan: coba yang sederhana dulu, naik hanya kalau terbukti lebih baik lewat cross-validation.</li>
+            <li>"Presisi: dari 100 orang yang kita kirimi voucher, berapa yang memang mau pergi. Recall: dari semua orang yang mau pergi, berapa yang berhasil kita hubungi. Voucher mahal berarti presisi lebih penting; pesan gratis berarti recall lebih penting."</li>
+            <li>Dari hitungan untung-rugi, bukan dari bawaan pustaka. Sebutkan rumus presisi impas dan tunjukkan bahwa ambang optimal berpindah saat biaya intervensi berubah.</li>
+            <li>Fitur yang tidak akan tersedia saat prediksi sungguhan dibuat. Cara memeriksanya: gambar garis waktu tiap fitur, curigai akurasi yang terlalu tinggi, dan pastikan penskalaan dilakukan di dalam pipeline setelah pemisahan data.</li>
+            <li>"Saya akan curiga ada kebocoran, dan hal pertama yang saya periksa adalah apakah ada fitur yang sebenarnya merupakan akibat dari hal yang kami prediksi." Jawaban ini hampir selalu benar, dan menunjukkan kematangan.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <p>Modul terakhir: <strong>Capstone &amp; Pencarian Kerja</strong> (Bulan 11–12) — menyatukan semuanya jadi satu proyek unggulan, merapikan portofolio, dan menyiapkan lamaran ke Singapura dan Australia.</p>
+    <p class="closing">Model yang menghasilkan Rp 3,4 juta lebih berharga daripada model dengan AUC 0,95 yang tidak pernah dipakai siapa pun.</p>
+  </footer>
+
+</div>

@@ -1,0 +1,725 @@
+<title>Modul Statistik dan A/B Testing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.62;
+    padding:20px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.86em; background:var(--code-bg); padding:2px 6px; border-radius:6px; }
+  pre{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.8rem; line-height:1.5;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; overflow-x:auto; margin:0 0 12px;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .out{ border-left:3px solid var(--teal); }
+
+  .nav{
+    position:sticky; top:0; z-index:5; max-width:880px; margin:0 auto 24px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; padding:8px 10px; flex-wrap:wrap;
+  }
+  .nav .brand{ font-family:"Fraunces", serif; font-weight:600; font-size:0.95rem; padding:6px 10px; margin-right:auto; }
+  .nav a{ text-decoration:none; color:var(--ink-soft); font-size:0.8rem; font-weight:500; padding:6px 10px; border-radius:999px; }
+  .nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .nav a:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+
+  .page{
+    max-width:880px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:32px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+  .needs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+  @media (max-width:600px){ .needs{ grid-template-columns:1fr; } }
+  .needs div{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.86rem; color:var(--ink-soft); }
+  .needs strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:2px; }
+
+  section{ margin-bottom:48px; scroll-margin-top:84px; }
+  section > h2{ font-size:1.36rem; font-weight:600; margin-bottom:4px; }
+  .week-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:8px; }
+  .goal{ color:var(--ink-soft); font-size:0.92rem; max-width:62ch; margin-bottom:22px; padding-left:14px; border-left:3px solid var(--teal); }
+  .goal strong{ color:var(--ink); }
+  h3{ font-size:1.08rem; font-weight:600; margin:26px 0 10px; }
+  h4{ font-size:0.98rem; font-weight:600; margin:18px 0 6px; }
+  .prose{ max-width:68ch; }
+  .prose p{ margin-bottom:12px; font-size:0.95rem; }
+  .prose ul, .prose ol{ margin:0 0 12px; padding-left:22px; font-size:0.95rem; }
+  .prose li{ margin-bottom:6px; }
+  .concept{ background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin:14px 0 18px; font-size:0.92rem; max-width:70ch; }
+  .concept strong{ color:var(--teal); }
+  .tip{ background:var(--gold-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .tip strong{ color:var(--gold); }
+  .warn{ background:var(--alert-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .warn strong{ color:var(--alert); }
+
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; margin:12px 0 16px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.84rem; }
+  th, td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.num, th.num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; text-align:right; }
+  table.wrap td{ white-space:normal; }
+
+  .block{ border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; background:var(--surface-2); }
+  .block h4{ margin:0 0 6px; font-family:"IBM Plex Mono", monospace; font-size:0.92rem; color:var(--teal); }
+  .block .use{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:10px; }
+  .block pre{ margin-bottom:8px; }
+  .block .result{ font-size:0.88rem; }
+
+  .exercise{ border:1px dashed var(--gold); border-radius:14px; padding:18px 20px; margin:22px 0 0; background:var(--surface); }
+  .exercise h3{ margin:0 0 4px; }
+  .exercise .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.1em; color:var(--gold); }
+  .exercise ol{ margin:10px 0 0; padding-left:22px; font-size:0.93rem; }
+  .exercise li{ margin-bottom:8px; }
+  details{ margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  summary{ cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--teal); }
+  summary:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; border-radius:4px; }
+  details .answer{ margin-top:10px; font-size:0.9rem; }
+  details .answer ol{ padding-left:22px; margin:0; }
+  details .answer li{ margin-bottom:12px; }
+  details .answer pre{ margin:6px 0; }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .steps li{ display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem; }
+  .steps li::before{ counter-increment:step; content:counter(step, decimal-leading-zero); font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px; }
+  .steps li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .steps li span{ color:var(--ink-soft); }
+
+  .checklist{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .checklist li{ display:flex; gap:10px; align-items:flex-start; font-size:0.92rem; }
+  .checklist .box{ flex:none; width:15px; height:15px; margin-top:4px; border:1.5px solid var(--teal); border-radius:4px; }
+
+  .verdict{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:16px 0;
+  }
+  @media (max-width:640px){ .verdict{ grid-template-columns:1fr; } }
+  .verdict div{ border:1px solid var(--line); border-radius:12px; padding:14px 16px; background:var(--surface-2); }
+  .verdict .m{ font-family:"IBM Plex Mono", monospace; font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); display:block; }
+  .verdict .v{ font-family:"IBM Plex Mono", monospace; font-size:1.25rem; font-weight:600; display:block; margin:4px 0 2px; font-variant-numeric:tabular-nums; }
+  .verdict .ok .v{ color:var(--teal); }
+  .verdict .bad .v{ color:var(--alert); }
+  .verdict .meh .v{ color:var(--gold); }
+  .verdict .s{ font-size:0.82rem; color:var(--ink-soft); }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<nav class="nav" aria-label="Bagian modul">
+  <span class="brand">Statistik &amp; A/B Test</span>
+  <a href="#setup">Data</a>
+  <a href="#w1">Mgg 1 · Sebaran</a>
+  <a href="#w2">Mgg 2 · Uji hipotesis</a>
+  <a href="#w3">Mgg 3 · CI &amp; jebakan</a>
+  <a href="#w4">Mgg 4 · Proyek</a>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Materi · Bulan 5</span>
+    <h1>Statistik Inferensial &amp; A/B Testing</h1>
+    <p class="lede">Sampai sekarang kamu menghitung apa yang <em>sudah terjadi</em>. Bulan ini kamu belajar menjawab pertanyaan yang lebih sulit: apakah yang kamu lihat itu nyata, atau cuma kebetulan? Ini materi yang paling sering dipakai untuk menyaring pelamar analis di perusahaan produk, dan yang paling sering salah dijawab.</p>
+
+    <div class="needs">
+      <div><strong>Alat</strong>Google Colab, ditambah <code>scipy</code> (sudah terpasang di Colab).</div>
+      <div><strong>Data</strong>Hasil A/B test aplikasi Kedai Kopi Senja — dibuat oleh skrip di bawah, hasilnya sama persis untuk semua orang.</div>
+      <div><strong>Prasyarat</strong>Modul pandas selesai. Kamu harus nyaman dengan <code>groupby</code> dan filter.</div>
+    </div>
+  </header>
+
+  <!-- ================= SETUP ================= -->
+  <section id="setup" aria-labelledby="setup-h">
+    <h2 id="setup-h">Kasusnya: aplikasi Kedai Kopi Senja</h2>
+    <p class="goal">Kedai membuat halaman checkout baru di aplikasinya. Tim ingin tahu: apakah halaman baru membuat lebih banyak orang jadi membeli? Selama dua minggu, tiap pengunjung dilempar acak ke salah satu versi.</p>
+
+    <div class="prose">
+      <p>Jalankan sel ini di Colab. Karena ada <code>default_rng(42)</code>, angka yang kamu dapat akan <strong>sama persis</strong> dengan semua angka di materi ini — jadi kamu bisa langsung tahu kalau ada langkah yang keliru.</p>
+    </div>
+
+<pre><code>import numpy as np
+import pandas as pd
+from scipy import stats
+
+rng = np.random.default_rng(42)
+N = 4000
+
+def buat_grup(nama, p_konversi, mean_nilai):
+    konversi = rng.random(N) &lt; p_konversi
+    nilai = np.where(konversi, rng.normal(mean_nilai, 25000, N).round(-2), 0)
+    nilai = np.clip(nilai, 0, None)
+    return pd.DataFrame({"grup": nama,
+                         "konversi": konversi.astype(int),
+                         "nilai_pesanan": nilai})
+
+ab = pd.concat([buat_grup("kontrol",   0.110, 85000),
+                buat_grup("perlakuan", 0.132, 80000)], ignore_index=True)
+
+ab.groupby("grup").agg(pengunjung=("konversi", "count"),
+                       pembeli=("konversi", "sum"),
+                       konversi=("konversi", "mean"))</code></pre>
+<pre class="out"><code>           pengunjung  pembeli  konversi
+grup
+kontrol          4000      449   0.11225
+perlakuan        4000      511   0.12775</code></pre>
+
+    <div class="prose">
+      <p>Konversi naik dari <strong>11,23%</strong> ke <strong>12,78%</strong> — selisih 1,55 poin persen, atau <strong>13,8% lebih tinggi secara relatif</strong>. Kelihatannya bagus. Tapi 4.000 orang per grup itu sampel; kalau eksperimennya diulang minggu depan, angkanya pasti berbeda sedikit. Pertanyaannya: seberapa yakin kita bahwa halaman barunya benar-benar lebih baik, bukan sekadar undian yang kebetulan menguntungkan?</p>
+      <div class="concept"><strong>Itulah seluruh isi statistik inferensial:</strong> kamu punya sampel, kamu ingin menyimpulkan sesuatu tentang kenyataan yang lebih besar, dan kamu harus jujur soal seberapa yakin kamu boleh merasa.</div>
+      <p class="tip"><strong>Catatan soal data buatan:</strong> di balik layar, halaman baru memang benar-benar lebih baik (11% vs 13,2%). Kita tahu jawabannya. Itu justru gunanya — kamu bisa mengecek apakah metode statistiknya berhasil menemukan kebenaran yang sudah kita tanam.</p>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 1 ================= -->
+  <section id="w1" aria-labelledby="w1-h">
+    <span class="week-tag">Minggu 1</span>
+    <h2 id="w1-h">Sebaran, sampel, dan kenapa rata-rata bisa dipercaya</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menjelaskan kenapa rata-rata dari sampel kecil tidak bisa dipercaya, dan menghitung seberapa jauh rata-rata sampel biasanya meleset dari kebenaran.</p>
+
+    <div class="prose">
+      <h3>1. Data punya bentuk, dan bentuknya penting</h3>
+      <p>Nilai transaksi di kedai tidak tersebar simetris. Banyak transaksi kecil, sedikit transaksi besar. Sebaran seperti ini disebut <em>miring ke kanan</em> (right-skewed), dan itu bentuk paling umum untuk data uang.</p>
+    </div>
+
+    <div class="block">
+      <h4>Melihat bentuk sebaran</h4>
+<pre><code>pembeli = ab[ab.konversi == 1]
+
+pembeli["nilai_pesanan"].describe()
+pembeli["nilai_pesanan"].plot(kind="hist", bins=30,
+    title="Sebaran nilai pesanan — puncak di tengah, ekor ke kanan")</code></pre>
+      <p class="result">Perhatikan <code>describe()</code>: kalau <strong>mean lebih besar dari median</strong>, sebarannya miring ke kanan. Kalau mean jauh lebih kecil, miring ke kiri. Ini pemeriksaan 5 detik yang harus jadi refleks.</p>
+    </div>
+
+    <div class="prose">
+      <h3>2. Central Limit Theorem, tanpa rumus</h3>
+      <p>Ini konsep terpenting di seluruh statistik, dan paling mudah dipahami lewat simulasi, bukan rumus. Idenya: <strong>walaupun datanya berbentuk aneh, rata-rata dari sampel akan berbentuk lonceng</strong> — dan makin besar sampelnya, makin sempit loncengnya.</p>
+    </div>
+
+    <div class="block">
+      <h4>Membuktikannya sendiri</h4>
+<pre><code>rng2 = np.random.default_rng(7)
+populasi = rng2.exponential(scale=210000, size=100_000)   # sengaja dibuat miring
+
+print("populasi: mean %.0f, median %.0f" % (populasi.mean(), np.median(populasi)))
+
+for n in (5, 30, 100):
+    rata2 = np.array([rng2.choice(populasi, n, replace=False).mean()
+                      for _ in range(2000)])
+    print(f"n={n:3d}  sebaran rata-rata: std={rata2.std(ddof=1):.0f}"
+          f"   prediksi rumus SE={populasi.std(ddof=1)/np.sqrt(n):.0f}")</code></pre>
+<pre class="out"><code>populasi: mean 209866, median 146259
+
+n=  5  sebaran rata-rata: std=90164    prediksi rumus SE=93216
+n= 30  sebaran rata-rata: std=37229    prediksi rumus SE=38055
+n=100  sebaran rata-rata: std=21472    prediksi rumus SE=20844</code></pre>
+      <p class="result">Dua hal yang harus kamu tangkap. Pertama: hasil simulasi dan prediksi rumus <strong>cocok</strong> — jadi rumusnya bisa dipakai tanpa simulasi. Kedua: dari n=5 ke n=100 (20 kali lebih besar), meleset rata-ratanya turun dari ±90 ribu ke ±21 ribu — cuma <strong>sekitar 4 kali lebih akurat</strong>, bukan 20 kali.</p>
+    </div>
+
+    <div class="prose">
+      <div class="concept"><strong>Standard error (SE)</strong> = seberapa jauh rata-rata sampel biasanya meleset dari rata-rata sebenarnya. Rumusnya <code>SE = std / √n</code>. Karena ada akar di penyebut, <strong>untuk melipatgandakan ketelitian kamu perlu 4 kali lipat data</strong>. Ini alasan langsung kenapa A/B test butuh puluhan ribu pengunjung, dan kenapa "coba tambah sampelnya sedikit" jarang menyelesaikan masalah.</div>
+
+      <h3>3. Tiga sebaran yang perlu kamu kenali</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Sebaran</th><th>Untuk data seperti apa</th><th>Contoh di kedai</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Normal</strong> (lonceng)</td><td>Nilai yang menumpuk di tengah, simetris</td><td>Tinggi badan pegawai; rata-rata sampel (dari CLT)</td></tr>
+          <tr><td><strong>Binomial</strong></td><td>Hitungan "berhasil dari sekian percobaan"</td><td>449 pembeli dari 4.000 pengunjung</td></tr>
+          <tr><td><strong>Poisson</strong></td><td>Hitungan kejadian per satuan waktu</td><td>Berapa pelanggan datang per jam</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <p>Untuk pekerjaan sehari-hari, kamu tidak perlu menghafal rumus ketiganya. Yang penting: konversi adalah data binomial, dan berkat CLT kamu boleh memperlakukan <em>proporsinya</em> seperti normal selama sampelnya cukup besar (aturan praktis: minimal 10 kejadian di tiap sisi — kita punya 449 dan 511, jadi aman).</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 1</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Hitung mean dan median <code>nilai_pesanan</code> untuk pembeli di tiap grup. Mana yang lebih besar, dan apa artinya soal bentuk sebarannya?</li>
+        <li>Ulangi simulasi CLT dengan n=1000. Berapa SE-nya? Bandingkan dengan n=100 — berapa kali lipat lebih teliti, dan berapa kali lipat datanya?</li>
+        <li>Hitung SE konversi grup kontrol dengan rumus <code>np.sqrt(p*(1-p)/n)</code>, di mana p=0,11225 dan n=4000. Hasilnya sekitar berapa poin persen?</li>
+        <li>Ambil 50 sampel acak berukuran 30 dari <code>pembeli["nilai_pesanan"]</code>, hitung rata-ratanya masing-masing. Berapa yang meleset lebih dari 10.000 dari rata-rata sebenarnya?</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>pembeli.groupby("grup")["nilai_pesanan"].agg(["mean", "median"])</code></pre>Kontrol: mean 83.410, median sekitar 83.500. Perlakuan: mean 80.194. Karena data ini dibuat dari sebaran normal (bukan eksponensial), mean dan median-nya <strong>hampir sama</strong> — sebarannya simetris. Ini berbeda dengan nilai transaksi di dunia nyata yang biasanya miring. Pelajarannya: selalu cek, jangan berasumsi.</li>
+            <li>SE di n=1000 sekitar 6.600. Dibanding n=100 (SE 21.000): datanya 10× lebih banyak, ketelitiannya sekitar 3,2× (yaitu √10). Persis seperti yang dijanjikan rumus.</li>
+            <li><pre><code>np.sqrt(0.11225 * (1 - 0.11225) / 4000)</code></pre>= 0,00500 atau <strong>0,50 poin persen</strong>. Artinya: konversi sebenarnya kemungkinan besar ada di kisaran 11,23% ± 1 poin persen.</li>
+            <li>Sekitar dua pertiga akan meleset kurang dari satu SE. Dengan SE ≈ 24.500/√30 ≈ 4.500, hampir semua sampel meleset di bawah 10.000, dan hanya sedikit (sekitar 2–4 dari 50) yang lebih jauh.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 2 ================= -->
+  <section id="w2" aria-labelledby="w2-h">
+    <span class="week-tag">Minggu 2</span>
+    <h2 id="w2-h">Uji hipotesis: apakah beda ini nyata?</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menjalankan uji-t dan chi-square, membaca p-value dengan benar, dan menjelaskannya ke orang non-teknis tanpa berbohong.</p>
+
+    <div class="prose">
+      <h3>1. Logikanya: menganggap tidak ada apa-apa, lalu terkejut</h3>
+      <p>Uji hipotesis bekerja terbalik dari yang kamu kira. Kamu tidak membuktikan halaman barunya lebih baik. Kamu berpura-pura <strong>halaman barunya sama saja</strong>, lalu bertanya: kalau memang sama saja, seberapa mengejutkan hasil yang kita lihat?</p>
+      <ul>
+        <li><strong>Hipotesis nol (H₀):</strong> tidak ada beda. Konversi kedua halaman sama.</li>
+        <li><strong>Hipotesis alternatif (H₁):</strong> ada beda.</li>
+        <li><strong>p-value:</strong> kalau H₀ benar, seberapa sering kita akan melihat selisih sebesar ini atau lebih besar, hanya karena keberuntungan?</li>
+      </ul>
+      <div class="concept"><strong>p-value kecil = hasilnya mengejutkan kalau tidak ada efek.</strong> Ambang yang paling umum dipakai adalah 0,05: kalau p &lt; 0,05, kita bilang hasilnya "signifikan secara statistik" dan menolak H₀. Angka 0,05 itu konvensi, bukan hukum alam.</div>
+
+      <h3>2. Uji proporsi: dua konversi</h3>
+      <p>Ini uji yang paling sering kamu pakai sebagai analis produk. Kita hitung manual dulu supaya kamu paham isinya, baru pakai fungsi jadi.</p>
+    </div>
+
+    <div class="block">
+      <h4>Uji-z dua proporsi, dihitung tangan</h4>
+<pre><code>k = ab[ab.grup == "kontrol"]
+p_ = ab[ab.grup == "perlakuan"]
+
+x1, n1 = k.konversi.sum(), len(k)       # 449, 4000
+x2, n2 = p_.konversi.sum(), len(p_)     # 511, 4000
+p1, p2 = x1/n1, x2/n2
+
+pool = (x1 + x2) / (n1 + n2)                          # konversi gabungan
+se   = np.sqrt(pool * (1-pool) * (1/n1 + 1/n2))       # SE di bawah H0
+z    = (p2 - p1) / se
+p_value = 2 * (1 - stats.norm.cdf(abs(z)))            # dua sisi
+
+print(f"selisih = {p2-p1:.5f}  ({(p2-p1)/p1*100:.1f}% relatif)")
+print(f"z = {z:.4f}   p-value = {p_value:.4f}")</code></pre>
+<pre class="out"><code>selisih = 0.01550  (13.8% relatif)
+z = 2.1331   p-value = 0.0329</code></pre>
+      <p class="result">z = 2,13 artinya selisih yang kita lihat berjarak 2,13 standard error dari nol. p = 0,033 artinya: <strong>kalau kedua halaman sebenarnya sama, hasil seekstrem ini hanya muncul 3,3% dari waktu.</strong> Karena 0,033 &lt; 0,05, kita menolak H₀.</p>
+    </div>
+
+    <div class="block">
+      <h4>Cara cepat: chi-square</h4>
+      <p class="use">Untuk dua proporsi, chi-square memberi kesimpulan yang sama. Ini yang biasanya dipakai di kantor karena satu baris.</p>
+<pre><code>tabel = pd.crosstab(ab.grup, ab.konversi)
+print(tabel)
+
+chi2, p, dof, expected = stats.chi2_contingency(tabel)
+print(f"chi2 = {chi2:.4f}   p = {p:.4f}")</code></pre>
+<pre class="out"><code>konversi      0    1
+grup
+kontrol    3551  449
+perlakuan  3489  511
+
+chi2 = 4.4046   p = 0.0358</code></pre>
+      <p class="result">p = 0,036, sedikit berbeda dari uji-z (0,033) karena chi-square memakai pendekatan yang sedikit lain. Kesimpulannya sama. Jangan bingung kalau dua metode memberi p sedikit berbeda — yang penting keduanya di sisi yang sama dari ambang.</p>
+    </div>
+
+    <div class="block">
+      <h4>Uji-t: membandingkan dua rata-rata</h4>
+      <p class="use">Konversi sudah naik. Tapi bagaimana nilai pesanannya? Untuk rata-rata (bukan proporsi), pakai uji-t.</p>
+<pre><code>beli_k = k[k.konversi == 1].nilai_pesanan
+beli_p = p_[p_.konversi == 1].nilai_pesanan
+
+print(f"kontrol   n={len(beli_k)}  rata-rata={beli_k.mean():,.0f}")
+print(f"perlakuan n={len(beli_p)}  rata-rata={beli_p.mean():,.0f}")
+
+t, p = stats.ttest_ind(beli_p, beli_k, equal_var=False)   # Welch
+print(f"t = {t:.4f}   p = {p:.4f}")</code></pre>
+<pre class="out"><code>kontrol   n=449  rata-rata=83,410
+perlakuan n=511  rata-rata=80,194
+t = -2.0272   p = 0.0429</code></pre>
+      <div class="warn" style="margin-bottom:0"><strong>Perhatikan tandanya.</strong> t negatif, p = 0,043 &lt; 0,05. Artinya nilai pesanan di grup perlakuan <strong>turun secara signifikan</strong>, sekitar 3.200 rupiah per pesanan. Halaman baru menarik lebih banyak pembeli, tapi pembeli yang belanjanya lebih sedikit. Kita akan selesaikan konflik ini di minggu 4.</div>
+    </div>
+
+    <div class="prose">
+      <p><code>equal_var=False</code> memakai uji Welch, yang tidak menganggap kedua kelompok punya sebaran sama lebar. <strong>Selalu pakai ini</strong> kecuali kamu punya alasan kuat sebaliknya — lebih aman dan hampir tidak ada ruginya.</p>
+
+      <h3>3. Membaca p-value dengan benar</h3>
+      <p>Ini bagian yang paling sering ditanyakan di wawancara, dan paling sering dijawab salah.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th>Kalimat</th><th>Benar?</th><th>Kenapa</th></tr></thead>
+        <tbody>
+          <tr><td>"p = 0,033, jadi ada 3,3% kemungkinan halaman baru tidak berpengaruh."</td><td><strong style="color:var(--alert)">Salah</strong></td><td>p bukan peluang H₀ benar. p dihitung <em>dengan menganggap</em> H₀ benar.</td></tr>
+          <tr><td>"p = 0,033, jadi ada 96,7% kemungkinan halaman baru lebih bagus."</td><td><strong style="color:var(--alert)">Salah</strong></td><td>Kesalahan yang sama, dibalik.</td></tr>
+          <tr><td>"Kalau kedua halaman sebenarnya sama, hasil seekstrem ini muncul 3,3% dari waktu."</td><td><strong style="color:var(--teal)">Benar</strong></td><td>Ini definisi p-value.</td></tr>
+          <tr><td>"p = 0,06 berarti tidak ada efek."</td><td><strong style="color:var(--alert)">Salah</strong></td><td>Tidak signifikan ≠ tidak ada efek. Mungkin sampelnya kurang.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <div class="tip"><strong>Cara menjelaskan ke pemilik kedai (tanpa kata "p-value"):</strong> "Kalau halaman barunya sebenarnya sama saja, kita cuma akan melihat kenaikan sebesar ini sekitar 3 dari 100 kali percobaan. Jadi kemungkinan besar kenaikannya nyata — walaupun tidak dijamin."</div>
+
+      <h3>4. Dua jenis kesalahan</h3>
+    </div>
+    <div class="table-wrap">
+      <table class="wrap">
+        <thead><tr><th></th><th>Kenyataan: tidak ada efek</th><th>Kenyataan: ada efek</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Kita bilang ada</strong></td><td><strong style="color:var(--alert)">Kesalahan Tipe I</strong> (false positive) — peluangnya = α = 5%. Meluncurkan fitur sia-sia.</td><td>Benar</td></tr>
+          <tr><td><strong>Kita bilang tidak ada</strong></td><td>Benar</td><td><strong style="color:var(--alert)">Kesalahan Tipe II</strong> (false negative) — peluangnya = β. Membuang fitur yang sebenarnya bagus.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose"><p><strong>Power</strong> = 1 − β = peluang menemukan efek yang memang ada. Standar industri: 80%. Kita hitung power eksperimen ini di minggu 4, dan hasilnya akan mengejutkan.</p></div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 2</span>
+      <h3>Lima soal</h3>
+      <ol>
+        <li>Jalankan uji-z sendiri. Kalau grup perlakuan punya 480 pembeli (bukan 511), berapa z dan p-nya? Apakah masih signifikan?</li>
+        <li>Uji apakah rata-rata <code>nilai_pesanan</code> seluruh pengunjung (termasuk yang tidak membeli, nilainya 0) berbeda antar grup. Bandingkan p-nya dengan uji AOV di atas — kenapa berbeda jauh?</li>
+        <li>Tulis satu paragraf menjelaskan hasil konversi ke pemilik kedai, tanpa memakai kata "p-value", "signifikan", atau "hipotesis".</li>
+        <li>Dari empat kalimat di tabel "membaca p-value", tulis versi benar untuk masing-masing yang salah.</li>
+        <li>Kalau tim menaikkan ambang dari 0,05 ke 0,01, apa yang terjadi pada kesalahan Tipe I dan Tipe II?</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>x2 = 480
+p2b = x2/4000                      # 0.12
+pool = (449 + 480) / 8000          # 0.1161
+se = np.sqrt(pool*(1-pool)*(2/4000))
+z = (p2b - 0.11225)/se             # z = 1.0818
+2*(1-stats.norm.cdf(abs(z)))       # p = 0.279</code></pre><strong>Tidak signifikan lagi.</strong> Selisih 31 pembeli saja mengubah kesimpulan sepenuhnya — bukti bahwa hasil ini rapuh dan sampelnya pas-pasan.</li>
+            <li><pre><code>stats.ttest_ind(p_.nilai_pesanan, k.nilai_pesanan, equal_var=False)
+# t = 1.4149, p = 0.157</code></pre>Tidak signifikan. Bedanya karena kolom ini mencampur dua hal (apakah membeli, dan berapa) sehingga sebarannya penuh angka nol dan sangat berisik. Ini justru metrik yang paling penting untuk bisnis, dan kita bahas tuntas di minggu 4.</li>
+            <li>Contoh: "Dari 4.000 pengunjung tiap versi, halaman baru menghasilkan 511 pembelian dibanding 449 di halaman lama — naik sekitar 14%. Kalau kedua halaman sebenarnya sama saja, selisih sebesar ini hanya akan muncul sekitar 3 dari 100 kali karena kebetulan. Jadi kemungkinan besar halaman baru memang lebih baik, tapi kita perlu memeriksa satu hal lagi sebelum memutuskan."</li>
+            <li>Versi benar: (a) "Kalau tidak ada efek, hasil seekstrem ini muncul 3,3% dari waktu." (b) "Data ini konsisten dengan adanya efek, tapi p tidak memberi tahu peluang efeknya nyata." (d) "p = 0,06 berarti kita tidak punya cukup bukti — bukan berarti efeknya tidak ada."</li>
+            <li>Tipe I <strong>turun</strong> (dari 5% ke 1% — lebih jarang salah meluncurkan). Tipe II <strong>naik</strong> — lebih sering melewatkan fitur yang bagus. Selalu ada pertukaran; ambang yang tepat tergantung mana yang lebih mahal bagi bisnis.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 3 ================= -->
+  <section id="w3" aria-labelledby="w3-h">
+    <span class="week-tag">Minggu 3</span>
+    <h2 id="w3-h">Confidence interval, effect size, dan tiga cara menipu diri sendiri</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> melaporkan hasil dengan rentang, bukan satu angka; dan mengenali tiga kesalahan yang membuat hasil A/B test palsu — termasuk yang mungkin sedang dilakukan timmu sekarang.</p>
+
+    <div class="prose">
+      <h3>1. Confidence interval: jawaban yang jujur</h3>
+      <p>p-value cuma memberi jawaban ya/tidak. Confidence interval memberi tahu <em>seberapa besar</em> efeknya — dan itu jauh lebih berguna untuk mengambil keputusan.</p>
+    </div>
+
+    <div class="block">
+      <h4>CI 95% untuk selisih konversi</h4>
+<pre><code>se_ci = np.sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n2)   # SE tanpa pooling
+selisih = p2 - p1
+lo, hi = selisih - 1.96*se_ci, selisih + 1.96*se_ci
+
+print(f"selisih = {selisih*100:.2f} poin persen")
+print(f"CI 95%  = [{lo*100:.2f}, {hi*100:.2f}] poin persen")</code></pre>
+<pre class="out"><code>selisih = 1.55 poin persen
+CI 95%  = [0.13, 2.97] poin persen</code></pre>
+      <p class="result">Baca begini: <strong>efek sebenarnya kemungkinan besar antara +0,13 dan +2,97 poin persen.</strong> Rentangnya lebar sekali — batas bawahnya nyaris nol. Kita tahu efeknya positif, tapi kita hampir tidak tahu <em>seberapa</em> positif. Itu informasi penting yang hilang kalau kamu cuma melaporkan "p = 0,03, signifikan".</p>
+    </div>
+
+    <div class="prose">
+      <div class="concept"><strong>Hubungan CI dan p-value:</strong> kalau CI 95% tidak memuat nol, maka p &lt; 0,05. Keduanya bilang hal yang sama, tapi CI bilangnya lebih berguna. <strong>Selalu laporkan CI</strong> — itu tanda analis yang matang, dan pewawancara memperhatikannya.</div>
+
+      <h3>2. Effect size: signifikan belum tentu berarti</h3>
+      <p>Dengan sampel cukup besar, perbedaan sekecil apa pun akan jadi signifikan. Effect size mengukur besarnya perbedaan dalam satuan yang tidak tergantung ukuran sampel.</p>
+    </div>
+
+    <div class="block">
+      <h4>Cohen's d untuk nilai pesanan</h4>
+<pre><code>sp = np.sqrt(((len(beli_k)-1)*beli_k.var(ddof=1) +
+              (len(beli_p)-1)*beli_p.var(ddof=1)) /
+             (len(beli_k)+len(beli_p)-2))
+d = (beli_p.mean() - beli_k.mean()) / sp
+print(f"Cohen's d = {d:.3f}")</code></pre>
+<pre class="out"><code>Cohen's d = -0.131</code></pre>
+      <p class="result">Panduan kasar: 0,2 kecil · 0,5 sedang · 0,8 besar. Nilai 0,13 itu <strong>sangat kecil</strong> — signifikan secara statistik, tapi nyaris tidak berarti secara praktis. Penurunan 3.200 rupiah per pesanan mungkin tidak layak dikhawatirkan; tapi kita tetap harus mengeceknya lewat pendapatan total.</p>
+    </div>
+
+    <div class="prose">
+      <h3>3. Tiga cara menipu diri sendiri</h3>
+      <p>Ketiganya membuat p-value bohong. Ketiganya sangat umum. Yang pertama adalah yang paling sering terjadi di tim produk.</p>
+
+      <h4>Jebakan 1 — Peeking (mengintip hasil sebelum selesai)</h4>
+      <p>Kamu menjalankan tes, mengeceknya tiap hari, dan berhenti begitu p &lt; 0,05. Kedengarannya efisien. Sebenarnya itu curang: makin sering kamu mengecek, makin besar peluang kamu menangkap kebetulan.</p>
+    </div>
+
+    <div class="block">
+      <h4>Buktinya: A/A test, dua grup yang benar-benar identik</h4>
+<pre><code>rng3 = np.random.default_rng(2024)
+
+def simulasi_peek(jumlah_cek, n_total=4000, p=0.11, percobaan=4000):
+    titik = np.linspace(n_total//jumlah_cek, n_total, jumlah_cek).astype(int)
+    palsu = 0
+    for _ in range(percobaan):
+        a = rng3.random(n_total) &lt; p      # dua grup, efek nol
+        b = rng3.random(n_total) &lt; p
+        for t in titik:
+            x1, x2 = a[:t].sum(), b[:t].sum()
+            pp = (x1 + x2) / (2*t)
+            se = np.sqrt(pp*(1-pp)*2/t)
+            if se &gt; 0 and abs((x2-x1)/t/se) &gt; 1.96:
+                palsu += 1
+                break                       # berhenti begitu "menang"
+    return palsu / percobaan
+
+for c in (1, 5, 20):
+    print(f"cek {c:2d}x -> {simulasi_peek(c)*100:.1f}% 'menang' padahal tidak ada efek")</code></pre>
+<pre class="out"><code>cek  1x ->  4.8% 'menang' padahal tidak ada efek
+cek  5x -> 13.8% 'menang' padahal tidak ada efek
+cek 20x -> 25.8% 'menang' padahal tidak ada efek</code></pre>
+      <div class="warn" style="margin-bottom:0"><strong>Kalau kamu mengecek tiap hari selama 20 hari dan berhenti saat menang, satu dari empat tes akan "berhasil" walaupun fiturmu sama sekali tidak berpengaruh.</strong> Ini bukan teori — ini sebab utama kenapa banyak "kemenangan" A/B test tidak pernah terlihat di angka bisnis. Obatnya: tentukan ukuran sampel di depan, lalu jangan lihat hasilnya sampai selesai.</div>
+    </div>
+
+    <div class="prose">
+      <h4>Jebakan 2 — Multiple comparisons (menguji banyak hal sekaligus)</h4>
+      <p>Tiap uji punya peluang 5% memberi false positive. Uji banyak metrik sekaligus, dan hampir pasti ada satu yang "menang".</p>
+    </div>
+
+    <div class="block">
+      <h4>Hitungannya sederhana</h4>
+<pre><code>for m in (1, 5, 10, 20):
+    print(f"{m:2d} metrik -> peluang minimal 1 false positive: {(1-0.95**m)*100:.1f}%")</code></pre>
+<pre class="out"><code> 1 metrik -> peluang minimal 1 false positive:  5.0%
+ 5 metrik -> peluang minimal 1 false positive: 22.6%
+10 metrik -> peluang minimal 1 false positive: 40.1%
+20 metrik -> peluang minimal 1 false positive: 64.2%</code></pre>
+      <p class="result">Obatnya: tentukan <strong>satu metrik utama</strong> sebelum tes dimulai. Metrik lain jadi pendukung, bukan penentu. Kalau memang harus menguji banyak, perketat ambangnya — koreksi Bonferroni: bagi 0,05 dengan jumlah uji (untuk 5 metrik jadi 0,01).</p>
+    </div>
+
+    <div class="prose">
+      <h4>Jebakan 3 — Memotong data sampai ketemu kemenangan</h4>
+      <p>Tes gagal secara keseluruhan, lalu seseorang bilang: "tapi coba lihat pengguna Android di Jakarta yang usia 25–34 — di situ naik 40%!" Itu multiple comparison dalam bentuk tersembunyi, dan hampir selalu kebetulan. Analisis per segmen boleh dilakukan, tapi hasilnya adalah <em>hipotesis untuk tes berikutnya</em>, bukan kesimpulan.</p>
+      <div class="tip"><strong>Aturan praktis yang bisa kamu bawa ke kantor:</strong> tuliskan sebelum tes dimulai — metrik utama apa, ukuran sampel berapa, tes berjalan berapa lama, dan keputusan apa yang diambil untuk tiap hasil. Dokumen satu halaman ini mencegah ketiga jebakan sekaligus, dan menunjukkan kamu tahu apa yang kamu lakukan.</div>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN MINGGU 3</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Hitung CI 95% untuk selisih AOV (nilai pesanan pembeli). Apakah memuat nol? Cocokkah dengan p = 0,043?</li>
+        <li>Jalankan simulasi peeking dengan 40 kali cek. Berapa persen false positive-nya?</li>
+        <li>Kalau tim menguji 8 metrik dan salah satunya keluar dengan p = 0,03, apakah kamu percaya? Berapa ambang Bonferroni untuk 8 metrik?</li>
+        <li>Ubah CI dari 95% ke 99% (ganti 1,96 jadi 2,576). Apa yang terjadi pada lebarnya, dan apakah masih tidak memuat nol?</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>se_aov = np.sqrt(beli_k.var(ddof=1)/len(beli_k) + beli_p.var(ddof=1)/len(beli_p))
+d_aov = beli_p.mean() - beli_k.mean()      # -3216
+d_aov - 1.96*se_aov, d_aov + 1.96*se_aov</code></pre>CI = <strong>[−6.324, −107]</strong> rupiah. Tidak memuat nol (walau nyaris), konsisten dengan p = 0,043. Perhatikan batas atasnya hampir menyentuh nol — buktinya lemah.</li>
+            <li>Sekitar <strong>31%</strong>. Makin sering mengintip, makin buruk, tapi kenaikannya melambat karena pengecekan yang berdekatan hasilnya mirip.</li>
+            <li>Jangan langsung percaya. Dengan 8 metrik, peluang minimal satu false positive = 1 − 0,95⁸ = <strong>33,7%</strong>. Ambang Bonferroni = 0,05/8 = <strong>0,00625</strong>, dan p = 0,03 tidak lolos. Jawaban yang tepat: perlakukan sebagai hipotesis, lalu uji ulang khusus metrik itu.</li>
+            <li>CI 99% ≈ <strong>[-0,32, +3,42] poin persen</strong>. Lebih lebar, dan sekarang <strong>memuat nol</strong> — artinya pada tingkat keyakinan 99%, kita tidak bisa bilang halaman baru lebih baik. Ini menunjukkan hasilnya benar-benar di batas.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= MINGGU 4 ================= -->
+  <section id="w4" aria-labelledby="w4-h">
+    <span class="week-tag">Minggu 4 · Proyek</span>
+    <h2 id="w4-h">Merancang tes dari awal, dan memutuskan</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menghitung berapa pengunjung yang dibutuhkan sebelum tes dimulai, dan menulis laporan keputusan yang bisa dibaca pimpinan.</p>
+
+    <div class="prose">
+      <h3>1. Berapa sampel yang dibutuhkan?</h3>
+      <p>Ini pertanyaan pertama yang harus dijawab, <em>sebelum</em> tes berjalan. Butuh empat masukan:</p>
+      <ul>
+        <li><strong>Baseline</strong> — konversi sekarang. Di sini 11%.</li>
+        <li><strong>MDE</strong> (minimum detectable effect) — kenaikan terkecil yang <em>layak diperjuangkan</em> bisnis. Ini keputusan bisnis, bukan statistik.</li>
+        <li><strong>α</strong> — 0,05.</li>
+        <li><strong>Power</strong> — 0,80.</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <h4>Menghitung ukuran sampel</h4>
+<pre><code>def n_per_grup(p1, mde_relatif, alpha=0.05, power=0.80):
+    p2 = p1 * (1 + mde_relatif)
+    z_a = stats.norm.ppf(1 - alpha/2)
+    z_b = stats.norm.ppf(power)
+    pbar = (p1 + p2) / 2
+    n = (z_a*np.sqrt(2*pbar*(1-pbar)) +
+         z_b*np.sqrt(p1*(1-p1) + p2*(1-p2)))**2 / (p2-p1)**2
+    return int(np.ceil(n))
+
+for mde in (0.05, 0.10, 0.15, 0.20):
+    n = n_per_grup(0.11, mde)
+    print(f"MDE {int(mde*100):2d}% relatif -> {n:7,} per grup ({2*n:,} total)")</code></pre>
+<pre class="out"><code>MDE  5% relatif ->  51,912 per grup (103,824 total)
+MDE 10% relatif ->  13,253 per grup ( 26,506 total)
+MDE 15% relatif ->   6,011 per grup ( 12,022 total)
+MDE 20% relatif ->   3,449 per grup (  6,898 total)</code></pre>
+      <p class="result">Perhatikan betapa mahalnya efek kecil: untuk mendeteksi kenaikan 5% kamu butuh <strong>15 kali lebih banyak pengunjung</strong> dibanding kenaikan 20%. Inilah kenapa perusahaan kecil sebaiknya hanya menguji perubahan besar — menguji perubahan warna tombol butuh trafik yang tidak mereka punya.</p>
+    </div>
+
+    <div class="block">
+      <h4>Berapa power tes yang sudah kita jalankan?</h4>
+<pre><code>p1, p2, n = 0.11225, 0.12775, 4000
+z_a = stats.norm.ppf(0.975)
+se_null = np.sqrt(2*((p1+p2)/2)*(1-(p1+p2)/2)/n)
+se_alt  = np.sqrt(p1*(1-p1)/n + p2*(1-p2)/n)
+power = (1 - stats.norm.cdf((z_a*se_null - (p2-p1))/se_alt)
+           + stats.norm.cdf((-z_a*se_null - (p2-p1))/se_alt))
+print(f"power = {power*100:.1f}%")</code></pre>
+<pre class="out"><code>power = 56.9%</code></pre>
+      <div class="warn" style="margin-bottom:0"><strong>Hanya 57%.</strong> Padahal efeknya benar-benar ada (kita yang menanamnya). Artinya kalau eksperimen ini diulang 100 kali dengan trafik segini, <strong>43 kali di antaranya akan gagal menemukan efek yang nyata</strong>. Kita beruntung. Untuk mendeteksi kenaikan 13,8% dengan power 80%, seharusnya kita pakai sekitar 7.000 pengunjung per grup, bukan 4.000.</div>
+    </div>
+
+    <div class="prose">
+      <h3>2. Memutuskan: menggabungkan semua bukti</h3>
+      <p>Sekarang kumpulkan semuanya. Metrik utama naik, metrik sekunder turun, dan metrik uang tidak konklusif.</p>
+    </div>
+
+    <div class="verdict">
+      <div class="ok">
+        <span class="m">Konversi</span>
+        <span class="v">+13,8%</span>
+        <span class="s">11,23% → 12,78% · p = 0,033 · CI [+0,13, +2,97] pp</span>
+      </div>
+      <div class="bad">
+        <span class="m">Nilai pesanan</span>
+        <span class="v">−3,9%</span>
+        <span class="s">83.410 → 80.194 · p = 0,043 · d = −0,13 (sangat kecil)</span>
+      </div>
+      <div class="meh">
+        <span class="m">Pendapatan / pengunjung</span>
+        <span class="v">+9,4%</span>
+        <span class="s">9.363 → 10.245 · p = 0,157 · tidak konklusif</span>
+      </div>
+    </div>
+
+    <div class="block">
+      <h4>Metrik yang sebenarnya penting</h4>
+      <p class="use">Konversi dan AOV bergerak berlawanan, jadi keduanya tidak bisa jadi penentu. Yang menentukan adalah pendapatan per pengunjung, karena itu menggabungkan keduanya.</p>
+<pre><code>rpv = ab.groupby("grup").nilai_pesanan.mean()
+print(rpv)
+print(f"selisih: {(rpv['perlakuan']-rpv['kontrol'])/rpv['kontrol']*100:.2f}%")
+
+t, p = stats.ttest_ind(p_.nilai_pesanan, k.nilai_pesanan, equal_var=False)
+print(f"t = {t:.4f}   p = {p:.4f}")</code></pre>
+<pre class="out"><code>grup
+kontrol       9362.7
+perlakuan    10244.8
+selisih: 9.42%
+
+t = 1.4149   p = 0.1571</code></pre>
+      <p class="result">Arahnya positif dan besarnya menarik (+9,4%), tapi p = 0,157 — <strong>tidak signifikan</strong>. Metrik ini sangat berisik karena mencampur "apakah membeli" dan "berapa belanjanya", sehingga butuh sampel jauh lebih besar.</p>
+    </div>
+
+    <div class="prose">
+      <div class="concept"><strong>Keputusan yang benar di sini bukan "luncurkan" atau "buang" — tapi "lanjutkan tesnya".</strong> Analis pemula akan bilang "konversi naik signifikan, luncurkan!". Analis yang baik menyadari: metrik uangnya belum terjawab, power-nya cuma 57%, dan CI-nya nyaris menyentuh nol. Berani mengatakan "belum cukup bukti" adalah keterampilan yang dibayar mahal.</div>
+
+      <h3>3. Menulis laporan keputusan</h3>
+      <p>Ini format satu halaman yang dipakai di tim produk. Tulis dalam urutan ini — pimpinan membaca dari atas dan sering berhenti setelah bagian 2.</p>
+    </div>
+    <ol class="steps">
+      <li><strong>Keputusan &amp; alasan, satu paragraf</strong><span>"Rekomendasi: lanjutkan tes 2 minggu lagi. Konversi naik meyakinkan, tapi dampak ke pendapatan belum terbukti dan tes ini kekurangan daya."</span></li>
+      <li><strong>Angka utama, satu tabel</strong><span>Tiga metrik, tiap baris: nilai kontrol, nilai perlakuan, selisih, CI, p.</span></li>
+      <li><strong>Rancangan tes</strong><span>Metrik utama yang ditetapkan di awal, ukuran sampel, durasi, cara pembagian grup.</span></li>
+      <li><strong>Yang kami temukan</strong><span>Termasuk hal yang mengganggu: AOV turun. Jangan sembunyikan hasil yang tidak enak — itu justru yang membangun kepercayaan.</span></li>
+      <li><strong>Batasan</strong><span>Power 57%, tes hanya 2 minggu (belum menangkap efek musiman), pengguna baru dan lama tidak dipisah.</span></li>
+      <li><strong>Langkah berikutnya</strong><span>Berapa sampel tambahan yang dibutuhkan, dan apa yang akan diputuskan pada tiap kemungkinan hasil.</span></li>
+    </ol>
+
+    <div class="exercise" style="margin-top:22px; border-color:var(--teal)">
+      <span class="tag" style="color:var(--teal)">PROYEK: LAPORAN A/B TEST</span>
+      <h3>Notebook + laporan keputusan</h3>
+      <div class="prose">
+        <p>File <code>04-abtest-checkout.ipynb</code>. Isinya: pembuatan data, analisis lengkap ketiga metrik dengan CI, perhitungan power dan ukuran sampel yang seharusnya, minimal dua grafik (batang konversi dengan error bar; histogram nilai pesanan kedua grup bertumpuk), dan diakhiri sel Markdown berisi laporan enam bagian di atas.</p>
+        <p>Untuk error bar: <code>plt.bar(["kontrol","perlakuan"], [p1,p2], yerr=[1.96*np.sqrt(p1*(1-p1)/n1), 1.96*np.sqrt(p2*(1-p2)/n2)], capsize=8)</code>. Grafik konversi tanpa error bar adalah grafik yang menyembunyikan ketidakpastian — jangan pernah membuatnya.</p>
+        <p>Untuk portofolio, proyek ini bernilai tinggi karena menunjukkan tiga hal sekaligus: kamu bisa statistik, kamu paham metrik bisnis, dan kamu berani menyimpulkan "belum cukup bukti". Yang terakhir itu yang membedakan.</p>
+      </div>
+      <ul class="checklist">
+        <li><span class="box"></span>Ketiga metrik dianalisis, tiap satu dengan p dan CI.</li>
+        <li><span class="box"></span>Power dihitung, dan disebutkan bahwa 57% itu kurang.</li>
+        <li><span class="box"></span>Ukuran sampel yang seharusnya dihitung untuk beberapa MDE.</li>
+        <li><span class="box"></span>Dua grafik, yang konversi memakai error bar.</li>
+        <li><span class="box"></span>Laporan enam bagian, rekomendasinya bukan sekadar "luncurkan".</li>
+        <li><span class="box"></span>Ada di GitHub, README diperbarui ("Proyek 4").</li>
+      </ul>
+    </div>
+
+    <div class="exercise" style="margin-top:18px">
+      <span class="tag">PERTANYAAN WAWANCARA YANG SERING MUNCUL</span>
+      <h3>Latih jawabannya dengan suara keras</h3>
+      <ol>
+        <li>Jelaskan p-value ke orang yang tidak pernah belajar statistik.</li>
+        <li>Tes kami menunjukkan p = 0,04. Apakah kita boleh meluncurkan fiturnya?</li>
+        <li>Kenapa tidak boleh menghentikan tes begitu hasilnya signifikan?</li>
+        <li>Metrik utama naik tapi metrik lain turun. Apa yang kamu lakukan?</li>
+        <li>Bagaimana kamu menentukan berapa lama tes harus berjalan?</li>
+        <li>Apa bedanya signifikan secara statistik dan berarti secara bisnis?</li>
+      </ol>
+      <details>
+        <summary>Kerangka jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li>Pakai analogi koin: "Kalau saya lempar koin 10 kali dan keluar kepala 9 kali, saya mulai curiga koinnya berat sebelah. p-value mengukur seberapa besar kecurigaan itu pantas — seberapa aneh hasil ini kalau koinnya sebenarnya jujur."</li>
+            <li>Jangan langsung jawab boleh atau tidak. Tanya balik: metrik utamanya ditetapkan di awal atau dipilih belakangan? Berapa kali hasilnya diintip? Berapa power-nya? Berapa besar efeknya dan apakah layak secara bisnis? Bagaimana metrik penjaga (guardrail)? Pewawancara menguji apakah kamu ikut arus atau berpikir.</li>
+            <li>Karena tiap kali mengintip menambah peluang menangkap kebetulan. Sebutkan angkanya: dengan 20 kali pengecekan, false positive naik dari 5% ke sekitar 26%. Kalau harus mengintip, gunakan metode sequential testing yang memang dirancang untuk itu.</li>
+            <li>Naik ke metrik yang menggabungkan keduanya — untuk kasus konversi vs nilai pesanan, itu pendapatan per pengunjung. Kalau metrik gabungan itu belum konklusif, rekomendasinya melanjutkan tes, bukan memilih metrik yang kebetulan menang.</li>
+            <li>Dari perhitungan ukuran sampel: baseline, MDE yang layak bagi bisnis, α, power. Lalu bagi dengan trafik harian. Tambahkan minimal satu siklus penuh mingguan supaya efek hari kerja dan akhir pekan tertangkap.</li>
+            <li>Signifikan = kemungkinan bukan kebetulan. Berarti = cukup besar untuk mengubah keputusan. Dengan sampel sangat besar, kenaikan 0,01% bisa signifikan tapi tidak layak dikerjakan. Sebutkan effect size dan CI, bukan cuma p.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <p>Modul berikutnya: <strong>Visualisasi &amp; Business Intelligence</strong> (Bulan 6) — mengubah semua analisis ini jadi dashboard yang dilihat orang tiap hari, dengan matplotlib, plotly, lalu Tableau dan Power BI.</p>
+    <p class="closing">Kemampuan bilang "datanya belum cukup" adalah hal yang membedakan analis dari pembuat grafik.</p>
+  </footer>
+
+</div>

@@ -1,0 +1,1202 @@
+<title>Modul SQL dan pandas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.62;
+    padding:20px 20px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.86em; background:var(--code-bg); padding:2px 6px; border-radius:6px; }
+  pre{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.8rem; line-height:1.5;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:12px;
+    padding:14px 16px; overflow-x:auto; margin:0 0 12px;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .out{ border-left:3px solid var(--teal); }
+
+  .nav{
+    position:sticky; top:0; z-index:5; max-width:880px; margin:0 auto 24px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:4px; padding:8px 10px; flex-wrap:wrap;
+  }
+  .nav .brand{ font-family:"Fraunces", serif; font-weight:600; font-size:0.95rem; padding:6px 10px; margin-right:auto; }
+  .nav a{ text-decoration:none; color:var(--ink-soft); font-size:0.8rem; font-weight:500; padding:6px 10px; border-radius:999px; }
+  .nav a:hover{ background:var(--surface-2); color:var(--ink); }
+  .nav a:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav .sep{ width:1px; height:18px; background:var(--line); margin:0 4px; }
+
+  .page{
+    max-width:880px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+    padding:40px 44px 48px;
+  }
+  @media (max-width:600px){ .page{ padding:26px 18px 32px; } }
+
+  header{ margin-bottom:32px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:10px; }
+  h1{ font-size:clamp(1.9rem, 5vw, 2.5rem); font-weight:600; }
+  .lede{ margin-top:12px; max-width:62ch; color:var(--ink-soft); font-size:1rem; }
+  .needs{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:22px; }
+  @media (max-width:600px){ .needs{ grid-template-columns:1fr; } }
+  .needs div{ background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.86rem; color:var(--ink-soft); }
+  .needs strong{ display:block; color:var(--ink); font-weight:600; margin-bottom:2px; }
+
+  .part{
+    margin:52px 0 20px; padding-bottom:10px; border-bottom:2px solid var(--line);
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+  }
+  .part .q{ font-family:"IBM Plex Mono", monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .part h2{ font-size:1.6rem; font-weight:600; }
+  .part .range{ font-size:0.86rem; color:var(--ink-soft); }
+
+  section{ margin-bottom:48px; scroll-margin-top:84px; }
+  section > h2{ font-size:1.36rem; font-weight:600; margin-bottom:4px; }
+  .week-tag{ font-family:"IBM Plex Mono", monospace; font-size:0.7rem; letter-spacing:0.1em; color:var(--gold); text-transform:uppercase; display:block; margin-bottom:8px; }
+  .goal{ color:var(--ink-soft); font-size:0.92rem; max-width:62ch; margin-bottom:22px; padding-left:14px; border-left:3px solid var(--teal); }
+  .goal strong{ color:var(--ink); }
+  h3{ font-size:1.08rem; font-weight:600; margin:26px 0 10px; }
+  h4{ font-size:0.98rem; font-weight:600; margin:18px 0 6px; }
+  .prose{ max-width:68ch; }
+  .prose p{ margin-bottom:12px; font-size:0.95rem; }
+  .prose ul, .prose ol{ margin:0 0 12px; padding-left:22px; font-size:0.95rem; }
+  .prose li{ margin-bottom:6px; }
+  .concept{ background:var(--teal-soft); border-radius:12px; padding:14px 18px; margin:14px 0 18px; font-size:0.92rem; max-width:70ch; }
+  .concept strong{ color:var(--teal); }
+  .tip{ background:var(--gold-soft); border-radius:12px; padding:12px 16px; margin:14px 0 18px; font-size:0.9rem; max-width:70ch; }
+  .tip strong{ color:var(--gold); }
+
+  .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:14px; margin:12px 0 16px; }
+  table{ width:100%; border-collapse:collapse; font-size:0.84rem; }
+  th, td{ text-align:left; padding:8px 12px; border-bottom:1px solid var(--line); vertical-align:top; white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.num, th.num{ font-family:"IBM Plex Mono", monospace; font-variant-numeric:tabular-nums; text-align:right; }
+  table.wrap td{ white-space:normal; }
+  td code{ white-space:nowrap; }
+
+  .block{ border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin:12px 0; background:var(--surface-2); }
+  .block h4{ margin:0 0 6px; font-family:"IBM Plex Mono", monospace; font-size:0.92rem; color:var(--teal); }
+  .block .use{ font-size:0.9rem; color:var(--ink-soft); margin-bottom:10px; }
+  .block pre{ margin-bottom:8px; }
+  .block .result{ font-size:0.88rem; }
+
+  .exercise{ border:1px dashed var(--gold); border-radius:14px; padding:18px 20px; margin:22px 0 0; background:var(--surface); }
+  .exercise h3{ margin:0 0 4px; }
+  .exercise .tag{ font-family:"IBM Plex Mono", monospace; font-size:0.66rem; letter-spacing:0.1em; color:var(--gold); }
+  .exercise ol{ margin:10px 0 0; padding-left:22px; font-size:0.93rem; }
+  .exercise li{ margin-bottom:8px; }
+  details{ margin-top:12px; border-top:1px dashed var(--line); padding-top:10px; }
+  summary{ cursor:pointer; font-weight:600; font-size:0.9rem; color:var(--teal); }
+  summary:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; border-radius:4px; }
+  details .answer{ margin-top:10px; font-size:0.9rem; }
+  details .answer ol{ padding-left:22px; margin:0; }
+  details .answer li{ margin-bottom:12px; }
+  details .answer pre{ margin:6px 0; }
+
+  .steps{ counter-reset:step; list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .steps li{ display:grid; grid-template-columns:34px 1fr; gap:12px; align-items:start; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; font-size:0.92rem; }
+  .steps li::before{ counter-increment:step; content:counter(step, decimal-leading-zero); font-family:"IBM Plex Mono", monospace; font-size:0.74rem; color:var(--teal); padding-top:3px; }
+  .steps li strong{ display:block; font-weight:600; margin-bottom:2px; }
+  .steps li span{ color:var(--ink-soft); }
+
+  .checklist{ list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .checklist li{ display:flex; gap:10px; align-items:flex-start; font-size:0.92rem; }
+  .checklist .box{ flex:none; width:15px; height:15px; margin-top:4px; border:1.5px solid var(--teal); border-radius:4px; }
+
+  footer{ border-top:1px solid var(--line); padding-top:22px; font-size:0.86rem; color:var(--ink-soft); }
+  .closing{ font-family:"Fraunces", serif; font-size:1.05rem; font-weight:600; color:var(--ink); margin-top:12px; }
+</style>
+
+<nav class="nav" aria-label="Bagian modul">
+  <span class="brand">SQL &amp; pandas</span>
+  <a href="#setup">Setup</a>
+  <span class="sep"></span>
+  <a href="#s1">SQL 1</a><a href="#s2">SQL 2</a><a href="#s3">SQL 3</a><a href="#s4">SQL 4</a>
+  <span class="sep"></span>
+  <a href="#p1">pandas 1</a><a href="#p2">pandas 2</a><a href="#p3">pandas 3</a><a href="#p4">pandas 4</a>
+  <span class="sep"></span>
+  <a href="#cheat">Cheat sheet</a>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Seri Rute Data Analyst · Materi · 8 minggu</span>
+    <h1>SQL &amp; Python pandas dari nol</h1>
+    <p class="lede">Dua alat utama analis data, dipelajari berurutan dengan satu dataset yang sama. Empat minggu SQL dulu — karena hampir semua wawancara analis di Singapura dan Australia dimulai dari SQL — lalu empat minggu pandas, yang akan terasa familiar karena konsepnya sama. Tidak perlu instal apa pun: semua berjalan di browser.</p>
+
+    <div class="needs">
+      <div><strong>SQL</strong>sqliteonline.com (gratis, tanpa daftar). Kalau mau seperti di kantor: db-fiddle.com pilih PostgreSQL.</div>
+      <div><strong>Python</strong>Google Colab (colab.research.google.com). Gratis, pandas sudah terpasang.</div>
+      <div><strong>Data</strong>Kedai Kopi Senja — 24 transaksi, 5 produk, 3 cabang. Skrip pembuatannya ada di bawah.</div>
+    </div>
+  </header>
+
+  <!-- ================= SETUP ================= -->
+  <section id="setup" aria-labelledby="setup-h">
+    <h2 id="setup-h">Setup: memasukkan data</h2>
+    <p class="goal">Kerjakan ini sekali di awal. Kalau data sudah masuk, semua contoh dan latihan di bawah tinggal salin-tempel.</p>
+
+    <h3>A. Untuk SQL — sqliteonline.com</h3>
+    <ol class="steps">
+      <li><strong>Buka sqliteonline.com</strong><span>Langsung ada kotak editor. Tidak perlu login.</span></li>
+      <li><strong>Salin seluruh skrip di bawah, tempel, klik Run</strong><span>Ini membuat 3 tabel: <code>produk</code>, <code>cabang</code>, <code>penjualan</code>.</span></li>
+      <li><strong>Cek</strong><span>Jalankan <code>SELECT COUNT(*) FROM penjualan;</code> — harus keluar 24.</span></li>
+    </ol>
+
+<pre><code>CREATE TABLE produk (
+  produk       TEXT PRIMARY KEY,
+  kategori     TEXT,
+  harga        INTEGER,
+  biaya_modal  INTEGER
+);
+INSERT INTO produk VALUES
+('Kopi Susu',    'Minuman', 22000,  9000),
+('Americano',    'Minuman', 18000,  6000),
+('Roti Bakar',   'Makanan', 15000,  7000),
+('Croissant',    'Makanan', 20000, 11000),
+('Matcha Latte', 'Minuman', 25000, 12000);
+
+CREATE TABLE cabang (
+  kota          TEXT PRIMARY KEY,
+  manajer       TEXT,
+  tanggal_buka  DATE
+);
+INSERT INTO cabang VALUES
+('Jakarta',  'Rina',  '2024-05-01'),
+('Bandung',  'Dimas', '2025-02-15'),
+('Surabaya', 'Ayu',   '2026-04-01');
+
+CREATE TABLE penjualan (
+  id        INTEGER PRIMARY KEY,
+  tanggal   DATE,
+  produk    TEXT,
+  kategori  TEXT,
+  jumlah    INTEGER,
+  total     INTEGER,
+  kota      TEXT
+);
+INSERT INTO penjualan (tanggal, produk, kategori, jumlah, total, kota) VALUES
+('2026-01-03','Kopi Susu','Minuman',12,264000,'Jakarta'),
+('2026-01-03','Roti Bakar','Makanan',5,75000,'Jakarta'),
+('2026-01-05','Americano','Minuman',8,144000,'Bandung'),
+('2026-01-08','Croissant','Makanan',6,120000,'Bandung'),
+('2026-01-12','Kopi Susu','Minuman',15,330000,'Bandung'),
+('2026-01-15','Roti Bakar','Makanan',9,135000,'Jakarta'),
+('2026-01-20','Americano','Minuman',10,180000,'Jakarta'),
+('2026-01-27','Croissant','Makanan',4,80000,'Jakarta'),
+('2026-02-02','Kopi Susu','Minuman',18,396000,'Jakarta'),
+('2026-02-04','Americano','Minuman',7,126000,'Bandung'),
+('2026-02-09','Roti Bakar','Makanan',11,165000,'Bandung'),
+('2026-02-11','Croissant','Makanan',8,160000,'Jakarta'),
+('2026-02-16','Kopi Susu','Minuman',20,440000,'Bandung'),
+('2026-02-19','Americano','Minuman',12,216000,'Jakarta'),
+('2026-02-24','Roti Bakar','Makanan',6,90000,'Jakarta'),
+('2026-02-27','Croissant','Makanan',5,100000,'Bandung'),
+('2026-03-01','Kopi Susu','Minuman',22,484000,'Jakarta'),
+('2026-03-05','Americano','Minuman',9,162000,'Bandung'),
+('2026-03-09','Roti Bakar','Makanan',13,195000,'Jakarta'),
+('2026-03-13','Croissant','Makanan',7,140000,'Jakarta'),
+('2026-03-18','Kopi Susu','Minuman',25,550000,'Bandung'),
+('2026-03-22','Americano','Minuman',11,198000,'Jakarta'),
+('2026-03-26','Roti Bakar','Makanan',8,120000,'Bandung'),
+('2026-03-30','Croissant','Makanan',9,180000,'Bandung');</code></pre>
+
+    <div class="prose">
+      <p class="tip"><strong>Kalau pakai PostgreSQL (db-fiddle):</strong> ganti <code>id INTEGER PRIMARY KEY</code> jadi <code>id SERIAL PRIMARY KEY</code>. Sisanya sama. Perbedaan kecil lain akan saya tandai di tempatnya.</p>
+      <p>Perhatikan: <code>penjualan</code> <em>tidak</em> punya kolom harga atau biaya modal. Itu ada di tabel <code>produk</code>. Ini sengaja — begitulah database sungguhan disusun, dan itu alasan kita butuh JOIN di minggu 3.</p>
+    </div>
+
+    <h3>B. Untuk pandas — Google Colab</h3>
+    <ol class="steps">
+      <li><strong>Buka colab.research.google.com → Notebook baru</strong><span>Beri nama "kedai-kopi-senja".</span></li>
+      <li><strong>Tempel kode di bawah di sel pertama, tekan Shift+Enter</strong><span>Ini membuat dua DataFrame: <code>df</code> (penjualan) dan <code>produk</code>.</span></li>
+      <li><strong>Cek</strong><span>Jalankan <code>df.shape</code> di sel baru — harus keluar <code>(24, 7)</code>.</span></li>
+    </ol>
+
+<pre><code>import pandas as pd
+from io import StringIO
+
+csv_penjualan = """tanggal,produk,kategori,jumlah,harga_satuan,total,kota
+2026-01-03,Kopi Susu,Minuman,12,22000,264000,Jakarta
+2026-01-03,Roti Bakar,Makanan,5,15000,75000,Jakarta
+2026-01-05,Americano,Minuman,8,18000,144000,Bandung
+2026-01-08,Croissant,Makanan,6,20000,120000,Bandung
+2026-01-12,Kopi Susu,Minuman,15,22000,330000,Bandung
+2026-01-15,Roti Bakar,Makanan,9,15000,135000,Jakarta
+2026-01-20,Americano,Minuman,10,18000,180000,Jakarta
+2026-01-27,Croissant,Makanan,4,20000,80000,Jakarta
+2026-02-02,Kopi Susu,Minuman,18,22000,396000,Jakarta
+2026-02-04,Americano,Minuman,7,18000,126000,Bandung
+2026-02-09,Roti Bakar,Makanan,11,15000,165000,Bandung
+2026-02-11,Croissant,Makanan,8,20000,160000,Jakarta
+2026-02-16,Kopi Susu,Minuman,20,22000,440000,Bandung
+2026-02-19,Americano,Minuman,12,18000,216000,Jakarta
+2026-02-24,Roti Bakar,Makanan,6,15000,90000,Jakarta
+2026-02-27,Croissant,Makanan,5,20000,100000,Bandung
+2026-03-01,Kopi Susu,Minuman,22,22000,484000,Jakarta
+2026-03-05,Americano,Minuman,9,18000,162000,Bandung
+2026-03-09,Roti Bakar,Makanan,13,15000,195000,Jakarta
+2026-03-13,Croissant,Makanan,7,20000,140000,Jakarta
+2026-03-18,Kopi Susu,Minuman,25,22000,550000,Bandung
+2026-03-22,Americano,Minuman,11,18000,198000,Jakarta
+2026-03-26,Roti Bakar,Makanan,8,15000,120000,Bandung
+2026-03-30,Croissant,Makanan,9,20000,180000,Bandung
+"""
+
+csv_produk = """produk,kategori,harga,biaya_modal
+Kopi Susu,Minuman,22000,9000
+Americano,Minuman,18000,6000
+Roti Bakar,Makanan,15000,7000
+Croissant,Makanan,20000,11000
+Matcha Latte,Minuman,25000,12000
+"""
+
+df = pd.read_csv(StringIO(csv_penjualan), parse_dates=["tanggal"])
+produk = pd.read_csv(StringIO(csv_produk))
+df.head()</code></pre>
+  </section>
+
+  <!-- ======================================================= -->
+  <div class="part"><span class="q">BAGIAN A</span><h2>SQL</h2><span class="range">Minggu 1–4</span></div>
+
+  <!-- ================= SQL 1 ================= -->
+  <section id="s1" aria-labelledby="s1-h">
+    <span class="week-tag">Minggu 1</span>
+    <h2 id="s1-h">Bertanya ke database: SELECT, WHERE, ORDER BY</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> mengambil persis baris yang kamu mau dari tabel, dalam urutan yang kamu mau.</p>
+
+    <div class="prose">
+      <div class="concept"><strong>Cara membaca query SQL:</strong> selalu dari <code>FROM</code> dulu (tabel mana), lalu <code>WHERE</code> (baris mana), lalu <code>SELECT</code> (kolom mana), lalu <code>ORDER BY</code> (urutannya). Kamu <em>menulis</em> SELECT di atas, tapi database <em>menjalankan</em> FROM dulu.</div>
+    </div>
+
+    <div class="block">
+      <h4>SELECT … FROM — ambil kolom</h4>
+      <p class="use">Bintang (<code>*</code>) artinya semua kolom. Di kantor, sebutkan kolomnya — lebih cepat dan lebih jelas.</p>
+<pre><code>SELECT * FROM penjualan;                    -- semua kolom, semua baris
+SELECT tanggal, produk, total FROM penjualan;   -- tiga kolom saja</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>WHERE — saring baris</h4>
+      <p class="use">Ini padanan filter. Teks pakai kutip satu, angka tidak.</p>
+<pre><code>SELECT * FROM penjualan WHERE kota = 'Bandung';
+SELECT * FROM penjualan WHERE jumlah &gt;= 15;
+SELECT * FROM penjualan WHERE kota = 'Jakarta' AND kategori = 'Makanan';
+SELECT * FROM penjualan WHERE produk = 'Kopi Susu' OR produk = 'Americano';
+SELECT * FROM penjualan WHERE produk IN ('Kopi Susu', 'Americano');   -- sama, lebih rapi
+SELECT * FROM penjualan WHERE tanggal BETWEEN '2026-02-01' AND '2026-02-28';
+SELECT * FROM penjualan WHERE produk LIKE 'Kopi%';   -- diawali "Kopi"</code></pre>
+      <p class="result">Baris ke-3 menghasilkan <strong>7 baris</strong>: semua Roti Bakar dan Croissant yang dijual di Jakarta.</p>
+    </div>
+
+    <div class="block">
+      <h4>ORDER BY · LIMIT — urutkan, ambil sebagian</h4>
+      <p class="use"><code>DESC</code> = dari besar ke kecil. Tanpa DESC = kecil ke besar.</p>
+<pre><code>SELECT tanggal, produk, kota, total
+FROM penjualan
+ORDER BY total DESC
+LIMIT 3;</code></pre>
+<pre class="out"><code>tanggal     produk     kota     total
+2026-03-18  Kopi Susu  Bandung  550000
+2026-03-01  Kopi Susu  Jakarta  484000
+2026-02-16  Kopi Susu  Bandung  440000</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>DISTINCT — nilai unik</h4>
+<pre><code>SELECT DISTINCT produk FROM penjualan;     -- 4 baris
+SELECT DISTINCT kota, kategori FROM penjualan;   -- kombinasi unik: 4 baris</code></pre>
+    </div>
+
+    <div class="prose">
+      <h3>Tiga kebiasaan sejak hari pertama</h3>
+      <ul>
+        <li><strong>Akhiri dengan titik koma</strong> <code>;</code>. Di beberapa alat wajib, di semua alat aman.</li>
+        <li><strong>Huruf besar untuk kata kunci</strong> (SELECT, FROM), huruf kecil untuk nama tabel/kolom. Bukan aturan, tapi konvensi yang membuat query terbaca.</li>
+        <li><strong>Satu klausa per baris</strong> untuk query yang lebih dari satu baris. Lihat contoh ORDER BY di atas.</li>
+      </ul>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN SQL MINGGU 1</span>
+      <h3>Lima query</h3>
+      <ol>
+        <li>Semua transaksi di Bandung, urut dari tanggal paling lama. Berapa baris?</li>
+        <li>Tiga transaksi dengan <em>jumlah porsi</em> terbanyak (bukan total rupiah).</li>
+        <li>Transaksi bulan Maret yang porsinya 10 atau lebih. Tampilkan tanggal, produk, jumlah.</li>
+        <li>Semua transaksi Makanan di Jakarta. Berapa baris?</li>
+        <li>Transaksi yang total-nya antara 150.000 dan 250.000, urut dari total terbesar.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>SELECT * FROM penjualan WHERE kota = 'Bandung' ORDER BY tanggal;</code></pre><strong>11 baris.</strong></li>
+            <li><pre><code>SELECT tanggal, produk, jumlah FROM penjualan ORDER BY jumlah DESC LIMIT 3;</code></pre>25 (Kopi Susu, 18 Mar), 22 (Kopi Susu, 1 Mar), 20 (Kopi Susu, 16 Feb).</li>
+            <li><pre><code>SELECT tanggal, produk, jumlah FROM penjualan
+WHERE tanggal &gt;= '2026-03-01' AND jumlah &gt;= 10;</code></pre><strong>4 baris:</strong> Kopi Susu 22, Roti Bakar 13, Kopi Susu 25, Americano 11.</li>
+            <li><pre><code>SELECT * FROM penjualan WHERE kategori = 'Makanan' AND kota = 'Jakarta';</code></pre><strong>7 baris.</strong></li>
+            <li><pre><code>SELECT * FROM penjualan WHERE total BETWEEN 150000 AND 250000 ORDER BY total DESC;</code></pre><strong>8 baris:</strong> 216.000, 198.000, 195.000, 180.000 (Americano, Jan), 180.000 (Croissant, Mar), 165.000, 162.000, 160.000. Kebiasaan baik: setelah menyaring, selalu cek jumlah barisnya dengan <code>SELECT COUNT(*) … WHERE …</code> — mudah sekali salah hitung kalau hanya melihat dengan mata.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= SQL 2 ================= -->
+  <section id="s2" aria-labelledby="s2-h">
+    <span class="week-tag">Minggu 2</span>
+    <h2 id="s2-h">Meringkas: COUNT, SUM, GROUP BY, HAVING</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menjawab "berapa total X per Y" — pertanyaan yang muncul di 90% pekerjaan analis dan di hampir semua wawancara.</p>
+
+    <div class="block">
+      <h4>Fungsi agregat — satu angka dari banyak baris</h4>
+<pre><code>SELECT
+  COUNT(*)      AS jumlah_transaksi,
+  SUM(total)    AS omzet,
+  AVG(total)    AS rata_rata,
+  MIN(total)    AS terkecil,
+  MAX(total)    AS terbesar
+FROM penjualan;</code></pre>
+<pre class="out"><code>jumlah_transaksi  omzet    rata_rata   terkecil  terbesar
+24                5050000  210416.67   75000     550000</code></pre>
+      <p class="result"><code>AS</code> memberi nama kolom hasil. Selalu pakai — hasil tanpa nama tidak bisa dibaca orang lain.</p>
+    </div>
+
+    <div class="block">
+      <h4>GROUP BY — satu angka <em>per kelompok</em></h4>
+      <p class="use">Ini inti minggu ini. "Omzet per produk" = kelompokkan berdasarkan produk, lalu jumlahkan tiap kelompok.</p>
+<pre><code>SELECT produk, SUM(total) AS omzet, SUM(jumlah) AS porsi
+FROM penjualan
+GROUP BY produk
+ORDER BY omzet DESC;</code></pre>
+<pre class="out"><code>produk      omzet    porsi
+Kopi Susu   2464000  112
+Americano   1026000  57
+Roti Bakar  780000   52
+Croissant   780000   39</code></pre>
+      <div class="concept" style="margin-bottom:0"><strong>Aturan emas GROUP BY:</strong> setiap kolom di SELECT harus <em>ada di GROUP BY</em> atau <em>dibungkus fungsi agregat</em>. <code>SELECT produk, kota, SUM(total) … GROUP BY produk</code> akan error (atau memberi hasil ngawur) karena <code>kota</code> tidak dikelompokkan dan tidak diagregat.</div>
+    </div>
+
+    <div class="block">
+      <h4>GROUP BY dua kolom</h4>
+<pre><code>SELECT kota, kategori, SUM(jumlah) AS porsi
+FROM penjualan
+GROUP BY kota, kategori
+ORDER BY kota, kategori;</code></pre>
+<pre class="out"><code>kota     kategori  porsi
+Bandung  Makanan   39
+Bandung  Minuman   84
+Jakarta  Makanan   52
+Jakarta  Minuman   85</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Mengelompokkan per bulan</h4>
+      <p class="use">Tanggal harus dipotong jadi "2026-01" dulu. Di SQLite pakai <code>substr</code>; di PostgreSQL pakai <code>to_char(tanggal, 'YYYY-MM')</code>.</p>
+<pre><code>SELECT substr(tanggal, 1, 7) AS bulan, SUM(total) AS omzet, COUNT(*) AS transaksi
+FROM penjualan
+GROUP BY bulan
+ORDER BY bulan;</code></pre>
+<pre class="out"><code>bulan    omzet    transaksi
+2026-01  1328000  8
+2026-02  1693000  8
+2026-03  2029000  8</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>HAVING — saring <em>setelah</em> dikelompokkan</h4>
+      <p class="use"><code>WHERE</code> menyaring baris sebelum dikelompokkan. <code>HAVING</code> menyaring kelompok setelah dihitung. "Produk yang porsinya lebih dari 50" adalah syarat pada hasil SUM — jadi HAVING.</p>
+<pre><code>SELECT produk, SUM(jumlah) AS porsi
+FROM penjualan
+GROUP BY produk
+HAVING SUM(jumlah) &gt; 50;</code></pre>
+<pre class="out"><code>produk      porsi
+Kopi Susu   112
+Americano   57
+Roti Bakar  52</code></pre>
+    </div>
+
+    <div class="prose">
+      <h3>Urutan eksekusi yang harus kamu hafal</h3>
+      <p><code>FROM</code> → <code>WHERE</code> → <code>GROUP BY</code> → <code>HAVING</code> → <code>SELECT</code> → <code>ORDER BY</code> → <code>LIMIT</code>. Ini menjelaskan kenapa kamu tidak bisa pakai alias dari SELECT di dalam WHERE (WHERE jalan duluan), dan kenapa HAVING bisa memakai SUM (GROUP BY sudah jalan).</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN SQL MINGGU 2</span>
+      <h3>Enam query</h3>
+      <ol>
+        <li>Jumlah transaksi dan rata-rata total per kota. Kota mana yang rata-rata transaksinya lebih besar?</li>
+        <li>Omzet per kategori, plus persentasenya dari total keseluruhan (petunjuk: <code>SUM(total) * 100.0 / 5050000</code>; nanti di minggu 4 kita buat tanpa angka hardcode).</li>
+        <li>Porsi terjual per produk per bulan. Produk mana yang naik terus tiap bulan?</li>
+        <li>Kota yang jumlah transaksinya lebih dari 12.</li>
+        <li>Rata-rata porsi per transaksi untuk tiap produk, urut dari terbesar.</li>
+        <li>Bulan dengan omzet Bandung di atas 800.000.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>SELECT kota, COUNT(*) AS transaksi, AVG(total) AS rata_rata
+FROM penjualan GROUP BY kota;</code></pre>Jakarta 13 transaksi, rata-rata 201.000. Bandung 11 transaksi, rata-rata 221.545. <strong>Bandung lebih besar per transaksi</strong> meski total omzetnya lebih kecil.</li>
+            <li><pre><code>SELECT kategori, SUM(total) AS omzet, SUM(total) * 100.0 / 5050000 AS persen
+FROM penjualan GROUP BY kategori;</code></pre>Minuman 3.490.000 (69,1%), Makanan 1.560.000 (30,9%). Perhatikan <code>100.0</code> bukan <code>100</code> — tanpa desimal, SQLite membulatkan ke bilangan bulat.</li>
+            <li><pre><code>SELECT substr(tanggal,1,7) AS bulan, produk, SUM(jumlah) AS porsi
+FROM penjualan GROUP BY bulan, produk ORDER BY produk, bulan;</code></pre>Kopi Susu: 27 → 38 → 47. Americano: 18 → 19 → 20. Roti Bakar: 14 → 17 → 21. Croissant: 10 → 13 → 16. <strong>Semua naik</strong> — Kopi Susu paling cepat.</li>
+            <li><pre><code>SELECT kota, COUNT(*) AS transaksi FROM penjualan
+GROUP BY kota HAVING COUNT(*) &gt; 12;</code></pre>Hanya Jakarta (13).</li>
+            <li><pre><code>SELECT produk, AVG(jumlah) AS rata_porsi FROM penjualan
+GROUP BY produk ORDER BY rata_porsi DESC;</code></pre>Kopi Susu 18,67 · Americano 9,5 · Roti Bakar 8,67 · Croissant 6,5.</li>
+            <li><pre><code>SELECT substr(tanggal,1,7) AS bulan, SUM(total) AS omzet
+FROM penjualan WHERE kota = 'Bandung'
+GROUP BY bulan HAVING SUM(total) &gt; 800000;</code></pre>Februari 831.000 dan Maret 1.012.000. (Januari 594.000 tidak lolos.) Perhatikan: syarat <em>kota</em> di WHERE, syarat <em>omzet</em> di HAVING.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= SQL 3 ================= -->
+  <section id="s3" aria-labelledby="s3-h">
+    <span class="week-tag">Minggu 3</span>
+    <h2 id="s3-h">Menggabungkan tabel: JOIN</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menjawab pertanyaan yang jawabannya tersebar di dua tabel — misalnya "berapa <em>laba</em>?", yang butuh tabel penjualan <em>dan</em> tabel produk.</p>
+
+    <div class="prose">
+      <div class="concept"><strong>Kenapa data dipecah jadi banyak tabel?</strong> Kalau harga Kopi Susu ditulis di tiap baris penjualan, saat harganya naik kamu harus mengubah 6 baris (di dunia nyata: jutaan). Dengan tabel <code>produk</code> terpisah, cukup ubah 1 baris. JOIN adalah cara "menyatukan kembali" saat kamu butuh keduanya.</div>
+      <p>Tabel <code>produk</code> punya <code>harga</code> dan <code>biaya_modal</code>. Tabel <code>penjualan</code> punya <code>jumlah</code>. Laba per transaksi = jumlah × (harga − biaya_modal). Tidak ada satu tabel pun yang punya semuanya.</p>
+    </div>
+
+    <div class="block">
+      <h4>INNER JOIN — baris yang cocok di kedua tabel</h4>
+<pre><code>SELECT
+  p.tanggal,
+  p.produk,
+  p.jumlah,
+  pr.harga,
+  pr.biaya_modal,
+  p.jumlah * (pr.harga - pr.biaya_modal) AS laba
+FROM penjualan AS p
+JOIN produk AS pr ON p.produk = pr.produk
+ORDER BY laba DESC
+LIMIT 3;</code></pre>
+<pre class="out"><code>tanggal     produk     jumlah  harga  biaya_modal  laba
+2026-03-18  Kopi Susu  25      22000  9000         325000
+2026-03-01  Kopi Susu  22      22000  9000         286000
+2026-02-16  Kopi Susu  20      22000  9000         260000</code></pre>
+      <p class="result"><code>p</code> dan <code>pr</code> adalah alias tabel — singkatan supaya tidak menulis nama panjang berulang. <code>ON</code> menyebut kolom apa yang "menjodohkan" kedua tabel. <code>JOIN</code> tanpa kata lain = INNER JOIN.</p>
+    </div>
+
+    <div class="block">
+      <h4>JOIN + GROUP BY — laba per produk</h4>
+<pre><code>SELECT
+  pr.produk,
+  SUM(p.total) AS omzet,
+  SUM(p.jumlah * (pr.harga - pr.biaya_modal)) AS laba
+FROM penjualan p
+JOIN produk pr ON p.produk = pr.produk
+GROUP BY pr.produk
+ORDER BY laba DESC;</code></pre>
+<pre class="out"><code>produk      omzet    laba
+Kopi Susu   2464000  1456000
+Americano   1026000  684000
+Roti Bakar  780000   416000
+Croissant   780000   351000</code></pre>
+      <div class="tip" style="margin-bottom:0"><strong>Temuan yang tidak mungkin didapat dari satu tabel:</strong> Roti Bakar dan Croissant omzetnya sama persis, tapi Roti Bakar labanya lebih besar (416 vs 351 ribu). Croissant modalnya mahal. Ini jenis insight yang membuat pemilik kedai mendengarkan.</div>
+    </div>
+
+    <div class="block">
+      <h4>LEFT JOIN — semua baris kiri, cocok atau tidak</h4>
+      <p class="use">Tabel <code>produk</code> punya Matcha Latte yang belum pernah terjual. INNER JOIN akan menghilangkannya. LEFT JOIN mempertahankannya, dengan nilai kosong (<code>NULL</code>) di sisi kanan.</p>
+<pre><code>SELECT pr.produk, COUNT(p.id) AS transaksi, COALESCE(SUM(p.total), 0) AS omzet
+FROM produk pr
+LEFT JOIN penjualan p ON pr.produk = p.produk
+GROUP BY pr.produk
+ORDER BY omzet DESC;</code></pre>
+<pre class="out"><code>produk        transaksi  omzet
+Kopi Susu     6          2464000
+Americano     6          1026000
+Roti Bakar    6          780000
+Croissant     6          780000
+Matcha Latte  0          0</code></pre>
+      <p class="result"><code>COALESCE(x, 0)</code> = "kalau x kosong, pakai 0". Tanpa itu, omzet Matcha Latte tampil NULL. <code>COUNT(p.id)</code> bukan <code>COUNT(*)</code> — karena <code>COUNT(*)</code> akan menghitung baris NULL sebagai 1.</p>
+    </div>
+
+    <div class="block">
+      <h4>Anti-join — yang <em>tidak</em> punya pasangan</h4>
+      <p class="use">"Produk mana yang belum pernah terjual?" "Cabang mana yang belum ada transaksi?" Pola: LEFT JOIN lalu saring yang sisi kanannya NULL.</p>
+<pre><code>SELECT c.kota, c.manajer, c.tanggal_buka
+FROM cabang c
+LEFT JOIN penjualan p ON c.kota = p.kota
+WHERE p.id IS NULL;</code></pre>
+<pre class="out"><code>kota      manajer  tanggal_buka
+Surabaya  Ayu      2026-04-01</code></pre>
+    </div>
+
+    <div class="prose">
+      <h3>Jebakan JOIN yang menjatuhkan banyak orang di wawancara</h3>
+      <ul>
+        <li><strong>Baris berlipat ganda.</strong> Kalau tabel kanan punya 2 baris yang cocok untuk 1 baris kiri, hasilnya 2 baris. Total omzet tiba-tiba dua kali lipat. Selalu cek <code>COUNT(*)</code> sebelum dan sesudah JOIN.</li>
+        <li><strong>INNER JOIN diam-diam membuang data.</strong> Kalau ada penjualan dengan nama produk yang salah ketik ("Kopi susu" huruf kecil), INNER JOIN ke <code>produk</code> akan menghilangkannya tanpa peringatan.</li>
+        <li><strong>Syarat di WHERE vs ON pada LEFT JOIN.</strong> <code>LEFT JOIN … WHERE p.kota = 'Jakarta'</code> mengubah LEFT JOIN jadi INNER JOIN secara efektif, karena baris NULL tidak lolos WHERE. Kalau mau tetap LEFT, taruh syaratnya di ON.</li>
+      </ul>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN SQL MINGGU 3</span>
+      <h3>Lima query</h3>
+      <ol>
+        <li>Laba per kota. Kota mana yang lebih menguntungkan?</li>
+        <li>Margin (%) tiap produk: laba ÷ omzet × 100. Produk mana yang marginnya paling rendah?</li>
+        <li>Semua produk beserta jumlah porsi terjual — termasuk yang 0.</li>
+        <li>Gabungkan tiga tabel: tampilkan tanggal, produk, kota, <em>nama manajer</em>, dan laba, untuk 5 transaksi dengan laba tertinggi.</li>
+        <li>Laba per bulan per kategori.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>SELECT p.kota, SUM(p.jumlah * (pr.harga - pr.biaya_modal)) AS laba
+FROM penjualan p JOIN produk pr ON p.produk = pr.produk
+GROUP BY p.kota;</code></pre>Jakarta 1.507.000 · Bandung 1.400.000. Total 2.907.000.</li>
+            <li><pre><code>SELECT pr.produk,
+  SUM(p.jumlah * (pr.harga - pr.biaya_modal)) * 100.0 / SUM(p.total) AS margin
+FROM penjualan p JOIN produk pr ON p.produk = pr.produk
+GROUP BY pr.produk ORDER BY margin;</code></pre>Croissant 45% · Roti Bakar 53,3% · Kopi Susu 59,1% · Americano 66,7%. <strong>Croissant paling rendah.</strong></li>
+            <li><pre><code>SELECT pr.produk, COALESCE(SUM(p.jumlah), 0) AS porsi
+FROM produk pr LEFT JOIN penjualan p ON pr.produk = p.produk
+GROUP BY pr.produk ORDER BY porsi DESC;</code></pre>112, 57, 52, 39, dan Matcha Latte 0.</li>
+            <li><pre><code>SELECT p.tanggal, p.produk, p.kota, c.manajer,
+  p.jumlah * (pr.harga - pr.biaya_modal) AS laba
+FROM penjualan p
+JOIN produk pr ON p.produk = pr.produk
+JOIN cabang c ON p.kota = c.kota
+ORDER BY laba DESC LIMIT 5;</code></pre>Lima teratas semuanya Kopi Susu: 325.000 (Dimas), 286.000 (Rina), 260.000 (Dimas), 234.000 (Rina), 195.000 (Dimas).</li>
+            <li><pre><code>SELECT substr(p.tanggal,1,7) AS bulan, pr.kategori,
+  SUM(p.jumlah * (pr.harga - pr.biaya_modal)) AS laba
+FROM penjualan p JOIN produk pr ON p.produk = pr.produk
+GROUP BY bulan, pr.kategori ORDER BY bulan, pr.kategori;</code></pre>Jan: Makanan 202.000, Minuman 567.000 · Feb: Makanan 253.000, Minuman 722.000 · Mar: Makanan 312.000, Minuman 851.000. (Jumlah semuanya 2.907.000 — selalu cek totalnya cocok dengan laba keseluruhan.)</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= SQL 4 ================= -->
+  <section id="s4" aria-labelledby="s4-h">
+    <span class="week-tag">Minggu 4 · Proyek</span>
+    <h2 id="s4-h">Window function &amp; CTE — dan proyek SQL pertama</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> membandingkan baris dengan baris lain (bulan ini vs bulan lalu, peringkat, total berjalan) — materi yang membedakan "bisa SQL" dari "bisa SQL untuk kerja".</p>
+
+    <div class="prose">
+      <div class="concept"><strong>Bedanya dengan GROUP BY:</strong> GROUP BY <em>meringkas</em> banyak baris jadi satu. Window function <em>menambah kolom</em> ke tiap baris, dengan nilai yang dihitung dari "jendela" baris di sekitarnya. Jumlah baris tidak berubah.</div>
+    </div>
+
+    <div class="block">
+      <h4>RANK / ROW_NUMBER — peringkat</h4>
+<pre><code>SELECT
+  produk,
+  SUM(total) AS omzet,
+  RANK() OVER (ORDER BY SUM(total) DESC) AS peringkat
+FROM penjualan
+GROUP BY produk;</code></pre>
+<pre class="out"><code>produk      omzet    peringkat
+Kopi Susu   2464000  1
+Americano   1026000  2
+Roti Bakar  780000   3
+Croissant   780000   3</code></pre>
+      <p class="result"><code>RANK</code> memberi angka sama untuk nilai seri (dan melompat: berikutnya 5). <code>ROW_NUMBER</code> selalu 1, 2, 3, 4 walau seri. <code>DENSE_RANK</code> seri tapi tidak melompat (1, 2, 3, 3, 4).</p>
+    </div>
+
+    <div class="block">
+      <h4>PARTITION BY — peringkat <em>dalam</em> tiap kelompok</h4>
+      <p class="use">"Transaksi terbesar di tiap kota" — peringkat dihitung ulang per kota.</p>
+<pre><code>SELECT tanggal, kota, produk, total,
+  ROW_NUMBER() OVER (PARTITION BY kota ORDER BY total DESC) AS urutan
+FROM penjualan;</code></pre>
+      <p class="result">Baris dengan <code>urutan = 1</code>: Bandung 550.000 (18 Mar) dan Jakarta 484.000 (1 Mar). Untuk mengambil hanya baris itu, kamu butuh CTE di bawah — karena WHERE tidak bisa memakai hasil window function langsung.</p>
+    </div>
+
+    <div class="block">
+      <h4>SUM() OVER — total berjalan</h4>
+<pre><code>SELECT tanggal, produk, total,
+  SUM(total) OVER (ORDER BY tanggal, id) AS omzet_kumulatif
+FROM penjualan;</code></pre>
+<pre class="out"><code>tanggal     produk      total   omzet_kumulatif
+2026-01-03  Kopi Susu   264000  264000
+2026-01-03  Roti Bakar  75000   339000
+2026-01-05  Americano   144000  483000
+...
+2026-03-30  Croissant   180000  5050000</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>LAG — bandingkan dengan baris sebelumnya</h4>
+      <p class="use">Pertumbuhan bulan ke bulan. Ini query yang hampir pasti ditanya di wawancara.</p>
+<pre><code>WITH bulanan AS (
+  SELECT substr(tanggal,1,7) AS bulan, SUM(total) AS omzet
+  FROM penjualan
+  GROUP BY bulan
+)
+SELECT
+  bulan,
+  omzet,
+  LAG(omzet) OVER (ORDER BY bulan) AS omzet_bulan_lalu,
+  (omzet - LAG(omzet) OVER (ORDER BY bulan)) * 100.0
+     / LAG(omzet) OVER (ORDER BY bulan) AS pertumbuhan_persen
+FROM bulanan;</code></pre>
+<pre class="out"><code>bulan    omzet    omzet_bulan_lalu  pertumbuhan_persen
+2026-01  1328000  NULL              NULL
+2026-02  1693000  1328000           27.48
+2026-03  2029000  1693000           19.85</code></pre>
+      <p class="result">Bagian <code>WITH bulanan AS (…)</code> adalah <strong>CTE</strong>: tabel sementara yang kamu beri nama, lalu dipakai di query utama. Ini cara memecah query panjang jadi langkah yang bisa dibaca. Kamu akan memakainya setiap hari.</p>
+    </div>
+
+    <div class="block">
+      <h4>CTE untuk persentase tanpa angka hardcode</h4>
+<pre><code>WITH total_semua AS (
+  SELECT SUM(total) AS grand FROM penjualan
+)
+SELECT p.kategori,
+  SUM(p.total) AS omzet,
+  SUM(p.total) * 100.0 / t.grand AS persen
+FROM penjualan p, total_semua t
+GROUP BY p.kategori, t.grand;</code></pre>
+      <p class="result">Minuman 69,1% · Makanan 30,9%. Sama seperti minggu 2, tapi kalau datanya bertambah, angkanya ikut benar sendiri.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN SQL MINGGU 4</span>
+      <h3>Empat query</h3>
+      <ol>
+        <li>Pakai CTE + ROW_NUMBER untuk mengambil <em>hanya</em> transaksi terbesar di tiap kota (2 baris).</li>
+        <li>Pertumbuhan porsi Kopi Susu bulan ke bulan, dalam persen.</li>
+        <li>Untuk tiap transaksi, tampilkan total dan rata-rata total <em>di kota yang sama</em> (petunjuk: <code>AVG(total) OVER (PARTITION BY kota)</code>). Lalu tambahkan kolom selisihnya.</li>
+        <li>Peringkat produk berdasarkan laba (butuh JOIN + window).</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>WITH ranked AS (
+  SELECT tanggal, kota, produk, total,
+    ROW_NUMBER() OVER (PARTITION BY kota ORDER BY total DESC) AS rn
+  FROM penjualan
+)
+SELECT tanggal, kota, produk, total FROM ranked WHERE rn = 1;</code></pre>Bandung 550.000 dan Jakarta 484.000.</li>
+            <li><pre><code>WITH ks AS (
+  SELECT substr(tanggal,1,7) AS bulan, SUM(jumlah) AS porsi
+  FROM penjualan WHERE produk = 'Kopi Susu' GROUP BY bulan
+)
+SELECT bulan, porsi,
+  (porsi - LAG(porsi) OVER (ORDER BY bulan)) * 100.0 / LAG(porsi) OVER (ORDER BY bulan) AS tumbuh
+FROM ks;</code></pre>27 → 38 (+40,7%) → 47 (+23,7%).</li>
+            <li><pre><code>SELECT tanggal, kota, total,
+  AVG(total) OVER (PARTITION BY kota) AS rata_kota,
+  total - AVG(total) OVER (PARTITION BY kota) AS selisih
+FROM penjualan ORDER BY kota, selisih DESC;</code></pre>Rata-rata Jakarta 201.000, Bandung 221.545. Transaksi 550.000 di Bandung berada 328.455 di atas rata-rata kotanya.</li>
+            <li><pre><code>SELECT pr.produk,
+  SUM(p.jumlah * (pr.harga - pr.biaya_modal)) AS laba,
+  RANK() OVER (ORDER BY SUM(p.jumlah * (pr.harga - pr.biaya_modal)) DESC) AS peringkat
+FROM penjualan p JOIN produk pr ON p.produk = pr.produk
+GROUP BY pr.produk;</code></pre>Kopi Susu 1, Americano 2, Roti Bakar 3, Croissant 4 — tidak seri lagi, beda dengan peringkat omzet.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <div class="exercise" style="margin-top:22px; border-color:var(--teal)">
+      <span class="tag" style="color:var(--teal)">PROYEK SQL</span>
+      <h3>10 pertanyaan, 10 query, satu file</h3>
+      <div class="prose">
+        <p>Buat file <code>02-kedai-kopi-analisis.sql</code>. Isinya 10 pertanyaan bisnis, masing-masing sebagai komentar (<code>-- Pertanyaan 1: …</code>) diikuti query-nya dan satu baris komentar berisi jawabannya. Minimal: 2 pakai JOIN, 2 pakai window function, 1 pakai CTE, 1 pakai HAVING. Unggah ke repository <code>portofolio-data-analyst</code> di GitHub, dan tambahkan bagian "Proyek 2" di README dengan tiga temuan utama.</p>
+        <p>Kalau mau data lebih besar: di sqliteonline.com ada menu untuk mengimpor CSV. Ambil dataset "Brazilian E-Commerce (Olist)" dari Kaggle — 100 ribu pesanan, 8 tabel. Semua konsep di sini berlaku persis sama.</p>
+      </div>
+      <ul class="checklist">
+        <li><span class="box"></span>10 query berjalan tanpa error dari atas ke bawah.</li>
+        <li><span class="box"></span>Tiap query punya komentar pertanyaan dan jawaban.</li>
+        <li><span class="box"></span>Ada JOIN, window function, CTE, dan HAVING.</li>
+        <li><span class="box"></span>File ada di GitHub, README diperbarui.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================================================= -->
+  <div class="part"><span class="q">BAGIAN B</span><h2>Python pandas</h2><span class="range">Minggu 5–8</span></div>
+
+  <!-- ================= PANDAS 1 ================= -->
+  <section id="p1" aria-labelledby="p1-h">
+    <span class="week-tag">Minggu 5</span>
+    <h2 id="p1-h">DataFrame: melihat, memilih, menyaring</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> semua yang bisa kamu lakukan di SQL minggu 1, sekarang di Python — dan kamu akan sadar polanya sama.</p>
+
+    <div class="prose">
+      <h3>Python secukupnya</h3>
+      <p>Kamu tidak perlu jadi programmer dulu. Empat hal ini cukup untuk empat minggu ke depan:</p>
+    </div>
+<pre><code>angka = 22000                    # variabel: kotak berisi nilai
+nama  = "Kopi Susu"              # teks pakai kutip
+daftar = ["Jakarta", "Bandung"]  # list: kumpulan berurutan, akses daftar[0]
+harga = {"Kopi Susu": 22000, "Americano": 18000}   # dict: pasangan kunci→nilai
+
+for kota in daftar:              # perulangan
+    print(kota)
+
+def laba(jumlah, harga, modal):  # fungsi: bungkus hitungan supaya bisa dipakai ulang
+    return jumlah * (harga - modal)
+
+laba(25, 22000, 9000)            # → 325000</code></pre>
+    <div class="prose">
+      <div class="concept"><strong>DataFrame</strong> = tabel di Python. <code>df</code> adalah nama yang kamu berikan (bisa apa saja, tapi <code>df</code> konvensi umum). Setiap kolom disebut <strong>Series</strong>. Hampir semua yang kamu lakukan adalah: ambil DataFrame → lakukan sesuatu → dapat DataFrame baru.</div>
+    </div>
+
+    <div class="block">
+      <h4>Melihat data</h4>
+<pre><code>df.head()          # 5 baris pertama
+df.tail(3)         # 3 baris terakhir
+df.shape           # (24, 7) → 24 baris, 7 kolom
+df.info()          # nama kolom, tipe, jumlah yang tidak kosong
+df.describe()      # statistik ringkas kolom angka: mean, min, max, kuartil
+df.columns         # daftar nama kolom
+df["produk"].unique()        # nilai unik — seperti SELECT DISTINCT
+df["produk"].value_counts()  # berapa kali tiap nilai muncul</code></pre>
+      <p class="result"><code>df.info()</code> adalah hal pertama yang dilakukan analis pada data baru. Kalau <code>tanggal</code> tipenya <code>object</code> (teks) bukan <code>datetime64</code>, ada yang harus dibereskan dulu.</p>
+    </div>
+
+    <div class="block">
+      <h4>Memilih kolom — seperti SELECT</h4>
+<pre><code>df["total"]                        # satu kolom → Series
+df[["tanggal", "produk", "total"]] # beberapa kolom → DataFrame (kurung dua lapis!)</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Menyaring baris — seperti WHERE</h4>
+      <p class="use">Pola: <code>df[syarat]</code>. Syarat menghasilkan deretan True/False, dan pandas mengambil baris yang True.</p>
+<pre><code>df[df["kota"] == "Bandung"]
+df[df["jumlah"] &gt;= 15]
+df[(df["kota"] == "Jakarta") &amp; (df["kategori"] == "Makanan")]   # AND → &amp;, wajib kurung
+df[(df["produk"] == "Kopi Susu") | (df["produk"] == "Americano")]  # OR → |
+df[df["produk"].isin(["Kopi Susu", "Americano"])]                # seperti IN
+df[df["tanggal"] &gt;= "2026-03-01"]
+df[df["produk"].str.startswith("Kopi")]                          # seperti LIKE 'Kopi%'</code></pre>
+      <p class="result">Baris ke-3 menghasilkan 7 baris — sama persis dengan SQL minggu 1. Kesalahan paling umum: lupa kurung di sekitar tiap syarat saat memakai <code>&amp;</code> atau <code>|</code>.</p>
+    </div>
+
+    <div class="block">
+      <h4>Mengurutkan — seperti ORDER BY · LIMIT</h4>
+<pre><code>df.sort_values("total", ascending=False).head(3)
+df.sort_values(["kota", "tanggal"])         # dua kolom</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Kolom baru</h4>
+<pre><code>df["bulan"] = df["tanggal"].dt.to_period("M")    # 2026-01, 2026-02, …
+df["ukuran"] = df["jumlah"].apply(lambda x: "Besar" if x &gt;= 15 else "Kecil")
+df.head()</code></pre>
+      <p class="result"><code>.dt</code> membuka fungsi-fungsi tanggal (hanya untuk kolom bertipe datetime). <code>lambda</code> = fungsi kecil satu baris. Jalankan sel ini — kolom <code>bulan</code> dipakai di minggu berikutnya.</p>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN PANDAS MINGGU 5</span>
+      <h3>Lima soal — sama dengan SQL minggu 1, sekarang di pandas</h3>
+      <ol>
+        <li>Semua transaksi Bandung, urut tanggal. Cek jumlah barisnya dengan <code>.shape</code> atau <code>len()</code>.</li>
+        <li>Tiga transaksi dengan porsi terbanyak.</li>
+        <li>Transaksi Maret dengan porsi ≥ 10, hanya kolom tanggal, produk, jumlah.</li>
+        <li>Transaksi Makanan di Jakarta — berapa baris?</li>
+        <li>Total antara 150.000 dan 250.000, urut dari terbesar. Petunjuk: <code>.between(150000, 250000)</code>.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>bdg = df[df["kota"] == "Bandung"].sort_values("tanggal")
+len(bdg)   # 11</code></pre></li>
+            <li><pre><code>df.sort_values("jumlah", ascending=False).head(3)</code></pre>25, 22, 20 — semuanya Kopi Susu.</li>
+            <li><pre><code>df[(df["tanggal"] &gt;= "2026-03-01") &amp; (df["jumlah"] &gt;= 10)][["tanggal", "produk", "jumlah"]]</code></pre>4 baris.</li>
+            <li><pre><code>len(df[(df["kategori"] == "Makanan") &amp; (df["kota"] == "Jakarta")])   # 7</code></pre></li>
+            <li><pre><code>df[df["total"].between(150000, 250000)].sort_values("total", ascending=False)</code></pre>8 baris.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= PANDAS 2 ================= -->
+  <section id="p2" aria-labelledby="p2-h">
+    <span class="week-tag">Minggu 6</span>
+    <h2 id="p2-h">groupby &amp; pivot_table — GROUP BY versi pandas</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> semua ringkasan dari SQL minggu 2, dengan satu-dua baris pandas — dan mengubahnya jadi tabel lebar (pivot) yang siap dilihat orang.</p>
+
+    <div class="block">
+      <h4>Agregat seluruh tabel</h4>
+<pre><code>df["total"].sum()      # 5050000
+df["total"].mean()     # 210416.67
+df["total"].count()    # 24
+df["total"].agg(["count", "sum", "mean", "min", "max"])   # sekaligus</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>groupby — satu angka per kelompok</h4>
+<pre><code>df.groupby("produk")["total"].sum().sort_values(ascending=False)</code></pre>
+<pre class="out"><code>produk
+Kopi Susu     2464000
+Americano     1026000
+Croissant      780000
+Roti Bakar     780000
+Name: total, dtype: int64</code></pre>
+      <p class="result">Baca: "kelompokkan df per produk, ambil kolom total, jumlahkan, urutkan". Persis GROUP BY produk + SUM(total) + ORDER BY.</p>
+    </div>
+
+    <div class="block">
+      <h4>Beberapa agregat sekaligus dengan .agg</h4>
+<pre><code>ringkasan = df.groupby("produk").agg(
+    omzet     = ("total", "sum"),
+    porsi     = ("jumlah", "sum"),
+    transaksi = ("total", "count"),
+    rata_porsi= ("jumlah", "mean"),
+).sort_values("omzet", ascending=False)
+ringkasan</code></pre>
+<pre class="out"><code>            omzet  porsi  transaksi  rata_porsi
+produk
+Kopi Susu  2464000    112          6   18.666667
+Americano  1026000     57          6    9.500000
+Croissant   780000     39          6    6.500000
+Roti Bakar  780000     52          6    8.666667</code></pre>
+      <p class="result">Format <code>nama_baru = ("kolom", "fungsi")</code> ini disebut <em>named aggregation</em>. Hasilnya langsung punya nama kolom yang jelas — sama seperti <code>AS</code> di SQL.</p>
+    </div>
+
+    <div class="block">
+      <h4>groupby dua kolom &amp; reset_index</h4>
+<pre><code>df.groupby(["kota", "kategori"])["jumlah"].sum().reset_index()</code></pre>
+<pre class="out"><code>      kota kategori  jumlah
+0  Bandung  Makanan      39
+1  Bandung  Minuman      84
+2  Jakarta  Makanan      52
+3  Jakarta  Minuman      85</code></pre>
+      <p class="result"><code>.reset_index()</code> mengubah hasil groupby (yang indeksnya berlapis) jadi tabel biasa. Kamu akan sering butuh ini sebelum menggabung atau menggambar grafik.</p>
+    </div>
+
+    <div class="block">
+      <h4>pivot_table — tabel lebar</h4>
+      <p class="use">Hasil di atas berbentuk panjang. Pemilik kedai lebih suka bentuk lebar: kota ke bawah, kategori ke samping.</p>
+<pre><code>df.pivot_table(index="kota", columns="kategori", values="jumlah", aggfunc="sum", margins=True)</code></pre>
+<pre class="out"><code>kategori  Makanan  Minuman  All
+kota
+Bandung        39       84  123
+Jakarta        52       85  137
+All            91      169  260</code></pre>
+      <p class="result"><code>margins=True</code> menambah baris/kolom total. Ini pivot table Excel, versi satu baris kode.</p>
+    </div>
+
+    <div class="block">
+      <h4>Per bulan</h4>
+<pre><code>df.groupby("bulan").agg(omzet=("total", "sum"), transaksi=("total", "count"))</code></pre>
+<pre class="out"><code>           omzet  transaksi
+bulan
+2026-01  1328000          8
+2026-02  1693000          8
+2026-03  2029000          8</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Menyaring hasil groupby — seperti HAVING</h4>
+<pre><code>porsi = df.groupby("produk")["jumlah"].sum()
+porsi[porsi &gt; 50]     # Kopi Susu 112, Americano 57, Roti Bakar 52</code></pre>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN PANDAS MINGGU 6</span>
+      <h3>Lima soal — padanan SQL minggu 2</h3>
+      <ol>
+        <li>Jumlah transaksi dan rata-rata total per kota, pakai <code>.agg</code> dengan nama kolom yang jelas.</li>
+        <li>Omzet per kategori plus persentase dari total (tanpa angka hardcode).</li>
+        <li>Pivot: porsi per produk (baris) per bulan (kolom).</li>
+        <li>Rata-rata porsi per transaksi tiap produk, urut menurun.</li>
+        <li>Bulan dengan omzet Bandung di atas 800.000.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>df.groupby("kota").agg(transaksi=("total","count"), rata_rata=("total","mean"))</code></pre>Jakarta 13 / 201.000 · Bandung 11 / 221.545.</li>
+            <li><pre><code>k = df.groupby("kategori")["total"].sum()
+pd.DataFrame({"omzet": k, "persen": k / k.sum() * 100})</code></pre>Minuman 69,1% · Makanan 30,9%.</li>
+            <li><pre><code>df.pivot_table(index="produk", columns="bulan", values="jumlah", aggfunc="sum")</code></pre>Kopi Susu 27/38/47, Americano 18/19/20, Roti Bakar 14/17/21, Croissant 10/13/16.</li>
+            <li><pre><code>df.groupby("produk")["jumlah"].mean().sort_values(ascending=False)</code></pre></li>
+            <li><pre><code>b = df[df["kota"] == "Bandung"].groupby("bulan")["total"].sum()
+b[b &gt; 800000]</code></pre>Feb 831.000, Mar 1.012.000.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= PANDAS 3 ================= -->
+  <section id="p3" aria-labelledby="p3-h">
+    <span class="week-tag">Minggu 7</span>
+    <h2 id="p3-h">merge &amp; membersihkan data kotor</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu bisa:</strong> menggabung dua tabel (JOIN versi pandas) dan — yang lebih penting — membereskan data berantakan, yang di dunia nyata memakan 60% waktu analis.</p>
+
+    <div class="block">
+      <h4>merge — JOIN versi pandas</h4>
+<pre><code>gab = df.merge(produk[["produk", "harga", "biaya_modal"]], on="produk", how="inner")
+gab["laba"] = gab["jumlah"] * (gab["harga"] - gab["biaya_modal"])
+gab.groupby("produk").agg(omzet=("total","sum"), laba=("laba","sum")).sort_values("laba", ascending=False)</code></pre>
+<pre class="out"><code>              omzet     laba
+produk
+Kopi Susu   2464000  1456000
+Americano   1026000   684000
+Roti Bakar   780000   416000
+Croissant    780000   351000</code></pre>
+      <p class="result"><code>how=</code> menerima <code>"inner"</code>, <code>"left"</code>, <code>"right"</code>, <code>"outer"</code>. Sama persis dengan SQL. Kalau nama kolom penghubung beda di kedua tabel: <code>left_on="produk", right_on="nama_produk"</code>.</p>
+    </div>
+
+    <div class="block">
+      <h4>LEFT merge &amp; anti-join</h4>
+<pre><code>semua = produk.merge(df, on="produk", how="left", suffixes=("", "_jual"))
+semua[semua["total"].isna()]["produk"].unique()     # → ['Matcha Latte']</code></pre>
+      <p class="result"><code>.isna()</code> = "apakah kosong". <code>suffixes</code> menangani kolom yang namanya sama di kedua tabel (di sini: <code>kategori</code>).</p>
+    </div>
+
+    <div class="prose">
+      <h3>Data kotor: yang sebenarnya kamu terima di kantor</h3>
+      <p>Jalankan ini di sel baru. Ini versi "apa adanya" dari ekspor kasir — persis jenis kekacauan yang akan kamu temui.</p>
+    </div>
+<pre><code>csv_kotor = """tanggal,produk,kategori,jumlah,total,kota
+2026-01-03,Kopi Susu,Minuman,12,264000,Jakarta
+03/01/2026,roti bakar,Makanan,5,75000,Jakarta
+2026-01-05,Americano,Minuman,8,144000, Bandung
+2026-01-05,Americano,Minuman,8,144000, Bandung
+2026-01-08,Croissant,makanan,6,,Bandung
+2026-01-12,KOPI SUSU,Minuman,15,330000,bandung
+2026-01-15,Roti Bakar,Makanan,,135000,Jakarta
+2026-01-20,Americano ,Minuman,10,180000,Jakarta
+"""
+kotor = pd.read_csv(StringIO(csv_kotor))
+kotor.info()</code></pre>
+    <div class="prose">
+      <p>Lihat masalahnya satu per satu: tanggal dua format, huruf besar-kecil acak, spasi di awal/akhir, baris ganda (Americano 5 Jan dua kali), total kosong, jumlah kosong.</p>
+    </div>
+
+    <div class="block">
+      <h4>Langkah pembersihan standar</h4>
+<pre><code>bersih = kotor.copy()
+
+# 1. Teks: buang spasi, seragamkan huruf
+for kol in ["produk", "kategori", "kota"]:
+    bersih[kol] = bersih[kol].str.strip().str.title()
+
+# 2. Tanggal: paksa jadi datetime, dua format sekaligus
+bersih["tanggal"] = pd.to_datetime(bersih["tanggal"], format="mixed", dayfirst=True)
+
+# 3. Duplikat
+print("duplikat:", bersih.duplicated().sum())    # 1
+bersih = bersih.drop_duplicates()
+
+# 4. Nilai kosong: lihat dulu, baru putuskan
+print(bersih.isna().sum())
+
+# total kosong → bisa dihitung ulang dari jumlah × harga (butuh merge)
+bersih = bersih.merge(produk[["produk","harga"]], on="produk", how="left")
+bersih["total"] = bersih["total"].fillna(bersih["jumlah"] * bersih["harga"])
+
+# jumlah kosong → bisa dihitung balik: total ÷ harga
+bersih["jumlah"] = bersih["jumlah"].fillna(bersih["total"] / bersih["harga"])
+
+# 5. Tipe data
+bersih["jumlah"] = bersih["jumlah"].astype(int)
+bersih["total"]  = bersih["total"].astype(int)
+
+bersih</code></pre>
+      <p class="result">Hasil akhir: 7 baris, semua terisi, tanggal seragam, "Roti Bakar" dan "Kopi Susu" ejaannya konsisten. Prinsipnya: <strong>lihat dulu (<code>info</code>, <code>isna</code>, <code>duplicated</code>), putuskan aturan, baru ubah</strong>. Jangan pernah <code>dropna()</code> membabi buta — kamu bisa membuang data yang sebenarnya bisa diselamatkan.</p>
+    </div>
+
+    <div class="prose">
+      <div class="tip"><strong>Kenapa <code>.copy()</code>?</strong> Supaya <code>kotor</code> tetap utuh sebagai bukti "sebelum". Analis yang baik selalu bisa menunjukkan data mentah dan data bersih berdampingan.</div>
+    </div>
+
+    <div class="exercise">
+      <span class="tag">LATIHAN PANDAS MINGGU 7</span>
+      <h3>Empat soal</h3>
+      <ol>
+        <li>Laba per kota (pakai <code>gab</code>).</li>
+        <li>Margin persen per produk, urut naik.</li>
+        <li>Gabungkan <code>df</code> dengan tabel cabang (buat DataFrame-nya sendiri dari data di bagian Setup SQL) untuk menampilkan nama manajer di tiap transaksi. Cabang mana yang tidak muncul, dan kenapa?</li>
+        <li>Tambahkan satu masalah baru ke <code>csv_kotor</code> — misalnya kota "JKT" — lalu perbaiki dengan <code>.replace({"Jkt": "Jakarta"})</code>.</li>
+      </ol>
+      <details>
+        <summary>Kunci jawaban</summary>
+        <div class="answer">
+          <ol>
+            <li><pre><code>gab.groupby("kota")["laba"].sum()   # Jakarta 1507000, Bandung 1400000</code></pre></li>
+            <li><pre><code>m = gab.groupby("produk").agg(omzet=("total","sum"), laba=("laba","sum"))
+(m["laba"] / m["omzet"] * 100).sort_values()</code></pre>Croissant 45,0 · Roti Bakar 53,3 · Kopi Susu 59,1 · Americano 66,7.</li>
+            <li><pre><code>cabang = pd.DataFrame({"kota": ["Jakarta","Bandung","Surabaya"],
+                       "manajer": ["Rina","Dimas","Ayu"]})
+df.merge(cabang, on="kota", how="inner")</code></pre>Surabaya tidak muncul karena inner merge hanya mempertahankan kota yang ada di <em>kedua</em> tabel, dan Surabaya belum punya transaksi.</li>
+            <li>Setelah <code>.str.title()</code>, "JKT" jadi "Jkt". Lalu <code>bersih["kota"] = bersih["kota"].replace({"Jkt": "Jakarta"})</code>. Pelajarannya: pembersihan sering butuh <em>kamus</em> pemetaan yang kamu susun manual setelah melihat <code>value_counts()</code>.</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ================= PANDAS 4 ================= -->
+  <section id="p4" aria-labelledby="p4-h">
+    <span class="week-tag">Minggu 8 · Proyek</span>
+    <h2 id="p4-h">EDA, grafik, dan notebook pertama di GitHub</h2>
+    <p class="goal"><strong>Setelah minggu ini kamu punya:</strong> satu notebook yang bisa dibuka siapa pun, berjalan dari atas ke bawah tanpa error, dan berakhir dengan temuan yang jelas. Itu definisi "proyek portofolio" untuk analis.</p>
+
+    <div class="prose">
+      <div class="concept"><strong>EDA (Exploratory Data Analysis)</strong> bukan teknik khusus — ini urutan pertanyaan yang selalu sama saat bertemu data baru: <em>Bentuknya apa? Ada yang kosong/aneh? Tiap kolom sebarannya bagaimana? Kolom mana yang berhubungan? Apa yang berubah dari waktu ke waktu?</em> Yang membedakan analis pemula dan berpengalaman: yang berpengalaman punya urutan ini di kepala dan tidak melewatkan langkah.</div>
+    </div>
+
+    <div class="block">
+      <h4>Langkah 1–2: bentuk &amp; kualitas</h4>
+<pre><code>df.shape
+df.info()
+df.isna().sum()
+df.duplicated().sum()
+df.describe()
+df.describe(include="object")     # untuk kolom teks: unik, terbanyak</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Langkah 3: sebaran tiap kolom</h4>
+<pre><code>import matplotlib.pyplot as plt
+
+df["produk"].value_counts().plot(kind="bar", title="Jumlah transaksi per produk")
+plt.show()
+
+df["total"].plot(kind="hist", bins=10, title="Sebaran nilai transaksi")
+plt.show()</code></pre>
+      <p class="result">Histogram total akan menunjukkan dua "gundukan": transaksi kecil (makanan, 75–200 ribu) dan transaksi besar (Kopi Susu, 260–550 ribu). Itu temuan — dan kamu menemukannya dari gambar, bukan dari angka.</p>
+    </div>
+
+    <div class="block">
+      <h4>Langkah 4: hubungan antar kolom</h4>
+<pre><code>df.pivot_table(index="produk", columns="kota", values="total", aggfunc="sum").plot(
+    kind="bar", title="Omzet per produk, per kota")
+plt.ylabel("Rupiah")
+plt.show()
+
+df[["jumlah", "total"]].corr()     # korelasi: mendekati 1 = searah kuat</code></pre>
+    </div>
+
+    <div class="block">
+      <h4>Langkah 5: perubahan waktu</h4>
+<pre><code>bulanan = df.groupby("bulan")["total"].sum()
+bulanan.plot(kind="line", marker="o", title="Omzet naik tiap bulan — Maret +53% dari Januari")
+plt.ylabel("Rupiah")
+plt.show()
+
+bulanan.pct_change() * 100      # pertumbuhan persen: NaN, 27.48, 19.85 — LAG versi pandas</code></pre>
+      <p class="result">Perhatikan judul grafiknya menyatakan temuan, bukan nama kolom. Aturan yang sama seperti di Modul 1.</p>
+    </div>
+
+    <div class="prose">
+      <h3>Struktur notebook yang bisa dibaca orang</h3>
+      <p>Sel teks (Markdown) di Colab: klik "+ Text". Pakai untuk menjelaskan, bukan hanya kode.</p>
+    </div>
+    <ol class="steps">
+      <li><strong>Judul + satu paragraf konteks</strong><span>Data apa, dari mana, pertanyaan apa yang mau dijawab.</span></li>
+      <li><strong>Memuat &amp; memeriksa data</strong><span>Kode setup + <code>info()</code>, <code>isna()</code>, <code>duplicated()</code>. Satu kalimat: "Data bersih, 24 baris, tidak ada yang kosong."</span></li>
+      <li><strong>Eksplorasi per pertanyaan</strong><span>Tiap pertanyaan: judul kecil → kode → grafik/tabel → satu-dua kalimat temuan. Minimal 5 pertanyaan.</span></li>
+      <li><strong>Ringkasan temuan</strong><span>Lima poin, format yang sama seperti Modul 1: apa + angka + artinya.</span></li>
+      <li><strong>Satu rekomendasi</strong><span>Dengan angka pendukung. Kalau bisa, angka laba — karena sekarang kamu punya tabel produk.</span></li>
+      <li><strong>Runtime → Restart and run all</strong><span>Kalau ada satu sel yang error, notebook belum selesai. Ini ujian sesungguhnya.</span></li>
+    </ol>
+
+    <div class="exercise" style="margin-top:22px; border-color:var(--teal)">
+      <span class="tag" style="color:var(--teal)">PROYEK PANDAS</span>
+      <h3>Notebook EDA Kedai Kopi Senja</h3>
+      <div class="prose">
+        <p>Nama file <code>03-kedai-kopi-eda.ipynb</code>. Ikuti struktur di atas. Wajib memakai: <code>merge</code> dengan tabel produk (untuk laba), minimal 3 grafik dengan judul temuan, <code>pct_change</code> untuk pertumbuhan. Unduh dari Colab (File → Download → .ipynb), unggah ke GitHub — GitHub menampilkan notebook lengkap dengan grafiknya, jadi recruiter bisa membaca tanpa menjalankan apa pun.</p>
+        <p>Untuk versi yang lebih menantang: ganti datasetnya dengan data terbuka Singapura (data.gov.sg — misalnya "Resale Flat Prices", harga rumah HDB) atau Australia (data.gov.au). Struktur notebooknya tidak berubah; yang berubah hanya pertanyaannya. Kalau kamu targetnya kerja di SG/AU, proyek dengan data negara itu jauh lebih menarik bagi recruiter di sana.</p>
+      </div>
+      <ul class="checklist">
+        <li><span class="box"></span>"Restart and run all" berjalan tanpa error.</li>
+        <li><span class="box"></span>Ada sel Markdown yang menjelaskan tiap bagian — bukan hanya kode.</li>
+        <li><span class="box"></span>Minimal 3 grafik, tiap judul menyatakan temuan.</li>
+        <li><span class="box"></span>Lima temuan + satu rekomendasi dengan angka laba.</li>
+        <li><span class="box"></span>Notebook tampil rapi di GitHub, README diperbarui ("Proyek 3").</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= CHEAT SHEET ================= -->
+  <section id="cheat" aria-labelledby="cheat-h">
+    <h2 id="cheat-h">Cheat sheet: SQL ↔ pandas</h2>
+    <p class="goal">Simpan ini. Kalau kamu bisa SQL, kamu 80% bisa pandas — tinggal hafal padanannya.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Mau apa</th><th>SQL</th><th>pandas</th></tr></thead>
+        <tbody>
+          <tr><td>Lihat sebagian</td><td><code>SELECT * … LIMIT 5</code></td><td><code>df.head()</code></td></tr>
+          <tr><td>Pilih kolom</td><td><code>SELECT a, b FROM t</code></td><td><code>df[["a","b"]]</code></td></tr>
+          <tr><td>Saring baris</td><td><code>WHERE kota = 'X'</code></td><td><code>df[df["kota"] == "X"]</code></td></tr>
+          <tr><td>Dua syarat</td><td><code>WHERE a AND b</code></td><td><code>df[(a) &amp; (b)]</code></td></tr>
+          <tr><td>Salah satu dari</td><td><code>WHERE x IN (…)</code></td><td><code>df[df["x"].isin([…])]</code></td></tr>
+          <tr><td>Nilai unik</td><td><code>SELECT DISTINCT x</code></td><td><code>df["x"].unique()</code></td></tr>
+          <tr><td>Urutkan</td><td><code>ORDER BY x DESC</code></td><td><code>df.sort_values("x", ascending=False)</code></td></tr>
+          <tr><td>Hitung total</td><td><code>SUM(x)</code></td><td><code>df["x"].sum()</code></td></tr>
+          <tr><td>Per kelompok</td><td><code>GROUP BY k</code></td><td><code>df.groupby("k")</code></td></tr>
+          <tr><td>Beberapa agregat</td><td><code>SUM(a), COUNT(b)</code></td><td><code>.agg(s=("a","sum"), n=("b","count"))</code></td></tr>
+          <tr><td>Saring hasil kelompok</td><td><code>HAVING SUM(x) &gt; n</code></td><td><code>g = …; g[g &gt; n]</code></td></tr>
+          <tr><td>Tabel lebar</td><td>(CASE WHEN … rumit)</td><td><code>df.pivot_table(index, columns, values)</code></td></tr>
+          <tr><td>Gabung tabel</td><td><code>JOIN … ON</code></td><td><code>df.merge(t2, on=…, how=…)</code></td></tr>
+          <tr><td>Bulan dari tanggal</td><td><code>substr(tgl,1,7)</code></td><td><code>df["tgl"].dt.to_period("M")</code></td></tr>
+          <tr><td>Bandingkan baris sebelumnya</td><td><code>LAG(x) OVER (ORDER BY …)</code></td><td><code>df["x"].shift(1)</code> / <code>.pct_change()</code></td></tr>
+          <tr><td>Total berjalan</td><td><code>SUM(x) OVER (ORDER BY …)</code></td><td><code>df["x"].cumsum()</code></td></tr>
+          <tr><td>Peringkat</td><td><code>RANK() OVER (ORDER BY x)</code></td><td><code>df["x"].rank(ascending=False)</code></td></tr>
+          <tr><td>Peringkat per kelompok</td><td><code>… OVER (PARTITION BY k …)</code></td><td><code>df.groupby("k")["x"].rank(…)</code></td></tr>
+          <tr><td>Kolom bersyarat</td><td><code>CASE WHEN … THEN … END</code></td><td><code>np.where(cond, a, b)</code> / <code>.apply(lambda)</code></td></tr>
+          <tr><td>Kosong → nilai</td><td><code>COALESCE(x, 0)</code></td><td><code>df["x"].fillna(0)</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>Setelah delapan minggu ini kamu sudah menutup Leg 02 dan Leg 03 di peta besar. Berikutnya: <strong>statistik inferensial &amp; A/B testing</strong> — memakai scipy di notebook yang sama, dengan pertanyaan seperti "apakah kenaikan omzet Maret itu nyata atau kebetulan?"</p>
+    <p class="closing">Dua proyek di GitHub — satu .sql, satu .ipynb — sudah lebih dari yang dimiliki kebanyakan pelamar posisi junior.</p>
+  </footer>
+
+</div>

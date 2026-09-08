@@ -1,0 +1,7 @@
+cabang_id,nama_cabang,kota,provinsi,tanggal_buka,manajer,kapasitas_kursi
+C01,Senja Menteng,Jakarta,DKI Jakarta,2024-01-01,Rina Kusuma,45
+C02,Senja Kemang,Jakarta,DKI Jakarta,2024-03-15,Bayu Pratama,38
+C03,Senja Dago,Bandung,Jawa Barat,2024-07-01,Dimas Anggara,52
+C04,Senja Darmo,Surabaya,Jawa Timur,2025-02-01,Ayu Lestari,40
+C05,Senja Seturan,Yogyakarta,DI Yogyakarta,2025-08-01,Galih Saputra,35
+C06,Senja Renon,Denpasar,Bali,2026-01-15,Kadek Ari,30
