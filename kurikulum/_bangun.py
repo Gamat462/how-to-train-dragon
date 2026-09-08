@@ -37,7 +37,7 @@ print("id tanpa slug yang ditemukan di isi:", tak_dikenal or "tidak ada")
 # --- data & skrip ---
 D = OUT / "data-dan-skrip"
 (D / "sql-mahir").mkdir()
-for f in ["gen_final.py", "besar.py", "uji_mutu.py"]:
+for f in ["gen_final.py", "besar.py", "uji_mutu.py", "senja.sql", "buat_senja_sql.py"]:
     shutil.copy(BASE / "sql" / f, D / "sql-mahir" / f)
 
 (D / "python-produksi").mkdir()
