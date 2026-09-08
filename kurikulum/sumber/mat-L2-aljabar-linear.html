@@ -1,0 +1,972 @@
+<title>Aljabar Linear Terapan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/f6784136-a13e-47e9-9eae-0264bd514182">← Kembali ke MAT L1: Probabilitas formal</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">MAT L2 · Aljabar Linear</span>
+  <button type="button" data-hari="1" aria-selected="true">A1</button>
+  <button type="button" data-hari="2" aria-selected="false">A2</button>
+  <button type="button" data-hari="3" aria-selected="false">A3</button>
+  <button type="button" data-hari="4" aria-selected="false">A4</button>
+  <button type="button" data-hari="5" aria-selected="false">A5</button>
+  <button type="button" data-hari="6" aria-selected="false">A6</button>
+  <button type="button" data-hari="7" aria-selected="false">A7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal Matematika S2 · L2 dari 4 · 7 hari</span>
+    <h1>Aljabar linear: yang membuat regresi berhenti jadi kotak hitam</h1>
+    <p class="lede">Target modul ini satu mata kuliah yang sangat spesifik: <strong>MAST90138 <em>Multivariate Statistics for Data Science</em></strong> di Melbourne — mata kuliah <em>wajib</em>, bukan pilihan. Isinya bertumpu penuh pada matriks kovarian dan eigendekomposisi.</p>
+    <p class="lede" style="margin-top:10px">Tujuh hari, dan tiap konsep dibuktikan dengan menjalankan kodenya. Puncaknya di Hari 6: kamu menghitung <strong>PCA dari nol</strong>, lalu mengadunya dengan <code>sklearn</code> — dan selisihnya <strong>4,44 × 10⁻¹⁶</strong>, yaitu batas presisi komputer.</p>
+    <p class="lede" style="margin-top:10px">Yang berubah setelah tujuh hari ini bukan cuma pengetahuan. Regresi berhenti menjadi fungsi yang kamu panggil, dan menjadi persamaan yang bisa kamu tulis sendiri — lalu kamu tahu kapan ia gagal, dan kenapa.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Vektor: dot product itu “harga × kuantitas”</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> melihat bahwa notasi aljabar linear yang menakutkan itu menuliskan hal yang sudah kamu hitung ribuan kali di Excel — lalu memakainya untuk seluruh tabel sekaligus.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Rumus pertama yang sudah kamu kuasai tanpa sadar</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-1-1"><label for="mat-L2-aljabar-linear-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Kalau kamu pernah menulis <code>=SUMPRODUCT(harga; qty)</code>, kamu sudah menghitung dot product. Itu saja isinya.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+harga = np.array([18000, 22000, 25000, 15000])
+qty   = np.array([  120,    85,    43,   210])
+
+print(&quot;dot product     =&quot;, harga @ qty)
+print(&quot;cek manual      =&quot;, sum(h*q for h, q in zip(harga, qty)))
+print(&quot;panjang vektor  =&quot;, np.linalg.norm(qty))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>dot product     = 8255000
+cek manual      = 8255000
+panjang vektor  = 259.95000...</code></pre></div></div>
+        <div class="catatan"><strong>Tanda <code>@</code> di Python adalah perkalian matriks.</strong> Sekali kamu terbiasa, <code>harga @ qty</code> jauh lebih mudah dibaca daripada perulangan — dan berjalan ratusan kali lebih cepat, seperti yang sudah kamu ukur di Python Produksi (270× di 800.000 baris).</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Norma dan sudut — kenapa ini nanti jadi “kemiripan”</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-1-2"><label for="mat-L2-aljabar-linear-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+a = np.array([3.0, 4.0])
+b = np.array([6.0, 8.0])       # arah sama, dua kali panjang
+c = np.array([-4.0, 3.0])      # tegak lurus a
+
+for nama, v in ((&quot;a&quot;, a), (&quot;b&quot;, b), (&quot;c&quot;, c)):
+    print(nama, &quot;panjang =&quot;, np.linalg.norm(v))
+
+def cos_sudut(u, v):
+    return (u @ v) / (np.linalg.norm(u) * np.linalg.norm(v))
+
+print(&quot;cos(a,b) =&quot;, cos_sudut(a, b))
+print(&quot;cos(a,c) =&quot;, cos_sudut(a, c))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>a panjang = 5.0
+b panjang = 10.0
+c panjang = 5.0
+cos(a,b) = 1.0
+cos(a,c) = 0.0</code></pre></div></div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          <strong>cos = 1</strong> berarti arahnya persis sama. <strong>cos = 0</strong> berarti tegak lurus — tidak berbagi informasi apa pun. Angka inilah yang dipakai sistem rekomendasi untuk bilang “pelanggan ini mirip pelanggan itu”, dan yang dipakai pencarian teks untuk bilang “dokumen ini mirip kuerimu”.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p>Besok: satu baris kode yang menggantikan seluruh tabel Excel berisi rumus.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>Matriks × vektor: seluruh tabel dalam satu operasi</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> berhenti melihat matriks sebagai “tabel angka” dan mulai melihatnya sebagai <em>mesin yang mengubah vektor</em> — cara pandang yang membuat sisa modul ini masuk akal.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Omzet tiga cabang, satu baris kode</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-2-1"><label for="mat-L2-aljabar-linear-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+harga = np.array([18000, 22000, 25000, 15000])
+Q = np.array([[120,  85, 43, 210],     # cabang Dago
+              [ 95, 110, 60, 180],     # cabang Riau
+              [140,  70, 30, 250]])    # cabang Buah Batu
+
+print(Q @ harga)
+print(&quot;bentuk:&quot;, Q.shape, &quot;@&quot;, harga.shape, &quot;-&gt;&quot;, (Q @ harga).shape)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>[8255000 8330000 8560000]
+bentuk: (3, 4) @ (4,) -&gt; (3,)</code></pre></div></div>
+        <div class="catatan"><strong>Aturan bentuk adalah satu-satunya hal yang wajib kamu hafal:</strong> (3×4) @ (4,) menghasilkan (3,). Angka di tengah harus cocok dan lenyap. Sembilan dari sepuluh error aljabar linear adalah bentuk yang tidak cocok, dan pesan error numpy menyebutkan angkanya — bacalah, jangan panik.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Matriks sebagai transformasi, bukan tabel</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-2-2"><label for="mat-L2-aljabar-linear-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Kalikan sebuah matriks dengan vektor dan lihat apa yang terjadi pada vektornya secara geometris.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+v = np.array([1.0, 1.0])
+R = np.array([[0.0, -1.0],
+              [1.0,  0.0]])          # putar 90 derajat
+S = np.array([[3.0, 0.0],
+              [0.0, 0.5]])           # regangkan x, gepengkan y
+
+print(&quot;v      =&quot;, v)
+print(&quot;R @ v  =&quot;, R @ v)
+print(&quot;S @ v  =&quot;, S @ v)
+print(&quot;R@R@v  =&quot;, R @ (R @ v))       # putar 180 derajat</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>v      = [1. 1.]
+R @ v  = [-1.  1.]
+S @ v  = [3.  0.5]
+R@R@v  = [-1. -1.]</code></pre></div></div>
+        <div class="hasil"><span class="tag">INI PERGESERAN CARA PANDANG</span>
+          <strong>Matriks tidak menyimpan data di sini — ia melakukan sesuatu.</strong> R memutar, S meregangkan. Ini cara pandang yang dipakai COMP90050 dan seluruh grafis komputer, dan ini yang membuat “eigenvector” di Hari 6 bisa dimengerti: eigenvector adalah arah yang <em>tidak berubah arahnya</em> ketika matriksnya bekerja.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Perkalian matriks × matriks</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-2-3"><label for="mat-L2-aljabar-linear-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+Q = np.array([[120, 85, 43, 210], [95, 110, 60, 180], [140, 70, 30, 250]])
+# dua skenario harga: normal dan promo
+H = np.array([[18000, 16000],
+              [22000, 19000],
+              [25000, 25000],
+              [15000, 12000]])
+hasil = Q @ H
+print(hasil)
+print(&quot;bentuk:&quot;, Q.shape, &quot;@&quot;, H.shape, &quot;-&gt;&quot;, hasil.shape)
+print(&quot;penurunan omzet per cabang:&quot;, hasil[:, 0] - hasil[:, 1])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>[[8255000 7130000]
+ [8330000 7270000]
+ [8560000 7320000]]
+bentuk: (3, 4) @ (4, 2) -&gt; (3, 2)
+penurunan omzet per cabang: [1125000 1060000 1240000]</code></pre></div></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ganti satu harga promo, jalankan lagi, dan pastikan kamu bisa menjelaskan dari mana tiap angka di hasil datang. Kalau belum bisa, hitung satu sel dengan tangan: baris 1 dari Q kali kolom 2 dari H.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p>Besok: menyelesaikan sistem persamaan — dan menemukan bahwa regresi ternyata cuma itu.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Sistem persamaan: menyelesaikan, bukan mencoba-coba</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menyelesaikan sistem persamaan linear dengan satu perintah, dan tahu kapan sistem itu <em>tidak punya</em> jawaban tunggal — pengetahuan yang langsung dipakai untuk mendeteksi multikolinearitas.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>np.linalg.solve, dan selalu periksa hasilnya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-3-1"><label for="mat-L2-aljabar-linear-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+A = np.array([[2., 1., 1.],
+              [1., 3., 2.],
+              [1., 0., 4.]])
+b = np.array([12., 17., 14.])
+
+x = np.linalg.solve(A, b)
+print(&quot;x        =&quot;, x)
+print(&quot;A @ x    =&quot;, A @ x, &quot; (harus = b)&quot;)
+print(&quot;selisih  =&quot;, np.abs(A @ x - b).max())
+print(&quot;det(A)   =&quot;, np.linalg.det(A))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>x        = [3.2632 2.7895 2.6842]
+A @ x    = [12. 17. 14.]  (harus = b)
+selisih  = 0.0
+det(A)   = 19.000000000000004</code></pre></div></div>
+        <div class="catatan"><strong>Kebiasaan yang harus kamu bawa dari kertas kerja:</strong> selalu hitung <code>A @ x</code> dan bandingkan dengan <code>b</code>. Itu tie-out, persis konsep yang sama. Jangan pernah memakai keluaran solver tanpa mencocokkannya kembali.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ketika determinan nol — dan kenapa ini penting untuk regresi</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-3-2"><label for="mat-L2-aljabar-linear-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+# kolom ketiga = kolom pertama + kolom kedua  (informasi berulang)
+B = np.array([[1., 2., 3.],
+              [4., 5., 9.],
+              [7., 8., 15.]])
+print(&quot;det(B)  =&quot;, np.linalg.det(B))
+print(&quot;rank(B) =&quot;, np.linalg.matrix_rank(B), &quot;dari 3 kolom&quot;)
+try:
+    np.linalg.solve(B, np.array([1., 2., 3.]))
+except np.linalg.LinAlgError as e:
+    print(&quot;solve GAGAL:&quot;, e)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>det(B)  = 0.0
+rank(B) = 2 dari 3 kolom
+solve GAGAL: Singular matrix</code></pre></div></div>
+        <div class="bahaya"><strong>Ini bukan kejadian langka — ini terjadi di data kerja setiap saat.</strong> Kamu memasukkan “omzet”, “PPN”, dan “omzet termasuk PPN” sebagai tiga kolom prediktor. Kolom ketiga adalah jumlah dua yang pertama. Matriksnya singular, koefisien regresimu jadi tidak stabil, dan tandanya bisa terbalik tanpa peringatan apa pun. Namanya <strong>multikolinearitas</strong>, dan <code>np.linalg.matrix_rank</code> mendeteksinya dalam satu baris.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p>Besok: regresi, diturunkan sendiri dari nol — bukan dipanggil dari pustaka.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>Regresi = sistem yang persamaannya terlalu banyak</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menurunkan sendiri rumus regresi linear berganda dari aljabar linear, lalu membuktikan hasilnya identik dengan pustaka — supaya regresi berhenti jadi kotak hitam.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Masalahnya: 200 persamaan, 3 hal yang dicari</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-4-1"><label for="mat-L2-aljabar-linear-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Di Hari 3, jumlah persamaan sama dengan jumlah yang dicari, jadi ada jawaban persis. Di data nyata kamu punya 200 baris dan cuma 3 koefisien. Tidak ada jawaban persis — yang ada jawaban <em>paling tidak meleset</em>.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(7)
+n  = 200
+x1 = np.random.uniform(0, 40, n)      # jumlah pengunjung
+x2 = np.random.uniform(0, 10, n)      # intensitas promo
+y  = 150_000 + 8_500*x1 + 22_000*x2 + np.random.normal(0, 30_000, n)
+
+X = np.column_stack([np.ones(n), x1, x2])     # kolom 1 = intersep
+print(&quot;bentuk X:&quot;, X.shape, &quot; bentuk y:&quot;, y.shape)</code></pre></div>
+        <div class="catatan">Kolom pertama berisi angka 1 semua. Itulah cara intersep masuk ke dalam matriks — sehingga β₀ diperlakukan sama seperti koefisien lain, bukan kasus khusus.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Persamaan normal, diketik apa adanya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-4-2"><label for="mat-L2-aljabar-linear-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Rumus yang muncul di setiap buku teks regresi adalah β = (XᵀX)⁻¹Xᵀy. Sekarang kamu bisa mengetiknya persis seperti itu.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>beta_normal = np.linalg.inv(X.T @ X) @ X.T @ y
+beta_lstsq  = np.linalg.lstsq(X, y, rcond=None)[0]
+
+print(&quot;persamaan normal :&quot;, beta_normal)
+print(&quot;np.linalg.lstsq  :&quot;, beta_lstsq)
+print(&quot;selisih maksimum :&quot;, np.abs(beta_normal - beta_lstsq).max())
+print(&quot;nilai sebenarnya : [150000. 8500. 22000.]&quot;)
+
+resid = y - X @ beta_lstsq
+print(&quot;R^2 =&quot;, 1 - resid.var()/y.var())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Cara</th>
+<th class="n">β₀ (intersep)</th>
+<th class="n">β₁ (pengunjung)</th>
+<th class="n">β₂ (promo)</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Persamaan normal (tanganmu)</td><td class="n">149.140,678</td><td class="n">8.488,7048</td><td class="n">21.433,1269</td></tr>
+              <tr><td><code>np.linalg.lstsq</code></td><td class="n">149.140,678</td><td class="n">8.488,7048</td><td class="n">21.433,1269</td></tr>
+              <tr><td><em>Nilai sebenarnya</em></td><td class="n"><em>150.000</em></td><td class="n"><em>8.500</em></td><td class="n"><em>22.000</em></td></tr>
+            </tbody>
+          </table>
+        </div>
+          <p style="margin-top:8px">Selisih maksimum antara kedua cara: <strong>6,1 × 10⁻¹⁰</strong> — nol untuk keperluan apa pun. R² = <strong>0,935492</strong>.</p></div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          <strong>Kamu baru saja menulis regresi berganda dari nol dalam satu baris.</strong> <code>sklearn.LinearRegression</code> tidak melakukan hal lain — ia cuma memakai versi yang lebih tahan galat numerik. Regresi bukan kotak hitam lagi; ia perkalian matriks.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa lstsq lebih baik daripada inv — dan kapan itu penting</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-4-3"><label for="mat-L2-aljabar-linear-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(7)
+n = 200
+x1 = np.random.uniform(0, 40, n)
+x3 = x1 + np.random.normal(0, 1e-6, n)      # nyaris duplikat x1
+y  = 3*x1 + np.random.normal(0, 1, n)
+Xb = np.column_stack([np.ones(n), x1, x3])
+
+print(&quot;rank    :&quot;, np.linalg.matrix_rank(Xb), &quot;dari 3&quot;)
+print(&quot;cond    :&quot;, np.linalg.cond(Xb))
+print(&quot;lstsq   :&quot;, np.linalg.lstsq(Xb, y, rcond=None)[0])
+print(&quot;inv     :&quot;, np.linalg.inv(Xb.T @ Xb) @ Xb.T @ y)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>rank    : 3 dari 3
+cond    : 4.6096e+07
+lstsq   : [    -0.1506 -77567.9892  77570.9885]
+inv     : [     1.191  -31175.8104  31178.7684]</code></pre></div></div>
+        <div class="bahaya"><strong>Perhatikan tiga hal sekaligus, dan ketiganya buruk.</strong><p style="margin-top:8px"><strong>Satu.</strong> Koefisiennya raksasa dan berlawanan tanda: −77.568 dan +77.571. Nilai sebenarnya yang saya tanam cuma <strong>3</strong>. Model ini bilang satu kolom menaikkan omzet 77 ribu per satuan dan kolom kembarannya menurunkannya 77 ribu — omong kosong yang menghasilkan prediksi bagus.</p><p style="margin-top:8px"><strong>Dua.</strong> <code>lstsq</code> dan <code>inv</code> memberi jawaban yang <em>berbeda jauh</em>: −77.568 lawan −31.176, beda 2,5 kali. Dua metode sah, data yang sama persis, hasil yang tidak sepakat. Itu sendiri sudah alarm.</p><p style="margin-top:8px"><strong>Tiga.</strong> <code>matrix_rank</code> tetap melaporkan <strong>3 dari 3</strong> — jadi pemeriksaan rank saja TIDAK menangkap ini. Yang menangkapnya adalah <code>cond</code>: <strong>4,6 × 10⁷</strong>.</p></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Aturan kerja: <strong>sebelum menafsirkan koefisien regresi mana pun, hitung <code>np.linalg.cond(X)</code>.</strong> Patokan kasar yang dipakai luas: di bawah 30 aman, 30–1.000 hati-hati, di atas 1.000 jangan tafsirkan koefisien satu per satu sebelum memeriksa korelasi antar prediktor. Contoh di atas 4,6 juta.</div>
+        <div class="catatan"><strong>Prediksinya sendiri tetap benar</strong> — model ini meramal y dengan baik. Yang rusak hanya <em>penjelasannya</em>. Ini pembedaan yang wajib kamu bawa ke klien: model boleh dipakai untuk meramal dan sekaligus tidak boleh dipakai untuk menjawab “faktor mana yang paling berpengaruh”.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai</h3>
+      <p>Regresi sudah berhenti jadi kotak hitam. Besok: matriks kovarian — pintu masuk ke MAST90138.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>Matriks kovarian: inti Multivariate Statistics</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> membaca matriks kovarian dan korelasi dengan benar, dan tahu kenapa penskalaan mengubah segalanya — syarat mutlak sebelum menyentuh PCA besok.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Hitung, lalu periksa dua sifat yang harus selalu benar</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-5-1"><label for="mat-L2-aljabar-linear-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(7)
+n  = 200
+x1 = np.random.uniform(0, 40, n)
+x2 = np.random.uniform(0, 10, n)
+y  = 150_000 + 8_500*x1 + 22_000*x2 + np.random.normal(0, 30_000, n)
+D  = np.column_stack([x1, x2, y])
+
+C = np.cov(D, rowvar=False)
+R = np.corrcoef(D, rowvar=False)
+np.set_printoptions(precision=4, suppress=True)
+print(&quot;kovarian:\n&quot;, C)
+print(&quot;korelasi:\n&quot;, R)
+print(&quot;simetris?&quot;, np.allclose(C, C.T))
+print(&quot;diagonal = varians?&quot;, np.allclose(np.diag(C), D.var(axis=0, ddof=1)))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>korelasi:
+ [[ 1.     -0.0089  0.8061]
+ [-0.0089  1.      0.5274]
+ [ 0.8061  0.5274  1.    ]]
+simetris? True
+diagonal = varians? True</code></pre></div></div>
+        <div class="hasil"><span class="tag">CARA MEMBACANYA</span>
+          <p><strong>Baca korelasinya:</strong> pengunjung↔omzet <strong>0,8061</strong>, promo↔omzet <strong>0,5274</strong>, pengunjung↔promo <strong>−0,0089</strong> (praktis nol — memang saya buat saling bebas).</p><p style="margin-top:6px">Dua sifat itu bukan hiasan: matriks kovarian <em>selalu</em> simetris dan diagonalnya <em>selalu</em> varians tiap kolom. Kalau punyamu tidak, kamu salah sumbu (<code>rowvar</code>).</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa kovarian mentah tidak bisa dibandingkan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-5-2"><label for="mat-L2-aljabar-linear-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Lihat kovarian mentahnya: pasangan pengunjung–omzet bernilai sekitar 1.094.700, pasangan pengunjung–promo bernilai −0,30. Bedanya jutaan kali. Apakah artinya yang pertama jauh lebih penting?</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;kovarian(x1, y) =&quot;, C[0, 2])
+print(&quot;kovarian(x1, x2)=&quot;, C[0, 1])
+print(&quot;korelasi(x1, y) =&quot;, R[0, 2])
+print(&quot;korelasi(x1, x2)=&quot;, R[0, 1])
+# ubah satuan y dari rupiah ke juta rupiah
+D2 = D.copy(); D2[:, 2] /= 1e6
+print(&quot;kovarian setelah ganti satuan:&quot;, np.cov(D2, rowvar=False)[0, 2])
+print(&quot;korelasi setelah ganti satuan:&quot;, np.corrcoef(D2, rowvar=False)[0, 2])</code></pre></div>
+        <div class="hasil"><span class="tag">INI JAWABANNYA</span>
+          <strong>Ganti satuan omzet dari rupiah ke juta rupiah, dan kovariannya turun sejuta kali — tapi korelasinya tidak bergerak sama sekali.</strong> Kovarian bergantung satuan; korelasi tidak. Itulah kenapa kamu membandingkan korelasi, bukan kovarian.</div>
+        <div class="bahaya"><strong>Dan ini yang akan menggigitmu besok di PCA.</strong> PCA bekerja pada kovarian. Kalau satu kolom bersatuan rupiah (jutaan) dan lainnya bersatuan “jumlah kunjungan” (puluhan), PCA akan melaporkan bahwa komponen pertama hampir seluruhnya adalah kolom rupiah — bukan karena ia lebih penting, tapi karena satuannya lebih besar. Selalu bakukan dulu.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 5 selesai</h3>
+      <p>Besok puncaknya: eigenvector dan PCA, dihitung tangan lalu diadu dengan sklearn.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 6</span>
+      <h2>Eigenvector & PCA, dari nol lalu diadu dengan sklearn</h2>
+      <span class="waktu">± 3,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menghitung PCA sendiri dari matriks kovarian, dan membuktikan hasilnya sama persis dengan <code>sklearn.decomposition.PCA</code> — inti MAST90138.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Eigenvector: arah yang tidak berubah arah</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-6-1"><label for="mat-L2-aljabar-linear-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Ingat Hari 2: matriks itu mesin yang mengubah vektor. <strong>Eigenvector adalah arah yang hanya diregangkan, tidak diputar</strong>, dan eigenvalue adalah faktor regangnya.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+A = np.array([[3., 1.],
+              [1., 3.]])
+w, V = np.linalg.eigh(A)
+print(&quot;eigenvalue :&quot;, w)
+print(&quot;eigenvector:\n&quot;, V)
+for i in range(2):
+    v = V[:, i]
+    print(f&quot;A @ v{i} =&quot;, A @ v, &quot;   {:.1f} * v{} =&quot;.format(w[i], i), w[i]*v)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>eigenvalue : [2. 4.]
+A @ v0 = [-1.4142  1.4142]    2.0 * v0 = [-1.4142  1.4142]
+A @ v1 = [2.8284 2.8284]      4.0 * v1 = [2.8284 2.8284]</code></pre></div>
+          <p style="margin-top:8px">Untuk kedua eigenvector, <code>A @ v</code> memberi hasil yang <strong>identik</strong> dengan <code>λ · v</code>. Itulah definisinya: Av = λv.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>PCA dari nol: enam baris</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-6-2"><label for="mat-L2-aljabar-linear-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(7)
+n  = 200
+x1 = np.random.uniform(0, 40, n); x2 = np.random.uniform(0, 10, n)
+y  = 150_000 + 8_500*x1 + 22_000*x2 + np.random.normal(0, 30_000, n)
+D  = np.column_stack([x1, x2, y])
+
+Z  = (D - D.mean(0)) / D.std(0, ddof=1)      # BAKUKAN dulu (pelajaran Hari 5)
+Cz = np.cov(Z, rowvar=False)
+w, V = np.linalg.eigh(Cz)
+urut = np.argsort(w)[::-1]; w, V = w[urut], V[:, urut]
+
+print(&quot;eigenvalue     :&quot;, w)
+print(&quot;proporsi ragam :&quot;, w / w.sum())
+print(&quot;kumulatif      :&quot;, np.cumsum(w / w.sum()))
+print(&quot;jumlah eigenvalue:&quot;, w.sum(), &quot;(harus = jumlah kolom = 3)&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Komponen</th>
+<th class="n">Eigenvalue</th>
+<th class="n">Proporsi ragam</th>
+<th class="n">Kumulatif</th>
+</tr></thead>
+            <tbody>
+              <tr><td>PC1</td><td class="n">1,9592</td><td class="n"><strong>65,31%</strong></td><td class="n">65,31%</td></tr>
+              <tr><td>PC2</td><td class="n">1,0082</td><td class="n">33,61%</td><td class="n"><strong>98,91%</strong></td></tr>
+              <tr><td>PC3</td><td class="n">0,0327</td><td class="n">1,09%</td><td class="n">100,00%</td></tr>
+            </tbody>
+          </table>
+        </div>
+          <p style="margin-top:8px">Jumlah eigenvalue = <strong>3,000000</strong>, sama dengan jumlah kolom. Itu selalu benar setelah pembakuan, dan itu pemeriksaan mandiri gratis.</p></div>
+        <div class="hasil"><span class="tag">CARA MEMBACANYA</span>
+          <strong>Dua komponen menjelaskan 98,91% keragaman tiga kolom.</strong> Artinya kolom ketiga hampir tidak membawa informasi baru — masuk akal, karena omzet memang dibangun dari dua kolom lainnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Adu dengan sklearn — harus sama</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-6-3"><label for="mat-L2-aljabar-linear-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>from sklearn.decomposition import PCA
+pca = PCA().fit(Z)
+print(&quot;sklearn :&quot;, pca.explained_variance_ratio_)
+print(&quot;tanganmu:&quot;, w / w.sum())
+print(&quot;selisih maksimum:&quot;, np.abs(pca.explained_variance_ratio_ - w/w.sum()).max())
+
+skor_tangan  = Z @ V[:, 0]
+skor_sklearn = pca.transform(Z)[:, 0]
+print(&quot;skor PC1 sama (tanda boleh beda)?&quot;,
+      np.allclose(np.abs(skor_tangan), np.abs(skor_sklearn)))
+print(&quot;muatan PC1:&quot;, V[:, 0])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>sklearn : [0.6531 0.3361 0.0109]
+tanganmu: [0.6531 0.3361 0.0109]
+selisih maksimum: 4.44e-16
+skor PC1 sama (tanda boleh beda)? True
+muatan PC1: [0.5919 0.3841 0.7086]</code></pre></div></div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          <strong>Selisih 4,44 × 10⁻¹⁶ adalah batas presisi komputer.</strong> Hitunganmu dan sklearn identik. Kamu sekarang tahu persis apa yang dilakukan PCA, bukan sekadar bisa memanggilnya.</div>
+        <div class="catatan"><strong>Soal tanda:</strong> eigenvector boleh dibalik tanpa mengubah arti — kalau v eigenvector, −v juga. Itu sebabnya kita membandingkan nilai mutlaknya. Jangan kaget kalau grafik PCA-mu terlihat tercermin dibanding punya orang lain; itu bukan kesalahan.</div>
+        <div class="bahaya"><strong>Jebakan menafsirkan muatan.</strong> Muatan PC1 = [0,5919, 0,3841, 0,7086] artinya PC1 adalah campuran ketiga kolom, bukan “kolom omzet”. PCA menghasilkan sumbu baru yang <em>tidak punya nama</em>. Kalau klienmu bertanya “PC1 itu apa?”, jawaban jujurnya adalah menyebutkan muatannya — bukan mengarang label.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 6 selesai</h3>
+      <p>Kamu baru menghitung PCA dari nol dan mencocokkannya sampai 16 angka di belakang koma. Itu isi minggu pertama MAST90138.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 7</span>
+      <h2>Ujian mandiri & jembatan ke optimisasi</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menguji apakah enam hari ini melekat, lalu menyiapkan satu pertanyaan yang jawabannya baru datang di MAT L3.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tujuh soal, tanpa membuka catatan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-7-1"><label for="mat-L2-aljabar-linear-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. A berbentuk (5,3), B berbentuk (3,7). Bentuk A@B? Bentuk B@A?
+2. Kenapa kolom berisi angka 1 semua ditambahkan ke matriks X pada regresi?
+3. det(M) = 0. Apa artinya untuk regresi yang memakai M?
+4. Tulis rumus koefisien regresi dengan notasi matriks.
+5. Jumlah seluruh eigenvalue dari matriks korelasi 5 kolom = ?
+6. PCA dijalankan tanpa membakukan kolom. Apa yang terjadi
+   kalau satu kolom bersatuan rupiah dan lainnya bersatuan &quot;jumlah&quot;?
+7. cos(u,v) = 0. Apa artinya secara praktis?</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis ketujuh jawabanmu dulu, baru buka kuncinya.</div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="isi">
+            <p><strong>1.</strong> A@B → <strong>(5,7)</strong>. B@A <strong>gagal</strong>: 7 ≠ 5. Perkalian matriks tidak komutatif.</p>
+            <p><strong>2.</strong> Supaya intersep β₀ ikut terhitung dalam satu operasi matriks yang sama, bukan sebagai kasus khusus.</p>
+            <p><strong>3.</strong> Matriksnya singular — ada kolom yang merupakan kombinasi kolom lain. Koefisien jadi tidak tunggal dan tidak stabil; tandanya bisa terbalik. Periksa dengan <code>matrix_rank</code> dan <code>cond</code>.</p>
+            <p><strong>4.</strong> β = (XᵀX)⁻¹Xᵀy — dan dalam praktik pakai <code>np.linalg.lstsq</code>, bukan <code>inv</code>.</p>
+            <p><strong>5.</strong> <strong>5.</strong> Jumlah eigenvalue matriks korelasi selalu sama dengan jumlah kolomnya, karena diagonalnya semua 1.</p>
+            <p><strong>6.</strong> Komponen pertama akan didominasi kolom bersatuan besar, semata karena satuannya — bukan karena informasinya. Hasilnya menyesatkan.</p>
+            <p><strong>7.</strong> Kedua vektor tegak lurus: tidak berbagi informasi. Pada kolom data yang sudah dipusatkan, ini berarti korelasinya nol.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Yang tertutup, dan yang belum</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-7-2"><label for="mat-L2-aljabar-linear-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Sebelum</th>
+<th>Sesudah</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Pemindaian 49 modul: “aljabar linear / matriks — <strong>0 modul</strong>”</td><td>6 hari, cocok dengan sklearn sampai 4,44 × 10⁻¹⁶</td></tr>
+              <tr><td>Regresi = fungsi yang dipanggil</td><td>Regresi = (XᵀX)⁻¹Xᵀy yang bisa kamu tulis sendiri</td></tr>
+              <tr><td>PCA = tombol di sklearn</td><td>PCA = eigendekomposisi matriks kovarian yang dibakukan</td></tr>
+              <tr><td>Multikolinearitas = istilah</td><td>Dideteksi dengan <code>matrix_rank</code> dan <code>cond</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Yang belum ditutup:</strong> dekomposisi SVD, ruang null, dan basis ortonormal secara formal. Ketiganya muncul di MAST90138 minggu-minggu berikutnya. Modul ini membawamu sampai pintunya, bukan sampai ujung ruangan — dan aku lebih suka mengatakannya daripada membiarkanmu terkejut di kelas.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Pertanyaan yang sengaja kutinggalkan menggantung</h3>
+        <span class="cek"><input type="checkbox" id="mat-L2-aljabar-linear-7-3"><label for="mat-L2-aljabar-linear-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Di Hari 4 kamu menyelesaikan regresi dengan rumus tertutup: β = (XᵀX)⁻¹Xᵀy. Satu operasi, jawaban langsung.</p>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Pertanyaannya: <strong>kalau ada rumus tertutup yang langsung memberi jawaban, kenapa seluruh machine learning modern memakai gradient descent yang mengulang ribuan kali?</strong> Tulis dugaanmu sekarang, di catatan yang sama. Jawabannya ada di MAT L3 Hari 5, dan kamu akan mengukurnya sendiri.</div>
+        <div class="catatan"><strong>Bocoran secukupnya supaya kamu punya arah:</strong> <code>inv(X.T @ X)</code> mengharuskan membalik matriks berukuran (jumlah fitur × jumlah fitur). Coba bayangkan biayanya kalau fiturmu 100.000 — dan kalau matriksnya tidak muat di memori sama sekali.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>MAT L2 selesai</h3>
+      <p>Dua dari empat lubang tertutup. Berikutnya optimisasi — bagian yang membuat DSA5103 di NUS menenggelamkan mahasiswa yang datang tanpa bekal ini.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/6dc7de48-3ed0-4126-8455-a2c82e7bad4c">Lanjut ke MAT L3: Optimisasi numerik →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Seluruh angka dihasilkan dengan menjalankan kodenya di Python 3.11, numpy 2.4.6, scikit-learn 1.9.0, dengan <code>np.random.seed(7)</code>.</p>
+    <p style="margin-top:10px">Nama dan status wajib mata kuliah merujuk University of Melbourne Handbook dan halaman NUS Department of Mathematics per September 2026.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "mat-L2-aljabar-linear";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

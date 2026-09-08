@@ -1,0 +1,1046 @@
+<title>Minggu Kedua Belas Product Analytics</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .funnel{ margin:14px 0; font-size:0.85rem; }
+  .funnel .row{ display:grid; grid-template-columns:130px 1fr 60px; align-items:center; gap:10px; margin-bottom:6px; }
+  .funnel .lab{ text-align:right; color:var(--ink-soft); font-size:0.8rem; }
+  .funnel .bar-in{ height:22px; background:var(--teal); border-radius:5px; }
+  .funnel .drop{ font-family:"IBM Plex Mono",monospace; font-size:0.75rem; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760">← Kembali ke Bekal Kirim Hasil</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 12</span>
+  <button type="button" data-hari="78" aria-selected="true">Hari 78</button>
+  <button type="button" data-hari="79" aria-selected="false">Hari 79</button>
+  <button type="button" data-hari="80" aria-selected="false">Hari 80</button>
+  <button type="button" data-hari="81" aria-selected="false">Hari 81</button>
+  <button type="button" data-hari="82" aria-selected="false">Hari 82</button>
+  <button type="button" data-hari="83" aria-selected="false">Hari 83</button>
+  <button type="button" data-hari="84" aria-selected="false">Hari 84</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Penuntun langkah demi langkah · Lanjutan dari Minggu Kesebelas</span>
+    <h1>Minggu Kedua Belas: Product &amp; Business Analytics</h1>
+    <p class="lede">Sampai sekarang kamu menjawab pertanyaan yang sudah ditanyakan. Minggu ini kamu belajar menemukan pertanyaan yang belum terpikirkan — lewat analisis kohor (alat paling tajam yang dipunyai analis produk), LTV/CAC, dan peramalan yang jujur soal ketidakpastiannya. Data: pelanggan aplikasi keanggotaan, dengan dua tipe pelanggan tersembunyi yang harus kamu <em>temukan sendiri</em>.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 78 ================= -->
+  <section class="day aktif" data-hari="78">
+    <div class="day-head">
+      <span class="n mono">HARI 78</span>
+      <h2>Metrik yang menipu, dan funnel yang jujur</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membedakan metrik yang menuntun tindakan dari yang cuma enak dilihat, dan membangun funnel yang menunjukkan di mana orang berhenti.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Muat data pelanggan keanggotaan</h3>
+        <span class="cek"><input type="checkbox" id="h78s1"><label for="h78s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Colab baru. Tiap baris = satu pelanggan yang bertransaksi di satu bulan. <code>kohor</code> = bulan pertama dia mendaftar, <code>bulan_ke</code> = jarak bulan sejak pendaftaran.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(11)
+BULAN = pd.period_range("2025-07", "2025-12", freq="M")
+N_BARU = [500, 620, 700, 850, 900, 1000]
+
+baris = []; uid = 0
+for i, bln in enumerate(BULAN):
+    for _ in range(N_BARU[i]):
+        uid += 1
+        setia = rng.random() < (0.22 + 0.015*i)     # dua tipe pelanggan
+        p_tetap = 0.90 if setia else 0.42
+        baris.append((uid, bln, 0, rng.normal(78000, 22000)))
+        aktif = True
+        for m in range(1, len(BULAN)-i):
+            if not aktif or rng.random() > p_tetap:
+                aktif = False
+                continue
+            baris.append((uid, bln, m, rng.normal(78000 + 3500*m, 22000)))
+
+df = pd.DataFrame(baris, columns=["user_id", "kohor", "bulan_ke", "nilai"])
+df["nilai"] = df["nilai"].clip(15000, None).round(-2)
+
+print(len(df), "baris,", df.user_id.nunique(), "pelanggan")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>8093 baris, 4570 pelanggan</code></p></div>
+        <div class="catatan">
+          <strong>Perhatikan cara data ini dibuat:</strong> ada dua tipe pelanggan — yang setia (90% bertahan tiap bulan) dan yang coba-coba (42%). <strong>Kamu tidak akan tahu tipe siapa dari data yang kamu terima</strong> — kamu harus menemukannya. Itulah inti pekerjaan minggu ini, dan itu juga bagaimana kenyataan bekerja: rata-rata selalu menyembunyikan dua populasi yang berbeda.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Vanity metric vs metrik yang bisa ditindaklanjuti</h3>
+        <span class="cek"><input type="checkbox" id="h78s2"><label for="h78s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini pembeda pertama antara analis dan pembuat laporan:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Metrik menipu</th><th>Kenapa menipu</th><th>Gantinya</th></tr></thead>
+            <tbody>
+              <tr><td>Total pengguna terdaftar</td><td>Hanya bisa naik, tidak pernah beri kabar buruk</td><td>Pengguna aktif bulanan + retensi per kohor</td></tr>
+              <tr><td>Total unduhan aplikasi</td><td>Mengukur iklan, bukan produk</td><td>Persentase yang menyelesaikan transaksi pertama</td></tr>
+              <tr><td>Rata-rata semua pelanggan</td><td>Mencampur dua populasi berbeda jadi angka yang tidak mewakili siapa pun</td><td>Median, dan pecahan per segmen</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Ujian sederhana:</strong> kalau angka ini turun besok, apakah kamu tahu harus berbuat apa? Kalau tidak, itu bukan metrik yang berguna — itu hiasan dashboard.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Funnel: menemukan di mana orang menyerah</h3>
+        <span class="cek"><input type="checkbox" id="h78s3"><label for="h78s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Funnel mengukur berapa banyak orang lolos tiap tahap. Yang penting bukan angka tiap tahap, tapi <strong>persentase yang gugur di antara dua tahap</strong>:</p>
+        <div class="funnel">
+          <div class="row"><span class="lab">Buka aplikasi</span><span class="bar-in" style="width:100%"></span><span class="drop">10.000</span></div>
+          <div class="row"><span class="lab">Lihat menu</span><span class="bar-in" style="width:72%"></span><span class="drop">−28%</span></div>
+          <div class="row"><span class="lab">Tambah ke keranjang</span><span class="bar-in" style="width:41%"></span><span class="drop">−43%</span></div>
+          <div class="row"><span class="lab">Mulai checkout</span><span class="bar-in" style="width:33%"></span><span class="drop">−20%</span></div>
+          <div class="row"><span class="lab">Bayar berhasil</span><span class="bar-in" style="width:12%"></span><span class="drop">−64%</span></div>
+        </div>
+        <p>Dari gambar ini, satu tahap langsung menonjol: <strong>64% orang yang sudah membuka halaman pembayaran gagal menyelesaikannya.</strong> Itu bukan masalah pemasaran; itu masalah teknis atau kepercayaan. Perbaikan di sana bernilai jauh lebih besar daripada menambah iklan di atas funnel.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Jebakan funnel di SQL</h3>
+        <span class="cek"><input type="checkbox" id="h78s4"><label for="h78s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>WITH tahap AS (
+  SELECT
+    COUNT(DISTINCT CASE WHEN peristiwa = 'buka_app'    THEN user_id END) AS t1_buka,
+    COUNT(DISTINCT CASE WHEN peristiwa = 'bayar_ok'    THEN user_id END) AS t5_bayar
+  FROM peristiwa
+  WHERE tanggal >= '2026-01-01'
+)
+SELECT t1_buka, t5_bayar,
+  ROUND(100.0 * t5_bayar / t1_buka, 1) AS konversi_total
+FROM tahap;</code></pre></div>
+        <div class="bahaya">
+          <strong>Jebakan funnel yang paling sering terjadi:</strong> query di atas menghitung orang yang melakukan tiap peristiwa, <em>tanpa memastikan urutannya</em>. Seseorang yang membuka checkout hari ini tapi menambah keranjang minggu lalu tetap terhitung di kedua tahap. Funnel yang benar harus mengikat peristiwa ke satu sesi dan memaksa urutan waktu. Kalau pewawancara menanyakan "apa yang salah dengan funnel ini", itulah jawabannya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h78s5"><label for="h78s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hitung jumlah pelanggan aktif per bulan kalender dari <code>df</code> (bukan per kohor). Apakah tumbuh?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>df["bulan_kalender"] = df.kohor + df.bulan_ke      # Period + int = Period
+aktif = df.groupby("bulan_kalender").user_id.nunique()
+print(aktif)</code></pre></div>
+            <p>Naik terus, karena tiap bulan ada kohor baru yang lebih besar <em>ditambah</em> sisa kohor lama. Ini contoh angka yang terlihat sehat padahal belum tentu — pertumbuhannya bisa saja hanya berasal dari akuisisi, sementara retensinya memburuk. Besok kita bongkar.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 78 selesai. Berhenti di sini.</h3>
+      <p><strong>Tambahkan ke catatan:</strong> uji metrik: "kalau turun besok, tahu harus berbuat apa?" Funnel: fokus ke persentase gugur antar tahap, wajib ikat urutan waktu.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 79 ================= -->
+  <section class="day" data-hari="79">
+    <div class="day-head">
+      <span class="n mono">HARI 79</span>
+      <h2>Analisis kohor: alat paling tajam yang kamu punya</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat dan membaca matriks retensi kohor — menjawab pertanyaan yang tidak bisa dijawab metrik lain: apakah produknya membaik dari waktu ke waktu?</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa total aktif bisa menipu</h3>
+        <span class="cek"><input type="checkbox" id="h79s1"><label for="h79s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Total pengguna aktif naik tiap bulan (Hari 78). Kedengarannya bagus. Tapi itu bisa terjadi <em>sambil</em> produkmu memburuk, asalkan kamu terus membeli pelanggan baru lebih cepat daripada kehilangan yang lama. Analisis kohor membongkar ilusi itu dengan mengikuti tiap kelompok pendaftar secara terpisah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Membuat matriks retensi</h3>
+        <span class="cek"><input type="checkbox" id="h79s2"><label for="h79s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code># ukuran tiap kohor di bulan ke-0
+ukuran = df[df.bulan_ke == 0].groupby("kohor").user_id.nunique()
+
+# jumlah yang masih aktif di tiap bulan_ke
+aktif = df.groupby(["kohor", "bulan_ke"]).user_id.nunique().unstack()
+
+# ubah jadi persentase
+retensi = (aktif.div(ukuran, axis=0) * 100).round(1)
+retensi</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">YANG HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Kohor</th><th class="n">Ukuran</th><th class="n">Bln 0</th><th class="n">Bln 1</th><th class="n">Bln 2</th><th class="n">Bln 3</th><th class="n">Bln 4</th><th class="n">Bln 5</th></tr></thead>
+              <tbody>
+                <tr><td>Jul 2025</td><td class="n">500</td><td class="n">100</td><td class="n">52,4</td><td class="n">31,2</td><td class="n">20,0</td><td class="n">15,4</td><td class="n">11,8</td></tr>
+                <tr><td>Agu 2025</td><td class="n">620</td><td class="n">100</td><td class="n">54,2</td><td class="n">33,7</td><td class="n">23,1</td><td class="n">16,5</td><td class="idx">—</td></tr>
+                <tr><td>Sep 2025</td><td class="n">700</td><td class="n">100</td><td class="n">56,7</td><td class="n">35,7</td><td class="n">26,4</td><td class="idx">—</td><td class="idx">—</td></tr>
+                <tr><td>Okt 2025</td><td class="n">850</td><td class="n">100</td><td class="n">55,3</td><td class="n">33,8</td><td class="idx">—</td><td class="idx">—</td><td class="idx">—</td></tr>
+                <tr><td>Nov 2025</td><td class="n">900</td><td class="n">100</td><td class="n">54,4</td><td class="idx">—</td><td class="idx">—</td><td class="idx">—</td><td class="idx">—</td></tr>
+                <tr><td>Des 2025</td><td class="n">1.000</td><td class="n">100</td><td class="idx">—</td><td class="idx">—</td><td class="idx">—</td><td class="idx">—</td><td class="idx">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cara membaca matriks</h3>
+        <span class="cek"><input type="checkbox" id="h79s3"><label for="h79s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><strong>Baca ke kanan</strong> untuk melihat nasib satu kelompok seiring waktu. <strong>Baca ke bawah</strong> untuk membandingkan kelompok pada usia yang sama — dan di situlah jawaban "apakah kami membaik?" berada.</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Kurvanya melandai.</strong> Penurunan terbesar di bulan pertama (100→~55), lalu makin melambat. Antara bulan 4-5 hanya turun 15,4→11,8. Bentuk yang sehat: ada inti pelanggan yang benar-benar bertahan.</li>
+          <li><strong>Kolom bulan 3 membaik:</strong> Juli 20,0%→Agustus 23,1%→September 26,4%. Kohor lebih baru bertahan lebih baik pada usia yang sama.</li>
+        </ul>
+        <div class="catatan">
+          <strong>Bentuk kurva retensi adalah pertanyaan hidup-mati sebuah produk.</strong> Kalau kurvamu melandai di angka berapa pun di atas nol, kamu punya inti pengguna yang benar-benar butuh produkmu. Kalau kurvanya terus turun sampai nol, tidak ada jumlah iklan yang bisa menyelamatkan — kamu hanya menuang air ke ember bocor. Kalimat itu, dengan grafiknya, adalah salah satu jawaban wawancara paling kuat yang bisa kamu siapkan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Membuat peta panas retensi</h3>
+        <span class="cek"><input type="checkbox" id="h79s4"><label for="h79s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig, ax = plt.subplots(figsize=(9, 4.5))
+sns.heatmap(retensi, annot=True, fmt=".1f", cmap="YlGnBu",
+            vmin=0, vmax=60, cbar_kws={"label": "% bertahan"}, ax=ax)
+ax.set_title("Kohor yang lebih baru bertahan lebih baik di bulan ke-3", loc="left")
+plt.show()</code></pre>
+        </div>
+        <div class="catatan">
+          <strong><code>vmin=0, vmax=60</code> penting:</strong> tanpa batas tetap, skala warnanya berubah tiap kali datanya diperbarui, dan perbandingan antar waktu jadi menyesatkan. Bulan ke-0 sengaja tidak masuk rentang warna karena selalu 100 dan akan mendominasi seluruh skala.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h79s5"><label for="h79s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hitung retensi rata-rata tiap <code>bulan_ke</code> (rata-rata tiap kolom, <code>retensi.mean()</code>). Di bulan ke berapa penurunannya mulai jelas melandai?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi"><p><code>retensi.mean()</code> → 100 · 54,6 · 33,6 · 23,2 · 15,9 · 11,8. Penurunan antar bulan: −45,4 · −21,0 · −10,4 · −7,2 · −4,2 — mulai jelas melandai setelah <strong>bulan ke-3</strong>.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 79 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> matriks retensi = <code>aktif.div(ukuran, axis=0)*100</code>. Baca ke kanan = nasib satu kohor. Baca ke bawah = apakah produk membaik. Kurva melandai (bukan ke nol) = tanda bisnis sehat.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 80 ================= -->
+  <section class="day" data-hari="80">
+    <div class="day-head">
+      <span class="n mono">HARI 80</span>
+      <h2>Rata-rata menyembunyikan segalanya: segmentasi</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menemukan populasi tersembunyi di balik satu angka rata-rata — kemampuan yang mengubah pertanyaan bisnis jadi jauh lebih murah dijawab.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Retensi rata-rata tidak menggambarkan siapa pun</h3>
+        <span class="cek"><input type="checkbox" id="h80s1"><label for="h80s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Retensi rata-rata bulan 3 adalah 23,2% (Hari 79). Ingat cara data ini dibuat (Hari 78): ada kolom tersembunyi <code>setia</code> yang menentukan <code>p_tetap</code> (0,90 vs 0,42) — tapi kolom itu <strong>tidak ada</strong> di <code>df</code> yang kamu terima. Di dunia nyata, label populasi tersembunyi ini nyaris tidak pernah tersedia langsung.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Yang terjadi kalau dipecah per segmen</h3>
+        <span class="cek"><input type="checkbox" id="h80s2"><label for="h80s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Segmen</th><th class="n">Retensi bulan 3</th><th>Artinya</th></tr></thead>
+            <tbody>
+              <tr><td>Semua pelanggan</td><td class="n">23,2%</td><td>Angka yang biasanya dilaporkan</td></tr>
+              <tr><td>Pelanggan setia</td><td class="n">73,6%</td><td>Produk sangat cocok untuk mereka</td></tr>
+              <tr><td>Pelanggan coba-coba</td><td class="n">8,0%</td><td>Datang sekali, pergi</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Angka 23,2% tidak menggambarkan siapa pun. Tidak ada pelanggan yang "23% bertahan" — yang ada dua kelompok yang sangat berbeda. <strong>Keputusan bisnisnya jadi berbeda:</strong> percaya rata-rata → coba perbaiki produk untuk semua orang. Lihat pecahannya → pertanyaannya berubah jadi "apa ciri pelanggan setia, dan bagaimana mendapat lebih banyak orang seperti itu?" — pertanyaan yang jauh lebih murah dijawab.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cara menemukan segmen tanpa label</h3>
+        <span class="cek"><input type="checkbox" id="h80s3"><label for="h80s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan">
+          <strong>Di dunia nyata, label segmen ini tidak ada.</strong> Cara menemukannya: bandingkan <strong>perilaku bulan pertama</strong> antara pelanggan yang bertahan 3+ bulan dan yang tidak. Berapa transaksi di minggu pertama? Produk apa yang dibeli pertama kali? Lewat kanal mana mereka datang? Perbedaan yang paling tajam biasanya menunjuk ke definisi segmen yang berguna. Ini analisis yang sangat disukai pewawancara karena menunjukkan kamu berpikir soal sebab, bukan cuma laporan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h80s4"><label for="h80s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Bandingkan <code>nilai</code> transaksi rata-rata di <code>bulan_ke==0</code> antara pelanggan yang masih muncul di <code>bulan_ke==3</code> vs yang tidak. Apakah pelanggan yang bertahan sudah terlihat beda sejak transaksi pertamanya?</p>
+        <details>
+          <summary>Buka petunjuk</summary>
+          <div class="isi"><div class="kode"><pre><code>bertahan_ids = df[df.bulan_ke == 3].user_id.unique()
+bln0 = df[df.bulan_ke == 0]
+print("bertahan:", bln0[bln0.user_id.isin(bertahan_ids)].nilai.mean())
+print("tidak bertahan:", bln0[~bln0.user_id.isin(bertahan_ids)].nilai.mean())</code></pre></div>
+          <p>Karena <code>nilai</code> di data ini tidak dirancang berbeda antar tipe pelanggan (cuma probabilitas bertahannya yang beda), kamu mungkin tidak melihat perbedaan besar di sini — pelajaran pentingnya: tidak semua sinyal segmentasi ada di kolom nilai transaksi, kadang ada di kolom lain (kanal akuisisi, produk pertama, dll) yang tidak ada di dataset sederhana ini.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 80 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> rata-rata sering menyembunyikan 2+ populasi berbeda. Cari segmen dengan membandingkan perilaku bulan pertama antara yang bertahan dan yang tidak — bukan menunggu label yang biasanya tidak ada.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 81 ================= -->
+  <section class="day" data-hari="81">
+    <div class="day-head">
+      <span class="n mono">HARI 81</span>
+      <h2>LTV: nilai seumur hidup pelanggan, dibangun dari retensi</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung LTV langkah demi langkah dari matriks retensi — dan menjelaskan kenapa LTV kotor bukan LTV yang sebenarnya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>LTV bukan angka ajaib</h3>
+        <span class="cek"><input type="checkbox" id="h81s1"><label for="h81s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>LTV hanyalah penjumlahan: untuk tiap bulan, berapa peluang pelanggan masih ada, dikali berapa yang dia belanjakan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Menghitung LTV</h3>
+        <span class="cek"><input type="checkbox" id="h81s2"><label for="h81s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>r    = retensi.mean()                        # retensi rata-rata per bulan_ke
+arpu = df.groupby("bulan_ke").nilai.mean()   # belanja rata-rata per bulan_ke
+
+kum = 0
+for m in range(len(r)):
+    kontribusi = (r[m] / 100) * arpu[m]
+    kum += kontribusi
+    print(f"bulan {m}: retensi {r[m]:5.1f}%  ARPU {arpu[m]:8,.0f}"
+          f"  kontribusi {kontribusi:8,.0f}  kumulatif {kum:9,.0f}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>bulan 0: retensi 100.0%  ARPU   78,306  kontribusi   78,306  kumulatif    78,306</code><br>
+          <code>bulan 1: retensi  54.6%  ARPU   81,254  kontribusi   44,364  kumulatif   122,671</code><br>
+          <code>bulan 2: retensi  33.6%  ARPU   84,732  kontribusi   28,470  kumulatif   151,141</code><br>
+          <code>bulan 3: retensi  23.2%  ARPU   88,690  kontribusi   20,547  kumulatif   171,687</code><br>
+          <code>bulan 4: retensi  15.9%  ARPU   93,528  kontribusi   14,918  kumulatif   186,605</code><br>
+          <code>bulan 5: retensi  11.8%  ARPU   97,337  kontribusi   11,486  kumulatif   198,091</code></p>
+        </div>
+        <p>Dua hal menarik. Pertama, <strong>ARPU naik seiring usia pelanggan</strong> (78rb→97rb): yang bertahan justru berbelanja lebih banyak. Kedua, <strong>lebih dari separuh LTV datang dari bulan 0 dan 1 saja</strong> — perbaikan di pengalaman awal bernilai jauh lebih besar daripada di bulan-bulan berikutnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>LTV kotor bukan LTV</h3>
+        <span class="cek"><input type="checkbox" id="h81s3"><label for="h81s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">
+          <strong>Angka Rp 198.091 di atas adalah omzet, bukan keuntungan.</strong> Kalau margin kotor kedai 55%, LTV yang sebenarnya adalah <strong>Rp 108.950</strong> (198.091 × 0,55). Melaporkan LTV kotor lalu membandingkannya dengan biaya akuisisi adalah kesalahan yang membuat banyak bisnis membakar uang selama bertahun-tahun sambil merasa untung.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h81s4"><label for="h81s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hitung LTV memakai <em>hanya</em> kohor Juli dan Agustus (yang paling matang datanya, sampai bulan 4-5). Apakah hasilnya lebih tinggi atau lebih rendah dari rata-rata semua kohor?</p>
+        <details>
+          <summary>Buka petunjuk</summary>
+          <div class="isi"><p>Filter <code>retensi.loc[["2025-07", "2025-08"]].mean()</code> sebelum menghitung LTV. Karena tren menunjukkan kohor <em>lebih baru</em> bertahan lebih baik (Hari 79), kohor Juli-Agustus yang lebih tua kemungkinan memberi LTV yang sedikit lebih <strong>rendah</strong> dari rata-rata gabungan — pelajaran penting soal kohor mana yang representatif untuk masa depan.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 81 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> LTV = Σ(retensi bulan m × ARPU bulan m). LTV kotor × margin = LTV bersih (yang sebenarnya harus dibandingkan dengan CAC).</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 82 ================= -->
+  <section class="day" data-hari="82">
+    <div class="day-head">
+      <span class="n mono">HARI 82</span>
+      <h2>LTV/CAC: berapa boleh belanja iklan?</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjawab pertanyaan paling praktis di bisnis mana pun — berapa maksimal yang boleh dibayar untuk satu pelanggan baru, dan berapa lama modalnya kembali.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>LTV/CAC: rasio yang menentukan</h3>
+        <span class="cek"><input type="checkbox" id="h82s1"><label for="h82s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>CAC (biaya akuisisi pelanggan) = total belanja pemasaran ÷ jumlah pelanggan baru. Dengan LTV bersih Rp 108.950 (Hari 81):</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th class="n">CAC</th><th class="n">LTV/CAC</th><th>Penilaian</th></tr></thead>
+            <tbody>
+              <tr><td class="n">Rp 30.000</td><td class="n">3,63</td><td><strong style="color:var(--teal)">Sehat</strong> — tambah belanja iklan</td></tr>
+              <tr><td class="n">Rp 50.000</td><td class="n">2,18</td><td><strong style="color:var(--gold)">Waspada</strong> — bisa jalan, tapi tidak ada ruang salah</td></tr>
+              <tr><td class="n">Rp 80.000</td><td class="n">1,36</td><td><strong style="color:var(--alert)">Bahaya</strong> — perbaiki retensi dulu, jangan tambah iklan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Patokan industri: <strong>LTV/CAC ≥ 3</strong> dianggap sehat. Di bawah 1 berarti tiap pelanggan baru membuat perusahaan rugi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Yang sering dilupakan: waktu balik modal</h3>
+        <span class="cek"><input type="checkbox" id="h82s2"><label for="h82s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>LTV/CAC 3 terdengar bagus, tapi kalau butuh 14 bulan untuk menutup CAC, perusahaan harus menalangi uang itu dulu. Margin kumulatif (55%) dari data Hari 81: bulan 0 = Rp 43.068, bulan 1 = Rp 67.469, bulan 2 = Rp 83.128, bulan 3 = Rp 94.428.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th class="n">CAC</th><th>Balik modal di bulan</th></tr></thead>
+            <tbody>
+              <tr><td class="n">Rp 30.000</td><td>0 (langsung)</td></tr>
+              <tr><td class="n">Rp 50.000</td><td>1</td></tr>
+              <tr><td class="n">Rp 80.000</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Ketiganya tergolong cepat</strong> — bisnis dengan payback di bawah 12 bulan umumnya dianggap nyaman. Menyebutkan angka payback ini di wawancara, di samping LTV/CAC, menunjukkan kamu berpikir seperti orang keuangan, bukan hanya seperti analis.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kehati-hatian yang wajib disebutkan</h3>
+        <span class="cek"><input type="checkbox" id="h82s3"><label for="h82s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Data kita cuma 6 bulan.</strong> LTV Rp 198 ribu adalah nilai 6 bulan, bukan seumur hidup. Kurvanya masih melandai di 11,8% — nilai sebenarnya lebih tinggi, tapi belum bisa dibuktikan.</li>
+          <li><strong>Kohor baru belum matang.</strong> Kohor Desember baru punya satu titik data.</li>
+          <li><strong>CAC harus mencakup semuanya:</strong> belanja iklan, gaji tim pemasaran, diskon perkenalan — bukan cuma biaya iklan saja.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h82s4"><label for="h82s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tulis rekomendasi satu paragraf untuk pemilik kedai yang mempertimbangkan belanja iklan Rp 50 juta untuk 1.000 pelanggan baru. Sertakan angkanya.</p>
+        <details>
+          <summary>Buka contoh jawaban</summary>
+          <div class="isi"><p>"Belanja Rp 50 juta untuk 1.000 pelanggan berarti CAC Rp 50.000 per pelanggan. Dari data 6 bulan terakhir, tiap pelanggan menghasilkan Rp 198.000 omzet, atau sekitar Rp 109.000 margin — rasio 2,2× biaya akuisisi, modal kembali dalam sebulan. Layak dijalankan, tapi belum lapang (patokan sehat 3×). Saya sarankan jalankan setengahnya dulu (Rp 25 juta) sambil memantau apakah pelanggan dari kanal iklan bertahan sebaik pelanggan yang datang sendiri."</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 82 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> LTV/CAC ≥3 = sehat, &lt;1 = rugi tiap pelanggan baru. Payback period = kapan margin kumulatif menutup CAC — sama pentingnya dengan rasio LTV/CAC.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 83 ================= -->
+  <section class="day" data-hari="83">
+    <div class="day-head">
+      <span class="n mono">HARI 83</span>
+      <h2>Ulangan dari ingatan — Kohor, LTV, CAC</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Tutup catatan. Kerjakan dari ingatan, baru buka kunci jawaban.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tujuh soal</h3>
+        <span class="cek"><input type="checkbox" id="h83s1"><label for="h83s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Kenapa total pengguna aktif yang terus naik bisa menyembunyikan produk yang sebenarnya memburuk?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Di matriks retensi, apa yang kamu baca dengan bergerak ke KANAN vs ke BAWAH?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Bentuk kurva retensi seperti apa yang menandakan bisnis sehat?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Kalau tidak ada label segmen pelanggan, bagaimana cara menemukannya dari data?</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Kenapa LTV kotor tidak boleh langsung dibandingkan dengan CAC?</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> Apa patokan LTV/CAC yang dianggap sehat?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> (Ulangan Minggu 11) Kenapa <code>matplotlib.use("Agg")</code> wajib di skrip server?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Karena pelanggan baru yang lebih banyak bisa menutupi hilangnya pelanggan lama — total tetap naik walau retensi tiap kohor memburuk.</p>
+            <p><strong>2.</strong> Ke kanan = nasib satu kohor seiring waktu. Ke bawah = membandingkan kohor pada usia yang sama (apakah membaik).</p>
+            <p><strong>3.</strong> Melandai di angka di atas nol (ada inti pelanggan yang bertahan) — bukan terus turun sampai nol.</p>
+            <p><strong>4.</strong> Bandingkan perilaku bulan pertama antara yang bertahan dan yang tidak (transaksi, produk pertama, kanal akuisisi).</p>
+            <p><strong>5.</strong> LTV kotor adalah omzet, bukan keuntungan — harus dikali margin dulu untuk jadi LTV bersih yang sebanding dengan biaya akuisisi.</p>
+            <p><strong>6.</strong> LTV/CAC ≥ 3.</p>
+            <p><strong>7.</strong> Server tidak punya layar/jendela grafis — tanpa itu matplotlib gagal mencoba membuka jendela yang tidak ada.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 83 selesai</h3>
+      <p>Kalau enam dari tujuh benar, lanjut ke peramalan dan proyek Hari 84. Kalau kurang, ulangi Hari 78-82 dulu.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 84 ================= -->
+  <section class="day" data-hari="84">
+    <div class="day-head">
+      <span class="n mono">HARI 84</span>
+      <h2>Peramalan jujur, dan proyek portofolio #10</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat ramalan yang bisa dipertanggungjawabkan dengan membuktikan ia lebih baik dari tebakan sederhana — lalu menyatukan seluruh minggu jadi proyek laporan kesehatan bisnis.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Aturan pertama peramalan</h3>
+        <span class="cek"><input type="checkbox" id="h84s1"><label for="h84s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan">
+          <strong>Selalu bandingkan dengan metode terbodoh yang masuk akal.</strong> Model rumit yang kalah dari "pakai angka minggu lalu" adalah model yang gagal, seberapa pun canggihnya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Data harian dengan pola mingguan</h3>
+        <span class="cek"><input type="checkbox" id="h84s2"><label for="h84s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>rng = np.random.default_rng(5)
+tgl = pd.date_range("2025-01-01", "2025-12-31", freq="D")
+tren = np.linspace(4_000_000, 6_400_000, len(tgl))
+efek_hari = {0:-0.10, 1:-0.12, 2:-0.06, 3:0.02, 4:0.14, 5:0.24, 6:0.12}
+musiman = np.array([efek_hari[d.dayofweek] for d in tgl])
+derau = rng.normal(0, 0.05, len(tgl))
+s = pd.Series((tren * (1 + musiman + derau)).round(-3), index=tgl, name="omzet")</code></pre>
+        </div>
+        <p>Sabtu 20% di atas rata-rata, Selasa 15% di bawah — <strong>model apa pun yang mengabaikan pola ini akan salah besar setiap hari.</strong></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Menguji empat metode secara adil</h3>
+        <span class="cek"><input type="checkbox" id="h84s3"><label for="h84s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sisihkan 28 hari terakhir. Latih dengan sisanya, ramalkan 28 hari itu, bandingkan dengan kenyataan:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>latih, uji = s[:-28], s[-28:]
+
+def mape(aktual, ramal):
+    return np.mean(np.abs((aktual - ramal) / aktual)) * 100
+
+p1 = pd.Series(latih.iloc[-1], index=uji.index)                       # naive
+p2 = pd.Series(latih[-28:].mean(), index=uji.index)                   # rata-rata 28 hari
+p3 = pd.Series([latih.iloc[-7 + (i % 7)] for i in range(28)], index=uji.index)  # seasonal naive
+
+X = np.arange(len(latih))
+koef = np.polyfit(X, latih.values, 1)
+faktor = {d: latih[latih.index.dayofweek == d].mean() / latih.mean() for d in range(7)}
+dasar = np.polyval(koef, np.arange(len(latih), len(latih) + 28))
+p4 = pd.Series([dasar[i] * faktor[uji.index[i].dayofweek] for i in range(28)], index=uji.index)
+
+for nm, p in [("naive", p1), ("rata-rata 28 hari", p2),
+              ("seasonal naive", p3), ("tren + faktor hari", p4)]:
+    print(f"{nm:22s} MAPE {mape(uji, p):5.2f}%")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>naive                  MAPE 12.95%</code><br>
+          <code>rata-rata 28 hari      MAPE 11.58%</code><br>
+          <code>seasonal naive         MAPE  5.14%</code><br>
+          <code>tren + faktor hari     MAPE  3.50%</code></p>
+        </div>
+        <p><strong>Lompatan terbesar terjadi saat kita mulai memperhitungkan hari dalam seminggu</strong> — dari 11,58% ke 5,14%, lebih dari setengahnya hilang. Pelajarannya: memahami pola dalam datamu memberi hasil jauh lebih besar daripada mengganti model dengan yang lebih canggih.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>MAE, MAPE, RMSE — dan kapan pakai yang mana</h3>
+        <span class="cek"><input type="checkbox" id="h84s4"><label for="h84s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Ukuran</th><th>Artinya</th><th>Pakai kalau</th></tr></thead>
+            <tbody>
+              <tr><td><strong>MAE</strong></td><td>Rata-rata selisih mutlak, satuan asli (rupiah)</td><td>Menjelaskan ke orang bisnis: "meleset rata-rata Rp 222rb/hari"</td></tr>
+              <tr><td><strong>MAPE</strong></td><td>Rata-rata selisih dalam persen</td><td>Membandingkan antar produk/cabang beda ukuran</td></tr>
+              <tr><td><strong>RMSE</strong></td><td>Menghukum kesalahan besar lebih berat</td><td>Meleset jauh sekali jauh lebih buruk</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>MAPE punya cacat:</strong> pecah kalau nilai aktualnya nol/mendekati nol (pembagian dengan nol), dan menghukum ramalan yang terlalu tinggi lebih ringan daripada yang terlalu rendah. Untuk data yang sering bernilai nol, pakai MAE.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Proyek portofolio #10: laporan kesehatan bisnis</h3>
+        <span class="cek"><input type="checkbox" id="h84s5"><label for="h84s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Notebook <code>10-kesehatan-bisnis-kedai.ipynb</code> — proyek paling dekat dengan pekerjaan analis produk sungguhan:</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Keadaan sekarang</strong> — pengguna aktif per bulan, pertumbuhan</li>
+          <li><strong>Retensi</strong> — matriks kohor, peta panas, kurva rata-rata (Hari 79)</li>
+          <li><strong>Segmentasi</strong> — temuan dari perbandingan perilaku bulan pertama (Hari 80)</li>
+          <li><strong>Ekonomi unit</strong> — LTV kotor/bersih, payback, tabel LTV/CAC (Hari 81-82)</li>
+          <li><strong>Ramalan</strong> — 28 hari ke depan, tabel MAPE empat metode (langkah 3)</li>
+          <li><strong>Rekomendasi</strong> — tiga rekomendasi dengan angka pendukung + batasan analisis, ditulis jujur</li>
+        </ol>
+        <div class="catatan">
+          <strong>Checklist:</strong> setiap angka penting punya pembanding/rentang. Ada minimal satu temuan yang hanya muncul setelah data dipecah per segmen. Ramalan diuji terhadap metode sederhana. Bagian batasan ditulis jujur.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Dua belas minggu selesai — dari query ke jawaban bisnis</h3>
+      <p>Sepuluh proyek publik di GitHub-mu. Kamu sekarang bisa menjawab "boleh belanja iklan sampai berapa per pelanggan, ini hitungannya" — bernilai jauh lebih besar daripada sekadar membuat grafik.</p>
+      <p style="margin-top:14px">Minggu depan: Machine Learning untuk Analis — memprediksi pelanggan mana yang akan berhenti, dan yang lebih penting, menjelaskan kenapa dengan bahasa yang dimengerti pimpinan, plus menghitung berapa rupiah yang dihasilkan model. Masih dituntun hari demi hari.</p>
+      <a class="lanjut" href="https://claude.ai/code/artifact/1c78fa92-69e9-4546-a3b1-075eabd3e5c8">Lanjut ke M13: Machine Learning →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu12-product-analytics-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

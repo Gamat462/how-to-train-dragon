@@ -1,0 +1,1028 @@
+<title>Bekal Excel Kantor</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/e5ebbbde-69c2-4a12-a118-9eaa29210949">← Kembali ke Python Produksi: dari notebook jadi alat</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Bekal Excel Kantor</span>
+  <button type="button" data-hari="1" aria-selected="true">X1</button>
+  <button type="button" data-hari="2" aria-selected="false">X2</button>
+  <button type="button" data-hari="3" aria-selected="false">X3</button>
+  <button type="button" data-hari="4" aria-selected="false">X4</button>
+  <button type="button" data-hari="5" aria-selected="false">X5</button>
+  <button type="button" data-hari="6" aria-selected="false">X6</button>
+  <button type="button" data-hari="7" aria-selected="false">X7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal Excel Kantor · 7 hari · menutup lubang terbesar</span>
+    <h1>Excel: alat yang paling sering diminta, dan paling tidak diajarkan di sini</h1>
+    <p class="lede">Saya memindai 41 modul pengajaran untuk <code>pivot table</code>, <code>VLOOKUP</code>, <code>XLOOKUP</code>, <code>SUMIFS</code>, dan <code>Power Query</code>. Hasilnya <strong>nol sebutan</strong>.</p>
+    <p class="lede" style="margin-top:10px">Lalu saya membuka lima lowongan nyata di Indeed Indonesia. <strong>Excel disebut namanya di tiga dari lima</strong> — termasuk di GOTO Group, tempat ia satu-satunya kemampuan teknis yang disebut. Python sebagai <em>syarat</em>: nol dari lima.</p>
+    <p class="lede" style="margin-top:10px">Kurikulum ini dibangun dengan asumsi “SQL dan Python, bukan Excel”. Asumsi itu keliru untuk pasar Indonesia, dan ini modul yang memperbaikinya — dengan batas, jebakan, dan aturan pemilihan alat yang semuanya saya ukur sendiri. Termasuk satu selisih <strong>Rp 3,43 miliar</strong> antara XLOOKUP dan <code>merge</code> pada data yang sama persis.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Kenapa modul ini ada, dan kenapa terlambat</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> melihat bukti bahwa alat yang paling sering diminta lowongan Indonesia justru yang paling tidak diajarkan kurikulum ini — lalu memperbaikinya.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lima lowongan nyata, dan alat yang mereka sebut</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-1-1"><label for="bekal-excel-kantor-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Ini bukan pendapat. Ini kutipan dari lowongan yang terbuka di Indeed Indonesia, September 2026.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Perusahaan</th>
+<th>Posisi</th>
+<th>Alat yang disebut namanya</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>GOTO Group</strong></td><td>Data Analyst Intern</td><td>“foundational understanding of <strong>Microsoft Excel</strong> (basic formulas, filtering, and data entry)” — <em>satu-satunya alat yang disebut</em></td></tr>
+              <tr><td><strong>Adi Sarana Armada</strong></td><td>Data Analyst</td><td>“Good Analytical Thinking and <strong>Microsoft Excel</strong>” — <em>satu-satunya alat yang disebut</em></td></tr>
+              <tr><td><strong>Moladin</strong></td><td>Data Analyst (3–5 th)</td><td>Metabase · Looker Studio · <strong>Spreadsheet</strong> · Apps Script · Airflow</td></tr>
+              <tr><td><strong>PwC</strong></td><td>Senior Associate Risk Assurance</td><td>SQL · akuntansi; Python disebut “<em>a plus point</em>”</td></tr>
+              <tr><td><strong>PT Entrust Digital</strong></td><td>Data Analyst</td><td>STEM background</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS KAMU LIHAT</span>
+          <p><strong>Excel disebut di 3 dari 5. Python sebagai syarat: 0 dari 5.</strong></p><p style="margin-top:8px">Dan GOTO adalah salah satu perusahaan teknologi terbesar di Indonesia. Untuk posisi analis pemula mereka, satu-satunya kemampuan teknis yang disebut namanya adalah <em>Microsoft Excel</em>.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Sekarang lihat kurikulummu sendiri</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-1-2"><label for="bekal-excel-kantor-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Saya memindai teks <strong>41 modul pengajaran</strong> (tanpa indeks, jadwal, dan arsip) untuk kata-kata Excel yang sebenarnya: <code>pivot table</code>, <code>VLOOKUP</code>, <code>XLOOKUP</code>, <code>INDEX MATCH</code>, <code>SUMIFS</code>, <code>Power Query</code>.</p>
+        <div class="kode"><pre><code>Excel: rumus &amp; pivot          0 modul     0 sebutan   — NOL —
+Excel: menghasilkan berkas    2 modul    18 sebutan   bekal-data-klien, studi-kasus-nyata</code></pre></div>
+        <div class="bahaya"><strong>Nol.</strong> Kurikulum ini mengajarimu membaca berkas Excel dengan pandas dan mengirim balik berkas Excel — tapi tidak sekali pun mengajarkan cara <em>bekerja di dalam</em> Excel. Padahal itu alat yang paling sering diminta.<p style="margin-top:8px">Ini kesalahan rancangan saya. Kurikulum ini dibangun dengan asumsi “SQL dan Python, bukan Excel”, dan asumsi itu keliru untuk pasar Indonesia.</p></div>
+        <div class="catatan"><strong>Yang TIDAK saya sarankan:</strong> berhenti belajar SQL dan Python. Justru sebaliknya — kombinasi <em>Excel untuk berbicara dengan orang, Python untuk mengerjakan yang berat</em> adalah posisi yang jauh lebih kuat daripada salah satunya saja. Tujuh hari ini menutup separuh yang hilang.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Pasang alatnya</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-1-3"><label for="bekal-excel-kantor-1-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Kamu butuh salah satu dari: <strong>Microsoft Excel</strong> (versi apa pun sejak 2016), <strong>Google Sheets</strong> (gratis, dan fungsi di modul ini semuanya ada), atau <strong>LibreOffice Calc</strong> (gratis, offline). Rumus di modul ini ditulis untuk ketiganya kecuali disebutkan lain.</div>
+        <div class="catatan"><strong>Kalau kamu memakai Google Sheets:</strong> <code>XLOOKUP</code> sudah tersedia, <code>Power Query</code> tidak ada (padanannya <code>IMPORTRANGE</code> + <code>QUERY</code>), dan batas selnya 10 juta sel — bukan 1.048.576 baris. Saya sebutkan bedanya di tiap hari yang relevan.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p>Besok: batas keras Excel, dan satu di antaranya pernah membuat laporan keuangan salah tanpa satu pun pesan error.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>Batas keras Excel — dan yang diam-diam merusak angkamu</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> hafal batas yang tidak bisa dilanggar, dan mengenali satu jenis kerusakan angka yang tidak menghasilkan pesan error sama sekali.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Empat angka yang harus kamu hafal</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-2-1"><label for="bekal-excel-kantor-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Batas</th>
+<th>Nilai</th>
+<th>Kenapa penting</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Baris maksimum</td><td><strong>1.048.576</strong></td><td>Data lebih besar dari ini tidak bisa dibuka — bukan lambat, <em>tidak bisa</em></td></tr>
+              <tr><td>Kolom maksimum</td><td><strong>16.384</strong> (kolom XFD)</td><td>Jarang mentok, tapi data hasil <em>pivot lebar</em> bisa</td></tr>
+              <tr><td>Presisi angka</td><td><strong>15 digit signifikan</strong></td><td>Nomor faktur/NIK 16 digit ke atas berubah diam-diam</td></tr>
+              <tr><td>Panjang teks per sel</td><td>32.767 karakter</td><td>Jarang jadi masalah</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka Excel, tekan <kbd>Ctrl</kbd>+<kbd>↓</kbd> lalu <kbd>Ctrl</kbd>+<kbd>→</kbd>. Kamu akan mendarat di sel <strong>XFD1048576</strong>. Itu ujung dunia Excel. Lihat sendiri sekali, supaya angkanya melekat.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Batas 15 digit — kerusakan yang tidak berbunyi</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-2-2"><label for="bekal-excel-kantor-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Ini yang paling berbahaya untuk pekerjaan auditmu, karena tidak ada peringatan apa pun.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for v in (&quot;1234567890123456&quot;, &quot;12345678901234567890&quot;):
+    f = float(v)
+    print(f&quot;{v:&lt;22} -&gt; {f:.0f}  {&#x27;BERUBAH&#x27; if f&#x27;{f:.0f}&#x27; != v else &#x27;utuh&#x27;}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>1234567890123456       -> 1234567890123456       utuh
+12345678901234567890   -> 12345678901234567168   BERUBAH</code></pre></div></div>
+        <div class="bahaya"><strong>Angka 20 digit itu berubah tiga digit terakhirnya menjadi 168.</strong> Excel melakukan hal yang sama persis, dan tidak menampilkan peringatan apa pun. Nomor yang panjangnya melebihi 15 digit — <strong>nomor rekening, NIK, nomor faktur pajak, ID transaksi</strong> — akan rusak diam-diam.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Aturan yang harus kamu terapkan mulai hari ini:</strong> setiap kolom yang isinya <em>pengenal</em> dan bukan <em>jumlah</em> harus diformat sebagai <strong>Teks</strong>, bukan Angka. Di pandas: <code>pd.read_excel(f, dtype={'no_faktur': str})</code>. Kalau kamu lupa, kamu tidak akan tahu sampai ada yang mengeluh.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Aritmetika pecahan — sama-sama meleset di Excel dan Python</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-2-3"><label for="bekal-excel-kantor-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(0.1 + 0.2)
+print(0.1 + 0.2 == 0.3)
+print(round(0.1 + 0.2, 2))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>0.30000000000000004
+False
+0.3</code></pre></div></div>
+        <div class="catatan"><strong>Ini bukan bug Excel dan bukan bug Python</strong> — ini cara komputer menyimpan pecahan. Akibat praktisnya di kertas kerja: jangan pernah menguji kecocokan dengan <code>=A1=B1</code>. Pakai selisih berambang: <code>=ABS(A1-B1)&lt;0.01</code>. Di pandas: <code>np.isclose(a, b)</code>.</div>
+        <div class="bahaya"><strong>Ini penyebab paling umum “tie-out saya tidak nol padahal seharusnya nol”.</strong> Selisihnya sering 0,0000000001 — dan kalau kamu mengejarnya sebagai temuan, kamu membuang setengah hari.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p>Besok: pivot table, yang ternyata persis <code>groupby</code> yang sudah kamu kuasai.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Pivot table = groupby yang sudah kamu kuasai</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menguasai pivot table dengan cepat karena kamu sudah paham konsepnya dari pandas — lalu membuktikan kedua alat memberi angka yang sama persis.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Peta istilah: yang kamu tahu ↔ yang mereka pakai</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-3-1"><label for="bekal-excel-kantor-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Di pandas / SQL</th>
+<th>Di pivot table Excel</th>
+<th>Contoh</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>groupby('cabang')</code></td><td>Taruh <em>cabang</em> di kotak <strong>Rows</strong></td><td>daftar cabang menurun ke bawah</td></tr>
+              <tr><td>kolom hasil <code>pivot()</code></td><td>Taruh <em>bulan</em> di kotak <strong>Columns</strong></td><td>bulan melebar ke samping</td></tr>
+              <tr><td><code>.sum()</code> / <code>.mean()</code></td><td>Kotak <strong>Values</strong> → Sum / Average</td><td>angka di badan tabel</td></tr>
+              <tr><td><code>WHERE</code> / <code>.query()</code></td><td>Kotak <strong>Filters</strong> atau <em>slicer</em></td><td>menyaring sebelum dihitung</td></tr>
+              <tr><td><code>GROUP BY a, b</code></td><td>dua field di Rows, bertingkat</td><td>cabang lalu produk</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">KENAPA INI CEPAT BUATMU</span>
+          <strong>Tidak ada konsep baru di sini.</strong> Pivot table adalah antarmuka seret-dan-lepas untuk <code>GROUP BY</code>. Kamu sudah menghabiskan berminggu-minggu memahami bagiannya yang sulit; yang tersisa cuma menghafal empat nama kotak.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buktikan keduanya sama</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-3-2"><label for="bekal-excel-kantor-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+df = pd.read_csv(&quot;uji_100000.csv&quot;)        # 100.000 baris penjualan
+
+piv = pd.pivot_table(df, index=&quot;cabang&quot;, values=&quot;nilai&quot;, aggfunc=&quot;sum&quot;)
+grp = df.groupby(&quot;cabang&quot;)[&quot;nilai&quot;].sum().to_frame()
+
+print(piv)
+print(&quot;identik dengan groupby?&quot;, piv[&quot;nilai&quot;].equals(grp[&quot;nilai&quot;]))
+print(&quot;total keseluruhan:&quot;, df[&quot;nilai&quot;].sum())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>                nilai
+cabang               
+Buah Batu  8631158192
+Dago       8473836982
+Riau       8463341591
+Setiabudi  8495894643
+
+identik dengan groupby? True
+total keseluruhan: 34064231408</code></pre></div></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat pivot table di Excel atas data yang sama, dengan <em>cabang</em> di Rows dan Sum of <em>nilai</em> di Values. <strong>Keempat angkanya harus sama persis</strong> dengan keluaran di atas. Kalau tidak sama, cari penyebabnya sebelum lanjut — biasanya ada baris yang tidak ikut terpilih.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tiga hal yang membuat pivot table diam-diam salah</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-3-3"><label for="bekal-excel-kantor-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Penyebab</th>
+<th>Gejalanya</th>
+<th>Cara memeriksanya</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Rentang sumber tidak ikut baris baru</td><td>Total pivot lebih kecil dari total data</td><td>Bandingkan <code>Grand Total</code> pivot dengan <code>=SUM()</code> kolom aslinya. <strong>Harus sama.</strong></td></tr>
+              <tr><td>Angka tersimpan sebagai teks</td><td>Sebagian baris tidak ikut dijumlah</td><td><code>=COUNT(rentang)</code> lawan <code>=COUNTA(rentang)</code> — kalau beda, ada teks</td></tr>
+              <tr><td>Pivot belum di-<em>refresh</em></td><td>Angka lama padahal data sudah diubah</td><td>Klik kanan → Refresh. Biasakan sebelum menyalin angka ke mana pun</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Penyebab pertama adalah versi Excel dari kesalahan yang sudah kamu kenal:</strong> baris yang hilang tanpa pesan error. Sama seperti <code>merge</code> yang membuang baris di pandas. Obatnya juga sama — <strong>tie-out</strong>: total hasil harus sama dengan total sumber, selisih nol.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Biasakan menaruh satu sel pemeriksa di samping tiap pivot: <code>=Grand_Total_pivot - SUM(kolom_sumber)</code>. Kalau isinya bukan 0, jangan salin angka mana pun dari pivot itu.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p>Besok: VLOOKUP, XLOOKUP, dan satu jebakan yang menggeser total sebesar Rp 3,43 miliar.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>XLOOKUP & VLOOKUP = merge, dengan jebakan yang berbeda</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menguasai fungsi pencarian Excel, dan memahami satu perbedaan mendasar dengan <code>merge</code> pandas yang menentukan mana yang harus kamu pakai untuk pekerjaan rekonsiliasi.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bentuk rumusnya</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-4-1"><label for="bekal-excel-kantor-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>=XLOOKUP(nilai_dicari; kolom_kunci; kolom_hasil; &quot;tidak ketemu&quot;)
+   contoh: =XLOOKUP(A2; Induk!A:A; Induk!C:C; &quot;TIDAK ADA&quot;)
+
+=VLOOKUP(nilai_dicari; tabel; nomor_kolom; FALSE)
+   contoh: =VLOOKUP(A2; Induk!A:C; 3; FALSE)
+
+Padanan pandas:
+   df.merge(induk, on=&quot;produk&quot;, how=&quot;left&quot;)</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th></th>
+<th>VLOOKUP</th>
+<th>XLOOKUP</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Arah pencarian</td><td>hanya ke kanan</td><td>ke segala arah</td></tr>
+              <tr><td>Kalau kolom disisipkan</td><td><strong>rusak</strong> (nomor kolom bergeser)</td><td>tetap benar</td></tr>
+              <tr><td>Kalau tidak ketemu</td><td><code>#N/A</code></td><td>bisa diberi teks sendiri</td></tr>
+              <tr><td>Argumen keempat</td><td><code>FALSE</code> <strong>wajib</strong> ditulis</td><td>tidak perlu</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Kesalahan paling mahal di VLOOKUP: lupa menulis <code>FALSE</code>.</strong> Tanpa itu, VLOOKUP memakai pencocokan <em>perkiraan</em> — ia mengembalikan nilai terdekat yang lebih kecil, bukan yang cocok persis. Hasilnya tetap keluar angka, tidak ada error, dan angkanya salah. Kalau kamu masih memakai VLOOKUP, tulis <code>FALSE</code> setiap kali tanpa kecuali.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jebakan duplikat — dan angka Rp 3,43 miliar</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-4-2"><label for="bekal-excel-kantor-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Ini perbedaan yang paling penting antara Excel dan pandas, dan arahnya mungkin bukan yang kamu duga.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+df = pd.read_csv(&quot;uji_100000.csv&quot;)          # 100.000 baris transaksi
+# tabel induk produk, lalu 3 baris SENGAJA diduplikasi
+induk_dup = pd.concat([induk, induk.head(3)], ignore_index=True)
+
+gab = df.merge(induk_dup, on=&quot;produk&quot;, how=&quot;left&quot;)
+print(&quot;baris sebelum :&quot;, len(df))
+print(&quot;baris sesudah :&quot;, len(gab))
+print(&quot;selisih nilai :&quot;, gab[&quot;nilai&quot;].sum() - df[&quot;nilai&quot;].sum())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Alat</th>
+<th class="n">Jumlah baris hasil</th>
+<th>Total nilai</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Data asli</td><td class="n">100.000</td><td>Rp 34.064.231.408</td></tr>
+              <tr><td><strong>VLOOKUP / XLOOKUP</strong> di Excel</td><td class="n"><strong>100.000</strong> (tetap)</td><td>tetap — diam-diam memakai kecocokan <em>pertama</em></td></tr>
+              <tr><td><strong><code>merge</code></strong> di pandas</td><td class="n"><strong>110.060</strong> (+10.060)</td><td>bertambah <strong>Rp 3.431.225.868</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>Dua alat, data yang sama, selisih Rp 3,43 miliar.</strong><p style="margin-top:8px">Keduanya “benar” menurut rancangannya masing-masing. XLOOKUP menjawab <em>“beri saya satu nilai”</em> — ia mengambil yang pertama dan diam. <code>merge</code> menjawab <em>“gabungkan semua yang cocok”</em> — tiga duplikat berarti baris tergandakan.</p></div>
+        <div class="hasil"><span class="tag">INI YANG HARUS KAMU BAWA</span>
+          <p><strong>Yang berbahaya bukan salah satunya — tapi tidak tahu yang mana yang sedang kamu pakai.</strong></p><p style="margin-top:8px">XLOOKUP menyembunyikan masalah datamu (duplikat tetap ada, kamu tidak tahu). <code>merge</code> meledakkannya di depan mata (jumlah baris berubah, kamu langsung sadar). Untuk pekerjaan rekonsiliasi, <strong>yang meledak lebih aman</strong> — persis seperti kertas kerja: lebih baik selisih terlihat daripada tersembunyi.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Prosedur wajib sebelum lookup apa pun</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-4-3"><label for="bekal-excel-kantor-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>Di Excel, sebelum menulis XLOOKUP:
+  =COUNTA(kunci_induk)                 -&gt; jumlah baris tabel induk
+  =SUMPRODUCT(1/COUNTIF(kunci;kunci))  -&gt; jumlah nilai UNIK
+  Kalau kedua angka BEDA -&gt; ada duplikat. Bereskan dulu.
+
+Di pandas:
+  induk[&quot;produk&quot;].duplicated().sum()       # harus 0
+  len(gab) == len(df)                      # harus True setelah merge</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jadikan ini kebiasaan tetap: <strong>hitung baris sebelum dan sesudah setiap penggabungan.</strong> Kalau berubah dan kamu tidak berniat begitu, berhenti dan cari sebabnya. Ini prosedur yang sama dengan menghitung ulang jumlah item sampel di kertas kerja.</div>
+        <div class="catatan"><strong>Kaitannya dengan Studi Kasus 3</strong>, tempat <code>merge</code> meledak jadi 4.041 baris. Sekarang kamu tahu bahwa alat yang sama di Excel tidak akan meledak — dan itu justru membuatnya lebih berbahaya, bukan lebih aman.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai</h3>
+      <p>Besok: SUMIFS, COUNTIFS, dan rumus pemeriksa yang membuat kertas kerja Excel-mu bisa ditelaah orang.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>SUMIFS, COUNTIFS, dan sel pemeriksa</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menulis rumus agregasi berkondisi, dan memasang sel pemeriksa mandiri — kebiasaan yang membedakan kertas kerja yang bisa ditelaah dari yang tidak.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Empat rumus yang menutup 80% pekerjaan</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-5-1"><label for="bekal-excel-kantor-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>=SUMIFS(kolom_jumlah; kolom_syarat1; syarat1; kolom_syarat2; syarat2)
+   contoh: =SUMIFS(E:E; B:B; &quot;Dago&quot;; A:A; &quot;&gt;=&quot;&amp;DATE(2026;6;1))
+
+=COUNTIFS(kolom_syarat1; syarat1; ...)
+   contoh: =COUNTIFS(B:B; &quot;Dago&quot;; E:E; &quot;&gt;1000000&quot;)
+
+=AVERAGEIFS(kolom_rata; kolom_syarat; syarat)
+
+=IFERROR(rumus_apa_pun; &quot;&quot;)     &lt;- bungkus setiap lookup dengan ini</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Rumus Excel</th>
+<th>Padanan pandas</th>
+<th>Padanan SQL</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>SUMIFS</code></td><td><code>df.loc[kondisi, 'nilai'].sum()</code></td><td><code>SUM(nilai) ... WHERE</code></td></tr>
+              <tr><td><code>COUNTIFS</code></td><td><code>kondisi.sum()</code></td><td><code>COUNT(*) ... WHERE</code></td></tr>
+              <tr><td><code>SUMPRODUCT</code></td><td><code>(a * b).sum()</code></td><td><code>SUM(a*b)</code></td></tr>
+              <tr><td><code>COUNTIF(x;x)</code></td><td><code>value_counts()</code></td><td><code>GROUP BY ... HAVING</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Perhatikan bentuk <code>"&gt;="&amp;DATE(2026;6;1)</code>.</strong> Syarat di SUMIFS ditulis sebagai <em>teks</em>, jadi tanda pembanding harus digabung dengan <code>&amp;</code>. Ini bentuk yang paling sering salah ditulis orang, dan hasilnya nol tanpa error.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Sel pemeriksa — kertas kerja yang memeriksa dirinya sendiri</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-5-2"><label for="bekal-excel-kantor-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Kamu sudah punya refleksnya dari KAP. Ini cara memasangnya di Excel.</p>
+        <div class="kode"><pre><code>Taruh di kolom terpisah, beri warna, jangan disembunyikan:
+
+  Tie-out total      =SUM(Detail!E:E) - Ringkasan!B10          -&gt; harus 0
+  Cek duplikat kunci =COUNTA(A:A) - SUMPRODUCT(1/COUNTIF(A:A;A:A))  -&gt; harus 0
+  Cek angka jadi teks =COUNTA(E:E) - COUNT(E:E)                -&gt; harus 0
+  Cek tanggal kosong =COUNTBLANK(C2:C10000)                    -&gt; harus 0
+  Cek nilai negatif  =COUNTIF(E:E;&quot;&lt;0&quot;)                         -&gt; harus 0 (atau dijelaskan)
+  Cek di luar periode =COUNTIFS(C:C;&quot;&lt;&quot;&amp;awal)+COUNTIFS(C:C;&quot;&gt;&quot;&amp;akhir)  -&gt; harus 0</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan blok enam baris ini ke setiap berkas Excel yang kamu serahkan ke klien, di sheet bernama <strong>CEK</strong>. Beri satu sel ringkasan: <code>=IF(SUM(hasil_semua_cek)=0;"LOLOS";"PERIKSA")</code>.</div>
+        <div class="hasil"><span class="tag">KENAPA INI MENJUAL</span>
+          <strong>Ini keunggulanmu yang paling langsung terpakai.</strong> Sebagian besar analis data tidak memasang sel pemeriksa karena tidak pernah dilatih menelaah pekerjaan orang. Kamu dilatih. Berkas Excel yang memeriksa dirinya sendiri langsung terlihat berbeda di mata siapa pun yang pernah mengaudit.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Format bersyarat untuk menemukan yang aneh</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-5-3"><label for="bekal-excel-kantor-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>Home -&gt; Conditional Formatting -&gt; New Rule -&gt; Use a formula
+
+  Sorot baris nilai di luar 3 simpangan baku:
+    =ABS($E2-AVERAGE($E:$E)) &gt; 3*STDEV($E:$E)
+
+  Sorot tanggal akhir pekan (sering tanda transaksi tidak biasa):
+    =WEEKDAY($C2;2)&gt;5
+
+  Sorot angka bulat mencurigakan (kelipatan 1 juta persis):
+    =AND($E2&lt;&gt;0; MOD($E2;1000000)=0)</code></pre></div>
+        <div class="catatan"><strong>Aturan ketiga itu langsung dari dunia auditmu.</strong> Angka yang bulat sempurna sering menandakan estimasi, jurnal manual, atau angka yang “dirapikan” — bukan transaksi sungguhan. Di pandas: <code>df[(df.nilai % 1_000_000 == 0) &amp; (df.nilai != 0)]</code>.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 5 selesai</h3>
+      <p>Besok pertanyaan yang menentukan cara kerjamu setiap hari: kapan Excel, kapan Python? Aku sudah mengukurnya.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 6</span>
+      <h2>Kapan Excel, kapan Python — diukur, bukan dirasakan</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> punya aturan berangka untuk memilih alat, supaya kamu berhenti memakai yang salah dan membuang waktu.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ukuran dan waktu, diukur sungguhan</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-6-1"><label for="bekal-excel-kantor-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd, numpy as np, os, time
+rng = np.random.default_rng(7)
+for n in (10_000, 100_000, 500_000):
+    df = pd.DataFrame({...})                 # 6 kolom penjualan
+    t0=time.perf_counter(); df.to_excel(f&quot;uji_{n}.xlsx&quot;, index=False)
+    t_tulis = time.perf_counter()-t0
+    t0=time.perf_counter(); pd.read_excel(f&quot;uji_{n}.xlsx&quot;)
+    t_baca = time.perf_counter()-t0</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Baris</th>
+<th class="n">xlsx ukuran</th>
+<th class="n">xlsx tulis</th>
+<th class="n">xlsx baca</th>
+<th class="n">csv ukuran</th>
+<th class="n">csv tulis</th>
+<th class="n">csv baca</th>
+</tr></thead>
+            <tbody>
+              <tr><td>10.000</td><td class="n">0,35 MB</td><td class="n">1,09 s</td><td class="n">0,50 s</td><td class="n">0,38 MB</td><td class="n">0,02 s</td><td class="n">0,01 s</td></tr>
+              <tr><td>100.000</td><td class="n">3,46 MB</td><td class="n">11,22 s</td><td class="n">5,24 s</td><td class="n">3,78 MB</td><td class="n">0,13 s</td><td class="n">0,06 s</td></tr>
+              <tr><td>500.000</td><td class="n">17,28 MB</td><td class="n"><strong>57,03 s</strong></td><td class="n"><strong>29,03 s</strong></td><td class="n">18,91 MB</td><td class="n">0,67 s</td><td class="n">0,23 s</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">ANGKA YANG MENENTUKAN</span>
+          <p>Pada 500.000 baris: menulis xlsx <strong>57 detik</strong> lawan csv <strong>0,67 detik</strong> — <strong>85 kali lebih lambat</strong>. Membacanya 29 detik lawan 0,23 detik — <strong>126 kali</strong>.</p><p style="margin-top:8px">Dan ukuran berkasnya justru <em>lebih kecil</em> sedikit. Jadi xlsx tidak menukar waktu dengan ruang; ia hanya mahal.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Aturan memilih alat</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-6-2"><label for="bekal-excel-kantor-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Situasi</th>
+<th>Pakai</th>
+<th>Alasan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Data &lt; 50.000 baris, sekali kerjakan</td><td><strong>Excel</strong></td><td>Lebih cepat selesai daripada menulis kode</td></tr>
+              <tr><td>Pekerjaan berulang tiap minggu/bulan</td><td><strong>Python</strong></td><td>Ditulis sekali, jalan selamanya, dan bisa diuji</td></tr>
+              <tr><td>Klien akan mengutak-atik angkanya</td><td><strong>Excel</strong></td><td>Mereka bisa membukanya; notebook tidak</td></tr>
+              <tr><td>&gt; 200.000 baris</td><td><strong>Python / SQL</strong></td><td>Excel jadi menyakitkan jauh sebelum batas 1 juta</td></tr>
+              <tr><td>Hasilnya harus bisa ditelusuri ulang</td><td><strong>Python + git</strong></td><td>Rumus Excel tidak punya riwayat perubahan</td></tr>
+              <tr><td>Perlu digabung dari 5+ berkas</td><td><strong>Python</strong></td><td>Power Query bisa, tapi Python lebih mudah diperiksa</td></tr>
+              <tr><td>Presentasi ke manajemen</td><td><strong>Excel / Sheets</strong></td><td>Mereka mengenalinya, dan itu menentukan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">JAWABANNYA BUKAN SALAH SATU</span>
+          <strong>Pola kerja yang paling kuat: hitung di Python, serahkan dalam Excel.</strong> Python mengerjakan yang berat dan bisa diulang; Excel jadi bentuk keluaran yang bisa dibuka dan diperiksa siapa pun. Itulah yang sudah kamu latih di Bekal Data Klien dengan <code>ExcelWriter</code> — sekarang kamu tahu alasan angkanya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Serahkan berkas Excel yang rapi dari Python</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-6-3"><label for="bekal-excel-kantor-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+with pd.ExcelWriter(&quot;Laporan Juni.xlsx&quot;, engine=&quot;openpyxl&quot;) as w:
+    ringkas.to_excel(w, sheet_name=&quot;Ringkasan&quot;, index=False)
+    detail.to_excel(w,  sheet_name=&quot;Detail&quot;,    index=False)
+    cek.to_excel(w,     sheet_name=&quot;CEK&quot;,       index=False)
+
+    for sheet, lebar in ((&quot;Ringkasan&quot;,[18,14,14]), (&quot;Detail&quot;,[12,18,10,12,14])):
+        ws = w.sheets[sheet]
+        ws.freeze_panes = &quot;A2&quot;                      # kunci baris judul
+        for i, lb in enumerate(lebar, start=1):
+            ws.column_dimensions[chr(64+i)].width = lb</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tiga hal ini membuat berkas kirimanmu langsung terlihat profesional, dan ketiganya satu baris: <strong>freeze_panes</strong> (judul tidak ikut menggulung), <strong>lebar kolom</strong> (tidak ada <code>####</code>), dan <strong>sheet CEK</strong> (pemeriksa dari Hari 5).</div>
+        <div class="bahaya"><strong>Jangan kirim berkas dengan kolom <code>####</code> atau tanggal yang tampil sebagai <code>45444</code>.</strong> Isinya boleh benar sempurna; yang dilihat klien pertama kali adalah bahwa berkasnya berantakan. Itu memengaruhi apakah mereka mempercayai angkanya.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 6 selesai</h3>
+      <p>Besok penutup: Power Query, dan ujian mandiri.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 7</span>
+      <h2>Power Query & ujian mandiri</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengenal satu fitur Excel yang paling mendekati pekerjaan analis sungguhan, lalu menguji apakah tujuh hari ini melekat.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Power Query — pipeline yang tinggal di dalam Excel</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-7-1"><label for="bekal-excel-kantor-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Ini fitur Excel yang paling jarang dipakai dan paling berguna. Ia merekam <em>langkah-langkah pembersihan</em>, lalu mengulangnya tiap kali data diperbarui.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Langkah Power Query</th>
+<th>Padanan pandas</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Get Data → From Folder</td><td><code>glob</code> + <code>pd.concat</code></td></tr>
+              <tr><td>Remove Top Rows</td><td><code>skiprows=</code></td></tr>
+              <tr><td>Use First Row as Headers</td><td><code>header=0</code></td></tr>
+              <tr><td>Change Type</td><td><code>astype()</code> / <code>to_datetime()</code></td></tr>
+              <tr><td>Unpivot Columns</td><td><code>df.melt()</code></td></tr>
+              <tr><td>Merge Queries</td><td><code>df.merge()</code></td></tr>
+              <tr><td>Refresh All</td><td>jalankan ulang skripnya</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">KENAPA INI PENTING</span>
+          <strong>Kolom kiri adalah kolom kanan, dengan tetikus.</strong> Yang membuatnya berharga: langkahnya <em>tercatat dan bisa diulang</em> — itu properti yang membedakan pekerjaan yang bisa ditelaah dari yang tidak, dan itu sudah jadi nilai kerjamu di KAP.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Latihan sekali saja: taruh tiga berkas Excel berformat sama di satu folder, lalu Get Data → From Folder → Combine. Kamu baru saja membuat pipeline penggabungan tanpa satu baris kode. Bandingkan dengan versi pandas-mu di Studi Kasus.</div>
+        <div class="catatan"><strong>Google Sheets tidak punya Power Query.</strong> Padanannya <code>IMPORTRANGE</code> digabung <code>QUERY</code>, yang jauh lebih terbatas. Kalau pekerjaanmu banyak menggabung berkas, itu satu alasan nyata memilih Excel di atas Sheets.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ujian: delapan soal</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-7-2"><label for="bekal-excel-kantor-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Berapa baris maksimum satu sheet Excel? Berapa kolom?
+2. Nomor faktur 18 digit dimasukkan ke Excel. Apa yang terjadi,
+   dan bagaimana mencegahnya?
+3. Pivot table menunjukkan Grand Total 8.400.000.000, tapi
+   =SUM() kolom sumbernya 8.631.158.192. Sebutkan dua kemungkinan.
+4. Kenapa VLOOKUP wajib ditulis dengan FALSE di argumen keempat?
+5. Tabel induk punya 3 kunci duplikat. Apa bedanya hasil
+   XLOOKUP dan merge pandas? Yang mana lebih aman untuk rekonsiliasi?
+6. Tulis rumus SUMIFS: total kolom E untuk cabang &quot;Dago&quot;
+   sejak 1 Juni 2026.
+7. Data 300.000 baris, diperbarui tiap minggu, dikirim ke klien
+   sebagai Excel. Alat apa untuk apa?
+8. Rumus pemeriksa mana yang mendeteksi angka tersimpan
+   sebagai teks?</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis kedelapan jawabanmu dulu, baru buka kuncinya.</div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <strong>1.048.576</strong> baris, <strong>16.384</strong> kolom (kolom terakhir XFD).</p>
+            <p><strong>2.</strong> Excel menyimpan angka dengan 15 digit signifikan, jadi digit ke-16 dan seterusnya <strong>berubah jadi nol</strong> tanpa peringatan — terbukti: 12345678901234567890 menjadi 12345678901234567168. Cegah dengan memformat kolom sebagai <strong>Teks</strong> sebelum menempel, atau <code>dtype={'no_faktur': str}</code> di pandas.</p>
+            <p><strong>3.</strong> (a) Rentang sumber pivot tidak mencakup seluruh baris — baris baru tidak ikut. (b) Sebagian angka tersimpan sebagai teks sehingga tidak dijumlah. Kemungkinan ketiga: pivot belum di-refresh.</p>
+            <p><strong>4.</strong> Tanpa <code>FALSE</code>, VLOOKUP memakai pencocokan perkiraan dan mengembalikan nilai terdekat yang lebih kecil. Hasilnya tetap keluar angka, tanpa error, dan salah.</p>
+            <p><strong>5.</strong> XLOOKUP mengambil kecocokan <em>pertama</em> dan jumlah baris tidak berubah — masalahnya tersembunyi. <code>merge</code> menggandakan baris: 100.000 → 110.060, dan totalnya bergeser <strong>Rp 3.431.225.868</strong>. Untuk rekonsiliasi, <strong>merge lebih aman</strong> justru karena masalahnya terlihat.</p>
+            <p><strong>6.</strong> <code>=SUMIFS(E:E; B:B; "Dago"; C:C; "&gt;="&amp;DATE(2026;6;1))</code> — perhatikan <code>&amp;</code> untuk menyambung tanda pembanding.</p>
+            <p><strong>7.</strong> <strong>Python</strong> untuk memproses (300.000 baris, berulang tiap minggu — Excel butuh ±30 detik hanya untuk menulisnya), <strong>Excel sebagai bentuk keluaran</strong> lewat <code>ExcelWriter</code>, dengan sheet CEK. Hitung di Python, serahkan dalam Excel.</p>
+            <p><strong>8.</strong> <code>=COUNTA(rentang) - COUNT(rentang)</code>. <code>COUNT</code> hanya menghitung angka; <code>COUNTA</code> menghitung semua yang terisi. Selisihnya adalah jumlah sel teks.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Yang tertutup, dan yang jujur belum</h3>
+        <span class="cek"><input type="checkbox" id="bekal-excel-kantor-7-3"><label for="bekal-excel-kantor-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Sebelum</th>
+<th>Sesudah</th>
+</tr></thead>
+            <tbody>
+              <tr><td>41 modul pengajaran, rumus Excel &amp; pivot: <strong>0 sebutan</strong></td><td>7 hari, batas dan jebakannya diukur sendiri</td></tr>
+              <tr><td>Tidak tahu kapan Excel patah</td><td>Angka: 500.000 baris = 57 detik menulis, 85× lebih lambat dari csv</td></tr>
+              <tr><td>VLOOKUP dan merge dianggap sama</td><td>Tahu selisihnya bisa Rp 3,43 miliar, dan tahu mana yang lebih aman</td></tr>
+              <tr><td>Berkas kiriman apa adanya</td><td>Freeze panes, lebar kolom, sheet CEK</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Yang belum ditutup, dan saya sebutkan supaya kamu tidak terkejut:</strong> makro VBA, Power Pivot dan model data DAX, serta <em>array formula</em> dinamis tingkat lanjut. Ketiganya muncul di lowongan tingkat menengah ke atas. Tujuh hari ini membawamu ke tingkat yang diminta GOTO dan Adi Sarana — <em>“basic formulas, filtering, and data entry”</em> dan jauh di atasnya — bukan ke tingkat spesialis Excel.</div>
+        <div class="catatan"><strong>Satu kalimat untuk CV-mu yang sekarang jujur:</strong> “Mengolah data di Excel (pivot, XLOOKUP, SUMIFS, Power Query) dan Python/pandas; memilih alat berdasarkan ukuran data dan frekuensi pekerjaan.” Kalimat itu benar setelah tujuh hari ini, dan tidak benar sebelumnya.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal Excel Kantor selesai</h3>
+      <p>Alat yang paling sering diminta lowongan Indonesia sekarang ada di kurikulummu. Berikutnya: alat kantor lain yang juga bernilai nol — Looker Studio, Metabase, Google Sheets, Apps Script, dan membaca DAG Airflow.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/f1e55d95-3ab1-4904-b378-ff0886a08852">Lanjut ke Bekal Alat Kantor →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Batas, ukuran berkas, dan waktu tulis/baca diukur dengan menjalankan kodenya di Python 3.11, pandas 3.0.5, openpyxl 3.1.5 — hasilnya akan berbeda di mesinmu, tapi perbandingannya tidak.</p>
+    <p style="margin-top:10px">Kutipan syarat lowongan diambil dari Indeed Indonesia, September 2026: GOTO Group, PT Adi Sarana Armada Tbk, Moladin, PwC, dan PT Entrust Digital.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "bekal-excel-kantor";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

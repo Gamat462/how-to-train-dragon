@@ -1,0 +1,1843 @@
+<title>Jalur S2 Luar Negeri</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/61355282-6fe8-4f54-bd99-18ff4ae63d28">← Kembali ke Proyek Buta: tanpa kunci jawaban</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Jalur S2</span>
+  <button type="button" data-hari="1" aria-selected="true">1</button>
+  <button type="button" data-hari="2" aria-selected="false">2</button>
+  <button type="button" data-hari="3" aria-selected="false">3</button>
+  <button type="button" data-hari="4" aria-selected="false">4</button>
+  <button type="button" data-hari="5" aria-selected="false">5</button>
+  <button type="button" data-hari="6" aria-selected="false">6</button>
+  <button type="button" data-hari="7" aria-selected="false">7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Jalur S2 · 7 hari · ditulis ulang mengikuti pola Bekal Python</span>
+    <h1>S2 Data Science di luar negeri: hitung sendiri, jangan tanya saya</h1>
+    <p class="lede">Tujuh hari untuk menjawab satu pertanyaan mahal: apakah kamu perlu S2 di luar negeri. Versi sebelumnya menyodorkan sepuluh tabel angka untuk dibaca. Versi ini memberimu <strong>empat skrip</strong> yang menghitung angka-angka itu dengan asumsimu sendiri — biaya, tenggat, lubang kurikulum, dan skor keputusanmu.</p>
+    <p class="lede" style="margin-top:10px">Bedanya bukan gaya. Tabel yang diketik akan basi diam-diam: modul lama menulis “tinggal 29 hari” dan “empat topik bernilai nol”, dan dua-duanya sudah tidak benar lagi hari ini. Skrip menghitungnya ulang tiap kali dijalankan, dan itulah satu-satunya cara modul seperti ini tetap jujur.</p>
+    <p class="lede" style="margin-top:10px">Setiap angka yang tertulis di halaman ini keluar dari menjalankan skripnya sungguhan (Python 3.11.15). Kalau angkamu berbeda, itu bukan kesalahan — itu asumsimu, dan asumsimu yang berlaku.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Apakah S2 itu gerbangnya? Hitung sendiri, jangan tanya saya</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengganti tebakan “apakah saya perlu S2” dengan tiga angka yang kamu hitung sendiri dari lowongan sungguhan — termasuk satu filter yang selama ini mungkin luput dan justru merugikanmu.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buka Indeed sebelum membaca apa pun dari saya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-1-1"><label for="jalur-s2-luar-negeri-v2-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka Indeed Indonesia. Cari <code>data analyst</code>, lokasi Jakarta. Jangan gulung dulu — ambil sepuluh lowongan pertama apa adanya.</div>
+<p>Sisa hari ini akan menunjukkan angka-angka saya. Tapi angka saya sudah berumur; pasarmu bergerak. <strong>Kalau hasilmu berbeda, hasilmu yang benar.</strong></p>
+        <div class="bahaya"><strong>Jangan lanjut ke langkah 2 sebelum sepuluh lowongan itu terbuka.</strong> Kalau kamu membaca tabel saya lebih dulu, kamu akan menghitung sambil sudah tahu jawaban yang saya harapkan. Itu bukan pengukuran lagi.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buat tabel tallynya, tiga kolom</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-1-2"><label for="jalur-s2-luar-negeri-v2-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Di kertas atau berkas teks, buat tiga kolom dan isi satu baris per lowongan.</div>
+        <div class="kode"><pre><code>no  syarat pendidikan tertulis          S2 wajib?
+--  ----------------------------------  ---------
+ 1
+ 2
+...
+10</code></pre></div>
+<p>Kolom tengah diisi <strong>kutipan apa adanya</strong>, bukan ringkasanmu. "Bachelor's degree in a quantitative field" berbeda arti dari "S1 semua jurusan", dan bedanya baru terlihat kalau kamu menyalinnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Hitung tiga angka dari tabelmu</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-1-3"><label for="jalur-s2-luar-negeri-v2-1-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Setelah sepuluh baris terisi, hitung.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang dihitung</th>
+<th>Angkamu</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Berapa yang menulis <strong>S2 wajib</strong></td><td>___ dari 10</td></tr>
+              <tr><td>Berapa yang menulis <strong>S2 sebagai nilai tambah</strong></td><td>___ dari 10</td></tr>
+              <tr><td>Berapa yang memasang filter <strong>STEM / kuantitatif</strong></td><td>___ dari 10</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">HARUS ADA DI TANGANMU</span>
+          <p>Tiga angka di kolom kanan. Tulis tanggalnya juga — angka ini akan kamu pakai lagi di Hari 7, dan kamu perlu tahu kapan ia diambil.</p></div>
+<p>Angka ketiga yang paling penting, dan hampir tidak ada yang menghitungnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Bandingkan dengan tiga lowongan yang saya buka</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-1-4"><label for="jalur-s2-luar-negeri-v2-1-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baru sekarang boleh dibaca. Ini kutipan dari Indeed Indonesia, September 2026.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Perusahaan</th>
+<th>Posisi</th>
+<th>Syarat pendidikan — apa adanya</th>
+</tr></thead>
+            <tbody>
+              <tr><td>PT Entrust Digital</td><td>Data Analyst</td><td>“Minimal education <strong>S1</strong>” · “<strong>STEM background</strong>”</td></tr>
+              <tr><td>Moladin</td><td>Data Analyst (3–5 th)</td><td>“<strong>Bachelor's degree</strong> in Business Analytics, Finance, Economics, Statistics, Computer Science, or a matching quantitative field”</td></tr>
+              <tr><td>Thakral One</td><td>Data Science Manager (6+ th)</td><td>“A <strong>Masters or Ph.D. will be an advantage</strong>”</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">YANG TERBACA</span>
+          <p>Bahkan di posisi <em>manajer</em> dengan syarat 6 tahun pengalaman, S2 ditulis sebagai <strong>“an advantage”</strong> — keunggulan, bukan syarat. <strong>Nol dari tiga mensyaratkan S2.</strong></p></div>
+        <div class="catatan"><strong>Tiga bukan sepuluh.</strong> Sampel saya kecil dan saya tidak menyembunyikannya. Angkamu dari sepuluh lowongan lebih kuat daripada angka saya dari tiga.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Lihat apa yang dikatakan statistik nasional</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-1-5"><label for="jalur-s2-luar-negeri-v2-1-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca satu angka ini pelan-pelan.</div>
+        <div class="hasil"><span class="tag">DATA BPS</span>
+          <p>BPS, dirilis November 2025: rata-rata upah buruh berpendidikan <strong>Diploma IV, S1, S2, dan S3 dikelompokkan dalam satu golongan yang sama: Rp 4,77 juta per bulan.</strong></p></div>
+<p>BPS tidak memisahkan S2 dari S1 <em>karena selisihnya tidak cukup besar untuk dipisahkan</em>. Artinya bukan “S2 tidak berguna”. Artinya: gelar S2 saja, rata-rata, tidak menggeser upahmu.</p>
+        <div class="bahaya"><strong>Jebakan yang paling sering saya lihat.</strong> Orang membandingkan “gaji lulusan S2 luar negeri” — yang dilaporkan alumni sukses di LinkedIn — dengan “gaji rata-rata S1” yang dihitung BPS dari seluruh populasi. Itu membandingkan batas atas melawan rata-rata. Kamu sendiri yang melarang saya melakukan itu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Sekarang bagian yang menguntungkan S2</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-1-6"><label for="jalur-s2-luar-negeri-v2-1-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat lagi baris kedua syarat PT Entrust Digital.</div>
+        <div class="kode"><pre><code>STEM background (STEM background adalah latar belakang pendidikan
+yang berfokus pada bidang Sains (S), Teknologi (T), Engineering
+atau Teknik (E), dan Mathematics atau Matematika (M))</code></pre></div>
+        <div class="bahaya"><strong>Akuntansi bukan STEM.</strong> Lowongan ini bahkan repot menjelaskan singkatannya di dalam kurung — artinya mereka serius menyaringnya. Ijazahmu gagal di filter ini, dan tidak ada portofolio, sertifikat, atau proyek buta yang bisa mengubah tulisan di ijazah S1-mu.</div>
+        <div class="hasil"><span class="tag">SATU GERBANG YANG NYATA</span>
+          <p><strong>Inilah nilai asli S2 untukmu.</strong> Bukan “supaya lebih pintar” — 50 modul sudah mengurus itu. Bukan “supaya gaji naik” — BPS bilang tidak. Nilainya sangat spesifik: <strong>S2 Data Science mengubah statusmu dari non-STEM menjadi STEM secara permanen di atas kertas.</strong></p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Ukur seberapa besar gerbang itu — pakai angkamu sendiri</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-1-7"><label for="jalur-s2-luar-negeri-v2-1-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil angka ketiga dari langkah 3: berapa dari sepuluh lowongan yang memasang filter STEM. Tulis sebagai persen.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Angkamu</th>
+<th>Artinya</th>
+</tr></thead>
+            <tbody>
+              <tr><td>0–1 dari 10</td><td>Gerbangnya sempit. Biayanya besar untuk melewati satu pintu dari sepuluh.</td></tr>
+              <tr><td>2–4 dari 10</td><td>Nyata tapi belum menentukan. Cek dulu apakah enam sisanya cukup untukmu.</td></tr>
+              <tr><td>5+ dari 10</td><td>Gerbangnya lebar. Ini alasan kuat, dan seluruh sisa modul jadi relevan.</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Dari tiga lowongan yang saya buka, <strong>satu</strong> memasang filter STEM. Moladin tidak — mereka menerima Finance dan Economics. Sebelum kamu membayar ratusan juta untuk melewati satu filter, kamu harus tahu seberapa sering filter itu dipasang.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Tulis ulang pertanyaanmu</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-1-8"><label for="jalur-s2-luar-negeri-v2-1-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Tulis satu kalimat di catatanmu.</div>
+<p>Kamu masuk hari ini dengan pertanyaan <em>“apakah saya perlu S2?”</em> — pertanyaan yang tidak bisa dijawab siapa pun. Keluarlah dengan pertanyaan yang bisa dijawab:</p>
+        <div class="hasil"><span class="tag">PERTANYAAN YANG BENAR</span>
+          <p><strong>“Berapa persen lowongan yang saya incar memasang filter yang hanya bisa saya lewati dengan gelar?”</strong></p></div>
+        <div class="catatan"><strong>Kalau angkamu masih nol setelah sepuluh lowongan,</strong> buka sepuluh lagi minggu depan. Sepuluh terlalu sedikit untuk memutuskan sesuatu senilai satu miliar rupiah — dan itu sendiri adalah temuan yang berguna.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> tiga angka dari sepuluh lowongan, bertanggal. Itu satu-satunya bukti di seluruh modul ini yang berasal dari pasarmu sendiri, bukan dari rata-rata orang lain.</p><p style="margin-top:8px">Besok kita bedah isi kuliahnya — bukan brosurnya, tapi kode mata kuliah wajibnya, dan berapa banyak yang sudah kamu kuasai.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>Silabusnya, dan pindaian yang menghitung lubangmu sendiri</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> melihat mata kuliah wajib tujuh kampus, lalu menjalankan satu skrip yang memindai seluruh modulmu dan memberitahu topik mana yang benar-benar tipis — hitungan, bukan ingatan.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Baca lima mata kuliah wajib NUS</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-2-1"><label for="jalur-s2-luar-negeri-v2-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca tabelnya sekali, lalu tutup halaman dan sebutkan kembali berapa mata kuliah wajibnya dan berapa unit totalnya.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kode</th>
+<th>Nama mata kuliah</th>
+<th class="n">Unit</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>DSA5101</code></td><td>Introduction to Big Data for Industry</td><td class="n">4</td></tr>
+              <tr><td><code>DSA5103</code></td><td>Optimization Algorithms for Data Modelling</td><td class="n">4</td></tr>
+              <tr><td><code>DSA5104</code></td><td>Principles of Data Management and Retrieval</td><td class="n">4</td></tr>
+              <tr><td><code>DSA5105</code></td><td>Principles of Machine Learning</td><td class="n">4</td></tr>
+              <tr><td><code>DSA5106</code></td><td>Deep Learning: Foundations and Techniques</td><td class="n">4</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Lima inti wajib (20 unit) ditambah lima pilihan (20 unit). Struktur untuk angkatan masuk AY2025 dan AY2026.</p>
+        <div class="catatan"><strong>Perhatikan DSA5103.</strong> “Optimization Algorithms” bukan mata kuliah pemrograman — itu matematika: fungsi konveks, gradien, pengali Lagrange. Kalau kalkulus multivariabelmu belum kuat, ini mata kuliah yang akan menghabisimu di semester pertama.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Baca enam mata kuliah wajib Melbourne, lalu hitung satu hal</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-2-2"><label for="jalur-s2-luar-negeri-v2-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca tabelnya, lalu hitung: dari enam mata kuliah ini, berapa yang bertumpu pada <strong>statistika matematis</strong> dan berapa yang mengajarkan <strong>alat</strong>?</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kode</th>
+<th>Nama mata kuliah</th>
+<th>Rumpun</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>MAST90138</code></td><td>Multivariate Statistics for Data Science</td><td>Statistika</td></tr>
+              <tr><td><code>MAST90139</code></td><td>Statistical Modelling for Data Science</td><td>Statistika</td></tr>
+              <tr><td><code>MAST90083</code></td><td>Computational Statistics &amp; Data Science</td><td>Statistika</td></tr>
+              <tr><td><code>COMP90024</code></td><td>Cluster and Cloud Computing</td><td>Ilmu komputer</td></tr>
+              <tr><td><code>COMP90050</code></td><td>Advanced Database Systems</td><td>Ilmu komputer</td></tr>
+              <tr><td><code>COMP90051</code></td><td>Statistical Machine Learning</td><td>Ilmu komputer</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">JAWABANNYA</span>
+          <p><strong>Empat dari enam</strong> bertumpu pada statistika matematis. <strong>Nol</strong> yang mengajarkan alat — tidak ada mata kuliah bernama “Tableau” atau “Power BI”.</p></div>
+<p>S2 Data Science yang baik <em>tidak</em> mengajarkan yang sudah kamu pelajari di 50 modul. Ia mengajarkan lapisan di bawahnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Lima kampus lain, dan satu pola yang menentukan Hari 3</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-2-3"><label for="jalur-s2-luar-negeri-v2-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca kolom “Bentuk”. Hitung berapa yang daring.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kampus &amp; program</th>
+<th>Bentuk</th>
+<th>Isi wajib yang tercatat</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>UC Berkeley</strong> — MIDS</td><td>Daring, ± 2 th, 27 unit</td><td>DATASCI W201 · W203 Statistics for Data Science · W205 Data Engineering · W207 Applied ML · W210 Capstone</td></tr>
+              <tr><td><strong>CMU Heinz</strong> — jalur BIDA</td><td>Daring, ± 12 mata kuliah, 2–3 th</td><td>Database Management · Data Warehousing · Data Mining · Exploring and Visualizing Data · Privacy in the Digital Age · Advanced Business Analytics</td></tr>
+              <tr><td><strong>Georgia Tech</strong> — OMS Analytics</td><td>Daring, 36 kredit, 24–36 bln</td><td>ISYE 6501 Analytics Modeling (R) · CSE 6040 Computing for Data Analysis (Python) · 6748 Practicum</td></tr>
+              <tr><td><strong>UCL</strong> — Data Science MSc</td><td>Tatap muka, 12 bln</td><td>STAT0032 Introduction to Statistical Data Science + maks. dua modul ilmu komputer + proyek riset</td></tr>
+              <tr><td><strong>Imperial</strong> — MSc Statistics (DS &amp; ML)</td><td>Tatap muka, 12 bln</td><td>Fondasi statistika di term 1, lalu satu dari lima aliran</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS KAMU HITUNG</span>
+          <p><strong>Tiga dari lima daring.</strong> Georgia Tech, Berkeley, dan CMU tidak mengharuskanmu pindah negara.</p></div>
+        <div class="catatan"><strong>Simpan angka itu untuk besok.</strong> Biaya hidup di luar negeri — bukan uang kuliah — yang sering jadi bagian terbesar tagihannya. Program daring memotongnya jadi nol.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Ambil pemindainya, jangan percaya peta buatan saya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-2-4"><label for="jalur-s2-luar-negeri-v2-2-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dari paket zip, salin <code>data-dan-skrip/jalur-s2/pindai_topik.py</code> ke folder paket — sejajar dengan folder <code>kurikulum/</code>. Lalu jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python pindai_topik.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL (baris pertama)</span>
+                  <div class="kode"><pre><code>memindai 58 modul di kurikulum/  (ambang: disebut &gt;= 3 kali)</code></pre></div></div>
+<p>Skrip ini membaca <strong>teks seluruh modulmu</strong> dan menghitung berapa modul yang benar-benar membahas tiap topik penyusun silabus di atas. Bukan ingatan saya — hitungan.</p>
+        <div class="catatan"><strong>Kalau muncul “tidak ada berkas .html”:</strong> kamu menjalankannya dari folder yang salah. Skripnya harus berada di sebelah folder <code>kurikulum/</code>, bukan di dalamnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Baca hasil pindaiannya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-2-5"><label for="jalur-s2-luar-negeri-v2-2-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>topik dalam silabus S2           modul   modul yang paling membahasnya
+pandas / pembersihan data           21   022-M03-python-pandas.html
+SQL join &amp; agregasi                 28   911-referensi-sql-pandas.html
+Git &amp; rekayasa perangkat lunak      21   045-M11-git-otomasi-streamlit.html
+rekayasa data / pipeline            12   044-M10-dbt.html
+desain &amp; indeks basis data          12   073-sql-mahir-L4.html
+visualisasi                         11   041-M08-visualisasi-bi.html
+big data / Spark / cloud            11   043-M09-sql-data-besar.html
+A/B test                             9   912-referensi-statistik-abtest.html
+window function                      9   072-sql-mahir-L3.html
+machine learning                     7   085-jalur-s2-luar-negeri.html
+regresi                              7   091-mat-L2-aljabar-linear.html
+aljabar linear / matriks             5   091-mat-L2-aljabar-linear.html
+optimisasi                           5   092-mat-L3-optimisasi.html
+kalkulus / turunan                   3   093-mat-L4-deep-learning.html
+probabilitas formal                  3   090-mat-L1-probabilitas.html
+deep learning                        3   093-mat-L4-deep-learning.html
+statistik inferensial                2   023-M04-statistik-abtest.html
+etika &amp; privasi data                 1   042-bekal-rahasia-klien.html</code></pre></div></div>
+        <div class="catatan"><strong>Angkamu boleh sedikit berbeda</strong> kalau kurikulummu sudah bertambah modul. Yang harus sama: urutannya, dan dua baris paling bawah.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Lihat apa yang berubah sejak modul ini pertama ditulis</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-2-6"><label for="jalur-s2-luar-negeri-v2-2-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bandingkan hasil pindaianmu dengan angka lama di bawah ini.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Topik</th>
+<th>Saat modul ini ditulis pertama kali</th>
+<th>Sekarang</th>
+<th>Yang menutupnya</th>
+</tr></thead>
+            <tbody>
+              <tr><td>probabilitas formal</td><td><strong>0</strong></td><td>3</td><td>MAT L1</td></tr>
+              <tr><td>aljabar linear / matriks</td><td><strong>0</strong></td><td>5</td><td>MAT L2</td></tr>
+              <tr><td>optimisasi</td><td><strong>0</strong></td><td>5</td><td>MAT L3</td></tr>
+              <tr><td>deep learning</td><td><strong>0</strong></td><td>3</td><td>MAT L4</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">YANG BERUBAH</span>
+          <p><strong>Empat lubang terbesar sudah ditutup</strong> — MAT L1 sampai L4 dibuat setelah modul ini pertama ditulis, justru karena pindaian ini menemukannya.</p></div>
+<p>Inilah gunanya menghitung dan bukan mengingat. Peta yang diketik tangan akan basi diam-diam; peta yang dihitung ulang tidak bisa.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Sekarang lubang yang sebenarnya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-2-7"><label for="jalur-s2-luar-negeri-v2-2-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat dua baris paling bawah hasil pindaianmu.</div>
+        <div class="bahaya"><strong>etika &amp; privasi data: 1 modul. statistik inferensial: 2 modul.</strong> Dua-duanya ada di silabus wajib: <em>Privacy in the Digital Age</em> (CMU) dan <em>MAST90139 Statistical Modelling</em> (Melbourne). Ini daftar belanja belajarmu yang sekarang, menggantikan daftar lama.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Lubang</th>
+<th>Menutup mata kuliah</th>
+<th>Bisa ditutup dengan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>etika &amp; privasi data</td><td>Privacy in the Digital Age (CMU)</td><td>Bekal Rahasia Klien sudah menutup sisi praktiknya; sisi regulasinya (GDPR, UU PDP) belum</td></tr>
+              <tr><td>statistik inferensial</td><td>MAST90139 (Melbourne) · W203 (Berkeley)</td><td>M4 Statistik &amp; A/B test menutup dasarnya; uji hipotesis formal belum</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Perhatikan bahwa keduanya bukan matematika berat.</strong> Berbeda dengan empat lubang lama, dua ini bisa ditutup dengan membaca dan latihan beberapa minggu, bukan modul 7 hari.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Salin dua baris itu ke catatanmu</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-2-8"><label for="jalur-s2-luar-negeri-v2-2-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis dua lubang itu di catatan, dengan tanggal pindaianmu.</div>
+<p>Di Hari 4 kamu akan melihat bahwa beberapa kampus mengubah daftar ini dari “sebaiknya” menjadi <strong>syarat masuk tertulis</strong> — dan di situ selisih antara “sudah bisa” dan “punya transkripnya” jadi menentukan.</p>
+        <div class="bahaya"><strong>Ini kalimat terpenting di seluruh modul.</strong> 50 modulmu dirancang membuatmu <em>bisa dipekerjakan</em>. Modul-modul itu tidak dirancang membuatmu <em>bisa diterima kuliah S2</em>. Itu dua target berbeda — dan MAT L1–L4 ada justru karena selisih itu ditemukan di sini.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> hasil pindaian bertanggal, dan dua lubang yang masih nyata (etika/privasi dan statistik inferensial). Empat lubang lama sudah ditutup MAT L1–L4.</p><p style="margin-top:8px">Besok: harganya. Kamu akan menghitungnya sendiri dengan kalkulator yang bisa kamu ubah asumsinya — bukan membaca tabel saya.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Harganya, dihitung sendiri — dan satu kolom yang membalik semuanya</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengganti “S2 di luar negeri itu mahal” dengan angka yang kamu hitung sendiri, lalu menghitung hal yang hampir tidak pernah dihitung siapa pun: berapa kenaikan gaji yang <em>harus</em> terjadi supaya uangnya kembali.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ambil kalkulatornya dan jalankan apa adanya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-1"><label for="jalur-s2-luar-negeri-v2-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin <code>data-dan-skrip/jalur-s2/hitung_s2.py</code> dari paket zip. Jalankan tanpa mengubah apa pun dulu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python hitung_s2.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL (dua baris pertama)</span>
+                  <div class="kode"><pre><code>uang kuliah &amp; biaya hidup: biaya sendiri
+gaji yang hilang: Rp 14,0 jt/bln · impas dalam 5 tahun</code></pre></div></div>
+<p>Dua baris itu adalah <strong>asumsimu</strong>, dan keduanya bisa kamu ganti. Sisa hari ini menghitung apa yang mengalir dari sana.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Periksa dasar perhitungannya sebelum percaya hasilnya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-2"><label for="jalur-s2-luar-negeri-v2-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka <code>hitung_s2.py</code> di editor. Baca bagian <code>KURS</code> dan <code>RUTE</code> — semua angka sumbernya ada di situ, dalam mata uang aslinya.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang dipakai</th>
+<th>Nilainya</th>
+<th>Dari mana</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Kurs jual, 6 Sep 2026</td><td>USD 17.690 · GBP 24.114 · AUD 12.538 · CHF 22.489 · EUR 20.649 · SGD 14.044</td><td>BCA, BRI, Yahoo Finance</td></tr>
+              <tr><td>Biaya hidup Inggris</td><td>£1.529/bln London · £1.171/bln luar London</td><td>syarat dana visa pelajar UK 2026</td></tr>
+              <tr><td>Biaya hidup Australia</td><td>AUD 29.710/tahun</td><td>syarat kapasitas keuangan visa pelajar</td></tr>
+              <tr><td>Biaya hidup Jerman</td><td>€992/bln = €11.904/tahun</td><td>rekening terblokir 2026</td></tr>
+              <tr><td>Biaya hidup Swiss</td><td>CHF 1.850/bln</td><td>titik tengah rentang CHF 1.500–2.200</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Kenapa saya memakai syarat visa sebagai biaya hidup.</strong> Karena itu angka resmi pemerintah, bukan cerita blog. Sisi buruknya: itu <em>batas minimum yang mereka izinkan</em>, jadi biaya hidup sebenarnya biasanya lebih tinggi. Semua angka di modul ini adalah <strong>perkiraan bawah</strong>, bukan atas. Kamu yang menyuruh saya berhenti memakai batas atas — ini kebalikannya, dan itu disengaja.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Baca kolom “kantong”: uang yang benar-benar keluar</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-3"><label for="jalur-s2-luar-negeri-v2-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat tiga kolom pertama hasilmu.</div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL (dalam juta rupiah)</span>
+                  <div class="kode"><pre><code>rute                              bln    kantong  gaji hilang  biaya ekonomi
+Georgia Tech OMSA (daring)         30      212,3          0,0          212,3
+Jerman negeri (RWTH/TU Berlin)     24      521,3        336,0          857,3
+TU Munich (non-UE)                 24      987,2        336,0        1.323,2
+NUS MSc DSML                       18    1.159,9        252,0        1.411,9
+Edinburgh                          12    1.267,2        168,0        1.435,2
+Berkeley MIDS (daring)             24    1.454,6          0,0        1.454,6
+ETH Zurich                         24    1.195,5        336,0        1.531,5
+Imperial College London            12    1.404,6        168,0        1.572,6
+CMU Heinz BIDA (daring)            30    1.585,0          0,0        1.585,0
+University of Melbourne            24    2.245,6        336,0        2.581,6</code></pre></div></div>
+<p>Selisih antara termurah dan termahal <strong>sepuluh kali lipat</strong> — Rp 212 juta lawan Rp 2.245 juta — untuk gelar yang di CV sama-sama tertulis “Master”.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Temukan satu baris yang paling menyesatkan</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-4"><label for="jalur-s2-luar-negeri-v2-3-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Cari baris ETH Zurich. Pisahkan uang kuliahnya dari biaya hidupnya — buka <code>RUTE</code> di editor untuk melihat angka aslinya.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>ETH Zurich</th>
+<th class="n">Dalam CHF</th>
+<th class="n">Dalam rupiah</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Uang kuliah, 2 tahun</td><td class="n">CHF 8.760</td><td class="n">197,0 jt</td></tr>
+              <tr><td>Biaya hidup, 24 bulan</td><td class="n">CHF 44.400</td><td class="n"><strong>998,5 jt</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">YANG BARU KAMU HITUNG</span>
+          <p><strong>Biaya hidupnya lima kali lipat uang kuliahnya.</strong> “Kuliah murah di Eropa” itu benar dan menyesatkan pada saat yang sama.</p></div>
+        <div class="catatan"><strong>Ini pola, bukan kekhususan ETH.</strong> Cek juga Jerman negeri: uang kuliah Rp 29,7 juta, biaya hidup Rp 491,6 juta. Enam belas kali lipat. Angka yang dipromosikan agen pendidikan hampir selalu yang kiri.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Sekarang tambahkan gaji yang tidak kamu terima</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-5"><label for="jalur-s2-luar-negeri-v2-3-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat kolom <code>gaji hilang</code>. Lalu buka editor dan ganti <code>GAJI_SEKARANG</code> dengan angka yang realistis untukmu, jalankan lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>GAJI_SEKARANG = 14_000_000      # ganti dengan angkamu</code></pre></div>
+<p>Rp 14 juta/bulan adalah batas bawah Senior Associate Big 4 dengan 2–3 tahun pengalaman — posisi yang realistis untukmu setelah 50 modul, bukan angka mimpi. <strong>Kalau angkamu berbeda, ganti dan jalankan lagi.</strong> Itu gunanya berupa skrip, bukan tabel.</p>
+        <div class="catatan"><strong>Perhatikan tiga rute daring punya gaji hilang nol.</strong> Georgia Tech, Berkeley, dan CMU tidak menghentikan pekerjaanmu. Kolom itu sendirian yang mengubah urutan seluruh tabel.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Balik pertanyaannya: berapa kenaikan yang HARUS terjadi</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-6"><label for="jalur-s2-luar-negeri-v2-3-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat kolom <code>impas/bln</code>. Itu bukan ramalan gaji — itu syarat.</div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>rute                            biaya ekonomi  impas/bln  = bln gaji
+Georgia Tech OMSA (daring)              212,3        3,5          35
+Jerman negeri (RWTH/TU Berlin)          857,3       14,3         143
+NUS MSc DSML                          1.411,9       23,5         235
+Edinburgh                             1.435,2       23,9         239
+Berkeley MIDS (daring)                1.454,6       24,2         242
+ETH Zurich                            1.531,5       25,5         255
+Imperial College London               1.572,6       26,2         262
+CMU Heinz BIDA (daring)               1.585,0       26,4         264
+University of Melbourne               2.581,6       43,0         430</code></pre></div></div>
+<p>Bukan “berapa gaji setelah S2?” — itu mengarang. Tapi: <strong>berapa kenaikan gaji per bulan yang harus benar-benar terjadi, permanen, selama lima tahun, supaya modalnya kembali.</strong></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Baca satu baris paling keras</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-7"><label for="jalur-s2-luar-negeri-v2-3-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat baris Melbourne.</div>
+        <div class="bahaya"><strong>+Rp 43,0 juta per bulan, permanen, selama lima tahun penuh — hanya untuk kembali ke titik nol.</strong> Median gaji data analyst Indonesia Rp 6 juta: total, bukan kenaikan. Kenaikan sebesar itu bukan “ambisius”; itu di luar rentang yang ada datanya.</div>
+<p>Kolom terakhir, <code>= bln gaji</code>, membaca hal yang sama dengan cara lain: biaya ekonominya setara <strong>430 bulan</strong> gaji pasar — 36 tahun.</p>
+        <div class="hasil"><span class="tag">KESIMPULAN SEMENTARA</span>
+          <p><strong>S2 luar negeri dengan biaya sendiri tidak masuk akal secara ekonomi untukmu, di angka pasar Indonesia mana pun yang punya sumber.</strong> Kecuali satu: Georgia Tech OMSA, karena kamu tetap bekerja.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Sekarang hapus uang kuliahnya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-8"><label for="jalur-s2-luar-negeri-v2-3-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan sekali lagi dengan satu tambahan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python hitung_s2.py --beasiswa</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>rute                            biaya ekonomi  impas/bln  = bln gaji
+Georgia Tech OMSA (daring)                0,0        0,0           0
+Berkeley MIDS (daring)                    0,0        0,0           0
+CMU Heinz BIDA (daring)                   0,0        0,0           0
+Edinburgh                               168,0        2,8          28
+Imperial College London                 168,0        2,8          28
+NUS MSc DSML                            252,0        4,2          42
+Jerman negeri (RWTH/TU Berlin)          336,0        5,6          56
+University of Melbourne                 336,0        5,6          56</code></pre></div></div>
+        <div class="hasil"><span class="tag">INILAH SELURUH JAWABANNYA</span>
+          <p>Rute Inggris satu tahun: dari butuh kenaikan <strong>Rp 26,2 juta/bulan</strong> menjadi butuh <strong>Rp 2,8 juta/bulan</strong>. <strong>Turun sembilan kali lipat.</strong> Kenaikan Rp 2,8 juta/bulan masuk akal dan ada datanya.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Ubah satu asumsi dan lihat apakah kesimpulannya goyah</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-9"><label for="jalur-s2-luar-negeri-v2-3-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ini kebiasaan auditor, dan skripnya dibuat justru untuk ini. Ganti satu angka, jalankan, lihat apakah kesimpulannya berubah.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Ganti</th>
+<th>Jadi</th>
+<th>Yang mau kamu tahu</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>TAHUN_IMPAS</code></td><td>10</td><td>apakah dengan waktu dua kali lipat, jalur non-beasiswa jadi masuk akal?</td></tr>
+              <tr><td><code>GAJI_SEKARANG</code></td><td>8.000.000</td><td>kalau gajimu lebih rendah, apakah biaya ekonominya turun cukup jauh?</td></tr>
+              <tr><td><code>KURS["GBP"]</code></td><td>28.000</td><td>seberapa rapuh kesimpulannya terhadap kurs?</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Yang kamu cari bukan angka barunya, tapi apakah urutannya berubah.</strong> Kalau Georgia Tech tetap paling murah di semua percobaan, kesimpulannya kokoh. Kalau satu perubahan kecil membalik urutannya, kesimpulannya rapuh dan kamu harus mencari angka yang lebih baik dulu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Tulis pertanyaan yang benar</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-3-10"><label for="jalur-s2-luar-negeri-v2-3-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Tulis satu kalimat.</div>
+        <div class="hasil"><span class="tag">PERTANYAAN YANG BENAR</span>
+          <p>Pertanyaannya bukan <em>“apakah saya sebaiknya S2 di luar negeri”</em>. Pertanyaannya <strong>“apakah saya bisa dapat beasiswa”</strong>.</p></div>
+<p>Dengan beasiswa: masuk akal. Tanpa beasiswa: tidak, kecuali OMSA. Sisa modul ini mengerjakan pertanyaan yang benar itu.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p><strong>Tempel di catatanmu:</strong> biaya hidup sering beberapa kali lipat uang kuliah · gaji yang hilang adalah biaya nyata · syarat impas adalah pertanyaan yang benar, bukan ramalan gaji · dengan beasiswa syaratnya turun sembilan kali lipat.</p><p style="margin-top:8px">Besok: apakah lamaranmu bahkan akan dibaca — karena ada masalah yang datang lebih dulu daripada uang.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>Pintu mana yang terkunci untuk ijazah akuntansi, dan mana yang terbuka lebar</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengetahui — sebelum membayar biaya pendaftaran apa pun — kampus mana yang menolak lamaranmu secara otomatis, dan menyusun daftar empat kampus dari sumber primer, bukan dari modul ini.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Baca satu syarat masuk, kata per kata</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-4-1"><label for="jalur-s2-luar-negeri-v2-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca kutipan ini pelan-pelan, lalu cari nama jurusanmu di dalamnya.</div>
+        <div class="kode"><pre><code>Edinburgh MSc Data Science, syarat masuk:
+  - Gelar UK 2:1 dalam informatics, artificial intelligence,
+    cognitive science, computer science, econometrics,
+    electrical engineering, linguistics, mathematics,
+    philosophy, physics, psychology, atau disiplin kuantitatif lain
+  - Pengalaman pemrograman setara satu mata kuliah pengantar
+  - 60 kredit SCQF / 30 ECTS matematika yang mencakup
+    KALKULUS, ALJABAR LINEAR, dan MATEMATIKA DISKRIT</code></pre></div>
+        <div class="hasil"><span class="tag">YANG KAMU TEMUKAN</span>
+          <p><strong>Akuntansi tidak ada dalam daftar itu.</strong></p></div>
+        <div class="bahaya"><strong>Kamu bukan kandidat yang lemah untuk Edinburgh — kamu <em>tidak memenuhi syarat</em>.</strong> Itu keputusan administratif yang tidak bisa dibantah dengan portofolio sebagus apa pun.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Hitung syarat 60 kredit matematikanya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-4-2"><label for="jalur-s2-luar-negeri-v2-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ubah “60 kredit SCQF / 30 ECTS” jadi satuan yang kamu pahami.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Satuan</th>
+<th>Nilai</th>
+<th>Setara</th>
+</tr></thead>
+            <tbody>
+              <tr><td>60 kredit SCQF</td><td>= 30 ECTS</td><td>± 4 mata kuliah matematika tingkat sarjana</td></tr>
+              <tr><td>Bekalmu (pindaian Hari 2)</td><td>kalkulus 3 modul · aljabar linear 5 modul</td><td>MAT L2 dan L4 — bukan mata kuliah bertranskrip</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Inilah selisih yang harus kamu pegang sepanjang hari ini:</strong> MAT L1–L4 membuatmu <em>mampu mengikuti</em> kuliahnya. Yang memenuhi <em>syarat administratif</em> hanyalah mata kuliah yang punya transkrip. Dua hal berbeda — jangan mencampurnya.</div>
+        <div class="catatan"><strong>Manchester</strong> (MSc Data Science, Business and Management) juga menyebut “gelar dalam bidang kuantitatif atau komputasi” dan mensyaratkan <strong>IELTS 7.0 tanpa komponen di bawah 6.5</strong> — salah satu syarat bahasa tertinggi dalam daftar ini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Sekarang pintu yang justru terbuka</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-4-3"><label for="jalur-s2-luar-negeri-v2-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca kolom tengah. Cari yang menyebut akuntansi secara eksplisit.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Program</th>
+<th>Posisi ijazah akuntansimu</th>
+<th>Catatan penting</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>LSE</strong> — MSc Accounting and Data Analytics</td><td>ini justru <em>bidang aslimu</em></td><td>10 bulan. AC415 wajib. <strong>GMAT atau GRE wajib untuk semua pelamar tanpa gelar sarjana UK.</strong></td></tr>
+              <tr><td><strong>Bristol</strong> — MSc Data Science for Business</td><td>diterima secara eksplisit</td><td>Bristol memasukkan <strong>Accounting and Finance sebagai bidang kuantitatif</strong> yang memenuhi syarat</td></tr>
+              <tr><td><strong>Georgia Tech</strong> — OMS Analytics</td><td>diterima meski bekal matematika kurang</td><td><strong>tanpa syarat GRE/GMAT.</strong> Pelamar yang bekal matematikanya belum cukup tetap bisa diterima</td></tr>
+              <tr><td><strong>Exeter</strong> — MSc Data Science</td><td>dirancang untuk latar non-komputasi</td><td>program <em>conversion</em>: materinya memang disusun untuk pendatang dari luar bidang</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">TEMUAN PALING BERGUNA HARI INI</span>
+          <p><strong>LSE MSc Accounting and Data Analytics.</strong> Nama programnya harfiah menggabungkan dua hal yang kamu punya. Di program ini, latar KAP-mu bukan hambatan yang harus dijelaskan — itu <em>syarat masuknya</em>.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Buat tabel daftarmu, lima kolom</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-4-4"><label for="jalur-s2-luar-negeri-v2-4-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat berkas <code>kampus.md</code> berisi kerangka ini, empat baris kosong.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>| program | syarat matematika | GMAT/GRE | IELTS | tenggat |
+|---------|-------------------|----------|-------|---------|
+| 1.      |                   |          |       |         |
+| 2.      |                   |          |       |         |
+| 3.      |                   |          |       |         |
+| 4.      |                   |          |       |         |</code></pre></div>
+<p>Tiga realistis, satu aspirasi. <strong>Sumbernya harus halaman resmi kampus</strong> — bukan agen pendidikan, dan bukan modul ini.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Isi tabelnya dari sumber primer, satu kampus dulu</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-4-5"><label for="jalur-s2-luar-negeri-v2-4-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka halaman <em>entry requirements</em> resmi satu kampus. Salin syaratnya apa adanya ke tabelmu, termasuk angkanya.</div>
+        <div class="hasil"><span class="tag">YANG HARUS ADA</span>
+          <p>Satu baris terisi penuh, dengan tautan sumbernya di bawah tabel.</p></div>
+        <div class="bahaya"><strong>Kenapa saya menyuruhmu mengecek ulang semua angka saya.</strong> Riset modul ini dilakukan lewat hasil pencarian, karena akses langsung ke situs kampus diblokir dari lingkungan kerja saya. Uang kuliah berubah tiap tahun, dan beberapa sumber saling bertentangan — untuk Edinburgh saja saya menemukan tiga angka berbeda (£38.500, £40.900, dan £45.410). Saya memakai yang terendah.</div>
+<p>Perlakukan seluruh modul ini seperti kertas kerja audit: <strong>berguna sebagai peta, wajib diuji ke sumber primer sebelum dipakai mengambil keputusan.</strong></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Periksa daftarmu dengan satu pertanyaan</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-4-6"><label for="jalur-s2-luar-negeri-v2-4-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Setelah empat baris terisi, jawab satu pertanyaan untuk tiap baris.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Pertanyaan</th>
+<th>Kalau jawabannya ya</th>
+<th>Kalau tidak</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Apakah syarat matematikanya bisa saya penuhi <strong>hari ini</strong>?</td><td>kampus ini realistis</td><td>ia butuh 6–12 bulan tambahan sebelum kamu bahkan mendaftar</td></tr>
+              <tr><td>Apakah GMAT/GRE diwajibkan?</td><td>tambah 2–3 bulan persiapan dan biaya tes</td><td>satu hambatan hilang</td></tr>
+              <tr><td>Apakah IELTS-nya di atas 6,5?</td><td>targetmu naik, jadwalkan tes lebih awal</td><td>6,0–6,5 cukup</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kalau tiga dari empat barismu butuh 6–12 bulan tambahan,</strong> daftarmu terlalu ambisius untuk siklus ini. Ganti satu dengan yang menerimamu apa adanya — supaya kamu punya sesuatu untuk dikirim tahun ini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Kalau kamu tetap mengincar kampus yang mensyaratkan matematika</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-4-7"><label for="jalur-s2-luar-negeri-v2-4-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca tiga jalan ini, lalu tulis tanggal mulai yang realistis untuk masing-masing.</div>
+<ol>
+          <li><strong>Ambil kalkulus dan aljabar linear daring yang bersertifikat kredit</strong> —
+          bukan sekadar sertifikat penyelesaian. Yang dihitung panitia adalah kredit yang bisa
+          ditranskripkan.</li>
+          <li><strong>Ambil GRE dan kejar nilai Quantitative yang tinggi.</strong> Untuk pelamar
+          yang latar belakangnya diragukan, nilai GRE Quant sering dipakai sebagai bukti pengganti
+          — LSE menyatakan ini secara eksplisit.</li>
+          <li><strong>Pilih program <em>conversion</em></strong> seperti Exeter, yang memang
+          menargetkan pendatang dari luar bidang komputasi.</li>
+        </ol>
+        <div class="bahaya"><strong>Jujur soal biayanya:</strong> ketiga jalan ini menambah 6–12 bulan <em>sebelum kamu bahkan mendaftar</em>, dan menggeser mulai kuliah paling cepat ke 2028. Bandingkan dengan LSE atau Bristol yang menerimamu apa adanya sekarang.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-4-8"><label for="jalur-s2-luar-negeri-v2-4-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Sebutkan dua kampus yang akan menolakmu otomatis dan dua yang menerimamu apa adanya — beserta alasannya.</div>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p><strong>Menolak otomatis:</strong> Edinburgh (akuntansi tidak ada di daftar
+            jurusan, plus 60 kredit matematika) dan Manchester (bidang kuantitatif/komputasi,
+            IELTS 7.0).</p>
+            <p><strong>Menerima apa adanya:</strong> LSE (akuntansi justru syaratnya, tapi wajib
+            GMAT/GRE) · Bristol (Accounting and Finance dihitung kuantitatif) · Georgia Tech
+            (tanpa GRE, menerima bekal matematika yang kurang) · Exeter (program conversion).</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai</h3>
+      <p>Empat kampus menerimamu apa adanya; setidaknya dua akan menolakmu otomatis. Itu daftar pendek yang jauh lebih berguna daripada peringkat QS.</p><p style="margin-top:8px">Dan satu selisih yang harus kamu pegang: <strong>mampu mengikuti kuliahnya</strong> tidak sama dengan <strong>memenuhi syarat administratifnya</strong>. Besok: uangnya — siapa yang mau membayari, dan kapan tenggatnya.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>Beasiswa: syaratnya, isinya, dan hitungan mundur yang tidak pernah basi</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> Hari 3 membuktikan seluruh keputusan ini bergantung pada beasiswa. Hari ini kamu menghitung sendiri sisa waktunya, mengukur usiamu terhadap batas LPDP, dan memilih target IELTS.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Jalankan hitungan mundurnya dari hari ini, bukan dari hari saya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-1"><label for="jalur-s2-luar-negeri-v2-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin <code>data-dan-skrip/jalur-s2/hitung_tenggat.py</code> dari paket zip, lalu jalankan tanpa argumen.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python hitung_tenggat.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL (kalau hari ini 7 Sep 2026)</span>
+                  <div class="kode"><pre><code>TENGGAT
+  Chevening 2027/28        2026-10-06    29 hari lagi     (6 Okt 2026, 11:00 UTC)
+  LPDP Tahap 1 2027        2027-02-23   169 hari lagi     (perkiraan, pola 2026)
+  Australia Awards 2028    2027-04-30   235 hari lagi     (jendela 1 Feb - 30 Apr 2027)</code></pre></div></div>
+        <div class="catatan"><strong>Angkamu pasti berbeda dari saya</strong>, dan itu memang tujuannya. Modul yang menuliskan “tinggal 29 hari” jadi salah keesokan harinya. Skrip ini menghitungnya ulang tiap kali dijalankan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Baca baris paling atas dua kali</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-2"><label for="jalur-s2-luar-negeri-v2-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat sisa hari untuk Chevening di layarmu.</div>
+        <div class="bahaya"><strong>Chevening mensyaratkan minimum dua tahun pengalaman kerja (setara 2.800 jam) — dan kamu sudah melewatinya bertahun-tahun lalu di KAP.</strong> Ini bukan tenggat yang “sebaiknya dipertimbangkan”. Ini pintu yang sedang terbuka dan akan tertutup selama setahun penuh.</div>
+<p>Kalau angkanya sudah negatif di layarmu, jendela itu sudah lewat — dan yang berlaku adalah siklus berikutnya. Perbarui tanggalnya di dalam skrip, jangan menebak.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Bandingkan syarat ketiganya berdampingan</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-3"><label for="jalur-s2-luar-negeri-v2-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Cari satu baris yang kamu belum penuhi.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Syarat</th>
+<th>LPDP (reguler LN)</th>
+<th>Chevening</th>
+<th>Australia Awards</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Usia maksimum S2</td><td>35 th per 31 Des 2026</td><td>tidak ada</td><td>tidak ada</td></tr>
+              <tr><td>IPK minimum</td><td>2,50</td><td>—</td><td>—</td></tr>
+              <tr><td>Pengalaman kerja</td><td>—</td><td><strong>2 th / 2.800 jam</strong></td><td>—</td></tr>
+              <tr><td>Bahasa Inggris</td><td>IELTS 6,5 · TOEFL iBT 80 · PTE 58</td><td>syarat kampusnya</td><td><strong>IELTS 6,0</strong></td></tr>
+              <tr><td>Masa berlaku sertifikat</td><td>maks. 2 tahun</td><td>—</td><td>berlaku 1 Jan 2027, tes setelah 1 Jan 2025</td></tr>
+              <tr><td>Ikatan setelah lulus</td><td>wajib pulang</td><td><strong>pulang min. 2 tahun</strong></td><td>wajib pulang</td></tr>
+              <tr><td>Kewajiban lain</td><td>—</td><td>—</td><td><strong>pelatihan EAP penuh waktu</strong> Sen–Jum 08.00–16.00 sebelum berangkat</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">BARIS YANG BELUM KAMU PENUHI</span>
+          <p>Baris <strong>Bahasa Inggris</strong>. Kamu belum punya IELTS, dan ketiga jalur membutuhkannya.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Hitung usiamu per 31 Desember 2026</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-4"><label for="jalur-s2-luar-negeri-v2-5-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu baris di terminal. Ganti tanggal lahirnya dengan milikmu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python3 -c &quot;from datetime import date; l=date(1996,5,20); b=date(2026,12,31); print(b.year-l.year-((b.month,b.day)&lt;(l.month,l.day)), &#x27;tahun&#x27;)&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL (untuk contoh 20 Mei 1996)</span>
+                  <div class="kode"><pre><code>30 tahun</code></pre></div></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Usiamu per 31 Des 2026</th>
+<th>Artinya untuk LPDP</th>
+</tr></thead>
+            <tbody>
+              <tr><td>di bawah 33</td><td>jendelamu masih 3+ siklus. Tidak perlu terburu-buru.</td></tr>
+              <tr><td>33–34</td><td>tersisa 1–2 siklus. LPDP naik prioritas.</td></tr>
+              <tr><td>35 ke atas</td><td>jalur S2 reguler LPDP tertutup. Chevening dan AAS tidak punya batas usia.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Batas 35 tahun dihitung per 31 Desember tahun pendaftaran</strong>, bukan per tanggal kamu mendaftar. Selisihnya bisa satu siklus penuh.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Pilih target IELTS yang paling murah dikejar</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-5"><label for="jalur-s2-luar-negeri-v2-5-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat tiga angka ini dan pilih satu sebagai targetmu.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Target</th>
+<th>Untuk</th>
+<th>Catatan</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>6,0</strong></td><td>Australia Awards</td><td>paling ringan; targetkan ini dulu</td></tr>
+              <tr><td><strong>6,5</strong></td><td>LPDP</td><td>target realistis kedua</td></tr>
+              <tr><td><strong>7,0</strong> tanpa komponen &lt; 6,5</td><td>Manchester</td><td>paling berat; hanya kalau kampus itu memang tujuanmu</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Ambil satu tes, bukan tiga. Skor 7,0 memenuhi semuanya sekaligus — tapi mengejar 7,0 menunda tesmu berbulan-bulan. <strong>Skor 6,5 membuka LPDP dan AAS sekaligus</strong>, dan itu titik yang paling masuk akal.</p>
+        <div class="bahaya"><strong>Pesan jadwal tesnya minggu ini juga.</strong> Kursi IELTS sering penuh 3–6 minggu di muka. Ini satu-satunya langkah di seluruh modul yang gagal hanya karena ditunda seminggu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Lihat isi LPDP, dan apa yang baru dihapus</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-6"><label for="jalur-s2-luar-negeri-v2-5-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca tabelnya, lalu perhatikan baris terakhir.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Komponen</th>
+<th>Besaran</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Dana hidup bulanan</td><td>menyesuaikan standar biaya hidup negara tujuan</td></tr>
+              <tr><td>Dana kedatangan</td><td><strong>200% dari dana hidup bulanan</strong></td></tr>
+              <tr><td>Tunjangan buku</td><td>maks. Rp 10 juta/tahun</td></tr>
+              <tr><td>Asuransi kesehatan</td><td>maks. Rp 29 juta/tahun</td></tr>
+              <tr><td>Tunjangan keluarga</td><td>25% dari dana hidup, maks. 2 orang</td></tr>
+              <tr><td><em>Dihapus mulai 2026</em></td><td><em>biaya laptop · visa keluarga · publikasi jurnal</em></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Hubungkan dengan Hari 3.</strong> Kalau uang kuliah dan biaya hidup ditanggung, yang tersisa cuma gaji yang tidak kamu terima — dan syarat impasmu turun dari Rp 26,2 juta jadi Rp 2,8 juta per bulan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Cocokkan daftar kampusmu dengan daftar LPDP</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-7"><label for="jalur-s2-luar-negeri-v2-5-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Unduh buku “Daftar Perguruan Tinggi Tujuan” LPDP terbaru dari <code>lpdp.kemenkeu.go.id</code>. Cocokkan dengan empat kampus dari Hari 4.</div>
+        <div class="bahaya"><strong>Perubahan LPDP 2026 yang paling berdampak:</strong> daftar Perguruan Tinggi Utama Dunia yang diprioritaskan <strong>dipangkas dari 30 menjadi 17 kampus</strong>, seiring pengetatan fokus ke bidang STEM dan industri strategis. Kampus yang tidak ada di daftar akan menggugurkan berkasmu, sebagus apa pun esaimu.</div>
+        <div class="hasil"><span class="tag">YANG HARUS ADA SETELAH LANGKAH INI</span>
+          <p>Empat baris di <code>kampus.md</code>-mu, masing-masing bertanda <strong>ada</strong> atau <strong>tidak ada</strong> di daftar LPDP.</p></div>
+<p>Kalau LSE atau Bristol tidak ada di daftar untuk bidangmu, itu mengubah rencanamu <strong>hari ini juga</strong> — bukan nanti setelah esaimu selesai.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Satu perubahan aturan visa yang memangkas nilai gelar Inggris</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-8"><label for="jalur-s2-luar-negeri-v2-5-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca, lalu hubungkan dengan satu angka yang sudah kamu punya.</div>
+        <div class="hasil"><span class="tag">ATURAN BARU</span>
+          <p>Mahasiswa yang <strong>menyelesaikan studi setelah 1 Januari 2027</strong> mendapat <strong>18 bulan</strong> izin kerja pascastudi (Graduate Route), bukan 2 tahun lagi. Yang menentukan adalah <em>tanggal kamu mengajukan</em>, bukan tanggal kuliahmu dimulai. Lulusan S3 tetap 3 tahun.</p></div>
+        <div class="bahaya"><strong>Riset LPEM FEB UI atas Sakernas BPS Agustus 2025 mencatat rata-rata pencarian kerja di Indonesia 19,8 bulan.</strong> Kalau di Inggris pun butuh waktu sebanding, izin 18 bulan itu <em>lebih pendek daripada rata-rata lama orang mendapatkan pekerjaan</em>. Rencana “kuliah di Inggris lalu kerja di sana untuk balik modal” baru saja kehilangan enam bulan dari margin yang sudah tipis.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Pasang pengingat, bukan niat</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-5-9"><label for="jalur-s2-luar-negeri-v2-5-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka kalender di HP-mu. Pasang tiga pengingat, masing-masing dua minggu <em>sebelum</em> tenggatnya.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Pengingat</th>
+<th>Kapan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Chevening — kirim, jangan tunggu hari terakhir</td><td>22 September 2026</td></tr>
+              <tr><td>LPDP — cek pengumuman jadwal Tahap 1</td><td>1 Januari 2027</td></tr>
+              <tr><td>Australia Awards — jendela buka</td><td>25 Januari 2027</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Jangan mengirim di hari terakhir.</strong> Server Chevening kelebihan beban tiap tahun menjelang tenggat, dan tidak ada perpanjangan untuk itu.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 5 selesai</h3>
+      <p><strong>Tempel di catatanmu:</strong> Chevening tidak punya batas usia dan syarat terberatnya sudah kamu penuhi · batas usia LPDP dihitung per 31 Desember · IELTS 6,5 membuka dua jalur sekaligus · daftar kampus LPDP dipangkas jadi 17 · Graduate Route Inggris turun jadi 18 bulan.</p><p style="margin-top:8px">Besok kita ubah semua ini menjadi kalender — dengan tanggal yang dihitung skrip, bukan niat.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 6</span>
+      <h2>Kalender yang dihitung skrip — dan satu bentrokan yang ketahuan sebelum terjadi</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menaruh semua tenggat dan seluruh kurikulummu ke dalam satu kalender yang dihitung, lalu memeriksa apakah semuanya benar-benar muat. Satu di antaranya ternyata tidak.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Jalankan skrip yang sama, dengan tanggal mulai belajarmu</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-1"><label for="jalur-s2-luar-negeri-v2-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Beri satu argumen: tanggal kamu mulai (atau sudah mulai) mengerjakan kurikulum.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python hitung_tenggat.py 2026-09-07</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>KAPAN FASE SELESAI
+  Fase 1-5 (teknis)     217 hari materi = 22 minggu -&gt; 2027-02-08
+  Fase 1-6              254 hari materi = 26 minggu -&gt; 2027-03-08
+  Fase 1-7 (penuh)      282 hari materi = 29 minggu -&gt; 2027-03-29</code></pre></div></div>
+<p>Angka <code>217</code>, <code>254</code>, dan <code>282</code> bukan ketikan — itu jumlah hari materi tiap fase, dijumlahkan dari daftar modulmu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Pahami ritme yang dipakai perhitungan itu</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-2"><label for="jalur-s2-luar-negeri-v2-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka <code>hitung_tenggat.py</code> dan cari baris <code>PER_MINGGU</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>PER_MINGGU = 10   # 2 hari materi per hari kerja, 5 hari seminggu</code></pre></div>
+<p>Itu ritme yang dipakai seluruh rute: <strong>dua “hari materi” per satu hari kerja, lima hari seminggu.</strong> Bukan tiga — modul-modul ini punya ulangan berjarak bawaan, dan memampatkannya membuat jaraknya ikut memampat.</p>
+        <div class="catatan"><strong>Kalau ritmemu berbeda, ganti angkanya.</strong> Belajar akhir pekan juga? <code>PER_MINGGU = 14</code>. Cuma sanggup satu hari materi per hari? <code>PER_MINGGU = 5</code>, dan seluruh kalendermu mundur dua kali lipat — lebih baik tahu sekarang.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Baca tabel “muat atau tidak”</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-3"><label for="jalur-s2-luar-negeri-v2-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lihat bagian paling bawah keluarannya.</div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>MUAT ATAU TIDAK
+  (Chevening tidak masuk tabel ini: ia tidak menunggu portofoliomu selesai)
+  berhenti di              LPDP Tahap 1 2027  Australia Awards 202
+  Fase 1-5 (teknis)         muat, sisa 15 hr      muat, sisa 81 hr
+  Fase 1-6                   TERLAMBAT 13 hr      muat, sisa 53 hr
+  Fase 1-7 (penuh)           TERLAMBAT 34 hr      muat, sisa 32 hr</code></pre></div></div>
+        <div class="bahaya"><strong>Inilah bentrokan yang ditemukan skrip ini.</strong> Kalau kamu menunggu seluruh rute selesai sebelum mendaftar LPDP, kamu <strong>terlambat 34 hari</strong>. Kalau berhenti setelah fase 5, kamu <strong>muat dengan sisa 15 hari</strong>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Ambil aturannya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-4"><label for="jalur-s2-luar-negeri-v2-6-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis satu kalimat ini di catatanmu.</div>
+        <div class="hasil"><span class="tag">ATURAN YANG BERLAKU</span>
+          <p><strong>Kirim berkas LPDP setelah fase 5, bukan setelah seluruh rute.</strong></p></div>
+<p>Di titik itu portofolio teknismu sudah lengkap: SQL Mahir L1–L5, SQL &amp; Python Produksi, migas, studi kasus. <strong>Fase 6 dan 7 menambah kemampuan, bukan menambah bukti yang dibutuhkan panitia.</strong></p>
+        <div class="catatan"><strong>Australia Awards muat di ketiga skenario</strong>, jadi ia bukan yang membatasi. Yang membatasi hanya LPDP — dan hanya karena tenggatnya jatuh di Februari.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Uji sendiri: apa yang terjadi kalau kamu mulai terlambat sebulan</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-5"><label for="jalur-s2-luar-negeri-v2-6-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan lagi dengan tanggal mulai satu bulan lebih lambat.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python hitung_tenggat.py 2026-10-07</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL (baris fase 1-5)</span>
+                  <div class="kode"><pre><code>  Fase 1-5 (teknis)         TERLAMBAT 15 hr      muat, sisa 51 hr</code></pre></div></div>
+        <div class="bahaya"><strong>Menunda mulai satu bulan menghapus jalur LPDP siklus ini seluruhnya.</strong> Bukan karena kamu kurang mampu, tapi karena aritmetika. Ini alasan paling konkret untuk mulai minggu ini, dan kamu baru saja membuktikannya sendiri.</div>
+<p>Australia Awards masih muat dengan sisa 51 hari — jadi menunda sebulan berarti <strong>kehilangan satu dari tiga lemparan</strong>, bukan semuanya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Susun kalender lengkapmu</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-6"><label for="jalur-s2-luar-negeri-v2-6-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin kerangka ini ke catatanmu dan isi tanggalnya dari keluaran skripmu sendiri, bukan dari tabel saya.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kapan</th>
+<th>Yang dikerjakan</th>
+<th>Kenapa saat itu</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>Minggu ini</strong></td><td>pesan jadwal IELTS · mulai empat esai Chevening</td><td>kursi IELTS penuh 3–6 minggu di muka</td></tr>
+              <tr><td><strong>sampai tenggat Chevening</strong></td><td>selesaikan lamaran: 3 pilihan program UK + 4 esai</td><td>jangan kirim di hari terakhir</td></tr>
+              <tr><td><strong>sampai fase 5 selesai</strong></td><td>jalankan fase 1–5</td><td>di titik ini portofoliomu cukup untuk melamar beasiswa</td></tr>
+              <tr><td><strong>2–3 bulan sebelum LPDP</strong></td><td>ambil IELTS · GMAT/GRE kalau mengincar LSE</td><td>sertifikatnya harus sudah di tangan saat mendaftar</td></tr>
+              <tr><td><strong>jendela LPDP</strong></td><td>daftar LPDP Tahap 1</td><td>setelah fase 5, bukan setelah seluruh rute</td></tr>
+              <tr><td><strong>setelah berkas terkirim</strong></td><td>jalankan fase 6 lalu fase 7</td><td>tidak menghalangi apa pun lagi</td></tr>
+              <tr><td><strong>jendela AAS</strong></td><td>daftar Australia Awards</td><td>muat di skenario mana pun</td></tr>
+              <tr><td><strong>sepanjang itu</strong></td><td>melamar kerja secara paralel</td><td>tidak ada beasiswa yang pasti</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Pahami kenapa dua jalur ini tidak saling memakan</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-7"><label for="jalur-s2-luar-negeri-v2-6-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca diagram ini, lalu jawab: apa isi lamaran beasiswamu?</div>
+        <div class="diagram">
+          <div class="kotak"><strong>SEKARANG</strong>58 modul</div>
+          <span class="panah">→</span>
+          <div class="kotak"><strong>SELESAI FASE 5</strong>portofolio teknis lengkap</div>
+          <span class="panah">→</span>
+          <div class="kotak"><strong>SELEKSI</strong>bahan esai &amp; wawancara</div>
+        </div>
+        <div class="hasil"><span class="tag">JAWABANNYA</span>
+          <p>Setiap panitia beasiswa menanyakan hal yang sama: <em>kenapa bidang ini, dan apa buktinya kamu serius?</em> Pelamar biasa menjawab dengan niat. Kamu bisa menjawab dengan <strong>tiga proyek klien yang dikerjakan tanpa kunci jawaban, satu nilai ujian berwaktu yang objektif, dan portofolio yang bisa dibuka</strong>.</p></div>
+<p><strong>Rute itu bukan penunda lamaran beasiswamu — itu isi lamarannya.</strong></p>
+        <div class="catatan"><strong>Dan kalau semua beasiswa gagal</strong>, di titik yang sama kamu tetap punya kemampuan kerja yang lengkap, tanpa kehilangan satu rupiah pun. Itu properti yang tidak dimiliki rencana mana pun yang bertumpu pada diterima-tidaknya kamu di suatu tempat.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Lihat empat modul yang menutup lubang matematikanya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-8"><label for="jalur-s2-luar-negeri-v2-6-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka satu di antaranya sebentar, lalu tutup lagi. Kamu cuma perlu tahu bentuknya sekarang.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Modul</th>
+<th>Menutup mata kuliah wajib</th>
+<th class="n">Hari</th>
+</tr></thead>
+            <tbody>
+              <tr><td><a href="https://claude.ai/code/artifact/f6784136-a13e-47e9-9eae-0264bd514182"><strong>MAT L1 — Probabilitas formal</strong></a></td><td>DATASCI W203 (Berkeley) · ISYE 6739 (Georgia Tech)</td><td class="n">7</td></tr>
+              <tr><td><a href="https://claude.ai/code/artifact/f5079d99-9181-47a2-9ce4-7747feca52a3"><strong>MAT L2 — Aljabar linear</strong></a></td><td>MAST90138 <em>Multivariate Statistics</em> (Melbourne)</td><td class="n">7</td></tr>
+              <tr><td><a href="https://claude.ai/code/artifact/6dc7de48-3ed0-4126-8455-a2c82e7bad4c"><strong>MAT L3 — Optimisasi</strong></a></td><td>DSA5103 <em>Optimization Algorithms</em> (NUS)</td><td class="n">7</td></tr>
+              <tr><td><a href="https://claude.ai/code/artifact/bf6f3e02-66dc-40a4-a649-f1c260029d36"><strong>MAT L4 — Deep learning</strong></a></td><td>DSA5106 (NUS) · COMP90051 (Melbourne)</td><td class="n">7</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Keempatnya dibuat <em>setelah</em> pindaian Hari 2 menemukan lubangnya — 28 hari materi yang seluruhnya lahir dari satu skrip yang menghitung, bukan dari dugaan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Putuskan kapan mengerjakan MAT L1–L4</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-6-9"><label for="jalur-s2-luar-negeri-v2-6-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Pilih satu baris yang menggambarkan tujuanmu.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Tujuanmu</th>
+<th>Kapan mengerjakan MAT L1–L4</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Kerja di analitik audit / risiko di Indonesia</td><td><strong>Jangan sekarang.</strong> Tidak satu pun lowongan di Hari 1 menyebutnya. Waktumu lebih berharga di Pintu B dan Proyek Buta.</td></tr>
+              <tr><td>Melamar S2 ke kampus yang mensyaratkan matematika</td><td><strong>Kerjakan, <em>dan</em> ambil kredit resmi.</strong> Empat modul itu membuatmu mampu mengikuti; yang memenuhi syarat administratif tetap mata kuliah bertranskrip.</td></tr>
+              <tr><td>Melamar LSE / Bristol / OMSA</td><td><strong>Kerjakan setelah diterima, bukan sebelum melamar.</strong> Ketiganya menerimamu apa adanya. Empat modul itu jadi persiapan 28 hari sebelum kuliah dimulai.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Jebakan urutan.</strong> Godaan terbesarnya adalah menghabiskan enam bulan menutup lubang matematika “supaya siap”, lalu mendapati kampus tujuanmu tidak pernah memintanya — sementara tenggat Chevening sudah lewat. <strong>Matematika tidak punya tenggat; beasiswa punya.</strong> Fase 7 diletakkan setelah modul ini justru karena itu.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 6 selesai</h3>
+      <p><strong>Tempel di catatanmu:</strong> kirim LPDP setelah fase 5 · menunda mulai sebulan menghapus jalur LPDP siklus ini · Australia Awards muat di skenario mana pun · matematika tidak punya tenggat, beasiswa punya.</p><p style="margin-top:8px">Besok hari terakhir: keputusannya, dan rubrik supaya kamu bisa mengambilnya sendiri tanpa bertanya kepada saya.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 7</span>
+      <h2>Keputusannya, dan rubrik yang kamu jalankan sendiri</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menutup enam hari angka menjadi satu keputusan bertanggal yang bisa kamu pertahankan di depan siapa pun — termasuk di depan dirimu sendiri lima tahun lagi.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lihat pernyataan rubriknya sebelum menjawab</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-7-1"><label for="jalur-s2-luar-negeri-v2-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin <code>data-dan-skrip/jalur-s2/skor_rubrik.py</code> dari paket zip. Jalankan tanpa membuat berkas jawaban dulu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python skor_rubrik.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>buat dulu jawaban.txt berisi 8 baris Y atau T:
+
+  1. [2 poin] Uang kuliah DAN biaya hidupnya dibayar orang lain (beasiswa penuh)
+  2. [1 poin] Usiaku pada 31 Des tahun depan masih di bawah 33
+  3. [1 poin] Aku mengincar pekerjaan yang benar-benar memfilter &#x27;STEM background&#x27;
+  4. [1 poin] Aku ingin bekerja atau menetap di luar negeri, bukan hanya kuliah di sana
+  5. [2 poin] Aku menginginkan riset, S3, atau mengajar
+  6. [1 poin] Aku sudah punya IELTS/TOEFL yang masih berlaku
+  7. [1 poin] Aku sanggup tidak berpenghasilan 12-24 bulan tanpa mengganggu siapa pun
+  8. [2 poin] Aku sudah melamar 20+ posisi analitik audit/risiko dan ditolak karena pendidikan</code></pre></div></div>
+        <div class="bahaya"><strong>Jangan menjawab Y untuk hal yang “bisa diusahakan nanti”.</strong> Rubrik ini menilai keadaanmu hari ini. Menjawab Y untuk beasiswa yang belum kamu punya membuat seluruh hitungannya tidak berguna.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jawab kedelapannya, satu baris per jawaban</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-7-2"><label for="jalur-s2-luar-negeri-v2-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat <code>jawaban.txt</code> berisi delapan baris <code>Y</code> atau <code>T</code>. Lalu jalankan lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python skor_rubrik.py</code></pre></div>
+        <div class="hasil"><span class="tag">CONTOH KELUARAN</span>
+                  <div class="kode"><pre><code>  [T] 0/2  Uang kuliah DAN biaya hidupnya dibayar orang lain (beasiswa penuh)
+  [Y] 1/1  Usiaku pada 31 Des tahun depan masih di bawah 33
+  [T] 0/1  Aku mengincar pekerjaan yang benar-benar memfilter &#x27;STEM background&#x27;
+  [Y] 1/1  Aku ingin bekerja atau menetap di luar negeri, bukan hanya kuliah di sana
+  [T] 0/2  Aku menginginkan riset, S3, atau mengajar
+  [T] 0/1  Aku sudah punya IELTS/TOEFL yang masih berlaku
+  [Y] 1/1  Aku sanggup tidak berpenghasilan 12-24 bulan tanpa mengganggu siapa pun
+  [T] 0/2  Aku sudah melamar 20+ posisi analitik audit/risiko dan ditolak karena pendidikan
+
+skor: 3 dari 11
+bacaan: Lamar beasiswanya, jangan biayai sendiri
+        Kalau ditolak, tidak ada yang hilang selain waktumu.</code></pre></div></div>
+        <div class="catatan"><strong>Contoh di atas bukan jawabanmu</strong> — itu satu kemungkinan. Yang berarti adalah skormu sendiri dan bacaan yang keluar bersamanya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Perhatikan baris nomor 3 dan bandingkan dengan angkamu di Hari 1</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-7-3"><label for="jalur-s2-luar-negeri-v2-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil angka ketiga dari Hari 1: berapa dari sepuluh lowongan yang memasang filter STEM. Baru putuskan jawaban baris 3.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Angkamu di Hari 1</th>
+<th>Jawaban baris 3</th>
+</tr></thead>
+            <tbody>
+              <tr><td>0–1 dari 10</td><td><strong>T</strong> — filternya terlalu jarang untuk jadi alasan</td></tr>
+              <tr><td>2–4 dari 10</td><td>boleh Y, tapi catat bahwa alasannya lemah</td></tr>
+              <tr><td>5+ dari 10</td><td><strong>Y</strong> — dan ini alasan terkuatmu</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Inilah gunanya Hari 1 dikerjakan sebelum Hari 7. Baris ini tidak dijawab dengan perasaan; ia dijawab dengan angka yang kamu hitung sendiri enam hari lalu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Perhatikan baris nomor 8 dan bobotnya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-7-4"><label for="jalur-s2-luar-negeri-v2-7-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca baris 8 sekali lagi, lalu hitung berapa lamaran yang sudah kamu kirim.</div>
+        <div class="bahaya"><strong>Bukti terkuat bahwa kamu butuh gelar adalah penolakan nyata karena gelar</strong> — bukan dugaan bahwa kamu akan ditolak. Kalau kamu belum melamar, seluruh perhitungan modul ini bertumpu pada rata-rata orang lain, bukan pada pasarmu.</div>
+<p>Itu sebabnya baris ini berbobot 2 poin, sama dengan beasiswa penuh dan sama dengan jalur riset. Ia satu-satunya baris yang datanya bisa kamu kumpulkan sendiri dalam sebulan, tanpa biaya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Baca rekomendasi saya, dan alasan tiap barisnya</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-7-5"><label for="jalur-s2-luar-negeri-v2-7-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca urutannya. Perhatikan bahwa lima dari enam baris tidak berbiaya uang.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Urutan</th>
+<th>Lakukan</th>
+<th>Kenapa</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1</td><td><strong>Lamar Chevening sebelum tenggatnya</strong></td><td>biayanya cuma waktumu; syarat terberatnya sudah kamu penuhi</td></tr>
+              <tr><td>2</td><td><strong>Selesaikan fase 1–5</strong></td><td>membuatmu bisa dipekerjakan <em>dan</em> mengisi lamaran beasiswamu</td></tr>
+              <tr><td>3</td><td><strong>Ambil IELTS sebelum jendela LPDP</strong></td><td>gerbang bersama semua jalur</td></tr>
+              <tr><td>4</td><td><strong>Lamar LPDP dan Australia Awards</strong></td><td>tiga lemparan ke tiga sasaran dalam satu siklus</td></tr>
+              <tr><td>5</td><td><strong>Jangan biayai S2 luar negeri dari kantong sendiri</strong></td><td>tabel Hari 3: butuh kenaikan Rp 23–43 juta/bulan di pasar yang mediannya Rp 6 juta</td></tr>
+              <tr><td>6</td><td><strong>Kalau tetap ingin gelar tanpa beasiswa: Georgia Tech OMSA</strong></td><td>Rp 212 juta, tanpa berhenti bekerja, tanpa GRE — satu-satunya yang lolos uji ekonomi</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kamu memintaku memakai skema rata-rata, bukan batas atas.</strong> Enam baris ini adalah rekomendasi versi rata-rata, dan itu sebabnya ia terdengar hati-hati.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Baca juga apa yang tidak akan saya katakan</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-7-6"><label for="jalur-s2-luar-negeri-v2-7-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca sekali, pelan.</div>
+        <div class="bahaya"><strong>Saya tidak akan bilang “S2 luar negeri akan mengubah hidupmu”.</strong> Datanya tidak mendukung itu: BPS meletakkan S1 dan S2 di golongan upah yang sama, dan tidak satu pun dari tiga lowongan yang saya buka mensyaratkannya.</div>
+<p>Saya juga tidak akan bilang “S2 itu sia-sia” — karena satu filter STEM itu nyata, kesempatan menetap di luar negeri itu nyata, dan jalur riset memang mensyaratkannya. <strong>Yang saya tolak adalah menjawab pertanyaanmu dengan perasaan.</strong></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Tulis keputusanmu, dan beri tanggal</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-7-7"><label for="jalur-s2-luar-negeri-v2-7-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat berkas <code>keputusan-s2.md</code>, salin kerangka ini, isi semuanya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>KEPUTUSAN S2 - tanggal: ____________
+Skor rubrik saya (dari 11)      : ____
+Usia saya per 31 Des tahun ini  : ____
+IELTS                           : belum / dijadwalkan ____ / skor ____</code></pre></div>
+<p>Lalu tiga baris keputusan beasiswanya:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>Chevening        : lamar / lewatkan  - alasan: __________
+LPDP Tahap 1     : lamar / lewatkan  - alasan: __________
+Australia Awards : lamar / lewatkan  - alasan: __________</code></pre></div>
+<p>Lalu empat kampus, disalin dari <code>kampus.md</code> Hari 4:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>1. ____________  matematika: ____  GMAT/GRE: ____  IELTS: ____
+2. ____________  matematika: ____  GMAT/GRE: ____  IELTS: ____
+3. ____________  matematika: ____  GMAT/GRE: ____  IELTS: ____
+4. ____________  matematika: ____  GMAT/GRE: ____  IELTS: ____</code></pre></div>
+<p>Dan dua baris terakhir — yang paling penting:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>Kalau semua beasiswa gagal, saya akan: ______________________
+Lamaran audit-analytics yang saya kirim  : ____
+Ditolak eksplisit karena pendidikan      : ____</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lalu periksa tidak ada yang kosong.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>grep -n &quot;____&quot; keputusan-s2.md</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tidak ada satu baris pun keluaran.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Pasang satu pengingat untuk membukanya lagi</h3>
+        <span class="cek"><input type="checkbox" id="jalur-s2-luar-negeri-v2-7-8"><label for="jalur-s2-luar-negeri-v2-7-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Pasang pengingat di kalender: buka <code>keputusan-s2.md</code> pada hari fase 5 selesai — tanggalnya sudah dihitung skrip di Hari 6.</div>
+        <div class="catatan"><strong>Dua baris terakhir kerangka itu inti seluruh modul ini.</strong> Kamu sedang mempertimbangkan mengeluarkan lebih dari satu miliar rupiah untuk memperbaiki masalah yang belum kamu ukur.</div>
+<p>Ukur dulu. <strong>Dua puluh lamaran memakan waktu satu bulan dan tidak berbiaya.</strong> Kalau tidak satu pun menolakmu karena pendidikan, kamu baru saja menghemat Rp 1,4 miliar dan dua tahun hidupmu.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Jalur S2 Luar Negeri selesai</h3>
+      <p>Modul ini tidak menambah satu pun kemampuan teknis. Yang ditambahkannya: <strong>cara mengambil keputusan mahal dengan cara yang sama seperti kamu mengaudit</strong> — kumpulkan bukti, sebut sumbernya, hitung sendiri, dan jangan percaya angka yang tidak bisa kamu telusuri.</p><p style="margin-top:10px">Satu hal yang layak kamu bawa dari tujuh hari ini: <strong>keputusan ini tidak bergantung pada seberapa pintar kamu, tapi pada apakah ada yang membiayainya.</strong> Dengan beasiswa, syarat impasnya Rp 2,8 juta per bulan. Tanpa beasiswa, Rp 26,2 juta. Orangnya sama, gelarnya sama, kuliahnya sama. Yang berbeda cuma siapa yang membayar.</p><p style="margin-top:10px"><strong>Empat skrip yang kamu punya sekarang</strong> — <code>hitung_s2.py</code>, <code>hitung_tenggat.py</code>, <code>pindai_topik.py</code>, dan <code>skor_rubrik.py</code> — jangan dihapus. Jalankan lagi tiap kali kurs berubah, tenggat bergeser, atau keadaanmu berubah. Modul ini basi; skripnya tidak.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/f6784136-a13e-47e9-9eae-0264bd514182">Lanjut ke MAT L1: Probabilitas formal →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Empat skrip yang dipakai modul ini — <code>hitung_s2.py</code>, <code>hitung_tenggat.py</code>, <code>pindai_topik.py</code>, dan <code>skor_rubrik.py</code> — ada di <code>data-dan-skrip/jalur-s2/</code> di paket zip.</p>
+    <p style="margin-top:10px"><strong>Sumber angka di halaman ini.</strong> Kurikulum &amp; mata kuliah: halaman resmi NUS Department of Mathematics, University of Melbourne Handbook, UC Berkeley School of Information, CMU Heinz College, Georgia Tech Professional Education, UCL, dan Imperial College. Biaya &amp; syarat masuk: halaman program masing-masing kampus. Beasiswa: LPDP, Chevening, dan Australia Awards Indonesia. Upah: BPS (rilis November 2025); median gaji data analyst: NodeFlair; lama pencarian kerja 19,8 bulan: LPEM FEB UI atas Sakernas BPS Agustus 2025. Syarat visa: aturan visa pelajar UK, Australia, dan rekening terblokir Jerman 2026. Kurs: BCA, BRI, Yahoo Finance per 6 September 2026. Kutipan lowongan: Indeed Indonesia, September 2026.</p>
+    <p style="margin-top:10px"><strong>Peringatan yang harus kamu baca.</strong> Riset ini dikerjakan 7 September 2026 melalui hasil pencarian, karena akses langsung ke situs kampus diblokir dari lingkungan tempat modul ini disusun. Beberapa sumber saling bertentangan dan saya selalu memakai angka terendah. Uang kuliah, tenggat, dan aturan visa berubah setiap tahun. <em>Verifikasi setiap angka ke situs resmi sebelum memakainya untuk mengambil keputusan.</em> Skrip-skrip di atas dibuat justru supaya kamu bisa mengganti angkanya sendiri, bukan mempercayai angka saya.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "jalur-s2-luar-negeri-v2";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

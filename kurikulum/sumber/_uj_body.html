@@ -1,0 +1,292 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/9e8025f8-28cb-48cd-bee3-809b610567a6">← Kembali ke Jalur Pintu B</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Ujian Bernilai</span>
+  <button type="button" data-hari="1" aria-selected="true">Ujian</button>
+  <button type="button" data-hari="2" aria-selected="false">Penilaian</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Ujian Bernilai · 60 poin · berwaktu</span>
+    <h1>Ujian Bernilai: satu angka tentang kemampuanmu</h1>
+    <p class="lede">Sepanjang 49 modul sebelumnya, kamu menilai dirimu sendiri dengan mencentang kotak. <strong>801 centang, semuanya laporan diri sendiri.</strong> Tidak ada satu pun angka objektif yang bisa kamu tunjukkan — termasuk ke dirimu sendiri saat ragu.</p>
+    <p class="lede" style="margin-top:10px">Halaman ini memperbaiki itu. Dua puluh dua soal, 60 poin, 90 menit. Jawabannya <strong>angka atau satu kata</strong> — cocok atau tidak, tanpa ruang tawar. Dan kuncinya baru boleh kamu buka <strong>setelah</strong> seluruh jawabanmu tertulis.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ HARI 1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">UJIAN</span>
+      <h2>90 menit, 60 poin</h2>
+      <span class="waktu">± 90 menit</span>
+    </div>
+
+    <div class="bahaya">
+      <strong>Aturan, dan seluruh nilai halaman ini bergantung pada kamu mematuhinya.</strong>
+      <ul style="margin:8px 0 0; padding-left:20px">
+        <li>Pasang pengatur waktu <strong>90 menit</strong>. Berhenti saat berbunyi, meski belum selesai.</li>
+        <li>Boleh membuka <strong>dokumentasi</strong> dan mesin pencari. Tidak boleh membuka <strong>modul-modul lamamu</strong>.</li>
+        <li>Tulis tiap jawaban di kertas atau berkas terpisah <strong>beserta nomornya</strong>, sebelum melihat kunci.</li>
+        <li>Kunci ada di bagian Penilaian. <strong>Jangan dibuka sebelum 90 menit habis</strong> — kalau dibuka lebih dulu, angkamu tidak berarti apa-apa, dan satu-satunya yang kamu tipu adalah dirimu sendiri.</li>
+      </ul>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapkan datanya (tidak dihitung waktu)</h3>
+        <span class="cek"><input type="checkbox" id="x1s1"><label for="x1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3, pandas as pd
+con = sqlite3.connect("senja.db")          # dari SQL Mahir L1
+def q(sql): return pd.read_sql(sql, con)
+
+# untuk Bagian B, siapkan juga transaksi.csv dari Python Produksi P4</code></pre>
+        </div>
+        <div class="aksi">Pastikan kedua berkas ada sebelum menyalakan pengatur waktu: <code>senja.db</code> (7 tabel) dan <code>transaksi.csv</code> (800.000 baris). Menyiapkan berkas tidak dihitung waktu ujian.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bagian A — SQL · 15 soal · 38 poin</h3>
+        <span class="cek"><input type="checkbox" id="x1s2"><label for="x1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Semua dijawab dari <code>senja.db</code>. Jawaban berupa satu angka atau satu kata.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th style="width:38px">No</th><th>Soal</th><th class="n" style="width:52px">Poin</th></tr></thead>
+            <tbody>
+              <tr><td>A1</td><td>Berapa baris di tabel <code>pesanan</code>?</td><td class="n">1</td></tr>
+              <tr><td>A2</td><td>Berapa pesanan berstatus <code>'batal'</code>?</td><td class="n">1</td></tr>
+              <tr><td>A3</td><td>Berapa pesanan yang <code>pelanggan_id</code>-nya kosong?</td><td class="n">1</td></tr>
+              <tr><td>A4</td><td>Berapa pelanggan yang <strong>belum pernah</strong> memesan sama sekali?</td><td class="n">2</td></tr>
+              <tr><td>A5</td><td>Total omzet seluruh pesanan berstatus <code>'selesai'</code></td><td class="n">2</td></tr>
+              <tr><td>A6</td><td>Omzet cabang tertinggi — angkanya saja</td><td class="n">2</td></tr>
+              <tr><td>A7</td><td>Berapa produk yang <code>harga_beli</code>-nya kosong?</td><td class="n">2</td></tr>
+              <tr><td>A8</td><td><strong>Median</strong> nilai satu pesanan selesai (bilangan bulat)</td><td class="n">3</td></tr>
+              <tr><td>A9</td><td>Nama produk dengan omzet tertinggi <strong>di cabang Seturan</strong></td><td class="n">3</td></tr>
+              <tr><td>A10</td><td>Berapa pesanan <code>'selesai'</code> yang tidak punya struk di <code>pesanan_kasir</code>?</td><td class="n">3</td></tr>
+              <tr><td>A11</td><td>Berapa struk kasir yang tidak punya pesanan?</td><td class="n">3</td></tr>
+              <tr><td>A12</td><td>Berapa pesanan yang <strong>nilainya beda</strong> antara sistem dan kasir?</td><td class="n">3</td></tr>
+              <tr><td>A13</td><td>Bulan (format <code>YYYY-MM</code>) dengan omzet tertinggi</td><td class="n">4</td></tr>
+              <tr><td>A14</td><td>Berapa <strong>persen omzet</strong> cabang Seturan yang berasal dari kanal Ojol? (1 desimal)</td><td class="n">4</td></tr>
+              <tr><td>A15</td><td>Berapa pasangan <code>(pesanan_id, produk_id)</code> yang muncul lebih dari sekali di tabel <code>item</code>?</td><td class="n">4</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Bagian B — Python · 5 soal · 12 poin</h3>
+        <span class="cek"><input type="checkbox" id="x1s3"><label for="x1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Semua dijawab dari <code>transaksi.csv</code> (800.000 baris).</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th style="width:38px">No</th><th>Soal</th><th class="n" style="width:52px">Poin</th></tr></thead>
+            <tbody>
+              <tr><td>B1</td><td>Berapa baris dan berapa kolom? (jawab dua angka)</td><td class="n">2</td></tr>
+              <tr><td>B2</td><td>Baca dengan <code>dtype</code> yang kamu pilih sendiri agar hemat. Berapa MB pemakaian memorinya? (1 desimal)</td><td class="n">2</td></tr>
+              <tr><td>B3</td><td>Berapa <code>pelanggan_id</code> yang unik?</td><td class="n">2</td></tr>
+              <tr><td>B4</td><td>Omzet cabang tertinggi — angkanya saja</td><td class="n">3</td></tr>
+              <tr><td>B5</td><td>Berapa transaksi yang nilainya di atas 100.000?</td><td class="n">3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>B2 punya satu jawaban yang benar</strong> kalau kamu memilih tipe yang paling hemat namun masih aman untuk isinya. Kalau angkamu jauh lebih besar, kamu belum memilih tipe. Kalau jauh lebih kecil, periksa apakah ada kolom yang kamu buang.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Bagian C — Penilaian · 2 soal · 10 poin</h3>
+        <span class="cek"><input type="checkbox" id="x1s4"><label for="x1s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Dua soal ini yang paling menentukan, dan yang paling sedikit ada hubungannya dengan sintaks.</p>
+
+        <p style="margin-top:12px"><strong>C1 — 5 poin.</strong> Fungsi di bawah ini dipakai untuk membaca angka dari berkas Excel klien. Ia lulus semua uji yang ditulis untuknya. <strong>Ada satu bug yang seharusnya langsung terlihat oleh seorang auditor.</strong> Sebutkan bug-nya, dan sebutkan masukan yang membuktikannya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import re, pandas as pd
+
+def ke_angka(nilai):
+    """Ubah teks berformat Indonesia jadi bilangan bulat."""
+    if nilai is None or (isinstance(nilai, float) and pd.isna(nilai)):
+        return None
+    if isinstance(nilai, int):
+        return int(nilai)
+    teks = re.sub(r"[^0-9\-]", "", str(nilai))
+    return int(teks) if teks not in ("", "-") else None</code></pre>
+        </div>
+
+        <p style="margin-top:14px"><strong>C2 — 5 poin.</strong> Klien mengirim pesan: <em>“Tolong hitung berapa pelanggan aktif kami.”</em> Datanya ada. Tuliskan <strong>tiga pertanyaan berbeda</strong> yang harus kamu ajukan sebelum menjawab, dan untuk tiap pertanyaan sebutkan <strong>kenapa jawabannya mengubah angka akhir</strong>.</p>
+        <div class="catatan">
+          <strong>Cara C2 dinilai:</strong> 1 poin untuk tiap pertanyaan yang benar-benar mengubah angka, dan 1 poin tambahan untuk tiap alasan yang menyebut mekanismenya. Maksimal 5.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Waktu habis — tutup semuanya</h3>
+      <p>Sebelum membuka Penilaian, pastikan <strong>22 jawabanmu sudah tertulis</strong> dan tidak akan kamu ubah lagi. Mengoreksi jawaban sambil melihat kunci menghasilkan angka yang menyenangkan dan tidak berguna.</p>
+    </div>
+  </section>
+
+  <!-- ============ HARI 2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">PENILAIAN</span>
+      <h2>Kunci, skor, dan artinya</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kunci jawaban</h3>
+        <span class="cek"><input type="checkbox" id="x2s1"><label for="x2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">Jawabanmu sudah tertulis semua? Kalau belum, tutup halaman ini dan kembali ke bagian Ujian.</div>
+        <details>
+          <summary>Buka kunci — Bagian A</summary>
+          <div class="tabel-bungkus" style="margin-top:10px">
+            <table>
+              <thead><tr><th>No</th><th class="n">Jawaban</th><th class="n">Poin</th><th>Catatan</th></tr></thead>
+              <tbody>
+                <tr><td>A1</td><td class="n">400</td><td class="n">1</td><td></td></tr>
+                <tr><td>A2</td><td class="n">38</td><td class="n">1</td><td></td></tr>
+                <tr><td>A3</td><td class="n">12</td><td class="n">1</td><td></td></tr>
+                <tr><td>A4</td><td class="n">3</td><td class="n">2</td><td><strong>Jebakan <code>NOT IN</code>.</strong> Kalau jawabanmu 0, kamu memakai <code>NOT IN</code> dan tertipu 12 baris <code>NULL</code>. Yang benar: <code>NOT EXISTS</code>.</td></tr>
+                <tr><td>A5</td><td class="n">35.739.000</td><td class="n">2</td><td></td></tr>
+                <tr><td>A6</td><td class="n">12.665.000</td><td class="n">2</td><td>cabang Dago</td></tr>
+                <tr><td>A7</td><td class="n">2</td><td class="n">2</td><td>Cheesecake &amp; Matcha Latte</td></tr>
+                <tr><td>A8</td><td class="n">90.000</td><td class="n">3</td><td>Rata-ratanya 98.727 — kalau itu jawabanmu, kamu menjawab soal yang berbeda.</td></tr>
+                <tr><td>A9</td><td class="n">Cheesecake</td><td class="n">3</td><td>Matcha Latte menang di dua cabang lain, bukan di Seturan.</td></tr>
+                <tr><td>A10</td><td class="n">3</td><td class="n">3</td><td>id 7, 88, 251</td></tr>
+                <tr><td>A11</td><td class="n">2</td><td class="n">3</td><td>id 9001, 9002</td></tr>
+                <tr><td>A12</td><td class="n">2</td><td class="n">3</td><td>id 12 (+50.000) dan 199 (−25.000)</td></tr>
+                <tr><td>A13</td><td class="n">2024-02</td><td class="n">4</td><td></td></tr>
+                <tr><td>A14</td><td class="n">22,4</td><td class="n">4</td><td><strong>Jebakan.</strong> Kalau jawabanmu 25,0, kamu menghitung persen <em>jumlah pesanan</em>, bukan persen <em>omzet</em>. Soalnya menyebut omzet.</td></tr>
+                <tr><td>A15</td><td class="n">72</td><td class="n">4</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>Buka kunci — Bagian B</summary>
+          <div class="tabel-bungkus" style="margin-top:10px">
+            <table>
+              <thead><tr><th>No</th><th class="n">Jawaban</th><th class="n">Poin</th><th>Catatan</th></tr></thead>
+              <tbody>
+                <tr><td>B1</td><td class="n">800.000 baris, 7 kolom</td><td class="n">2</td><td>1 poin tiap angka</td></tr>
+                <tr><td>B2</td><td class="n">18,4 MB</td><td class="n">2</td><td>Beri diri 2 poin kalau hasilmu 17–20 MB. Kalau ~183 MB, kamu belum memilih <code>dtype</code> — 0 poin.</td></tr>
+                <tr><td>B3</td><td class="n">50.000</td><td class="n">2</td><td></td></tr>
+                <tr><td>B4</td><td class="n">8.373.050.000</td><td class="n">3</td><td>cabang Kemang</td></tr>
+                <tr><td>B5</td><td class="n">57.459</td><td class="n">3</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>Buka kunci — Bagian C</summary>
+          <p style="margin-top:10px"><strong>C1 — bug tanda kurung akuntansi (5 poin)</strong></p>
+          <div class="kode" style="margin-top:8px"><pre><code>ke_angka("(1.500)")   ->  1500      # SALAH
+                                    # seharusnya -1500</code></pre></div>
+          <p style="margin-top:10px">Di laporan keuangan, angka dalam tanda kurung berarti <strong>negatif</strong>. Fungsi itu membuang semua karakter selain angka dan tanda minus — sehingga kurungnya hilang dan angka negatif berubah jadi positif. Nilai <code>1.500</code> yang seharusnya mengurangi justru menambah, dan <strong>selisihnya dua kali lipat nilai aslinya</strong>.</p>
+          <p style="margin-top:8px"><strong>Penilaian:</strong> 3 poin kalau kamu menyebut soal tanda kurung/negatif. 2 poin tambahan kalau kamu menuliskan masukan pembuktinya, misalnya <code>"(1.500)"</code> atau <code>"(Rp 250.000)"</code>. Nol kalau kamu menyebut bug lain yang bukan ini.</p>
+          <div class="catatan" style="margin-top:10px">
+            <strong>Kenapa soal ini yang paling berbobot per menitnya.</strong> Fungsi itu lulus <em>sebelas</em> uji di modul Python Produksi. Tidak ada yang gagal, tidak ada peringatan. Yang menangkapnya bukan alat, bukan uji — tapi orang yang tahu bahwa <code>(1.500)</code> di kolom rupiah berarti minus. <strong>Itu pengetahuan akuntansi, bukan pengetahuan Python</strong>, dan itulah yang kamu jual.
+          </div>
+          <p style="margin-top:14px"><strong>C2 — pertanyaan yang harus diajukan (5 poin)</strong></p>
+          <p style="margin-top:6px">Pertanyaan yang dihitung benar — 1 poin masing-masing, dan 1 poin tambahan kalau alasannya menyebut mekanismenya:</p>
+          <ul style="margin-top:8px; padding-left:20px; font-size:0.93rem">
+            <li><strong>Aktif dalam rentang waktu berapa?</strong> Di <code>besar.db</code>, “pernah bertransaksi” = 50.000 orang, “30 hari terakhir” = 24.768. Beda dua kali lipat.</li>
+            <li><strong>Transaksi yang dibatalkan ikut dihitung?</strong> Di <code>senja.db</code>, 38 dari 400 pesanan berstatus batal — hampir 10%.</li>
+            <li><strong>Baris tanpa <code>pelanggan_id</code> diapakan?</strong> Ada 12; dibuang atau dihitung sebagai satu pelanggan tak dikenal mengubah hasilnya.</li>
+            <li><strong>Berapa kali transaksi baru disebut aktif?</strong> Sekali, atau minimal dua kali? Di <code>besar.db</code> selisihnya 43.263 lawan 29.616.</li>
+          </ul>
+          <p style="margin-top:8px">Maksimal 5 poin. Jawaban yang cuma menyebut satu pertanyaan tanpa alasan: 1 poin.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Hitung skormu, lalu baca artinya</h3>
+        <span class="cek"><input type="checkbox" id="x2s2"><label for="x2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Jumlahkan: Bagian A (maks 38) + Bagian B (maks 12) + Bagian C (maks 10) = <strong>skormu dari 60</strong>. Tulis angkanya beserta tanggalnya. Itu angka objektif pertamamu di seluruh kurikulum ini.</div>
+        <div class="tabel-bungkus" style="margin-top:12px">
+          <table>
+            <thead><tr><th class="n">Skor</th><th>Artinya</th><th>Yang harus kamu lakukan</th></tr></thead>
+            <tbody>
+              <tr><td class="n"><strong>52–60</strong></td><td>Siap tes teknis. Kemampuanmu bukan lagi penghambat.</td><td>Berhenti menambah modul. Pindah ke Pintu B dan Proyek Buta, lalu kirim lamaran.</td></tr>
+              <tr><td class="n"><strong>42–51</strong></td><td>Kuat, dengan satu-dua lubang.</td><td>Lihat soal mana yang hilang poinnya. Ulangi <em>modul</em>-nya, bukan seluruh jalur. Lalu tetap lamar — 42 sudah cukup untuk lulus tes SQL kebanyakan.</td></tr>
+              <tr><td class="n"><strong>30–41</strong></td><td>Dasarnya ada, penerapannya belum lancar.</td><td>Yang paling mungkin hilang: A8–A15 dan Bagian C. Ulangi SQL Mahir L3 dan L5, lalu ujian ini lagi dua minggu kemudian.</td></tr>
+              <tr><td class="n"><strong>di bawah 30</strong></td><td>Belum siap diuji orang lain — dan itu <em>informasi</em>, bukan vonis.</td><td>Jangan melamar dulu ke peran teknis. Ulangi SQL Mahir L1–L3 dengan mengerjakan soalnya, bukan membacanya. Ujian ini lagi sebulan kemudian.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya" style="margin-top:14px">
+          <strong>Satu hal yang membuat angka ini berarti, dan satu hal yang menghancurkannya.</strong> Yang membuatnya berarti: kamu mengerjakannya dalam 90 menit tanpa membuka modul lama. Yang menghancurkannya: membuka kunci di tengah jalan, lalu mencatat angka yang tidak kamu peroleh. Tidak ada yang memeriksa selain kamu — dan itulah yang membuat kejujuranmu di sini jadi latihan tersendiri, latihan yang sama persis dengan menolak menandatangani kertas kerja yang belum benar-benar kamu telaah.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ulangi tiga bulan lagi, dan bandingkan</h3>
+        <span class="cek"><input type="checkbox" id="x2s3"><label for="x2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Simpan skormu beserta tanggalnya. Kerjakan ujian yang <strong>sama persis</strong> tiga bulan lagi.</p>
+        <div class="catatan">
+          <strong>Kenapa soal yang sama, bukan yang baru.</strong> Karena yang ingin kamu ukur bukan “apakah saya bisa mengerjakan soal ini” — tapi <strong>apakah kemampuan saya bertambah</strong>. Untuk itu alat ukurnya harus tetap. Naik dari 38 ke 51 adalah bukti; mengerjakan soal berbeda dan mendapat 51 tidak membuktikan apa-apa.
+          <p style="margin-top:8px">Ini prinsip yang sama dengan pengujian berulang di audit: prosedur yang berubah tiap periode tidak bisa dipakai membandingkan periode.</p>
+        </div>
+        <div class="aksi" style="margin-top:12px">Dan satu lagi yang tidak boleh dilewati: <strong>tulis skormu di CV atau tidak sama sekali — tapi sebutkan di wawancara.</strong> “Saya menguji diri sendiri dengan 22 soal berwaktu di data 800.000 baris, dan mencatat skornya supaya bisa saya bandingkan tiga bulan lagi” adalah jawaban yang tidak pernah didengar pewawancara dari kandidat pindah karier.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Ujian Bernilai selesai</h3>
+      <p>Sekarang ada satu angka. Bukan 801 centang yang kamu isi sendiri, tapi satu angka dari 60 yang diperoleh dalam 90 menit tanpa contekan — dan yang bisa kamu bandingkan lagi tiga bulan ke depan.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Berikutnya:</strong> Proyek Buta — tiga tugas dengan data nyata, <strong>tanpa kunci jawaban sama sekali</strong>, dengan tenggat. Di situ kamu belajar hal terakhir yang belum pernah dilatih kurikulum ini: bekerja tanpa tahu apakah kamu benar, dan membangun sendiri caramu memastikannya.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/61355282-6fe8-4f54-bd99-18ff4ae63d28">Lanjut ke Proyek Buta: tanpa kunci jawaban →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Kedua puluh dua jawaban di halaman ini dihitung dengan menjalankan query dan kodenya sungguhan pada <code>senja.db</code> dan <code>transaksi.csv</code> — bukan dari ingatan.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

@@ -1,0 +1,881 @@
+<title>Minggu Kesembilan BigQuery</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/62446bd7-6166-47dc-b19d-9359b7ea8b99">← Kembali ke M8: Visualisasi Lanjutan & BI</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 9</span>
+  <button type="button" data-hari="57" aria-selected="true">Hari 57</button>
+  <button type="button" data-hari="58" aria-selected="false">Hari 58</button>
+  <button type="button" data-hari="59" aria-selected="false">Hari 59</button>
+  <button type="button" data-hari="60" aria-selected="false">Hari 60</button>
+  <button type="button" data-hari="61" aria-selected="false">Hari 61</button>
+  <button type="button" data-hari="62" aria-selected="false">Hari 62</button>
+  <button type="button" data-hari="63" aria-selected="false">Hari 63</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Penuntun langkah demi langkah · Lanjutan dari Minggu Kedelapan</span>
+    <h1>Minggu Kesembilan: SQL untuk Data Besar</h1>
+    <p class="lede">Delapan minggu ini kamu berlatih di data yang muat di satu laptop. Minggu ini kamu pindah ke lingkungan sungguhan: tabel yang tidak muat di memori, dan tiap query yang kamu jalankan <strong>ada harganya</strong>. Ini BigQuery — gratis untuk belajar, dan disebut di banyak lowongan data analyst SG/AU.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 57 ================= -->
+  <section class="day aktif" data-hari="57">
+    <div class="day-head">
+      <span class="n mono">HARI 57</span>
+      <h2>BigQuery sandbox, dan pelajaran biaya pertamamu</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjalankan query di dataset publik ratusan juta baris, dan tahu kenapa <code>SELECT *</code> dan <code>LIMIT</code> tidak berperilaku seperti yang kamu kira.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buka BigQuery sandbox</h3>
+        <span class="cek"><input type="checkbox" id="h57s1"><label for="h57s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kunjungi <span class="mono">console.cloud.google.com/bigquery</span>. Masuk dengan akun Google, buat proyek baru (nama bebas, misal "belajar-analis").</p>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Sandbox <strong>tidak minta kartu kredit</strong>. Batasnya 1 TB query per bulan — jauh lebih dari cukup untuk seluruh minggu ini.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buka dataset publik</h3>
+        <span class="cek"><input type="checkbox" id="h57s2"><label for="h57s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di panel Explorer (kiri), klik <strong>"+ Add"</strong> → <strong>"Public datasets"</strong>. Cari <code>bigquery-public-data</code>. Untuk minggu ini kita pakai <code>new_york_taxi_trips</code> — ratusan juta baris perjalanan taksi sungguhan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Penaksir biaya — baca ini SEBELUM tiap query</h3>
+        <span class="cek"><input type="checkbox" id="h57s3"><label for="h57s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di kanan atas editor query, ketik query apa saja (belum perlu dijalankan) — muncul tulisan <strong>"This query will process X GB"</strong>. <strong>Selalu baca angka itu sebelum menekan Run.</strong> Ini kebiasaan yang membedakan analis yang dipercaya dari yang tidak.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Query pertama, dan jebakan SELECT *</h3>
+        <span class="cek"><input type="checkbox" id="h57s4"><label for="h57s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ketik (JANGAN jalankan dulu) dan lihat taksiran GB-nya:</p>
+        <div class="kode"><pre><code>SELECT * FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS TERLIHAT</span><p>Taksiran akan menunjukkan <strong>ratusan GB</strong>. Jangan jalankan ini.</p></div>
+        <p>Sekarang ganti dengan versi yang benar — sebutkan kolom, batasi baris dengan <code>WHERE</code> (bukan <code>LIMIT</code>):</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT pickup_datetime, trip_distance, total_amount
+FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`
+WHERE DATE(pickup_datetime) = '2022-03-15'
+LIMIT 1000;</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS TERLIHAT</span><p>Taksiran turun drastis — biasanya beberapa GB atau kurang, jauh di bawah versi <code>SELECT *</code>. Sekarang aman dijalankan (klik Run).</p></div>
+        <div class="bahaya">
+          <strong>BigQuery menagih berdasarkan kolom yang dibaca, bukan baris yang dikembalikan.</strong> Itu sebabnya <code>SELECT *</code> mahal, dan <code>LIMIT</code> <em>tidak</em> menurunkan biaya sama sekali — dia tetap membaca seluruh kolom dari seluruh baris, lalu membuang sisanya setelah dibaca. Ini pertanyaan wawancara yang sering dipakai untuk memisahkan orang yang benar-benar pernah pakai BigQuery dari yang cuma menulisnya di CV.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h57s5"><label for="h57s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Bandingkan taksiran GB dari <code>SELECT *</code> (jangan dijalankan) vs <code>SELECT pickup_datetime</code> saja (juga jangan dijalankan dulu, cukup lihat taksirannya). Berapa kali lipat bedanya?</p>
+        <details>
+          <summary>Buka diskusi</summary>
+          <div class="isi"><p>Biasanya selisihnya besar sekali — tabel taksi NYC punya belasan kolom, jadi memilih 1 kolom vs semua kolom bisa memangkas taksiran GB sampai puluhan kali lipat. Angka pastinya tergantung skema tabel saat kamu mencoba (Google kadang memperbarui datasetnya).</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 57 selesai. Berhenti di sini.</h3>
+      <p><strong>Tambahkan ke catatan:</strong> BigQuery menagih per kolom yang dibaca, bukan baris yang dikembalikan. Selalu sebutkan kolom yang dipakai, selalu saring dengan <code>WHERE</code> pada tanggal. <code>LIMIT</code> tidak mengurangi biaya.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 58 ================= -->
+  <section class="day" data-hari="58">
+    <div class="day-head">
+      <span class="n mono">HARI 58</span>
+      <h2>Sintaks BigQuery, dan UNNEST untuk data bersarang</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menerjemahkan kebiasaan SQLite/PostgreSQL-mu ke BigQuery, dan membongkar kolom berbentuk array — struktur data yang sering muncul di data event modern (Google Analytics, Firebase).</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lima perbedaan sintaks yang mengejutkan</h3>
+        <span class="cek"><input type="checkbox" id="h58s1"><label for="h58s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Hal</th><th>SQLite/PostgreSQL (kebiasaanmu)</th><th>BigQuery</th></tr></thead>
+            <tbody>
+              <tr><td>Nama tabel</td><td><code>penjualan</code></td><td><code>`proyek.dataset.penjualan`</code> (backtick)</td></tr>
+              <tr><td>Bulan dari tanggal</td><td><code>strftime('%Y-%m', tgl)</code></td><td><code>FORMAT_DATE('%Y-%m', tgl)</code></td></tr>
+              <tr><td>Sekarang</td><td><code>datetime('now')</code></td><td><code>CURRENT_TIMESTAMP()</code></td></tr>
+              <tr><td>Pembagian aman</td><td><code>a / NULLIF(b,0)</code></td><td><code>SAFE_DIVIDE(a, b)</code></td></tr>
+              <tr><td>Kolom bersarang</td><td>Tidak ada</td><td><code>UNNEST(array_kolom)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ide dasarnya (SELECT, WHERE, GROUP BY, JOIN, window function, CTE — semua yang kamu kuasai dari Minggu 1-6) <strong>sama persis</strong>. Yang beda cuma nama fungsi dan cara menulis nama tabel.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>UNNEST: struktur data yang belum pernah kamu temui</h3>
+        <span class="cek"><input type="checkbox" id="h58s2"><label for="h58s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Data event modern menyimpan banyak nilai dalam <strong>satu sel</strong> berbentuk array (daftar). Contoh: satu baris pesanan berisi array item yang dibeli.</p>
+        <div class="kode"><pre><code>-- pesanan_id | items
+-- 1          | [{produk:'Kopi Susu', qty:2}, {produk:'Croissant', qty:1}]</code></pre></div>
+        <p><code>UNNEST</code> "membuka" array itu jadi baris-baris terpisah:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT
+  p.pesanan_id,
+  item.produk,
+  item.qty
+FROM pesanan AS p,
+UNNEST(p.items) AS item;
+
+-- Hasilnya 2 baris dari 1 baris asli</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Bayangkan seperti ini:</strong> UNNEST mirip dengan bagaimana <code>transaksi_item</code> (Minggu 2) sudah dipisah jadi baris per item dari awal — bedanya di BigQuery, item-item itu tersimpan RINGKAS di satu sel sebagai array, dan kamu yang harus "membongkarnya" dengan UNNEST setiap kali butuh.
+        </div>
+        <p>Kalau kamu melamar posisi yang menyebut "GA4" atau "event data", ini konsep yang wajib kamu kuasai. Latihannya ada di dataset publik <code>bigquery-public-data.ga4_obfuscated_sample_ecommerce</code>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h58s3"><label for="h58s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tulis (tanpa menjalankan) query BigQuery untuk: rata-rata jarak dan tarif per hari selama Maret 2022 dari data taksi (Hari 57), diurutkan dari hari termahal.</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi"><div class="kode"><pre><code>SELECT DATE(pickup_datetime) AS hari,
+       AVG(trip_distance) AS rata_jarak,
+       AVG(total_amount) AS rata_tarif
+FROM `bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2022`
+WHERE DATE(pickup_datetime) BETWEEN '2022-03-01' AND '2022-03-31'
+GROUP BY hari
+ORDER BY rata_tarif DESC;</code></pre></div></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 58 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> nama tabel BigQuery pakai backtick tiga bagian. <code>SAFE_DIVIDE</code> = pembagian aman. <code>UNNEST(kolom_array)</code> = bongkar array jadi baris.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 59 ================= -->
+  <section class="day" data-hari="59">
+    <div class="day-head">
+      <span class="n mono">HARI 59</span>
+      <h2>Kenapa query lambat: EXPLAIN dan index</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membaca rencana eksekusi query di PostgreSQL, dan menjelaskan kenapa index bisa membuat query 100-1000× lebih cepat.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Database tidak menjalankan query sesuai urutan tulisanmu</h3>
+        <span class="cek"><input type="checkbox" id="h59s1"><label for="h59s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Database membuat <em>rencana</em> dulu. Kalau query lambat, rencananya yang harus dilihat, bukan ditebak-tebak. Buka <span class="mono">db-fiddle.com</span>, pilih PostgreSQL, buat tabel <code>penjualan</code> sederhana dengan beberapa ribu baris (atau pakai data kedai kopi kamu).</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>EXPLAIN ANALYZE</h3>
+        <span class="cek"><input type="checkbox" id="h59s2"><label for="h59s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>EXPLAIN ANALYZE
+SELECT kota, SUM(total)
+FROM penjualan
+WHERE tanggal >= '2026-03-01'
+GROUP BY kota;</code></pre>
+        </div>
+        <p>Yang dicari dalam keluarannya:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Seq Scan</strong> — membaca seluruh tabel baris demi baris (buruk pada tabel besar)</li>
+          <li><strong>Index Scan</strong> — langsung ke baris yang relevan (bagus)</li>
+          <li><strong>rows taksiran vs aktual</strong> — kalau selisihnya besar, statistik tabel usang dan perencana mengambil keputusan buruk</li>
+        </ul>
+        <div class="catatan">
+          <strong>Di BigQuery tidak ada EXPLAIN</strong> — yang setara adalah tab <strong>Execution details</strong> setelah query selesai, plus penaksir byte sebelum menjalankan (Hari 57).
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Membuat dan menguji index</h3>
+        <span class="cek"><input type="checkbox" id="h59s3"><label for="h59s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Index itu seperti daftar isi buku — tanpa index, database membaca setiap "halaman" untuk mencari satu kata.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>-- sebelum: cek waktu eksekusinya
+EXPLAIN ANALYZE SELECT * FROM penjualan WHERE kota = 'Bandung';
+
+CREATE INDEX idx_penjualan_kota ON penjualan(kota);
+
+-- sesudah: bandingkan waktunya
+EXPLAIN ANALYZE SELECT * FROM penjualan WHERE kota = 'Bandung';</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Baris pertama <code>EXPLAIN</code> akan menunjukkan <strong>Seq Scan</strong>. Setelah index dibuat, baris kedua menunjukkan <strong>Index Scan</strong> dengan waktu eksekusi yang jauh lebih kecil — pada tabel besar (jutaan baris), bedanya bisa 100-1000× lipat; pada tabel kecil seperti latihan ini, bedanya mungkin cuma terlihat di milidetik.</p></div>
+        <div class="catatan">
+          <strong>Kapan index membantu, kapan tidak:</strong> membantu untuk kolom yang sering muncul di <code>WHERE</code>, <code>JOIN ... ON</code>, dan <code>ORDER BY</code>. <strong>Tidak</strong> membantu — malah merugikan — kalau kolomnya punya sedikit nilai unik (misalnya kolom isinya cuma "Ya"/"Tidak"), atau kalau query-mu tetap mengambil sebagian besar tabel. Tiap index juga memperlambat penulisan data baru, jadi bukan barang gratis.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h59s4"><label for="h59s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Muat data kedai (dari Minggu 1) ke db-fiddle. Jalankan <code>EXPLAIN ANALYZE</code> pada query filter kota. Buat index, jalankan lagi. Catat kedua waktunya di catatanmu.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 59 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>EXPLAIN ANALYZE</code> = lihat rencana eksekusi. Seq Scan (lambat) vs Index Scan (cepat). Index membantu kolom di WHERE/JOIN/ORDER BY dengan banyak nilai unik.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 60 ================= -->
+  <section class="day" data-hari="60">
+    <div class="day-head">
+      <span class="n mono">HARI 60</span>
+      <h2>Partisi dan clustering di BigQuery</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjelaskan kenapa BigQuery tidak punya index seperti PostgreSQL, dan menghindari jebakan yang paling sering membatalkan manfaat partisi.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Dua konsep pengganti index</h3>
+        <span class="cek"><input type="checkbox" id="h60s1"><label for="h60s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Partisi</strong> — memecah tabel per tanggal. Query yang menyaring tanggal hanya membaca partisi yang relevan. Ini penghematan terbesar.</li>
+          <li><strong>Clustering</strong> — mengurutkan data di dalam partisi berdasarkan kolom tertentu (misalnya kota). Membuat penyaringan kolom itu jauh lebih murah.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Membuat tabel terpartisi</h3>
+        <span class="cek"><input type="checkbox" id="h60s2"><label for="h60s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>CREATE TABLE `proyekku.kedai.penjualan_besar`
+PARTITION BY DATE(tanggal)
+CLUSTER BY kota, produk
+AS SELECT * FROM `proyekku.kedai.penjualan_mentah`;
+
+-- Sekarang query ini hanya membaca satu hari, bukan seluruh tabel:
+SELECT SUM(total) FROM `proyekku.kedai.penjualan_besar`
+WHERE DATE(tanggal) = '2026-03-18';</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Jebakan yang membatalkan partisi</h3>
+        <span class="cek"><input type="checkbox" id="h60s3"><label for="h60s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">
+          <strong>Membungkus kolom partisi dengan fungsi akan MEMBATALKAN manfaat partisi.</strong> <code>WHERE DATE(tanggal) = '2026-03-18'</code> bekerja kalau partisinya dibuat dengan <code>DATE(tanggal)</code> — tapi <code>WHERE FORMAT_DATE('%Y-%m', tanggal) = '2026-03'</code> akan memaksa BigQuery membaca <strong>seluruh tabel</strong>, karena dia tidak bisa tahu partisi mana yang cocok tanpa membaca semuanya dulu.
+        </div>
+        <p>Perbaikannya: ganti jadi rentang tanggal eksplisit:</p>
+        <div class="kode"><pre><code>-- SALAH (membatalkan partisi)
+WHERE FORMAT_DATE('%Y-%m', tanggal) = '2026-03'
+
+-- BENAR (memanfaatkan partisi)
+WHERE tanggal BETWEEN '2026-03-01' AND '2026-03-31'</code></pre></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h60s4"><label for="h60s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di editor query BigQuery (Hari 57), tulis dua versi query yang sama pada data taksi: satu yang membatalkan partisi (pakai fungsi di WHERE), satu yang memanfaatkannya. Bandingkan taksiran GB-nya (jangan perlu menjalankan, cukup lihat taksiran).</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 60 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> BigQuery pakai partisi (per tanggal) + clustering (per kolom), bukan index. Jangan pernah membungkus kolom partisi dengan fungsi di WHERE — pakai rentang tanggal eksplisit.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 61 ================= -->
+  <section class="day" data-hari="61">
+    <div class="day-head">
+      <span class="n mono">HARI 61</span>
+      <h2>Lima pola query lambat, dan perbaikannya</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali lima pola query lambat yang paling umum, dan menulis ulang query supaya JOIN besar tidak menggabungkan baris yang akan dibuang.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tabel pola lambat dan perbaikannya</h3>
+        <span class="cek"><input type="checkbox" id="h61s1"><label for="h61s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Pola lambat</th><th>Kenapa lambat</th><th>Perbaikan</th></tr></thead>
+            <tbody>
+              <tr><td><code>SELECT *</code></td><td>Membaca semua kolom</td><td>Sebutkan kolom yang benar-benar dipakai</td></tr>
+              <tr><td>Fungsi di kolom WHERE</td><td>Membatalkan index/partisi</td><td>Bandingkan langsung, bukan lewat fungsi</td></tr>
+              <tr><td><code>DISTINCT</code> menambal JOIN ganda</td><td>Menyembunyikan bug, dan mahal</td><td>Perbaiki JOIN-nya; agregasi dulu sebelum JOIN</td></tr>
+              <tr><td>JOIN tabel besar penuh, baru disaring</td><td>Menggabung baris yang akan dibuang</td><td>Saring di CTE dulu, baru JOIN</td></tr>
+              <tr><td><code>ORDER BY</code> tanpa <code>LIMIT</code> di tabel besar</td><td>Mengurutkan jutaan baris untuk dilihat 20</td><td>Selalu pasangkan dengan LIMIT</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Contoh nyata: saring dulu, gabung kemudian</h3>
+        <span class="cek"><input type="checkbox" id="h61s2"><label for="h61s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>-- LAMBAT: menggabungkan semuanya baru menyaring
+SELECT p.*, pr.harga
+FROM penjualan p
+JOIN produk pr ON p.produk = pr.produk
+WHERE p.tanggal >= '2026-03-01';
+
+-- CEPAT: menyaring dulu di CTE, yang digabung jauh lebih sedikit
+WITH maret AS (
+  SELECT * FROM penjualan WHERE tanggal >= '2026-03-01'
+)
+SELECT m.*, pr.harga
+FROM maret m
+JOIN produk pr ON m.produk = pr.produk;</code></pre>
+        </div>
+        <p>Pada tabel kecil, perencana query yang baik akan mengoptimalkan keduanya jadi setara. Pada tabel ratusan juta baris dengan JOIN berlapis, perbedaannya bisa dari beberapa menit jadi hitungan detik — karena versi kedua hanya menggabungkan baris Maret, bukan seluruh riwayat transaksi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kapan DISTINCT jadi tanda bahaya</h3>
+        <span class="cek"><input type="checkbox" id="h61s3"><label for="h61s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau kamu menambahkan <code>DISTINCT</code> ke sebuah query karena "ada duplikat aneh yang muncul", itu biasanya tanda ada <strong>JOIN yang menggandakan baris</strong> (satu baris kiri cocok dengan banyak baris kanan) — bukan masalah yang harus ditambal dengan DISTINCT, tapi bug JOIN yang harus diperbaiki di akarnya (cek: apakah kunci JOIN-nya benar-benar unik di tabel kanan?).</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h61s4"><label for="h61s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ambil query 3-tabel-JOIN dari Minggu 2 Hari 12 (transaksi + transaksi_item + produk). Tulis ulang memakai pola "saring dulu di CTE" (misal saring cabang tertentu sebelum JOIN). Buktikan hasilnya identik dengan membandingkan <code>COUNT(*)</code> dan <code>SUM(omzet)</code> dari kedua versi.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 61 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> lima pola lambat: SELECT *, fungsi di WHERE, DISTINCT menambal JOIN, JOIN sebelum filter, ORDER BY tanpa LIMIT. <code>DISTINCT</code> yang "diperlukan" sering menandakan JOIN yang salah.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 62 ================= -->
+  <section class="day" data-hari="62">
+    <div class="day-head">
+      <span class="n mono">HARI 62</span>
+      <h2>Ulangan dari ingatan — SQL Data Besar</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Tutup catatan. Kerjakan dari ingatan, baru buka kunci jawaban.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tujuh soal</h3>
+        <span class="cek"><input type="checkbox" id="h62s1"><label for="h62s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> BigQuery menagih berdasarkan apa — baris yang dikembalikan atau kolom yang dibaca?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Apakah <code>LIMIT 1000</code> mengurangi biaya query BigQuery? Kenapa?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Fungsi apa yang dipakai untuk "membongkar" kolom berbentuk array jadi baris-baris?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Apa beda Seq Scan dan Index Scan di hasil <code>EXPLAIN ANALYZE</code>?</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Kenapa <code>WHERE FORMAT_DATE('%Y-%m', tanggal) = '2026-03'</code> membatalkan manfaat partisi tanggal, sementara <code>WHERE tanggal BETWEEN '2026-03-01' AND '2026-03-31'</code> tidak?</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> (Ulangan Minggu 8) Apa urutan baca dashboard yang benar?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> (Ulangan Minggu 6) Apa fungsi <code>LAG()</code> paling sering dipakai untuk apa?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Kolom yang dibaca, bukan baris yang dikembalikan.</p>
+            <p><strong>2.</strong> Tidak. BigQuery tetap membaca semua kolom yang disebut dari seluruh baris yang cocok filter, baru membuang sisanya setelah dibaca.</p>
+            <p><strong>3.</strong> <code>UNNEST()</code>.</p>
+            <p><strong>4.</strong> Seq Scan membaca seluruh tabel baris demi baris (lambat di tabel besar); Index Scan langsung ke baris relevan lewat struktur index (cepat).</p>
+            <p><strong>5.</strong> Fungsi yang membungkus kolom partisi membuat BigQuery tidak bisa tahu partisi mana yang cocok tanpa membaca semuanya dulu; perbandingan rentang langsung pada kolom partisi bisa langsung dipetakan ke partisi yang relevan.</p>
+            <p><strong>6.</strong> Angka utama (dengan pembanding) → tren → rincian → tabel, dengan filter di satu tempat.</p>
+            <p><strong>7.</strong> Menghitung perubahan/pertumbuhan dari periode sebelumnya.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 62 selesai</h3>
+      <p>Kalau enam dari tujuh benar, lanjut ke Hari 63. Kalau kurang, ulangi Hari 57-61 dulu — kesadaran biaya query ini sering jadi pertanyaan penyaring di wawancara analis untuk perusahaan yang memakai cloud data warehouse.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 63 ================= -->
+  <section class="day" data-hari="63">
+    <div class="day-head">
+      <span class="n mono">HARI 63</span>
+      <h2>Latihan terapan: optimalkan query proyekmu sendiri</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menerapkan seluruh minggu ini ke query nyata dari proyek portofoliomu sendiri — bukti paling kuat kamu benar-benar paham, bukan cuma menghafal istilah.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Pilih satu query "mahal" dari proyekmu</h3>
+        <span class="cek"><input type="checkbox" id="h63s1"><label for="h63s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buka salah satu proyek SQL-mu (Minggu 2, 6, atau 7). Cari satu query yang: memakai <code>SELECT *</code>, atau JOIN sebelum filter, atau punya <code>DISTINCT</code> yang mencurigakan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tulis ulang, lalu buktikan hasilnya sama</h3>
+        <span class="cek"><input type="checkbox" id="h63s2"><label for="h63s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Terapkan minimal dua perbaikan dari tabel Hari 61. Setelah itu, <strong>wajib dibuktikan</strong> — bukan diasumsikan — bahwa hasilnya identik:</p>
+        <div class="kode"><pre><code>-- versi lama
+SELECT COUNT(*), SUM(total) FROM (query lama);
+
+-- versi baru
+SELECT COUNT(*), SUM(total) FROM (query baru);</code></pre></div>
+        <div class="bahaya">
+          <strong>Jangan pernah menganggap query yang "ditulis ulang supaya lebih cepat" otomatis benar.</strong> Optimasi yang mengubah logika (bukan cuma performanya) adalah bug yang menyamar jadi peningkatan. Selalu verifikasi angka akhirnya sama persis sebelum dan sesudah.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Catat di README proyek terkait</h3>
+        <span class="cek"><input type="checkbox" id="h63s3"><label for="h63s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tambahkan satu paragraf singkat ke README proyek yang bersangkutan (tidak perlu proyek baru minggu ini):</p>
+        <div class="kode"><pre><code>## Catatan optimasi query
+
+Query [nama query] awalnya memakai [pola lambat]. Ditulis ulang
+memakai [perbaikan] — hasil COUNT/SUM diverifikasi identik
+sebelum dan sesudah perubahan.</code></pre></div>
+        <div class="catatan">
+          <strong>Kenapa ini penting untuk portofolio:</strong> menunjukkan kesadaran performa/biaya adalah pembeda antara "bisa menulis SQL yang benar" dan "bisa menulis SQL yang bisa dipakai di lingkungan produksi sungguhan" — perekrut untuk posisi yang menyebut BigQuery/Snowflake/Redshift secara khusus mencari sinyal ini.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Sembilan minggu selesai — SQL dari nol sampai siap data besar</h3>
+      <p>Kamu sekarang paham bukan cuma cara menulis SQL yang benar, tapi SQL yang <em>murah</em> dan <em>cepat</em> di skala jutaan-miliaran baris — kemampuan yang memisahkan analis junior dari yang sudah biasa bekerja dengan data warehouse sungguhan.</p>
+      <p style="margin-top:14px">Minggu depan: dbt — mengubah tumpukan query yang berantakan jadi pipeline transformasi yang tertata, teruji, dan terdokumentasi otomatis. Masih dituntun hari demi hari.</p>
+      <a class="lanjut" href="https://claude.ai/code/artifact/26a3ee5f-9d8a-4679-9977-37c06da48459">Lanjut ke M10: dbt →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu9-bigquery-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

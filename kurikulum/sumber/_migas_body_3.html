@@ -1,0 +1,656 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/24fee33e-bafb-459c-8560-4a848e1257a8">← Kembali ke Migas Minggu 2</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Migas · Minggu 3</span>
+  <button type="button" data-hari="15" aria-selected="true">Hari 15</button>
+  <button type="button" data-hari="16" aria-selected="false">Hari 16</button>
+  <button type="button" data-hari="17" aria-selected="false">Hari 17</button>
+  <button type="button" data-hari="18" aria-selected="false">Hari 18</button>
+  <button type="button" data-hari="19" aria-selected="false">Hari 19</button>
+  <button type="button" data-hari="20" aria-selected="false">Hari 20</button>
+  <button type="button" data-hari="21" aria-selected="false">Hari 21</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Jalur spesialisasi migas · Level 3</span>
+    <h1>Migas Minggu 3: Window Function di Data Sumur</h1>
+    <p class="lede">Window function yang kamu kuasai di Minggu 6 kurikulum utama sekarang dipakai untuk pertanyaan yang benar-benar diajukan di rapat produksi: sumur mana yang menurun paling cepat, berapa sumur yang menyumbang 80% produksi, dan lapangan mana yang perannya menyusut. Minggu ini juga berisi satu jebakan SQL yang menghasilkan angka <em>hilang</em> tanpa pesan error.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 15 ================= -->
+  <section class="day aktif" data-hari="15">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 15</span>
+      <h2>LAG untuk decline bulanan — dan jebakan urutan eksekusi</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung pertumbuhan bulan-ke-bulan produksi lapangan, dan mengenali kesalahan yang membuat baris pertama hasilmu diam-diam kosong.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L3.1 — Produksi bulanan F04 dengan pertumbuhannya</h3>
+        <span class="cek"><input type="checkbox" id="m3h15s1"><label for="m3h15s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tulis dulu versimu sendiri sebelum melihat kode di bawah — ini pola <code>LAG</code> yang sama persis dengan Minggu 6 Hari 37, cuma datanya sekarang produksi sumur.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH bulanan AS (
+  SELECT substr(p.tanggal,1,7) AS bulan, SUM(p.oil_bopd) AS volume
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  WHERE s.lapangan_id = 'F04'
+  GROUP BY bulan
+)
+SELECT bulan,
+       ROUND(volume) AS volume,
+       ROUND(LAG(volume) OVER (ORDER BY bulan)) AS bulan_lalu,
+       ROUND(100.0 * (volume - LAG(volume) OVER (ORDER BY bulan))
+                   / LAG(volume) OVER (ORDER BY bulan), 1) AS tumbuh_persen
+FROM bulanan
+WHERE bulan LIKE '2025%'
+ORDER BY bulan;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">YANG MUNCUL — DAN ADA YANG JANGGAL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Bulan</th><th class="n">Volume</th><th class="n">Bulan lalu</th><th class="n">Tumbuh</th></tr></thead>
+              <tbody>
+                <tr><td>2025-01</td><td class="n">242.742</td><td class="idx">NULL</td><td class="idx">NULL</td></tr>
+                <tr><td>2025-02</td><td class="n">211.643</td><td class="n">242.742</td><td class="n">−12,8%</td></tr>
+                <tr><td>2025-03</td><td class="n">221.399</td><td class="n">211.643</td><td class="n">+4,6%</td></tr>
+                <tr><td>2025-04</td><td class="n">203.910</td><td class="n">221.399</td><td class="n">−7,9%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa Januari 2025 kosong padahal Desember 2024 ada datanya?</h3>
+        <span class="cek"><input type="checkbox" id="m3h15s2"><label for="m3h15s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>CTE <code>bulanan</code> berisi <strong>semua</strong> bulan sejak 2023. Jadi seharusnya <code>LAG</code> untuk Januari 2025 mengambil Desember 2024 — tapi hasilnya NULL. Kenapa?</p>
+        <div class="bahaya">
+          <strong>Urutan eksekusi SQL: <code>WHERE</code> dijalankan SEBELUM window function.</strong> Saat <code>LAG</code> dihitung, baris-baris di luar 2025 sudah dibuang duluan. Window function hanya "melihat" enam baris yang lolos filter, jadi baris paling awal di antaranya tidak punya pendahulu. Tidak ada pesan error — hasilnya cuma diam-diam kosong.
+        </div>
+        <p>Perbaikannya: hitung window <strong>dulu</strong> di CTE terpisah, baru saring di query luar.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH bulanan AS (
+  SELECT substr(p.tanggal,1,7) AS bulan, SUM(p.oil_bopd) AS volume
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  WHERE s.lapangan_id = 'F04'
+  GROUP BY bulan
+),
+dengan_lag AS (                              -- window dihitung di sini,
+  SELECT bulan, volume,                      -- selagi semua bulan masih ada
+         LAG(volume) OVER (ORDER BY bulan) AS bulan_lalu
+  FROM bulanan
+)
+SELECT bulan, ROUND(volume) AS volume, ROUND(bulan_lalu) AS bulan_lalu,
+       ROUND(100.0 * (volume - bulan_lalu) / bulan_lalu, 1) AS tumbuh_persen
+FROM dengan_lag
+WHERE bulan LIKE '2025%'                     -- filter baru di sini
+ORDER BY bulan;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">SEKARANG BENAR</span>
+          <p>2025-01 → volume 242.742, bulan lalu <strong>247.406</strong> (Des 2024), tumbuh <strong>−1,9%</strong>. Baris yang tadinya kosong sekarang terisi.</p>
+        </div>
+        <div class="catatan">
+          <strong>Kenapa jebakan ini berbahaya di dunia nyata:</strong> hasilnya tidak salah secara mencolok — cuma satu baris yang kosong. Kalau kamu langsung menghitung rata-rata pertumbuhan dari kolom itu, Januari terlewat dan rata-ratamu bergeser tanpa ada yang sadar. Aturan praktisnya: <strong>kalau query-mu punya window function DAN filter periode, hitung window-nya dulu di CTE terpisah.</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Membaca pola F04</h3>
+        <span class="cek"><input type="checkbox" id="m3h15s3"><label for="m3h15s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pertumbuhan F04 naik-turun tajam: −12,8% lalu +4,6% lalu −7,9% lalu +4,6%. Ini <strong>bukan</strong> berarti produksinya tidak menentu.</p>
+        <p>Sebagian besar goyangan itu berasal dari <strong>jumlah hari dalam bulan</strong> (Februari 28 hari vs Januari 31 hari = −9,7% otomatis) dan downtime acak. Trennya sendiri menurun perlahan — dan kamu akan memisahkan keduanya dengan moving average di Hari 18.</p>
+        <div class="catatan">
+          <strong>Perbaikan yang dipakai analis migas:</strong> laporkan produksi bulanan sebagai <strong>rata-rata bopd</strong> (volume ÷ jumlah hari), bukan total barel. Dengan begitu Februari tidak terlihat anjlok setiap tahun. Coba ubah query di atas memakai <code>AVG(p.oil_bopd)</code> alih-alih <code>SUM</code>, dan lihat betapa lebih tenang polanya.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 15 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> <code>WHERE</code> jalan sebelum window function — pisahkan ke CTE kalau butuh keduanya. Produksi bulanan sebaiknya dilaporkan sebagai rata-rata bopd, bukan total barel.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 16 ================= -->
+  <section class="day" data-hari="16">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 16</span>
+      <h2>Peringkat sumur per lapangan, dan kumulatif berjalan</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat papan peringkat sumur per lapangan dan kurva produksi kumulatif — dua tampilan yang selalu ada di dashboard produksi migas.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L3.2 — Tiga sumur teratas di tiap lapangan (2025)</h3>
+        <span class="cek"><input type="checkbox" id="m3h16s1"><label for="m3h16s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH prod AS (
+  SELECT s.lapangan_id, p.sumur_id, SUM(p.oil_bopd) AS volume
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  WHERE p.tanggal LIKE '2025%'
+  GROUP BY s.lapangan_id, p.sumur_id
+),
+peringkat AS (
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY lapangan_id ORDER BY volume DESC) AS rn
+  FROM prod
+)
+SELECT lapangan_id, sumur_id, ROUND(volume) AS bbl_2025, rn
+FROM peringkat WHERE rn <= 3
+ORDER BY lapangan_id, rn;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">POLA YANG HARUS TERLIHAT</span>
+          <p>Semua sumur bernomor tinggi (CDN-057 sampai CDN-064) muncul di F03/F04, sementara F01 dipimpin CDN-013 dan CDN-001. Ini konsisten dengan urutan pengeboran: sumur baru = lapangan baru = lebih produktif.</p>
+        </div>
+        <div class="catatan">
+          <strong>Kapan pakai <code>ROW_NUMBER</code> dan kapan <code>RANK</code>:</strong> untuk "tiga teratas" yang dipakai membuat daftar prioritas kerja, <code>ROW_NUMBER</code> lebih aman karena selalu memberi tepat 3 baris. <code>RANK</code> bisa memberi 4-5 baris kalau ada nilai seri — merepotkan kalau hasilnya jadi jadwal kunjungan teknisi. Tapi kalau yang dinilai adalah keadilan (misalnya bonus), <code>RANK</code> yang benar. Menanyakan balik "yang diinginkan yang mana?" adalah jawaban terbaik saat ini muncul di wawancara.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>L3.3 — Produksi kumulatif berjalan F01</h3>
+        <span class="cek"><input type="checkbox" id="m3h16s2"><label for="m3h16s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH bulanan AS (
+  SELECT substr(p.tanggal,1,7) AS bulan, SUM(p.oil_bopd) AS volume
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  WHERE s.lapangan_id = 'F01'
+  GROUP BY bulan
+)
+SELECT bulan, ROUND(volume) AS bulan_ini,
+       ROUND(SUM(volume) OVER (ORDER BY bulan)) AS kumulatif
+FROM bulanan ORDER BY bulan;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p>Baris pertama 2023-01: 67.021 / kumulatif 67.021. Baris terakhir 2026-06: 63.702 / kumulatif <strong>3.021.247</strong> — cocok persis dengan total produksi F01 seluruh periode yang kamu hitung di Minggu 1 Hari 5. Pemeriksaan silang seperti ini wajib: kalau angka terakhir kumulatif tidak sama dengan total, ada baris yang tergandakan atau hilang.</p>
+        </div>
+        <p><strong>Gunanya di migas:</strong> kurva kumulatif dipakai untuk melihat kapan lapangan mencapai tonggak tertentu (misalnya "kapan F01 menembus 3 juta barel"), dan menjadi bahan dasar perhitungan <em>recovery factor</em> — berapa persen cadangan yang sudah terkuras. Kamu akan memakainya di Level 5.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="m3h16s3"><label for="m3h16s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Gabungkan keduanya: buat kumulatif berjalan <strong>per lapangan</strong> dalam satu query (petunjuk: <code>PARTITION BY</code> di dalam <code>SUM() OVER</code>). Periksa tiap angka terakhirnya terhadap jawaban Minggu 1 Hari 5.</p>
+        <details>
+          <summary>Buka petunjuk</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SUM(volume) OVER (PARTITION BY lapangan_id ORDER BY bulan)</code></pre></div>
+            <p>Angka terakhir tiap lapangan harus: F04 8.040.306 · F03 6.444.114 · F01 3.021.247 · F02 2.573.467.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 16 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> <code>ROW_NUMBER</code> untuk daftar kerja (selalu tepat N), <code>RANK</code> untuk keadilan (bisa lebih dari N). Kumulatif terakhir wajib sama dengan total — pemeriksaan silang gratis.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 17 ================= -->
+  <section class="day" data-hari="17">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 17</span>
+      <h2>Pareto — dan kenapa "aturan 80/20" sering keliru dipakai</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung konsentrasi produksi dengan analisis Pareto, dan mengenali kapan menyebut "aturan 80/20" justru menyesatkan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L3.4 — Berapa sumur yang menyumbang 80% produksi F01?</h3>
+        <span class="cek"><input type="checkbox" id="m3h17s1"><label for="m3h17s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Polanya: urutkan dari terbesar, hitung kumulatif berjalan, bagi dengan total, cari di baris ke berapa melewati 80%.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH prod AS (
+  SELECT p.sumur_id, SUM(p.oil_bopd) AS volume
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  WHERE s.lapangan_id = 'F01' AND p.tanggal LIKE '2025%'
+  GROUP BY p.sumur_id
+)
+SELECT ROW_NUMBER() OVER (ORDER BY volume DESC) AS urutan,
+       sumur_id,
+       ROUND(volume) AS bbl,
+       ROUND(100.0 * SUM(volume) OVER (ORDER BY volume DESC)
+                   / SUM(volume) OVER (), 1) AS kumulatif_persen
+FROM prod
+ORDER BY volume DESC;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th class="n">#</th><th>Sumur</th><th class="n">bbl 2025</th><th class="n">Kumulatif %</th></tr></thead>
+              <tbody>
+                <tr><td class="n">1</td><td>CDN-013</td><td class="n">102.614</td><td class="n">11,1</td></tr>
+                <tr><td class="n">2</td><td>CDN-001</td><td class="n">96.161</td><td class="n">21,4</td></tr>
+                <tr><td class="n">3</td><td>CDN-003</td><td class="n">89.845</td><td class="n">31,1</td></tr>
+                <tr><td class="n">4</td><td>CDN-022</td><td class="n">86.937</td><td class="n">40,5</td></tr>
+                <tr><td class="n">5</td><td>CDN-021</td><td class="n">71.089</td><td class="n">48,2</td></tr>
+                <tr><td class="idx">…</td><td class="idx">…</td><td class="idx">…</td><td class="idx">…</td></tr>
+                <tr><td class="n">10</td><td>CDN-006</td><td class="n">40.078</td><td class="n">75,7</td></tr>
+                <tr><td class="n">11</td><td>CDN-014</td><td class="n">39.726</td><td class="n"><strong>80,0</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:8px"><strong>Jawaban: 11 sumur dari 20 yang berproduksi</strong> menyumbang 80% produksi F01.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Perhatikan: ini BUKAN 80/20</h3>
+        <span class="cek"><input type="checkbox" id="m3h17s2"><label for="m3h17s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>"Aturan Pareto" yang terkenal berbunyi 80% hasil datang dari 20% penyebab. Kalau berlaku di sini, 80% produksi F01 seharusnya datang dari sekitar <strong>4 sumur</strong>. Kenyataannya butuh <strong>11 sumur — 55% dari total sumur.</strong></p>
+        <div class="bahaya">
+          <strong>Menulis "produksi mengikuti aturan 80/20" di laporan ini akan salah, dan implikasi manajerialnya berbahaya.</strong> Kalau manajemen percaya 4 sumur menentukan segalanya, mereka akan memusatkan seluruh anggaran perawatan ke sana dan mengabaikan tujuh sumur lain yang sebenarnya masih menyumbang besar. Distribusi F01 <em>relatif merata</em> — dan itu temuan tersendiri.
+        </div>
+        <p>Cara melaporkan yang jujur: <em>"11 dari 20 sumur menyumbang 80% produksi F01. Konsentrasinya lebih merata daripada pola 80/20 yang biasa diasumsikan, sehingga strategi 'fokus ke segelintir sumur besar' kurang tepat untuk lapangan ini."</em></p>
+        <div class="catatan">
+          <strong>Kebiasaan yang benar:</strong> Pareto adalah <em>alat ukur</em>, bukan asumsi. Hitung dulu konsentrasi sebenarnya, baru simpulkan. Analis yang menyebut "80/20" tanpa menghitungnya sedang mengutip pepatah, bukan melaporkan data — dan orang yang paham akan langsung menangkapnya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Coba sendiri: bandingkan konsentrasi antar lapangan</h3>
+        <span class="cek"><input type="checkbox" id="m3h17s3"><label for="m3h17s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Jalankan analisis yang sama untuk <strong>F04</strong> (10 sumur). Berapa sumur yang menyumbang 80%? Apakah konsentrasinya lebih terpusat atau lebih merata daripada F01, dan apa artinya bagi risiko operasional lapangan itu?</p>
+        <details>
+          <summary>Petunjuk menafsirkan</summary>
+          <div class="isi">
+            <p>Lapangan dengan konsentrasi tinggi (sedikit sumur menyumbang mayoritas) punya <strong>risiko operasional lebih besar</strong>: satu sumur besar mati = produksi lapangan anjlok. Lapangan yang merata lebih tahan gangguan tapi biaya perawatannya tersebar. Keduanya butuh strategi berbeda — dan itulah gunanya menghitung angka ini, bukan sekadar mengutip 80/20.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 17 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> Pareto = <code>SUM() OVER (ORDER BY x DESC)</code> ÷ <code>SUM() OVER ()</code>. Hitung konsentrasinya, jangan asumsikan 80/20. Konsentrasi tinggi = risiko operasional tinggi.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 18 ================= -->
+  <section class="day" data-hari="18">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 18</span>
+      <h2>Moving average: memisahkan tren dari derau</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghaluskan data produksi harian yang berisik, dan menemukan hari-hari anomali yang layak diselidiki.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L3.5 — Moving average 30 hari untuk F03</h3>
+        <span class="cek"><input type="checkbox" id="m3h18s1"><label for="m3h18s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH harian AS (
+  SELECT p.tanggal, SUM(p.oil_bopd) AS bopd
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  WHERE s.lapangan_id = 'F03'
+  GROUP BY p.tanggal
+)
+SELECT tanggal,
+       ROUND(bopd) AS harian,
+       ROUND(AVG(bopd) OVER (ORDER BY tanggal
+                             ROWS BETWEEN 29 PRECEDING AND CURRENT ROW)) AS ma30
+FROM harian ORDER BY tanggal;</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Kolom <code>harian</code> naik-turun tajam dari hari ke hari; kolom <code>ma30</code> jauh lebih mulus dan memperlihatkan arah trennya. 29 baris pertama memakai jendela yang belum penuh — itu wajar, tapi <strong>harus disebutkan</strong> kalau kamu memakai angka-angka awal itu untuk kesimpulan.</p></div>
+        <p><strong>Kenapa data harian sangat berisik di migas:</strong> ada derau pengukuran, ada downtime acak (1.349 hari-sumur dari Minggu 1), ada perbedaan jam operasi. Tanpa perataan, kamu akan salah mengira fluktuasi harian sebagai perubahan tren — dan mengirim teknisi memeriksa sumur yang sebenarnya baik-baik saja.</p>
+        <div class="catatan">
+          <strong>Kenapa 30 hari, bukan 7?</strong> Untuk penjualan ritel, 7 hari tepat karena polanya mingguan (ingat Minggu 5 Hari 31). Produksi migas tidak punya siklus mingguan — sumur tidak libur akhir pekan. Yang perlu diredam di sini adalah gangguan acak dan siklus perawatan bulanan, jadi 30 hari lebih pas. <strong>Panjang jendela harus mengikuti siklus alami datanya</strong>, bukan kebiasaan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>L3.7 — Hari produksi terendah tiap bulan (kandidat investigasi)</h3>
+        <span class="cek"><input type="checkbox" id="m3h18s2"><label for="m3h18s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH harian AS (
+  SELECT p.tanggal, substr(p.tanggal,1,7) AS bulan, SUM(p.oil_bopd) AS bopd
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  WHERE s.lapangan_id = 'F01'
+  GROUP BY p.tanggal
+),
+peringkat AS (
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY bulan ORDER BY bopd ASC) AS rn
+  FROM harian
+)
+SELECT bulan, tanggal, ROUND(bopd) AS bopd_terendah
+FROM peringkat WHERE rn = 1 ORDER BY bulan;</code></pre>
+        </div>
+        <p>Sekarang <strong>buktikan dugaanmu</strong>: cocokkan tanggal-tanggal itu dengan tabel <code>downtime</code>. Kalau hari terendah bertepatan dengan downtime besar, penyebabnya sudah jelas dan tidak perlu diselidiki lebih jauh. Yang menarik justru <strong>hari terendah yang TIDAK ada catatan downtime-nya</strong> — itu anomali sesungguhnya.</p>
+        <div class="kode"><pre><code>-- Cocokkan dengan downtime pada tanggal yang sama
+SELECT d.tanggal_mulai, d.sumur_id, d.penyebab, d.durasi_hari
+FROM downtime d
+WHERE d.tanggal_mulai IN ('2025-03-14','2025-07-22');  -- ganti dengan tanggalmu</code></pre></div>
+        <div class="catatan">
+          <strong>Ini pola kerja analis operasional:</strong> jangan berhenti di "hari X paling rendah". Lanjutkan ke "apakah ada penjelasan yang sudah tercatat?" Kalau ada, tutup. Kalau tidak ada, itu yang naik ke daftar investigasi. Membedakan keduanya menghemat waktu tim lapangan — dan itu yang membuat analis dianggap berguna, bukan sekadar pembuat laporan.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 18 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> <code>AVG() OVER (ORDER BY t ROWS BETWEEN n PRECEDING AND CURRENT ROW)</code> = moving average. Panjang jendela ikut siklus alami data (migas: 30 hari, bukan 7). Anomali sejati = rendah TANPA catatan penyebab.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 19 ================= -->
+  <section class="day" data-hari="19">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 19</span>
+      <h2>Decline rate per sumur: siapa yang menurun paling cepat</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengurutkan sumur berdasarkan kecepatan penurunannya — daftar yang jadi bahan mentah untuk keputusan intervensi di Level 4-5.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L3.6 — Bandingkan rata-rata bopd 2024 vs 2025 per sumur</h3>
+        <span class="cek"><input type="checkbox" id="m3h19s1"><label for="m3h19s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH y24 AS (
+  SELECT sumur_id, AVG(oil_bopd) AS bopd_2024 FROM produksi_harian
+  WHERE tanggal LIKE '2024%' AND berproduksi = 1 GROUP BY sumur_id
+),
+y25 AS (
+  SELECT sumur_id, AVG(oil_bopd) AS bopd_2025 FROM produksi_harian
+  WHERE tanggal LIKE '2025%' AND berproduksi = 1 GROUP BY sumur_id
+)
+SELECT a.sumur_id,
+       ROUND(a.bopd_2024,1) AS thn_2024,
+       ROUND(b.bopd_2025,1) AS thn_2025,
+       ROUND(100.0*(b.bopd_2025 - a.bopd_2024)/a.bopd_2024, 1) AS decline_persen
+FROM y24 a JOIN y25 b ON a.sumur_id = b.sumur_id
+ORDER BY decline_persen ASC
+LIMIT 5;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">LIMA SUMUR DENGAN DECLINE TERCURAM</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Sumur</th><th>Lapangan</th><th class="n">2024 (bopd)</th><th class="n">2025 (bopd)</th><th class="n">Decline</th></tr></thead>
+              <tbody>
+                <tr><td>CDN-059</td><td>F04</td><td class="n">1.434,5</td><td class="n">858,6</td><td class="n">−40,2%</td></tr>
+                <tr><td>CDN-010</td><td>F01</td><td class="n">175,3</td><td class="n">119,4</td><td class="n">−31,9%</td></tr>
+                <tr><td>CDN-057</td><td>F04</td><td class="n">1.730,7</td><td class="n">1.272,1</td><td class="n">−26,5%</td></tr>
+                <tr><td>CDN-045</td><td>F03</td><td class="n">650,3</td><td class="n">480,0</td><td class="n">−26,2%</td></tr>
+                <tr><td>CDN-025</td><td>F02</td><td class="n">227,1</td><td class="n">170,2</td><td class="n">−25,0%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:8px">Sebagai pembanding: rata-rata decline seluruh sumur adalah <strong>−12,1%</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jangan langsung menyebutnya masalah</h3>
+        <span class="cek"><input type="checkbox" id="m3h19s2"><label for="m3h19s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">
+          <strong>CDN-059 turun 40,2%, tapi itu belum tentu anomali.</strong> Sumur muda dengan produksi awal sangat tinggi (1.434 bopd) <em>memang</em> menurun paling curam secara alami — itulah bentuk kurva Arps. Sumur tua yang sudah landai turun pelan. Membandingkan persentase decline antar sumur dengan umur berbeda sama tidak adilnya dengan membandingkan pertumbuhan cabang baru dan cabang lama (Minggu 6 kurikulum utama, Hari 41).
+        </div>
+        <p>Cara membedakan <strong>decline alami</strong> dari <strong>anomali</strong>: bandingkan tiap sumur dengan <em>rekan selapangannya</em>, bukan dengan seluruh blok. Kalau CDN-059 turun 40% sementara sumur F04 lain rata-rata turun 22%, selisih 18 poin itulah anomalinya. Kamu akan mengerjakan persis ini di Level 4 (L4.7).</p>
+        <div class="catatan">
+          <strong>Ini pola berpikir yang berulang di seluruh jalur migas:</strong> angka mentah → normalisasi terhadap pembanding yang setara → baru simpulkan. Sudah muncul di uptime (Hari 9), insiden HSE (Hari 10), evaluasi workover (Hari 11), dan sekarang decline. Kalau satu kebiasaan saja yang kamu bawa dari jalur ini, jadikan yang ini.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ulangan U4 — gabungan window function</h3>
+        <span class="cek"><input type="checkbox" id="m3h19s3"><label for="m3h19s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="ulang">
+          <span class="tag">PENGULANGAN BERJARAK · U4</span>
+          <p>Tanpa membuka catatan, tulis query untuk: <strong>tiga sumur dengan decline tercuram di tiap lapangan</strong> (gabungan L3.2 dan L3.6). Ini menuntutmu memakai CTE bertingkat plus <code>PARTITION BY</code> sekaligus.</p>
+        </div>
+        <details>
+          <summary>Petunjuk struktur</summary>
+          <div class="isi">
+            <p>Empat lapis: (1) CTE rata-rata 2024, (2) CTE rata-rata 2025, (3) CTE gabungan yang menghitung persen decline <em>dan</em> membawa <code>lapangan_id</code> lewat JOIN ke <code>sumur</code>, (4) query akhir dengan <code>ROW_NUMBER() OVER (PARTITION BY lapangan_id ORDER BY decline ASC)</code> lalu saring <code>rn &lt;= 3</code>.</p>
+            <p>Kalau kamu bisa menyusun ini tanpa contekan, kemampuan SQL-mu sudah di atas kebanyakan pelamar posisi analis migas.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 19 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> decline curam ≠ anomali — sumur muda memang turun cepat. Normalisasi terhadap rekan selapangan dulu. Rata-rata decline blok 2024→2025 = −12,1%.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 20 ================= -->
+  <section class="day" data-hari="20">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 20</span>
+      <h2>Pergeseran pangsa: temuan terpenting Level 3</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menemukan pergeseran struktural yang tidak terlihat dari angka produksi biasa — jenis temuan yang membuat analis diingat.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L3.8 — Pangsa tiap lapangan, 2023 vs 2025</h3>
+        <span class="cek"><input type="checkbox" id="m3h20s1"><label for="m3h20s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH t AS (
+  SELECT s.lapangan_id, substr(p.tanggal,1,4) AS tahun, SUM(p.oil_bopd) AS v
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  GROUP BY s.lapangan_id, tahun
+)
+SELECT lapangan_id,
+  ROUND(100.0*MAX(CASE WHEN tahun='2023' THEN v END)
+        /(SELECT SUM(v) FROM t WHERE tahun='2023'), 1) AS pangsa_2023,
+  ROUND(100.0*MAX(CASE WHEN tahun='2025' THEN v END)
+        /(SELECT SUM(v) FROM t WHERE tahun='2025'), 1) AS pangsa_2025
+FROM t GROUP BY lapangan_id;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Lapangan</th><th class="n">Pangsa 2023</th><th class="n">Pangsa 2025</th><th class="n">Perubahan</th></tr></thead>
+              <tbody>
+                <tr><td>F04 Gaharu</td><td class="n">36,9%</td><td class="n">42,9%</td><td class="n">+6,0</td></tr>
+                <tr><td>F01 Cendana Utara</td><td class="n">13,3%</td><td class="n">16,4%</td><td class="n">+3,1</td></tr>
+                <tr><td>F02 Cendana Selatan</td><td class="n">11,8%</td><td class="n">13,2%</td><td class="n">+1,4</td></tr>
+                <tr><td><strong>F03 Meranti</strong></td><td class="n">38,0%</td><td class="n">27,4%</td><td class="n"><strong>−10,6</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa ini temuan, bukan sekadar tabel</h3>
+        <span class="cek"><input type="checkbox" id="m3h20s2"><label for="m3h20s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>F03 Meranti kehilangan <strong>10,6 poin persen</strong> pangsa dalam dua tahun — dari lapangan terbesar (38,0%) jadi nomor tiga (27,4%). Tidak ada satu pun angka di Level 1-2 yang menunjukkan ini, karena produksi absolut semua lapangan menurun bersamaan.</p>
+        <div class="catatan">
+          <strong>Yang membuat pangsa berbeda dari angka absolut:</strong> pangsa menormalkan terhadap keseluruhan, sehingga menampakkan siapa yang menurun <em>lebih cepat dari yang lain</em>. Ini pola normalisasi yang sama yang sudah berulang sepanjang jalur ini — dan di sini dia mengungkap sesuatu yang benar-benar baru.
+        </div>
+        <p><strong>Kenapa F03 menyusut:</strong> F03 adalah reservoir karbonat, dan decline-nya ternyata lebih cepat dari perkiraan awal, sementara F04 masih dalam fase produksi awal yang tinggi. Konsekuensinya untuk perencanaan: kalau anggaran pengembangan disusun berdasarkan kontribusi historis F03, asumsinya sudah kedaluwarsa.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tulis temuannya untuk manajemen</h3>
+        <span class="cek"><input type="checkbox" id="m3h20s3"><label for="m3h20s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tulis 3-4 kalimat yang menyampaikan temuan ini <strong>tanpa istilah teknis</strong>, dan yang penting: menyebutkan apa yang harus dilakukan.</p>
+        <details>
+          <summary>Contoh — bandingkan dengan tulisanmu</summary>
+          <div class="isi">
+            <p>"Meranti (F03) turun dari penyumbang terbesar (38% produksi blok pada 2023) menjadi 27% pada 2025 — penurunan peran tercepat di antara empat lapangan kita. Penyebabnya bukan gangguan operasi: uptime F03 justru tertinggi (98,97%), jadi ini penurunan alami reservoir yang lebih cepat dari perkiraan awal. Gaharu (F04) mengambil alih porsi itu, sekarang 43% produksi blok. Implikasinya: rencana produksi dan anggaran perawatan yang masih memakai asumsi kontribusi F03 tahun 2023 perlu ditinjau, dan ketergantungan blok pada satu lapangan (F04) meningkat — yang menaikkan risiko kalau F04 mengalami gangguan besar."</p>
+            <p style="margin-top:8px">Perhatikan strukturnya: temuan → menyingkirkan penjelasan alternatif (uptime) → dampak → risiko baru yang muncul. Itu bentuk laporan yang dibaca sampai habis.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 20 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> analisis pangsa mengungkap siapa yang menurun lebih cepat dari yang lain — tidak terlihat di angka absolut. Selalu singkirkan penjelasan alternatif (di sini: uptime) sebelum menyimpulkan sebab.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 21 ================= -->
+  <section class="day" data-hari="21">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 21</span>
+      <h2>Uji Level 3</h2>
+      <span class="waktu">± 4 jam</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Level 4 adalah lompatan besar (rekonsiliasi PSC, ekonomi, anomali) — pastikan Level 3 benar-benar lancar dulu.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Enam soal uji</h3>
+        <span class="cek"><input type="checkbox" id="m3h21s1"><label for="m3h21s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Produksi bulanan <strong>F01</strong> dengan kolom bulan lalu dan pertumbuhan persen, <strong>untuk 2026 saja</strong> — pastikan Januari 2026 tetap punya pembanding (Des 2025).</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Lima sumur teratas di tiap lapangan berdasarkan produksi <strong>seluruh periode</strong>.</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Kumulatif berjalan per lapangan; buktikan angka terakhirnya cocok dengan total tiap lapangan.</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Pareto untuk <strong>F02</strong>: berapa sumur menyumbang 80% produksi 2025? Bandingkan konsentrasinya dengan F01 (11 dari 20).</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Moving average <strong>7 hari</strong> dan <strong>30 hari</strong> untuk F04 dalam satu tabel. Mana yang lebih berguna untuk melihat tren, dan kenapa?</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> Decline 2025→2026 (Jan–Jun) per sumur, <strong>dinormalisasi terhadap rata-rata lapangannya</strong>: tampilkan selisih poin persen tiap sumur terhadap rata-rata lapangan tempat ia berada.</p>
+        <details>
+          <summary>Petunjuk — soal 6 adalah yang terpenting</summary>
+          <div class="isi">
+            <p>Soal 6 adalah pemanasan langsung untuk L4.7. Strukturnya: CTE decline per sumur (seperti Hari 19) → JOIN ke <code>sumur</code> untuk dapat <code>lapangan_id</code> → tambahkan kolom <code>AVG(decline) OVER (PARTITION BY lapangan_id)</code> → selisihnya adalah kolom terakhir. Perhatikan: <code>AVG() OVER (PARTITION BY ...)</code> memberi rata-rata kelompok <em>di tiap baris</em> tanpa meringkas — itulah kekuatan window function yang tidak dimiliki <code>GROUP BY</code>.</p>
+            <p>Untuk soal 1, ingat jebakan Hari 15: hitung <code>LAG</code> di CTE terpisah sebelum menyaring tahun.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Nilai dirimu</h3>
+        <span class="cek"><input type="checkbox" id="m3h21s2"><label for="m3h21s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>5-6 tanpa bantuan</strong> — lolos. Level 4 menunggu: rekonsiliasi PSC dan ekonomi workover.</li>
+          <li><strong>4</strong> — ulangi dua yang gagal, terutama kalau salah satunya soal 6.</li>
+          <li><strong>di bawah 4</strong> — ulangi Hari 15-20. Kalau window function yang jadi hambatan, kembali ke Minggu 6 kurikulum utama Hari 36-38.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Minggu 3 selesai — Level 3 tuntas (32 soal total)</h3>
+      <p>Kamu sudah bisa memakai window function untuk pertanyaan produksi sungguhan, dan menemukan dua hal yang tidak terlihat di angka biasa: konsentrasi produksi F01 yang ternyata bukan 80/20, dan pergeseran pangsa F03 yang menyusut 10,6 poin.</p>
+      <p style="margin-top:14px">Minggu depan: <strong>Level 4</strong> — rekonsiliasi PSC (membuktikan <code>gross = FTP + cost recovery + ETS</code> untuk 42 bulan), efektivitas workover yang diukur dengan benar, payback, batas ekonomis, dan menilai kerugian downtime dalam dolar. Ini bagian yang paling dekat dengan pekerjaan audit cost recovery.</p>
+      <a class="lanjut" href="#" id="tombol-lanjut-mg4">Lanjut ke Migas Minggu 4 →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua angka di halaman ini dihasilkan dengan menjalankan query pada <code>migas.db</code> yang kamu punya — kalau hasilmu berbeda, ada langkah yang perlu diperiksa.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

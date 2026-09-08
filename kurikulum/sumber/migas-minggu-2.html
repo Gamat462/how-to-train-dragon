@@ -1,0 +1,1027 @@
+<title>Migas Minggu 2 Metrik</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F1EFE7; --surface:#FCFAF4; --surface-2:#E7E2D2;
+    --ink:#1B2129; --ink-soft:#57606C; --line:#D7D0BC;
+    --teal:#0B5F55; --teal-soft:#DFEBE7;
+    --gold:#8F5F1E; --gold-soft:#F0E2C6;
+    --alert:#9C3427; --alert-soft:#F5E0DB;
+    --code-bg:#EDE8D8;
+    --shadow: 0 24px 48px -28px rgba(27,33,41,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10151B; --surface:#181E26; --surface-2:#1F2733;
+      --ink:#ECE8DC; --ink-soft:#95A0AD; --line:#2E3846;
+      --teal:#4FC4AF; --teal-soft:rgba(79,196,175,0.14);
+      --gold:#DFAC5D; --gold-soft:rgba(223,172,93,0.14);
+      --alert:#E68B76; --alert-soft:rgba(230,139,118,0.14);
+      --code-bg:#0D1217;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10151B; --surface:#181E26; --surface-2:#1F2733;
+    --ink:#ECE8DC; --ink-soft:#95A0AD; --line:#2E3846;
+    --teal:#4FC4AF; --teal-soft:rgba(79,196,175,0.14);
+    --gold:#DFAC5D; --gold-soft:rgba(223,172,93,0.14);
+    --alert:#E68B76; --alert-soft:rgba(230,139,118,0.14);
+    --code-bg:#0D1217;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .ulang{ background:var(--surface); border:1px dashed var(--gold); border-radius:12px;
+          padding:12px 15px; margin:14px 0; font-size:0.89rem; }
+  .ulang .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; font-weight:600; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/70d5a371-10fd-485b-909f-e7e62d8ac4f0">← Kembali ke Migas L1: Fondasi blok & PSC</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Migas · Minggu 2</span>
+  <button type="button" data-hari="8" aria-selected="true">Hari 8</button>
+  <button type="button" data-hari="9" aria-selected="false">Hari 9</button>
+  <button type="button" data-hari="10" aria-selected="false">Hari 10</button>
+  <button type="button" data-hari="11" aria-selected="false">Hari 11</button>
+  <button type="button" data-hari="12" aria-selected="false">Hari 12</button>
+  <button type="button" data-hari="13" aria-selected="false">Hari 13</button>
+  <button type="button" data-hari="14" aria-selected="false">Hari 14</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Jalur spesialisasi migas · Level 2</span>
+    <h1>Migas Minggu 2: Metrik yang Ditanya Manajemen</h1>
+    <p class="lede">Level 1 menjawab "berapa". Level 2 menjawab "berapa <em>per</em>" — lifting cost per barel, uptime persen, watercut rasio. Metrik rasio inilah yang benar-benar dipakai untuk mengambil keputusan, dan minggu ini juga berisi jebakan statistik terbesar di seluruh jalur migas: <strong>selection bias pada evaluasi workover</strong>.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 8 ================= -->
+  <section class="day aktif" data-hari="8">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 8</span>
+      <h2>Produksi per lapangan per tahun — dengan nama, bukan kode</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat tabel produksi per lapangan per tahun yang bisa langsung ditempel ke laporan manajemen — dan mengenali satu kesalahan pelaporan yang sangat sering lolos.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ulangan U3 — dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="m2h8s1"><label for="m2h8s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="ulang">
+          <span class="tag">PENGULANGAN BERJARAK · U3 (+3 HARI)</span>
+          <p>Tanpa membuka Minggu 1: tulis query untuk <strong>total hari downtime per penyebab, hanya untuk tahun 2025</strong>. (Variasi dari L1.11 — ada tambahan filter tahun.)</p>
+        </div>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT penyebab, COUNT(*) AS kejadian, SUM(durasi_hari) AS hari
+FROM downtime
+WHERE tanggal_mulai LIKE '2025%'
+GROUP BY penyebab ORDER BY hari DESC;</code></pre></div>
+            <p>Yang dinilai bukan angkanya, tapi apakah kamu langsung tahu kolom mana yang dipakai untuk filter tanggal (<code>tanggal_mulai</code>, bukan <code>tanggal</code> — tabel ini beda dari <code>produksi_harian</code>).</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>L2.1 — Produksi per lapangan per tahun, pakai nama lapangan</h3>
+        <span class="cek"><input type="checkbox" id="m2h8s2"><label for="m2h8s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Perbedaan dari L1.3: sekarang butuh <strong>dua JOIN</strong> — <code>produksi_harian</code> → <code>sumur</code> → <code>lapangan</code>, karena nama lapangan hanya ada di tabel ketiga.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT l.nama_lapangan,
+       substr(p.tanggal,1,4) AS tahun,
+       ROUND(SUM(p.oil_bopd)) AS bbl
+FROM produksi_harian p
+JOIN sumur s    ON p.sumur_id = s.sumur_id
+JOIN lapangan l ON s.lapangan_id = l.lapangan_id
+GROUP BY l.nama_lapangan, tahun
+ORDER BY l.nama_lapangan, tahun;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">SEBAGIAN HASIL YANG HARUS MUNCUL</span>
+          <p>Cendana Selatan: 710.540 (2023) → 781.297 (2024) → 744.879 (2025) → 336.751 (Jan–Jun 2026)<br>
+          Cendana Utara: 798.587 (2023) → 901.463 (2024) → 927.487 (2025) → …</p>
+        </div>
+        <div class="bahaya">
+          <strong>Jebakan pelaporan yang sangat sering lolos:</strong> kolom 2026 hanya berisi <strong>enam bulan</strong>. Menaruhnya sejajar dengan tahun-tahun penuh di satu tabel — tanpa keterangan — membuat pembaca menyimpulkan produksi anjlok 55%, padahal separuh tahunnya belum terjadi. Selalu beri label eksplisit (<em>"2026 (Jan–Jun)"</em>) atau setahunkan angkanya dengan catatan bahwa itu proyeksi.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cara memperbaikinya: bandingkan periode yang setara</h3>
+        <span class="cek"><input type="checkbox" id="m2h8s3"><label for="m2h8s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau kamu memang perlu membandingkan 2026 dengan tahun sebelumnya, bandingkan <strong>Jan–Jun lawan Jan–Jun</strong>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT substr(tanggal,1,4) AS tahun, ROUND(SUM(oil_bopd)) AS bbl_jan_jun
+FROM produksi_harian
+WHERE CAST(substr(tanggal,6,2) AS INTEGER) <= 6
+GROUP BY tahun ORDER BY tahun;</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Ini yang disebut perbandingan <em>like-for-like</em>,</strong> dan menyebutkannya dengan nama itu di wawancara langsung terdengar seperti orang yang pernah menyusun laporan bulanan sungguhan. Prinsipnya sama dengan pelajaran Minggu 6 kurikulum utama: sebelum membandingkan dua angka, pastikan keduanya mengukur rentang yang setara.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 8 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> tiga tabel butuh dua JOIN berantai. Data tahun berjalan tidak boleh disejajarkan dengan tahun penuh tanpa label. Perbandingan setara = <em>like-for-like</em>.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 9 ================= -->
+  <section class="day" data-hari="9">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 9</span>
+      <h2>Lifting cost per barel — metrik nomor satu</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung lifting cost per barel dan uptime per lapangan — dua metrik yang paling sering diminta manajemen migas, dan yang paling sering salah dihitung.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L2.4 — Lifting cost per bbl per lapangan 2025</h3>
+        <span class="cek"><input type="checkbox" id="m2h9s1"><label for="m2h9s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Lifting cost = biaya operasi untuk mengangkat satu barel ke permukaan. Rumusnya sederhana — <strong>OPEX dibagi volume</strong> — tapi ada satu keputusan yang menentukan benar-salahnya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH opex AS (
+  SELECT lapangan_id, SUM(nilai_usd) AS biaya
+  FROM biaya_operasi
+  WHERE periode LIKE '2025%' AND jenis = 'OPEX'
+  GROUP BY lapangan_id
+),
+produksi AS (
+  SELECT s.lapangan_id, SUM(p.oil_bopd) AS volume
+  FROM produksi_harian p
+  JOIN sumur s ON p.sumur_id = s.sumur_id
+  WHERE p.tanggal LIKE '2025%'
+  GROUP BY s.lapangan_id
+)
+SELECT o.lapangan_id,
+       ROUND(o.biaya / p.volume, 2) AS lifting_cost_usd_per_bbl
+FROM opex o JOIN produksi p ON o.lapangan_id = p.lapangan_id
+ORDER BY lifting_cost_usd_per_bbl DESC;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Lapangan</th><th class="n">Lifting cost 2025 ($/bbl)</th></tr></thead>
+              <tbody>
+                <tr><td>F03 Meranti (offshore)</td><td class="n">14,69</td></tr>
+                <tr><td>F04 Gaharu (offshore)</td><td class="n">14,65</td></tr>
+                <tr><td>F01 Cendana Utara (onshore)</td><td class="n">14,29</td></tr>
+                <tr><td>F02 Cendana Selatan (onshore)</td><td class="n">14,18</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:8px">Rata-rata blok sepanjang seluruh periode: <strong>$14,35/bbl</strong> — cocok dengan angka acuan Minggu 1.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Keputusan yang menentukan: <code>jenis = 'OPEX'</code>.</strong> Kalau CAPEX ikut masuk, angkamu melonjak dan tidak lagi bisa dibandingkan dengan lifting cost perusahaan lain — karena standar industri hanya menghitung biaya operasi berjalan. CAPEX masuk lewat jalur berbeda (depresiasi) di perhitungan PSC. Mencampur keduanya adalah kesalahan yang langsung ditangkap auditor mana pun.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Temuan yang melawan dugaan</h3>
+        <span class="cek"><input type="checkbox" id="m2h9s2"><label for="m2h9s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Dugaan wajar: lapangan <em>offshore</em> jauh lebih mahal daripada <em>onshore</em>. Datanya bilang selisihnya cuma <strong>$0,51/bbl</strong> (14,69 vs 14,18) — tipis sekali.</p>
+        <p>Sebabnya: offshore memang punya biaya absolut jauh lebih besar, <strong>tapi volumenya juga jauh lebih besar</strong>. F03 dan F04 bersama memproduksi 70% blok. Biaya besar dibagi volume besar menghasilkan rasio yang mirip.</p>
+        <div class="catatan">
+          <strong>Pelajaran umum soal metrik rasio:</strong> rasio menyembunyikan skala. "Lifting cost hampir sama" itu benar <em>per barel</em>, tapi total OPEX offshore bisa berkali lipat onshore. Saat melaporkan rasio, <strong>selalu sertakan pembilangnya juga</strong> — kalau tidak, manajemen bisa menyimpulkan bahwa kedua jenis lapangan sama-sama murah untuk dioperasikan, dan itu keliru.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>L2.3 — Uptime per lapangan 2025</h3>
+        <span class="cek"><input type="checkbox" id="m2h9s3"><label for="m2h9s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT s.lapangan_id,
+       ROUND(100.0 * SUM(p.berproduksi) / COUNT(*), 2) AS uptime_persen
+FROM produksi_harian p
+JOIN sumur s ON p.sumur_id = s.sumur_id
+WHERE p.tanggal LIKE '2025%'
+GROUP BY s.lapangan_id
+ORDER BY uptime_persen ASC;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL (urut dari terburuk)</span>
+          <p>F01 <strong>97,93%</strong> · F02 <strong>97,97%</strong> · F04 <strong>98,63%</strong> · F03 <strong>98,97%</strong></p>
+        </div>
+        <p><code>SUM(berproduksi)</code> bekerja karena kolomnya berisi 1/0 — menjumlahkannya sama dengan menghitung hari yang berproduksi. Ini pola yang akan sering kamu pakai.</p>
+        <div class="catatan">
+          <strong>Jangan tertipu selisih yang terlihat kecil.</strong> Beda F01 (97,93%) dan F03 (98,97%) cuma 1,04 poin persen. Tapi pada volume F04/F03 yang besar, 1% berarti <em>puluhan ribu barel</em> per tahun. Cara melaporkan yang benar: ubah dulu ke barel dan dolar, baru sampaikan. "Uptime 98%" tidak menggerakkan siapa pun; "kehilangan 1% uptime setara $X juta setahun" menggerakkan.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 9 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> lifting cost = OPEX ÷ volume, <strong>jangan</strong> masukkan CAPEX. <code>SUM(kolom_1_0)</code> = hitung yang bernilai 1. Rasio menyembunyikan skala — selalu sertakan pembilangnya.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 10 ================= -->
+  <section class="day" data-hari="10">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 10</span>
+      <h2>Menghubungkan produksi dengan uang: ICP dan gross revenue</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menggabungkan tabel produksi dengan tabel harga untuk menghitung pendapatan bulanan — langkah pertama menuju seluruh analisis ekonomi PSC di Level 4.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L2.7 — Produksi bulanan 2026 beserta ICP dan gross revenue</h3>
+        <span class="cek"><input type="checkbox" id="m2h10s1"><label for="m2h10s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kuncinya: <code>produksi_harian.tanggal</code> berformat <code>YYYY-MM-DD</code> sementara <code>harga_icp.periode</code> berformat <code>YYYY-MM</code>. Jadi JOIN-nya lewat potongan enam karakter pertama.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT substr(p.tanggal,1,7) AS bulan,
+       ROUND(SUM(p.oil_bopd)) AS volume_bbl,
+       h.icp_usd_bbl,
+       ROUND(SUM(p.oil_bopd) * h.icp_usd_bbl / 1e6, 2) AS gross_juta_usd
+FROM produksi_harian p
+JOIN harga_icp h ON substr(p.tanggal,1,7) = h.periode
+WHERE p.tanggal LIKE '2026%'
+GROUP BY bulan
+ORDER BY bulan;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Bulan</th><th class="n">Volume (bbl)</th><th class="n">ICP ($)</th><th class="n">Gross (juta $)</th></tr></thead>
+              <tbody>
+                <tr><td>2026-01</td><td class="n">416.170</td><td class="n">69,42</td><td class="n">28,89</td></tr>
+                <tr><td>2026-02</td><td class="n">366.181</td><td class="n">63,07</td><td class="n">23,10</td></tr>
+                <tr><td>2026-03</td><td class="n">405.226</td><td class="n">70,05</td><td class="n">28,39</td></tr>
+                <tr><td>2026-04</td><td class="n">380.060</td><td class="n">74,71</td><td class="n">28,39</td></tr>
+                <tr><td>2026-05</td><td class="n">401.179</td><td class="n">69,33</td><td class="n">27,81</td></tr>
+                <tr><td>2026-06</td><td class="n">381.048</td><td class="n">72,98</td><td class="n">27,81</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="catatan">
+          <strong>Perhatikan Maret dan April.</strong> Volume turun (405.226 → 380.060) tapi gross revenue <em>sama persis</em> ($28,39 juta), karena ICP naik ($70,05 → $74,71) dan kebetulan menutup selisihnya. Ini contoh sempurna kenapa pendapatan bukan ukuran kinerja operasional: <strong>harga minyak di luar kendali tim lapangan.</strong> Untuk menilai kinerja operasi, pakai volume dan lifting cost; untuk menilai hasil keuangan, baru pakai revenue.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>L2.6 — HSE: lapangan mana yang insiden beratnya terbanyak?</h3>
+        <span class="cek"><input type="checkbox" id="m2h10s2"><label for="m2h10s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT lapangan_id, tingkat_keparahan, COUNT(*) AS n
+FROM hse_insiden GROUP BY lapangan_id, tingkat_keparahan
+ORDER BY lapangan_id;</code></pre></div>
+            <div class="tabel-bungkus">
+              <table>
+                <thead><tr><th>Lapangan</th><th class="n">Berat</th><th class="n">Sedang</th><th class="n">Ringan</th><th class="n">Total</th></tr></thead>
+                <tbody>
+                  <tr><td>F01</td><td class="n">1</td><td class="n">2</td><td class="n">13</td><td class="n">16</td></tr>
+                  <tr><td>F02</td><td class="n">1</td><td class="n">6</td><td class="n">16</td><td class="n">23</td></tr>
+                  <tr><td>F03</td><td class="n">3</td><td class="n">8</td><td class="n">18</td><td class="n">29</td></tr>
+                  <tr><td>F04</td><td class="n">2</td><td class="n">7</td><td class="n">14</td><td class="n">23</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>F03 Meranti</strong> paling banyak insiden berat (3) sekaligus paling banyak insiden total (29).</p>
+            <div class="bahaya">
+              <strong>Jangan langsung bilang "F03 paling tidak aman".</strong> F03 juga punya jumlah sumur dan aktivitas berbeda dari lapangan lain. Angka mentah insiden harus <em>dinormalisasi</em> dulu — biasanya per juta jam kerja, atau minimal per sumur. Dengan 3 kejadian berat, kamu juga masuk wilayah angka kecil di mana satu kejadian tambahan mengubah peringkat. Laporkan sebagai "perlu ditelusuri", bukan sebagai kesimpulan.
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 10 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> JOIN beda format tanggal lewat <code>substr()</code>. Revenue = volume × harga, tapi harga di luar kendali operasi — pisahkan penilaian operasional dari keuangan. Angka insiden mentah harus dinormalisasi.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 11 ================= -->
+  <section class="day" data-hari="11">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 11</span>
+      <h2>Jebakan terbesar di jalur ini: selection bias</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali kapan sebuah perbandingan kelompok <em>terlihat</em> membuktikan sesuatu padahal arah sebabnya bisa terbalik — kesalahan yang membuat perusahaan membakar jutaan dolar pada program yang tidak berhasil.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L2.8 — Bandingkan sumur yang pernah di-workover vs yang belum</h3>
+        <span class="cek"><input type="checkbox" id="m2h11s1"><label for="m2h11s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT CASE WHEN w.sumur_id IS NULL THEN 'Belum pernah' ELSE 'Pernah' END AS status,
+       COUNT(DISTINCT s.sumur_id) AS jumlah_sumur,
+       ROUND(AVG(p.oil_bopd), 1) AS rata_bopd
+FROM sumur s
+LEFT JOIN (SELECT DISTINCT sumur_id FROM workover) w ON s.sumur_id = w.sumur_id
+JOIN produksi_harian p ON p.sumur_id = s.sumur_id AND p.berproduksi = 1
+WHERE s.tipe_sumur = 'Producer'
+GROUP BY status;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Status</th><th class="n">Jumlah sumur</th><th class="n">Rata-rata bopd</th></tr></thead>
+              <tbody>
+                <tr><td>Pernah di-workover</td><td class="n">41</td><td class="n">305,0</td></tr>
+                <tr><td>Belum pernah</td><td class="n">18</td><td class="n">255,6</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kesimpulan yang menggoda — dan kenapa itu salah</h3>
+        <span class="cek"><input type="checkbox" id="m2h11s2"><label for="m2h11s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sumur yang pernah di-workover berproduksi 19% lebih tinggi (305,0 vs 255,6 bopd). Godaannya besar sekali untuk menulis: <em>"Workover terbukti menaikkan produksi 19% — perluas programnya."</em></p>
+        <div class="bahaya">
+          <strong>Itu kesimpulan yang salah, dan alasannya bukan soal statistik yang rumit — soal urutan sebab.</strong> Workover mahal ($850 ribu rata-rata). Perusahaan tidak membelanjakannya secara acak: mereka memilih <strong>sumur yang paling besar dan paling menjanjikan</strong>, karena di situlah pengembaliannya paling masuk akal. Jadi sumur-sumur itu sudah lebih produktif <em>sebelum</em> di-workover.
+        </div>
+        <p>Arah sebabnya bisa jadi: <strong>"sumur besar → dipilih untuk workover"</strong>, bukan <strong>"workover → sumur jadi besar"</strong>. Data ini sama sekali tidak bisa membedakan keduanya.</p>
+        <div class="catatan">
+          <strong>Nama gejalanya: <em>selection bias</em>.</strong> Kelompok yang menerima perlakuan tidak dipilih acak, jadi perbedaan antar kelompok mencampur efek perlakuan dengan perbedaan yang sudah ada sejak awal. Ini persis pola yang kamu pelajari di Minggu 5 kurikulum utama (korelasi bukan sebab-akibat) — sekarang dalam bentuk yang jauh lebih menggoda karena angkanya terlihat meyakinkan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cara yang benar — dan kamu akan mengerjakannya di Level 4</h3>
+        <span class="cek"><input type="checkbox" id="m2h11s3"><label for="m2h11s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Satu-satunya cara jujur menilai efektivitas workover dengan data ini: <strong>bandingkan sumur yang sama, sebelum vs sesudah</strong> — bukan sumur berbeda satu sama lain.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Pendekatan</th><th>Membandingkan</th><th>Bisa dipercaya?</th></tr></thead>
+            <tbody>
+              <tr><td>Antar sumur (L2.8)</td><td>Sumur A yang di-workover vs sumur B yang tidak</td><td>Tidak — bercampur selection bias</td></tr>
+              <tr><td>Sebelum-sesudah (L4.4)</td><td>Sumur A 30 hari sebelum vs 30 hari sesudah</td><td>Jauh lebih baik</td></tr>
+              <tr><td>Eksperimen acak</td><td>Sumur dipilih acak untuk di-workover</td><td>Terbaik — tapi tidak realistis di migas</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Di Level 4 nanti kamu akan menghitung yang kedua, dan hasilnya jauh lebih masuk akal: kenaikan rata-rata <strong>+61 sampai +115 bopd</strong> tergantung jenis pekerjaan — bukan 19% yang menyesatkan itu.</p>
+        <div class="catatan">
+          <strong>Kalimat yang membuatmu menonjol di wawancara:</strong> <em>"Angka mentahnya menunjukkan sumur yang di-workover berproduksi 19% lebih tinggi, tapi saya tidak melaporkan itu sebagai efek workover — karena sumur yang dipilih untuk di-workover memang sudah yang terbaik sejak awal. Saya membandingkan sumur yang sama sebelum dan sesudah."</em> Menemukan jebakan ini sendiri, lalu menghindarinya, adalah bukti kemampuan yang jauh lebih kuat daripada query mana pun.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>L2.9 — Anti-join: produser yang tidak pernah punya catatan downtime</h3>
+        <span class="cek"><input type="checkbox" id="m2h11s4"><label for="m2h11s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT s.sumur_id, s.lapangan_id
+FROM sumur s
+LEFT JOIN (SELECT DISTINCT sumur_id FROM downtime) d ON s.sumur_id = d.sumur_id
+WHERE s.tipe_sumur = 'Producer' AND d.sumur_id IS NULL;</code></pre></div>
+            <p>Hasilnya cuma <strong>satu sumur: CDN-058 (F04)</strong>.</p>
+            <p>Ini pola <strong>anti-join</strong> yang sama persis dengan yang kamu pelajari di Minggu 14 kurikulum utama (soal wawancara SQL nomor 1). Pakai <code>LEFT JOIN ... IS NULL</code> atau <code>NOT EXISTS</code> — <strong>jangan</strong> <code>NOT IN</code>, karena kalau subquery-nya menghasilkan satu saja NULL, seluruh hasilmu jadi kosong tanpa peringatan apa pun.</p>
+            <div class="catatan">
+              <strong>Pertanyaan yang harus kamu ajukan atas temuan ini:</strong> apakah CDN-058 benar-benar tidak pernah mati, atau <em>catatannya</em> yang tidak pernah dibuat? Di data operasional nyata, "tidak ada catatan" jauh lebih sering berarti masalah pencatatan daripada kesempurnaan operasi. Ini refleks yang sama dengan langkah pertama kerangka studi kasus di Minggu 15: sebelum mencari sebab di dunia nyata, periksa dulu apakah datanya benar.
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 11 selesai — hari terpenting di minggu ini</h3>
+      <p><strong>Tambahkan ke kartu:</strong> selection bias = kelompok perlakuan tidak dipilih acak, jadi perbedaannya bercampur perbedaan awal. Obatnya: bandingkan unit yang sama sebelum-sesudah. "Tidak ada catatan" ≠ "tidak pernah terjadi".</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 12 ================= -->
+  <section class="day" data-hari="12">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 12</span>
+      <h2>Rekonsiliasi pertama: lifting vs produksi</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> melakukan rekonsiliasi volume — pekerjaan yang paling dekat dengan latar belakang auditmu, dan yang paling dicari di posisi cost recovery PSC.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L2.10 — Apakah volume lifting cocok dengan volume produksi?</h3>
+        <span class="cek"><input type="checkbox" id="m2h12s1"><label for="m2h12s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Produksi = minyak yang keluar dari sumur. Lifting = minyak yang benar-benar diangkat/dijual. Keduanya <em>seharusnya</em> mirip — tapi tidak akan pernah sama persis, dan memahami kenapa itulah inti pekerjaannya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>WITH pr AS (
+  SELECT substr(tanggal,1,4) AS tahun, SUM(oil_bopd) AS produksi
+  FROM produksi_harian GROUP BY tahun
+),
+li AS (
+  SELECT substr(periode,1,4) AS tahun, SUM(volume_bbl) AS lifting
+  FROM lifting GROUP BY tahun
+)
+SELECT pr.tahun, ROUND(pr.produksi) AS produksi, ROUND(li.lifting) AS lifting,
+       ROUND(100.0 * (li.lifting - pr.produksi) / pr.produksi, 2) AS selisih_persen
+FROM pr JOIN li ON pr.tahun = li.tahun
+ORDER BY pr.tahun;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Tahun</th><th class="n">Produksi (bbl)</th><th class="n">Lifting (bbl)</th><th class="n">Selisih</th></tr></thead>
+              <tbody>
+                <tr><td>2023</td><td class="n">6.012.275</td><td class="n">5.905.775</td><td class="n">−1,77%</td></tr>
+                <tr><td>2024</td><td class="n">6.075.927</td><td class="n">5.819.316</td><td class="n">−4,22%</td></tr>
+                <tr><td>2025</td><td class="n">5.641.070</td><td class="n">5.576.850</td><td class="n">−1,14%</td></tr>
+                <tr><td>2026</td><td class="n">2.349.863</td><td class="n">2.351.470</td><td class="n">+0,07%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Membaca selisihnya seperti auditor</h3>
+        <span class="cek"><input type="checkbox" id="m2h12s2"><label for="m2h12s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Selisih berkisar <strong>−4,22% sampai +0,07%</strong>. Apakah ini masalah? Tiga penjelasan yang sah:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Stok di tangki.</strong> Minyak yang diproduksi Desember bisa baru diangkat Januari — jadi selisihnya berpindah antar periode, bukan hilang.</li>
+          <li><strong>Beda waktu pengangkatan kargo.</strong> Kargo besar berangkat pada jadwal kapal, bukan mengikuti produksi harian.</li>
+          <li><strong>Susut (losses).</strong> Penguapan, sisa di pipa, ketidakpastian pengukuran — selalu ada dan wajar dalam batas kecil.</li>
+        </ul>
+        <div class="catatan">
+          <strong>Ambang yang dipakai di praktik:</strong> selisih di bawah ±3% per tahun umumnya dianggap normal. Yang <em>tidak</em> normal ada dua: selisih di atas 5%, atau <strong>selisih yang selalu searah</strong>. Perhatikan data kita — tiga dari empat tahun negatif. Kalau polanya selalu negatif bertahun-tahun, itu bukan lagi soal waktu pengangkatan (yang seharusnya saling menutup), melainkan tanda ada masalah pengukuran sistematis atau susut yang belum dijelaskan. Itu <strong>temuan audit</strong>, dan kamu wajib menuliskannya walaupun tiap tahunnya sendiri masih "dalam batas".
+        </div>
+        <p>Perhatikan juga 2024 (−4,22%) menonjol dibanding tahun lain. Pertanyaan lanjutan yang tepat: apakah ada kargo Desember 2024 yang baru diangkat Januari 2025? Rekonsiliasi bulanan akan menjawabnya — dan itu tepat pekerjaan Level 4.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>L2.11 — Workover mana yang paling murah per unit kenaikan?</h3>
+        <span class="cek"><input type="checkbox" id="m2h12s3"><label for="m2h12s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT jenis_pekerjaan,
+       COUNT(*) AS n,
+       ROUND(AVG(biaya_usd)) AS biaya_rata,
+       ROUND(AVG(faktor_kenaikan), 3) AS faktor_kenaikan
+FROM workover
+GROUP BY jenis_pekerjaan
+ORDER BY faktor_kenaikan DESC;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Jenis</th><th class="n">n</th><th class="n">Biaya rata ($)</th><th class="n">Faktor kenaikan</th></tr></thead>
+              <tbody>
+                <tr><td>Scale Removal</td><td class="n">15</td><td class="n">856.015</td><td class="n">1,369</td></tr>
+                <tr><td>Reperforation</td><td class="n">17</td><td class="n">875.289</td><td class="n">1,362</td></tr>
+                <tr><td>Zone Change</td><td class="n">6</td><td class="n">892.324</td><td class="n">1,360</td></tr>
+                <tr><td>Acidizing</td><td class="n">24</td><td class="n">764.856</td><td class="n">1,352</td></tr>
+                <tr><td>ESP Replacement</td><td class="n">17</td><td class="n">913.189</td><td class="n">1,310</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p><strong>Acidizing</strong> memberi kenaikan hampir setara yang lain (1,352) dengan biaya paling murah ($764.856) — kandidat terbaik per rupiah. <strong>ESP Replacement</strong> paling mahal <em>dan</em> kenaikannya paling kecil.</p>
+        <div class="bahaya">
+          <strong>Tapi jangan langsung menyimpulkan "hentikan ESP Replacement".</strong> Jenis pekerjaan tidak dipilih acak — ESP diganti ketika pompanya <em>memang rusak</em>, sering pada sumur yang sudah bermasalah. Ini selection bias yang sama seperti kemarin, satu tingkat lebih halus. Perbandingan yang adil butuh kondisi awal sumur yang setara.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 12 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> rekonsiliasi volume: selisih &lt;3% normal, &gt;5% atau <strong>selalu searah</strong> = temuan. Selection bias muncul lagi di perbandingan jenis workover.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 13 ================= -->
+  <section class="day" data-hari="13">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 13</span>
+      <h2>Angka kecil, dan kenapa tren darinya berbahaya</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali kapan sebuah angka terlalu kecil untuk ditarik trennya — pelajaran statistik yang paling sering dilanggar di laporan HSE dan keselamatan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L2.12 — LTI dan hari kerja hilang per tahun</h3>
+        <span class="cek"><input type="checkbox" id="m2h13s1"><label for="m2h13s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT substr(tanggal,1,4) AS tahun,
+       COUNT(*) AS jumlah_lti,
+       SUM(hari_kerja_hilang) AS hari_hilang
+FROM hse_insiden
+WHERE jenis_insiden = 'Lost Time Injury'
+GROUP BY tahun ORDER BY tahun;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Tahun</th><th class="n">LTI</th><th class="n">Hari kerja hilang</th></tr></thead>
+              <tbody>
+                <tr><td>2023</td><td class="n">0</td><td class="n">0</td></tr>
+                <tr><td>2024</td><td class="n">1</td><td class="n">15</td></tr>
+                <tr><td>2025</td><td class="n">3</td><td class="n">28</td></tr>
+                <tr><td>2026 (Jan–Jun)</td><td class="n">1</td><td class="n">24</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:8px">Catatan: 2023 tidak muncul di hasil query karena tidak ada barisnya sama sekali — <strong>ketiadaan baris ≠ nol yang tercatat</strong>, dan kamu harus menyebutkannya secara eksplisit di laporan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kalimat yang tidak boleh kamu tulis</h3>
+        <span class="cek"><input type="checkbox" id="m2h13s2"><label for="m2h13s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">
+          <strong>"LTI naik 200% dari 2024 ke 2025."</strong> Secara aritmetika benar (1 → 3). Sebagai informasi, ini menyesatkan total. Dengan basis 1 kejadian, satu insiden tambahan sudah berarti "+100%". Persentase pada angka sekecil ini tidak mengandung informasi — hanya derau yang dibesar-besarkan.
+        </div>
+        <p>Cara melaporkan yang jujur untuk peristiwa langka:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Sebut angka absolutnya</strong>, bukan persentase: "3 LTI di 2025, dibanding 1 di 2024".</li>
+          <li><strong>Pakai rentang beberapa tahun</strong>, bukan perbandingan tahun-ke-tahun: total 5 LTI dalam 3,5 tahun.</li>
+          <li><strong>Pakai ukuran yang dinormalisasi</strong> yang jadi standar industri: LTIF (LTI per juta jam kerja) — walaupun untuk angka sekecil ini pun rentang ketidakpastiannya tetap lebar.</li>
+          <li><strong>Sebutkan ketidakpastiannya dengan jujur:</strong> "jumlah kejadian terlalu kecil untuk menyimpulkan tren; yang bisa dinilai adalah keparahan tiap kejadian dan tindak lanjutnya."</li>
+        </ul>
+        <div class="catatan">
+          <strong>Ini penerapan langsung dari Minggu 7 kurikulum utama</strong> (effect size dan ketidakpastian): dengan sampel kecil, ketidakpastian mendominasi sinyal. Bedanya, di HSE taruhannya bukan sekadar angka salah — laporan tren palsu bisa membuat perusahaan mengalihkan anggaran keselamatan ke tempat yang keliru.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ulangan U4 — gabungan Level 1 dan 2</h3>
+        <span class="cek"><input type="checkbox" id="m2h13s3"><label for="m2h13s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="ulang">
+          <span class="tag">PENGULANGAN BERJARAK · U4 (+7 HARI)</span>
+          <p>Tanpa membuka apa pun, tulis query untuk: <strong>lifting cost per barel per lapangan untuk tahun 2024</strong> (variasi dari Hari 9 yang memakai 2025).</p>
+          <p style="margin-top:8px">Lalu, tanpa menjalankan: <strong>tebak dulu</strong> apakah angkanya akan lebih tinggi atau lebih rendah dari 2025, dan kenapa. Baru jalankan dan periksa tebakanmu.</p>
+        </div>
+        <div class="catatan">
+          <strong>Kebiasaan menebak sebelum menjalankan</strong> adalah salah satu cara tercepat membangun intuisi terhadap data. Kalau tebakanmu meleset jauh, itu justru momen belajar paling berharga — berarti ada model mental yang perlu diperbaiki.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 13 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> peristiwa langka → laporkan angka absolut, bukan persen. Ketiadaan baris ≠ nol. Selalu tebak hasil sebelum menjalankan query.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 14 ================= -->
+  <section class="day" data-hari="14">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 14</span>
+      <h2>Uji Level 2</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Ambang untuk naik ke Level 3: menyelesaikan 6 dari 8 soal tanpa bantuan, dalam 3 jam.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Delapan soal uji</h3>
+        <span class="cek"><input type="checkbox" id="m2h14s1"><label for="m2h14s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Lifting cost per bbl per lapangan untuk <strong>seluruh periode</strong> (bukan 2025 saja).</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Uptime per lapangan untuk <strong>2024</strong>, urut dari terburuk.</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Watercut rata-rata per lapangan pada <strong>2026</strong> saja, untuk sumur yang berproduksi.</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Gross revenue bulanan sepanjang <strong>2025</strong> (volume × ICP), urut dari bulan terbesar.</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Rekonsiliasi lifting vs produksi <strong>per bulan</strong> untuk 2024 — bulan mana yang selisihnya paling besar?</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> Sumur produser yang <strong>tidak pernah</strong> di-workover, beserta lapangannya (anti-join).</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> Total biaya workover per lapangan (butuh JOIN <code>workover</code> → <code>sumur</code>).</p>
+        <p style="margin-bottom:12px"><strong>8.</strong> Untuk tiap lapangan: jumlah sumur, total produksi 2025, dan produksi rata-rata per sumur. <strong>Ingat menyaring produser saja.</strong></p>
+        <details>
+          <summary>Petunjuk — buka hanya kalau macet lebih dari 15 menit per soal</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Hilangkan filter periode di kedua CTE Hari 9. Hasilnya harus mendekati $14,35 rata-rata blok.</p>
+            <p><strong>5.</strong> Ubah <code>substr(...,1,4)</code> jadi <code>substr(...,1,7)</code> di kedua CTE Hari 12. Perhatikan Desember — bulan pergantian tahun biasanya paling besar selisihnya, dan alasannya (kargo lintas tahun) adalah bagian dari jawaban.</p>
+            <p><strong>7.</strong> <code>SELECT s.lapangan_id, ROUND(SUM(w.biaya_usd)) FROM workover w JOIN sumur s ON w.sumur_id=s.sumur_id GROUP BY s.lapangan_id;</code></p>
+            <p><strong>8.</strong> Dua agregasi berbeda tingkat (jumlah sumur vs total produksi) paling aman dikerjakan lewat dua CTE lalu di-JOIN — persis pola Hari 9. Kalau kamu langsung <code>COUNT(DISTINCT s.sumur_id)</code> dalam satu query, periksa hasilnya terhadap <strong>F01 20 · F02 17 · F03 13 · F04 9</strong> — kalau tidak cocok, ada baris yang tergandakan.</p>
+            <p><strong>Perhatikan:</strong> angka itu <em>berbeda</em> dari jawaban Minggu 1 Hari 5 (F01 22 · F02 18 · F03 14 · F04 10), karena yang di sana menghitung <strong>seluruh sumur</strong> sedangkan soal ini minta <strong>produser saja</strong>. Selisihnya adalah 5 sumur injeksi (F01 punya 2, sisanya 1 per lapangan). Ini jebakan domain yang sama dengan Migas Hari 4: sumur injeksi memompa air <em>ke dalam</em> reservoir, jadi memasukkannya ke hitungan produksi selalu salah. Kalau angkamu 22/18/14/10, filter produsernya belum terpasang.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Nilai dirimu, dan putuskan</h3>
+        <span class="cek"><input type="checkbox" id="m2h14s2"><label for="m2h14s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>7-8 tanpa bantuan</strong> — lolos, lanjut Level 3 (window function di data migas).</li>
+          <li><strong>6</strong> — lolos tipis. Ulangi dua yang gagal besok sebelum lanjut.</li>
+          <li><strong>di bawah 6</strong> — ulangi Hari 8-13. Kalau yang jadi masalah CTE dan JOIN bertingkat, kembali dulu ke Minggu 6 kurikulum utama.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tulis satu paragraf temuan</h3>
+        <span class="cek"><input type="checkbox" id="m2h14s3"><label for="m2h14s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sebelum menutup minggu ini, tulis satu paragraf (5-6 kalimat) untuk "manajer lapangan Blok Cendana", berisi tiga temuan paling penting dari Level 1-2, <strong>tanpa satu pun istilah SQL</strong>. Simpan — ini akan jadi bahan memo akhir di Level 5, dan bahan cerita di wawancara.</p>
+        <details>
+          <summary>Contoh kerangka (jangan disalin — pakai temuanmu sendiri)</summary>
+          <div class="isi">
+            <p>"Produksi blok turun dari 6,01 juta barel (2023) ke 5,64 juta (2025), terutama karena … Watercut naik di semua lapangan, dengan F01 kini mengangkat 4,4 barel air per barel minyak, yang berarti … Lifting cost antar lapangan ternyata seragam di kisaran $14,2-14,7/bbl, sehingga … Satu hal yang perlu ditelusuri lebih lanjut: selisih lifting terhadap produksi selalu negatif tiga tahun berturut-turut, yang bisa menandakan …"</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Minggu 2 selesai — Level 2 tuntas (24 soal total)</h3>
+      <p>Kamu sudah menguasai metrik rasio yang dipakai manajemen migas sehari-hari, melakukan rekonsiliasi volume pertamamu, dan yang terpenting: mengenali dua jebakan selection bias yang membuat banyak analis melaporkan kesimpulan yang salah dengan penuh percaya diri.</p>
+      <p style="margin-top:14px">Minggu depan: Level 3 — window function di data migas. Peringkat sumur per lapangan, decline bulan-ke-bulan, analisis Pareto (berapa sumur yang menyumbang 80% produksi), dan moving average untuk memisahkan tren dari derau harian.</p>
+      <a class="lanjut" href="https://claude.ai/code/artifact/5fc399f9-833f-48f5-88a2-57b9b9f7963c">Lanjut ke Migas L3: Window function di lapangan →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua angka di halaman ini dihasilkan dengan menjalankan query pada <code>migas.db</code> yang kamu punya — kalau hasilmu berbeda, ada langkah yang perlu diperiksa.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "migas-minggu2-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

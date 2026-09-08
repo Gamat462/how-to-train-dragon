@@ -1,0 +1,1687 @@
+<title>Bekal Python</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  .ulang{ background:var(--surface); border:1px dashed var(--gold); border-radius:12px;
+          padding:12px 15px; margin:14px 0; font-size:0.89rem; }
+  .ulang .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; font-weight:600; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/b2c56e91-5737-4cf3-9cd9-f865551bed10">← Kembali ke M2: JOIN & data sungguhan</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Bekal Python</span>
+  <button type="button" data-hari="1" aria-selected="true">Bekal 1</button>
+  <button type="button" data-hari="2" aria-selected="false">Bekal 2</button>
+  <button type="button" data-hari="3" aria-selected="false">Bekal 3</button>
+  <button type="button" data-hari="4" aria-selected="false">Bekal 4</button>
+  <button type="button" data-hari="5" aria-selected="false">Bekal 5</button>
+  <button type="button" data-hari="6" aria-selected="false">Bekal 6</button>
+  <button type="button" data-hari="7" aria-selected="false">Bekal 7</button>
+  <button type="button" data-hari="8" aria-selected="false">Bekal 8</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Sisipan wajib · dikerjakan setelah Hari 14, sebelum Hari 15</span>
+    <h1>Bekal Python: dari benar-benar nol</h1>
+    <p class="lede">Delapan hari ini tidak mengajarkan analisis data sama sekali. Ini mengajarkan <strong>bahasanya</strong> — hal-hal yang di Minggu 3 sampai 15 dipakai begitu saja tanpa pernah dijelaskan. Kalau kamu belum pernah menulis satu baris kode seumur hidup, mulai dari sini. Tidak ada yang boleh dilewati, dan tidak apa-apa kalau satu hari perlu dua kali duduk.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= BEKAL 1 ================= -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">BEKAL 1</span>
+      <h2>Apa itu "menjalankan kode", dan di mana kamu mengetiknya</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuka tempat menulis kode, mengetik satu perintah, menjalankannya, dan tahu di mana hasilnya muncul. Tidak lebih dari itu — dan itu sudah cukup untuk hari pertama.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bayangkan begini dulu</h3>
+        <span class="cek"><input type="checkbox" id="b1s1"><label for="b1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Selama ini kalau kamu mau menghitung sesuatu, kamu ketik rumus di sel Excel lalu tekan Enter, dan hasilnya muncul di sel itu.</p>
+        <p><strong>Python bekerja mirip, dengan dua perbedaan:</strong></p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li>Kamu menulis <strong>perintah</strong>, bukan rumus — dan perintahnya bisa lebih dari satu baris.</li>
+          <li>Hasilnya tidak muncul di tempat kamu mengetik, tapi <strong>di bawahnya</strong>.</li>
+        </ul>
+        <div class="catatan">
+          <strong>Kalau kamu terbiasa audit:</strong> anggap Python sebagai kertas kerja yang bisa dijalankan. Bedanya dengan Excel, setiap langkahmu tertulis dan bisa diulang persis oleh orang lain — sesuatu yang selama ini kamu kejar lewat dokumentasi manual.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buka tempatnya — tidak perlu memasang apa pun</h3>
+        <span class="cek"><input type="checkbox" id="b1s2"><label for="b1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">
+          <span class="tag">LAKUKAN PERSIS INI</span>
+          <ol style="font-size:0.93rem;padding-left:20px;margin:0">
+            <li>Buka browser (Chrome, Edge, apa saja).</li>
+            <li>Ketik di kolom alamat: <span class="mono">colab.research.google.com</span> lalu Enter.</li>
+            <li>Kalau diminta masuk, pakai akun Google-mu (Gmail).</li>
+            <li>Muncul kotak putih di tengah. Klik <strong>New notebook</strong> di pojok kanan bawah kotak itu.</li>
+          </ol>
+        </div>
+        <div class="hasil">
+          <span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Halaman kosong dengan judul <code>Untitled0.ipynb</code> di kiri atas, dan <strong>satu kotak abu-abu memanjang</strong> di tengah dengan tanda ▶ (segitiga) di sebelah kirinya.</p>
+        </div>
+        <p>Kotak abu-abu itu namanya <strong>sel</strong> (cell). Di situlah kamu mengetik. Tanda ▶ artinya "jalankan".</p>
+        <div class="catatan">
+          <strong>Colab gratis, jalan di browser, tidak ada yang dipasang di komputermu.</strong> Kalau laptopmu lambat pun tidak masalah — yang bekerja komputer Google, bukan komputermu. Ini juga berarti kerjaanmu tersimpan di Google Drive otomatis.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Perintah pertamamu</h3>
+        <span class="cek"><input type="checkbox" id="b1s3"><label for="b1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Klik di dalam kotak abu-abu, lalu ketik <strong>persis</strong> ini — termasuk tanda kurung dan tanda kutipnya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print("halo")</code></pre>
+        </div>
+        <div class="aksi">
+          <span class="tag">CARA MENJALANKAN — PILIH SALAH SATU</span>
+          <p>Klik tanda ▶ di kiri sel, <strong>atau</strong> tekan <strong>Shift + Enter</strong> bersamaan (tahan Shift, tekan Enter).</p>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL DI BAWAH SEL</span>
+          <div class="kode"><pre><code>halo</code></pre></div>
+        </div>
+        <p>Kalau pertama kali dijalankan agak lama (5-20 detik) dan ada tulisan "Connecting", itu normal — Google sedang menyiapkan komputer untukmu. Sekali tersambung, sisanya cepat.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Bongkar perintah tadi, satu per satu</h3>
+        <span class="cek"><input type="checkbox" id="b1s4"><label for="b1s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Bagian</th><th>Namanya</th><th>Tugasnya</th></tr></thead>
+            <tbody>
+              <tr><td><code>print</code></td><td>perintah</td><td>"tampilkan di layar"</td></tr>
+              <tr><td><code>( )</code></td><td>kurung</td><td>menandai apa yang mau ditampilkan</td></tr>
+              <tr><td><code>" "</code></td><td>tanda kutip</td><td>menandai bahwa isinya <strong>teks biasa</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Sekarang coba tanpa tanda kutip — ketik di sel baru (tekan tombol <strong>+ Code</strong> di kiri atas untuk membuat sel baru):</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(halo)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <div class="kode"><pre><code>NameError: name 'halo' is not defined</code></pre></div>
+        </div>
+        <div class="bahaya">
+          <strong>Jangan tutup tulisan merahnya. Baca.</strong> Tanpa tanda kutip, Python menyangka <code>halo</code> adalah <em>nama sesuatu</em> yang kamu simpan sebelumnya — dan karena belum ada, dia bilang "name 'halo' is not defined" (nama 'halo' belum ada). Itu bukan komputer yang rusak; itu komputer yang memberitahumu dengan jelas apa yang kurang.
+          <p style="margin-top:8px">Kita akan bahas cara membaca pesan merah ini secara khusus di <strong>Bekal 3</strong>. Untuk sekarang, cukup tahu: <strong>merah = pesan, bukan bencana.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Python juga kalkulator</h3>
+        <span class="cek"><input type="checkbox" id="b1s5"><label for="b1s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sel baru, ketik ini satu per satu dan jalankan tiap kali:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(22000 * 12)
+print(1914000 - 1131000)
+print(2305000 / 4002000)
+print(22000 + 18000 + 15000)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>264000</code><br><code>783000</code><br><code>0.5759620189905047</code><br><code>55000</code></p>
+        </div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Tanda</th><th>Artinya</th></tr></thead>
+            <tbody>
+              <tr><td><code>+</code> <code>-</code></td><td>tambah, kurang — sama seperti biasa</td></tr>
+              <tr><td><code>*</code></td><td><strong>kali</strong> (bintang, bukan ×)</td></tr>
+              <tr><td><code>/</code></td><td><strong>bagi</strong> (garis miring, bukan ÷)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Perhatikan hasil pembagian: <code>0.5759620189905047</code>. Python memakai <strong>titik</strong> sebagai koma desimal, bukan koma. Itu 0,576 dalam penulisan Indonesia — atau 57,6%.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Simpan pekerjaanmu</h3>
+        <span class="cek"><input type="checkbox" id="b1s6"><label for="b1s6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Klik tulisan <code>Untitled0.ipynb</code> di kiri atas, ganti jadi <strong>bekal-01</strong>. Colab menyimpan otomatis ke Google Drive-mu — tidak ada tombol Save yang perlu ditekan.</p>
+        <div class="catatan">
+          <strong>Buat satu notebook baru untuk tiap hari Bekal</strong> (<code>bekal-01</code> sampai <code>bekal-08</code>). Kalau nanti kamu lupa sesuatu, kamu tinggal buka lagi notebook harinya — bukan mencari-cari di satu berkas panjang.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal 1 selesai. Berhenti di sini hari ini.</h3>
+      <p><strong>Tulis di buku catatanmu (buku fisik, bukan digital):</strong></p>
+      <ul>
+        <li>Sel = kotak tempat mengetik. <strong>Shift+Enter</strong> = jalankan.</li>
+        <li><code>print( )</code> = tampilkan di layar.</li>
+        <li>Tanda kutip <code>" "</code> = isinya teks biasa. Tanpa kutip = Python menganggapnya nama sesuatu.</li>
+        <li><code>*</code> kali, <code>/</code> bagi. Desimal pakai <strong>titik</strong>.</li>
+        <li>Tulisan merah = pesan, bukan bencana.</li>
+      </ul>
+      <p style="margin-top:14px">Kamu baru saja menulis dan menjalankan program pertamamu. Itu bukan basa-basi — sebagian besar orang yang bilang "aku tidak bisa ngoding" tidak pernah sampai ke titik ini.</p>
+    </div>
+  </section>
+
+  <!-- ================= BEKAL 2 ================= -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">BEKAL 2</span>
+      <h2>Menyimpan nilai: variabel dan empat tipe isi</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyimpan angka atau teks dengan nama, memakainya lagi, dan tahu kenapa Python membedakan <code>22000</code> dari <code>"22000"</code>.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ulangi dulu dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="b2s1"><label for="b2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="ulang">
+          <span class="tag">PENGULANGAN · TANPA MEMBUKA CATATAN</span>
+          <p>Notebook baru (<code>bekal-02</code>). Tulis satu baris yang menampilkan hasil <strong>18000 dikali 8</strong> di layar.</p>
+        </div>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi"><p><code>print(18000 * 8)</code> → <strong>144000</strong>. Kalau kamu lupa <code>print</code>, di Colab hasilnya <em>tetap</em> muncul untuk baris terakhir sebuah sel — tapi biasakan menulis <code>print</code>, karena di luar Colab (skrip biasa, Hari 72) tanpa itu tidak akan muncul apa pun.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Variabel = kotak yang kamu beri nama</h3>
+        <span class="cek"><input type="checkbox" id="b2s2"><label for="b2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>harga = 22000
+jumlah = 12
+total = harga * jumlah
+print(total)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>264000</code></p></div>
+        <div class="bahaya">
+          <strong>Tanda <code>=</code> di Python BUKAN "sama dengan" seperti di matematika.</strong> Artinya: <em>"ambil nilai di sebelah kanan, simpan ke kotak bernama di sebelah kiri"</em>. Selalu baca dari <strong>kanan ke kiri</strong>.
+          <p style="margin-top:8px">Karena itu baris seperti <code>total = total + 5000</code> masuk akal di Python (padahal mustahil di matematika): "ambil isi total, tambah 5000, simpan lagi ke total".</p>
+        </div>
+        <p>Coba buktikan sendiri:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>total = 264000
+total = total + 5000
+print(total)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>269000</code></p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Aturan menamai kotak</h3>
+        <span class="cek"><input type="checkbox" id="b2s3"><label for="b2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Boleh</th><th>Tidak boleh</th><th>Kenapa</th></tr></thead>
+            <tbody>
+              <tr><td><code>harga</code></td><td><code>Harga</code> ≠ <code>harga</code></td><td>huruf besar/kecil dibedakan</td></tr>
+              <tr><td><code>harga_jual</code></td><td><code>harga jual</code></td><td>tidak boleh ada spasi — pakai garis bawah</td></tr>
+              <tr><td><code>total2</code></td><td><code>2total</code></td><td>tidak boleh diawali angka</td></tr>
+              <tr><td><code>jumlah</code></td><td><code>print</code></td><td>jangan pakai nama perintah yang sudah ada</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Pakai nama Indonesia yang jelas.</strong> Sepanjang kurikulum ini kamu akan melihat <code>omzet</code>, <code>biaya</code>, <code>retensi</code>, <code>latih</code>, <code>uji</code> — bukan <code>x</code>, <code>a</code>, <code>tmp</code>. Kode dibaca jauh lebih sering daripada ditulis, termasuk oleh dirimu sendiri tiga bulan lagi.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Empat tipe isi — hanya ini yang akan kamu temui</h3>
+        <span class="cek"><input type="checkbox" id="b2s4"><label for="b2s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(type(22000))
+print(type(14.35))
+print(type("Kopi Susu"))
+print(type(True))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Muncul</th><th>Sebutannya</th><th>Contoh di kurikulum ini</th></tr></thead>
+              <tbody>
+                <tr><td><code>&lt;class 'int'&gt;</code></td><td><strong>int</strong> — angka bulat</td><td>kolom <code>jumlah</code>, <code>total</code></td></tr>
+                <tr><td><code>&lt;class 'float'&gt;</code></td><td><strong>float</strong> — angka desimal</td><td>lifting cost 14.35 · p-value 0.033</td></tr>
+                <tr><td><code>&lt;class 'str'&gt;</code></td><td><strong>str</strong> — teks (string)</td><td>kolom <code>produk</code>, <code>kota</code></td></tr>
+                <tr><td><code>&lt;class 'bool'&gt;</code></td><td><strong>bool</strong> — hanya True/False</td><td>kolom <code>akhir_pekan</code>, <code>berproduksi</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p><code>True</code> dan <code>False</code> ditulis dengan huruf besar di depan, dan <strong>tanpa</strong> tanda kutip. Kalau kamu tulis <code>"True"</code> dengan kutip, itu jadi teks, bukan nilai benar/salah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Kenapa 22000 dan "22000" berbeda — ini penting sekali</h3>
+        <span class="cek"><input type="checkbox" id="b2s5"><label for="b2s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>angka = 22000
+teks  = "22000"
+
+print(angka * 3)
+print(teks * 3)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>66000</code><br><code>220002200022000</code></p>
+        </div>
+        <div class="bahaya">
+          <strong>Baris kedua bukan error — dan justru itu yang berbahaya.</strong> Teks dikali 3 artinya "ulang teks itu 3 kali". Python menurut saja, tidak ada peringatan apa pun. Kalau data harganya tersimpan sebagai teks dan kamu menjumlahkannya, hasilnya kacau <em>tanpa</em> ada tanda bahaya.
+          <p style="margin-top:8px">Ini persis masalah yang akan kamu temui di <strong>Hari 39</strong>: kolom <code>total</code> berisi <code>"Rp 47.000"</code> — angka yang benar, tapi tersimpan sebagai teks, sehingga tidak bisa dijumlahkan.</p>
+        </div>
+        <p>Cara mengubah teks jadi angka:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>teks = "22000"
+print(int(teks) * 3)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>66000</code></p></div>
+        <p><code>int( )</code> mengubah jadi angka bulat, <code>float( )</code> jadi angka desimal, <code>str( )</code> jadi teks.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="b2s6"><label for="b2s6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat tiga variabel: <code>harga_jual</code> 22000, <code>biaya_modal</code> 9000, <code>terjual</code> 87. Hitung dan tampilkan <strong>total laba</strong>.</p>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>harga_jual  = 22000
+biaya_modal = 9000
+terjual     = 87
+laba = (harga_jual - biaya_modal) * terjual
+print(laba)</code></pre></div>
+            <p>Hasilnya <strong>1131000</strong> — cocok persis dengan laba Kopi Susu yang kamu hitung dengan SQL di Hari 8. Angka yang sama, dua jalan berbeda.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal 2 selesai</h3>
+      <p><strong>Catat:</strong> <code>=</code> artinya "simpan ke", dibaca kanan ke kiri. Nama tidak boleh berspasi, huruf besar/kecil dibedakan. Empat tipe: int, float, str, bool. <strong>"22000" bukan 22000</strong> — dan Python tidak akan memperingatkanmu.</p>
+    </div>
+  </section>
+
+  <!-- ================= BEKAL 3 ================= -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">BEKAL 3</span>
+      <h2>Membaca tulisan merah — hari paling menentukan</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> melihat pesan error, menemukan penyebabnya dalam 30 detik, dan memperbaikinya sendiri. Ini kemampuan yang memisahkan orang yang bertahan belajar ngoding dari yang berhenti di minggu pertama.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa hari ini punya jatah sendiri</h3>
+        <span class="cek"><input type="checkbox" id="b3s1"><label for="b3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kamu akan melihat tulisan merah <strong>ratusan kali</strong> sepanjang kurikulum ini. Itu bukan tanda kamu gagal — programmer dengan pengalaman sepuluh tahun juga melihatnya setiap hari.</p>
+        <div class="catatan">
+          <strong>Satu-satunya perbedaan antara pemula dan yang berpengalaman:</strong> yang berpengalaman <em>membaca</em> pesannya. Pemula menutup layarnya dan mengubah-ubah kode secara acak sampai kebetulan jalan. Hari ini kamu belajar jadi yang pertama.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Aturan tiga langkah</h3>
+        <span class="cek"><input type="checkbox" id="b3s2"><label for="b3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">
+          <span class="tag">SETIAP KALI LAYAR MERAH</span>
+          <ol style="font-size:0.93rem;padding-left:20px;margin:0">
+            <li><strong>Baca BARIS PALING BAWAH lebih dulu</strong> — bukan yang atas. Di situlah jenis masalahnya disebut.</li>
+            <li><strong>Cari panah <code>----&gt;</code></strong> di bagian tengah — itu menunjuk baris kode mana yang bermasalah.</li>
+            <li><strong>Terjemahkan apa adanya.</strong> Pesannya memang bahasa Inggris, tapi rumusnya selalu sama dan cuma ada lima jenis yang akan kamu temui.</li>
+          </ol>
+        </div>
+        <p>Bagian tengah yang panjang itu (namanya <em>traceback</em>) berisi jejak internal Python. Untuk sekarang, <strong>abaikan saja</strong> — yang kamu butuh cuma baris bawah dan panahnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Lima error yang akan kamu temui — bikin sendiri semuanya</h3>
+        <span class="cek"><input type="checkbox" id="b3s3"><label for="b3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Notebook baru. Jalankan satu per satu di sel terpisah. <strong>Semuanya akan gagal, dan itu tujuannya.</strong></p>
+
+        <p style="margin-top:14px"><strong>1 — NameError</strong></p>
+        <div class="kode"><pre><code>print(harga_kopi)</code></pre></div>
+        <div class="hasil">
+          <span class="tag">MUNCUL</span>
+          <p><code>NameError: name 'harga_kopi' is not defined</code></p>
+          <p style="margin-top:6px"><strong>Artinya:</strong> kamu memakai nama yang belum pernah disimpan. <strong>Penyebab tersering:</strong> salah ketik nama, atau selnya belum dijalankan.</p>
+        </div>
+
+        <p style="margin-top:14px"><strong>2 — TypeError</strong></p>
+        <div class="kode"><pre><code>print("22000" + 5000)</code></pre></div>
+        <div class="hasil">
+          <span class="tag">MUNCUL</span>
+          <p><code>TypeError: can only concatenate str (not "int") to str</code></p>
+          <p style="margin-top:6px"><strong>Artinya:</strong> mencampur tipe yang tidak bisa dicampur — teks dengan angka. <strong>Obatnya:</strong> <code>int("22000") + 5000</code>.</p>
+        </div>
+
+        <p style="margin-top:14px"><strong>3 — SyntaxError</strong></p>
+        <div class="kode"><pre><code>print("halo"</code></pre></div>
+        <div class="hasil">
+          <span class="tag">MUNCUL</span>
+          <p><code>SyntaxError: '(' was never closed</code></p>
+          <p style="margin-top:6px"><strong>Artinya:</strong> tulisannya tidak lengkap secara tata bahasa — di sini kurung tutupnya hilang. <strong>Penyebab tersering:</strong> kurung atau kutip yang tidak berpasangan.</p>
+        </div>
+
+        <p style="margin-top:14px"><strong>4 — IndexError</strong></p>
+        <div class="kode"><pre><code>produk = ["Kopi Susu", "Americano"]
+print(produk[5])</code></pre></div>
+        <div class="hasil">
+          <span class="tag">MUNCUL</span>
+          <p><code>IndexError: list index out of range</code></p>
+          <p style="margin-top:6px"><strong>Artinya:</strong> kamu minta item nomor 5, padahal isinya cuma 2. Kita bahas penomoran ini besok di Bekal 4.</p>
+        </div>
+
+        <p style="margin-top:14px"><strong>5 — IndentationError</strong></p>
+        <div class="kode"><pre><code>angka = 10
+    print(angka)</code></pre></div>
+        <div class="hasil">
+          <span class="tag">MUNCUL</span>
+          <p><code>IndentationError: unexpected indent</code></p>
+          <p style="margin-top:6px"><strong>Artinya:</strong> ada spasi menjorok di depan baris yang seharusnya rata kiri. Di Python, <strong>spasi di awal baris punya arti</strong> — kita bahas tuntas di Bekal 6.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Latihan: perbaiki empat kode rusak</h3>
+        <span class="cek"><input type="checkbox" id="b3s4"><label for="b3s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Untuk tiap kode di bawah: jalankan, baca pesannya, <strong>tebak dulu masalahnya</strong>, baru perbaiki.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code># A
+Harga = 22000
+print(harga)
+
+# B
+jumlah = "12"
+print(jumlah * 22000)
+
+# C
+print("Kopi Susu)
+
+# D
+total = 264000
+ print(total)</code></pre>
+        </div>
+        <details>
+          <summary>Cek jawabanmu — buka setelah mencoba keempatnya</summary>
+          <div class="isi">
+            <p><strong>A — NameError.</strong> Disimpan sebagai <code>Harga</code> (H besar), dipanggil <code>harga</code> (h kecil). Python membedakan keduanya. Perbaiki: samakan penulisannya.</p>
+            <p><strong>B — bukan error, tapi hasilnya salah.</strong> Muncul angka 12 berulang 22.000 kali (Colab akan memotongnya). <code>"12"</code> itu teks. Perbaiki: <code>int(jumlah) * 22000</code> → 264000.</p>
+            <p><strong>C — SyntaxError.</strong> Tanda kutip penutup hilang. Perbaiki: <code>print("Kopi Susu")</code>.</p>
+            <p><strong>D — IndentationError.</strong> Ada satu spasi di depan <code>print</code>. Perbaiki: hapus spasinya sehingga rata kiri dengan baris di atasnya.</p>
+            <p style="margin-top:8px"><strong>Perhatikan B.</strong> Tiga dari empat memberi pesan merah, tapi B diam saja sambil memberi jawaban salah. <em>Error yang berteriak jauh lebih ramah daripada error yang diam.</em> Itu sebabnya kamu harus selalu memeriksa apakah hasilnya masuk akal, bukan cuma memastikan tidak ada tulisan merah.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal 3 selesai</h3>
+      <p><strong>Catat:</strong> baris <strong>paling bawah</strong> dulu, lalu cari panah <code>---&gt;</code>. NameError = nama belum ada/salah ketik. TypeError = campur tipe. SyntaxError = kurung/kutip tak berpasangan. IndexError = nomor melebihi isi. IndentationError = spasi di awal baris.</p>
+      <p style="margin-top:12px"><strong>Yang paling penting:</strong> kode yang jalan tanpa merah belum tentu benar. Selalu periksa apakah angkanya masuk akal.</p>
+    </div>
+  </section>
+
+  <!-- ================= BEKAL 4 ================= -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">BEKAL 4</span>
+      <h2>List: deretan bernomor, dan kenapa mulai dari nol</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat deretan nilai, mengambil satu atau sepotong darinya, dan membaca notasi <code>[a:b]</code> yang muncul di banyak tempat mulai Hari 50.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Satu kotak, banyak isi</h3>
+        <span class="cek"><input type="checkbox" id="b4s1"><label for="b4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sejauh ini satu variabel menyimpan satu nilai. <strong>List</strong> menyimpan banyak nilai berurutan dalam satu nama, ditandai kurung siku <code>[ ]</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>produk = ["Kopi Susu", "Americano", "Roti Bakar", "Croissant"]
+print(produk)
+print(len(produk))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>['Kopi Susu', 'Americano', 'Roti Bakar', 'Croissant']</code><br><code>4</code></p>
+        </div>
+        <p><code>len( )</code> artinya "berapa banyak isinya" — sama seperti <code>COUNT(*)</code> di SQL yang kamu pakai sejak Hari 2.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Mengambil satu isi — dan jebakan nomor nol</h3>
+        <span class="cek"><input type="checkbox" id="b4s2"><label for="b4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(produk[0])
+print(produk[1])
+print(produk[3])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>Kopi Susu</code><br><code>Americano</code><br><code>Croissant</code></p>
+        </div>
+        <div class="bahaya">
+          <strong>Nomornya mulai dari 0, bukan 1.</strong> Item <em>pertama</em> adalah <code>produk[0]</code>. Item <em>keempat</em> adalah <code>produk[3]</code>. Kalau ada 4 item, nomor tertingginya <strong>3</strong>.
+          <p style="margin-top:8px">Ini sumber kebingungan nomor satu bagi pemula, dan penyebab <code>IndexError</code> yang kamu bikin kemarin. Cara mengingatnya: nomor itu bukan "urutan ke-", tapi "<em>berapa langkah dari awal</em>". Item pertama = nol langkah dari awal.</p>
+        </div>
+        <p>Menghitung dari belakang pakai angka minus:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(produk[-1])
+print(produk[-2])</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>Croissant</code><br><code>Roti Bakar</code></p></div>
+        <p><code>[-1]</code> = yang terakhir. Ini sering dipakai karena kamu tidak perlu tahu ada berapa isinya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Slicing: mengambil sepotong</h3>
+        <span class="cek"><input type="checkbox" id="b4s3"><label for="b4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>angka = [10, 20, 30, 40, 50, 60]
+print(angka[0:3])
+print(angka[:3])
+print(angka[2:])
+print(angka[-2:])
+print(angka[:-2])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>[10, 20, 30]</code><br><code>[10, 20, 30]</code><br><code>[30, 40, 50, 60]</code><br><code>[50, 60]</code><br><code>[10, 20, 30, 40]</code></p>
+        </div>
+        <div class="catatan">
+          <strong>Aturan yang wajib dihafal:</strong> angka <em>sesudah</em> titik dua <strong>tidak ikut</strong>. <code>[0:3]</code> memberi item 0, 1, 2 — tiga item, bukan empat.
+          <ul style="margin:8px 0 0;padding-left:20px">
+            <li>Kosongkan sebelum titik dua = "dari awal"</li>
+            <li>Kosongkan sesudah titik dua = "sampai habis"</li>
+            <li>Angka minus = hitung dari belakang</li>
+          </ul>
+        </div>
+        <div class="bahaya">
+          <strong>Kamu akan bertemu ini di dua tempat penting.</strong> Hari 50: <code>bulanan.iloc[:3]</code> = tiga bulan pertama. Hari 84: <code>latih, uji = s[:-28], s[-28:]</code> — memisahkan 28 hari terakhir sebagai data uji ramalan. Kalau kamu salah membaca notasi ini, kamu salah memisahkan data latih dan data uji, dan seluruh hasil ramalannya jadi tidak sah.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Mengubah dan menambah isi</h3>
+        <span class="cek"><input type="checkbox" id="b4s4"><label for="b4s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>terjual = [87, 46, 44, 30]
+terjual[0] = 90
+print(terjual)
+
+terjual.append(25)
+print(terjual)
+print(sum(terjual))
+print(max(terjual))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>[90, 46, 44, 30]</code><br><code>[90, 46, 44, 30, 25]</code><br><code>235</code><br><code>90</code></p>
+        </div>
+        <p><code>.append( )</code> menambah satu item di ujung. <code>sum( )</code> menjumlahkan, <code>max( )</code> mencari terbesar, <code>min( )</code> terkecil — padanan <code>SUM</code>, <code>MAX</code>, <code>MIN</code> di SQL.</p>
+        <div class="catatan">
+          <strong><code>.append()</code> akan sangat sering kamu pakai</strong> mulai Bekal 7: pola "siapkan list kosong, isi satu per satu di dalam perulangan, lalu olah hasilnya". Itu pola yang dipakai di Hari 24, Hari 45, dan hampir semua simulasi di kurikulum ini.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="b4s5"><label for="b4s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Diberikan <code>omzet = [1914000, 828000, 660000, 600000]</code> (omzet empat produk dari Hari 8). Tanpa mengetik ulang angkanya:</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li>Tampilkan total omzet keempatnya.</li>
+          <li>Tampilkan omzet produk terlaris (yang pertama).</li>
+          <li>Tampilkan dua omzet terkecil (dua terakhir) sebagai list.</li>
+        </ol>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>omzet = [1914000, 828000, 660000, 600000]
+print(sum(omzet))      # 4002000
+print(omzet[0])        # 1914000
+print(omzet[-2:])      # [660000, 600000]</code></pre></div>
+            <p>Totalnya <strong>4002000</strong> — cocok dengan omzet total yang kamu hitung di Hari 3 dengan SQL dan di Hari 15 dengan pandas.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal 4 selesai</h3>
+      <p><strong>Catat:</strong> <code>[ ]</code> = list. Nomor <strong>mulai 0</strong>, terakhir = <code>[-1]</code>. <code>[a:b]</code> tidak menyertakan b. <code>len sum max min</code> = COUNT SUM MAX MIN. <code>.append()</code> menambah di ujung.</p>
+    </div>
+  </section>
+
+  <!-- ================= BEKAL 5 ================= -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">BEKAL 5</span>
+      <h2>Dictionary: mencari lewat nama, bukan nomor</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyimpan pasangan nama-nilai dan mengambilnya kembali — struktur yang dipakai di Hari 84 dan di seluruh jalur migas.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ulangan dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="b5s1"><label for="b5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="ulang">
+          <span class="tag">PENGULANGAN · TANPA MEMBUKA CATATAN</span>
+          <p>Buat list <code>kota</code> berisi "Jakarta", "Bandung", "Surabaya". Tampilkan yang terakhir, lalu tampilkan dua yang pertama.</p>
+        </div>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi"><div class="kode"><pre><code>kota = ["Jakarta", "Bandung", "Surabaya"]
+print(kota[-1])    # Surabaya
+print(kota[:2])    # ['Jakarta', 'Bandung']</code></pre></div></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Masalah yang dipecahkan dictionary</h3>
+        <span class="cek"><input type="checkbox" id="b5s2"><label for="b5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau harga disimpan sebagai list, kamu harus <strong>ingat</strong> bahwa Americano ada di nomor 1:</p>
+        <div class="kode"><pre><code>harga_list = [22000, 18000, 15000]
+print(harga_list[1])   # 18000 — tapi ini harga apa? kamu harus ingat sendiri</code></pre></div>
+        <p>Dictionary menyimpan namanya sekalian, ditandai kurung kurawal <code>{ }</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>harga = {"Kopi Susu": 22000, "Americano": 18000, "Roti Bakar": 15000}
+print(harga["Americano"])
+print(len(harga))</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>18000</code><br><code>3</code></p></div>
+        <p>Bagian kiri titik dua namanya <strong>key</strong> (kunci), kanannya <strong>value</strong> (nilai). Ambil isinya pakai kurung siku berisi key: <code>harga["Americano"]</code>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Menambah, mengubah, memeriksa</h3>
+        <span class="cek"><input type="checkbox" id="b5s3"><label for="b5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>harga["Croissant"] = 20000      # menambah yang belum ada
+harga["Kopi Susu"] = 23000      # mengubah yang sudah ada
+print(harga)
+
+print("Latte" in harga)
+print(harga.get("Latte", 0))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>{'Kopi Susu': 23000, 'Americano': 18000, 'Roti Bakar': 15000, 'Croissant': 20000}</code><br>
+          <code>False</code><br><code>0</code></p>
+        </div>
+        <div class="catatan">
+          <strong><code>.get(key, cadangan)</code> penting.</strong> Kalau kamu tulis <code>harga["Latte"]</code> untuk key yang tidak ada, Python melempar <code>KeyError</code> dan kodenya berhenti. <code>.get()</code> memberi nilai cadangan alih-alih berhenti — dipakai di Hari 27 jalur migas: <code>harga.get(bulan, 65)</code> artinya "ambil harga bulan itu, kalau tidak ada pakai 65".
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Di mana kamu akan bertemu ini</h3>
+        <span class="cek"><input type="checkbox" id="b5s4"><label for="b5s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><strong>Hari 84</strong>, efek hari dalam seminggu terhadap omzet:</p>
+        <div class="kode"><pre><code>efek_hari = {0:-0.10, 1:-0.12, 2:-0.06, 3:0.02, 4:0.14, 5:0.24, 6:0.12}</code></pre></div>
+        <p>Key-nya angka 0-6 (0 = Senin, 5 = Sabtu), value-nya seberapa jauh omzet hari itu dari rata-rata. Sabtu <code>0.24</code> artinya 24% di atas rata-rata. Kamu tinggal <code>efek_hari[5]</code> untuk mengambilnya.</p>
+        <div class="catatan">
+          <strong>Kapan pakai list, kapan dictionary?</strong> Kalau urutannya penting dan kamu mengambil "yang ke-berapa" → list. Kalau kamu mengambil "yang mana" berdasarkan nama/kode → dictionary. Dalam pekerjaan analis, dictionary paling sering dipakai sebagai <em>tabel pencarian</em>: kode → nama, bulan → harga, cabang → kota.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="b5s5"><label for="b5s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat dictionary <code>biaya</code>: Kopi Susu 9000, Americano 6000, Roti Bakar 7000, Croissant 11000. Lalu hitung dan tampilkan laba per porsi <strong>Croissant</strong>, memakai <code>harga</code> dari langkah 3.</p>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>biaya = {"Kopi Susu": 9000, "Americano": 6000, "Roti Bakar": 7000, "Croissant": 11000}
+print(harga["Croissant"] - biaya["Croissant"])</code></pre></div>
+            <p>Hasilnya <strong>9000</strong> — cocok dengan laba per porsi Croissant di tabel Hari 8 (600.000 omzet ÷ 30 porsi = 20.000 harga, dikurangi modal 11.000).</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal 5 selesai</h3>
+      <p><strong>Catat:</strong> <code>{ }</code> = dictionary, isinya pasangan <code>key: value</code>. Ambil pakai <code>d["key"]</code>. <code>.get(key, cadangan)</code> aman kalau key-nya mungkin tidak ada. <code>"x" in d</code> untuk memeriksa keberadaan.</p>
+    </div>
+  </section>
+
+  <!-- ================= BEKAL 6 ================= -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">BEKAL 6</span>
+      <h2>if / else, dan spasi yang punya arti</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat kode yang mengambil keputusan sendiri, dan memahami kenapa Python rewel soal spasi di awal baris.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Membandingkan dua nilai</h3>
+        <span class="cek"><input type="checkbox" id="b6s1"><label for="b6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(22000 &gt; 18000)
+print(22000 == 22000)
+print(22000 != 18000)
+print(15000 &gt;= 15000)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>True</code><br><code>True</code><br><code>True</code><br><code>True</code></p></div>
+        <div class="bahaya">
+          <strong>Perhatikan <code>==</code> dengan dua tanda sama dengan.</strong> Satu <code>=</code> artinya "simpan ke" (Bekal 2). Dua <code>==</code> artinya "apakah sama dengan?". Menukar keduanya adalah kesalahan paling sering di seluruh dunia pemrograman.
+          <p style="margin-top:8px"><code>!=</code> artinya "tidak sama dengan". <code>&gt;=</code> "lebih besar atau sama dengan".</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>if: lakukan hanya kalau benar</h3>
+        <span class="cek"><input type="checkbox" id="b6s2"><label for="b6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>laba = 13000
+
+if laba &gt; 10000:
+    print("produk untung besar")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>produk untung besar</code></p></div>
+        <p>Dua hal wajib yang tidak boleh lupa:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Titik dua <code>:</code></strong> di akhir baris <code>if</code>.</li>
+          <li><strong>Baris berikutnya menjorok ke dalam</strong> — tekan Tab, atau empat spasi.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Spasi di awal baris = tanda kepemilikan</h3>
+        <span class="cek"><input type="checkbox" id="b6s3"><label for="b6s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di kebanyakan bahasa lain, blok kode ditandai kurung kurawal. Python memakai <strong>menjorok</strong> (indentasi). Baris yang menjorok "milik" baris di atasnya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>laba = 5000
+
+if laba &gt; 10000:
+    print("A — ini menjorok, jadi milik if")
+    print("B — ini juga")
+print("C — ini rata kiri, jadi SELALU jalan")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p>Hanya <code>C — ini rata kiri, jadi SELALU jalan</code></p>
+          <p style="margin-top:6px">A dan B tidak muncul karena 5000 tidak lebih besar dari 10000. C muncul karena dia bukan milik <code>if</code>.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Gunakan Tab, dan jangan campur Tab dengan spasi.</strong> Colab otomatis menjorokkan baris setelah kamu mengetik titik dua dan menekan Enter — biarkan saja, jangan ditambah manual. Kalau muncul <code>IndentationError</code> (kamu sudah bikin sendiri di Bekal 3), periksa apakah ada baris yang menjoroknya tidak konsisten.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>else dan elif: kalau tidak, maka</h3>
+        <span class="cek"><input type="checkbox" id="b6s4"><label for="b6s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>p_value = 0.033
+
+if p_value &lt; 0.05:
+    print("signifikan secara statistik")
+else:
+    print("belum cukup bukti")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>signifikan secara statistik</code></p></div>
+        <p>Untuk lebih dari dua kemungkinan, pakai <code>elif</code> (singkatan "else if") sebanyak yang kamu perlu:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>rasio = 2.18
+
+if rasio &gt;= 3:
+    print("Sehat — tambah belanja iklan")
+elif rasio &gt;= 1:
+    print("Waspada — bisa jalan, tidak ada ruang salah")
+else:
+    print("Bahaya — perbaiki retensi dulu")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>Waspada — bisa jalan, tidak ada ruang salah</code></p></div>
+        <div class="catatan">
+          <strong>Itu persis tabel LTV/CAC di Hari 82.</strong> Python memeriksa dari atas ke bawah dan <strong>berhenti di yang pertama benar</strong> — jadi urutannya penting. Kalau <code>elif rasio &gt;= 1</code> ditaruh di atas <code>if rasio &gt;= 3</code>, rasio 5 pun akan dibilang "Waspada", karena 5 juga ≥ 1.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="b6s5"><label for="b6s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat variabel <code>watercut = 0.816</code> (angka F01 tahun 2026 dari jalur migas). Tulis if/elif/else yang menampilkan:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li>"kritis" kalau di atas 0,90</li>
+          <li>"tinggi" kalau di atas 0,75</li>
+          <li>"wajar" selain itu</li>
+        </ul>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>watercut = 0.816
+
+if watercut &gt; 0.90:
+    print("kritis")
+elif watercut &gt; 0.75:
+    print("tinggi")
+else:
+    print("wajar")</code></pre></div>
+            <p>Hasilnya <strong>tinggi</strong>. Kalau kamu menulis <code>elif</code>-nya duluan, 0,95 pun akan dibilang "tinggi" — urutan dari yang paling ketat ke paling longgar.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal 6 selesai</h3>
+      <p><strong>Catat:</strong> <code>=</code> simpan, <code>==</code> bandingkan. <code>if</code> diakhiri titik dua, isinya <strong>menjorok</strong>. Baris rata kiri bukan milik if. <code>elif</code> diperiksa berurutan — susun dari paling ketat.</p>
+    </div>
+  </section>
+
+  <!-- ================= BEKAL 7 ================= -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">BEKAL 7</span>
+      <h2>for: mengerjakan hal yang sama berulang kali</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membaca dan menulis perulangan — konsep yang muncul pertama kali di Hari 24 dan dipakai terus sampai Hari 105.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Masalahnya</h3>
+        <span class="cek"><input type="checkbox" id="b7s1"><label for="b7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kamu punya empat produk dan mau menampilkan tiap namanya. Cara yang melelahkan:</p>
+        <div class="kode"><pre><code>print(produk[0])
+print(produk[1])
+print(produk[2])
+print(produk[3])</code></pre></div>
+        <p>Kalau produknya 15 (seperti tabel <code>produk</code> sungguhan di Hari 12), kamu menulis 15 baris. Kalau 5.000, mustahil. <strong>Perulangan</strong> menyelesaikan ini:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>produk = ["Kopi Susu", "Americano", "Roti Bakar", "Croissant"]
+
+for nama in produk:
+    print(nama)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>Kopi Susu</code><br><code>Americano</code><br><code>Roti Bakar</code><br><code>Croissant</code></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bongkar kalimatnya</h3>
+        <span class="cek"><input type="checkbox" id="b7s2"><label for="b7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Bagian</th><th>Artinya</th></tr></thead>
+            <tbody>
+              <tr><td><code>for</code></td><td>"untuk setiap"</td></tr>
+              <tr><td><code>nama</code></td><td>kotak sementara — <strong>kamu yang menamai</strong>, bebas</td></tr>
+              <tr><td><code>in produk</code></td><td>"di dalam list produk"</td></tr>
+              <tr><td><code>:</code></td><td>wajib, sama seperti <code>if</code></td></tr>
+              <tr><td>baris menjorok</td><td>yang dikerjakan berulang</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Bacanya: <em>"untuk setiap isi di dalam produk, sebut dia <code>nama</code>, lalu tampilkan <code>nama</code>"</em>. Python mengulang baris menjorok itu sebanyak isi list-nya, tiap kali dengan isi yang berbeda.</p>
+        <div class="catatan">
+          <strong>Nama kotak sementara itu bebas.</strong> <code>for x in produk</code> juga jalan. Tapi pakai nama yang berarti — <code>for nama in produk</code>, <code>for bulan in daftar_bulan</code> — supaya kodenya terbaca seperti kalimat.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>range: mengulang sekian kali</h3>
+        <span class="cek"><input type="checkbox" id="b7s3"><label for="b7s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>for i in range(5):
+    print(i)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>0</code><br><code>1</code><br><code>2</code><br><code>3</code><br><code>4</code></p></div>
+        <div class="bahaya">
+          <strong><code>range(5)</code> memberi 0,1,2,3,4 — lima angka, tapi berhenti sebelum 5.</strong> Aturan yang sama dengan slicing di Bekal 4: batas atas tidak ikut. Ini konsisten di seluruh Python, jadi sekali terbiasa, berlaku di mana-mana.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Garis bawah sendirian: <code>_</code></h3>
+        <span class="cek"><input type="checkbox" id="b7s4"><label for="b7s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kadang kamu cuma ingin mengulang sekian kali, tanpa peduli angka urutannya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>for _ in range(3):
+    print("ulangi")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>ulangi</code><br><code>ulangi</code><br><code>ulangi</code></p></div>
+        <div class="catatan">
+          <strong><code>_</code> hanyalah nama variabel biasa</strong> — tidak ada yang ajaib. Tapi programmer sepakat memakainya sebagai tanda: <em>"kotak ini memang sengaja tidak saya pakai"</em>. Ketika kamu melihat <code>_</code>, artinya "abaikan nilainya, yang penting jumlah putarannya".
+          <p style="margin-top:8px">Di <strong>Hari 24</strong> kamu akan melihat <code>for _ in range(1000)</code> — artinya "ambil 1.000 sampel", dan nomor sampel keberapa tidak penting.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Pola paling penting: kumpulkan hasil</h3>
+        <span class="cek"><input type="checkbox" id="b7s5"><label for="b7s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini pola yang dipakai berulang kali di seluruh kurikulum: <strong>siapkan list kosong → isi di dalam perulangan → olah hasilnya</strong>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>harga = [22000, 18000, 15000, 20000]
+biaya = [9000, 6000, 7000, 11000]
+
+laba = []
+for i in range(len(harga)):
+    laba.append(harga[i] - biaya[i])
+
+print(laba)
+print(sum(laba))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>[13000, 12000, 8000, 9000]</code><br><code>42000</code></p>
+        </div>
+        <p>Baca pelan-pelan: <code>laba = []</code> membuat list kosong. Tiap putaran, satu hasil ditambahkan dengan <code>.append()</code>. Setelah perulangan selesai, <code>laba</code> berisi empat angka.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>f-string: menyisipkan nilai ke dalam teks</h3>
+        <span class="cek"><input type="checkbox" id="b7s6"><label for="b7s6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>nama = "Kopi Susu"
+terjual = 87
+
+print(f"{nama} terjual {terjual} porsi")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>Kopi Susu terjual 87 porsi</code></p></div>
+        <p>Huruf <code>f</code> di depan tanda kutip artinya "teks ini berisi sisipan". Apa pun di dalam <code>{ }</code> diganti dengan nilai variabelnya.</p>
+        <p>Bisa sekalian mengatur tampilannya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>omzet = 1914000
+persen = 0.5759620189905047
+
+print(f"omzet {omzet:,}")
+print(f"margin {persen:.1%}")
+print(f"margin {persen:.3f}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>omzet 1,914,000</code><br><code>margin 57.6%</code><br><code>margin 0.576</code></p>
+        </div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Kode</th><th>Gunanya</th></tr></thead>
+            <tbody>
+              <tr><td><code>:,</code></td><td>pemisah ribuan</td></tr>
+              <tr><td><code>:.1%</code></td><td>tampilkan sebagai persen, 1 angka di belakang koma</td></tr>
+              <tr><td><code>:.3f</code></td><td>3 angka di belakang koma</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Kamu akan melihat ini di mana-mana</strong> — Hari 24, Hari 45, seluruh jalur migas. Contohnya di Hari 48: <code>f"MDE {int(mde*100):2d}% relatif -&gt; {n:7,} per grup"</code> yang menghasilkan tabel rapi berjajar.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="b7s7"><label for="b7s7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Diberikan <code>produk</code> dan <code>terjual = [87, 46, 44, 30]</code>. Tampilkan satu baris per produk dengan format: <code>Kopi Susu: 87 porsi</code>. Pakai perulangan dan f-string.</p>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>produk  = ["Kopi Susu", "Americano", "Roti Bakar", "Croissant"]
+terjual = [87, 46, 44, 30]
+
+for i in range(len(produk)):
+    print(f"{produk[i]}: {terjual[i]} porsi")</code></pre></div>
+            <p>Ada cara yang lebih rapi memakai <code>zip()</code>, tapi versi di atas sudah benar dan lebih mudah dibaca saat kamu masih belajar:</p>
+            <div class="kode"><pre><code>for nama, jml in zip(produk, terjual):
+    print(f"{nama}: {jml} porsi")</code></pre></div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal 7 selesai</h3>
+      <p><strong>Catat:</strong> <code>for x in daftar:</code> — titik dua, isinya menjorok. <code>range(n)</code> = 0 sampai n−1. <code>_</code> = "sengaja tidak dipakai". Pola kumpul: list kosong → <code>.append()</code> di dalam loop → olah. <code>f"...{x}..."</code> menyisipkan nilai; <code>:,</code> ribuan, <code>:.1%</code> persen.</p>
+    </div>
+  </section>
+
+  <!-- ================= BEKAL 8 ================= -->
+  <section class="day" data-hari="8">
+    <div class="day-head">
+      <span class="n mono">BEKAL 8</span>
+      <h2>Comprehension, fungsi, dan membongkar kode Hari 24</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membaca dua bentuk terakhir yang tersisa, lalu membuktikan kesiapanmu dengan membongkar potongan kode yang selama ini jadi tembok — baris demi baris.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>List comprehension: perulangan yang dipadatkan</h3>
+        <span class="cek"><input type="checkbox" id="b8s1"><label for="b8s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ingat pola kumpul dari kemarin:</p>
+        <div class="kode"><pre><code>kuadrat = []
+for x in [1, 2, 3, 4]:
+    kuadrat.append(x * x)
+print(kuadrat)</code></pre></div>
+        <p>Python punya cara menulis hal yang <strong>persis sama</strong> dalam satu baris:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>kuadrat = [x * x for x in [1, 2, 3, 4]]
+print(kuadrat)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">KEDUANYA MEMBERI</span><p><code>[1, 4, 9, 16]</code></p></div>
+        <div class="catatan">
+          <strong>Cara membacanya: dari tengah dulu, baru ke depan.</strong>
+          <ul style="margin:8px 0 0;padding-left:20px">
+            <li>Lihat bagian <code>for x in [1,2,3,4]</code> lebih dulu → "untuk setiap x"
+            <li>Baru lihat bagian depan <code>x * x</code> → "kumpulkan x dikali x"
+            <li>Kurung siku di luar → "hasilnya jadi list"
+          </ul>
+          <p style="margin-top:8px">Jadi: <em>"buat list berisi x×x, untuk setiap x di dalam [1,2,3,4]"</em>.</p>
+        </div>
+        <p>Latihan membaca — apa isi <code>hasil</code>?</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>harga = [22000, 18000, 15000, 20000]
+hasil = [h * 2 for h in harga]
+print(hasil)</code></pre>
+        </div>
+        <details>
+          <summary>Tebak dulu, baru jalankan dan buka ini</summary>
+          <div class="isi"><p><code>[44000, 36000, 30000, 40000]</code> — tiap harga dikali dua.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kapan pakai yang mana</h3>
+        <span class="cek"><input type="checkbox" id="b8s2"><label for="b8s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Pakai</th><th>Kalau</th></tr></thead>
+            <tbody>
+              <tr><td><code>for</code> biasa</td><td>ada beberapa langkah di dalamnya, atau kamu masih belajar</td></tr>
+              <tr><td>comprehension</td><td>cuma satu operasi sederhana per item</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>Jangan merasa wajib memakai comprehension.</strong> Keduanya menghasilkan hal yang sama, dan versi <code>for</code> biasa sering lebih mudah dibaca. Kamu belajar ini <em>supaya bisa membaca kode orang lain</em> — termasuk kode di kurikulum ini — bukan supaya harus selalu memakainya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>def: memberi nama pada sekumpulan langkah</h3>
+        <span class="cek"><input type="checkbox" id="b8s3"><label for="b8s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau kamu mengerjakan hal yang sama berkali-kali dengan angka berbeda, bungkus jadi <strong>fungsi</strong>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>def laba_per_porsi(harga, biaya):
+    hasil = harga - biaya
+    return hasil
+
+print(laba_per_porsi(22000, 9000))
+print(laba_per_porsi(20000, 11000))</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>13000</code><br><code>9000</code></p></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Bagian</th><th>Artinya</th></tr></thead>
+            <tbody>
+              <tr><td><code>def</code></td><td>"aku mau membuat perintah baru"</td></tr>
+              <tr><td><code>laba_per_porsi</code></td><td>nama perintahnya — kamu yang menentukan</td></tr>
+              <tr><td><code>(harga, biaya)</code></td><td>kotak kosong yang diisi saat dipanggil</td></tr>
+              <tr><td><code>:</code> lalu menjorok</td><td>isi perintahnya, sama seperti <code>if</code> dan <code>for</code></td></tr>
+              <tr><td><code>return</code></td><td>"serahkan hasil ini ke pemanggilnya"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong><code>return</code> berbeda dari <code>print</code>.</strong> <code>print</code> cuma menampilkan di layar; hasilnya tidak bisa dipakai lagi. <code>return</code> menyerahkan nilainya sehingga bisa disimpan atau dihitung lagi. Fungsi tanpa <code>return</code> menghasilkan <code>None</code> — penyebab bingung yang sangat umum.
+        </div>
+        <p>Buktikan sendiri bedanya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>def versi_print(a, b):
+    print(a - b)
+
+x = versi_print(22000, 9000)
+print("nilai x:", x)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>13000</code><br><code>nilai x: None</code></p></div>
+        <p>Angkanya tampil, tapi <code>x</code> kosong — karena fungsinya tidak <code>return</code> apa pun.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Ujian sesungguhnya: bongkar kode Hari 24</h3>
+        <span class="cek"><input type="checkbox" id="b8s4"><label for="b8s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Inilah potongan yang selama ini jadi tembok. Sebelum membaca penjelasannya, <strong>coba baca sendiri dulu</strong> — kamu sekarang tahu setiap bagiannya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>for n in [5, 30, 100]:
+    hasil = [np.random.choice(populasi, size=n, replace=False).mean() for _ in range(1000)]
+    hasil = np.array(hasil)
+    print(f"n={n}: rata-rata dari 1000 sampel = {round(hasil.mean())}, sebaran (std) = {round(hasil.std())}")</code></pre>
+        </div>
+        <details>
+          <summary>Buka setelah kamu mencoba membacanya sendiri</summary>
+          <div class="isi">
+            <p><strong>Baris 1</strong> — <code>for n in [5, 30, 100]:</code><br>
+            Perulangan (Bekal 7). Isi list-nya dijalankan tiga kali: sekali dengan <code>n</code> = 5, sekali 30, sekali 100.</p>
+
+            <p><strong>Baris 2</strong> — <code>hasil = [ ... for _ in range(1000)]</code><br>
+            List comprehension (langkah 1 hari ini). Baca dari tengah: <code>for _ in range(1000)</code> = "lakukan 1.000 kali, nomor putarannya tidak dipakai" (garis bawah, Bekal 7). Bagian depannya <code>np.random.choice(...).mean()</code> = "ambil n orang secara acak, hitung rata-ratanya". Jadi: <em>kumpulkan 1.000 rata-rata, tiap kali dari sampel acak yang berbeda</em>.</p>
+
+            <p><strong>Baris 3</strong> — <code>hasil = np.array(hasil)</code><br>
+            Mengubah list biasa jadi bentuk yang bisa dihitung statistiknya. Sama seperti <code>int("22000")</code> di Bekal 2 — mengubah bentuk, bukan isinya.</p>
+
+            <p><strong>Baris 4</strong> — <code>print(f"n={n}: ... {round(hasil.mean())} ...")</code><br>
+            f-string (Bekal 7). <code>{n}</code> diganti 5/30/100, <code>{round(hasil.mean())}</code> diganti rata-rata dari 1.000 angka tadi, dibulatkan.</p>
+
+            <div class="catatan" style="margin-top:12px">
+              <strong>Satu-satunya yang belum kamu kenal adalah <code>np.random.choice</code> dan <code>.mean()</code></strong> — dan keduanya memang <em>dijelaskan</em> di Hari 24 itu sendiri. Semua kerangkanya — perulangan, comprehension, garis bawah, f-string — sekarang sudah kamu kuasai.
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Latihan penutup: tulis dari nol</h3>
+        <span class="cek"><input type="checkbox" id="b8s5"><label for="b8s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tanpa membuka catatan. Diberikan dua list ini:</p>
+        <div class="kode"><pre><code>produk  = ["Kopi Susu", "Americano", "Roti Bakar", "Croissant"]
+terjual = [87, 46, 44, 30]</code></pre></div>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li>Buat fungsi <code>kategori(jml)</code> yang mengembalikan "laris" kalau ≥ 50, "sedang" kalau ≥ 40, "lambat" selain itu.</li>
+          <li>Pakai perulangan untuk menampilkan tiap produk dengan formatnya: <code>Kopi Susu: 87 porsi (laris)</code></li>
+        </ol>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>def kategori(jml):
+    if jml &gt;= 50:
+        return "laris"
+    elif jml &gt;= 40:
+        return "sedang"
+    else:
+        return "lambat"
+
+produk  = ["Kopi Susu", "Americano", "Roti Bakar", "Croissant"]
+terjual = [87, 46, 44, 30]
+
+for nama, jml in zip(produk, terjual):
+    print(f"{nama}: {jml} porsi ({kategori(jml)})")</code></pre></div>
+            <div class="hasil">
+              <span class="tag">HARUS MUNCUL</span>
+              <p><code>Kopi Susu: 87 porsi (laris)</code><br><code>Americano: 46 porsi (sedang)</code><br><code>Roti Bakar: 44 porsi (sedang)</code><br><code>Croissant: 30 porsi (lambat)</code></p>
+            </div>
+            <p style="margin-top:8px">Latihan ini memakai <strong>enam</strong> hal sekaligus: fungsi, <code>return</code>, if/elif/else, perulangan, f-string, dan list. Kalau kamu bisa menulis ini, kamu siap.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal Python selesai — sekarang lanjut ke Hari 15</h3>
+      <p>Delapan hari lalu kamu belum pernah menulis satu baris kode. Sekarang kamu bisa membaca dan menulis: variabel, empat tipe data, pesan error, list, slicing, dictionary, if/elif/else, perulangan, <code>range</code>, f-string, list comprehension, dan fungsi.</p>
+      <p style="margin-top:14px"><strong>Itu seluruh Python yang dipakai kurikulum ini, dari Hari 15 sampai Hari 105.</strong> Tidak ada konstruksi lain yang akan muncul mendadak. Mulai sekarang, kalau ada kode yang tidak kamu mengerti, penyebabnya adalah <em>pustakanya</em> (pandas, scipy, sklearn) — dan itu memang dijelaskan di tempatnya masing-masing.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Simpan halaman ini.</strong> Setiap kali kamu bertemu tanda yang tidak kamu kenali di hari-hari berikutnya — kurung siku berisi <code>for</code>, garis bawah sendirian, huruf <code>f</code> di depan kutip — kembali ke sini. Delapan hari ini adalah kamus tanda bacamu.
+      </div>
+      <a class="lanjut" href="https://claude.ai/code/artifact/e672ec75-7caf-45aa-b90c-726ce55d46b7">Lanjut ke M3: Python & pandas →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua keluaran di halaman ini dihasilkan dengan menjalankan kodenya sungguhan — kalau hasilmu berbeda, ada langkah yang perlu diperiksa.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "bekal-python-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

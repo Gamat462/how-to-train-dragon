@@ -1,0 +1,1090 @@
+<title>Migas Minggu 1 Fondasi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F1EFE7; --surface:#FCFAF4; --surface-2:#E7E2D2;
+    --ink:#1B2129; --ink-soft:#57606C; --line:#D7D0BC;
+    --teal:#0B5F55; --teal-soft:#DFEBE7;
+    --gold:#8F5F1E; --gold-soft:#F0E2C6;
+    --alert:#9C3427; --alert-soft:#F5E0DB;
+    --code-bg:#EDE8D8;
+    --shadow: 0 24px 48px -28px rgba(27,33,41,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10151B; --surface:#181E26; --surface-2:#1F2733;
+      --ink:#ECE8DC; --ink-soft:#95A0AD; --line:#2E3846;
+      --teal:#4FC4AF; --teal-soft:rgba(79,196,175,0.14);
+      --gold:#DFAC5D; --gold-soft:rgba(223,172,93,0.14);
+      --alert:#E68B76; --alert-soft:rgba(230,139,118,0.14);
+      --code-bg:#0D1217;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10151B; --surface:#181E26; --surface-2:#1F2733;
+    --ink:#ECE8DC; --ink-soft:#95A0AD; --line:#2E3846;
+    --teal:#4FC4AF; --teal-soft:rgba(79,196,175,0.14);
+    --gold:#DFAC5D; --gold-soft:rgba(223,172,93,0.14);
+    --alert:#E68B76; --alert-soft:rgba(230,139,118,0.14);
+    --code-bg:#0D1217;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .ulang{ background:var(--surface); border:1px dashed var(--gold); border-radius:12px;
+          padding:12px 15px; margin:14px 0; font-size:0.89rem; }
+  .ulang .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; font-weight:600; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/1c78fa92-69e9-4546-a3b1-075eabd3e5c8">← Kembali ke M13: Machine Learning</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Migas · Minggu 1</span>
+  <button type="button" data-hari="1" aria-selected="true">Hari 1</button>
+  <button type="button" data-hari="2" aria-selected="false">Hari 2</button>
+  <button type="button" data-hari="3" aria-selected="false">Hari 3</button>
+  <button type="button" data-hari="4" aria-selected="false">Hari 4</button>
+  <button type="button" data-hari="5" aria-selected="false">Hari 5</button>
+  <button type="button" data-hari="6" aria-selected="false">Hari 6</button>
+  <button type="button" data-hari="7" aria-selected="false">Hari 7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Jalur spesialisasi · Dikerjakan setelah Minggu 1-6 kurikulum utama</span>
+    <h1>Migas Minggu 1: Blok Cendana &amp; Fondasi</h1>
+    <p class="lede">Jalur ini bukan lanjutan dari kurikulum utama — ini <strong>spesialisasi</strong>. Kombinasi audit + migas + analitik data itu langka dan mahal: Pertamina Hulu Energi, Medco, PetroChina, SKK Migas, KAP yang mengaudit cost recovery PSC; di Australia sektor LNG; di Singapura pusat perdagangan minyak. Latar belakang auditmu bukan penghambat di sini — justru keunggulan, karena sebagian besar pekerjaan analis migas hulu adalah rekonsiliasi, alokasi biaya, dan verifikasi volume.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 1 ================= -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 1</span>
+      <h2>Menyiapkan data, dan mengenal Blok Cendana</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjalankan query pertama di database migas berisi 70.602 baris produksi harian, dan tahu empat angka kunci yang dipakai untuk memeriksa apakah analisismu masuk akal.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Syarat sebelum mulai</h3>
+        <span class="cek"><input type="checkbox" id="m1h1s1"><label for="m1h1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">
+          <strong>Jangan mulai jalur ini sebelum menyelesaikan minimal Minggu 1-6 kurikulum utama</strong> (SELECT sampai window function dan CTE). Semua soal di sini mengandaikan kamu sudah bisa <code>GROUP BY</code>, <code>JOIN</code>, dan <code>WITH</code> tanpa membuka contekan. Kalau belum, kerjakan itu dulu — jalur ini tidak akan ke mana-mana.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Impor database migas</h3>
+        <span class="cek"><input type="checkbox" id="m1h1s2"><label for="m1h1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Dari berkas zip bootcamp, buka folder <code>bootcamp/migas/</code>. Ada dua cara memakai datanya:</p>
+        <div class="aksi">
+          <span class="tag">CARA 1 — PALING MUDAH (sqliteonline)</span>
+          <p>Buka <span class="mono">sqliteonline.com</span> → menu <strong>File → Open DB</strong> → pilih <code>migas.db</code>. Seluruh 10 tabel langsung muncul di panel kiri, tanpa perlu impor CSV satu per satu.</p>
+        </div>
+        <div class="aksi">
+          <span class="tag">CARA 2 — KALAU MAU PAKAI PYTHON</span>
+          <p>Di Colab, unggah <code>migas.db</code>, lalu:</p>
+          <div class="kode"><pre><code>import sqlite3, pandas as pd
+con = sqlite3.connect("migas.db")
+pd.read_sql("SELECT * FROM lapangan", con)</code></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Lihat isi sepuluh tabelnya</h3>
+        <span class="cek"><input type="checkbox" id="m1h1s3"><label for="m1h1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT COUNT(*) FROM produksi_harian;</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><strong>70602</strong> — data produksi harian tiap sumur, Januari 2023 sampai Juni 2026.</p></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Tabel</th><th class="n">Baris</th><th>Isinya</th></tr></thead>
+            <tbody>
+              <tr><td><code>produksi_harian</code></td><td class="n">70.602</td><td>bopd, gas, air, watercut, status berproduksi per sumur per hari</td></tr>
+              <tr><td><code>sumur</code></td><td class="n">64</td><td>tipe, lapangan, tanggal onstream, parameter decline, metode angkat</td></tr>
+              <tr><td><code>lapangan</code></td><td class="n">4</td><td>nama, onshore/offshore, tahun onstream, jenis reservoir</td></tr>
+              <tr><td><code>downtime</code></td><td class="n">329</td><td>kapan sumur mati, berapa lama, penyebabnya</td></tr>
+              <tr><td><code>workover</code></td><td class="n">79</td><td>intervensi sumur: jenis, biaya, faktor kenaikan</td></tr>
+              <tr><td><code>harga_icp</code></td><td class="n">42</td><td>harga acuan minyak Indonesia per bulan</td></tr>
+              <tr><td><code>biaya_operasi</code></td><td class="n">1.552</td><td>OPEX/CAPEX per lapangan per bulan per kategori</td></tr>
+              <tr><td><code>lifting</code></td><td class="n">122</td><td>kargo yang diangkat/dijual: volume, harga, tujuan</td></tr>
+              <tr><td><code>psc_bulanan</code></td><td class="n">42</td><td>mekanisme bagi hasil: FTP, cost recovery, ETS, DMO, pajak</td></tr>
+              <tr><td><code>hse_insiden</code></td><td class="n">91</td><td>kecelakaan kerja: jenis, keparahan, hari kerja hilang</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Kenali perusahaannya: Blok Cendana</h3>
+        <span class="cek"><input type="checkbox" id="m1h1s4"><label for="m1h1s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>SELECT * FROM lapangan;</code></pre></div>
+        <div class="hasil">
+          <span class="tag">EMPAT LAPANGAN YANG AKAN KAMU URUS</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>ID</th><th>Nama</th><th>Tipe</th><th class="n">Onstream</th><th>Ciri khas</th></tr></thead>
+              <tbody>
+                <tr><td>F01</td><td>Cendana Utara</td><td>Onshore</td><td class="n">1998</td><td>Tua, watercut tertinggi (81,6% di 2026)</td></tr>
+                <tr><td>F02</td><td>Cendana Selatan</td><td>Onshore</td><td class="n">2005</td><td>Menengah</td></tr>
+                <tr><td>F03</td><td>Meranti</td><td>Offshore</td><td class="n">2012</td><td>Karbonat, produktif</td></tr>
+                <tr><td>F04</td><td>Gaharu</td><td>Offshore</td><td class="n">2019</td><td>Termuda, decline tercepat</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Empat angka yang harus kamu hafal</h3>
+        <span class="cek"><input type="checkbox" id="m1h1s5"><label for="m1h1s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini dipakai sebagai <strong>pemeriksa kewarasan</strong> — kalau hasil hitunganmu jauh dari sini, ada langkah yang salah:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <tbody>
+              <tr><td>Total produksi 2023–Jun 2026</td><td class="n">20.079.135 bbl</td></tr>
+              <tr><td>Produksi 2025 saja</td><td class="n">5.641.070 bbl</td></tr>
+              <tr><td>Lifting cost</td><td class="n">$14,35/bbl</td></tr>
+              <tr><td>Government take</td><td class="n">70,5% dari gross revenue</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Kebiasaan yang membedakan analis migas yang dipercaya:</strong> selalu punya beberapa angka acuan di kepala, dan periksa tiap hasil terhadapnya <em>sebelum</em> melaporkannya. Salah satu cara tercepat kehilangan kepercayaan adalah melaporkan angka yang secara fisik tidak mungkin — dan di industri ini angka besar terlihat wajar sampai seseorang memeriksanya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Empat hukum fisika yang perlu kamu pahami secukupnya</h3>
+        <span class="cek"><input type="checkbox" id="m1h1s6"><label for="m1h1s6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kamu tidak perlu jadi petroleum engineer. Empat hal ini cukup untuk seluruh jalur:</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Produksi selalu menurun.</strong> Sumur mengikuti kurva decline Arps: <code>q(t) = qi / (1 + b·D·t)^(1/b)</code>. Kalau <code>b=0</code>, jadi eksponensial murni.</li>
+          <li><strong>Watercut naik seiring waktu.</strong> Reservoir makin lama makin banyak mengeluarkan air. Di atas ~95% sumur biasanya tidak ekonomis lagi.</li>
+          <li><strong>Workover menaikkan produksi sementara,</strong> lalu meluruh kembali. Ini <em>menghancurkan</em> kurva decline — jebakan utama di Level 5.</li>
+          <li><strong>Downtime mengurangi produksi tanpa mengubah kemampuan sumur.</strong> Bedakan "sumur lemah" dari "sumur mati sementara" — dua diagnosis berbeda dengan tindakan berbeda.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 1 selesai. Berhenti di sini.</h3>
+      <p><strong>Buat kartu catatan (kamu akan pakai terus):</strong> daftar 10 tabel + isinya, empat angka acuan, dan empat hukum fisika di atas. Baca ulang 2 menit sebelum mulai belajar tiap hari — itu saja sudah menaikkan retensi secara nyata.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 2 ================= -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 2</span>
+      <h2>Empat soal pertama: agregasi di data migas</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjawab empat pertanyaan yang benar-benar ditanyakan manajemen lapangan, memakai <code>SUM</code>, <code>COUNT</code>, dan <code>GROUP BY</code> yang sudah kamu kuasai — sekarang di data 70.602 baris.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L1.1 — Total produksi minyak sepanjang 2025</h3>
+        <span class="cek"><input type="checkbox" id="m1h2s1"><label for="m1h2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><strong>Coba dulu sendiri minimal 10 menit</strong> sebelum membuka jawaban. Petunjuk: kolom <code>oil_bopd</code> adalah barel per hari; karena tiap baris = satu sumur satu hari, menjumlahkannya langsung memberi total barel.</p>
+        <details>
+          <summary>Buka jawaban dan penjelasan</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT ROUND(SUM(oil_bopd)) AS bbl_2025
+FROM produksi_harian
+WHERE tanggal LIKE '2025%';</code></pre></div>
+            <p><strong>Jawaban: 5.641.070 bbl</strong> — cocok dengan angka acuan Hari 1. Kalau hasilmu berbeda, kemungkinan besar filter tahunnya salah.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>L1.2 — Berapa sumur produser dan berapa injektor?</h3>
+        <span class="cek"><input type="checkbox" id="m1h2s2"><label for="m1h2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban dan penjelasan</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT tipe_sumur, COUNT(*) AS jumlah
+FROM sumur GROUP BY tipe_sumur;</code></pre></div>
+            <p><strong>Producer 59 · Injector 5</strong> (total 64).</p>
+            <p><strong>Kenapa ini penting untuk semua soal berikutnya:</strong> injektor <em>menyuntikkan</em> air/gas ke reservoir untuk menjaga tekanan — dia tidak memproduksi minyak. Setiap kali kamu menghitung "rata-rata produksi per sumur", kamu harus memutuskan: dibagi 64 atau dibagi 59? Jawabannya hampir selalu 59, dan analis yang lupa ini melaporkan angka yang terlalu rendah 8%.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>L1.3 — Produksi per lapangan sepanjang 2025</h3>
+        <span class="cek"><input type="checkbox" id="m1h2s3"><label for="m1h2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Butuh <code>JOIN</code>: tabel <code>produksi_harian</code> hanya punya <code>sumur_id</code>, sementara <code>lapangan_id</code> ada di tabel <code>sumur</code>.</p>
+        <details>
+          <summary>Buka jawaban dan penjelasan</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT s.lapangan_id, ROUND(SUM(p.oil_bopd)) AS bbl
+FROM produksi_harian p
+JOIN sumur s ON p.sumur_id = s.sumur_id
+WHERE p.tanggal LIKE '2025%'
+GROUP BY s.lapangan_id
+ORDER BY bbl DESC;</code></pre></div>
+            <div class="tabel-bungkus">
+              <table>
+                <thead><tr><th>Lapangan</th><th class="n">bbl 2025</th></tr></thead>
+                <tbody>
+                  <tr><td>F04 Gaharu</td><td class="n">2.422.737</td></tr>
+                  <tr><td>F03 Meranti</td><td class="n">1.545.966</td></tr>
+                  <tr><td>F01 Cendana Utara</td><td class="n">927.487</td></tr>
+                  <tr><td>F02 Cendana Selatan</td><td class="n">744.879</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Periksa:</strong> jumlahkan keempatnya → 5.641.069, cocok dengan L1.1 (selisih 1 karena pembulatan tiap baris). Kebiasaan memeriksa silang seperti ini yang membuat pekerjaanmu bisa dipercaya.</p>
+            <p><strong>Temuan awal:</strong> F04 yang termuda (onstream 2019) menyumbang 43% produksi, sementara F01 yang tertua hanya 16%. Ini pola normal — lapangan tua sudah lama menurun.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>L1.4 — Lima sumur dengan produksi kumulatif terbesar</h3>
+        <span class="cek"><input type="checkbox" id="m1h2s4"><label for="m1h2s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT sumur_id, ROUND(SUM(oil_bopd)) AS kumulatif
+FROM produksi_harian
+GROUP BY sumur_id
+ORDER BY kumulatif DESC
+LIMIT 5;</code></pre></div>
+            <p>CDN-059 (1.506.316) · CDN-057 (1.473.298) · CDN-062 (1.186.553) · CDN-063 (1.007.919) · CDN-049 (863.017)</p>
+            <p>Semua bernomor tinggi — dan itu masuk akal: nomor tinggi = sumur yang dibor belakangan = lapangan F03/F04 yang lebih baru dan lebih produktif. <strong>Selalu tanyakan "apakah pola ini masuk akal secara fisik?"</strong> sebelum melanjutkan.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 2 selesai</h3>
+      <p><strong>Catat pola, bukan jawaban:</strong> tiap baris <code>produksi_harian</code> = satu sumur satu hari, jadi <code>SUM(oil_bopd)</code> langsung = total barel. Untuk memecah per lapangan wajib <code>JOIN</code> ke <code>sumur</code>. Selalu periksa silang: jumlah per lapangan harus sama dengan total.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 3 ================= -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 3</span>
+      <h2>Downtime, HSE, dan biaya — plus ulangan pertama</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membaca tabel operasional (downtime, HSE, biaya) yang jadi bahan Level 4 nanti — dan mengalami pengulangan berjarak pertamamu.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ulangan U2 — dari ingatan, tanpa membuka Hari 2</h3>
+        <span class="cek"><input type="checkbox" id="m1h3s1"><label for="m1h3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="ulang">
+          <span class="tag">PENGULANGAN BERJARAK · U2 (+1 HARI)</span>
+          <p>Tutup catatan. Tulis ulang query untuk: <strong>produksi minyak per lapangan sepanjang 2024</strong> (bukan 2025 — variasinya sengaja diubah supaya kamu tidak sekadar menghafal).</p>
+        </div>
+        <details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi">
+            <p>Sama seperti L1.3, cuma filternya <code>'2024%'</code>. Kalau kamu bisa menuliskannya tanpa melihat, konsep <strong>K1 (agregasi &amp; filter)</strong> dan <strong>K2 (JOIN)</strong> sudah mulai menempel. Kalau macet lebih dari 5 menit, baru buka Hari 2.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>L1.5 — Berapa hari-sumur yang tidak berproduksi?</h3>
+        <span class="cek"><input type="checkbox" id="m1h3s2"><label for="m1h3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT COUNT(*) FROM produksi_harian WHERE berproduksi = 0;</code></pre></div>
+            <p><strong>1.349 hari-sumur.</strong> Satuan "hari-sumur" penting: bukan 1.349 hari kalender, tapi jumlah kombinasi (satu sumur × satu hari) yang mati. Salah menyebut satuan adalah cara cepat kehilangan kredibilitas di rapat teknis.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>L1.11 — Penyebab downtime tersering dan total hari hilang</h3>
+        <span class="cek"><input type="checkbox" id="m1h3s3"><label for="m1h3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT penyebab, COUNT(*) AS kejadian, SUM(durasi_hari) AS total_hari
+FROM downtime GROUP BY penyebab ORDER BY kejadian DESC;</code></pre></div>
+            <div class="tabel-bungkus">
+              <table>
+                <thead><tr><th>Penyebab</th><th class="n">Kejadian</th><th class="n">Hari</th></tr></thead>
+                <tbody>
+                  <tr><td>Pump Failure</td><td class="n">102</td><td class="n">225</td></tr>
+                  <tr><td>Power Outage</td><td class="n">60</td><td class="n">113</td></tr>
+                  <tr><td>Facility Shutdown</td><td class="n">48</td><td class="n">87</td></tr>
+                  <tr><td>Weather</td><td class="n">42</td><td class="n">98</td></tr>
+                  <tr><td>Sand Production</td><td class="n">39</td><td class="n">89</td></tr>
+                  <tr><td>Flowline Leak</td><td class="n">38</td><td class="n">78</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Simpan temuan ini.</strong> Pump Failure paling sering <em>dan</em> paling banyak memakan hari. Di Level 4 nanti kamu akan menghitung berapa dolar yang hilang karenanya — dan ternyata memang paling mahal ($4,25 juta).</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>L1.6 &amp; L1.8 — HSE dan biaya</h3>
+        <span class="cek"><input type="checkbox" id="m1h3s4"><label for="m1h3s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <p><strong>L1.6 Insiden HSE per jenis:</strong> Near Miss 43 · First Aid 20 · Medical Treatment 13 · Spill 8 · Lost Time Injury 5 · Fire 2.</p>
+            <p>Piramida keselamatan yang sehat memang berbentuk begini: banyak nyaris-celaka, sedikit celaka berat. Kalau Near Miss <em>lebih sedikit</em> dari First Aid, itu justru tanda bahaya — artinya pelaporan nyaris-celaka tidak jalan, bukan tempat kerjanya lebih aman.</p>
+            <p><strong>L1.8 Biaya per jenis:</strong> OPEX <strong>$288.049.861</strong> · CAPEX <strong>$100.800.990</strong>.</p>
+            <div class="kode"><pre><code>SELECT jenis, ROUND(SUM(nilai_usd)) FROM biaya_operasi GROUP BY jenis;</code></pre></div>
+            <p>Bedanya krusial untuk PSC: OPEX di-<em>cost recover</em> langsung, CAPEX lewat depresiasi bertahun-tahun. Mencampur keduanya saat menghitung lifting cost adalah kesalahan yang akan langsung ditangkap auditor.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 3 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> satuan "hari-sumur" ≠ hari kalender. OPEX vs CAPEX diperlakukan berbeda di PSC. Piramida HSE yang sehat = banyak Near Miss di dasar.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 4 ================= -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 4</span>
+      <h2>Metode angkat, lifting, workover — dan jebakan domain pertama</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyelesaikan Level 1, dan mengalami jebakan pertama yang tidak bisa ditangkap SQL — hanya bisa ditangkap kalau kamu paham arti datanya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>L1.9 — Metode angkat mana yang paling banyak dipakai?</h3>
+        <span class="cek"><input type="checkbox" id="m1h4s1"><label for="m1h4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kerjakan dulu dengan cara paling langsung yang terpikirkan, catat hasilnya, <strong>baru</strong> buka jawabannya.</p>
+        <details>
+          <summary>Buka jawaban — dan jebakannya</summary>
+          <div class="isi">
+            <p>Cara paling langsung memberi ini:</p>
+            <div class="kode"><pre><code>SELECT metode_angkat, COUNT(*) n FROM sumur
+GROUP BY metode_angkat ORDER BY n DESC;
+-- ESP 29 · Gas Lift 14 · Sucker Rod 11 · Natural Flow 10   (total 64)</code></pre></div>
+            <p><strong>Angka itu benar secara SQL, tapi salah secara domain.</strong> Tabel <code>sumur</code> berisi 64 sumur — 59 produser <em>dan 5 injektor</em>. Injektor menyuntikkan fluida ke reservoir; dia tidak mengangkat minyak ke permukaan, jadi "metode angkat" untuknya tidak bermakna dalam konteks pertanyaan ini.</p>
+            <div class="kode"><pre><code>SELECT metode_angkat, COUNT(*) n FROM sumur
+WHERE tipe_sumur = 'Producer'
+GROUP BY metode_angkat ORDER BY n DESC;
+-- ESP 28 · Gas Lift 12 · Sucker Rod 10 · Natural Flow 9    (total 59)</code></pre></div>
+            <p><strong>Jawaban yang benar: ESP 28 dari 59 produser (47%).</strong></p>
+          </div>
+        </details>
+        <div class="bahaya">
+          <strong>Inilah jebakan yang paling sering menjatuhkan analis pindahan dari industri lain.</strong> Query-nya jalan, hasilnya keluar, tidak ada pesan error — tapi angkanya menjawab pertanyaan yang berbeda dari yang dimaksud. SQL tidak bisa menolongmu di sini; hanya pemahaman soal apa arti tiap baris yang bisa. Setiap kali kamu <code>COUNT(*)</code> sebuah tabel, tanyakan: <em>apakah semua baris di tabel ini benar-benar relevan dengan pertanyaannya?</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>L1.10 — Lifting per tujuan: domestik vs ekspor</h3>
+        <span class="cek"><input type="checkbox" id="m1h4s2"><label for="m1h4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT tujuan, COUNT(*) AS kargo,
+       ROUND(SUM(volume_bbl)) AS volume,
+       ROUND(SUM(nilai_usd)) AS nilai
+FROM lifting GROUP BY tujuan;</code></pre></div>
+            <div class="tabel-bungkus">
+              <table>
+                <thead><tr><th>Tujuan</th><th class="n">Kargo</th><th class="n">Volume (bbl)</th><th class="n">Nilai (USD)</th></tr></thead>
+                <tbody>
+                  <tr><td>Domestik</td><td class="n">78</td><td class="n">12.788.674</td><td class="n">823.196.781</td></tr>
+                  <tr><td>Ekspor</td><td class="n">44</td><td class="n">6.864.737</td><td class="n">446.298.578</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Hitung harga rata-rata tiap tujuan: domestik $64,37/bbl, ekspor $65,01/bbl. Selisih kecil ini terkait <strong>DMO</strong> (Domestic Market Obligation) — kewajiban menjual sebagian produksi ke dalam negeri, kadang di bawah harga pasar. Kamu akan menghitung dampaknya di Level 4.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>L1.12 — Workover per jenis pekerjaan</h3>
+        <span class="cek"><input type="checkbox" id="m1h4s3"><label for="m1h4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT jenis_pekerjaan, COUNT(*) AS n, ROUND(SUM(biaya_usd)) AS total_biaya
+FROM workover GROUP BY jenis_pekerjaan ORDER BY n DESC;</code></pre></div>
+            <div class="tabel-bungkus">
+              <table>
+                <thead><tr><th>Jenis</th><th class="n">Jumlah</th><th class="n">Total biaya (USD)</th></tr></thead>
+                <tbody>
+                  <tr><td>Acidizing</td><td class="n">24</td><td class="n">18.356.545</td></tr>
+                  <tr><td>Reperforation</td><td class="n">17</td><td class="n">14.879.909</td></tr>
+                  <tr><td>ESP Replacement</td><td class="n">17</td><td class="n">15.524.221</td></tr>
+                  <tr><td>Scale Removal</td><td class="n">15</td><td class="n">12.840.226</td></tr>
+                  <tr><td>Zone Change</td><td class="n">6</td><td class="n">5.353.943</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Total 79 workover, $66,95 juta. Di Level 4 kamu akan menjawab pertanyaan yang jauh lebih berguna: <em>berapa kenaikan produksi yang benar-benar dihasilkan tiap dolar itu?</em></p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>L1.7 — Rata-rata ICP per tahun</h3>
+        <span class="cek"><input type="checkbox" id="m1h4s4"><label for="m1h4s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT substr(periode,1,4) AS tahun, ROUND(AVG(icp_usd_bbl),2) AS icp
+FROM harga_icp GROUP BY tahun;</code></pre></div>
+            <p>2023 <strong>$67,72</strong> · 2024 <strong>$65,64</strong> · 2025 <strong>$62,91</strong> · 2026 <strong>$69,93</strong></p>
+            <div class="catatan">
+              <strong>Perhatikan 2026:</strong> datanya hanya Januari–Juni. Membandingkan rata-rata 6 bulan dengan rata-rata 12 bulan boleh untuk harga (karena ini rata-rata, bukan total) — tapi <strong>tidak boleh</strong> untuk volume produksi atau pendapatan. Kesalahan membandingkan tahun berjalan dengan tahun penuh adalah salah satu yang paling sering muncul di laporan manajemen.
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 4 selesai — Level 1 tuntas (12 soal)</h3>
+      <p><strong>Tambahkan ke kartu:</strong> sebelum <code>COUNT(*)</code>, tanya "apakah semua baris relevan?" (jebakan injektor). Tahun berjalan tidak boleh dibandingkan langsung dengan tahun penuh untuk angka total.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 5 ================= -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 5</span>
+      <h2>Ulangan U3 dan uji Level 1</h2>
+      <span class="waktu">± 90 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Hari ini menentukan apakah kamu boleh naik ke Level 2 — ambangnya: 80% soal selesai tanpa bantuan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Aturan ujinya</h3>
+        <span class="cek"><input type="checkbox" id="m1h5s1"><label for="m1h5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tutup semua catatan dan semua hari sebelumnya. Kerjakan delapan soal berikut berturut-turut, <strong>maksimal 90 menit</strong>. Catat mana yang bisa kamu selesaikan tanpa bantuan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Delapan soal uji (variasi, bukan soal yang sama)</h3>
+        <span class="cek"><input type="checkbox" id="m1h5s2"><label for="m1h5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Total produksi minyak sepanjang <strong>2023</strong> (bukan 2025).</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Produksi per lapangan sepanjang <strong>seluruh periode</strong>, urut terbesar.</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Berapa sumur di tiap lapangan? (petunjuk: tabel <code>sumur</code> saja, tanpa JOIN)</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Sepuluh sumur dengan produksi <strong>terkecil</strong> sepanjang 2025.</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Total hari downtime per <strong>kategori</strong> (bukan penyebab).</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> Insiden HSE per <strong>tingkat keparahan</strong>, plus total hari kerja hilang.</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> Total biaya per <strong>kategori_biaya</strong> sepanjang 2025 saja.</p>
+        <p style="margin-bottom:12px"><strong>8.</strong> Bulan dengan ICP tertinggi dan terendah sepanjang data.</p>
+        <details>
+          <summary>Kunci — buka hanya setelah 90 menit habis</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <code>WHERE tanggal LIKE '2023%'</code> → <strong>6.012.275 bbl</strong>. Perhatikan ini <em>lebih besar</em> dari 2025 (5.641.070) — produksi blok memang sedang menurun, dan itu temuan, bukan kesalahan hitung.</p>
+            <p><strong>2.</strong> Sama seperti L1.3 tanpa filter tahun: F04 8.040.306 · F03 6.444.114 · F01 3.021.247 · F02 2.573.467. Urutannya sama dengan 2025, tapi <strong>proporsinya bergeser</strong> — dan pergeseran itu yang menarik: pangsa F03 menyusut tajam sementara F04 naik. Kamu akan mengukurnya persis di Level 3.</p>
+            <p><strong>3.</strong> <code>SELECT lapangan_id, COUNT(*) FROM sumur GROUP BY lapangan_id;</code> → F01 22 · F02 18 · F03 14 · F04 10. Perhatikan: F04 punya sumur <em>paling sedikit</em> tapi produksi <em>paling besar</em>. Itu temuan, bukan sekadar angka.</p>
+            <p><strong>4.</strong> Sama seperti L1.4 dengan <code>ORDER BY ... ASC</code>. Hati-hati: sumur dengan produksi 0 mungkin injektor — periksa <code>tipe_sumur</code>-nya (ingat Hari 4).</p>
+            <p><strong>5.</strong> <code>SELECT kategori, SUM(durasi_hari) FROM downtime GROUP BY kategori;</code></p>
+            <p><strong>6.</strong> <code>SELECT tingkat_keparahan, COUNT(*), SUM(hari_kerja_hilang) FROM hse_insiden GROUP BY tingkat_keparahan;</code></p>
+            <p><strong>7.</strong> <code>WHERE periode LIKE '2025%'</code> lalu <code>GROUP BY kategori_biaya</code>.</p>
+            <p><strong>8.</strong> <code>ORDER BY icp_usd_bbl DESC LIMIT 1</code> dan <code>ASC LIMIT 1</code>.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Nilai dirimu jujur</h3>
+        <span class="cek"><input type="checkbox" id="m1h5s3"><label for="m1h5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>7-8 benar tanpa bantuan</strong> — lolos, lanjut ke Level 2 minggu depan.</li>
+          <li><strong>5-6 benar</strong> — hampir. Ulangi soal yang gagal besok, baru lanjut.</li>
+          <li><strong>di bawah 5</strong> — jangan lanjut. Ulangi Migas Hari 2-4, dan kalau <code>JOIN</code> yang jadi masalah, kembali ke Minggu 2 kurikulum utama.</li>
+        </ul>
+        <div class="catatan">
+          <strong>Aturan yang membuat jalur ini berhasil:</strong> jangan pindah level sebelum level sebelumnya lolos. Level 4 dan 5 mengandaikan Level 1-2 sudah otomatis di tanganmu — kalau belum, kamu akan menghabiskan waktu berjam-jam macet di hal yang seharusnya sudah lancar.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 5 selesai</h3>
+      <p>Catat nilaimu. Pola nilaimu sendiri adalah data — dan kamu sedang belajar membaca data.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 6 ================= -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 6</span>
+      <h2>Watercut: angka yang menentukan umur lapangan</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung dan menafsirkan watercut — metrik yang paling menentukan apakah sebuah lapangan masih punya masa depan. Ini jembatan ke Level 2.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa watercut adalah metrik hidup-mati</h3>
+        <span class="cek"><input type="checkbox" id="m1h6s1"><label for="m1h6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Watercut = proporsi air dalam cairan yang keluar dari sumur. Sumur yang menghasilkan 100 bbl cairan dengan watercut 80% berarti hanya 20 bbl minyak — sisanya air yang harus <strong>diangkat, dipisahkan, diolah, dan dibuang</strong>, semuanya berbiaya.</p>
+        <p>Di atas ~95%, biaya menangani air biasanya melebihi nilai minyaknya, dan sumur ditutup. Jadi watercut bukan sekadar angka teknis — dia jam pasir yang menghitung mundur umur ekonomis tiap sumur.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Watercut rata-rata per lapangan per tahun</h3>
+        <span class="cek"><input type="checkbox" id="m1h6s2"><label for="m1h6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT s.lapangan_id,
+       substr(p.tanggal,1,4) AS tahun,
+       ROUND(AVG(p.watercut)*100, 1) AS watercut_persen
+FROM produksi_harian p
+JOIN sumur s ON p.sumur_id = s.sumur_id
+WHERE p.berproduksi = 1
+GROUP BY s.lapangan_id, tahun
+ORDER BY s.lapangan_id, tahun;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">POLA YANG HARUS TERLIHAT</span>
+          <p>Watercut naik konsisten di <strong>semua</strong> lapangan tiap tahun:</p>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>Lapangan</th><th class="n">2023</th><th class="n">2024</th><th class="n">2025</th><th class="n">2026</th></tr></thead>
+              <tbody>
+                <tr><td>F01 (tertua)</td><td class="n">46,6</td><td class="n">61,6</td><td class="n">72,8</td><td class="n">81,6</td></tr>
+                <tr><td>F02</td><td class="n">31,2</td><td class="n">45,1</td><td class="n">60,7</td><td class="n">71,4</td></tr>
+                <tr><td>F03</td><td class="n">15,3</td><td class="n">30,3</td><td class="n">45,4</td><td class="n">56,3</td></tr>
+                <tr><td>F04 (termuda)</td><td class="n">12,3</td><td class="n">29,6</td><td class="n">44,8</td><td class="n">58,5</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:8px">Perhatikan urutannya persis mengikuti umur lapangan — dan perhatikan juga <strong>F04 naik paling cepat</strong> (12,3 → 58,5 dalam 3,5 tahun, +46 poin) walau paling muda. Lapangan muda bukan berarti aman.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Perhatikan <code>WHERE p.berproduksi = 1</code>.</strong> Tanpa filter itu, hari-hari sumur mati (1.349 hari-sumur dari Hari 3) ikut terhitung dengan watercut 0 atau NULL, dan rata-ratamu jadi terlalu rendah. Ini contoh khas kenapa memahami arti kolom <code>berproduksi</code> lebih penting daripada hafal sintaks.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Apa artinya untuk manajemen</h3>
+        <span class="cek"><input type="checkbox" id="m1h6s3"><label for="m1h6s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>F01 pada 81,6% berarti: untuk tiap 100 barel cairan yang diangkat, hanya 18,4 barel minyak. Tiga konsekuensi langsung:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li>Biaya angkat per barel <em>minyak</em> naik terus, walau biaya per barel <em>cairan</em> tetap</li>
+          <li>Kapasitas fasilitas pengolahan air jadi pembatas produksi, bukan kapasitas sumur</li>
+          <li>Umur ekonomis makin dekat — ini kandidat utama untuk program pengelolaan air atau kajian penutupan</li>
+        </ul>
+        <div class="catatan">
+          <strong>Cara melaporkannya ke manajemen:</strong> jangan bilang "watercut F01 81,6%". Bilang: <em>"F01 sekarang mengangkat 4,4 barel air untuk tiap barel minyak, naik dari 0,9 pada 2023. Kalau tren ini berlanjut, batas 95% tercapai sekitar [hitung sendiri], dan kapasitas penanganan air akan jadi pembatas sebelum itu."</em> Angka yang sama, tapi yang kedua bisa langsung dipakai untuk mengambil keputusan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="m1h6s4"><label for="m1h6s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Cari sumur yang watercut-nya <strong>sudah melewati 90%</strong> pada data terakhirnya. Petunjuk: butuh subquery/CTE untuk mengambil tanggal terakhir tiap sumur dulu.</p>
+        <details>
+          <summary>Buka petunjuk</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>WITH terakhir AS (
+  SELECT sumur_id, MAX(tanggal) AS tgl FROM produksi_harian
+  WHERE berproduksi = 1 GROUP BY sumur_id
+)
+SELECT p.sumur_id, ROUND(p.watercut*100,1) AS wc, ROUND(p.oil_bopd,1) AS bopd
+FROM produksi_harian p
+JOIN terakhir t ON p.sumur_id = t.sumur_id AND p.tanggal = t.tgl
+WHERE p.watercut > 0.90
+ORDER BY wc DESC;</code></pre></div>
+            <p>Banyak sumur F01 sudah mencapai kisaran 96%: CDN-001, CDN-005, CDN-006, CDN-007, CDN-008, CDN-010, dan seterusnya. Perhatikan sebagian masih berproduksi cukup besar (CDN-001 ~190 bopd) — watercut tinggi tidak otomatis berarti sumur kecil, dan itu yang membuat keputusan penutupan jadi rumit.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Hari 6 selesai</h3>
+      <p><strong>Tambahkan ke kartu:</strong> watercut = jam pasir umur sumur. Selalu saring <code>berproduksi = 1</code> saat merata-rata metrik teknis. Laporkan sebagai rasio air:minyak, bukan persen mentah — itu yang bisa dipakai manajemen.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 7 ================= -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">MIGAS HARI 7</span>
+      <h2>Istirahat aktif: rapikan kartu dan pahami PSC</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada query hari ini.</strong> Hari ringan untuk mengendapkan minggu pertama, dan membaca satu konsep yang akan mendominasi Level 4-5: mekanisme PSC.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Rapikan kartu ingatanmu</h3>
+        <span class="cek"><input type="checkbox" id="m1h7s1"><label for="m1h7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tulis ulang kartu untuk tiap konsep yang sudah muncul, formatnya <strong>pola — bukan jawaban</strong>:</p>
+        <div class="kode"><pre><code>K1 — Agregasi &amp; filter
+Kapan dipakai : meringkas banyak baris jadi satu angka per kelompok
+Pola          : SELECT dimensi, SUM(ukuran) FROM t WHERE ... GROUP BY dimensi
+Jebakan migas : baris = sumur×hari, jadi SUM(oil_bopd) langsung = total bbl
+                dan hari mati (berproduksi=0) ikut terhitung kalau tidak disaring
+Contoh        : produksi 2025 = 5.641.070 bbl</code></pre></div>
+        <p>Buat kartu serupa untuk <strong>K2 (JOIN multi-tabel)</strong> dan <strong>K3 (rasio &amp; normalisasi)</strong>. Baca ulang 2 menit sebelum belajar tiap hari.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Baca: bagaimana uang mengalir di PSC</h3>
+        <span class="cek"><input type="checkbox" id="m1h7s2"><label for="m1h7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>PSC (Production Sharing Contract) adalah skema bagi hasil migas Indonesia. Urutannya selalu begini, dan urutan itu yang menentukan segalanya:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th class="idx">#</th><th>Tahap</th><th>Apa yang terjadi</th></tr></thead>
+            <tbody>
+              <tr><td class="idx">1</td><td><strong>Gross revenue</strong></td><td>Volume produksi × harga (ICP)</td></tr>
+              <tr><td class="idx">2</td><td><strong>FTP</strong> (First Tranche Petroleum)</td><td>Potongan di depan, dibagi pemerintah–kontraktor <em>sebelum</em> biaya dikembalikan</td></tr>
+              <tr><td class="idx">3</td><td><strong>Cost recovery</strong></td><td>Kontraktor mengambil kembali biayanya (OPEX + depresiasi CAPEX)</td></tr>
+              <tr><td class="idx">4</td><td><strong>ETS</strong> (Equity To be Split)</td><td>Sisanya, dibagi pemerintah–kontraktor dengan porsi besar ke pemerintah</td></tr>
+              <tr><td class="idx">5</td><td><strong>DMO</strong> + <strong>pajak</strong></td><td>Kewajiban jual domestik di bawah harga, lalu pajak atas bagian kontraktor</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Identitas yang harus selalu berlaku:</strong> <code>gross = FTP + cost recovery + ETS</code>. Di Level 4 kamu akan <em>membuktikan</em> identitas ini untuk seluruh 42 bulan — dan kalau ada satu bulan yang tidak seimbang, itu temuan audit. Ini persis pekerjaan audit cost recovery yang selama ini kamu kerjakan, cuma dengan data yang jauh lebih besar.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa latar belakang auditmu adalah keunggulan di sini</h3>
+        <span class="cek"><input type="checkbox" id="m1h7s3"><label for="m1h7s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Perhatikan apa saja yang sudah muncul di minggu pertama ini: rekonsiliasi volume, pemisahan OPEX vs CAPEX, pemeriksaan silang total, kehati-hatian soal satuan, kesadaran bahwa cara membagi biaya mengubah kesimpulan. <strong>Itu semua kosakata auditor.</strong></p>
+        <p>Analis data yang datang dari latar teknik sering unggul di pemodelan tapi lemah di ketelitian rekonsiliasi. Kamu kebalikannya — dan yang dibutuhkan di cost recovery PSC justru yang kedua. Sebutkan ini secara eksplisit di wawancara.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Migas Minggu 1 selesai — Level 1 tuntas</h3>
+      <p>Kamu sudah menjawab 12 soal fondasi di data migas sungguhan 70.602 baris, mengenal empat lapangan Blok Cendana, dan tahu jebakan domain pertama (injektor vs produser).</p>
+      <p style="margin-top:14px">Minggu depan: Level 2 — JOIN multi-tabel, lifting cost per barel (metrik yang paling sering ditanya manajemen), uptime, anti-join, dan satu jebakan besar: <em>selection bias</em> pada evaluasi workover.</p>
+      <a class="lanjut" href="https://claude.ai/code/artifact/24fee33e-bafb-459c-8560-4a848e1257a8">Lanjut ke Migas L2: Perbandingan adil & bias →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua angka di halaman ini dihasilkan dengan menjalankan query pada <code>migas.db</code> yang kamu punya — kalau hasilmu berbeda, ada langkah yang perlu diperiksa.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "migas-minggu1-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

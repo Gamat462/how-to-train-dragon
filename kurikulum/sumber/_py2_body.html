@@ -1,0 +1,890 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/15ba1f07-96fd-4636-b694-f2cf31f020cd">← Kembali ke SQL Produksi</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Python Produksi</span>
+  <button type="button" data-hari="1" aria-selected="true">P1</button>
+  <button type="button" data-hari="2" aria-selected="false">P2</button>
+  <button type="button" data-hari="3" aria-selected="false">P3</button>
+  <button type="button" data-hari="4" aria-selected="false">P4</button>
+  <button type="button" data-hari="5" aria-selected="false">P5</button>
+  <button type="button" data-hari="6" aria-selected="false">P6</button>
+  <button type="button" data-hari="7" aria-selected="false">P7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Python Produksi · modul penutup jalur teknis</span>
+    <h1>Python Produksi: dari sel notebook jadi alat</h1>
+    <p class="lede">Saya mencacah seluruh 44 modul sebelumnya untuk mencari kata-kata ini. Hasilnya: <strong><code>logging</code> nol, <code>argparse</code> nol, <code>yield</code> nol, <code>chunksize</code> nol, modul buatan sendiri nol, <code>pytest</code> tiga kali.</strong> Artinya seluruh kurikulummu mengajarkan Python <strong>sebagai skrip notebook</strong> — dan tidak pernah sebagai kode yang dipasang, dijadwalkan, dan dipercaya orang lain.</p>
+    <p class="lede" style="margin-top:10px">Tujuh hari ini menutup lubang itu. Di akhir, kamu punya satu paket Python sungguhan: berfungsi, ber-uji, ber-log, dan dijalankan dari baris perintah dengan argumen. Semua angka di halaman ini <strong>hasil pengukuran</strong>, bukan perkiraan.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ P1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">PYTHON PRODUKSI · 1</span>
+      <h2>Berhenti menyalin-tempel fungsi antar-notebook</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menaruh fungsi di berkas sendiri dan memanggilnya dari mana saja — supaya perbaikan satu tempat berlaku di semua tempat.</p>
+
+    <div class="bahaya">
+      <strong>Masalah yang mungkin belum kamu sadari sedang kamu alami.</strong> Fungsi <code>ke_angka()</code> yang mengubah <code>"3.200.000"</code> jadi angka kamu tulis di Bekal Data Klien, lalu <em>salin lagi</em> di Studi Kasus 1, <em>salin lagi</em> di Kasus 3, <em>salin lagi</em> di Kasus 5. Empat salinan. Kalau kamu menemukan bug di salah satunya — misalnya tanda kurung akuntansi <code>(1.000)</code> untuk angka negatif — kamu harus ingat memperbaikinya di empat tempat, dan kamu tidak akan ingat.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin kerangka paketnya</h3>
+        <span class="cek"><input type="checkbox" id="y1s1"><label for="y1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Buat folder dan berkas dengan susunan persis seperti ini. Nama folder <code>laporan</code> boleh kamu ganti, sisanya jangan.</div>
+        <div class="kode"><pre><code>proyek/
+├── laporan/
+│   ├── __init__.py      &lt;- menandai folder ini sebagai paket Python
+│   ├── bersih.py        &lt;- fungsi pembersihan
+│   ├── hitung.py        &lt;- fungsi agregasi
+│   └── cli.py           &lt;- titik masuk baris perintah (P7)
+└── tests/
+    └── test_bersih.py   &lt;- pengujian (P2)</code></pre></div>
+        <div class="catatan">
+          <strong><code>__init__.py</code> boleh berisi apa saja, termasuk kosong.</strong> Keberadaannyalah yang memberi tahu Python "folder ini adalah paket, isinya boleh di-<code>import</code>". Tanpa berkas itu, <code>from laporan.bersih import ke_angka</code> gagal.
+        </div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Alat laporan penjualan — dipakai ulang, bukan disalin-tempel."""
+__version__ = "0.1.0"</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Pindahkan fungsimu ke sana — dengan tanda tipe</h3>
+        <span class="cek"><input type="checkbox" id="y1s2"><label for="y1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Simpan ini sebagai <code>laporan/bersih.py</code>. Fungsinya sama dengan yang kamu tulis di Studi Kasus — yang baru adalah <em>bentuknya</em>.</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Fungsi pembersihan yang bisa diuji satu per satu."""
+import re
+import pandas as pd
+
+
+def ke_angka(nilai: object) -&gt; int | None:
+    """Ubah teks berformat Indonesia jadi bilangan bulat.
+
+    &gt;&gt;&gt; ke_angka("3.200.000")
+    3200000
+    &gt;&gt;&gt; ke_angka("Rp 91.190.000")
+    91190000
+    &gt;&gt;&gt; ke_angka(None) is None
+    True
+    """
+    if nilai is None or (isinstance(nilai, float) and pd.isna(nilai)):
+        return None
+    if isinstance(nilai, (int,)):
+        return int(nilai)
+    teks = re.sub(r"[^0-9\-]", "", str(nilai))
+    return int(teks) if teks not in ("", "-") else None
+
+
+def rapikan_nama(s: pd.Series) -&gt; pd.Series:
+    """Samakan penulisan nama: spasi ganda, huruf besar-kecil, badan usaha."""
+    return (s.str.strip()
+             .str.replace(r"\s+", " ", regex=True)
+             .str.title()
+             .str.replace(r"^(Cv|Pt|Ud)\s+",
+                          lambda m: m.group(1).upper() + " ", regex=True))
+
+
+def buang_baris_bukan_data(df: pd.DataFrame, kolom_no: str = "No") -&gt; pd.DataFrame:
+    """Sisakan hanya baris yang kolom nomornya benar-benar angka."""
+    return df[df[kolom_no].fillna("").astype(str).str.fullmatch(r"\d+")].copy()</code></pre>
+        </div>
+        <p>Tiga hal baru yang layak kamu tiru di tiap fungsi mulai sekarang:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Yang ditambahkan</th><th>Contohnya</th><th>Gunanya</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Tanda tipe</strong></td><td class="mono">(nilai: object) -&gt; int | None</td><td>Editormu bisa memperingatkanmu <em>sebelum</em> dijalankan. Dan pembaca tahu fungsi ini bisa mengembalikan <code>None</code> — jadi hasilnya harus diperiksa.</td></tr>
+              <tr><td><strong>Docstring</strong></td><td class="mono">"""Ubah teks berformat Indonesia…"""</td><td>Muncul saat kamu mengetik <code>help(ke_angka)</code>. Ditulis untuk dirimu enam bulan lagi.</td></tr>
+              <tr><td><strong>Contoh di docstring</strong></td><td class="mono">&gt;&gt;&gt; ke_angka("3.200.000")</td><td>Contoh yang <em>bisa dijalankan</em> — dan yang jadi soal ujinya di P2.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Tanda tipe tidak memaksa apa pun saat program berjalan.</strong> Python tetap menerima <code>ke_angka([1,2,3])</code>. Gunanya untuk manusia dan untuk alat pemeriksa. Itu sudah cukup — sebagian besar bug yang menyita waktumu adalah salah tipe, dan tanda ini membuatnya terlihat sebelum kamu menjalankannya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Pakai dari mana saja</h3>
+        <span class="cek"><input type="checkbox" id="y1s3"><label for="y1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Dari folder <code>proyek/</code>, buka Python atau notebook dan jalankan:</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>from laporan.bersih import ke_angka, rapikan_nama
+import pandas as pd
+
+print(ke_angka("Rp 91.190.000"))
+print(ke_angka("3.200.000"))
+print(ke_angka(None))
+print(list(rapikan_nama(pd.Series([" budi santoso ", "BUDI SANTOSO", "cv karya abadi"]))))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>91190000
+3200000
+None
+['Budi Santoso', 'Budi Santoso', 'CV Karya Abadi']</code></pre></div>
+        </div>
+        <p>Sekarang ada <strong>satu</strong> <code>ke_angka</code> di seluruh pekerjaanmu. Perbaiki di sini, dan semua yang memakainya ikut terperbaiki — termasuk skrip klien yang sudah berjalan tiga bulan.</p>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Kalau muncul <code>ModuleNotFoundError: No module named 'laporan'</code>:</strong> kamu menjalankannya dari folder yang salah. Python mencari paket mulai dari folder tempat kamu menjalankannya. Harus dari <code>proyek/</code>, bukan dari dalam <code>laporan/</code>. Di Colab, <code>import os; os.chdir('/content/proyek')</code> lebih dulu.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">PYTHON PRODUKSI · 2</span>
+      <h2>Pengujian: cara berhenti memeriksa ulang dengan mata</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis uji otomatis untuk kode data, dan menjalankannya dalam satu perintah.</p>
+
+    <p>Sejauh ini caramu memastikan kode benar adalah <em>melihat hasilnya</em> — cocokkan dengan kotak "HARUS MUNCUL". Itu bekerja saat kamu sedang menatap layar. Yang tidak bekerja: memastikan bahwa perubahan hari ini tidak merusak sesuatu yang kamu tulis bulan lalu.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tulis ujinya</h3>
+        <span class="cek"><input type="checkbox" id="y2s1"><label for="y2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Simpan sebagai <code>tests/test_bersih.py</code>, lalu pasang pytest: <code>pip install pytest</code></div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+import pytest
+from laporan.bersih import ke_angka, rapikan_nama, buang_baris_bukan_data
+
+
+@pytest.mark.parametrize("masuk,harap", [
+    ("3.200.000", 3200000),
+    ("Rp 91.190.000", 91190000),
+    ("96.000", 96000),
+    (22000, 22000),
+    ("-96.000", -96000),
+    ("", None),
+    (None, None),
+])
+def test_ke_angka(masuk, harap):
+    assert ke_angka(masuk) == harap
+
+
+def test_rapikan_nama_menyatukan_empat_ejaan():
+    s = pd.Series([" budi santoso ", "BUDI SANTOSO", "Budi  Santoso", "Budi Santoso"])
+    assert rapikan_nama(s).nunique() == 1
+
+
+def test_rapikan_nama_tidak_merusak_cv():
+    s = pd.Series(["cv karya abadi", "PT mitra bangun"])
+    assert list(rapikan_nama(s)) == ["CV Karya Abadi", "PT Mitra Bangun"]
+
+
+def test_buang_baris_bukan_data():
+    df = pd.DataFrame({"No": ["1", "2", "Dicetak oleh: Admin", None], "x": [1, 2, 3, 4]})
+    assert len(buang_baris_bukan_data(df)) == 2
+
+
+def test_rapikan_nama_tidak_mengarang_pelanggan_palsu():
+    """Bug asli Studi Kasus 1: sel kosong dari Excel berubah jadi pelanggan 'Nan'."""
+    import numpy as np
+    s = pd.Series(["Budi Santoso", np.nan, "Toko Berkah"])
+    hasil = list(rapikan_nama(s))
+    palsu = [x for x in hasil if x in ("Nan", "None", "Nat")]
+    assert not palsu, f"sel kosong berubah jadi nama palsu: {hasil}"</code></pre>
+        </div>
+        <div class="aksi">Dari folder <code>proyek/</code>, jalankan: <code>python -m pytest -q</code></div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>...........                                                              [100%]
+11 passed in 0.26s</code></pre></div>
+        </div>
+        <p>Sebelas uji, seperempat detik. Bandingkan dengan memeriksa sebelas hal dengan mata setiap kali kamu mengubah satu baris.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Tiga aturan penamaan yang wajib diikuti pytest</strong>, dan itu saja: berkasnya diawali <code>test_</code>, fungsinya diawali <code>test_</code>, dan pemeriksaannya memakai <code>assert</code> biasa. Tidak ada kerangka kerja yang harus dipelajari.
+        </div>
+        <div class="catatan" style="margin-top:10px">
+          <strong><code>@pytest.mark.parametrize</code> adalah yang paling berguna untuk kode data.</strong> Satu fungsi uji, tujuh pasang masukan-harapan — dan pytest menjalankannya sebagai <strong>tujuh uji terpisah</strong>, sehingga kalau yang gagal cuma <code>"-96.000"</code>, ia menyebut persis kasus itu, bukan sekadar "fungsi ke_angka gagal".
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Apa yang layak diuji, dan apa yang tidak</h3>
+        <span class="cek"><input type="checkbox" id="y2s2"><label for="y2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Uji ini</th><th>Jangan buang waktu untuk ini</th></tr></thead>
+            <tbody>
+              <tr><td>Fungsi pembersihan dengan masukan aneh: kosong, <code>NaN</code>, negatif, teks salah bentuk</td><td>Bahwa pandas bisa menjumlahkan. Itu bukan kodemu.</td></tr>
+              <tr><td>Perhitungan bisnis dengan angka yang kamu hitung sendiri di kertas</td><td>Bentuk tampilan atau warna grafik</td></tr>
+              <tr><td>Kasus batas: nol baris, satu baris, semua nilai sama</td><td>Kode yang sekali pakai lalu dibuang</td></tr>
+              <tr><td>Bug yang <strong>pernah benar-benar terjadi</strong> — supaya tidak kembali</td><td>Menargetkan "100% teruji". Angka itu tidak berarti apa-apa.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Baris terakhir kolom kiri adalah yang paling bernilai, dan besok kamu akan melakukannya.</strong> Uji yang ditulis <em>setelah</em> menemukan bug punya nama: <em>regression test</em>. Nilainya bukan menemukan bug baru — tapi memastikan bug lama tidak pernah kembali diam-diam.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">PYTHON PRODUKSI · 3</span>
+      <h2>Uji yang menangkap bug yang sungguh pernah kamu buat</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membaca laporan kegagalan pytest, dan mengubah satu bug jadi penjaga permanen.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ingat lagi bug "Nan" dari Studi Kasus 1</h3>
+        <span class="cek"><input type="checkbox" id="y3s1"><label for="y3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di Studi Kasus 1 kamu menemukan bahwa <code>.astype(str)</code> yang dijalankan <strong>sebelum</strong> <code>.str.strip()</code> mengubah sel kosong jadi teks <code>"nan"</code>, lalu <code>.str.title()</code> mengubahnya jadi pelanggan bernama <strong>"Nan"</strong> yang muncul rapi di laporan seolah-olah manusia.</p>
+        <div class="aksi">Sekarang tanam ulang bug itu dengan sengaja, dan lihat apakah ujimu menangkapnya. Ubah satu baris di <code>laporan/bersih.py</code>:</div>
+        <div class="kode"><pre><code># dari:
+    return (s.str.strip()
+# jadi:
+    return (s.astype(str).str.strip()</code></pre></div>
+        <p>Lalu tambahkan uji ini ke <code>tests/test_bersih.py</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>def test_rapikan_nama_tidak_mengarang_pelanggan_palsu():
+    """Bug asli Studi Kasus 1: sel kosong dari Excel berubah jadi pelanggan 'Nan'."""
+    import numpy as np
+    s = pd.Series(["Budi Santoso", np.nan, "Toko Berkah"])
+    hasil = list(rapikan_nama(s))
+    palsu = [x for x in hasil if x in ("Nan", "None", "Nat")]
+    assert not palsu, f"sel kosong berubah jadi nama palsu: {hasil}"</code></pre>
+        </div>
+        <div class="aksi">Jalankan <code>python -m pytest -q</code></div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>..........F                                                              [100%]
+=================================== FAILURES ===================================
+______________ test_rapikan_nama_tidak_mengarang_pelanggan_palsu _______________
+
+    def test_rapikan_nama_tidak_mengarang_pelanggan_palsu():
+        """Bug asli Studi Kasus 1: sel kosong dari Excel berubah jadi pelanggan 'Nan'."""
+        import numpy as np
+        s = pd.Series(["Budi Santoso", np.nan, "Toko Berkah"])
+        hasil = list(rapikan_nama(s))
+        palsu = [x for x in hasil if x in ("Nan", "None", "Nat")]
+&gt;       assert not palsu, f"sel kosong berubah jadi nama palsu: {hasil}"
+E       AssertionError: sel kosong berubah jadi nama palsu: ['Budi Santoso', 'Nan', 'Toko Berkah']
+E       assert not ['Nan']
+
+tests/test_bersih.py:40: AssertionError
+=========================== short test summary item ============================
+FAILED tests/test_bersih.py::test_rapikan_nama_tidak_mengarang_pelanggan_palsu
+1 failed, 10 passed in 0.28s</code></pre></div>
+        </div>
+        <p>Perhatikan barisnya: pytest menunjukkan <strong>nilai sebenarnya</strong> — <code>['Budi Santoso', 'Nan', 'Toko Berkah']</code> — bukan cuma "gagal". Itu karena <code>assert</code>-nya diberi pesan. <strong>Selalu beri pesan pada assert</strong>; bedanya antara memperbaiki dalam sepuluh detik dan dalam sepuluh menit.</p>
+        <div class="aksi" style="margin-top:12px">Sekarang kembalikan baris tadi (buang <code>.astype(str)</code>), jalankan lagi. Harus <code>11 passed</code>. Ujimu sekarang jadi penjaga permanen: siapa pun yang menambahkan <code>.astype(str)</code> di tempat itu lagi akan langsung tahu.</div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Satu catatan jujur soal <code>None</code> lawan <code>NaN</code>.</strong> Uji itu memakai <code>np.nan</code>, bukan <code>None</code> — dan itu disengaja. <code>pd.Series([...None...]).astype(str)</code> menghasilkan <code>'None'</code>, sementara sel kosong dari <code>read_excel</code> menghasilkan <code>'nan'</code> → <code>'Nan'</code>. Dua kata yang berbeda, dan yang benar-benar kamu temui di berkas klien adalah yang kedua. Uji yang memakai masukan yang salah akan lulus sementara bug sungguhannya tetap ada — jadi <strong>tirukan bentuk data aslinya, bukan yang paling mudah diketik.</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">PYTHON PRODUKSI · 4</span>
+      <h2>183 MB jadi 18 MB, hasilnya sama persis</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memilih tipe data sendiri saat membaca berkas, dan mengecilkan pemakaian memori sepuluh kali lipat tanpa mengubah satu pun angka hasil.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapkan berkas besarnya</h3>
+        <span class="cek"><input type="checkbox" id="y4s1"><label for="y4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Kita pakai <code>besar.db</code> dari SQL Mahir L4 (800.000 baris). Kalau belum ada, jalankan ulang <code>besar.py</code> dari modul itu.</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3, pandas as pd, os
+con = sqlite3.connect("besar.db")
+pd.read_sql("SELECT * FROM transaksi", con).to_csv("transaksi.csv", index=False)
+print(f"{os.path.getsize('transaksi.csv')/1e6:.1f} MB")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>39.6 MB</code></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ukur, jangan percaya</h3>
+        <span class="cek"><input type="checkbox" id="y4s2"><label for="y4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>d1 = pd.read_csv("transaksi.csv")
+m1 = d1.memory_usage(deep=True).sum() / 1e6
+print(f"apa adanya : {m1:8.1f} MB")
+print(d1.dtypes.to_string())
+
+d2 = pd.read_csv("transaksi.csv",
+                 dtype={"id":"int32", "cabang":"category", "pelanggan_id":"int32",
+                        "produk":"category", "jumlah":"int8", "nilai":"int32"},
+                 parse_dates=["tanggal"])
+m2 = d2.memory_usage(deep=True).sum() / 1e6
+print(f"\ndipilih    : {m2:8.1f} MB   -&gt; {m1/m2:.1f}x lebih kecil, hemat {m1-m2:.0f} MB")
+print("hasil sama?", d1["nilai"].sum() == d2["nilai"].sum())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>apa adanya :    183.0 MB
+id               int64
+tanggal         object
+cabang          object
+pelanggan_id     int64
+produk          object
+jumlah           int64
+nilai            int64
+
+dipilih    :     18.4 MB   -&gt; 9.9x lebih kecil, hemat 165 MB
+hasil sama? True</code></pre></div>
+        </div>
+        <p><strong>183,0 MB jadi 18,4 MB — hampir sepuluh kali lipat, dan totalnya identik.</strong> Berkasnya sendiri cuma 39,6 MB di disk; pandas membengkakkannya jadi 183 MB di memori kalau dibiarkan menebak sendiri.</p>
+        <div class="tabel-bungkus" style="margin-top:12px">
+          <table>
+            <thead><tr><th>Bawaan pandas</th><th>Diganti jadi</th><th>Kenapa aman</th></tr></thead>
+            <tbody>
+              <tr><td><code>int64</code> untuk <code>jumlah</code></td><td><code>int8</code></td><td>Isinya cuma 1–4. <code>int8</code> menampung −128 sampai 127. Delapan kali lebih kecil.</td></tr>
+              <tr><td><code>int64</code> untuk <code>nilai</code>, <code>id</code></td><td><code>int32</code></td><td>Menampung sampai 2,1 miliar. Cukup untuk rupiah per transaksi.</td></tr>
+              <tr><td><code>object</code> untuk <code>cabang</code>, <code>produk</code></td><td><code>category</code></td><td><strong>Ini penghemat terbesarnya.</strong> Hanya 5 dan 7 nilai unik di 800.000 baris — pandas menyimpan daftar pendeknya sekali, lalu 800.000 nomor kecil.</td></tr>
+              <tr><td><code>object</code> untuk <code>tanggal</code></td><td><code>datetime64</code></td><td>Bukan cuma hemat — tanpa ini kamu tidak bisa memakai <code>.dt.month</code> atau membandingkan tanggal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Batas yang harus kamu tahu sebelum memakai <code>int32</code> untuk uang.</strong> Batasnya <strong>2.147.483.647</strong> — sekitar 2,1 miliar. Cukup untuk nilai per transaksi, tapi <em>tidak</em> untuk kolom yang menyimpan total kumulatif atau nilai kontrak besar. Kalau terlampaui, angkanya <strong>berputar jadi negatif tanpa peringatan</strong>. Untuk kolom yang mungkin melewati 2 miliar, tetap pakai <code>int64</code>. Ini persis jenis kesalahan diam-diam yang kamu latih untuk curigai sejak Level 1.
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Kapan ini benar-benar penting:</strong> Colab gratis memberi sekitar 12 GB RAM. Berkas 400 MB yang membengkak jadi 1,8 GB masih muat; tapi begitu kamu meng-<code>merge</code> dua tabel seperti itu, salinan sementaranya bisa menghabiskan semuanya dan sesimu mati tanpa penjelasan. Memilih tipe di baris <code>read_csv</code> adalah pencegahan termurah yang ada.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">PYTHON PRODUKSI · 5</span>
+      <h2>270 kali lebih cepat, dengan menghapus satu kata</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali kapan <code>.apply()</code> harus diganti, dan — sama pentingnya — kapan tidak perlu.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Empat cara mengerjakan hal yang sama</h3>
+        <span class="cek"><input type="checkbox" id="y5s1"><label for="y5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import time
+kecil = d2.head(50_000).copy()
+
+def ukur(f, n=3):
+    w = []
+    for _ in range(n):
+        t = time.perf_counter(); hasil = f(); w.append(time.perf_counter() - t)
+    return min(w), hasil
+
+# Tugas: hitung PPN 11% lalu bulatkan
+t1,h1 = ukur(lambda: [round(v*0.11) for v in kecil["nilai"].tolist()])
+t2,_  = ukur(lambda: [round(r.nilai*0.11) for r in kecil.itertuples()])
+t3,_  = ukur(lambda: kecil["nilai"].apply(lambda v: round(v*0.11)))
+t4,h4 = ukur(lambda: (kecil["nilai"]*0.11).round())
+
+print(f"  list comprehension : {t1*1000:8.1f} ms")
+print(f"  itertuples         : {t2*1000:8.1f} ms")
+print(f"  .apply(lambda)     : {t3*1000:8.1f} ms")
+print(f"  vektorisasi        : {t4*1000:8.1f} ms   &lt;- {t3/t4:.0f}x lebih cepat dari .apply")
+print("  hasil sama?", int(sum(h1)) == int(h4.sum()))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  list comprehension :      4.1 ms
+  itertuples         :     48.7 ms
+  .apply(lambda)     :     14.2 ms
+  vektorisasi        :      0.2 ms   &lt;- 72x lebih cepat dari .apply
+  hasil sama? True</code></pre></div>
+        </div>
+        <p>Empat cara, satu jawaban, dan rentangnya <strong>0,2 ms sampai 48,7 ms</strong>. Perhatikan yang mengejutkan: <code>itertuples</code> — yang sering diajarkan sebagai "cara benar mengulang DataFrame" — justru <strong>paling lambat</strong>, dan tiga kali lebih lambat daripada <code>.apply</code>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Di 800.000 baris, jaraknya melebar</h3>
+        <span class="cek"><input type="checkbox" id="y5s2"><label for="y5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>t8,_ = ukur(lambda: d2["nilai"].apply(lambda v: round(v*0.11)), n=1)
+t9,_ = ukur(lambda: (d2["nilai"]*0.11).round(), n=3)
+print(f"  .apply      : {t8:8.2f} detik")
+print(f"  vektorisasi : {t9*1000:8.1f} ms   &lt;- {t8/t9:.0f}x lebih cepat")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  .apply      :     0.32 detik
+  vektorisasi :      1.2 ms   &lt;- 270x lebih cepat</code></pre></div>
+        </div>
+        <p>72 kali di 50.000 baris, <strong>270 kali di 800.000</strong>. Selisihnya makin lebar seiring datanya membesar — persis seperti subquery berkorelasi di SQL Mahir L4.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Kenapa begitu.</strong> <code>.apply()</code> memanggil fungsi Python-mu sekali untuk <em>tiap baris</em> — 800.000 panggilan, masing-masing dengan biaya tetapnya sendiri. <code>(kolom * 0,11)</code> menyerahkan seluruh kolom ke kode C yang mengerjakannya sekaligus. Bukan Python-nya yang lambat; yang mahal adalah <em>bolak-baliknya</em>.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Dan sekarang bagian yang jujur: kapan .apply boleh dibiarkan</h3>
+        <span class="cek"><input type="checkbox" id="y5s3"><label for="y5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import numpy as np
+
+def kat(v):
+    if v &lt; 30000:  return "kecil"
+    if v &lt; 80000:  return "sedang"
+    return "besar"
+
+t5,_ = ukur(lambda: kecil["nilai"].apply(kat))
+t6,_ = ukur(lambda: pd.Series(np.select(
+        [kecil["nilai"]&lt;30000, kecil["nilai"]&lt;80000], ["kecil","sedang"], "besar")))
+t7,_ = ukur(lambda: pd.cut(kecil["nilai"], [-1,29999,79999,10**9],
+                           labels=["kecil","sedang","besar"]))
+print(f"  .apply(fungsi) : {t5*1000:8.1f} ms")
+print(f"  np.select      : {t6*1000:8.1f} ms   &lt;- {t5/t6:.1f}x")
+print(f"  pd.cut         : {t7*1000:8.1f} ms   &lt;- {t5/t7:.1f}x")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  .apply(fungsi) :      4.6 ms
+  np.select      :      3.3 ms   &lt;- 1.4x
+  pd.cut         :      1.3 ms   &lt;- 3.5x</code></pre></div>
+        </div>
+        <p><strong>Cuma 1,4 kali.</strong> Bukan 270. Untuk penggolongan bersyarat seperti ini, <code>.apply</code> hampir sama cepatnya dengan <code>np.select</code> — dan jauh lebih mudah dibaca.</p>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Jadi aturannya bukan "jangan pernah pakai .apply".</strong> Aturannya: <strong>ganti <code>.apply</code> untuk aritmetika</strong> (kali, bagi, tambah, bulatkan) — di situ untungnya ratusan kali lipat. <strong>Biarkan <code>.apply</code> untuk logika bercabang</strong> yang sulit divektorkan — di situ untungnya tipis dan harganya kode yang lebih sulit dibaca. Menukar keterbacaan demi 1,4 kali adalah pertukaran yang merugi.
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Dan aturan di atas semua aturan: ukur dulu.</strong> Kalau kode lambatmu jalan 4,6 ms, mempercepatnya 3 kali menghemat 3 milidetik — tidak ada artinya. Optimasi yang tidak diukur adalah menebak, dan menebak menghabiskan waktumu di tempat yang salah. Fungsi <code>ukur()</code> di atas cukup untuk seluruh karier analismu.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P6 ============ -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">PYTHON PRODUKSI · 6</span>
+      <h2>Berkas yang lebih besar daripada memorimu</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memproses berkas yang tidak muat di RAM, dan tahu harga yang harus dibayar untuk itu.</p>
+
+    <p>Cepat atau lambat seorang klien mengirimimu berkas yang membuat <code>pd.read_csv()</code> berhenti dengan <code>MemoryError</code>, atau membuat Colab-mu mati diam-diam. Ada dua jalan keluar, dan keduanya punya harga.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ukur puncak memorinya, bukan cuma waktunya</h3>
+        <span class="cek"><input type="checkbox" id="y6s1"><label for="y6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd, time, tracemalloc
+BERKAS = "transaksi.csv"
+
+def puncak(f):
+    """Jalankan f, kembalikan (detik, puncak MB, hasil)."""
+    tracemalloc.start()
+    t = time.perf_counter(); hasil = f(); dt = time.perf_counter() - t
+    _, puncak_b = tracemalloc.get_traced_memory(); tracemalloc.stop()
+    return dt, puncak_b/1e6, hasil
+
+def sekaligus():
+    return pd.read_csv(BERKAS).groupby("cabang")["nilai"].sum().sort_index()
+
+def bertahap(chunk=100_000):
+    total = {}
+    for bagian in pd.read_csv(BERKAS, usecols=["cabang","nilai"],
+                              dtype={"cabang":"category","nilai":"int32"},
+                              chunksize=chunk):
+        for k, v in bagian.groupby("cabang", observed=True)["nilai"].sum().items():
+            total[k] = total.get(k, 0) + v
+    return pd.Series(total).sort_index()
+
+t1, m1, h1 = puncak(sekaligus)
+t2, m2, h2 = puncak(bertahap)
+print(f"muat sekaligus   : {t1:5.2f} detik | puncak memori {m1:7.1f} MB")
+print(f"bertahap (chunk) : {t2:5.2f} detik | puncak memori {m2:7.1f} MB  &lt;- {m1/m2:.0f}x lebih hemat")
+print("hasil sama?", (h1.values == h2.values).all())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>muat sekaligus   :  0.71 detik | puncak memori   154.0 MB
+bertahap (chunk) :  0.63 detik | puncak memori     6.6 MB  &lt;- 23x lebih hemat
+hasil sama? True</code></pre></div>
+        </div>
+        <p><strong>154 MB jadi 6,6 MB, dan waktunya justru sedikit lebih cepat.</strong> Ini pertukaran yang hampir gratis — dan alasannya <code>usecols</code>: kita cuma membaca dua kolom dari tujuh, jadi lima kolom lain tidak pernah menyentuh memori sama sekali.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Pola <code>chunksize</code> selalu tiga langkah:</strong> siapkan wadah kosong di luar perulangan &rarr; untuk tiap bagian, hitung ringkasannya &rarr; gabungkan ke wadah. Yang tidak boleh: menumpuk potongannya lalu <code>pd.concat</code> di akhir — itu memuat semuanya juga, cuma dengan cara yang lebih berbelit.
+        </div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Yang tidak bisa dikerjakan bertahap:</strong> apa pun yang butuh melihat seluruh data sekaligus — median, urutan global, deduplikasi menyeluruh, atau <code>merge</code> besar. Untuk itu jawabannya bukan chunk, tapi <strong>serahkan ke basis data</strong>: muat ke DuckDB atau SQLite, lalu kerjakan dengan SQL. Itu sebabnya SQL Produksi kemarin datang sebelum hari ini.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Generator: memori nyaris nol, dan harganya</h3>
+        <span class="cek"><input type="checkbox" id="y6s2"><label for="y6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import csv
+
+def baris_besar(path, ambang):
+    """Generator: keluarkan baris satu per satu, jangan pernah menyimpan semuanya.
+
+    Kata `yield` yang membuatnya generator: fungsi ini BERHENTI di situ,
+    menyerahkan satu baris, lalu melanjutkan dari titik yang sama saat diminta lagi.
+    """
+    with open(path, newline="") as f:
+        for baris in csv.DictReader(f):
+            if int(baris["nilai"]) &gt; ambang:
+                yield baris
+
+def hitung_generator():
+    n = jml = 0
+    for b in baris_besar(BERKAS, 100_000):
+        n += 1; jml += int(b["nilai"])
+    return n, jml
+
+t3, m3, h3 = puncak(hitung_generator)
+print(f"generator : {t3:5.2f} detik | puncak memori {m3:7.1f} MB")
+print(f"  transaksi &gt; 100.000: {h3[0]:,} baris, nilai {h3[1]:,}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>generator :  7.37 detik | puncak memori     0.0 MB
+  transaksi &gt; 100,000: 57,459 baris, nilai 6,433,560,000</code></pre></div>
+        </div>
+        <p><strong>Puncak memori 0,0 MB — dan 7,37 detik, sepuluh kali lebih lambat daripada muat sekaligus.</strong> Itu harganya, dan halaman ini tidak akan menyembunyikannya.</p>
+        <div class="tabel-bungkus" style="margin-top:12px">
+          <table>
+            <thead><tr><th>Cara</th><th>Waktu</th><th>Puncak memori</th><th>Pakai kalau</th></tr></thead>
+            <tbody>
+              <tr><td>Muat sekaligus</td><td class="mono">0,71 dtk</td><td class="mono">154,0 MB</td><td>Datanya muat. <strong>Ini bawaan yang benar</strong> — jangan merumitkan tanpa sebab.</td></tr>
+              <tr><td><code>chunksize</code></td><td class="mono">0,63 dtk</td><td class="mono">6,6 MB</td><td>Tidak muat, tapi tugasnya bisa diringkas bertahap. <strong>Pilihan pertama saat mentok.</strong></td></tr>
+              <tr><td>Generator</td><td class="mono">7,37 dtk</td><td class="mono">~0 MB</td><td>Sangat besar, dan tugasnya sebaris-sebaris: menyaring, mengubah bentuk, menulis ulang.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Kenapa generator tetap layak dipelajari meski paling lambat.</strong> Ia satu-satunya yang <strong>tidak peduli seberapa besar berkasnya</strong> — 40 MB atau 40 GB, pemakaian memorinya sama. Dan <code>yield</code> muncul di banyak tempat lain: membaca log, memanggil API berhalaman, memproses berkas satu per satu dari folder. Tapi untuk pekerjaan analis sehari-hari, <code>chunksize</code> hampir selalu jawaban yang benar.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P7 ============ -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">PYTHON PRODUKSI · 7</span>
+      <h2>Skrip yang bisa dipasang di jadwal</h2>
+      <span class="waktu">± 90 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengubah notebook jadi perintah yang dijalankan dengan argumen, mencatat apa yang dikerjakannya, dan melapor gagal dengan cara yang bisa dibaca mesin penjadwal.</p>
+
+    <div class="bahaya">
+      <strong>Kenapa <code>print()</code> tidak cukup untuk skrip terjadwal.</strong> <code>print</code> tidak punya waktu, tidak punya tingkat kepentingan, tidak bisa dimatikan sebagian, dan semuanya masuk ke tempat yang sama — sehingga pesan "selesai" dan pesan "ada yang salah" terlihat serupa. Ketika skripmu berjalan jam 6 pagi tanpa ditonton siapa pun, satu-satunya bukti tentang apa yang terjadi adalah catatannya.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tambahkan fungsi hitung, lalu titik masuknya</h3>
+        <span class="cek"><input type="checkbox" id="y7s1"><label for="y7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Simpan sebagai <code>laporan/hitung.py</code>:</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Agregasi laporan. Tidak mencetak apa pun — hanya mengembalikan nilai."""
+import pandas as pd
+
+
+def omzet_per_cabang(df: pd.DataFrame) -&gt; pd.DataFrame:
+    """Ringkas omzet dan jumlah transaksi per cabang, terbesar dulu."""
+    return (df.groupby("cabang", observed=True)
+              .agg(transaksi=("nilai", "size"), omzet=("nilai", "sum"))
+              .sort_values("omzet", ascending=False)
+              .reset_index())</code></pre>
+        </div>
+        <div class="aksi" style="margin-top:12px">Lalu <code>laporan/cli.py</code> — ini inti hari ini. Baca komentarnya, bukan cuma salin.</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Titik masuk baris perintah.
+
+    python -m laporan.cli --berkas transaksi.csv --keluar hasil.csv --cabang Dago
+"""
+import argparse
+import logging
+import sys
+import time
+from pathlib import Path
+
+import pandas as pd
+
+from laporan.hitung import omzet_per_cabang
+
+TIPE = {"id": "int32", "cabang": "category", "pelanggan_id": "int32",
+        "produk": "category", "jumlah": "int8", "nilai": "int32"}
+log = logging.getLogger("laporan")
+
+
+def atur_log(rinci: bool) -&gt; None:
+    logging.basicConfig(
+        level=logging.DEBUG if rinci else logging.INFO,
+        format="%(asctime)s %(levelname)-7s %(name)s | %(message)s",
+        datefmt="%H:%M:%S",
+    )
+
+
+def argumen(argv=None) -&gt; argparse.Namespace:
+    p = argparse.ArgumentParser(description="Ringkas omzet per cabang dari berkas CSV.")
+    p.add_argument("--berkas", type=Path, required=True, help="CSV sumber")
+    p.add_argument("--keluar", type=Path, help="CSV hasil (kalau kosong: cetak ke layar)")
+    p.add_argument("--cabang", help="saring satu cabang saja")
+    p.add_argument("--rinci", action="store_true", help="tampilkan log tingkat DEBUG")
+    return p.parse_args(argv)
+
+
+def main(argv=None) -&gt; int:
+    a = argumen(argv)
+    atur_log(a.rinci)
+    mulai = time.perf_counter()
+
+    if not a.berkas.exists():
+        log.error("berkas tidak ditemukan: %s", a.berkas)
+        return 2                       # kode keluar bukan-nol = gagal
+
+    log.info("membaca %s", a.berkas)
+    df = pd.read_csv(a.berkas, dtype=TIPE, parse_dates=["tanggal"])
+    log.debug("terbaca %s baris, memori %.1f MB",
+              f"{len(df):,}", df.memory_usage(deep=True).sum() / 1e6)
+
+    if a.cabang:
+        sebelum = len(df)
+        df = df[df["cabang"] == a.cabang]
+        log.info("saring cabang=%s: %s -&gt; %s baris", a.cabang, f"{sebelum:,}", f"{len(df):,}")
+        if df.empty:
+            log.warning("tidak ada baris untuk cabang %r — hasilnya akan kosong", a.cabang)
+
+    hasil = omzet_per_cabang(df)
+
+    if a.keluar:
+        hasil.to_csv(a.keluar, index=False)
+        log.info("ditulis ke %s", a.keluar)
+    else:
+        print(hasil.to_string(index=False))
+
+    log.info("selesai dalam %.2f detik", time.perf_counter() - mulai)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jalankan seperti alat, bukan seperti notebook</h3>
+        <span class="cek"><input type="checkbox" id="y7s2"><label for="y7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Dari folder <code>proyek/</code> (dengan <code>transaksi.csv</code> di dalamnya):</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>python -m laporan.cli --help</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>usage: cli.py [-h] --berkas BERKAS [--keluar KELUAR] [--cabang CABANG]
+              [--rinci]
+
+Ringkas omzet per cabang dari berkas CSV.
+
+options:
+  -h, --help       show this help message and exit
+  --berkas BERKAS  CSV sumber
+  --keluar KELUAR  CSV hasil (kalau kosong: cetak ke layar)
+  --cabang CABANG  saring satu cabang saja
+  --rinci          tampilkan log tingkat DEBUG</code></pre></div>
+        </div>
+        <p><strong>Halaman bantuan itu kamu dapat gratis</strong> — argparse menyusunnya dari <code>help=</code> yang kamu tulis. Enam bulan lagi, ketika kamu lupa cara memakai skripmu sendiri, ini yang menyelamatkanmu. Begitu juga klien yang kamu serahi skripnya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>python -m laporan.cli --berkas transaksi.csv --cabang Dago --rinci</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>03:12:56 INFO    laporan | membaca transaksi.csv
+03:12:57 DEBUG   laporan | terbaca 800,000 baris, memori 18.4 MB
+03:12:57 INFO    laporan | saring cabang=Dago: 800,000 -&gt; 160,428 baris
+cabang  transaksi      omzet
+  Dago     160428 8346883000
+03:12:57 INFO    laporan | selesai dalam 1.35 detik</code></pre></div>
+        </div>
+        <p>Jamnya akan berbeda; angkanya tidak boleh. Perhatikan barisnya: tiap catatan punya <strong>waktu</strong>, <strong>tingkat</strong>, dan <strong>nama sumbernya</strong>. Baris <code>DEBUG</code> cuma muncul karena <code>--rinci</code> — tanpa itu ia diam.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Gagal dengan benar</h3>
+        <span class="cek"><input type="checkbox" id="y7s3"><label for="y7s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>python -m laporan.cli --berkas transaksi.csv --cabang Bogor</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>03:12:57 INFO    laporan | membaca transaksi.csv
+03:12:59 INFO    laporan | saring cabang=Bogor: 800,000 -&gt; 0 baris
+03:12:59 WARNING laporan | tidak ada baris untuk cabang 'Bogor' — hasilnya akan kosong
+Empty DataFrame</code></pre></div>
+        </div>
+        <p><strong>Ini bukan error, tapi wajib berbunyi.</strong> Ingat pelajaran dari Bekal Data Klien: <code>.sum()</code> pada tabel kosong mengembalikan 0, bukan error. Laporan berisi nol yang terkirim tanpa peringatan terlihat seperti "penjualan nihil", bukan seperti "salah ketik nama cabang". Satu baris <code>WARNING</code> memisahkan keduanya.</p>
+
+        <div class="aksi" style="margin-top:14px">Sekarang periksa <strong>kode keluar</strong>-nya — inilah yang dibaca cron, GitHub Actions, dan penjadwal mana pun untuk tahu skripmu berhasil atau tidak.</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>python -m laporan.cli &gt;/dev/null 2&gt;&amp;1;                       echo "lupa argumen wajib -&gt; $?"
+python -m laporan.cli --berkas hilang.csv &gt;/dev/null 2&gt;&amp;1;   echo "berkas tidak ada   -&gt; $?"
+python -m laporan.cli --berkas transaksi.csv &gt;/dev/null 2&gt;&amp;1; echo "berhasil           -&gt; $?"</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>lupa argumen wajib -&gt; 2
+berkas tidak ada   -&gt; 2
+berhasil           -&gt; 0</code></pre></div>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Aturannya baku di seluruh dunia perangkat lunak: 0 berarti berhasil, bukan-nol berarti gagal.</strong> Itu sebabnya <code>main()</code> mengembalikan angka dan <code>sys.exit(main())</code> menyerahkannya ke sistem. Skrip yang selalu keluar dengan 0 — misalnya karena error-nya ditangkap lalu ditelan — akan dilaporkan "berhasil" oleh penjadwal selamanya, meski tidak menghasilkan apa-apa. Ini bersaudara dekat dengan pelajaran <code>raise</code> di Bekal Kirim Hasil.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Kunci lingkungannya, supaya jalan juga di komputer lain</h3>
+        <span class="cek"><input type="checkbox" id="y7s4"><label for="y7s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>pip freeze &gt; requirements.txt
+head -5 requirements.txt</code></pre>
+        </div>
+        <p>Berkas itu mencatat versi persis tiap pustaka yang kamu pakai. Di komputer klien atau di server, <code>pip install -r requirements.txt</code> menyusun ulang lingkungan yang sama.</p>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Kenapa ini bukan formalitas.</strong> Kode di Studi Kasus mengandalkan perilaku pandas <strong>2.2.3</strong>. Di pandas 3.x, beberapa hal berubah — misalnya bagaimana kolom teks ditampilkan tipenya. Skrip yang jalan sempurna di laptopmu bisa memberi hasil berbeda di tempat lain, dan <em>tanpa error</em>. <code>requirements.txt</code> adalah cara termurah menghentikan seluruh kelas masalah itu.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Python Produksi selesai — dan jalur teknismu tuntas</h3>
+      <p>Kamu punya satu paket Python sungguhan sekarang: fungsi di berkasnya sendiri, bertanda tipe, ber-docstring, diuji 11 kali dalam seperempat detik, dengan titik masuk baris perintah yang punya halaman bantuan, catatan bertingkat, dan kode keluar yang benar.</p>
+      <p style="margin-top:10px"><strong>Yang berubah bukan kemampuanmu menulis Python — tapi apakah kode itu boleh dipercaya berjalan tanpa kamu tonton.</strong> Itu satu-satunya syarat sebelum kamu menagih klien secara bulanan, dan satu-satunya bentuk penghasilan freelance yang berulang tanpa mencari klien baru.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Enam angka dari modul ini yang layak kamu ingat, semuanya hasil pengukuran:</strong> memori 183 MB &rarr; 18,4 MB dengan memilih tipe; <code>.apply</code> &rarr; vektorisasi 270× di 800.000 baris; tapi cuma 1,4× untuk logika bercabang — jadi jangan pukul rata; <code>chunksize</code> memangkas puncak memori 23×; generator memakai ~0 MB tapi 10× lebih lambat; dan 11 uji berjalan dalam 0,26 detik.
+      </div>
+      <div class="bahaya" style="margin-top:12px">
+        <strong>Satu hal yang belum ditutup, dan saya sebut supaya kamu tahu.</strong> Seluruh kurikulum ini — termasuk modul ini — tidak pernah menyuruhmu menunjukkan kode ke <em>manusia lain</em> untuk dikoreksi. Di kantor, semua kodemu ditinjau orang. Cari satu komunitas data Indonesia, tunjukkan paket <code>laporan/</code> yang baru kamu buat, dan minta dikritik. Review pertama selalu terasa seperti serangan pribadi; sesudah yang kelima, ia jadi hal biasa. Lebih baik pengalaman itu terjadi sebelum hari pertama kerja.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">Seluruh rute selesai — kembali ke indeks →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua angka waktu, memori, dan keluaran di halaman ini dihasilkan dengan menjalankan kodenya sungguhan pada pandas 2.2.3 dan berkas 800.000 baris — bukan dari perkiraan.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

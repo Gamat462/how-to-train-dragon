@@ -1,0 +1,712 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/07cb0fb0-1240-471b-85b7-f691b8a585bd">← Kembali ke SQL Mahir L2</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">SQL Mahir L3</span>
+  <button type="button" data-hari="1" aria-selected="true">P1</button>
+  <button type="button" data-hari="2" aria-selected="false">P2</button>
+  <button type="button" data-hari="3" aria-selected="false">P3</button>
+  <button type="button" data-hari="4" aria-selected="false">P4</button>
+  <button type="button" data-hari="5" aria-selected="false">P5</button>
+  <button type="button" data-hari="6" aria-selected="false">P6</button>
+  <button type="button" data-hari="7" aria-selected="false">P7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">SQL Mahir · Level 3 dari 5 · lanjutan dari Level 2</span>
+    <h1>SQL Mahir L3: enam pola yang benar-benar ditanyakan</h1>
+    <p class="lede">Level 1 dan 2 memberimu bahannya. Level ini memberimu <strong>resepnya</strong> — enam bentuk soal yang muncul berulang-ulang di wawancara data analyst dan di pekerjaan sehari-hari, semuanya dibangun dari yang sudah kamu punya.</p>
+    <p class="lede" style="margin-top:10px">Yang membedakan level ini: tiap pola punya satu <strong>keputusan yang bukan milik SQL</strong> — ambang mana yang dipakai, baris mana yang dibuang, tahap apa yang dihitung. Menuliskan query-nya mudah; memilih dengan sadar itu yang membuatmu dibayar.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ P1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L3 · 1</span>
+      <h2>Deduplikasi, dan Rp 3,7 juta yang bisa hilang karenanya</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis pola deduplikasi baku, dan — lebih penting — tahu bahwa memilih cara membuangnya adalah keputusan bisnis, bukan teknis.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Sambungkan lagi basis datanya</h3>
+        <span class="cek"><input type="checkbox" id="p1s1"><label for="p1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3, pandas as pd
+con = sqlite3.connect("senja.db")
+def q(sql): return pd.read_sql(sql, con)
+
+q("""SELECT COUNT(*) AS pasangan_kembar FROM (
+       SELECT pesanan_id, produk_id FROM item
+       GROUP BY 1,2 HAVING COUNT(*) > 1)""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   pasangan_kembar
+0               72</code></pre></div>
+        </div>
+        <p>Ada <strong>72</strong> pasangan pesanan+produk yang muncul lebih dari sekali di tabel <code>item</code>. Artinya: dalam satu pesanan yang sama, produk yang sama tercatat di dua baris berbeda (atau lebih).</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Pola bakunya: ROW_NUMBER lalu ambil yang pertama</h3>
+        <span class="cek"><input type="checkbox" id="p1s2"><label for="p1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini pola deduplikasi yang dipakai di mana-mana, dan yang paling sering diminta di wawancara. Bandingkan tiga hasil sekaligus:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH bernomor AS (
+  SELECT id, pesanan_id, produk_id, jumlah, harga_saat_itu,
+         ROW_NUMBER() OVER (PARTITION BY pesanan_id, produk_id ORDER BY id) AS rn
+  FROM item)
+SELECT 'baris asli' AS versi, COUNT(*) AS baris,
+       SUM(jumlah*harga_saat_itu) AS nilai FROM bernomor
+UNION ALL SELECT 'ambil rn=1 (BUANG kembar)', COUNT(*), SUM(jumlah*harga_saat_itu)
+  FROM bernomor WHERE rn = 1
+UNION ALL SELECT 'digabung (JUMLAHKAN kembar)', COUNT(*), SUM(nilai) FROM (
+  SELECT pesanan_id, produk_id, SUM(jumlah*harga_saat_itu) AS nilai
+  FROM item GROUP BY 1,2)
+""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>                         versi  baris     nilai
+0                   baris asli    788  39407000
+1    ambil rn=1 (BUANG kembar)    715  35658000
+2  digabung (JUMLAHKAN kembar)    715  39407000</code></pre></div>
+        </div>
+        <div class="bahaya">
+          <strong>Berhenti di sini dan perhatikan baik-baik. Dua cara terakhir menghasilkan jumlah baris yang <em>sama persis</em> — 715 — tapi nilainya berbeda Rp 3.749.000.</strong>
+          <p style="margin-top:8px">Artinya: <strong>jumlah baris tidak bisa memberitahumu mana yang benar.</strong> Kebiasaan memeriksa jumlah baris yang kamu bangun di Level 1 tidak menyelamatkanmu di sini — dua-duanya lolos.</p>
+          <p style="margin-top:8px">Yang membedakan cuma satu pertanyaan, dan SQL tidak bisa menjawabnya: <em>ketika satu produk muncul dua kali dalam satu pesanan, itu kesalahan input atau dua baris pesanan yang sah?</em></p>
+        </div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Kalau kenyataannya…</th><th>Yang benar</th><th>Akibat kalau salah pilih</th></tr></thead>
+            <tbody>
+              <tr><td>Kasir tidak sengaja menyimpan dua kali</td><td>Buang (<code>rn=1</code>)</td><td>Pendapatan dilaporkan <strong>lebih besar</strong> dari kenyataan</td></tr>
+              <tr><td>Pelanggan memesan 2 kopi, lalu menambah 1 lagi</td><td>Jumlahkan</td><td>Pendapatan hilang <strong>Rp 3,7 juta</strong> — dan tidak ada yang tahu</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Cara memutuskannya bukan menebak — cari buktinya di data.</strong> Kalau tabelnya punya kolom waktu input, lihat selisihnya: dua baris yang tercatat dalam hitungan detik hampir pasti kesalahan sistem; yang berjarak lima menit hampir pasti tambahan pesanan sungguhan. Kalau tidak ada kolom waktu, tanyakan ke klien — dan sampaikan angkanya, seperti yang kamu pelajari di Bekal Data Klien: <em>"selisihnya Rp 3,7 juta, 9,5% dari total, tergantung jawaban Bapak/Ibu."</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kalau memang harus dibuang: baris mana yang disimpan?</h3>
+        <span class="cek"><input type="checkbox" id="p1s3"><label for="p1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Bagian <code>ORDER BY</code> di dalam <code>ROW_NUMBER</code> yang menentukan baris mana yang bertahan. Itu bukan hiasan:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Tujuan</th><th><code>ORDER BY</code> di dalam OVER</th></tr></thead>
+            <tbody>
+              <tr><td>Simpan yang paling awal masuk</td><td><code>ORDER BY id</code></td></tr>
+              <tr><td>Simpan yang paling akhir diperbarui</td><td><code>ORDER BY diperbarui_pada DESC, id DESC</code></td></tr>
+              <tr><td>Simpan yang datanya paling lengkap</td><td><code>ORDER BY (kolom IS NULL), id</code> — yang tidak NULL menang</td></tr>
+              <tr><td>Simpan yang nilainya terbesar</td><td><code>ORDER BY nilai DESC, id DESC</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>Selalu akhiri dengan kolom yang unik.</strong> Ini pelajaran Level 2 Hari 4 yang muncul lagi: kalau <code>ORDER BY diperbarui_pada DESC</code> tidak memecah seri sampai tuntas, dua baris dengan waktu yang sama akan dipilih secara acak — dan hasil query-mu berubah-ubah antar-jalankan tanpa datanya berubah. Menambahkan <code>, id DESC</code> di belakangnya menghilangkan seluruh masalah itu.
+        </div>
+        <div class="aksi">
+          <span class="tag">KERJAKAN SENDIRI</span>
+          <p>Tulis query yang menampilkan <strong>lima pasangan pesanan+produk dengan pengulangan terbanyak</strong>, berikut berapa kali muncul dan total jumlahnya. Ini yang akan kamu kirim ke klien sebagai contoh sebelum bertanya.</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>q("""SELECT pesanan_id, produk_id, COUNT(*) AS kali, SUM(jumlah) AS total_jumlah
+     FROM item GROUP BY 1,2 HAVING COUNT(*) > 1
+     ORDER BY kali DESC, pesanan_id LIMIT 5""")</code></pre></div>
+          <div class="kode"><pre><code>   pesanan_id  produk_id  kali  total_jumlah
+0         267          3     3             9
+1           1          1     2             5
+2           5          1     2             3
+3          26          7     2             5
+4          27          6     2             3</code></pre></div>
+          <p style="margin-top:8px">Pesanan 267 punya produk 3 (Teh Manis) di <strong>tiga</strong> baris, total 9 gelas. Sembilan gelas teh manis dalam satu pesanan itu masuk akal untuk rombongan — bukti yang condong ke "sah, jumlahkan". Tapi condong bukan pasti; yang memutuskan tetap pemilik kedainya.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L3 · 1 selesai</h3>
+      <p><strong>Catat:</strong> pola dedup = <code>ROW_NUMBER() OVER (PARTITION BY kunci ORDER BY pemilih)</code> lalu ambil <code>rn=1</code> · <strong>jumlah baris tidak bisa memberitahu mana yang benar</strong> — buang dan gabung sama-sama 715 baris tapi beda Rp 3,7 juta · <code>ORDER BY</code>-nya harus diakhiri kolom unik · dan keputusan buang-atau-gabung selalu milik klien, bukan milikmu.</p>
+    </div>
+  </section>
+
+  <!-- ============ P2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L3 · 2</span>
+      <h2>Top-N per kelompok</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjawab "dua terlaris di tiap cabang" — bentuk soal wawancara paling umum setelah dedup.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Polanya: beri nomor di dalam kelompok, lalu saring</h3>
+        <span class="cek"><input type="checkbox" id="p2s1"><label for="p2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH pen AS (
+  SELECT o.cabang, p.nama, SUM(i.jumlah) AS unit
+  FROM pesanan o
+  JOIN item i ON i.pesanan_id = o.id
+  JOIN produk p ON p.id = i.produk_id
+  WHERE o.status='selesai'
+  GROUP BY o.cabang, p.nama),
+per AS (
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY cabang ORDER BY unit DESC, nama) AS n
+  FROM pen)
+SELECT cabang, n, nama, unit FROM per WHERE n <= 2 ORDER BY cabang, n""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    cabang  n          nama  unit
+0     Dago  1     Kopi Susu    99
+1     Dago  2  Matcha Latte    99
+2   Kemang  1    Roti Bakar   126
+3   Kemang  2     Teh Manis   110
+4  Seturan  1    Roti Bakar   109
+5  Seturan  2     Americano    95</code></pre></div>
+        </div>
+        <div class="bahaya">
+          <strong>Lihat Dago: Kopi Susu dan Matcha Latte sama-sama 99 unit.</strong> <code>ROW_NUMBER</code> tetap memberi nomor 1 dan 2 — dan yang menentukan siapa nomor 1 adalah <code>, nama</code> di belakang <code>ORDER BY</code>, bukan penjualannya.
+          <p style="margin-top:8px">Kalau pemecah seri itu tidak ditulis, urutannya ditentukan mesin dan bisa berubah. Laporan "produk terlaris di Dago" akan berganti-ganti antara Kopi Susu dan Matcha Latte tanpa penjualannya berubah sedikit pun. Klien akan menganggapmu ceroboh, dan mereka benar.</p>
+        </div>
+        <div class="catatan">
+          <strong>Kalau serinya harus jujur ditampilkan, pakai <code>RANK</code>, bukan <code>ROW_NUMBER</code>.</strong> Dengan <code>RANK() ... WHERE n &lt;= 2</code>, Dago akan menampilkan <strong>dua produk yang sama-sama peringkat 1</strong> — dan itulah kenyataannya. Aturannya: <code>ROW_NUMBER</code> kalau kamu butuh <em>tepat</em> N baris; <code>RANK</code> kalau kamu butuh <em>semua</em> yang layak masuk N besar.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa harus window function, bukan LIMIT</h3>
+        <span class="cek"><input type="checkbox" id="p2s2"><label for="p2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Naluri pertama orang: <code>ORDER BY unit DESC LIMIT 2</code>. Itu memberi dua produk terlaris <strong>di seluruh kedai</strong>, bukan dua per cabang. <code>LIMIT</code> memotong hasil akhir; ia tidak tahu apa-apa tentang kelompok.</p>
+        <p>Tidak ada cara menulis "LIMIT per kelompok" di SQL standar. Window function adalah jawabannya, dan itu sebabnya soal ini dipakai sebagai penyaring di wawancara — ia memisahkan orang yang hafal <code>LIMIT</code> dari orang yang paham <code>PARTITION BY</code>.</p>
+        <div class="catatan">
+          <strong>Beberapa mesin punya jalan pintas.</strong> BigQuery dan Snowflake mendukung <code>QUALIFY</code>, yang menyaring hasil window function tanpa perlu CTE:
+          <div class="kode" style="margin-top:8px"><pre><code>SELECT cabang, nama, unit FROM pen
+QUALIFY ROW_NUMBER() OVER (PARTITION BY cabang ORDER BY unit DESC, nama) &lt;= 2</code></pre></div>
+          <p style="margin-top:8px">Lebih pendek, tapi <strong>tidak ada di SQLite dan PostgreSQL</strong>. Kenali bentuknya — kalau nanti kamu bekerja dengan BigQuery, ini menghemat banyak CTE.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L3 · 2 selesai</h3>
+      <p><strong>Catat:</strong> beri nomor dengan <code>ROW_NUMBER() OVER (PARTITION BY kelompok ORDER BY ukuran DESC, pemecah)</code>, lalu saring di CTE luar · <code>LIMIT</code> tidak bisa menggantikannya karena memotong hasil akhir, bukan per kelompok · <code>RANK</code> kalau seri harus ditampilkan apa adanya · <code>QUALIFY</code> ada di BigQuery, tidak di SQLite/PostgreSQL.</p>
+    </div>
+  </section>
+
+  <!-- ============ P3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L3 · 3</span>
+      <h2>Gaps &amp; islands: menemukan rentetan yang tidak terputus</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengelompokkan baris yang berurutan jadi "pulau", dengan trik yang terlihat ajaib sampai kamu melihat kenapa ia bekerja.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bentuk soalnya</h3>
+        <span class="cek"><input type="checkbox" id="p3s1"><label for="p3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>"Berapa hari berturut-turut pelanggan ini datang?" · "Berapa lama mesin menyala tanpa putus?" · "Berapa bulan berturut-turut penjualan naik?" — semuanya soal yang sama: <strong>kelompokkan baris yang berurutan, pisahkan di tempat yang bolong.</strong></p>
+        <p>Tanggal kunjungan pelanggan 1:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("SELECT DISTINCT date(waktu) AS d FROM kunjungan WHERE pelanggan_id=1 ORDER BY d")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>            d
+0  2024-03-21
+1  2024-03-22
+2  2024-03-23
+3  2024-03-25
+4  2024-04-03
+5  2024-04-04
+6  2024-04-05</code></pre></div>
+        </div>
+        <p>Dengan mata: tiga rentetan — 21–23 Maret (3 hari), 25 Maret sendirian, lalu 3–5 April (3 hari). Sekarang buat SQL yang menemukannya sendiri.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Triknya: kurangi tanggal dengan nomor urutnya</h3>
+        <span class="cek"><input type="checkbox" id="p3s2"><label for="p3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ide intinya satu kalimat: <strong>kalau tanggalnya naik satu-satu dan nomor urutnya juga naik satu-satu, selisih keduanya tetap.</strong> Begitu ada hari yang bolong, selisihnya melompat — dan lompatan itulah batas pulaunya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH h AS (SELECT DISTINCT date(waktu) AS d FROM kunjungan WHERE pelanggan_id=1),
+b AS (SELECT d,
+        ROW_NUMBER() OVER (ORDER BY d) AS n,
+        date(d, '-' || ROW_NUMBER() OVER (ORDER BY d) || ' day') AS penanda
+      FROM h)
+SELECT d, n, penanda FROM b ORDER BY d""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>            d  n     penanda
+0  2024-03-21  1  2024-03-20
+1  2024-03-22  2  2024-03-20
+2  2024-03-23  3  2024-03-20
+3  2024-03-25  4  2024-03-21
+4  2024-04-03  5  2024-03-29
+5  2024-04-04  6  2024-03-29
+6  2024-04-05  7  2024-03-29</code></pre></div>
+        </div>
+        <p>Lihat kolom <code>penanda</code>. Tiga hari pertama semuanya menghasilkan <strong>2024-03-20</strong>. Tanggal 25 sendirian menghasilkan <strong>2024-03-21</strong>. Tiga hari April semuanya <strong>2024-03-29</strong>.</p>
+        <p><strong>Nilai penandanya sendiri tidak berarti apa-apa</strong> — 2024-03-20 bukan tanggal yang penting. Yang penting: baris yang berurutan menghasilkan penanda yang sama, dan itu cukup untuk <code>GROUP BY</code>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH h AS (SELECT DISTINCT date(waktu) AS d FROM kunjungan WHERE pelanggan_id=1),
+b AS (SELECT d, date(d, '-' || ROW_NUMBER() OVER (ORDER BY d) || ' day') AS penanda FROM h)
+SELECT COUNT(*) AS panjang_rentetan, MIN(d) AS mulai, MAX(d) AS selesai
+FROM b GROUP BY penanda ORDER BY mulai""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   panjang_rentetan       mulai     selesai
+0                 3  2024-03-21  2024-03-23
+1                 1  2024-03-25  2024-03-25
+2                 3  2024-04-03  2024-04-05</code></pre></div>
+        </div>
+        <p>Persis yang kamu lihat dengan mata — sekarang dikerjakan query, dan tetap benar untuk 20 pelanggan atau 20 juta baris.</p>
+        <div class="catatan">
+          <strong>Kalau datanya berupa angka berurutan (bukan tanggal), triknya lebih sederhana:</strong> <code>nomor_baris - nilai</code>. Untuk deret 4, 5, 6, 9, 10 hasilnya 3, 3, 3, 5, 5 — dua pulau. Bentuknya sama, cuma pengurangannya langsung.
+          <p style="margin-top:8px">Perhatikan juga <code>DISTINCT date(waktu)</code> di awal: tanpa itu, dua kunjungan di hari yang sama akan dihitung sebagai dua langkah dan seluruh penandanya berantakan. Untuk soal beruntun-hari, satu hari harus jadi satu baris dulu.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L3 · 3 selesai</h3>
+      <p><strong>Catat:</strong> gaps &amp; islands = kurangi nilai dengan nomor urutnya, lalu <code>GROUP BY</code> hasilnya · baris berurutan menghasilkan penanda yang sama · nilai penandanya tidak berarti apa-apa, hanya kesamaannya yang dipakai · dan pastikan satu satuan waktu = satu baris sebelum memulai.</p>
+    </div>
+  </section>
+
+  <!-- ============ P4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L3 · 4</span>
+      <h2>Sesionisasi, dan cara memilih ambangnya</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengelompokkan peristiwa jadi sesi, dan memilih ambang jedanya <em>dari sebaran datanya</em> — bukan dari angka bulat yang enak didengar.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lihat sebarannya dulu, jangan langsung menentukan ambang</h3>
+        <span class="cek"><input type="checkbox" id="p4s1"><label for="p4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hampir semua orang langsung memakai "30 menit" karena itu angka bawaan Google Analytics. Untuk kedai kopi, itu tidak berarti apa-apa. Cari dulu apakah datanya punya batas alami.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH k AS (
+  SELECT pelanggan_id, waktu,
+         LAG(waktu) OVER (PARTITION BY pelanggan_id ORDER BY waktu) AS sebelum
+  FROM kunjungan)
+SELECT CAST(julianday(waktu) - julianday(sebelum) AS INT) AS jeda_hari, COUNT(*) AS n
+FROM k WHERE sebelum IS NOT NULL
+GROUP BY 1 ORDER BY 1""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   jeda_hari   n
+0          0  55
+1          1  19
+2          2   9
+3          4   7
+4          5  10
+5          8   6
+6          9  11
+7         19  17
+8         20   4</code></pre></div>
+        </div>
+        <div class="catatan">
+          <strong>Sebaran ini bercerita.</strong> Jeda menumpuk di 0–2 hari (83 kali), lalu ada kelompok di 4–5, lalu 8–9, lalu 19–20. Dan perhatikan yang <em>tidak</em> ada: <strong>tidak ada satu pun jeda 3, 6, 7, atau 10–18 hari.</strong>
+          <p style="margin-top:8px">Celah antara 5 dan 8 itu tempat yang wajar untuk memasang batas. Ambang <strong>7 hari</strong> jatuh di ruang kosong — jadi menggesernya sedikit ke kiri atau kanan tidak mengubah hasil sama sekali. Itu ciri ambang yang kokoh.</p>
+          <p style="margin-top:8px">Bandingkan dengan memasang ambang di 1 hari: 19 pasang kunjungan berada tepat di batas itu, jadi keputusan sekecil apa pun mengubah banyak hasil. Ambang yang jatuh di tengah tumpukan data selalu rapuh.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tiga langkah: tandai, jumlahkan berjalan, kelompokkan</h3>
+        <span class="cek"><input type="checkbox" id="p4s2"><label for="p4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH k AS (
+  SELECT pelanggan_id, date(waktu) AS d,
+         LAG(date(waktu)) OVER (PARTITION BY pelanggan_id ORDER BY waktu) AS sebelum
+  FROM kunjungan),
+t AS (   -- 1. tandai baris yang MEMULAI sesi baru
+  SELECT *, CASE WHEN sebelum IS NULL
+                 OR julianday(d) - julianday(sebelum) > 7
+            THEN 1 ELSE 0 END AS mulai
+  FROM k),
+b AS (   -- 2. jumlahkan berjalan -> jadi nomor sesi
+  SELECT *, SUM(mulai) OVER (PARTITION BY pelanggan_id ORDER BY d
+              ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS sesi
+  FROM t)
+SELECT pelanggan_id, sesi, COUNT(*) AS kunjungan,
+       MIN(d) AS mulai, MAX(d) AS akhir,
+       CAST(julianday(MAX(d)) - julianday(MIN(d)) AS INT) AS lama_hari
+FROM b WHERE pelanggan_id <= 3
+GROUP BY 1,2 ORDER BY 1,2""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   pelanggan_id  sesi  kunjungan       mulai       akhir  lama_hari
+0             1     1          4  2024-03-21  2024-03-25          4
+1             1     2          4  2024-04-03  2024-04-05          2
+2             2     1          9  2024-03-01  2024-03-18         17
+3             3     1          4  2024-03-21  2024-03-27          6
+4             3     2          5  2024-04-05  2024-04-22         17</code></pre></div>
+        </div>
+        <p>Pelanggan 1 punya dua <strong>periode aktif</strong>; pelanggan 2 satu periode panjang. Perhatikan bahwa pelanggan 1 punya 4 kunjungan di sesi pertama — padahal Hari 3 menemukan tiga hari berturut-turut. Bedanya: sesi mengizinkan jeda sampai 7 hari, jadi 25 Maret ikut masuk sesi pertama.</p>
+        <div class="catatan">
+          <strong>Pola tiga langkah ini — tandai, jumlahkan berjalan, kelompokkan — adalah salah satu yang paling sering dipakai di SQL analitis</strong>, dan bisa dipindah ke banyak soal lain: menandai perubahan status (kapan pesanan berpindah dari "diproses" ke "selesai"), memotong periode harga yang berlaku, atau memisahkan blok waktu mesin menyala.
+          <p style="margin-top:8px">Perhatikan bahwa langkah kedua memakai <code>ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> secara eksplisit. Di sini <code>RANGE</code> bawaan justru <strong>salah</strong>: kalau dua kunjungan jatuh di tanggal yang sama, <code>RANGE</code> akan menjumlahkan keduanya sekaligus dan nomor sesinya melompat. Ini persis bahaya Level 2 Hari 2, muncul di tempat yang tidak terduga.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L3 · 4 selesai</h3>
+      <p><strong>Catat:</strong> lihat <strong>sebaran jeda</strong> sebelum memilih ambang — ambang yang baik jatuh di ruang kosong, bukan di tengah tumpukan · polanya: <code>LAG</code> untuk menandai, <code>SUM(...) OVER</code> berjalan untuk menomori, <code>GROUP BY</code> untuk meringkas · tulis <code>ROWS</code> secara eksplisit, karena <code>RANGE</code> bawaan akan salah kalau ada waktu kembar.</p>
+    </div>
+  </section>
+
+  <!-- ============ P5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L3 · 5</span>
+      <h2>Pivot tanpa PIVOT</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengubah baris jadi kolom dengan cara yang berfungsi di semua mesin, dan tahu kapan sebaiknya tidak melakukannya di SQL sama sekali.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>SUM + CASE WHEN: satu kolom per nilai</h3>
+        <span class="cek"><input type="checkbox" id="p5s1"><label for="p5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Klien hampir selalu ingin tabel bulan × cabang — bulan ke bawah, cabang ke samping. Data mentahnya berbentuk panjang (satu baris per bulan per cabang). Mengubahnya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+SELECT substr(o.tanggal,1,7) AS bulan,
+  SUM(CASE WHEN o.cabang='Kemang'  THEN i.jumlah*i.harga_saat_itu ELSE 0 END) AS Kemang,
+  SUM(CASE WHEN o.cabang='Dago'    THEN i.jumlah*i.harga_saat_itu ELSE 0 END) AS Dago,
+  SUM(CASE WHEN o.cabang='Seturan' THEN i.jumlah*i.harga_saat_itu ELSE 0 END) AS Seturan,
+  SUM(i.jumlah*i.harga_saat_itu) AS Total
+FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+WHERE o.status='selesai'
+GROUP BY 1 ORDER BY 1""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>     bulan   Kemang     Dago  Seturan    Total
+0  2024-01  1255000  2834000  1879000  5968000
+1  2024-02  1694000  2731000  1926000  6351000
+2  2024-03  2348000  1286000  1940000  5574000
+3  2024-04  1756000  1664000  2334000  5754000
+4  2024-05  2832000  1568000  1872000  6272000
+5  2024-06  1784000  2582000  1454000  5820000</code></pre></div>
+        </div>
+        <p>Sekarang polanya terlihat, dan tidak terlihat di bentuk panjang: <strong>Kemang naik dari 1,26 juta ke 2,83 juta sementara Dago turun dari 2,83 ke 1,57 lalu naik lagi.</strong> Keduanya bergerak berlawanan — itu pertanyaan yang layak diajukan ke pemiliknya.</p>
+        <div class="catatan">
+          <strong>Kolom <code>Total</code> di ujung bukan hiasan — itu pemeriksaannya.</strong> Jumlahkan tiga kolom cabang di baris mana pun dan hasilnya harus persis sama dengan <code>Total</code>. Kalau ada cabang keempat yang lupa kamu tulis <code>CASE</code>-nya, angkanya tidak akan tutup dan kamu langsung tahu. Tanpa kolom itu, cabang yang terlewat menghilang diam-diam.
+          <p style="margin-top:8px">Coba sendiri: 1.255.000 + 2.834.000 + 1.879.000 = <strong>5.968.000</strong> ✓</p>
+        </div>
+        <div class="bahaya">
+          <strong>Kelemahan cara ini: nama kolomnya harus kamu ketik satu per satu.</strong> Tiga cabang masih enak. Tiga puluh produk tidak. Dan kalau klien membuka cabang keempat bulan depan, query-nya <strong>tidak error</strong> — cabang baru itu cuma tidak muncul, sementara <code>Total</code> ikut naik. Selisih yang tidak tutup itu satu-satunya tanda.
+          <p style="margin-top:8px">SQL standar tidak punya pivot dinamis. <code>PIVOT</code> ada di SQL Server dan BigQuery dengan sintaks berbeda-beda, dan tetap butuh daftar nilainya disebutkan. <strong>Kalau kolomnya banyak atau berubah-ubah, jangan pivot di SQL</strong> — ambil bentuk panjangnya, lalu pakai <code>df.pivot_table()</code> di pandas (Modul M4) atau biarkan alat dashboard yang mengurusnya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L3 · 5 selesai</h3>
+      <p><strong>Catat:</strong> pivot di SQL = <code>SUM(CASE WHEN kolom='nilai' THEN ukuran ELSE 0 END)</code> per nilai · <strong>selalu tambahkan kolom Total</strong> sebagai pemeriksaan bahwa tidak ada kategori yang terlewat · nilai baru tidak memicu error, ia cuma hilang · kalau kategorinya banyak atau berubah, pivot di pandas, bukan di SQL.</p>
+    </div>
+  </section>
+
+  <!-- ============ P6 ============ -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L3 · 6</span>
+      <h2>Funnel: dan kenapa tahapnya harus menyempit</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyusun funnel dari satu tabel dasar, dan mengenali funnel yang tahapnya tidak benar-benar bersarang.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Hitung sekali, saring berkali-kali</h3>
+        <span class="cek"><input type="checkbox" id="p6s1"><label for="p6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kesalahan umum: menulis empat query terpisah untuk empat tahap. Selain lambat, angkanya bisa tidak konsisten kalau salah satu syaratnya beda sedikit. Yang benar: satu CTE dasar berisi <strong>satu baris per orang</strong>, lalu tiap tahap cuma menyaringnya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH b AS (
+  SELECT p.id,
+         COUNT(o.id) AS pesanan,
+         COALESCE((SELECT SUM(i.jumlah*i.harga_saat_itu)
+                   FROM pesanan o2 JOIN item i ON i.pesanan_id = o2.id
+                   WHERE o2.pelanggan_id = p.id AND o2.status='selesai'), 0) AS belanja
+  FROM pelanggan p LEFT JOIN pesanan o ON o.pelanggan_id = p.id
+  GROUP BY p.id)
+SELECT '1. terdaftar' AS tahap, COUNT(*) AS orang, 100.0 AS persen FROM b
+UNION ALL SELECT '2. pernah memesan', COUNT(*),
+  ROUND(COUNT(*)*100.0/(SELECT COUNT(*) FROM b),1) FROM b WHERE pesanan > 0
+UNION ALL SELECT '3. memesan 20 kali atau lebih', COUNT(*),
+  ROUND(COUNT(*)*100.0/(SELECT COUNT(*) FROM b),1) FROM b WHERE pesanan >= 20
+UNION ALL SELECT '4. belanja di atas Rp 2 juta', COUNT(*),
+  ROUND(COUNT(*)*100.0/(SELECT COUNT(*) FROM b),1) FROM b WHERE belanja > 2000000""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>                           tahap  orang  persen
+0                   1. terdaftar     20   100.0
+1              2. pernah memesan     17    85.0
+2  3. memesan 20 kali atau lebih     12    60.0
+3   4. belanja di atas Rp 2 juta      9    45.0</code></pre></div>
+        </div>
+        <p>20 → 17 → 12 → 9. Turun di tiap tahap, seperti seharusnya funnel.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Funnel yang tidak bersarang adalah funnel yang bohong</h3>
+        <span class="cek"><input type="checkbox" id="p6s2"><label for="p6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><strong>Funnel hanya sah kalau tiap tahap benar-benar bagian dari tahap sebelumnya.</strong> Angka 20 → 17 → 12 → 9 turun rapi, jadi mudah sekali menganggapnya beres. Jangan. Periksa:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH b AS ( ...CTE yang sama seperti di atas... )
+SELECT COUNT(*) AS lolos_tahap4_gagal_tahap3
+FROM b WHERE belanja > 2000000 AND pesanan &lt; 20""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   lolos_tahap4_gagal_tahap3
+0                          1</code></pre></div>
+        </div>
+        <div class="bahaya">
+          <strong>Satu, bukan nol. Funnel yang baru saja kamu buat itu bohong.</strong>
+          <div class="kode" style="margin-top:8px"><pre><code>q("SELECT nama, pesanan, belanja FROM b WHERE belanja > 2000000 AND pesanan &lt; 20")</code></pre></div>
+          <div class="kode"><pre><code>   nama  pesanan  belanja
+0  Tari       19  2005000</code></pre></div>
+          <p style="margin-top:8px">Tari memesan <strong>19</strong> kali — satu di bawah ambang tahap 3 — tapi belanjanya <strong>Rp 2.005.000</strong>, lima ribu rupiah di atas ambang tahap 4. Dia terhitung di tahap 4 tanpa pernah masuk tahap 3.</p>
+          <p style="margin-top:8px">Akibatnya angka 9 (45%) di tahap terakhir <strong>bukan konversi dari 12</strong>. Menyebutnya "45% pelanggan sampai tahap akhir" salah, karena satu dari sembilan orang itu melompati tahap sebelumnya.</p>
+        </div>
+        <p>Perbaikannya: <strong>susun syaratnya bertumpuk</strong>, jangan berdiri sendiri-sendiri.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>-- tahap 4 yang benar-benar bersarang
+UNION ALL SELECT '4. dan belanja di atas Rp 2 juta', COUNT(*),
+  ROUND(COUNT(*)*100.0/(SELECT COUNT(*) FROM b),1)
+  FROM b WHERE pesanan >= 20 AND belanja > 2000000</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>                              tahap  orang  persen
+0                      1. terdaftar     20   100.0
+1                 2. pernah memesan     17    85.0
+2     3. memesan 20 kali atau lebih     12    60.0
+3  4. dan belanja di atas Rp 2 juta      8    40.0</code></pre></div>
+        </div>
+        <div class="catatan">
+          <strong>Sembilan berubah jadi delapan.</strong> Selisih satu orang, dan di data 20 baris itu terlihat sepele. Di data 200.000 pelanggan, kesalahan yang sama menggeser angka konversi beberapa persen — cukup untuk membuat keputusan belanja iklan meleset, dan tidak akan pernah ketahuan karena angkanya tetap "turun rapi".
+          <p style="margin-top:8px"><strong>Jadikan pemeriksaan ini bagian dari tiap funnel yang kamu buat</strong>, sebelum angkanya dikirim ke siapa pun. Satu baris query, dan ia menangkap jenis kesalahan yang tidak menimbulkan gejala apa pun.</p>
+        </div>
+        <div class="catatan">
+          <strong>Satu hal lagi yang membedakan funnel amatir dan profesional: urutan waktu.</strong> Funnel yang benar mensyaratkan tahap 2 terjadi <em>setelah</em> tahap 1, tahap 3 setelah tahap 2. Query di atas tidak memeriksa waktu sama sekali — ia cuma menghitung siapa yang pernah melakukan apa. Untuk kedai kopi itu cukup; untuk funnel pendaftaran atau checkout, mengabaikan urutan waktu membuat angkamu terlalu bagus dan tidak bisa dipertanggungjawabkan.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L3 · 6 selesai</h3>
+      <p><strong>Catat:</strong> satu CTE dasar berisi satu baris per orang, lalu tiap tahap menyaringnya — jangan empat query terpisah · syarat tahap harus <strong>bertumpuk</strong>, bukan berdiri sendiri · periksa dengan menghitung yang lolos tahap N tapi gagal tahap N−1, harus nol · dan funnel yang mengabaikan urutan waktu selalu terlihat lebih bagus dari kenyataannya.</p>
+    </div>
+  </section>
+
+  <!-- ============ P7 ============ -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L3 · 7</span>
+      <h2>Ulangan dari ingatan</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Enam pola, enam pertanyaan — jawab tanpa membuka halaman sebelumnya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Delapan soal</h3>
+        <span class="cek"><input type="checkbox" id="p7s1"><label for="p7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Tulis pola deduplikasi baku dari ingatan. Bagian mana yang menentukan baris mana yang bertahan?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Dua cara membereskan baris kembar menghasilkan jumlah baris yang sama. Bagaimana kamu memutuskan mana yang benar?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Kenapa <code>LIMIT 2</code> tidak bisa menjawab "dua terlaris per cabang"?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Jelaskan trik gaps &amp; islands dalam satu kalimat. Kenapa nilai penandanya tidak penting?</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Bagaimana cara memilih ambang jeda untuk sesionisasi, dan kenapa ambang di tengah tumpukan data itu buruk?</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> Pola tiga langkah sesionisasi. Kenapa frame-nya harus <code>ROWS</code>, bukan <code>RANGE</code>?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> Kenapa tabel pivot selalu perlu kolom Total?</p>
+        <p style="margin-bottom:12px"><strong>8.</strong> Apa artinya funnel "tidak bersarang", dan bagaimana cara memeriksanya?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <code>ROW_NUMBER() OVER (PARTITION BY kunci ORDER BY pemilih)</code> lalu ambil <code>rn = 1</code>. Bagian <code>ORDER BY</code> di dalam <code>OVER</code> yang menentukan siapa bertahan — dan harus diakhiri kolom unik supaya hasilnya stabil.</p>
+            <p><strong>2.</strong> Tidak bisa dari SQL. Buang atau jumlahkan adalah keputusan bisnis: apakah baris kembar itu kesalahan input atau tambahan pesanan yang sah. Cari buktinya (selisih waktu input), lalu tanyakan ke klien sambil menyebut dampak rupiahnya — di data latihan ini Rp 3,7 juta, 9,5% dari total.</p>
+            <p><strong>3.</strong> <code>LIMIT</code> memotong hasil akhir, bukan tiap kelompok. Ia memberi dua terlaris di seluruh kedai. Yang dibutuhkan <code>ROW_NUMBER() OVER (PARTITION BY cabang ...)</code> lalu saring.</p>
+            <p><strong>4.</strong> Kurangi nilainya dengan nomor urutnya; baris yang berurutan menghasilkan penanda yang sama. Nilai penandanya tidak berarti apa-apa — yang dipakai hanya <em>kesamaannya</em> sebagai kunci <code>GROUP BY</code>.</p>
+            <p><strong>5.</strong> Lihat sebaran jedanya dan cari ruang kosong. Ambang di ruang kosong bisa digeser sedikit tanpa mengubah hasil; ambang di tengah tumpukan membuat banyak baris berpindah kelompok hanya karena keputusan kecil, jadi hasilnya rapuh dan sulit dipertahankan kalau ditanya.</p>
+            <p><strong>6.</strong> <code>LAG</code> untuk menandai awal sesi → <code>SUM(...) OVER</code> berjalan untuk menomori → <code>GROUP BY</code> untuk meringkas. Harus <code>ROWS</code> karena <code>RANGE</code> memperlakukan waktu yang kembar sebagai satu blok, sehingga dua peristiwa di detik yang sama membuat nomor sesinya melompat.</p>
+            <p><strong>7.</strong> Sebagai pemeriksaan bahwa tidak ada kategori yang terlewat. Nilai baru yang belum ditulis <code>CASE</code>-nya tidak memicu error — ia hanya hilang dari kolom-kolomnya sementara Total tetap menghitungnya, jadi baris yang tidak tutup adalah satu-satunya tanda.</p>
+            <p><strong>8.</strong> Tahap N tidak sepenuhnya berisi orang dari tahap N−1. Periksa dengan menghitung berapa yang lolos tahap N tapi gagal tahap N−1 — harus nol. Di data latihan ini hasilnya <strong>1</strong> (Tari: 19 pesanan, Rp 2.005.000), jadi funnel versi pertama tidak sah dan tahap 4 harus ditulis bertumpuk — hasilnya berubah dari 9 jadi 8.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Soal terapan: gabungkan tiga pola</h3>
+        <span class="cek"><input type="checkbox" id="p7s2"><label for="p7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">
+          <span class="tag">KERJAKAN, ± 30 MENIT</span>
+          <p>Untuk tiap pelanggan yang pernah berkunjung: berapa <strong>periode aktif</strong> yang dia punya (ambang 7 hari), berapa <strong>rentetan hari berturut-turut terpanjang</strong>, dan berapa total kunjungannya. Urutkan dari yang rentetannya terpanjang.</p>
+          <p style="margin-top:6px">Petunjuk: butuh dua pola berbeda dari Hari 3 dan Hari 4, digabung di akhir.</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>q("""
+WITH h AS (SELECT DISTINCT pelanggan_id, date(waktu) AS d FROM kunjungan),
+
+-- pola Hari 3: rentetan hari berturut-turut
+pulau AS (
+  SELECT pelanggan_id, d,
+         date(d, '-' || ROW_NUMBER() OVER (PARTITION BY pelanggan_id ORDER BY d) || ' day') AS penanda
+  FROM h),
+rentetan AS (
+  SELECT pelanggan_id, COUNT(*) AS panjang
+  FROM pulau GROUP BY pelanggan_id, penanda),
+
+-- pola Hari 4: periode aktif, ambang 7 hari
+tandai AS (
+  SELECT pelanggan_id, d,
+         CASE WHEN LAG(d) OVER (PARTITION BY pelanggan_id ORDER BY d) IS NULL
+                OR julianday(d) - julianday(LAG(d) OVER (PARTITION BY pelanggan_id ORDER BY d)) > 7
+              THEN 1 ELSE 0 END AS mulai
+  FROM h),
+periode AS (
+  SELECT pelanggan_id, SUM(mulai) AS jumlah_periode FROM tandai GROUP BY pelanggan_id)
+
+SELECT p.nama,
+       per.jumlah_periode,
+       MAX(r.panjang) AS rentetan_terpanjang,
+       (SELECT COUNT(*) FROM h WHERE h.pelanggan_id = per.pelanggan_id) AS total_hari
+FROM periode per
+JOIN rentetan r ON r.pelanggan_id = per.pelanggan_id
+JOIN pelanggan p ON p.id = per.pelanggan_id
+GROUP BY p.nama, per.jumlah_periode, per.pelanggan_id
+ORDER BY rentetan_terpanjang DESC, total_hari DESC
+LIMIT 6""")</code></pre></div>
+          <div class="kode"><pre><code>    nama  jumlah_periode  rentetan_terpanjang  total_hari
+0   Agus               2                    4           6
+1  Fajar               4                    3          10
+2   Maya               4                    3           9
+3   Bayu               1                    3           8
+4  Intan               4                    3           7
+5   Rina               2                    3           7</code></pre></div>
+          <p style="margin-top:8px"><strong>Bacanya:</strong> Agus datang paling rutin — 4 hari berturut-turut, hanya 2 periode. Fajar datang paling sering (10 hari) tapi tersebar di <strong>4 periode</strong> terpisah: sering, tapi tidak teratur. Bayu cuma punya <strong>satu</strong> periode aktif dari 8 hari kunjungan — dia datang rajin selama beberapa minggu lalu berhenti sama sekali.</p>
+          <p style="margin-top:8px">Tiga pola perilaku yang berbeda, dan tidak satu pun terlihat dari angka "berapa kali datang". Bayu yang berhenti total adalah yang paling layak ditindaklanjuti — dan justru dia yang tidak akan muncul di laporan mana pun yang cuma menghitung total kunjungan.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir Level 3 selesai</h3>
+      <p>Enam pola, dan tiap satunya punya satu keputusan yang tidak bisa dijawab SQL: buang atau jumlahkan, ambang berapa hari, tahap mana yang dihitung. Query-nya bisa dihafal dalam seminggu — memilih dengan sadar itu yang tidak bisa.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Berikutnya di <a href="https://claude.ai/code/artifact/2d44eed8-d057-4afc-b429-974231efea42">Level 4</a>:</strong> kinerja dan keandalan — membaca rencana eksekusi lebih dalam daripada M9, merancang index, transaksi dan tingkat isolasi, view lawan materialized view, dan menguji SQL supaya kesalahannya ketahuan sebelum sampai ke klien.
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua keluaran di halaman ini dihasilkan dengan menjalankan query-nya sungguhan pada <code>senja.db</code>.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

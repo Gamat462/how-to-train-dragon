@@ -1,0 +1,11 @@
+Data Analyst - Singapore
+
+We are looking for a Data Analyst to join our commercial team.
+
+Requirements:
+- 2+ years experience with SQL and data warehouse environments (BigQuery preferred)
+- Strong Python skills, especially pandas
+- Experience building dashboards in Tableau or Looker
+- Familiarity with dbt and modern ETL practices
+- Comfortable with Git and version control
+- Good grounding in statistics

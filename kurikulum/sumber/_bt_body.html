@@ -1,0 +1,407 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/b20c546a-92f3-480f-81ae-4ba51728dc69">← Kembali ke Ujian Bernilai</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Proyek Buta</span>
+  <button type="button" data-hari="1" aria-selected="true">Aturan</button>
+  <button type="button" data-hari="2" aria-selected="false">Proyek 1</button>
+  <button type="button" data-hari="3" aria-selected="false">Proyek 2</button>
+  <button type="button" data-hari="4" aria-selected="false">Proyek 3</button>
+  <button type="button" data-hari="5" aria-selected="false">Ditelaah</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Proyek Buta · 5 hari · tanpa kunci jawaban</span>
+    <h1>Proyek Buta: bekerja tanpa tahu apakah kamu benar</h1>
+    <p class="lede">Lima puluh modul, <strong>190 kunci jawaban, 302 kotak “HARUS MUNCUL”.</strong> Tidak ada satu pun tugas di mana kamu harus memutuskan tanpa jaring pengaman. Padahal itu <strong>seratus persen kondisi kerja nyata</strong> — saya melatihmu di keadaan yang tidak akan pernah kamu temui.</p>
+    <p class="lede" style="margin-top:10px">Modul ini satu-satunya yang berbeda. Tiga berkas klien, tiga tenggat, <strong>nol kunci jawaban</strong>. Bahkan datanya dikirim sebagai berkas, bukan sebagai skrip pembuat — supaya kamu tidak bisa membaca jawabannya dari kodenya, seperti yang bisa kamu lakukan di semua Studi Kasus sebelumnya.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ ATURAN ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">ATURAN</span>
+      <h2>Cara tahu kamu benar, ketika tidak ada yang memberi tahu</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+
+    <div class="bahaya">
+      <strong>Yang tidak akan kamu temukan di modul ini:</strong> kotak “HARUS MUNCUL”, kunci jawaban, angka pembanding, atau konfirmasi bahwa temuanmu benar. Kalau kamu mencarinya, kamu akan mencari sampai akhir dan tidak menemukannya. Itu disengaja.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ambil berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="t1s1"><label for="t1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Semua ada di paket zip, folder <code>data-dan-skrip/proyek-buta/</code>. Salin ke folder kerja barumu.</div>
+        <div class="kode"><pre><code>proyek-buta/
+├── P1 Koperasi Sejahtera Mandiri.xlsx    (2 sheet)
+├── P2 Apotek Sehat Sentosa.xlsx          (2 sheet)
+├── P3 Penjualan Gerai.csv                (pemisah titik koma)
+├── P3 Target Gerai.csv
+└── periksa.py                            (pemeriksa STRUKTUR saja)</code></pre></div>
+        <div class="catatan">
+          <strong><code>periksa.py</code> hanya memastikan datamu termuat lengkap</strong> — jumlah barisnya benar, tidak ada yang tercecer. Ia <strong>tidak</strong> memeriksa temuanmu, dan tidak akan pernah memberi tahu apakah kesimpulanmu benar. Jalankan sekali di awal tiap proyek, lalu lupakan.
+        </div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>python periksa.py 1</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL (ini pemeriksaan struktur, bukan jawaban)</span>
+          <div class="kode"><pre><code>Proyek 1 — pemeriksaan struktur
+  OK    sheet Pinjaman      60 baris data (harus 60)
+  OK    sheet Angsuran     496 baris data (harus 496)
+
+Struktur benar. Angkamu boleh dipakai.
+Catatan: berkas ini TIDAK memeriksa temuanmu. Itu bagianmu.</code></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Lima cara memeriksa diri sendiri</h3>
+        <span class="cek"><input type="checkbox" id="t1s2"><label for="t1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini isi sesungguhnya modul ini. Kalau tidak ada yang memberi tahu kamu benar, kamu harus <strong>membangun sendiri buktinya</strong> — dan kelima cara ini adalah yang dipakai analis sungguhan.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Cara</th><th>Bentuknya</th><th>Menangkap apa</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Tie-out</strong></td><td>Total hasilmu = total sumbernya. Selisih harus <strong>nol</strong>.</td><td>Baris yang hilang saat menyaring, baris yang tergandakan saat <code>merge</code>.</td></tr>
+              <tr><td><strong>2. Dua jalan</strong></td><td>Hitung angka yang sama lewat dua rute berbeda. Harus bertemu.</td><td>Salah rumus. Satu jalan bisa salah; dua jalan yang salahnya sama, hampir mustahil.</td></tr>
+              <tr><td><strong>3. Uji akal sehat</strong></td><td>Margin 78% untuk kedai kopi? Rata-rata belanja Rp 5 juta di apotek?</td><td>Salah satuan, salah pembagi, tanda kurung yang hilang.</td></tr>
+              <tr><td><strong>4. Hitung ulang manual</strong></td><td>Ambil 3 baris, hitung dengan kalkulator, cocokkan.</td><td>Kesalahan rumus yang tidak terlihat di agregat.</td></tr>
+              <tr><td><strong>5. Cari yang hilang</strong></td><td>Berapa baris yang <em>tidak</em> masuk hasil? Ke mana perginya?</td><td>Ini yang paling sering dilewati — dan yang menyimpan temuan paling mahal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Cara nomor 5 adalah keunggulanmu, dan kamu sudah punya refleksnya.</strong> Di kertas kerja, pertanyaan “berapa yang tidak masuk sampel, dan kenapa” adalah prosedur baku. Di analitik data, hampir tidak ada yang menanyakannya — semua orang melihat baris yang muncul, hampir tidak ada yang menghitung baris yang lenyap. Di ketiga proyek berikut, <strong>temuan yang paling bernilai ada di baris yang hilang.</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Aturan tenggat</h3>
+        <span class="cek"><input type="checkbox" id="t1s3"><label for="t1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Proyek</th><th>Tenggat</th><th>Yang diserahkan</th></tr></thead>
+            <tbody>
+              <tr><td>P1 — Koperasi</td><td><strong>1 hari</strong></td><td>Balasan ≤200 kata + berkas kerja</td></tr>
+              <tr><td>P2 — Apotek</td><td><strong>2 hari</strong></td><td>Balasan ≤200 kata + berkas kerja</td></tr>
+              <tr><td>P3 — Retail</td><td><strong>2 hari</strong></td><td>Balasan ≤200 kata + berkas kerja</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Tenggat itu bagian dari soalnya, bukan saran.</strong> Pasang pengingat sungguhan di ponselmu. Kalau waktunya habis dan analisismu belum selesai, <strong>kirim yang sudah ada</strong> beserta kalimat “bagian X belum selesai, perkiraan selesai besok”. Itu jawaban yang benar di dunia kerja. Menahan pekerjaan sampai sempurna dan terlambat tiga hari adalah cara paling cepat kehilangan klien — dan tidak satu pun dari 50 modul sebelumnya pernah melatihmu untuk itu, karena tidak ada satu pun yang punya tenggat.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROYEK 1 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">PROYEK 1 · tenggat 1 hari</span>
+      <h2>Koperasi Simpan Pinjam Sejahtera Mandiri</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>“Pak, koperasi kami mau diperiksa Dinas bulan depan. Tolong dibantu lihat data pinjaman anggota — mana yang masih nunggak, berapa totalnya, dan apakah pembukuan kami rapi. Datanya dari sistem koperasi, ada dua sheet. Saya kurang paham komputer, jadi tolong dijelaskan yang sederhana saja.”</em><br>
+      <span class="mono" style="font-size:0.85rem">— Bu Hartini, Ketua Koperasi Sejahtera Mandiri</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Yang harus kamu serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t2s1"><label for="t2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Berapa total pokok pinjaman yang beredar, dan berapa yang sudah dibayar?
+2. Berapa anggota yang menunggak, dan berapa nilainya?
+3. Apakah pembukuannya rapi? Sebutkan bukti, bukan kesan.
+4. Satu hal yang tidak diminta Bu Hartini tapi wajib dia tahu.</code></pre></div>
+        <div class="aksi">Nomor 4 yang paling bernilai. Di tiap proyek modul ini ada sesuatu yang tidak ditanyakan klien dan seharusnya membuatnya berhenti sejenak.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rambu, bukan jawaban</h3>
+        <span class="cek"><input type="checkbox" id="t2s2"><label for="t2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini bukan petunjuk menuju jawaban. Ini daftar hal yang harus kamu <em>periksa sendiri</em>, dan hasilnya bisa saja bersih.</p>
+        <ul style="font-size:0.93rem; padding-left:20px">
+          <li>Sheet <code>Pinjaman</code> headernya tidak di baris 1, dan ada baris cetakan di bawah. Sudah kamu buang?</li>
+          <li>Kolom tanggal punya <strong>tiga format berbeda</strong>. Sesudah <code>to_datetime</code>, berapa yang gagal?</li>
+          <li>Kolom pokok pinjaman sebagian teks, sebagian angka. Kamu sudah mengukur berapa banyak masing-masing?</li>
+          <li>Sambungkan <code>Angsuran</code> ke <code>Pinjaman</code>. <strong>Berapa baris angsuran yang tidak punya pasangan?</strong> Ke mana perginya uang itu?</li>
+          <li>Untuk tiap anggota berstatus <code>Lunas</code>: apakah total angsurannya masuk akal dibanding pokoknya? <strong>Bandingkan satu per satu, jangan agregat.</strong></li>
+          <li>Tie-out: total angsuran per anggota, dijumlahkan, harus sama dengan total kolom Jumlah Bayar.</li>
+        </ul>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Jangan lewati rambu kelima.</strong> Status “Lunas” di data ini diketik manusia, bukan dihitung sistem. Kalau kamu mempercayainya tanpa memeriksa, seluruh angka tunggakanmu salah — dan Dinas yang akan menemukannya, bukan kamu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t2s3"><label for="t2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Tulis balasan untuk Bu Hartini: <strong>maksimal 200 kata, tanpa satu pun istilah teknis</strong>, tiap kalimat berangka. Simpan bersama berkas kerjamu. Tenggat: 1 hari sejak kamu mulai.</div>
+        <div class="catatan">
+          <strong>Ingat siapa pembacanya.</strong> Bu Hartini menulis “saya kurang paham komputer”. Balasan yang menyebut <code>merge</code>, <code>NaN</code>, atau “anti-join” bukan balasan — itu memindahkan pekerjaan menerjemahkan ke pundaknya.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROYEK 2 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">PROYEK 2 · tenggat 2 hari</span>
+      <h2>Apotek Sehat Sentosa</h2>
+      <span class="waktu">± 4 jam</span>
+    </div>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>“Selamat siang. Kami mau tahu nilai persediaan apotek kami per akhir Juni untuk laporan ke pemilik. Sekalian tolong dilihat obat mana yang lambat lakunya supaya tidak kami beli lagi. Data kartu stok dan penjualan saya lampirkan.”</em><br>
+      <span class="mono" style="font-size:0.85rem">— Pak Dedi, Apoteker Penanggung Jawab</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Yang harus kamu serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t3s1"><label for="t3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Berapa nilai persediaan per 30 Juni 2026?
+2. Obat mana yang lambat laku? Definisikan sendiri "lambat", dan sebutkan alasannya.
+3. Berapa bulan persediaan tiap golongan obat bertahan dengan laju jual sekarang?
+4. Satu hal yang tidak diminta Pak Dedi tapi wajib dia tahu.</code></pre></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rambu</h3>
+        <span class="cek"><input type="checkbox" id="t3s2"><label for="t3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem; padding-left:20px">
+          <li>Kolom tanggal kedaluwarsa punya <strong>tiga format</strong>, dan salah satunya cuma bulan-tahun (<code>Mar-2027</code>) tanpa tanggal. Apa asumsimu untuk yang itu, dan apakah kamu menyebutkannya?</li>
+          <li>Satu obat bisa punya beberapa batch. Nilai persediaan dihitung per batch atau per obat?</li>
+          <li>Ada obat di kartu stok yang <strong>tidak pernah muncul</strong> di sheet Penjualan. Berapa? Apa artinya bagi soal nomor 2?</li>
+          <li>Bandingkan tanggal kedaluwarsa tiap batch dengan 30 Juni 2026. <strong>Apa yang kamu temukan mengubah jawaban nomor 1.</strong></li>
+          <li>Soal nomor 3 butuh laju jual per bulan. Data penjualan mencakup berapa bulan? Jangan asumsikan enam.</li>
+          <li>Uji akal sehat: nilai persediaan apotek kecil biasanya puluhan sampai ratusan juta. Kalau angkamu miliaran atau ratusan ribu, periksa satuannya.</li>
+        </ul>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Rambu keempat adalah inti proyek ini.</strong> Pak Dedi meminta “nilai persediaan”. Pertanyaan yang harus kamu jawab lebih dulu: <em>apakah semua yang ada di rak masih boleh dihitung sebagai nilai?</em> Jawabannya mengubah angka yang kamu laporkan secara material — dan kalau kamu melaporkan angka yang pertama tanpa memeriksa, laporan ke pemiliknya jadi lebih saji.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t3s3"><label for="t3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Balasan ≤200 kata untuk Pak Dedi. Karena dia apoteker, istilah farmasi boleh; istilah teknis data tetap tidak. Tenggat: 2 hari.</div>
+        <div class="catatan">
+          <strong>Untuk soal nomor 1, laporkan angkanya dengan cara yang tidak bisa disalahartikan.</strong> Kalau ada dua angka yang sama-sama sah — misalnya “nilai seluruh isi rak” dan “nilai yang masih layak jual” — sebutkan keduanya beserta selisihnya. Satu angka tunggal untuk pertanyaan yang punya dua jawaban adalah cara paling halus menyesatkan orang.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROYEK 3 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">PROYEK 3 · tenggat 2 hari</span>
+      <h2>Lima gerai, satu papan peringkat</h2>
+      <span class="waktu">± 4 jam</span>
+    </div>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>“Halo, saya butuh papan peringkat gerai untuk rapat direksi Jumat. Ranking dari yang terbaik, berdasarkan pencapaian terhadap target. Yang paling bawah kemungkinan kami tutup. Data omzet dan target saya kirim, tolong yang simpel dan jelas.”</em><br>
+      <span class="mono" style="font-size:0.85rem">— Ibu Melinda, Direktur Operasional</span>
+    </div>
+
+    <div class="bahaya">
+      <strong>Proyek ini punya taruhan yang berbeda dari dua sebelumnya.</strong> Hasil kerjamu akan dipakai untuk memutuskan gerai mana yang ditutup — dan itu menyangkut pekerjaan orang. Kalau peringkatmu salah karena ada yang tidak kamu periksa, orang kehilangan pekerjaannya karena kelalaianmu.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Yang harus kamu serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t4s1"><label for="t4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Papan peringkat 5 gerai berdasarkan pencapaian terhadap target.
+2. Untuk tiap gerai: omzet, target, pencapaian %, dan catatan bila ada.
+3. Rekomendasimu soal gerai yang paling bawah.
+4. Satu hal yang tidak diminta Bu Melinda tapi wajib dia tahu SEBELUM rapat.</code></pre></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rambu</h3>
+        <span class="cek"><input type="checkbox" id="t4s2"><label for="t4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem; padding-left:20px">
+          <li>Kedua CSV memakai pemisah <strong>titik koma</strong>, dan angkanya berformat Indonesia. Sudah termuat sebagai angka, atau masih teks?</li>
+          <li><strong>Hitung berapa baris yang seharusnya ada</strong> kalau 5 gerai × 6 bulan. Bandingkan dengan yang benar-benar ada. Selisihnya bukan kebetulan.</li>
+          <li>Kalau ada gerai yang bulannya tidak lengkap, membandingkan <em>total</em> omzetnya dengan gerai lain adalah membandingkan dua hal berbeda. Apa yang kamu lakukan?</li>
+          <li>Lihat kolom target. Ada satu yang <strong>sangat berbeda</strong> dari yang lain. Apakah itu wajar, atau tanda target itu tidak pernah diperbarui?</li>
+          <li>Hitung pencapaian dua cara: terhadap target penuh 6 bulan, dan terhadap target yang disetahunkan sesuai bulan yang ada. Apakah peringkatnya berubah?</li>
+          <li>Uji akal sehat: kalau ada gerai yang pencapaiannya jauh di atas 200%, kemungkinan besar bukan gerainya yang hebat.</li>
+        </ul>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Dua rambu terakhir menentukan apakah rekomendasimu benar atau membahayakan.</strong> Papan peringkat yang disusun tanpa memeriksa keduanya akan menempatkan gerai yang salah di posisi teratas <em>dan</em> di posisi terbawah sekaligus. Yang teratas karena targetnya keliru; yang terbawah karena datanya tidak lengkap.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t4s3"><label for="t4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Balasan ≤200 kata + tabel peringkat. Tenggat: 2 hari.</div>
+        <div class="catatan">
+          <strong>Kalau kesimpulanmu adalah bahwa papan peringkat ini belum layak dipakai untuk keputusan penutupan, katakan itu</strong> — dengan alasan dan angkanya, plus apa yang kamu butuhkan agar layak. Menolak memberi peringkat yang kamu tahu menyesatkan bukan kegagalan menyelesaikan tugas. Itu justru pekerjaannya, dan itu persis pelajaran penutup Studi Kasus 5.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DITELAAH ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">DITELAAH</span>
+      <h2>Ditinjau manusia — bagian yang paling tidak nyaman</h2>
+      <span class="waktu">± 60 menit + menunggu</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini:</strong> hasil kerjamu sudah dibaca dan dikritik orang lain. Ini yang benar-benar tidak pernah dilatih 50 modul sebelumnya — <code>code review</code> muncul <strong>nol kali</strong> di seluruh kurikulum.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa ini tidak bisa dilewati</h3>
+        <span class="cek"><input type="checkbox" id="t5s1"><label for="t5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di kantor mana pun, <strong>100% kodemu dibaca orang lain</strong> sebelum dipakai. Kurikulum ini mencetak orang yang mahir sendirian dan belum pernah dikritik — dan tinjauan pertama di tempat kerja akan terasa seperti serangan pribadi, bukan proses biasa.</p>
+        <p style="margin-top:8px">Lebih baik pengalaman itu terjadi sekarang, atas pekerjaan yang tidak ada taruhannya.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Ini juga bukan hal baru buatmu, kalau kamu memikirkannya.</strong> Kertas kerjamu di KAP ditelaah senior, lalu manajer, lalu partner. Kamu sudah terbiasa hasil kerjamu dibaca orang yang mencari kesalahannya. Yang berubah cuma bentuk berkasnya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ke mana meminta, dan apa yang diminta</h3>
+        <span class="cek"><input type="checkbox" id="t5s2"><label for="t5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Ke siapa</th><th>Yang mereka lihat</th></tr></thead>
+            <tbody>
+              <tr><td>Komunitas data Indonesia (grup Telegram/Discord, Data Science Indonesia)</td><td>Kode dan pendekatanmu</td></tr>
+              <tr><td>Rekan KAP lamamu</td><td>Apakah kesimpulan auditnya masuk akal — mereka paling tajam di sini</td></tr>
+              <tr><td>Orang non-teknis di sekitarmu</td><td>Apakah balasan 200 katamu benar-benar bisa dimengerti</td></tr>
+              <tr><td>Forum publik (Stack Overflow, r/dataisbeautiful)</td><td>Kode, dengan jawaban paling langsung dan paling pedas</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="aksi" style="margin-top:12px">Kirim satu proyek — bukan tiga — dengan tiga pertanyaan spesifik, bukan “tolong dikoreksi”. Misalnya: <em>“Apakah cara saya menangani baris yang tidak punya pasangan sudah tepat?”</em> · <em>“Balasan saya ke klien bisa dimengerti orang non-teknis?”</em> · <em>“Ada yang saya lewatkan?”</em></div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Satu aturan yang tidak boleh dilanggar:</strong> data di ketiga proyek ini buatan, jadi aman dipublikasikan. <strong>Jangan pernah</strong> mengirim data klien sungguhan ke forum mana pun untuk minta dikoreksi — aturan lengkapnya ada di Bekal Rahasia Klien, dan pelanggarannya tidak bisa ditarik kembali.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cara menerima kritik tanpa membela diri</h3>
+        <span class="cek"><input type="checkbox" id="t5s3"><label for="t5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Yang datang</th><th>Jangan</th><th>Lakukan</th></tr></thead>
+            <tbody>
+              <tr><td>“Kodemu berbelit”</td><td>Menjelaskan kenapa kamu menulis begitu</td><td>Minta contoh versi yang lebih sederhana. Bandingkan. Simpan yang lebih baik.</td></tr>
+              <tr><td>“Kesimpulanmu salah”</td><td>Membela</td><td>Tanya <em>data mana</em> yang membuat mereka menyimpulkan begitu. Jalankan ulang. Sering mereka benar; kadang mereka salah baca — dan kamu perlu tahu yang mana.</td></tr>
+              <tr><td>Diam saja, tidak ada yang membalas</td><td>Menganggapnya penolakan</td><td>Pertanyaanmu kemungkinan terlalu umum. Persempit, kirim ulang ke tempat lain.</td></tr>
+              <tr><td>Kritik yang kasar</td><td>Membalas</td><td>Ambil isinya, buang nadanya. Isi yang benar tidak jadi salah karena disampaikan dengan buruk.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Ukurannya bukan “apakah mereka memuji”.</strong> Ukurannya: <em>apakah ada satu hal yang berubah di pekerjaanmu setelah dibaca orang lain?</em> Kalau tidak ada satu pun, kemungkinan besar kamu bertanya terlalu umum — bukan kamu sudah sempurna.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Proyek Buta selesai — dan ini akhir jalurnya</h3>
+      <p>Tiga berkas klien, tiga tenggat, nol kunci jawaban. Kamu memutuskan sendiri apa yang dilaporkan, membangun sendiri buktinya, dan menyerahkannya ke manusia untuk dikritik.</p>
+      <p style="margin-top:10px"><strong>Kalau kamu menemukan sesuatu di ketiga proyek yang tidak diminta klien — kamu sudah siap.</strong> Bukan karena kamu mahir SQL; itu sudah lama benar. Tapi karena kamu memeriksa hal yang tidak disuruh diperiksa, dan itu satu-satunya kebiasaan yang membuat seorang analis dibayar lebih dari alat yang menjalankan query.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Dan kalau kamu tidak menemukan apa-apa di salah satunya:</strong> jangan berasumsi berkas itu bersih. Ketiganya punya sesuatu. Kembali ke daftar “lima cara memeriksa diri sendiri” di bagian Aturan, dan kerjakan cara nomor lima — hitung baris yang <em>hilang</em>, bukan yang muncul.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">Seluruh rute selesai — kembali ke indeks →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Ketiga berkas proyek di modul ini dikirim sebagai berkas jadi, bukan sebagai skrip pembuat — dan tidak ada kunci jawaban di mana pun, termasuk di paket zip.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

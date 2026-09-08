@@ -1,0 +1,478 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">← Kembali ke indeks rute</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Bekal Rahasia Klien</span>
+  <button type="button" data-hari="1" aria-selected="true">P1</button>
+  <button type="button" data-hari="2" aria-selected="false">P2</button>
+  <button type="button" data-hari="3" aria-selected="false">P3</button>
+  <button type="button" data-hari="4" aria-selected="false">P4</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal wajib · kerjakan sebelum klien pertama, paling lambat Freelance 6</span>
+    <h1>Bekal Rahasia Klien: apa yang boleh naik ke internet</h1>
+    <p class="lede">Modul M2 menyuruhmu memilih <strong>Public</strong> waktu membuat repositori. Modul M8 menyuruhmu menerbitkan dashboard ke <strong>Tableau Public</strong>. Modul M11 menyuruhmu menaruh aplikasi Streamlit di URL publik. Ketiganya benar — <em>untuk portofolio</em>, dengan data latihan.</p>
+    <p class="lede" style="margin-top:10px">Lalu datang klien pertama, dan kamu mengerjakan hal yang sama dengan data penjualan sungguhan milik orang lain. <strong>Di titik itu kebiasaan yang diajarkan kurikulum ini berubah jadi kebocoran.</strong> Empat hari ini menarik garisnya, dan menunjukkan cara tetap punya portofolio tanpa melewatinya.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ P1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">RAHASIA 1</span>
+      <h2>Garis yang tidak boleh dilewati</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyebut dengan tepat apa yang boleh dan tidak boleh naik ke tempat publik, dan tahu apa arti sebenarnya kata "Public" di Tableau Public.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>"Public" berarti benar-benar publik</h3>
+        <span class="cek"><input type="checkbox" id="p1s1"><label for="p1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tableau Public bukan Tableau yang kebetulan gratis. Nama itu keterangan tempat menyimpannya:</p>
+        <ul>
+          <li><strong>Tidak ada pengaturan privat.</strong> Apa pun yang kamu terbitkan bisa dilihat siapa saja yang punya internet.</li>
+          <li><strong>Menyembunyikan dari profilmu bukan privasi.</strong> Ada pilihan agar karyamu tidak muncul di galeri profilmu — tapi siapa pun yang memegang tautannya tetap bisa membuka, memakai, dan mengunduhnya.</li>
+          <li><strong>Datanya ikut, bukan cuma gambarnya.</strong> Ada pilihan mengizinkan unduhan data; kalaupun dimatikan, yang kamu unggah tetap berada di server publik.</li>
+        </ul>
+        <div class="bahaya">
+          <strong>Artinya: data penjualan klien, daftar pelanggan, angka laba, gaji, atau apa pun yang mengandung nama orang tidak boleh menyentuh Tableau Public.</strong> Bukan "sebaiknya jangan" — memang tidak ada cara amannya di sana.
+          <p style="margin-top:8px">Streamlit Community Cloud sedikit berbeda: ia <em>bisa</em> membaca repositori privat dan menyediakan aplikasi privat, tapi paket gratisnya hanya mengizinkan <strong>satu</strong> aplikasi privat, dan aplikasinya tertidur setelah 12 jam tanpa pengunjung. Berguna, tapi ada batasnya — dibahas di Hari 3.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Daftar yang jelas, supaya tidak perlu menimbang tiap kali</h3>
+        <span class="cek"><input type="checkbox" id="p1s2"><label for="p1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Boleh publik</th><th>Tidak boleh publik</th></tr></thead>
+            <tbody>
+              <tr><td>Data terbuka pemerintah (data.go.id, BPS)</td><td>Ekspor apa pun dari sistem klien</td></tr>
+              <tr><td>Dataset latihan (Kaggle, dan berkas Kedai Senja di kurikulum ini)</td><td>Nama pelanggan, nomor telepon, alamat, NIK</td></tr>
+              <tr><td>Data yang kamu buat sendiri dengan kode</td><td>Angka penjualan, laba, gaji, harga beli</td></tr>
+              <tr><td>Cara kerjamu: kode, metode, cara berpikir</td><td>Nama klien — kecuali dia mengizinkan tertulis</td></tr>
+              <tr><td>Hasil yang sudah diizinkan klien secara tertulis</td><td>Tangkapan layar dashboard klien yang angkanya terbaca</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Baris terakhir sering luput.</strong> Orang berhati-hati dengan berkas datanya, lalu memasang tangkapan layar dashboard klien di halaman portofolio — lengkap dengan angka omzet dan nama cabang. Gambar itu sama bocornya dengan berkas CSV-nya, cuma lebih sulit dicari mesin. Dan gambar itu tetap ada di internet lama setelah proyeknya selesai.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa ini lebih berat untukmu daripada untuk orang lain</h3>
+        <span class="cek"><input type="checkbox" id="p1s3"><label for="p1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Programmer yang salah menerbitkan data klien menghadapi klien yang marah. Kamu menghadapi lebih dari itu.</p>
+        <p>Kerahasiaan informasi klien adalah kewajiban etika profesi yang sudah kamu jalani bertahun-tahun di KAP — bukan aturan kantor, tapi bagian dari kode etik akuntan. Kamu memang tidak lagi berpraktik sebagai auditor, dan pekerjaan ini bukan audit. Tapi reputasi yang kamu bawa ke pasar freelance <strong>justru latar audit itu</strong>: itu alasan orang mau memberimu angka yang tidak mereka berikan ke orang lain.</p>
+        <div class="catatan">
+          <strong>Ini bukan beban tambahan, ini keunggulanmu — kalau kamu memperlakukannya begitu.</strong> Sebagian besar freelancer data tidak punya kebiasaan ini sama sekali; mereka belajar setelah membuat kesalahan pertama. Kamu sudah punya refleksnya sejak hari pertama. Sebutkan itu waktu bicara dengan calon klien: <em>"Data Bapak/Ibu tidak akan saya unggah ke mana pun, dan tidak akan muncul di portofolio saya tanpa izin tertulis. Saya terbiasa bekerja dengan angka yang tidak boleh keluar."</em>
+          <p style="margin-top:8px">Kalimat itu mengerjakan dua hal sekaligus: menenangkan calon klien, dan membuatnya sadar bahwa freelancer lain mungkin tidak berpikir sejauh itu.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Rahasia 1 selesai</h3>
+      <p><strong>Catat:</strong> Tableau Public tidak punya pengaturan privat, dan menyembunyikan dari profil bukan privasi · Streamlit gratis boleh privat, tapi cuma <strong>satu</strong> aplikasi dan tertidur setelah 12 jam · tangkapan layar berangka sama bocornya dengan berkas datanya · dan kebiasaan menjaga rahasia yang kamu bawa dari KAP adalah alasan orang mau menyerahkan angkanya kepadamu.</p>
+    </div>
+  </section>
+
+  <!-- ============ P2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">RAHASIA 2</span>
+      <h2>Portofolio dari pekerjaan klien, tanpa membocorkannya</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat data pengganti yang mempertahankan bentuk dan pelajaran pekerjaanmu tanpa memuat satu pun angka asli klien — dan tahu kenapa sekadar mengganti nama sama sekali tidak melindungi.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Masalahnya nyata: pekerjaan terbaikmu justru yang tidak boleh dipamerkan</h3>
+        <span class="cek"><input type="checkbox" id="p2s1"><label for="p2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Setelah beberapa bulan, proyek terbaikmu adalah pekerjaan klien — bukan latihan. Tapi justru itu yang tidak boleh naik ke portofolio. Kalau dibiarkan, portofoliomu selamanya berisi data Kaggle sementara kemampuanmu sudah jauh di depannya.</p>
+        <p>Jalan keluarnya bukan menyembunyikan pekerjaannya, tapi <strong>mengganti datanya</strong>. Pakai berkas Kedai Senja yang sudah kamu bersihkan di <a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a">Bekal Data Klien</a>. Ini angka aslinya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import numpy as np, pandas as pd
+gabung["Bulan"] = gabung["Tanggal"].dt.to_period("M").astype(str)
+
+print(gabung.groupby("Cabang")["Total"].sum().sort_values(ascending=False))
+print(f"total: Rp {gabung['Total'].sum():,.0f}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Cabang
+Dago       6183000.0
+Seturan    6135000.0
+Kemang     5629000.0
+Name: Total, dtype: float64
+total: Rp 17,947,000</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Cara yang dipakai kebanyakan orang, dan kenapa ia tidak melindungi apa-apa</h3>
+        <span class="cek"><input type="checkbox" id="p2s2"><label for="p2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Naluri pertama semua orang: ganti nama cabangnya jadi "Cabang A, B, C", lalu terbitkan.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>naif = gabung.copy()
+naif["Cabang"] = naif["Cabang"].map({"Kemang":"Cabang A","Dago":"Cabang B","Seturan":"Cabang C"})
+print(naif.groupby("Cabang")["Total"].sum().sort_values(ascending=False))
+print(f"total: Rp {naif['Total'].sum():,.0f}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Cabang
+Cabang B    6183000.0
+Cabang C    6135000.0
+Cabang A    5629000.0
+Name: Total, dtype: float64
+total: Rp 17,947,000</code></pre>
+          </div>
+        </div>
+        <div class="bahaya">
+          <strong>Bandingkan baris demi baris dengan keluaran sebelumnya. Angkanya sama persis — sampai digit terakhir.</strong>
+          <p style="margin-top:8px">6.183.000, 6.135.000, 5.629.000, total 17.947.000. Yang berubah cuma tiga label. Mengganti nama tidak menyembunyikan apa pun, karena <strong>yang rahasia itu angkanya, bukan namanya.</strong></p>
+        </div>
+        <p>Yang sebenarnya kamu terbitkan dengan cara "anonim" itu: omzet bulanan klien, jumlah transaksi, harga tiap produk, pola akhir pekan, dan tanggal persisnya. Siapa pun yang tahu klienmu siapa — pesaingnya, mantan karyawannya, calon pembeli usahanya — bisa membaca semuanya. Nama cabang cuma label; <strong>yang rahasia itu angkanya.</strong></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Data pengganti: skala rahasia dan goyangan</h3>
+        <span class="cek"><input type="checkbox" id="p2s3"><label for="p2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Yang harus berubah adalah <strong>nilainya</strong>, dengan cara yang mempertahankan bentuk dan hubungan antar angka. Dua langkah: kalikan semuanya dengan satu faktor rahasia, lalu goyangkan tiap baris sedikit supaya perbandingannya tidak bisa dibalik.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>rng = np.random.default_rng(20240602)
+FAKTOR = 1.37          # rahasia. jangan pernah ditulis di repositori publik
+
+aman = gabung.copy()
+aman["Cabang"] = aman["Cabang"].map({"Kemang":"Cabang A","Dago":"Cabang B","Seturan":"Cabang C"})
+goyang = rng.normal(1.0, 0.06, len(aman))        # +-6% tiap baris
+aman["Total"] = (aman["Total"] * FAKTOR * goyang).round(-3)
+
+print(aman.groupby("Cabang")["Total"].sum().sort_values(ascending=False))
+print(f"total: Rp {aman['Total'].sum():,.0f}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Cabang
+Cabang B    8462000.0
+Cabang C    8448000.0
+Cabang A    7794000.0
+Name: Total, dtype: float64
+total: Rp 24,704,000</code></pre>
+          </div>
+        </div>
+        <p>Sekarang tidak ada satu pun angka asli di dalamnya. <code>round(-3)</code> membulatkan ke ribuan terdekat supaya angkanya tetap terlihat wajar sebagai rupiah.</p>
+        <div class="catatan">
+          <strong>Kenapa perlu goyangan, bukan cuma dikali 1,37?</strong> Kalau semuanya dikali angka yang sama, seluruh perbandingan tetap utuh — dan siapa pun yang tahu <em>satu</em> angka asli (misalnya omzet Juni yang pernah disebut klien di media sosial) bisa membagi, menemukan faktornya, lalu memulihkan seluruh tabel. Goyangan per baris memutus jalan itu.
+          <p style="margin-top:8px">Simpan <code>FAKTOR</code> di berkas <code>.env</code>, sama seperti sandi. Kalau ia ikut ter-<em>push</em>, seluruh usahamu hari ini batal.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Apakah pelajarannya masih terlihat?</h3>
+        <span class="cek"><input type="checkbox" id="p2s4"><label for="p2s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Data pengganti hanya berguna kalau temuan yang mau kamu pamerkan masih muncul di dalamnya. Uji.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>for nama, d in [("asli", gabung), ("pengganti", aman)]:
+    p = d[d["Bulan"].isin(["2024-05","2024-06"])].pivot_table(
+            index="Cabang", columns="Bulan", values="Total", aggfunc="sum")
+    p["selisih"] = p["2024-06"] - p["2024-05"]
+    p = p.sort_values("selisih")
+    turun = d[d.Bulan=="2024-06"]["Total"].sum() - d[d.Bulan=="2024-05"]["Total"].sum()
+    print(f"{nama:&lt;10} terbesar: {p.index[0]:&lt;9} {p.iloc[0]['selisih']:&gt;12,.0f}"
+          f"  = {p.iloc[0]['selisih']/turun:.0%} dari total penurunan")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>asli       terbesar: Kemang        -458,000  = 81% dari total penurunan
+pengganti  terbesar: Cabang A      -619,000  = 72% dari total penurunan</code></pre>
+          </div>
+        </div>
+        <p>Temuannya selamat: satu cabang tetap menjelaskan sebagian besar penurunan, dan itulah yang mau kamu tunjukkan. Tapi perhatikan bahwa persentasenya <strong>bergeser dari 81% ke 72%</strong> — goyangan tadi memang mengubah angkanya.</p>
+        <div class="bahaya">
+          <strong>Karena itu, jangan pernah mencampur keduanya.</strong> Kalau di halaman portofolio kamu menulis "saya menemukan satu cabang yang menyebabkan 81% penurunan" sambil memasang grafik dari data pengganti yang berbunyi 72%, dua hal buruk terjadi sekaligus: angkanya tidak cocok dengan gambarnya, <em>dan</em> angka 81% itu adalah temuan asli klien yang baru saja kamu bocorkan.
+          <p style="margin-top:8px">Aturannya: <strong>satu halaman portofolio memakai satu sumber angka.</strong> Kalau grafiknya dari data pengganti, seluruh angka di tulisannya juga dari data pengganti.</p>
+        </div>
+        <div class="catatan">
+          <strong>Yang kamu jual di portofolio bukan angka klien, tapi caramu bekerja.</strong> "Saya menemukan bahwa penurunan yang terlihat merata ternyata berasal dari satu cabang" bernilai sama persis apakah angkanya 81% atau 72%. Perekrut dan calon klien menilai pertanyaan yang kamu ajukan dan cara kamu mengujinya — bukan besar kecilnya angka usaha orang lain.
+        </div>
+        <div class="aksi">
+          <span class="tag">SEBELUM MENERBITKAN, PERIKSA TIGA HAL</span>
+          <ol style="font-size:0.93rem;padding-left:20px;margin:0">
+            <li><strong>Nama.</strong> Nama klien, cabang, produk khas, dan kota sudah diganti? Kedai kopi tiga cabang di Kemang, Dago, dan Seturan cukup untuk dikenali walaupun angkanya sudah diubah.</li>
+            <li><strong>Tanggal.</strong> Kalau periodenya khas (misalnya bulan pembukaan cabang), geser atau ganti jadi "Bulan 1–6".</li>
+            <li><strong>Berkas mentah.</strong> Berkas Excel asli tidak ikut ter-<em>commit</em>? Cek <code>git status</code>, dan pastikan <code>*.xlsx</code> ada di <code>.gitignore</code>.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Rahasia 2 selesai</h3>
+      <p><strong>Catat:</strong> mengganti nama <strong>tidak mengubah satu digit pun</strong> — yang rahasia itu angkanya · pengganti yang benar = faktor rahasia × goyangan per baris, faktornya disimpan seperti sandi · uji dulu apakah temuanmu masih terlihat setelah diganti · dan satu halaman portofolio memakai satu sumber angka, jangan dicampur.</p>
+    </div>
+  </section>
+
+  <!-- ============ P3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">RAHASIA 3</span>
+      <h2>Mengirim dashboard tanpa menerbitkannya</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memberi klien dashboard yang bisa dia buka kapan saja, tanpa satu byte pun datanya naik ke tempat publik.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Cara paling sederhana, dan biasanya paling tepat: satu berkas</h3>
+        <span class="cek"><input type="checkbox" id="p3s1"><label for="p3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>plotly bisa menyimpan grafik interaktif jadi <strong>satu berkas HTML</strong> yang berdiri sendiri. Klien membukanya dengan klik dua kali; ia terbuka di browser, bisa disorot dan diperbesar, tanpa memasang apa pun dan tanpa akun.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import plotly.express as px, os
+
+bulanan = gabung.groupby("Bulan", as_index=False)["Total"].sum()
+fig = px.bar(bulanan, x="Bulan", y="Total", title="Pendapatan per Bulan - Kedai Senja")
+
+fig.write_html("dashboard-klien.html", include_plotlyjs="inline")
+print("mandiri:", f"{os.path.getsize('dashboard-klien.html'):,} byte")
+
+fig.write_html("dashboard-cdn.html", include_plotlyjs="cdn")
+print("versi cdn:", f"{os.path.getsize('dashboard-cdn.html'):,} byte")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>mandiri: 4,301,391 byte
+versi cdn: 8,194 byte</code></pre>
+          <p style="margin-top:8px">Angka persisnya bergantung versi plotly yang terpasang — yang penting perbandingannya: sekitar <strong>4 MB</strong> lawan <strong>8 KB</strong>.</p>
+          </div>
+        </div>
+        <p>Selisih 500 kali lipat itu ada isinya: <code>include_plotlyjs="inline"</code> menyelipkan seluruh pustaka grafiknya ke dalam berkas. Hasilnya besar, tapi <strong>berfungsi selamanya, bahkan tanpa internet</strong>. Versi <code>"cdn"</code> mungil karena mengambil pustakanya dari internet saat dibuka — kalau klien membukanya di tempat tanpa sinyal, yang muncul halaman kosong.</p>
+        <div class="catatan">
+          <strong>Untuk klien, pakai yang <code>inline</code>.</strong> Empat MB masih jauh di bawah batas lampiran Gmail (sekitar 25 MB), dan kamu tidak perlu menjelaskan kenapa dashboard-nya kosong di ponsel yang sedang tidak ada sinyal.
+          <p style="margin-top:8px">Perhatikan juga apa yang <em>tidak</em> terjadi di sini: tidak ada server, tidak ada akun, tidak ada tautan yang bisa diteruskan orang, tidak ada data yang meninggalkan komputer klien. Datanya ada di dalam berkas itu, di laptopnya. Untuk sebagian besar UMKM, ini jawaban yang benar — dan hampir tidak ada freelancer yang menawarkannya, karena terdengar kurang canggih.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kalau klien butuh yang selalu terbarui</h3>
+        <span class="cek"><input type="checkbox" id="p3s2"><label for="p3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Cara</th><th>Cocok untuk</th><th>Batasnya</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Berkas HTML dikirim berkala</strong></td><td>Hampir semua UMKM. Digabung dengan laporan email mingguan dari <a href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760">Bekal Kirim Hasil</a>.</td><td>Bukan data terkini, sesuai jadwal kirim</td></tr>
+              <tr><td><strong>Streamlit aplikasi privat</strong></td><td>Klien yang benar-benar butuh membuka sendiri kapan saja</td><td>Paket gratis: <strong>satu</strong> aplikasi privat saja, dan tertidur setelah 12 jam tanpa pengunjung — buka pertama tiap pagi jadi lambat</td></tr>
+              <tr><td><strong>Berbagi lewat Google Drive</strong></td><td>Berkas besar, atau riwayat versi</td><td>Aksesnya harus dibatasi per orang, bukan "siapa saja yang punya tautan"</td></tr>
+              <tr><td><strong>Tableau Public</strong></td><td><strong>Tidak pernah, untuk data klien</strong></td><td>Tidak ada pengaturan privat sama sekali</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>Baris ketiga adalah kebocoran paling sering di Indonesia, dan paling tidak disadari.</strong> "Siapa saja yang memiliki link" terasa privat karena tautannya panjang dan acak. Ia tidak privat: tautan itu ikut ter-<em>forward</em> di grup WhatsApp, tersimpan di riwayat browser komputer bersama, dan kadang terindeks mesin pencari. Bagikan ke <strong>alamat email tertentu</strong>, dan periksa ulang daftarnya waktu proyek selesai.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kalau klien memintamu memakai Tableau Public</h3>
+        <span class="cek"><input type="checkbox" id="p3s3"><label for="p3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini akan terjadi. Klien pernah melihat dashboard Tableau yang bagus, atau iklan lowongan menyebut Tableau, lalu dia memintanya. Dia tidak tahu bahwa Tableau <em>Public</em> berarti datanya publik — hampir tidak ada orang di luar bidang ini yang tahu.</p>
+        <div class="aksi">
+          <span class="tag">KALIMAT YANG DIPAKAI</span>
+          <div class="kode"><pre><code>Bisa, Pak/Bu — tapi ada satu hal yang perlu saya sampaikan dulu.
+
+Tableau yang gratis namanya Tableau Public, dan semua yang
+diunggah ke sana bisa dilihat siapa saja di internet, termasuk
+angka penjualannya. Tidak ada pengaturan untuk membuatnya privat.
+
+Ada dua pilihan:
+1. Saya buatkan dashboard yang isinya sama, dikirim sebagai satu
+   berkas yang Bapak/Ibu buka sendiri. Tidak ada yang online.
+2. Kalau memang harus Tableau, versi berbayarnya bisa privat —
+   biayanya di pihak Bapak/Ibu, saya bantu siapkan.
+
+Saya sarankan yang pertama.</code></pre></div>
+        </div>
+        <div class="catatan">
+          <strong>Perhatikan bahwa kamu tidak menolak, dan tidak menggurui.</strong> Kamu menjelaskan satu fakta yang dia tidak tahu, memberi dua jalan, lalu menyarankan satu. Percakapan seperti ini yang membuat klien menyimpan nomormu — bukan karena kamu mahir Tableau, tapi karena kamu memberitahunya hal yang merugikan dirimu sendiri untuk disebutkan.
+          <p style="margin-top:8px">Kalau setelah dijelaskan dia tetap minta Tableau Public: minta persetujuannya <strong>tertulis</strong>, walau cuma lewat pesan WhatsApp yang kamu simpan. Ini keputusannya, dan sekarang ada catatannya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Rahasia 3 selesai</h3>
+      <p><strong>Catat:</strong> <code>write_html(..., include_plotlyjs="inline")</code> menghasilkan satu berkas ±4 MB yang berfungsi tanpa internet — untuk sebagian besar klien, ini jawaban yang benar · Streamlit privat cuma satu di paket gratis dan tertidur 12 jam · "siapa saja yang punya link" bukan privat · dan kalau klien minta Tableau Public, jelaskan faktanya lalu minta keputusannya tertulis.</p>
+    </div>
+  </section>
+
+  <!-- ============ P4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">RAHASIA 4</span>
+      <h2>Izin, dan apa yang boleh kamu ceritakan</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> meminta izin memakai pekerjaan klien untuk portofolio dengan cara yang biasanya diterima, dan tahu apa yang boleh kamu ceritakan tanpa izin apa pun.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Yang boleh diceritakan tanpa izin siapa pun</h3>
+        <span class="cek"><input type="checkbox" id="p4s1"><label for="p4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini penting supaya kamu tidak jadi terlalu takut sampai portofoliomu kosong. Tanpa izin apa pun, kamu selalu boleh menceritakan <strong>caramu bekerja</strong>:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Boleh, tanpa izin</th><th>Butuh izin tertulis</th></tr></thead>
+            <tbody>
+              <tr><td>"Saya pernah menangani data penjualan ritel multi-cabang"</td><td>"Saya menangani data Kedai Kopi Senja"</td></tr>
+              <tr><td>"Saya menemukan penurunan yang terlihat merata ternyata berasal dari satu cabang"</td><td>"Omzet mereka turun 16,9% di bulan Juni"</td></tr>
+              <tr><td>Kode dan metodenya, dengan data pengganti</td><td>Berkas, angka, atau tangkapan layar aslinya</td></tr>
+              <tr><td>"Klien di bidang makanan &amp; minuman"</td><td>Nama, logo, atau testimoni yang menyebut nama</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Kolom kiri saja sudah cukup untuk portofolio yang kuat</strong>, digabung dengan data pengganti dari Hari 2. Yang membuat calon klien yakin adalah kalimat "saya pernah menghadapi masalah seperti punya Anda, dan begini cara saya mengurainya" — bukan nama klien lama.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Meminta izin, di waktu yang tepat</h3>
+        <span class="cek"><input type="checkbox" id="p4s2"><label for="p4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Waktu terbaik meminta izin adalah <strong>saat serah terima</strong>, bersamaan dengan meminta testimoni (Freelance 8) — saat klien baru menerima hasil dan sedang senang. Bukan sebulan kemudian.</p>
+        <div class="aksi">
+          <span class="tag">KALIMAT YANG DIPAKAI</span>
+          <div class="kode"><pre><code>Pak/Bu, satu permintaan kecil.
+
+Boleh saya pakai pekerjaan ini sebagai contoh di portofolio saya?
+Ketentuannya begini:
+
+- Angkanya saya ubah semua, tidak ada nilai asli yang muncul
+- Nama usaha dan nama cabang tidak disebut
+- Yang saya tunjukkan cuma cara kerjanya
+
+Kalau lebih nyaman, nama Bapak/Ibu bisa disebut supaya jelas ini
+pekerjaan nyata — tapi itu sepenuhnya pilihan, dan tanpa itu pun
+tidak masalah buat saya.</code></pre></div>
+        </div>
+        <div class="catatan">
+          <strong>Menawarkan versi tanpa nama <em>lebih dulu</em> yang membuat permintaan ini hampir selalu diterima.</strong> Kamu meminta hal yang kecil dan sudah dijaga, bukan meminta klien memercayaimu. Sebagian klien justru menawarkan namanya sendiri — dan izin yang datang dari mereka jauh lebih kuat daripada yang kamu minta.
+          <p style="margin-top:8px">Simpan jawabannya. Balasan WhatsApp berbunyi "silakan" sudah cukup; simpan tangkapan layarnya di folder proyek. Izin lisan yang tidak tercatat sama saja dengan tidak ada izin kalau suatu saat dipertanyakan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Satu paragraf yang masuk ke tiap proposal</h3>
+        <span class="cek"><input type="checkbox" id="p4s3"><label for="p4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tambahkan ini ke bagian proposal dari Freelance 6. Ia melindungi klien, dan sekaligus menjual — karena hampir tidak ada pesaingmu yang menuliskannya.</p>
+        <div class="kode"><pre><code>KERAHASIAAN DATA
+
+- Data yang Bapak/Ibu kirim hanya saya pakai untuk pekerjaan ini.
+- Tidak diunggah ke layanan publik mana pun (termasuk Tableau
+  Public dan repositori GitHub publik).
+- Disimpan di komputer saya dan repositori privat, dan dihapus
+  paling lambat 30 hari setelah pekerjaan selesai kalau diminta.
+- Hasil pekerjaan ini tidak muncul di portofolio saya tanpa izin
+  tertulis dari Bapak/Ibu. Kalau nanti diizinkan, angkanya diubah
+  dan nama usaha tidak disebut.
+- Kalau saya memakai alat bantu pihak ketiga untuk mengolahnya,
+  saya sebutkan dulu sebelum dipakai.</code></pre></div>
+        <div class="catatan">
+          <strong>Baris terakhir semakin sering ditanyakan, dan sebaiknya kamu yang menyebut duluan.</strong> Menempelkan data klien ke layanan daring mana pun — termasuk alat bantu AI — berarti data itu keluar dari komputermu. Untuk sebagian klien itu tidak masalah; untuk yang lain sama sekali tidak boleh. Yang membedakan bukan alatnya, tapi apakah kamu memberitahu sebelum atau sesudah.
+          <p style="margin-top:8px">Kalau kamu ragu untuk satu berkas tertentu: kerjakan tanpa mengunggahnya. Berkas yang tidak pernah keluar dari laptopmu tidak perlu dijelaskan ke siapa pun.</p>
+        </div>
+        <div class="aksi">
+          <span class="tag">KERJAKAN SEKARANG, 15 MENIT</span>
+          <p>Buka berkas proposal dari Freelance 6, tempel paragraf di atas, sesuaikan kalimatnya dengan gaya bicaramu. Sekali kerja, terpakai di setiap proposal berikutnya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal Rahasia Klien selesai</h3>
+      <p>Kurikulum ini mengajarimu menerbitkan segalanya, karena tujuan awalnya membangun portofolio yang bisa dilihat perekrut. Empat hari ini menarik garis yang berubah begitu datanya milik orang lain: <strong>cara kerjamu boleh dipamerkan, angka klien tidak pernah.</strong></p>
+      <p style="margin-top:14px">Dan kamu tetap punya portofolio — dengan data pengganti yang mempertahankan seluruh pelajarannya, plus kalimat "saya pernah menghadapi masalah seperti ini" yang tidak butuh izin siapa pun.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Satu kalimat yang layak dibawa:</strong> kesalahan ini hampir tidak pernah terjadi karena orang tidak peduli — ia terjadi karena orang mengerjakan proyek klien dengan kebiasaan yang dibentuk waktu mengerjakan proyek latihan. Ganti kebiasaannya sekarang, sebelum ada klien, saat taruhannya masih nol.
+      </div>
+      <a class="lanjut" href="https://claude.ai/code/artifact/c1664d77-5877-4da8-ade7-764018718b5c">Lanjut ke Jalur Freelance →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua keluaran di halaman ini dihasilkan dengan menjalankan kodenya sungguhan — ukuran berkas di Hari 3 bisa sedikit berbeda tergantung versi plotly yang terpasang.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

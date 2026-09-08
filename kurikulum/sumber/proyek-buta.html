@@ -1,0 +1,723 @@
+<title>Proyek Buta</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/b20c546a-92f3-480f-81ae-4ba51728dc69">← Kembali ke Ujian Bernilai: 60 poin, berwaktu</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Proyek Buta</span>
+  <button type="button" data-hari="1" aria-selected="true">Aturan</button>
+  <button type="button" data-hari="2" aria-selected="false">Proyek 1</button>
+  <button type="button" data-hari="3" aria-selected="false">Proyek 2</button>
+  <button type="button" data-hari="4" aria-selected="false">Proyek 3</button>
+  <button type="button" data-hari="5" aria-selected="false">Ditelaah</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Proyek Buta · 5 hari · tanpa kunci jawaban</span>
+    <h1>Proyek Buta: bekerja tanpa tahu apakah kamu benar</h1>
+    <p class="lede">Lima puluh modul, <strong>190 kunci jawaban, 302 kotak “HARUS MUNCUL”.</strong> Tidak ada satu pun tugas di mana kamu harus memutuskan tanpa jaring pengaman. Padahal itu <strong>seratus persen kondisi kerja nyata</strong> — saya melatihmu di keadaan yang tidak akan pernah kamu temui.</p>
+    <p class="lede" style="margin-top:10px">Modul ini satu-satunya yang berbeda. Tiga berkas klien, tiga tenggat, <strong>nol kunci jawaban</strong>. Bahkan datanya dikirim sebagai berkas, bukan sebagai skrip pembuat — supaya kamu tidak bisa membaca jawabannya dari kodenya, seperti yang bisa kamu lakukan di semua Studi Kasus sebelumnya.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ ATURAN ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">ATURAN</span>
+      <h2>Cara tahu kamu benar, ketika tidak ada yang memberi tahu</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+
+    <div class="bahaya">
+      <strong>Yang tidak akan kamu temukan di modul ini:</strong> kotak “HARUS MUNCUL”, kunci jawaban, angka pembanding, atau konfirmasi bahwa temuanmu benar. Kalau kamu mencarinya, kamu akan mencari sampai akhir dan tidak menemukannya. Itu disengaja.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ambil berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="t1s1"><label for="t1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Semua ada di paket zip, folder <code>data-dan-skrip/proyek-buta/</code>. Salin ke folder kerja barumu.</div>
+        <div class="kode"><pre><code>proyek-buta/
+├── P1 Koperasi Sejahtera Mandiri.xlsx    (2 sheet)
+├── P2 Apotek Sehat Sentosa.xlsx          (2 sheet)
+├── P3 Penjualan Gerai.csv                (pemisah titik koma)
+├── P3 Target Gerai.csv
+└── periksa.py                            (pemeriksa STRUKTUR saja)</code></pre></div>
+        <div class="catatan">
+          <strong><code>periksa.py</code> hanya memastikan datamu termuat lengkap</strong> — jumlah barisnya benar, tidak ada yang tercecer. Ia <strong>tidak</strong> memeriksa temuanmu, dan tidak akan pernah memberi tahu apakah kesimpulanmu benar. Jalankan sekali di awal tiap proyek, lalu lupakan.
+        </div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>python periksa.py 1</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL (ini pemeriksaan struktur, bukan jawaban)</span>
+          <div class="kode"><pre><code>Proyek 1 — pemeriksaan struktur
+  OK    sheet Pinjaman      60 baris data (harus 60)
+  OK    sheet Angsuran     496 baris data (harus 496)
+
+Struktur benar. Angkamu boleh dipakai.
+Catatan: berkas ini TIDAK memeriksa temuanmu. Itu bagianmu.</code></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Lima cara memeriksa diri sendiri</h3>
+        <span class="cek"><input type="checkbox" id="t1s2"><label for="t1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini isi sesungguhnya modul ini. Kalau tidak ada yang memberi tahu kamu benar, kamu harus <strong>membangun sendiri buktinya</strong> — dan kelima cara ini adalah yang dipakai analis sungguhan.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Cara</th><th>Bentuknya</th><th>Menangkap apa</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Tie-out</strong></td><td>Total hasilmu = total sumbernya. Selisih harus <strong>nol</strong>.</td><td>Baris yang hilang saat menyaring, baris yang tergandakan saat <code>merge</code>.</td></tr>
+              <tr><td><strong>2. Dua jalan</strong></td><td>Hitung angka yang sama lewat dua rute berbeda. Harus bertemu.</td><td>Salah rumus. Satu jalan bisa salah; dua jalan yang salahnya sama, hampir mustahil.</td></tr>
+              <tr><td><strong>3. Uji akal sehat</strong></td><td>Margin 78% untuk kedai kopi? Rata-rata belanja Rp 5 juta di apotek?</td><td>Salah satuan, salah pembagi, tanda kurung yang hilang.</td></tr>
+              <tr><td><strong>4. Hitung ulang manual</strong></td><td>Ambil 3 baris, hitung dengan kalkulator, cocokkan.</td><td>Kesalahan rumus yang tidak terlihat di agregat.</td></tr>
+              <tr><td><strong>5. Cari yang hilang</strong></td><td>Berapa baris yang <em>tidak</em> masuk hasil? Ke mana perginya?</td><td>Ini yang paling sering dilewati — dan yang menyimpan temuan paling mahal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Cara nomor 5 adalah keunggulanmu, dan kamu sudah punya refleksnya.</strong> Di kertas kerja, pertanyaan “berapa yang tidak masuk sampel, dan kenapa” adalah prosedur baku. Di analitik data, hampir tidak ada yang menanyakannya — semua orang melihat baris yang muncul, hampir tidak ada yang menghitung baris yang lenyap. Di ketiga proyek berikut, <strong>temuan yang paling bernilai ada di baris yang hilang.</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Aturan tenggat</h3>
+        <span class="cek"><input type="checkbox" id="t1s3"><label for="t1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Proyek</th><th>Tenggat</th><th>Yang diserahkan</th></tr></thead>
+            <tbody>
+              <tr><td>P1 — Koperasi</td><td><strong>1 hari</strong></td><td>Balasan ≤200 kata + berkas kerja</td></tr>
+              <tr><td>P2 — Apotek</td><td><strong>2 hari</strong></td><td>Balasan ≤200 kata + berkas kerja</td></tr>
+              <tr><td>P3 — Retail</td><td><strong>2 hari</strong></td><td>Balasan ≤200 kata + berkas kerja</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Tenggat itu bagian dari soalnya, bukan saran.</strong> Pasang pengingat sungguhan di ponselmu. Kalau waktunya habis dan analisismu belum selesai, <strong>kirim yang sudah ada</strong> beserta kalimat “bagian X belum selesai, perkiraan selesai besok”. Itu jawaban yang benar di dunia kerja. Menahan pekerjaan sampai sempurna dan terlambat tiga hari adalah cara paling cepat kehilangan klien — dan tidak satu pun dari 50 modul sebelumnya pernah melatihmu untuk itu, karena tidak ada satu pun yang punya tenggat.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROYEK 1 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">PROYEK 1 · tenggat 1 hari</span>
+      <h2>Koperasi Simpan Pinjam Sejahtera Mandiri</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>“Pak, koperasi kami mau diperiksa Dinas bulan depan. Tolong dibantu lihat data pinjaman anggota — mana yang masih nunggak, berapa totalnya, dan apakah pembukuan kami rapi. Datanya dari sistem koperasi, ada dua sheet. Saya kurang paham komputer, jadi tolong dijelaskan yang sederhana saja.”</em><br>
+      <span class="mono" style="font-size:0.85rem">— Bu Hartini, Ketua Koperasi Sejahtera Mandiri</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Yang harus kamu serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t2s1"><label for="t2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Berapa total pokok pinjaman yang beredar, dan berapa yang sudah dibayar?
+2. Berapa anggota yang menunggak, dan berapa nilainya?
+3. Apakah pembukuannya rapi? Sebutkan bukti, bukan kesan.
+4. Satu hal yang tidak diminta Bu Hartini tapi wajib dia tahu.</code></pre></div>
+        <div class="aksi">Nomor 4 yang paling bernilai. Di tiap proyek modul ini ada sesuatu yang tidak ditanyakan klien dan seharusnya membuatnya berhenti sejenak.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rambu, bukan jawaban</h3>
+        <span class="cek"><input type="checkbox" id="t2s2"><label for="t2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini bukan petunjuk menuju jawaban. Ini daftar hal yang harus kamu <em>periksa sendiri</em>, dan hasilnya bisa saja bersih.</p>
+        <ul style="font-size:0.93rem; padding-left:20px">
+          <li>Sheet <code>Pinjaman</code> headernya tidak di baris 1, dan ada baris cetakan di bawah. Sudah kamu buang?</li>
+          <li>Kolom tanggal punya <strong>tiga format berbeda</strong>. Sesudah <code>to_datetime</code>, berapa yang gagal?</li>
+          <li>Kolom pokok pinjaman sebagian teks, sebagian angka. Kamu sudah mengukur berapa banyak masing-masing?</li>
+          <li>Sambungkan <code>Angsuran</code> ke <code>Pinjaman</code>. <strong>Berapa baris angsuran yang tidak punya pasangan?</strong> Ke mana perginya uang itu?</li>
+          <li>Untuk tiap anggota berstatus <code>Lunas</code>: apakah total angsurannya masuk akal dibanding pokoknya? <strong>Bandingkan satu per satu, jangan agregat.</strong></li>
+          <li>Tie-out: total angsuran per anggota, dijumlahkan, harus sama dengan total kolom Jumlah Bayar.</li>
+        </ul>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Jangan lewati rambu kelima.</strong> Status “Lunas” di data ini diketik manusia, bukan dihitung sistem. Kalau kamu mempercayainya tanpa memeriksa, seluruh angka tunggakanmu salah — dan Dinas yang akan menemukannya, bukan kamu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t2s3"><label for="t2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Tulis balasan untuk Bu Hartini: <strong>maksimal 200 kata, tanpa satu pun istilah teknis</strong>, tiap kalimat berangka. Simpan bersama berkas kerjamu. Tenggat: 1 hari sejak kamu mulai.</div>
+        <div class="catatan">
+          <strong>Ingat siapa pembacanya.</strong> Bu Hartini menulis “saya kurang paham komputer”. Balasan yang menyebut <code>merge</code>, <code>NaN</code>, atau “anti-join” bukan balasan — itu memindahkan pekerjaan menerjemahkan ke pundaknya.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROYEK 2 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">PROYEK 2 · tenggat 2 hari</span>
+      <h2>Apotek Sehat Sentosa</h2>
+      <span class="waktu">± 4 jam</span>
+    </div>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>“Selamat siang. Kami mau tahu nilai persediaan apotek kami per akhir Juni untuk laporan ke pemilik. Sekalian tolong dilihat obat mana yang lambat lakunya supaya tidak kami beli lagi. Data kartu stok dan penjualan saya lampirkan.”</em><br>
+      <span class="mono" style="font-size:0.85rem">— Pak Dedi, Apoteker Penanggung Jawab</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Yang harus kamu serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t3s1"><label for="t3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Berapa nilai persediaan per 30 Juni 2026?
+2. Obat mana yang lambat laku? Definisikan sendiri "lambat", dan sebutkan alasannya.
+3. Berapa bulan persediaan tiap golongan obat bertahan dengan laju jual sekarang?
+4. Satu hal yang tidak diminta Pak Dedi tapi wajib dia tahu.</code></pre></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rambu</h3>
+        <span class="cek"><input type="checkbox" id="t3s2"><label for="t3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem; padding-left:20px">
+          <li>Kolom tanggal kedaluwarsa punya <strong>tiga format</strong>, dan salah satunya cuma bulan-tahun (<code>Mar-2027</code>) tanpa tanggal. Apa asumsimu untuk yang itu, dan apakah kamu menyebutkannya?</li>
+          <li>Satu obat bisa punya beberapa batch. Nilai persediaan dihitung per batch atau per obat?</li>
+          <li>Ada obat di kartu stok yang <strong>tidak pernah muncul</strong> di sheet Penjualan. Berapa? Apa artinya bagi soal nomor 2?</li>
+          <li>Bandingkan tanggal kedaluwarsa tiap batch dengan 30 Juni 2026. <strong>Apa yang kamu temukan mengubah jawaban nomor 1.</strong></li>
+          <li>Soal nomor 3 butuh laju jual per bulan. Data penjualan mencakup berapa bulan? Jangan asumsikan enam.</li>
+          <li>Uji akal sehat: nilai persediaan apotek kecil biasanya puluhan sampai ratusan juta. Kalau angkamu miliaran atau ratusan ribu, periksa satuannya.</li>
+        </ul>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Rambu keempat adalah inti proyek ini.</strong> Pak Dedi meminta “nilai persediaan”. Pertanyaan yang harus kamu jawab lebih dulu: <em>apakah semua yang ada di rak masih boleh dihitung sebagai nilai?</em> Jawabannya mengubah angka yang kamu laporkan secara material — dan kalau kamu melaporkan angka yang pertama tanpa memeriksa, laporan ke pemiliknya jadi lebih saji.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t3s3"><label for="t3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Balasan ≤200 kata untuk Pak Dedi. Karena dia apoteker, istilah farmasi boleh; istilah teknis data tetap tidak. Tenggat: 2 hari.</div>
+        <div class="catatan">
+          <strong>Untuk soal nomor 1, laporkan angkanya dengan cara yang tidak bisa disalahartikan.</strong> Kalau ada dua angka yang sama-sama sah — misalnya “nilai seluruh isi rak” dan “nilai yang masih layak jual” — sebutkan keduanya beserta selisihnya. Satu angka tunggal untuk pertanyaan yang punya dua jawaban adalah cara paling halus menyesatkan orang.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROYEK 3 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">PROYEK 3 · tenggat 2 hari</span>
+      <h2>Lima gerai, satu papan peringkat</h2>
+      <span class="waktu">± 4 jam</span>
+    </div>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>“Halo, saya butuh papan peringkat gerai untuk rapat direksi Jumat. Ranking dari yang terbaik, berdasarkan pencapaian terhadap target. Yang paling bawah kemungkinan kami tutup. Data omzet dan target saya kirim, tolong yang simpel dan jelas.”</em><br>
+      <span class="mono" style="font-size:0.85rem">— Ibu Melinda, Direktur Operasional</span>
+    </div>
+
+    <div class="bahaya">
+      <strong>Proyek ini punya taruhan yang berbeda dari dua sebelumnya.</strong> Hasil kerjamu akan dipakai untuk memutuskan gerai mana yang ditutup — dan itu menyangkut pekerjaan orang. Kalau peringkatmu salah karena ada yang tidak kamu periksa, orang kehilangan pekerjaannya karena kelalaianmu.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Yang harus kamu serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t4s1"><label for="t4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Papan peringkat 5 gerai berdasarkan pencapaian terhadap target.
+2. Untuk tiap gerai: omzet, target, pencapaian %, dan catatan bila ada.
+3. Rekomendasimu soal gerai yang paling bawah.
+4. Satu hal yang tidak diminta Bu Melinda tapi wajib dia tahu SEBELUM rapat.</code></pre></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rambu</h3>
+        <span class="cek"><input type="checkbox" id="t4s2"><label for="t4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem; padding-left:20px">
+          <li>Kedua CSV memakai pemisah <strong>titik koma</strong>, dan angkanya berformat Indonesia. Sudah termuat sebagai angka, atau masih teks?</li>
+          <li><strong>Hitung berapa baris yang seharusnya ada</strong> kalau 5 gerai × 6 bulan. Bandingkan dengan yang benar-benar ada. Selisihnya bukan kebetulan.</li>
+          <li>Kalau ada gerai yang bulannya tidak lengkap, membandingkan <em>total</em> omzetnya dengan gerai lain adalah membandingkan dua hal berbeda. Apa yang kamu lakukan?</li>
+          <li>Lihat kolom target. Ada satu yang <strong>sangat berbeda</strong> dari yang lain. Apakah itu wajar, atau tanda target itu tidak pernah diperbarui?</li>
+          <li>Hitung pencapaian dua cara: terhadap target penuh 6 bulan, dan terhadap target yang disetahunkan sesuai bulan yang ada. Apakah peringkatnya berubah?</li>
+          <li>Uji akal sehat: kalau ada gerai yang pencapaiannya jauh di atas 200%, kemungkinan besar bukan gerainya yang hebat.</li>
+        </ul>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Dua rambu terakhir menentukan apakah rekomendasimu benar atau membahayakan.</strong> Papan peringkat yang disusun tanpa memeriksa keduanya akan menempatkan gerai yang salah di posisi teratas <em>dan</em> di posisi terbawah sekaligus. Yang teratas karena targetnya keliru; yang terbawah karena datanya tidak lengkap.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Serahkan</h3>
+        <span class="cek"><input type="checkbox" id="t4s3"><label for="t4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Balasan ≤200 kata + tabel peringkat. Tenggat: 2 hari.</div>
+        <div class="catatan">
+          <strong>Kalau kesimpulanmu adalah bahwa papan peringkat ini belum layak dipakai untuk keputusan penutupan, katakan itu</strong> — dengan alasan dan angkanya, plus apa yang kamu butuhkan agar layak. Menolak memberi peringkat yang kamu tahu menyesatkan bukan kegagalan menyelesaikan tugas. Itu justru pekerjaannya, dan itu persis pelajaran penutup Studi Kasus 5.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DITELAAH ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">DITELAAH</span>
+      <h2>Ditinjau manusia — bagian yang paling tidak nyaman</h2>
+      <span class="waktu">± 60 menit + menunggu</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini:</strong> hasil kerjamu sudah dibaca dan dikritik orang lain. Ini yang benar-benar tidak pernah dilatih 50 modul sebelumnya — <code>code review</code> muncul <strong>nol kali</strong> di seluruh kurikulum.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa ini tidak bisa dilewati</h3>
+        <span class="cek"><input type="checkbox" id="t5s1"><label for="t5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di kantor mana pun, <strong>100% kodemu dibaca orang lain</strong> sebelum dipakai. Kurikulum ini mencetak orang yang mahir sendirian dan belum pernah dikritik — dan tinjauan pertama di tempat kerja akan terasa seperti serangan pribadi, bukan proses biasa.</p>
+        <p style="margin-top:8px">Lebih baik pengalaman itu terjadi sekarang, atas pekerjaan yang tidak ada taruhannya.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Ini juga bukan hal baru buatmu, kalau kamu memikirkannya.</strong> Kertas kerjamu di KAP ditelaah senior, lalu manajer, lalu partner. Kamu sudah terbiasa hasil kerjamu dibaca orang yang mencari kesalahannya. Yang berubah cuma bentuk berkasnya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ke mana meminta, dan apa yang diminta</h3>
+        <span class="cek"><input type="checkbox" id="t5s2"><label for="t5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Ke siapa</th><th>Yang mereka lihat</th></tr></thead>
+            <tbody>
+              <tr><td>Komunitas data Indonesia (grup Telegram/Discord, Data Science Indonesia)</td><td>Kode dan pendekatanmu</td></tr>
+              <tr><td>Rekan KAP lamamu</td><td>Apakah kesimpulan auditnya masuk akal — mereka paling tajam di sini</td></tr>
+              <tr><td>Orang non-teknis di sekitarmu</td><td>Apakah balasan 200 katamu benar-benar bisa dimengerti</td></tr>
+              <tr><td>Forum publik (Stack Overflow, r/dataisbeautiful)</td><td>Kode, dengan jawaban paling langsung dan paling pedas</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="aksi" style="margin-top:12px">Kirim satu proyek — bukan tiga — dengan tiga pertanyaan spesifik, bukan “tolong dikoreksi”. Misalnya: <em>“Apakah cara saya menangani baris yang tidak punya pasangan sudah tepat?”</em> · <em>“Balasan saya ke klien bisa dimengerti orang non-teknis?”</em> · <em>“Ada yang saya lewatkan?”</em></div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Satu aturan yang tidak boleh dilanggar:</strong> data di ketiga proyek ini buatan, jadi aman dipublikasikan. <strong>Jangan pernah</strong> mengirim data klien sungguhan ke forum mana pun untuk minta dikoreksi — aturan lengkapnya ada di Bekal Rahasia Klien, dan pelanggarannya tidak bisa ditarik kembali.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cara menerima kritik tanpa membela diri</h3>
+        <span class="cek"><input type="checkbox" id="t5s3"><label for="t5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Yang datang</th><th>Jangan</th><th>Lakukan</th></tr></thead>
+            <tbody>
+              <tr><td>“Kodemu berbelit”</td><td>Menjelaskan kenapa kamu menulis begitu</td><td>Minta contoh versi yang lebih sederhana. Bandingkan. Simpan yang lebih baik.</td></tr>
+              <tr><td>“Kesimpulanmu salah”</td><td>Membela</td><td>Tanya <em>data mana</em> yang membuat mereka menyimpulkan begitu. Jalankan ulang. Sering mereka benar; kadang mereka salah baca — dan kamu perlu tahu yang mana.</td></tr>
+              <tr><td>Diam saja, tidak ada yang membalas</td><td>Menganggapnya penolakan</td><td>Pertanyaanmu kemungkinan terlalu umum. Persempit, kirim ulang ke tempat lain.</td></tr>
+              <tr><td>Kritik yang kasar</td><td>Membalas</td><td>Ambil isinya, buang nadanya. Isi yang benar tidak jadi salah karena disampaikan dengan buruk.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Ukurannya bukan “apakah mereka memuji”.</strong> Ukurannya: <em>apakah ada satu hal yang berubah di pekerjaanmu setelah dibaca orang lain?</em> Kalau tidak ada satu pun, kemungkinan besar kamu bertanya terlalu umum — bukan kamu sudah sempurna.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Proyek Buta selesai — dan ini akhir jalurnya</h3>
+      <p>Tiga berkas klien, tiga tenggat, nol kunci jawaban. Kamu memutuskan sendiri apa yang dilaporkan, membangun sendiri buktinya, dan menyerahkannya ke manusia untuk dikritik.</p>
+      <p style="margin-top:10px"><strong>Kalau kamu menemukan sesuatu di ketiga proyek yang tidak diminta klien — kamu sudah siap.</strong> Bukan karena kamu mahir SQL; itu sudah lama benar. Tapi karena kamu memeriksa hal yang tidak disuruh diperiksa, dan itu satu-satunya kebiasaan yang membuat seorang analis dibayar lebih dari alat yang menjalankan query.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Dan kalau kamu tidak menemukan apa-apa di salah satunya:</strong> jangan berasumsi berkas itu bersih. Ketiganya punya sesuatu. Kembali ke daftar “lima cara memeriksa diri sendiri” di bagian Aturan, dan kerjakan cara nomor lima — hitung baris yang <em>hilang</em>, bukan yang muncul.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/d70b6a53-5f3a-483d-83e4-79aba530fdb0">Lanjut ke Jalur S2 Luar Negeri: silabus, biaya, keputusan →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Ketiga berkas proyek di modul ini dikirim sebagai berkas jadi, bukan sebagai skrip pembuat — dan tidak ada kunci jawaban di mana pun, termasuk di paket zip.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "proyek-buta-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

@@ -1,0 +1,1584 @@
+<title>Jalur Freelance</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">← Kembali ke indeks rute</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Jalur Freelance</span>
+  <button type="button" data-hari="1" aria-selected="true">F1</button>
+  <button type="button" data-hari="2" aria-selected="false">F2</button>
+  <button type="button" data-hari="3" aria-selected="false">F3</button>
+  <button type="button" data-hari="4" aria-selected="false">F4</button>
+  <button type="button" data-hari="5" aria-selected="false">F5</button>
+  <button type="button" data-hari="6" aria-selected="false">F6</button>
+  <button type="button" data-hari="7" aria-selected="false">F7</button>
+  <button type="button" data-hari="8" aria-selected="false">F8</button>
+  <button type="button" data-hari="9" aria-selected="false">F9</button>
+  <button type="button" data-hari="10" aria-selected="false">F10</button>
+  <button type="button" data-hari="11" aria-selected="false">F11</button>
+  <button type="button" data-hari="12" aria-selected="false">F12</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Jalur paralel · mulai dikerjakan di minggu ke-5</span>
+    <h1>Jalur Freelance: dari nol klien sampai dibayar</h1>
+    <p class="lede">Dua belas hari ini <strong>tidak mengajarkan analisis data</strong> — semua modul lain sudah melakukannya. Ini mengajarkan bagian yang membuat kemampuan itu berubah jadi uang: menentukan apa yang kamu jual, menetapkan harga tanpa menebak, menulis batas pekerjaan, dan mendapat klien pertama ketika belum ada yang pernah membayarmu.</p>
+    <p class="lede" style="margin-top:10px"><strong>Jangan dikerjakan sekaligus.</strong> Kira-kira satu hari freelance per minggu kalender, mulai minggu ke-5 — dua belas hari ini menutupi minggu 5 sampai 17, kira-kira satu hari freelance per minggu. Sebagian besar hari di sini menuntutmu <em>keluar dan melakukan sesuatu di dunia nyata</em> — mengirim pesan, menelepon, menunggu balasan — dan itu butuh waktu kalender.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ F1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 1</span>
+      <h2>Apa yang sebenarnya dibeli orang</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyebut tiga jenis pekerjaan yang benar-benar dibayar orang, dan tahu mana yang sudah bisa kamu ambil sekarang.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Orang tidak membeli "analisis data"</h3>
+        <span class="cek"><input type="checkbox" id="f1s1"><label for="f1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau kamu menawarkan "jasa analisis data", tidak ada yang tahu harus membeli apa. Yang dibeli orang selalu lebih sempit dan lebih konkret: <strong>sebuah masalah yang sedang mengganggu mereka minggu ini.</strong></p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Yang mereka rasakan</th><th>Yang kamu jual</th><th>Siap setelah</th></tr></thead>
+            <tbody>
+              <tr><td>"Data saya berantakan di banyak file, tiap bulan saya rapikan manual berjam-jam"</td><td><strong>Pembersihan &amp; penggabungan data</strong> — sekali kerja, hasilnya rapi dan bisa diulang</td><td class="mono"><a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a">Bekal Data Klien</a></td></tr>
+              <tr><td>"Saya tidak tahu cabang mana yang sebenarnya untung"</td><td><strong>Dashboard</strong> — satu halaman yang menjawabnya, bisa dibuka kapan saja</td><td class="mono">Modul M8</td></tr>
+              <tr><td>"Tiap Senin saya bikin laporan yang sama, tiga jam"</td><td><strong>Laporan otomatis</strong> — berjalan sendiri, masuk email tiap Senin pagi</td><td class="mono">M11 + <a href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760">Bekal Kirim Hasil</a></td></tr>
+              <tr><td>"Pelanggan saya datang sekali lalu hilang, saya tidak tahu berapa banyak"</td><td><strong>Analisis kohor &amp; retensi</strong> — berapa yang bertahan, berapa nilai satu pelanggan</td><td class="mono">Modul M12</td></tr>
+              <tr><td>"Saya mau tahu pelanggan mana yang akan berhenti"</td><td><strong>Model prediksi</strong> — churn, segmentasi, ambang keputusan</td><td class="mono">Modul M13</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Baris pertama adalah pintu masuknya, dan ia butuh bekal tersendiri.</strong> Semua modul mengajarimu mengolah data yang <em>sudah rapi</em>. Berkas yang dikirim klien tidak pernah begitu — berformat Excel dengan banyak sheet, baris judul, dan angka yang diam-diam rusak. <a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a"><strong>Bekal Data Klien</strong></a> (6 hari) menutup jarak itu; kerjakan setelah Modul M6, sebelum Freelance 5.<p style="margin-top:8px">Baris ketiga punya lubang serupa: Modul M11 mengajarimu membuat laporan yang berjalan sendiri, tapi hasilnya berhenti di layar server — tidak ada yang sampai ke klien. <a href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760"><strong>Bekal Kirim Hasil</strong></a> (5 hari) menutupnya; kerjakan setelah Modul M11.</p><p style="margin-top:8px">Dan sebelum berkas klien pertama masuk ke tanganmu: <a href="https://claude.ai/code/artifact/e653810a-9c48-4b3e-af6e-8d439618c677"><strong>Bekal Rahasia Klien</strong></a> (4 hari). Kurikulum ini melatihmu menerbitkan segalanya ke tempat publik — benar untuk portofolio, kebocoran untuk data orang lain.</p>
+        </div>
+        <div class="catatan">
+          <strong>Perhatikan kolom kiri.</strong> Semuanya kalimat orang biasa, bukan istilah teknis. Itu bahasa yang harus kamu pakai di profil, penawaran, dan percakapan pertama. Kata "pandas", "window function", dan "dbt" tidak menjual apa pun — kecuali kepada sesama analis.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Pekerjaan pertamamu hampir pasti yang paling membosankan</h3>
+        <span class="cek"><input type="checkbox" id="f1s2"><label for="f1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pembersihan data adalah pekerjaan dengan tarif terendah dan paling banyak tersedia. Godaannya besar untuk melewatinya dan langsung menawarkan dashboard atau model prediksi.</p>
+        <div class="bahaya">
+          <strong>Jangan lewati.</strong> Bukan karena uangnya, tapi karena tiga hal yang cuma bisa didapat dari klien nyata: pengalaman menghadapi data yang benar-benar berantakan (bukan data latihan yang sudah disiapkan), bukti bahwa ada orang yang pernah membayarmu, dan testimoni pertama. Ketiganya tidak bisa dibeli atau dilatih sendiri.
+        </div>
+        <p>Setelah dua-tiga pekerjaan seperti ini, kamu berhenti melamar dan mulai dilamar — karena kamu punya sesuatu yang tidak dimiliki pelamar lain: <strong>rekam jejak</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tulis kalimat jasamu</h3>
+        <span class="cek"><input type="checkbox" id="f1s3"><label for="f1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Isi kerangka ini. Satu kalimat, tanpa istilah teknis:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>Saya membantu [SIAPA] yang kesulitan [MASALAH APA],
+dengan [APA YANG SAYA BUAT], supaya mereka bisa [HASIL APA].</code></pre>
+        </div>
+        <details>
+          <summary>Tiga contoh yang sudah diisi</summary>
+          <div class="isi">
+            <p>"Saya membantu <strong>pemilik usaha dengan beberapa cabang</strong> yang kesulitan <strong>tahu cabang mana yang benar-benar untung</strong>, dengan <strong>dashboard satu halaman yang bisa dibuka kapan saja</strong>, supaya mereka bisa <strong>berhenti menebak saat mengambil keputusan</strong>."</p>
+            <p>"Saya membantu <strong>tim keuangan</strong> yang kesulitan <strong>menghabiskan berjam-jam merapikan data tiap bulan</strong>, dengan <strong>proses yang berjalan otomatis</strong>, supaya mereka bisa <strong>memakai waktunya untuk menganalisis, bukan menyalin.</strong>"</p>
+            <p>Dengan latar auditmu: "Saya membantu <strong>perusahaan yang datanya tersebar di banyak sistem</strong> yang kesulitan <strong>memastikan angka laporannya cocok satu sama lain</strong>, dengan <strong>pemeriksaan otomatis yang menandai selisih sebelum sampai ke pimpinan</strong>, supaya mereka bisa <strong>berhenti menemukan kesalahan setelah laporannya terlanjur dikirim.</strong>"</p>
+            <p style="margin-top:8px"><strong>Contoh ketiga adalah yang paling sedikit saingannya</strong>, dan kamu satu-satunya yang bisa mengucapkannya dengan jujur.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 1 selesai</h3>
+      <p><strong>Catat:</strong> orang membeli masalah yang hilang, bukan teknik. Pekerjaan pertama = pembersihan data, dan itu memang tangganya. Kalimat jasa: siapa · masalah · yang kamu buat · hasilnya.</p>
+    </div>
+  </section>
+
+  <!-- ============ F2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 2</span>
+      <h2>Menetapkan harga tanpa menebak</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> angka tarif yang bisa kamu pertahankan kalau ditanya alasannya — dihitung, bukan dikira-kira atau dicontek.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa aku tidak memberimu angka</h3>
+        <span class="cek"><input type="checkbox" id="f2s1"><label for="f2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">
+          <strong>Aku tidak akan menulis "tarif pasaran freelance data di Indonesia adalah Rp X".</strong> Angka semacam itu berubah tiap tahun, berbeda jauh antar kota dan antar platform, dan aku tidak bisa memeriksanya dari sini. Menuliskannya seolah-olah fakta justru merugikanmu — kamu akan memakai angka yang mungkin sudah basi atau tidak pernah benar.
+        </div>
+        <p>Yang kuberikan adalah <strong>cara menghitungnya sendiri</strong>, plus satu langkah riset yang harus kamu kerjakan hari ini juga. Hasilnya akan lebih akurat daripada angka mana pun yang bisa kutulis.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Lantai: berapa yang tidak boleh kamu terima</h3>
+        <span class="cek"><input type="checkbox" id="f2s2"><label for="f2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hitung di kertas atau spreadsheet:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>A. Biaya hidup sebulan (yang sebenarnya, bukan yang ideal)  = ______
+B. Target tabungan/darurat sebulan                          = ______
+C. Kebutuhan kotor sebulan  = A + B                         = ______
+
+D. Hari kerja sebulan                                       = 20
+E. Jam kerja per hari yang BISA DITAGIH                     = 4
+   (bukan 8 — sisanya habis untuk cari klien, balas pesan,
+    revisi, administrasi, dan belajar)
+
+F. Jam tertagih sebulan = D x E                             = 80
+G. LANTAI tarif per jam = C / F                             = ______</code></pre>
+        </div>
+        <div class="bahaya">
+          <strong>Baris E adalah yang paling sering salah dihitung pemula.</strong> Freelancer penuh waktu jarang bisa menagih lebih dari 4-5 jam sehari. Kalau kamu menghitung lantai tarif dengan asumsi 8 jam tertagih, tarifmu akan setengah dari yang kamu butuhkan, dan kamu baru sadar setelah tiga bulan kehabisan tabungan.
+        </div>
+        <p><strong>Angka G adalah lantai, bukan tarif.</strong> Di bawah itu kamu rugi. Tarif sesungguhnya harus di atasnya — seberapa jauh, ditentukan langkah berikutnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Langit-langit: riset yang harus kamu kerjakan hari ini</h3>
+        <span class="cek"><input type="checkbox" id="f2s3"><label for="f2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">
+          <span class="tag">LAKUKAN SEKARANG, ± 45 MENIT</span>
+          <ol style="font-size:0.93rem;padding-left:20px;margin:0">
+            <li>Buka dua platform lokal (mis. Sribulancer, Projects.co.id) dan satu internasional (Upwork atau Fiverr).</li>
+            <li>Cari: <em>"dashboard"</em>, <em>"data cleaning"</em>, <em>"Power BI"</em>, <em>"analisis data"</em>.</li>
+            <li>Catat <strong>20 pekerjaan</strong> di spreadsheet: judul, anggaran yang tertulis, perkiraan lama kerja, negara klien.</li>
+            <li>Hitung anggaran ÷ perkiraan jam untuk tiap baris. Buang yang tertinggi dan terendah, lihat <strong>median</strong>-nya.</li>
+          </ol>
+        </div>
+        <div class="catatan">
+          <strong>Ini latihan analisis data juga, dan datanya tentang hidupmu sendiri.</strong> Kamu baru saja mengumpulkan sampel, membuang pencilan, dan melaporkan median alih-alih rata-rata — persis yang kamu pelajari di Minggu 4 Hari 23. Simpan spreadsheet-nya; ulangi tiap tiga bulan untuk melihat apakah tarifmu masih masuk akal.
+        </div>
+        <p>Sekarang kamu punya dua angka: <strong>lantai</strong> (dari kebutuhanmu) dan <strong>median pasar</strong> (dari risetmu). Tarif pembukamu ada di antara keduanya, condong ke bawah untuk 2-3 klien pertama.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Per jam atau per proyek?</h3>
+        <span class="cek"><input type="checkbox" id="f2s4"><label for="f2s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th></th><th>Per jam</th><th>Per proyek</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Pakai kalau</strong></td><td>Ruang lingkupnya belum jelas, atau pekerjaan berkelanjutan</td><td>Hasilnya jelas dan bisa disebutkan di awal</td></tr>
+              <tr><td><strong>Risikonya</strong></td><td>Klien mengawasi jam, dan kamu dihukum karena makin cepat</td><td>Kamu salah menaksir lama kerja, dan menanggung sendiri</td></tr>
+              <tr><td><strong>Untuk kamu</strong></td><td>Klien pertama, saat kamu belum bisa menaksir waktu</td><td>Setelah 3-4 proyek, saat taksiranmu sudah terbukti</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Kenapa per proyek lebih baik setelah kamu berpengalaman:</strong> makin mahir kamu, makin cepat selesai. Dengan tarif per jam, keahlianmu justru menurunkan pendapatanmu. Dengan harga per proyek, keahlian itu menjadi milikmu.
+          <p style="margin-top:8px"><strong>Cara menaksir per proyek:</strong> perkirakan jamnya, <strong>kalikan 1,5</strong>, lalu kalikan tarif per jammu. Faktor 1,5 itu bukan tambahan keuntungan — itu revisi, rapat, dan kejutan yang selalu ada. Taksiran pertamamu akan meleset; itu normal dan sudah diperhitungkan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 2 selesai</h3>
+      <p><strong>Catat:</strong> lantai = kebutuhan bulanan ÷ 80 jam tertagih (bukan 160). Langit-langit = median risetmu sendiri. Per jam untuk klien pertama, per proyek setelah taksiranmu terbukti. Taksiran jam × 1,5.</p>
+    </div>
+  </section>
+
+  <!-- ============ F3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 3</span>
+      <h2>Portofolio yang menjual, bukan yang memamerkan</h2>
+      <span class="waktu">± 90 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> satu halaman yang bisa dikirim ke calon klien, dan tahu kenapa notebook GitHub-mu saja tidak cukup.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Klien tidak membuka GitHub</h3>
+        <span class="cek"><input type="checkbox" id="f3s1"><label for="f3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Repositori GitHub-mu penting — untuk melamar kerja penuh waktu, di mana yang membaca adalah sesama analis. Untuk klien freelance, sebagian besar tidak akan membukanya, dan yang membuka tidak akan mengerti isinya.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Pembaca</th><th>Yang dia cari</th><th>Bentuk yang tepat</th></tr></thead>
+            <tbody>
+              <tr><td>Perekrut / analis senior</td><td>Kode yang rapi, cara berpikir</td><td>Repositori GitHub + notebook</td></tr>
+              <tr><td><strong>Calon klien</strong></td><td>"Apakah orang ini bisa menyelesaikan masalahku?"</td><td><strong>Satu halaman: masalah → hasil → berapa lama</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kerangka satu halaman per proyek</h3>
+        <span class="cek"><input type="checkbox" id="f3s2"><label for="f3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>[TANGKAPAN LAYAR HASILNYA — paling atas, sebelum tulisan apa pun]
+
+## Masalahnya
+Dua kalimat. Bahasa orang biasa, tanpa istilah teknis.
+
+## Yang saya kerjakan
+Tiga poin. Apa yang dibuat, dari data apa, berapa besar datanya.
+
+## Hasilnya
+Angka. "Ketahuan 3 cabang yang selama ini dikira untung ternyata rugi
+setelah biaya sewa dialokasikan." Bukan "berhasil membuat dashboard".
+
+## Berapa lama
+"4 hari kerja." Klien selalu ingin tahu ini dan jarang berani bertanya.
+
+[Lihat dashboard →]  [Lihat kodenya →]  (tautan hidup, dua-duanya)</code></pre>
+        </div>
+        <div class="bahaya">
+          <strong>Bagian "Hasilnya" adalah yang paling sering ditulis salah.</strong> "Membuat dashboard interaktif dengan Plotly" itu menjelaskan <em>usaha</em>. "Menemukan bahwa 40% omzet datang dari 3 produk yang stoknya paling sering kosong" menjelaskan <em>nilai</em>. Yang kedua yang membuat orang menghubungimu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Buat halamannya — gratis, hari ini juga</h3>
+        <span class="cek"><input type="checkbox" id="f3s3"><label for="f3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kamu sudah menyiapkan GitHub Pages di Minggu 8 Hari 56 untuk menaruh dashboard plotly. Pakai yang sama:</p>
+        <div class="aksi">
+          <span class="tag">LANGKAHNYA</span>
+          <ol style="font-size:0.93rem;padding-left:20px;margin:0">
+            <li>Di repositori portofoliomu, buat file <code>index.md</code>.</li>
+            <li>Isi: satu paragraf tentang dirimu (kalimat jasa dari Freelance 1), lalu 3 proyek dengan kerangka di atas.</li>
+            <li><strong>Settings → Pages</strong>, branch <code>main</code>, folder <code>/ (root)</code>.</li>
+            <li>Alamatnya jadi <code>https://[usernamemu].github.io/[repo]/</code> — itu yang kamu kirim ke klien, bukan tautan GitHub.</li>
+          </ol>
+        </div>
+        <div class="catatan">
+          <strong>Tiga proyek sudah cukup untuk mulai.</strong> Yang keempat dan seterusnya lebih baik datang dari klien nyata. Kalau kamu menunggu punya sepuluh proyek latihan sebelum berani menawarkan jasa, kamu menunda pemasukan berbulan-bulan untuk sesuatu yang tidak diminta siapa pun.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Proyek yang mana</h3>
+        <span class="cek"><input type="checkbox" id="f3s4"><label for="f3s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Dari proyek modulmu, pilih tiga yang paling dekat dengan yang mau kamu jual:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Kalau mau menjual</th><th>Pajang proyek ini</th></tr></thead>
+            <tbody>
+              <tr><td>Dashboard</td><td>Proyek 7 (Hari 56) — dua dashboard, dua alat, satu data</td></tr>
+              <tr><td>Pembersihan &amp; laporan</td><td>Proyek 1 (Hari 14) + Proyek 2 (Hari 21) digabung jadi satu cerita</td></tr>
+              <tr><td>Analisis keputusan</td><td>Proyek 3 (Hari 28) — laporan A/B test dengan rekomendasi</td></tr>
+              <tr><td>Spesialis rekonsiliasi</td><td>Memo Migas Hari 35 — paling sedikit saingannya</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 3 selesai</h3>
+      <p><strong>Catat:</strong> klien butuh halaman, bukan repositori. Urutan: gambar → masalah → yang dikerjakan → <strong>hasil berangka</strong> → lama pengerjaan. Tiga proyek cukup untuk mulai.</p>
+    </div>
+  </section>
+
+  <!-- ============ F4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 4</span>
+      <h2>Klien pertama: masalah ayam dan telur</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> daftar 20 nama yang bisa dihubungi minggu ini — bukan strategi, tapi daftar nama.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa platform bukan tempat memulai</h3>
+        <span class="cek"><input type="checkbox" id="f4s1"><label for="f4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Refleks pertama semua orang: buka Upwork, buat profil, lamar 50 pekerjaan. Lalu tidak ada yang membalas, dan kesimpulannya "aku belum cukup mahir".</p>
+        <div class="bahaya">
+          <strong>Bukan kemahiranmu yang jadi masalah — tapi nol ulasan.</strong> Di platform, calon klien memilih di antara puluhan pelamar yang semuanya mengaku bisa. Satu-satunya pembeda yang bisa dia lihat adalah riwayat pekerjaan dan penilaian. Pelamar tanpa keduanya nyaris tidak terlihat, seberapa pun bagus kerjanya.
+        </div>
+        <p>Jadi urutan yang benar bukan "platform dulu", tapi:</p>
+        <div class="diagram" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:14px 0;font-size:0.85rem">
+          <div style="border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--surface);flex:1 1 auto;text-align:center"><strong style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--teal)">1</strong>Orang yang sudah kenal kamu</div>
+          <span style="color:var(--ink-soft)">→</span>
+          <div style="border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--surface);flex:1 1 auto;text-align:center"><strong style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--teal)">2</strong>Rujukan dari mereka</div>
+          <span style="color:var(--ink-soft)">→</span>
+          <div style="border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--surface);flex:1 1 auto;text-align:center"><strong style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;color:var(--teal)">3</strong>Platform, dengan ulasan di tangan</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Keunggulan yang tidak kamu sadari</h3>
+        <span class="cek"><input type="checkbox" id="f4s2"><label for="f4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan">
+          <strong>Kamu bekerja bertahun-tahun di KAP.</strong> Artinya kamu punya sesuatu yang tidak dimiliki lulusan bootcamp mana pun: <strong>daftar kontak yang isinya orang keuangan di banyak perusahaan.</strong> Mantan klien, mantan rekan yang sekarang jadi manajer keuangan di tempat lain, alumni kantor lamamu yang tersebar.
+          <p style="margin-top:8px">Mereka semua punya masalah data, dan mereka semua sudah tahu kamu bisa dipercaya dengan angka. Itu bagian tersulit dari menjual jasa, dan buatmu sudah selesai sebelum dimulai.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Satu batas yang harus kamu jaga.</strong> Kalau kamu baru resign, periksa dulu perjanjian kerjamu soal larangan mendekati klien kantor lama. Aturannya berbeda-beda tiap KAP, dan melanggarnya bukan cuma soal hukum — reputasi di lingkaran akuntan Indonesia menyebar cepat, dan kamu akan bekerja di lingkaran itu bertahun-tahun ke depan. Kalau ragu, mulai dari kontak yang <em>bukan</em> klien kantor lamamu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tulis 20 nama sekarang</h3>
+        <span class="cek"><input type="checkbox" id="f4s3"><label for="f4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">
+          <span class="tag">BUAT SPREADSHEET, ISI SEKARANG</span>
+          <p>Kolom: <code>nama</code> · <code>dari mana kenal</code> · <code>tempat kerja sekarang</code> · <code>kemungkinan masalah datanya</code> · <code>sudah dihubungi?</code> · <code>balasan</code></p>
+        </div>
+        <p>Sumber nama, urut dari yang paling mudah:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li>Rekan seangkatan di kantor lama yang sudah pindah ke perusahaan</li>
+          <li>Teman kuliah yang sekarang di keuangan, operasional, atau punya usaha</li>
+          <li>Keluarga dan kenalan yang punya usaha — toko, klinik, kos, distributor</li>
+          <li>Alumni kampusmu di LinkedIn, terutama yang jabatannya manajer ke atas</li>
+          <li>Komunitas: pengurus organisasi, teman arisan, grup alumni</li>
+        </ul>
+        <div class="catatan">
+          <strong>Dua puluh terasa banyak sampai kamu mulai menulis.</strong> Jangan menyaring dulu — tulis semua nama yang terpikir, baru urutkan nanti. Menyaring sambil mengingat membuat daftarmu berhenti di angka enam.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Pesan pertama — yang tidak berbau jualan</h3>
+        <span class="cek"><input type="checkbox" id="f4s4"><label for="f4s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>Halo [Nama], apa kabar?
+
+Aku baru keluar dari [kantor lama] dan sekarang fokus ke analisis data —
+bikin dashboard dan merapikan data buat perusahaan.
+
+Bukan mau nawarin apa-apa, cuma pengin nanya: di tempatmu sekarang,
+laporan atau data apa yang paling bikin repot? Yang tiap bulan harus
+dikerjakan manual, atau yang angkanya sering nggak cocok.
+
+Aku lagi kumpulin gambaran masalah yang nyata, siapa tahu ada yang
+kebetulan bisa aku bantu.</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Kenapa pesan ini berhasil padahal tidak menjual apa pun:</strong> ia menanyakan masalah, bukan menawarkan solusi. Orang senang menceritakan hal yang membuat mereka repot. Dan begitu mereka menceritakannya, dua hal terjadi sekaligus — kamu tahu persis apa yang bisa kamu tawarkan, dan mereka sudah merasa didengarkan sebelum ada uang yang disebut.
+          <p style="margin-top:8px"><strong>Kirim ke 5 orang per hari, bukan 20 sekaligus.</strong> Kamu perlu tenaga untuk membalas dengan sungguh-sungguh, dan balasan pertama biasanya datang dalam 2-3 hari.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 4 selesai</h3>
+      <p><strong>Catat:</strong> jaringan dulu, platform belakangan (masalahnya nol ulasan, bukan kemampuan). Latar KAP-mu = daftar kontak orang keuangan. Periksa larangan mendekati klien kantor lama. Pesan pertama menanyakan masalah, bukan menawarkan jasa. Lima orang per hari.</p>
+    </div>
+  </section>
+
+  <!-- ============ F5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 5</span>
+      <h2>Percakapan pertama: bertanya seperti auditor</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> daftar pertanyaan yang menentukan apakah sebuah pekerjaan layak diambil — dan keberanian menolak yang tidak.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kamu sudah pernah melakukan ini</h3>
+        <span class="cek"><input type="checkbox" id="f5s1"><label for="f5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sebelum menerima penugasan audit, kantormu melakukan penerimaan klien: memahami bisnisnya, menilai risiko, memastikan lingkupnya jelas, memutuskan apakah pekerjaannya layak diambil.</p>
+        <div class="catatan">
+          <strong>Percakapan pertama dengan calon klien freelance adalah hal yang sama, versi satu orang.</strong> Bedanya cuma satu: tidak ada partner yang menandatangani, jadi kamu sendiri yang harus berkata tidak. Freelancer pemula hampir tidak pernah menolak pekerjaan — dan itu penyebab sebagian besar proyek yang berakhir buruk.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Delapan pertanyaan sebelum menyebut harga</h3>
+        <span class="cek"><input type="checkbox" id="f5s2"><label for="f5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>TENTANG MASALAHNYA
+1. Kalau ini selesai, apa yang berubah buat Bapak/Ibu?
+2. Sekarang dikerjakan bagaimana, berapa lama tiap kali?
+
+TENTANG DATANYA         <-- yang paling menentukan
+3. Datanya sekarang ada di mana, bentuknya apa?
+4. Boleh saya lihat 20 baris contohnya sebelum kita bicara harga?
+5. Ada berapa baris kira-kira, dan sejak kapan datanya?
+
+TENTANG PEKERJAANNYA
+6. Ini sekali jadi, atau perlu diperbarui rutin?
+7. Siapa yang akan memakai hasilnya, dan seberapa paham dia soal data?
+8. Kapan dibutuhkan?</code></pre>
+        </div>
+        <div class="bahaya">
+          <strong>Pertanyaan 4 adalah yang paling penting dan paling sering dilewati.</strong> "Data penjualan 2 tahun" bisa berarti satu file rapi berisi 20.000 baris — atau 24 file Excel dengan nama kolom berbeda-beda tiap bulan, tanggal ditulis lima format berbeda, dan tiga baris judul di atas tabelnya. Selisih pekerjaannya bisa lima kali lipat.
+          <p style="margin-top:8px"><strong>Jangan pernah menyebut harga sebelum melihat datanya.</strong> Kalau klien enggan mengirim contoh, minta 20 baris yang angkanya disamarkan. Kalau tetap tidak mau, itu sendiri sudah jawaban.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tanda bahaya — kapan menolak</h3>
+        <span class="cek"><input type="checkbox" id="f5s3"><label for="f5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Yang dia katakan</th><th>Yang sebenarnya terjadi</th></tr></thead>
+            <tbody>
+              <tr><td>"Ini gampang kok, sebentar aja"</td><td>Dia belum pernah mengerjakannya. Kalau gampang, sudah selesai dari dulu.</td></tr>
+              <tr><td>"Nanti kita lihat sambil jalan"</td><td>Ruang lingkup tanpa batas. Kamu akan mengerjakan tiga proyek dengan bayaran satu.</td></tr>
+              <tr><td>"Kalau bagus, nanti banyak kerjaan lagi"</td><td>Pembayaran ditunda dengan janji. Pekerjaan berikutnya, kalau ada, dibayar terpisah.</td></tr>
+              <tr><td>"Bisa dibayar setelah semuanya selesai?"</td><td>Tanpa uang muka, kamu menanggung seluruh risikonya sendiri.</td></tr>
+              <tr><td>"Datanya nanti menyusul"</td><td>Proyek akan tertunda berminggu-minggu, dan kamu yang disalahkan.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Menolak itu keahlian, bukan kemewahan.</strong> Satu proyek buruk memakan waktu yang cukup untuk tiga proyek baik, menghabiskan tenaga untuk mencari klien lain, dan sering berakhir tanpa dibayar penuh. Kalimat yang cukup: <em>"Sepertinya lingkupnya belum cukup jelas untuk saya beri harga yang adil. Kalau nanti sudah lebih pasti, dengan senang hati saya lihat lagi."</em>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 5 selesai</h3>
+      <p><strong>Catat:</strong> percakapan pertama = penerimaan klien versi satu orang. <strong>Jangan menyebut harga sebelum melihat 20 baris datanya.</strong> Lima tanda bahaya di atas — hafalkan. Menolak lebih murah daripada menyesal.</p>
+    </div>
+  </section>
+
+  <!-- ============ F6 ============ -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 6</span>
+      <h2>Proposal: satu halaman yang melindungimu</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> template proposal yang bisa dipakai berulang, dan yang bagian terpentingnya adalah daftar hal yang <em>tidak</em> termasuk.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Template lengkap</h3>
+        <span class="cek"><input type="checkbox" id="f6s1"><label for="f6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>PENAWARAN PEKERJAAN ANALISIS DATA
+[Nama klien] · [tanggal] · berlaku 14 hari
+
+1. YANG SAYA PAHAMI
+   [2-3 kalimat, pakai kata-kata mereka sendiri dari percakapan kemarin]
+
+2. YANG AKAN SAYA KERJAKAN
+   - [hasil konkret 1]
+   - [hasil konkret 2]
+   - [hasil konkret 3]
+
+3. YANG TIDAK TERMASUK          <-- bagian terpenting
+   - Perubahan sumber data setelah pekerjaan dimulai
+   - Pelatihan pemakaian di luar 1 sesi serah terima
+   - Pemeliharaan setelah serah terima (tersedia terpisah)
+   - Revisi lebih dari 2 putaran
+
+4. YANG SAYA BUTUHKAN DARI ANDA
+   - Data lengkap paling lambat [tanggal]
+   - Satu orang penanggung jawab untuk menjawab pertanyaan
+   - Balasan atas pertanyaan dalam 2 hari kerja
+
+5. WAKTU
+   [N] hari kerja sejak data lengkap diterima.
+   Keterlambatan data menggeser tanggal selesai hari per hari.
+
+6. BIAYA
+   Rp [total]
+   - 50% di muka sebelum pekerjaan dimulai
+   - 50% saat serah terima
+   Di luar: [pajak/biaya lisensi kalau ada]
+
+7. REVISI
+   Termasuk 2 putaran revisi dalam 14 hari setelah serah terima.
+   Selebihnya Rp [tarif]/jam.
+
+Setuju? Balas email ini dengan "setuju" dan saya kirim invoice uang muka.</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa bagian 3 yang paling penting</h3>
+        <span class="cek"><input type="checkbox" id="f6s2"><label for="f6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">
+          <strong>Penyebab nomor satu freelancer rugi bukan tarif yang kerendahan — tapi ruang lingkup yang melebar.</strong> Proyek dashboard tiga hari berubah jadi tiga minggu karena "sekalian ya, tambahin cabang Surabaya", "boleh minta versi bulanannya juga?", "tolong ajarin tim saya". Tiap permintaan kecil dan wajar. Digabung, kamu mengerjakan dua kali lipat dengan bayaran sama.
+        </div>
+        <p>Daftar "yang tidak termasuk" bukan untuk menolak permintaan. Fungsinya membuat percakapan berikutnya jadi mudah dan tidak canggung:</p>
+        <div class="catatan">
+          <em>"Boleh banget ditambah cabang Surabaya. Itu di luar lingkup yang kita sepakati, jadi saya kirimkan penawaran tambahannya ya — sekitar [X], selesai [Y] hari setelah yang sekarang."</em>
+          <p style="margin-top:8px">Tanpa daftar itu, kamu punya dua pilihan yang sama-sama buruk: mengerjakan gratis, atau menolak dan terlihat kaku. Dengan daftar itu, penambahan lingkup jadi hal biasa yang sudah diantisipasi — persis fungsi surat penugasan di pekerjaan lamamu.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Uang muka bukan tanda tidak percaya</h3>
+        <span class="cek"><input type="checkbox" id="f6s3"><label for="f6s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Meminta 50% di muka terasa canggung untuk klien pertama. Tapi:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Itu standar</strong> di hampir semua pekerjaan jasa, dan klien yang pernah memakai freelancer sudah mengharapkannya.</li>
+          <li><strong>Itu menyaring.</strong> Orang yang menolak membayar uang muka untuk pekerjaan yang lingkupnya jelas seringkali juga yang bermasalah saat pembayaran akhir.</li>
+          <li><strong>Itu mengikat kedua pihak.</strong> Setelah membayar, klien jadi lebih cepat mengirim data dan membalas pertanyaan — karena uangnya sudah keluar.</li>
+        </ul>
+        <div class="catatan">
+          <strong>Untuk klien pertama dari lingkaran kenalan,</strong> kalau benar-benar canggung, turunkan jadi 30% — jangan nol. Nol persen mengajarkan pada dirimu sendiri bahwa waktumu boleh dipertaruhkan tanpa jaminan, dan kebiasaan itu sulit dihilangkan nanti.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 6 selesai</h3>
+      <p><strong>Catat:</strong> tujuh bagian proposal, dan bagian 3 (<em>yang tidak termasuk</em>) yang melindungimu. Penambahan lingkup dijawab dengan penawaran tambahan, bukan penolakan. Uang muka minimal 30%, standarnya 50%.</p>
+    </div>
+  </section>
+
+  <!-- ============ F7 ============ -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 7</span>
+      <h2>Mengerjakan: data klien tidak seperti data latihan</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> urutan kerja yang mencegah kejutan di hari terakhir — dan tahu apa yang harus dilakukan saat datanya ternyata jauh lebih buruk dari dugaan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Hari pertama: periksa dulu, jangan langsung kerjakan</h3>
+        <span class="cek"><input type="checkbox" id="f7s1"><label for="f7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Begitu data lengkap diterima, sebelum menganalisis apa pun, jalankan pemeriksaan yang sudah kamu pelajari — dan <strong>laporkan hasilnya ke klien di hari itu juga.</strong></p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+df = pd.read_csv("data_klien.csv")
+
+print(df.shape)                         # Minggu 3 Hari 20
+print(df.info())                        # kolom mana yang banyak kosong
+print(df.describe())                    # Minggu 4 Hari 22
+print(df.duplicated().sum())            # Minggu 6 Hari 39
+for k in df.columns:
+    if df[k].dtype == "object":
+        print(k, df[k].nunique(), df[k].unique()[:5])   # teks tidak konsisten</code></pre>
+        </div>
+        <div class="aksi">
+          <span class="tag">KIRIM HARI ITU JUGA</span>
+          <p>"Data sudah saya terima dan periksa. Catatan awal: 1.240 dari 8.500 baris tidak punya tanggal, kolom cabang punya 14 penulisan berbeda untuk 6 cabang, dan ada 89 baris yang persis sama. Semuanya bisa saya tangani — cuma mau memberi tahu di depan supaya tidak jadi kejutan nanti."</p>
+        </div>
+        <div class="catatan">
+          <strong>Kenapa ini penting dilakukan di hari pertama, bukan nanti:</strong> kalau kamu menemukan masalah data di hari terakhir, itu terdengar seperti alasan. Kalau kamu melaporkannya di hari pertama, itu terdengar seperti ketelitian — dan kamu punya dasar untuk merundingkan tambahan waktu atau biaya kalau ternyata jauh lebih parah dari yang terlihat di 20 baris contoh.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kalau ternyata jauh lebih buruk</h3>
+        <span class="cek"><input type="checkbox" id="f7s2"><label for="f7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Akan terjadi, dan bukan salahmu — contoh 20 baris memang tidak bisa mengungkap segalanya.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Seberapa parah</th><th>Yang dilakukan</th></tr></thead>
+            <tbody>
+              <tr><td>Sedikit lebih repot dari dugaan</td><td>Kerjakan. Selisih kecil adalah bagian dari faktor 1,5 yang sudah kamu pasang.</td></tr>
+              <tr><td>Butuh 2× lipat waktu</td><td>Hubungi <strong>sekarang</strong>, jangan setelah dikerjakan. Tawarkan dua pilihan: tambah biaya, atau kurangi lingkup.</td></tr>
+              <tr><td>Datanya tidak bisa menjawab pertanyaannya</td><td>Katakan terus terang, kembalikan uang muka kalau belum banyak dikerjakan. Ini jarang, tapi terjadi.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>Yang tidak boleh: diam dan mengerjakan sendiri sampai kewalahan.</strong> Klien tidak marah karena masalah data — mereka marah karena diberi tahu terlambat. Ini persis prinsip komunikasi temuan audit yang sudah kamu jalankan bertahun-tahun: kabar buruk disampaikan lebih awal, bukan dikumpulkan sampai akhir.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Serah terima yang tidak menyisakan pertanyaan</h3>
+        <span class="cek"><input type="checkbox" id="f7s3"><label for="f7s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Yang diserahkan bukan cuma file hasilnya:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Hasilnya</strong> — dashboard/laporan, dalam bentuk yang bisa dibuka klien tanpa memasang apa pun</li>
+          <li><strong>Satu halaman ringkasan</strong> — 3 temuan utama berangka, bahasa orang biasa, tanpa istilah teknis</li>
+          <li><strong>Catatan batasan</strong> — apa yang tidak bisa dijawab data ini, dan apa asumsi yang kamu pakai</li>
+          <li><strong>Rekaman layar 5 menit</strong> — cara memakainya. Menghemat berjam-jam pertanyaan susulan.</li>
+          <li><strong>Kodenya</strong> — kalau klien memintanya. Kalau tidak, simpan; sering dibutuhkan saat pekerjaan lanjutan.</li>
+        </ul>
+        <div class="catatan">
+          <strong>Catatan batasan adalah yang paling membedakanmu.</strong> Sebagian besar freelancer menyerahkan hasil seolah-olah sempurna. Kamu sudah terlatih menulis "prosedur ini tidak mencakup X, dan angka ini bergantung pada asumsi Y" — dan klien yang serius justru lebih memercayai orang yang menyebutkan batasnya. Itu pelajaran Minggu 12 Hari 82 dan Migas Hari 35, dipakai di pekerjaan sungguhan.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 7 selesai</h3>
+      <p><strong>Catat:</strong> periksa data di hari pertama, laporkan temuannya hari itu juga. Kabar buruk disampaikan lebih awal. Serah terima = hasil + ringkasan + <strong>batasan</strong> + rekaman layar.</p>
+    </div>
+  </section>
+
+  <!-- ============ F8 ============ -->
+  <section class="day" data-hari="8">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 8</span>
+      <h2>Ditagih dan dibayar</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> template invoice, dan cara menagih pembayaran yang telat tanpa merusak hubungan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Invoice sederhana</h3>
+        <span class="cek"><input type="checkbox" id="f8s1"><label for="f8s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>INVOICE  #2026-001                        Tanggal: [tgl]
+                                          Jatuh tempo: [tgl + 14 hari]
+DARI                        KEPADA
+[Nama lengkap]              [Nama perusahaan/orang]
+[NPWP kalau ada]            [alamat]
+[alamat]                    [NPWP kalau perusahaan]
+[email] · [telepon]
+
+--------------------------------------------------------------
+Uraian                                              Jumlah
+--------------------------------------------------------------
+[Nama pekerjaan] — termin [1/2]                     Rp ______
+Sesuai penawaran tanggal [tgl]
+--------------------------------------------------------------
+                                          TOTAL     Rp ______
+
+PEMBAYARAN
+Bank [nama] · a.n. [nama sesuai rekening] · [no rekening]
+
+Mohon cantumkan nomor invoice pada keterangan transfer.
+Terima kasih.</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Nomor invoice berurutan sejak yang pertama</strong> (2026-001, 2026-002...). Bukan formalitas — itu catatanmu sendiri untuk pajak, dan membuatmu terlihat sudah biasa bekerja begini. Simpan semuanya di satu folder.
+          <p style="margin-top:8px"><strong>Soal pajak:</strong> penghasilan freelance tetap wajib dilaporkan. Aturannya berubah dari waktu ke waktu dan bergantung pada besaran serta status usahamu — periksa langsung di situs DJP atau tanyakan ke rekanmu yang di perpajakan. Kamu lebih tahu cara mencarinya daripada kebanyakan orang; jangan andalkan angka dari mana pun tanpa memeriksa sendiri.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kalau lewat jatuh tempo</h3>
+        <span class="cek"><input type="checkbox" id="f8s2"><label for="f8s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Kapan</th><th>Yang dikirim</th><th>Nadanya</th></tr></thead>
+            <tbody>
+              <tr><td>H+1</td><td>"Halo Pak/Bu, sekadar mengingatkan invoice #001 jatuh tempo kemarin. Kalau sudah ditransfer, mohon abaikan pesan ini."</td><td>Ringan, anggap terlewat</td></tr>
+              <tr><td>H+7</td><td>Kirim ulang invoice-nya, tanya apakah ada yang perlu dilengkapi dari sisi administrasi mereka.</td><td>Membantu, bukan menuntut</td></tr>
+              <tr><td>H+14</td><td>Telepon. Jangan pesan teks.</td><td>Langsung, tetap sopan</td></tr>
+              <tr><td>H+30</td><td>Email resmi: sebutkan tanggal penawaran disetujui, tanggal serah terima, dan minta tanggal pembayaran yang pasti.</td><td>Formal, tertulis</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Sebagian besar keterlambatan bukan itikad buruk</strong> — invoice-nya terselip, orang yang menyetujui sedang cuti, atau prosedur pembayaran mereka memang dua minggu. Menagih di H+1 dengan nada ringan menyelesaikan sebagian besar kasus, dan tidak merusak apa pun.
+          <p style="margin-top:8px"><strong>Yang melindungimu sejak awal:</strong> uang muka 50%. Kalau yang tertunggak cuma termin kedua, kerugian terburukmu setengah, bukan seluruhnya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Minta testimoni saat mereka paling senang</h3>
+        <span class="cek"><input type="checkbox" id="f8s3"><label for="f8s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Waktu terbaik: <strong>tepat setelah serah terima berjalan lancar</strong>, sebelum kesibukan menutupi rasa puasnya. Jangan menunggu sampai pembayaran lunas.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>Terima kasih Pak/Bu, senang bisa membantu.
+
+Kalau berkenan, boleh minta 2-3 kalimat tentang bagaimana hasilnya
+membantu? Saya ingin pasang di halaman portofolio.
+
+Kalau bingung mau menulis apa, tiga pertanyaan ini biasanya cukup:
+- Sebelumnya masalahnya apa?
+- Sekarang bedanya apa?
+- Apa yang paling membantu?
+
+Dan kalau ada rekan yang kira-kira menghadapi hal serupa,
+saya akan sangat berterima kasih kalau dikenalkan.</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Kalimat terakhir itu yang membuat klien kedua datang tanpa dicari.</strong> Rujukan adalah sumber klien paling murah dan paling mudah ditutup — orang datang sudah percaya. Tapi hampir tidak ada yang menawarkannya sendiri kalau tidak diminta.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 8 selesai</h3>
+      <p><strong>Catat:</strong> invoice bernomor urut, jatuh tempo 14 hari. Tagih H+1 dengan nada ringan — sebagian besar selesai di situ. Minta testimoni <strong>dan rujukan</strong> tepat setelah serah terima, bukan setelah dibayar.</p>
+    </div>
+  </section>
+
+  <!-- ============ F9 ============ -->
+  <section class="day" data-hari="9">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 9</span>
+      <h2>Platform: masuk setelah punya bukti</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> profil platform yang bisa bersaing — dikerjakan <em>setelah</em> 2-3 klien pertama, bukan sebelumnya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lokal atau internasional</h3>
+        <span class="cek"><input type="checkbox" id="f9s1"><label for="f9s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th></th><th>Platform lokal</th><th>Platform internasional</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Tarif</strong></td><td>Lebih rendah</td><td>Lebih tinggi, tapi saingannya global</td></tr>
+              <tr><td><strong>Bahasa</strong></td><td>Indonesia</td><td>Inggris, termasuk saat rapat</td></tr>
+              <tr><td><strong>Zona waktu</strong></td><td>Sama</td><td>Sering harus mengalah</td></tr>
+              <tr><td><strong>Pembayaran</strong></td><td>Transfer lokal, sederhana</td><td>Perlu Payoneer/Wise, ada potongan</td></tr>
+              <tr><td><strong>Mulai dari mana</strong></td><td><strong>Ya</strong> — lebih mudah dapat ulasan pertama</td><td>Setelah punya 3-5 ulasan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Urutan yang masuk akal:</strong> jaringan pribadi (Freelance 4) → platform lokal untuk mengumpulkan ulasan → platform internasional untuk menaikkan tarif. Melompat langsung ke internasional tanpa ulasan berarti bersaing dengan ribuan orang yang punya 100+ pekerjaan selesai, dan kamu tidak akan terlihat.
+          <p style="margin-top:8px"><strong>Periksa sendiri platform mana yang sedang ramai</strong> saat kamu membaca ini — jangan percaya daftar nama dari mana pun termasuk halaman ini. Platform naik dan turun; yang penting adalah ada berapa lowongan data yang diposting minggu ini di sana.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Profil yang tidak terdengar seperti semua orang</h3>
+        <span class="cek"><input type="checkbox" id="f9s2"><label for="f9s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="compare" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0">
+          <div class="bahaya" style="margin:0">
+            <strong>Yang ditulis semua orang:</strong><br>"Data analyst berpengalaman, menguasai SQL, Python, Tableau, Power BI. Detail-oriented, fast learner, siap membantu kebutuhan analisis data Anda."
+            <p style="margin-top:8px">Tidak bisa dibedakan dari 500 profil lain. Tidak ada satu pun kalimat yang cuma bisa ditulis orang ini.</p>
+          </div>
+          <div class="catatan" style="margin:0">
+            <strong>Yang cuma bisa kamu tulis:</strong><br>"Mantan auditor. Empat tahun memeriksa apakah angka laporan keuangan benar-benar cocok dengan datanya. Sekarang saya kerjakan hal yang sama dengan SQL dan Python — dashboard dan pemeriksaan otomatis yang menangkap selisih sebelum laporannya terlanjur dikirim."
+            <p style="margin-top:8px">Sempit, spesifik, dan langsung menjelaskan kenapa dia berbeda.</p>
+          </div>
+        </div>
+        <p>Lalu di bawahnya, tiga proyek dengan kerangka Freelance 3 — gambar dulu, hasil berangka, lama pengerjaan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Melamar: 5 yang serius mengalahkan 50 yang asal</h3>
+        <span class="cek"><input type="checkbox" id="f9s3"><label for="f9s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>[Kalimat pertama: SEBUTKAN masalah spesifik dari iklannya]
+Bapak/Ibu menyebutkan laporan penjualan 5 cabang yang sekarang
+digabung manual tiap bulan.
+
+[Kalimat kedua: bukti kamu pernah mengerjakan yang mirip]
+Saya baru menyelesaikan hal serupa untuk [klien], menggabungkan
+data 6 lokasi jadi satu dashboard yang diperbarui otomatis.
+[tautan]
+
+[Kalimat ketiga: satu pertanyaan yang menunjukkan kamu berpikir]
+Satu hal yang ingin saya pastikan: apakah format file tiap cabang
+sudah seragam, atau berbeda-beda? Itu yang paling menentukan
+lama pengerjaan.
+
+[Penutup: langkah berikutnya yang jelas]
+Kalau berkenan, boleh saya lihat contoh 20 baris datanya?
+Setelah itu saya bisa beri perkiraan waktu dan biaya yang pasti.</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Pertanyaan di kalimat ketiga adalah yang membuatmu menonjol.</strong> Sebagian besar pelamar cuma mengatakan bisa. Satu pertanyaan yang tepat menunjukkan kamu sudah membayangkan pekerjaannya — dan sekaligus melindungimu dari menyebut harga sebelum melihat data (Freelance 5).
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 9 selesai</h3>
+      <p><strong>Catat:</strong> jaringan → platform lokal (kumpulkan ulasan) → internasional (naikkan tarif). Profil harus berisi kalimat yang cuma kamu yang bisa menulisnya. Lamaran: sebut masalahnya, tunjukkan bukti, ajukan satu pertanyaan tajam.</p>
+    </div>
+  </section>
+
+  <!-- ============ F10 ============ -->
+  <section class="day" data-hari="10">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 10</span>
+      <h2>Dari sekali jadi ke penghasilan berulang</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengubah proyek yang selesai jadi pemasukan bulanan — perbedaan antara freelancer yang selalu mencari dan yang sudah tenang.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Masalah proyek sekali jadi</h3>
+        <span class="cek"><input type="checkbox" id="f10s1"><label for="f10s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Proyek selesai, dibayar, lalu penghasilanmu kembali nol dan kamu mulai mencari lagi dari awal. Sepuluh proyek setahun berarti sepuluh kali mencari klien.</p>
+        <div class="catatan">
+          <strong>Yang mengubahnya:</strong> setiap dashboard yang kamu buat akan <em>basi</em>. Datanya perlu diperbarui, cabang bertambah, definisi metriknya berubah, ada yang minta grafik baru. Klien akan mengerjakannya sendiri dengan susah payah, atau membiarkan dashboard-nya mati.
+          <p style="margin-top:8px">Kamu bisa menawarkan hal ketiga.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tawaran perawatan bulanan</h3>
+        <span class="cek"><input type="checkbox" id="f10s2"><label for="f10s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>PERAWATAN BULANAN — Rp [X]/bulan, minimum 3 bulan
+
+Termasuk:
+- Data diperbarui [mingguan/bulanan]
+- Sampai 2 perubahan kecil per bulan (tambah grafik, ubah filter)
+- Perbaikan kalau ada yang rusak, dikerjakan dalam 2 hari kerja
+- Satu panggilan 30 menit per bulan untuk membahas temuan
+
+Tidak termasuk:
+- Sumber data baru (ditawarkan terpisah)
+- Perubahan besar rancangan dashboard
+
+Berhenti kapan saja setelah bulan ketiga, cukup beri tahu 30 hari sebelumnya.</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Kapan menawarkannya:</strong> saat serah terima, bukan sebulan kemudian. Kalimatnya: <em>"Dashboard ini akan butuh pembaruan data tiap bulan. Bapak/Ibu bisa mengerjakan sendiri — saya sudah buatkan rekaman caranya. Atau kalau lebih praktis, saya sediakan paket perawatan bulanan."</em>
+          <p style="margin-top:8px">Menyebutkan pilihan mengerjakan sendiri itu penting. Itu membuat tawaranmu terdengar sebagai kemudahan, bukan jebakan ketergantungan — dan justru lebih sering diterima.</p>
+        </div>
+        <p>Tiga klien perawatan sudah menutup sebagian biaya hidup bulanan, dan itu mengubah caramu memilih pekerjaan: kamu bisa menolak proyek buruk karena tidak sedang kelaparan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Produkkan yang berulang</h3>
+        <span class="cek"><input type="checkbox" id="f10s3"><label for="f10s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Setelah 4-5 proyek, kamu akan sadar sedang mengerjakan hal yang mirip berulang kali. Ubah jadi paket dengan nama dan harga tetap:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Nama paket</th><th>Isinya</th><th>Kenapa laku</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Bersih-bersih Data</strong></td><td>Data berantakan masuk, data rapi + ringkasan keluar. 3 hari kerja.</td><td>Harga jelas, klien tidak perlu berpikir</td></tr>
+              <tr><td><strong>Dashboard Satu Halaman</strong></td><td>Satu dashboard, sampai 3 sumber data, 5 hari kerja.</td><td>Batasnya jelas sejak awal</td></tr>
+              <tr><td><strong>Pemeriksaan Angka</strong></td><td>Rekonsiliasi antar sumber, laporan selisih. 4 hari kerja.</td><td><strong>Hampir tidak ada saingan</strong> — butuh latar audit</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Paket ketiga adalah milikmu sendiri.</strong> Freelancer data biasa tidak menawarkannya karena tidak tahu cara berpikirnya: apa yang dibandingkan dengan apa, ambang mana yang material, bagaimana melaporkan selisih tanpa menuduh. Kamu sudah mengerjakan itu bertahun-tahun. Ini satu-satunya lini jasa yang tarifnya bisa kamu tetapkan tanpa menengok tarif orang lain.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 10 selesai</h3>
+      <p><strong>Catat:</strong> tawarkan perawatan bulanan <strong>saat serah terima</strong>, sertakan pilihan mengerjakan sendiri. Tiga klien perawatan = bisa menolak proyek buruk. Setelah 4-5 proyek, jadikan paket berharga tetap.</p>
+    </div>
+  </section>
+
+  <!-- ============ F11 ============ -->
+  <section class="day" data-hari="11">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 11</span>
+      <h2>Menaikkan tarif tanpa menebak-nebak</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menentukan <em>kapan</em> tarifmu perlu naik dari datamu sendiri, bukan dari perasaan — dan tahu kenapa menaikkan tarif terlalu cepat justru menurunkan pemasukan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tanda bahwa tarifmu ketinggalan: kamu hampir selalu menang</h3>
+        <span class="cek"><input type="checkbox" id="f11s1"><label for="f11s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kebanyakan orang menaikkan tarif berdasarkan perasaan: "sudah setahun, harusnya naik". Itu tebakan. Kamu punya cara yang lebih baik, karena kamu sedang belajar mengukur.</p>
+        <p>Angka yang kamu butuhkan cuma satu: <strong>berapa persen penawaranmu yang diterima</strong> (win rate). Hitung dari catatan sendiri:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>penawaran_dikirim  = 9
+penawaran_diterima = 8
+
+win_rate = penawaran_diterima / penawaran_dikirim
+print(f"Win rate: {win_rate:.0%}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HASILNYA</span>
+          <div class="kode"><pre><code>Win rate: 89%</code></pre></div>
+        </div>
+        <p>Menang 89% terasa menyenangkan. Tapi baca ulang artinya: <strong>hampir tidak ada yang menolak harganya.</strong> Kalau hampir tidak ada yang menolak, kamu tidak pernah tahu batas atasnya di mana — karena kamu belum pernah menyentuhnya.</p>
+        <div class="catatan">
+          <strong>Ini kesalahan pengukuran yang sama seperti di Minggu 5.</strong> Di sana kamu belajar bahwa membandingkan "sebelum dan sesudah" saja menyesatkan, karena kamu tidak melihat apa yang terjadi kalau tidak melakukan apa-apa. Di sini serupa: win rate 89% tidak memberitahumu bahwa harganya pas. Ia hanya memberitahumu bahwa kamu belum pernah mencoba harga yang lebih tinggi.
+          <p style="margin-top:8px">Beberapa penolakan bukan kegagalan — itu satu-satunya data yang memberitahumu di mana batasnya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Hitung sendiri: kapan naik tarif menguntungkan, kapan merugikan</h3>
+        <span class="cek"><input type="checkbox" id="f11s2"><label for="f11s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Menaikkan tarif <em>tidak selalu</em> menambah pemasukan. Kalau lebih banyak yang menolak, proyekmu berkurang. Jadi jangan diperdebatkan — hitung.</p>
+        <p>Tarif di sini ditulis relatif: tarif sekarang = <code>100</code>. Aku tidak menulis angka rupiah karena aku tidak bisa memeriksa tarif pasar dari sini — tapi perbandingannya berlaku berapa pun angkamu.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>kapasitas_proyek = 4      # proyek yang muat dikerjakan dalam sebulan
+hari_per_proyek  = 5
+penawaran_masuk  = 6      # tawaran yang datang per bulan
+
+skenario = [
+    ("Tarif sekarang", 100, 0.90),
+    ("Naik 30%",       130, 0.65),
+    ("Naik 60%",       160, 0.50),
+    ("Naik 100%",      200, 0.30),
+]
+
+print(f"{'Skenario':&lt;16}{'Tarif':&gt;7}{'Menang':&gt;8}{'Proyek':&gt;8}{'Hari':&gt;7}{'Pemasukan':&gt;11}{'Per hari':&gt;10}")
+for nama, tarif, menang in skenario:
+    proyek    = min(penawaran_masuk * menang, kapasitas_proyek)
+    hari      = proyek * hari_per_proyek
+    pemasukan = proyek * tarif
+    per_hari  = pemasukan / hari
+    print(f"{nama:&lt;16}{tarif:&gt;7}{menang:&gt;7.0%}{proyek:&gt;8.1f}{hari:&gt;7.1f}{pemasukan:&gt;11,.0f}{per_hari:&gt;10,.0f}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HASILNYA</span>
+          <div class="kode"><pre><code>Skenario          Tarif  Menang  Proyek   Hari  Pemasukan  Per hari
+Tarif sekarang      100    90%     4.0   20.0        400        20
+Naik 30%            130    65%     3.9   19.5        507        26
+Naik 60%            160    50%     3.0   15.0        480        32
+Naik 100%           200    30%     1.8    9.0        360        40</code></pre></div>
+        </div>
+        <p>Baca kolom <code>Pemasukan</code> dari atas ke bawah: 400 → 507 → 480 → <strong>360</strong>. Naik, lalu turun. Menaikkan tarif dua kali lipat membuat pemasukanmu <em>lebih kecil</em> daripada sebelum naik, walaupun tarif per harinya dua kali lipat.</p>
+        <p>Penyebabnya ada di kolom <code>Proyek</code>: cuma 1,8 dari kapasitas 4. Kamu menganggur separuh bulan. Tarif tinggi tidak berguna kalau tidak ada yang mengisi harimu.</p>
+        <div class="catatan">
+          <strong>Perhatikan baris "Naik 60%".</strong> Pemasukannya 480 — sedikit di bawah 507 — tapi kamu hanya bekerja <strong>15 hari, bukan 19,5</strong>. Lima hari itu bukan kerugian: itu waktu untuk mencari klien yang lebih baik, membuat portofolio, atau istirahat. Kalau kamu cuma melihat kolom pemasukan, kamu akan salah memilih.
+          <p style="margin-top:8px">Ini persis pelajaran normalisasi di Minggu 6: angka total menyesatkan sampai kamu membaginya dengan sesuatu. Di sana pembaginya jumlah bulan beroperasi. Di sini pembaginya hari kerja.</p>
+        </div>
+        <div class="aksi">
+          <span class="tag">GANTI DENGAN ANGKAMU SENDIRI</span>
+          <p>Ubah <code>penawaran_masuk</code> jadi 12 dan jalankan lagi. Perhatikan apa yang berubah pada baris "Naik 100%" — dan simpulkan sendiri aturannya sebelum membuka kunci di bawah.</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <p>Dengan <code>penawaran_masuk = 12</code>, baris "Naik 100%" jadi 3,6 proyek → pemasukan 720, jauh di atas 400. Semua baris lain mentok di kapasitas 4 proyek, jadi pemasukannya jadi persis 400 / 520 / 640 / 720 — naik terus seiring tarif.</p>
+          <p style="margin-top:8px"><strong>Aturannya:</strong> naikkan tarif ketika kapasitasmu penuh, bukan ketika kamu merasa pantas. Selama masih ada hari kosong di kalendermu, menaikkan tarif memindahkan uang keluar dari kantongmu. Begitu kalendermu penuh dan kamu masih menolak pekerjaan, tarifmu terlalu rendah — dan setiap kenaikan langsung jadi tambahan bersih.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Jalan yang lebih cepat daripada menaikkan tarif: berhenti jadi umum</h3>
+        <span class="cek"><input type="checkbox" id="f11s3"><label for="f11s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ada cara menaikkan harga tanpa menabrak batas win rate: <strong>berhenti bersaing di kolam yang sama.</strong></p>
+        <p>Seorang "freelancer data" bersaing dengan ribuan orang yang menawarkan hal yang sama, jadi harganya ditekan ke bawah oleh yang paling murah. Seorang <em>"mantan auditor yang mengerjakan rekonsiliasi data dan pemeriksaan angka"</em> bersaing dengan segelintir orang — dan klien yang butuh itu tidak sedang membandingkan harga, mereka sedang mencari orang yang mengerti.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th></th><th>Umum</th><th>Terspesialisasi</th></tr></thead>
+            <tbody>
+              <tr><td>Cara klien memilih</td><td>Bandingkan harga</td><td>Cari yang paham masalahnya</td></tr>
+              <tr><td>Pertanyaan pertama klien</td><td>"Berapa?"</td><td>"Bisa tolong lihat kasus saya?"</td></tr>
+              <tr><td>Yang menentukan tarif</td><td>Pesaing termurah</td><td>Nilai masalah yang dipecahkan</td></tr>
+              <tr><td>Sumber klien baru</td><td>Platform, ulasan</td><td>Rujukan dari klien lama</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Kamu punya bahan spesialisasi yang tidak dimiliki hampir semua orang di jalur ini.</strong> Bukan karena kamu lebih pintar Python — kamu justru baru belajar. Tapi karena kamu tahu hal-hal yang tidak diajarkan di kursus data mana pun:</p>
+        <ul>
+          <li>Apa artinya dua sumber angka "cocok", dan seberapa besar selisih yang masih wajar</li>
+          <li>Kenapa selisih terjadi — beda tanggal potong, beda dasar pencatatan, transaksi ganda, pembulatan</li>
+          <li>Cara melaporkan selisih tanpa terdengar menuduh siapa pun</li>
+          <li>Bukti apa yang harus disimpan supaya temuan bisa dipertanggungjawabkan ulang</li>
+        </ul>
+        <div class="catatan">
+          <strong>Peringatan supaya spesialisasi tidak jadi jebakan:</strong> kamu bukan lagi auditor, dan pekerjaanmu bukan audit. Jangan pernah menuliskan atau menyiratkan bahwa hasil kerjamu adalah opini audit, pemeriksaan, atau atestasi. Yang kamu jual adalah <em>analisis data</em> yang kebetulan memakai cara berpikir audit. Sebut jasanya "rekonsiliasi data" atau "pemeriksaan konsistensi angka", bukan "audit".
+          <p style="margin-top:8px">Ini bukan soal kehati-hatian berlebihan: menyebut pekerjaanmu audit padahal bukan bisa jadi masalah hukum dan profesi, dan itu risiko yang tidak sebanding dengan manfaatnya.</p>
+        </div>
+        <div class="aksi">
+          <span class="tag">TULIS SEKARANG, 15 MENIT</span>
+          <p>Kembali ke kalimat jasamu dari Freelance 1. Tulis ulang versi terspesialisasi:</p>
+          <p style="margin-top:6px"><em>"Saya membantu <strong>[jenis usaha yang punya banyak sumber angka]</strong> yang kesulitan <strong>[angkanya tidak pernah cocok antar sistem]</strong>, dengan <strong>[rekonsiliasi otomatis + laporan selisih]</strong>, supaya <strong>[tutup buku bulanan tidak lagi memakan seminggu]</strong>."</em></p>
+          <p style="margin-top:6px">Simpan dua versi: yang umum untuk platform, yang terspesialisasi untuk jaringanmu sendiri dan untuk rujukan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Freelance 11 selesai</h3>
+      <p><strong>Catat:</strong> win rate hampir 100% artinya kamu belum pernah menyentuh batas atas harga. Naikkan tarif <strong>saat kapasitas penuh</strong>, tidak sebelum — sebelum itu, tarif tinggi cuma membuatmu menganggur. Dan spesialisasi menaikkan harga tanpa menurunkan win rate, karena mengubah siapa yang kamu lawan.</p>
+    </div>
+  </section>
+
+  <!-- ============ F12 ============ -->
+  <section class="day" data-hari="12">
+    <div class="day-head">
+      <span class="n mono">FREELANCE 12</span>
+      <h2>Menempelkan jalur ini ke kalendermu</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> tahu hari freelance mana dikerjakan di minggu berapa, apa yang masuk akal terjadi dalam 90 hari setelah materi habis, dan mana dari tiga jalan karier yang kamu ambil.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Dua belas hari ini menempel di mana</h3>
+        <span class="cek"><input type="checkbox" id="f12s1"><label for="f12s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Satu kebingungan yang perlu dibereskan dulu: modul materinya <em>bernama</em> "Minggu 1" sampai "Minggu 15", tapi itu bukan minggu kalender. Dengan dua hari materi per hari kerja, satu minggu kalender menghabiskan sepuluh hari materi. Di tabel ini, <strong>"minggu" selalu berarti minggu kalendermu.</strong></p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Minggu</th><th>Materi yang sedang jalan</th><th>Hari freelance</th><th>Yang kamu kerjakan di dunia nyata</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">5</td><td>Modul M5–M6</td><td class="mono"><strong>F1</strong></td><td>Tentukan jasa apa yang benar-benar kamu jual</td></tr>
+              <tr><td class="mono">6</td><td>Bekal Data Klien + M7</td><td class="mono"><strong>F2</strong></td><td>Hitung tarif dasar, riset 20 iklan jasa sejenis</td></tr>
+              <tr><td class="mono">7</td><td>Modul M7–M8 (M8 selesai)</td><td class="mono"><strong>F3</strong></td><td>Bangun halaman portofolio dari proyek dashboard M8</td></tr>
+              <tr><td class="mono">8</td><td>Bekal Rahasia Klien + M9</td><td class="mono"><strong>F4</strong></td><td>Daftar 30 kontak, kirim 10 pesan pertama</td></tr>
+              <tr><td class="mono">9</td><td>Modul M9–M11</td><td class="mono"><strong>F5</strong></td><td>Percakapan pertama, lihat data calon klien</td></tr>
+              <tr><td class="mono">10</td><td>M11 + Bekal Kirim Hasil</td><td class="mono"><strong>F6</strong></td><td>Kirim proposal pertama</td></tr>
+              <tr><td class="mono">11</td><td>Modul M12–M13</td><td class="mono"><strong>F7</strong></td><td>Kerjakan proyek klien pertama</td></tr>
+              <tr><td class="mono">12</td><td>Modul M13–M14</td><td class="mono"><strong>F8</strong></td><td>Kirim invoice, minta testimoni dan rujukan</td></tr>
+              <tr><td class="mono">13</td><td>Modul M14–M15 + migas L1</td><td class="mono"><strong>F9</strong></td><td>Pasang profil di platform lokal</td></tr>
+              <tr><td class="mono">14</td><td>Migas L1–L2</td><td class="mono"><strong>F10</strong></td><td>Tawarkan perawatan bulanan ke klien pertama</td></tr>
+              <tr><td class="mono">15</td><td>Migas L2–L4</td><td class="mono"><strong>F11</strong></td><td>Hitung win rate, tetapkan tarif berikutnya</td></tr>
+              <tr><td class="mono">16–17</td><td>Migas L4–L5 — materi habis</td><td class="mono"><strong>F12</strong></td><td>Susun rencana 90 hari</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>Kenapa F3 di minggu 7, bukan lebih awal:</strong> halaman portofolio butuh dashboard jadi untuk dipajang, dan Modul M8 baru selesai di hari materi ke-70 — yaitu minggu kalender ke-7. Membuat halaman portofolio sebelum ada isinya cuma menunda.
+          <p style="margin-top:8px"><strong>Tabel ini tetap akan meleset, dan itu bukan kegagalanmu.</strong> Kolom paling kanan bergantung pada orang lain membalas — dan orang lain tidak mengikuti jadwalmu. Wajar sekali kalau proposal pertama baru dikirim di minggu 12, bukan 10, karena tiga kontak pertama tidak membalas sama sekali.</p>
+          <p style="margin-top:8px">Yang <em>tidak boleh</em> meleset adalah kolom materi. Kalau jadwal freelance mundur, biarkan mundur. Kalau materi mundur, seluruh jadwal ikut mundur — dan itu yang membuat orang berhenti di tengah.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>90 hari setelah materi habis</h3>
+        <span class="cek"><input type="checkbox" id="f12s2"><label for="f12s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Minggu 17 bukan garis finis. Materinya habis, tapi yang menentukan hasilnya adalah 90 hari berikutnya — masa ketika tidak ada lagi modul yang memberi tahu kamu harus mengerjakan apa hari ini.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Bulan</th><th>Yang dikejar</th><th>Ukuran keberhasilan yang jujur</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">1</td><td>Selesaikan 1–2 proyek berbayar sampai serah terima. Perbaiki portofolio pakai hasil nyatanya, bukan data latihan.</td><td>Ada satu halaman studi kasus dengan <strong>angka hasil</strong> di dalamnya, dan satu testimoni tertulis</td></tr>
+              <tr><td class="mono">2</td><td>Kirim penawaran sampai win rate bisa dihitung. Mulai satu paket berharga tetap dari Freelance 10.</td><td>Minimal <strong>8 penawaran terkirim</strong> — jumlahnya lebih penting daripada hasilnya, karena win rate butuh penyebut</td></tr>
+              <tr><td class="mono">3</td><td>Kejar penghasilan berulang: 1–2 klien perawatan bulanan. Naikkan tarif kalau kapasitas mulai penuh (Freelance 11).</td><td>Ada pemasukan yang <strong>datang lagi bulan depan tanpa mencari klien baru</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Kenapa ukurannya begitu, bukan "dapat X rupiah".</strong> Pemasukan bulan-bulan pertama hampir seluruhnya ditentukan hal-hal di luar kendalimu: siapa yang kebetulan sedang butuh, siapa yang kebetulan membalas. Yang bisa kamu kendalikan adalah jumlah penawaran terkirim dan kualitas studi kasus. Ukur yang kamu kendalikan — itu juga alasan Minggu 12 mengajarkan memisahkan angka yang bisa ditindaklanjuti dari angka yang cuma bisa dilihat.
+        </div>
+        <div class="aksi">
+          <span class="tag">TULIS SEKARANG, 20 MENIT</span>
+          <p>Buka spreadsheet kontak dari Freelance 4. Tambahkan tab baru bernama <code>90hari</code> dengan kolom:</p>
+          <p style="margin-top:6px"><code>tanggal</code> · <code>penawaran dikirim (nama)</code> · <code>nilai</code> · <code>diterima/ditolak/diam</code> · <code>alasan kalau ditolak</code></p>
+          <p style="margin-top:6px">Kolom terakhir yang paling berharga dan paling sering dikosongkan orang. Tanyakan langsung ke calon klien yang menolak: <em>"Boleh tahu apa yang membuat Bapak/Ibu memilih lain? Jawabannya membantu saya memperbaiki penawaran berikutnya."</em> Sebagian besar akan menjawab, dan jawabannya sering bukan soal harga.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tiga jalan, pilih satu dengan sadar</h3>
+        <span class="cek"><input type="checkbox" id="f12s3"><label for="f12s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kamu sudah resign, jadi keputusan ini nyata dan berbatas waktu, bukan renungan. Tiga jalan yang terbuka setelah minggu 17:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Jalan</th><th>Cocok kalau</th><th>Risiko terbesarnya</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Freelance penuh</strong></td><td>Tabunganmu cukup 6+ bulan, dan kamu sudah punya minimal 1 klien berbayar sebelum minggu 17</td><td>Pemasukan naik-turun tajam di 6 bulan pertama. Bulan tanpa proyek itu normal, tapi menghancurkan mental kalau tidak diantisipasi.</td></tr>
+              <tr><td><strong>Melamar kerja data analyst</strong></td><td>Kamu lebih tenang dengan pemasukan tetap, atau tabungan menipis</td><td>Proses rekrutmen makan 1–3 bulan. Mulai melamar di <strong>minggu 8</strong>, bukan setelah minggu 17 — portofolio dari M8 (selesai minggu 7) sudah cukup untuk melamar.</td></tr>
+              <tr><td><strong>Keduanya</strong></td><td>Sebagian besar orang di posisimu</td><td>Freelance jadi terbengkalai begitu ada tawaran kerja. Wajar — tapi putuskan sadar-sadar, jangan biarkan berhenti sendiri.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Kalau ragu, ambil yang ketiga.</strong> Melamar kerja tidak membatalkan jalur freelance, dan satu klien berbayar justru membuat lamaranmu jauh lebih kuat daripada pelamar lain yang cuma punya proyek latihan. Yang perlu kamu jaga cuma satu: jangan berhenti mengirim penawaran hanya karena sedang menunggu hasil wawancara. Menunggu bukan kegiatan.
+        </div>
+        <div class="aksi">
+          <span class="tag">PUTUSKAN DAN TULIS, 15 MENIT</span>
+          <p>Tulis di catatan yang bisa kamu buka lagi:</p>
+          <ol style="font-size:0.93rem;padding-left:20px;margin:6px 0 0">
+            <li>Jalan yang aku ambil: <strong>_______</strong></li>
+            <li>Tabunganku cukup untuk <strong>___ bulan</strong> tanpa pemasukan sama sekali</li>
+            <li>Kalau sampai tanggal <strong>_______</strong> belum ada klien berbayar, aku akan <strong>_______</strong></li>
+          </ol>
+          <p style="margin-top:8px">Nomor tiga yang paling penting dan paling sering dilewati. Menetapkan batasnya <em>sekarang</em>, saat kamu masih tenang, jauh lebih baik daripada memutuskannya nanti saat panik.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Jalur Freelance selesai</h3>
+      <p>Dua belas hari ini tidak menambah satu pun kemampuan analisis — semua itu ada di modul lain. Yang ditambahkannya adalah bagian yang membuat kemampuan tadi dibayar: tahu apa yang dibeli orang, menetapkan harga dari hitungan, menulis batas pekerjaan, menagih tanpa canggung, dan menaikkan tarif pada waktu yang tepat.</p>
+      <p style="margin-top:14px"><strong>Satu hal yang perlu kamu bawa dari sini:</strong> yang membuatmu berbeda bukan Python-mu — orang lain juga belajar Python. Yang membuatmu berbeda adalah kamu sudah bertahun-tahun bekerja dengan angka orang lain, tahu kapan angka mencurigakan, dan tahu cara menyampaikannya tanpa menuduh. Kurikulum ini memberimu alatnya. Bagian yang sulit itu sudah kamu punya sebelum hari pertama.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Kalau kamu berhenti membaca semuanya dan cuma ingat satu kalimat:</strong> kirim penawaran sebelum kamu merasa siap. Rasa siap datang setelah proyek ketiga, tidak pernah sebelumnya — dan menunggunya adalah cara paling umum untuk tidak pernah mulai.
+      </div>
+      <a class="lanjut" href="https://claude.ai/code/artifact/f333a8b3-8341-4a10-b69e-4c603671830e">Kembali ke Rencana 17 Minggu →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Tarif di halaman ini selalu ditulis relatif (tarif sekarang = 100), bukan rupiah — angka pasar tidak bisa diperiksa dari sini, jadi tidak ditulis sebagai fakta. Semua tabel hitungan dihasilkan dengan menjalankan kodenya sungguhan.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "jalur-freelance-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

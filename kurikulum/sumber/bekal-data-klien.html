@@ -1,0 +1,1415 @@
+<title>Bekal Data Klien</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/7a1dae30-ebd4-4de7-bbce-722bbbf0be7e">← Kembali ke M6: SQL Lanjutan</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Bekal Data Klien</span>
+  <button type="button" data-hari="1" aria-selected="true">D1</button>
+  <button type="button" data-hari="2" aria-selected="false">D2</button>
+  <button type="button" data-hari="3" aria-selected="false">D3</button>
+  <button type="button" data-hari="4" aria-selected="false">D4</button>
+  <button type="button" data-hari="5" aria-selected="false">D5</button>
+  <button type="button" data-hari="6" aria-selected="false">D6</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal wajib · kerjakan setelah Modul M6, sebelum Freelance F5</span>
+    <h1>Bekal Data Klien: membuka berkas yang dikirim orang sungguhan</h1>
+    <p class="lede">Seluruh kurikulum ini melatihmu memakai data yang <strong>sudah rapi</strong> — <code>pd.read_csv</code> dari satu tautan, kolom bersih, tipe data benar. Klien pertamamu tidak akan mengirim itu. Dia akan mengirim <strong>satu berkas Excel</strong> dengan judul di baris pertama, tiga sheet, nama kolom berbeda antar sheet, angka yang diam-diam berubah jadi salah, dan baris "TOTAL" yang ikut terbaca sebagai transaksi.</p>
+    <p class="lede" style="margin-top:10px">Enam hari ini menutup jarak itu. Semua angka di halaman ini dihasilkan dengan menjalankan kodenya sungguhan pada berkas yang <strong>akan kamu buat sendiri di Hari 1</strong> — jadi angkamu harus sama persis dengan angkaku. Kalau berbeda, ada langkah yang terlewat.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ D1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">DATA KLIEN 1</span>
+      <h2>Membuka berkas Excel, dan kenapa bacaan pertama selalu salah</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memasukkan berkas klien ke Colab, melihat isi semua sheet-nya, dan membaca satu sheet dengan header yang benar.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat "berkas dari klien" untuk dipakai enam hari ini</h3>
+        <span class="cek"><input type="checkbox" id="k1s1"><label for="k1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buka notebook Colab baru. Sel pertama membuat berkas Excel berantakan — persis jenis berkas yang dikirim kedai kopi, toko, atau klinik ke freelancer data. Jalankan apa adanya, tidak perlu dimengerti sekarang.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import numpy as np, pandas as pd
+from openpyxl import Workbook
+
+rng = np.random.default_rng(7)
+cabang = ["Kemang", "Dago", "Seturan"]
+harga  = {"Kopi Susu":22000, "Americano":18000, "Roti Bakar":15000,
+          "Croissant":25000, "Teh Manis":10000}
+produk = list(harga)
+
+def baris(n, b1, b2):
+    out = []
+    for _ in range(n):
+        b = int(rng.integers(b1, b2+1)); h = int(rng.integers(1, 29))
+        p = produk[int(rng.integers(0, 5))]; c = cabang[int(rng.integers(0, 3))]
+        q = int(rng.integers(1, 6))
+        out.append({"Tanggal": f"{h:02d}/{b:02d}/2024", "Cabang": c, "Produk": p,
+                    "Jumlah": q, "Harga Satuan": harga[p], "Total": q*harga[p]})
+    return out
+
+wb = Workbook(); ws = wb.active; ws.title = "Penjualan Q1"
+ws["A1"] = "LAPORAN PENJUALAN KEDAI KOPI SENJA"
+ws["A2"] = "Periode: Januari - Maret 2024"
+kol = ["Tanggal","Cabang","Produk","Jumlah","Harga Satuan","Total"]
+for i, k in enumerate(kol, 1): ws.cell(row=4, column=i, value=k)
+
+d = baris(180, 1, 3)
+d[10]["Cabang"] = " kemang "; d[11]["Cabang"] = "KEMANG"; d[12]["Cabang"] = "Kemang "
+d[40]["Jumlah"] = None; d[41]["Total"] = None
+d[70]["Harga Satuan"] = "22.000"; d[71]["Harga Satuan"] = "18.000"; d[72]["Total"] = "45.000"
+d[100]["Tanggal"] = "2024-02-15"; d[101]["Tanggal"] = "17 Feb 2024"
+d.append(dict(d[5])); d.append(dict(d[5]))
+for r, row in enumerate(d, 5):
+    for c, k in enumerate(kol, 1): ws.cell(row=r, column=c, value=row[k])
+ws.cell(row=len(d)+6, column=1, value="TOTAL")
+
+ws2 = wb.create_sheet("Penjualan Q2")
+kol2 = ["TANGGAL","CABANG","PRODUK","QTY","HARGA","TOTAL"]
+for i, k in enumerate(kol2, 1): ws2.cell(row=1, column=i, value=k)
+peta = dict(zip(kol2, kol))
+for r, row in enumerate(baris(150, 4, 6), 2):
+    for c, k in enumerate(kol2, 1): ws2.cell(row=r, column=c, value=row[peta[k]])
+
+wb.create_sheet("Catatan")["A1"] = "Jangan diubah. Hubungi Rina kalau ada pertanyaan."
+wb.save("Laporan Penjualan 2024.xlsx")
+print("Berkas 'Laporan Penjualan 2024.xlsx' dibuat.")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Berkas 'Laporan Penjualan 2024.xlsx' dibuat.</code></pre></div>
+        </div>
+        <div class="catatan">
+          <strong>Di pekerjaan sungguhan, berkas ini datang lewat WhatsApp atau email.</strong> Cara memasukkannya ke Colab: klik ikon <strong>folder</strong> di tepi kiri Colab, lalu ikon <strong>unggah</strong> (panah ke atas), pilih berkasnya. Berkas itu hilang saat sesi Colab berakhir — itu normal, unggah lagi besoknya. Cara lain: <code>from google.colab import files</code> lalu <code>files.upload()</code>, yang memunculkan tombol pilih berkas.
+          <p style="margin-top:8px">Kita membuatnya dengan kode supaya berkasmu <em>identik</em> dengan berkasku, dan setiap angka di halaman ini bisa kamu cocokkan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Baca seperti biasa — dan lihat kenapa hasilnya kacau</h3>
+        <span class="cek"><input type="checkbox" id="k1s2"><label for="k1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sampai sekarang kamu selalu memakai <code>pd.read_csv</code>. Untuk Excel, perintahnya <code>pd.read_excel</code> — dan sisanya sama.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>df = pd.read_excel("Laporan Penjualan 2024.xlsx")
+print(df.shape)
+print(df.head(4))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>(187, 6)
+  LAPORAN PENJUALAN KEDAI KOPI SENJA Unnamed: 1  ...    Unnamed: 4 Unnamed: 5
+0      Periode: Januari - Maret 2024        NaN  ...           NaN        NaN
+1                                NaN        NaN  ...           NaN        NaN
+2                            Tanggal     Cabang  ...  Harga Satuan      Total
+3                         18/03/2024    Seturan  ...         25000      75000</code></pre>
+          </div>
+        </div>
+        <p>Baca baik-baik apa yang terjadi. pandas menganggap <strong>baris pertama adalah nama kolom</strong>, jadi judul laporan jadi nama kolom, dan lima kolom lain diberi nama <code>Unnamed: 1</code> sampai <code>Unnamed: 5</code>. Nama kolom yang sebenarnya (<code>Tanggal</code>, <code>Cabang</code>, …) malah terdampar di baris ke-2 sebagai data.</p>
+        <div class="bahaya">
+          <strong>Tidak ada pesan error.</strong> Ini yang membuatnya berbahaya. Kalau kamu langsung mengetik <code>df["Total"].sum()</code>, Python akan bilang kolomnya tidak ada — itu masih beruntung. Yang lebih buruk: kamu mengerjakan analisis berjam-jam di atas tabel yang salah tanpa sadar, karena bentuknya terlihat seperti tabel yang benar.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Lihat dulu ada sheet apa saja</h3>
+        <span class="cek"><input type="checkbox" id="k1s3"><label for="k1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Satu berkas Excel bisa berisi banyak lembar (sheet). <code>read_excel</code> tanpa keterangan tambahan hanya membaca <strong>sheet pertama</strong> — jadi separuh data klien bisa hilang tanpa kamu tahu.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>xls = pd.ExcelFile("Laporan Penjualan 2024.xlsx")
+print(xls.sheet_names)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>['Penjualan Q1', 'Penjualan Q2', 'Catatan']</code></pre></div>
+        </div>
+        <div class="catatan">
+          <strong>Jadikan ini refleks pertama, sebelum apa pun.</strong> Klien yang bilang "datanya saya kirim ya" hampir tidak pernah menyebut ada berapa sheet. Kalau kamu menganalisis Q1 saja lalu melapor "pendapatan setahun Rp 9,9 juta", kamu salah setengahnya — dan yang menemukan kesalahan itu adalah kliennya, bukan kamu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Baca dengan header yang benar</h3>
+        <span class="cek"><input type="checkbox" id="k1s4"><label for="k1s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Nama kolom asli ada di baris ke-4 berkas Excel. Artinya tiga baris di atasnya harus dilewati: <code>skiprows=3</code>. Dan sheet-nya disebut namanya: <code>sheet_name=</code>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q1 = pd.read_excel("Laporan Penjualan 2024.xlsx",
+                   sheet_name="Penjualan Q1", skiprows=3)
+print(q1.shape)
+print(list(q1.columns))
+print(q1.head(3))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>(184, 6)
+['Tanggal', 'Cabang', 'Produk', 'Jumlah', 'Harga Satuan', 'Total']
+      Tanggal   Cabang     Produk  Jumlah  Harga Satuan    Total
+0  18/03/2024  Seturan  Croissant     3.0       25000.0  75000.0
+1  24/03/2024   Kemang  Americano     2.0       18000.0  36000.0
+2  25/01/2024   Kemang  Teh Manis     3.0       10000.0  30000.0</code></pre>
+          </div>
+        </div>
+        <p>Sekarang kolomnya benar. Tapi perhatikan angkanya: <strong>184 baris</strong>. Kita akan lihat besok bahwa hanya 182 di antaranya benar-benar transaksi.</p>
+        <div class="catatan">
+          <strong>Kalau kamu tidak tahu harus melewati berapa baris:</strong> baca dulu tanpa <code>skiprows</code>, lihat <code>df.head(10)</code>, hitung di baris keberapa nama kolom muncul, lalu ulangi. Cara ini selalu berhasil dan tidak perlu membuka Excel sama sekali.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Data Klien 1 selesai</h3>
+      <p><strong>Catat:</strong> <code>pd.read_excel</code> untuk berkas Excel · <code>pd.ExcelFile(...).sheet_names</code> untuk melihat semua sheet <em>sebelum</em> menganalisis apa pun · <code>sheet_name=</code> memilih sheet · <code>skiprows=</code> melewati baris judul. Bacaan pertama sebuah berkas klien hampir selalu salah, dan salahnya tanpa pesan error.</p>
+    </div>
+  </section>
+
+  <!-- ============ D2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">DATA KLIEN 2</span>
+      <h2>Memeriksa kerusakan sebelum menyentuh apa pun</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjalankan empat pemeriksaan baku pada berkas klien mana pun, dan menyebut kerusakannya dengan angka — bukan dengan perasaan "datanya berantakan".</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Pemeriksaan 1: tipe data tiap kolom</h3>
+        <span class="cek"><input type="checkbox" id="k2s1"><label for="k2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q1.dtypes)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Tanggal          object
+Cabang           object
+Produk           object
+Jumlah          float64
+Harga Satuan    float64
+Total           float64
+dtype: object</code></pre>
+          </div>
+        </div>
+        <p><code>object</code> berarti teks. <code>float64</code> berarti angka desimal. Dua hal langsung mencurigakan:</p>
+        <ul>
+          <li><strong><code>Tanggal</code> bertipe teks</strong>, bukan tanggal. Artinya kamu belum bisa menyortir berdasar waktu atau mengelompokkan per bulan — <code>"31/01/2024"</code> akan diurutkan sebagai kata, sehingga Maret bisa datang sebelum Januari.</li>
+          <li><strong><code>Jumlah</code> bertipe desimal</strong>, padahal jumlah cangkir kopi selalu bilangan bulat. Desimal muncul karena ada sel kosong di kolom itu — pandas memakai <code>NaN</code> untuk sel kosong, dan <code>NaN</code> hanya ada di tipe desimal.</li>
+        </ul>
+        <div class="catatan">
+          <strong>Kalau kamu memakai Colab, kemungkinan besar hasilmu persis seperti di atas.</strong> Pada pandas versi 3 (belum jadi bawaan Colab saat ini), kolom teks ditampilkan sebagai <code>str</code>, bukan <code>object</code>. Artinya sama — jangan bingung kalau suatu saat tulisannya berubah.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Pemeriksaan 2: sel kosong</h3>
+        <span class="cek"><input type="checkbox" id="k2s2"><label for="k2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q1.isna().sum())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Tanggal         1
+Cabang          2
+Produk          2
+Jumlah          3
+Harga Satuan    2
+Total           3
+dtype: int64</code></pre>
+          </div>
+        </div>
+        <p><code>isna()</code> mengubah tiap sel jadi benar/salah — benar kalau kosong. <code>sum()</code> menjumlahkan yang benar. Jadi ini menghitung sel kosong per kolom.</p>
+        <p>Polanya menarik: <code>Cabang</code> dan <code>Produk</code> sama-sama 2, <code>Jumlah</code> dan <code>Total</code> sama-sama 3. Itu petunjuk bahwa <strong>ada baris yang hampir seluruhnya kosong</strong> — bukan sel kosong yang tersebar acak.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Pemeriksaan 3: lihat ujung tabel</h3>
+        <span class="cek"><input type="checkbox" id="k2s3"><label for="k2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hampir semua orang memeriksa <code>head()</code> dan berhenti di situ. Kerusakan berkas Excel justru paling sering bersembunyi di <strong>bawah</strong>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q1.tail(4))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>        Tanggal Cabang      Produk  Jumlah  Harga Satuan    Total
+180  28/01/2024   Dago  Roti Bakar     3.0       15000.0  45000.0
+181  28/01/2024   Dago  Roti Bakar     3.0       15000.0  45000.0
+182         NaN    NaN         NaN     NaN           NaN      NaN
+183       TOTAL    NaN         NaN     NaN           NaN      NaN</code></pre>
+          </div>
+        </div>
+        <p>Ketemu. Dua baris terakhir bukan transaksi: satu baris kosong, dan satu baris <strong>"TOTAL"</strong> — baris ringkasan yang di Excel terlihat wajar di bawah tabel, tapi begitu dibaca Python ia menyamar jadi transaksi.</p>
+        <div class="bahaya">
+          <strong>Baris "TOTAL" adalah penyebab kesalahan paling umum saat mengolah berkas Excel orang.</strong> Kalau baris itu punya angka di kolom Total (di berkas asli sering begitu, hasil rumus <code>=SUM(...)</code>), maka setiap penjumlahanmu akan <strong>terhitung dua kali lipat</strong> — dan hasilnya masih terlihat masuk akal, cuma dua kali lebih besar. Selalu periksa <code>tail()</code>.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Pemeriksaan 4: berapa versi ejaan tiap kolom teks</h3>
+        <span class="cek"><input type="checkbox" id="k2s4"><label for="k2s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q1["Cabang"].value_counts(dropna=False))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Cabang
+Dago        62
+Seturan     60
+Kemang      57
+NaN          2
+ kemang      1
+KEMANG       1
+Kemang       1
+Name: count, dtype: int64</code></pre>
+          </div>
+        </div>
+        <p>Kedai ini punya <strong>tiga</strong> cabang, tapi datanya mengenal <strong>enam</strong>. Kemang tercatat empat kali dengan ejaan berbeda: <code>Kemang</code> (57), <code>&nbsp;kemang&nbsp;</code> dengan spasi (1), <code>KEMANG</code> huruf besar (1), dan <code>Kemang&nbsp;</code> dengan spasi di belakang (1).</p>
+        <p>Spasi di depan atau belakang tidak terlihat sama sekali di layar. Di Excel, <code>"Kemang "</code> dan <code>"Kemang"</code> terlihat identik. Bagi Python, keduanya dua hal yang sama sekali berbeda.</p>
+        <div class="catatan">
+          <strong>Ini akibatnya kalau tidak diperbaiki.</strong> Kemang yang sebenarnya punya <strong>60</strong> transaksi, sama banyak dengan Seturan. Tapi kalau kamu langsung membuat grafik "transaksi per cabang", Kemang akan tampil punya 57 — dan tiga cabang hantu bermunculan di grafik yang kamu kirim ke klien.
+        </div>
+        <div class="aksi">
+          <span class="tag">LAKUKAN SEKARANG</span>
+          <p>Jalankan <code>value_counts(dropna=False)</code> untuk kolom <code>Produk</code> juga. Berapa versi yang muncul, dan apakah ada yang mencurigakan?</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <p>Kolom <code>Produk</code> bersih: lima produk saja, plus 2 <code>NaN</code> dari baris kosong dan baris TOTAL.</p>
+          <div class="kode"><pre><code>Produk
+Roti Bakar    43
+Teh Manis     40
+Kopi Susu     36
+Croissant     33
+Americano     30
+NaN            2
+Name: count, dtype: int64</code></pre></div>
+          <p style="margin-top:8px">Tidak semua kolom teks rusak — dan itulah gunanya memeriksa satu per satu, bukan menebak.</p>
+          <p style="margin-top:8px">Kolom <code>Produk</code> yang bersih ini akan sangat berguna besok: karena ia bisa dipercaya, ia bisa dipakai untuk <em>memperbaiki</em> kolom lain yang rusak.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Data Klien 2 selesai</h3>
+      <p><strong>Empat pemeriksaan baku, hafalkan urutannya:</strong> <code>dtypes</code> (tipe salah?) → <code>isna().sum()</code> (kosong di mana?) → <code>tail()</code> (ada baris ringkasan?) → <code>value_counts(dropna=False)</code> (berapa versi ejaan?). Empat baris ini yang kamu jalankan di hari pertama tiap proyek klien, sebelum menyebut harga apa pun.</p>
+    </div>
+  </section>
+
+  <!-- ============ D3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">DATA KLIEN 3</span>
+      <h2>Angka yang diam-diam berubah jadi salah</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menemukan angka yang rusak tanpa memeriksa satu per satu, memperbaikinya dari data yang sehat, dan tahu kenapa uji yang bilang "aman" kadang justru sedang berbohong.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buang dulu yang bukan transaksi</h3>
+        <span class="cek"><input type="checkbox" id="k3s1"><label for="k3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kemarin <code>tail()</code> menunjukkan dua baris di ujung yang bukan transaksi: satu baris kosong dan satu baris "TOTAL". Buang keduanya <strong>sebelum</strong> menghitung apa pun — kalau tidak, keduanya akan mengacaukan setiap pemeriksaan hari ini.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q1 = q1.dropna(how="all")
+print("setelah baris kosong :", len(q1))
+
+q1 = q1[q1["Produk"].notna()]
+print("setelah baris TOTAL  :", len(q1))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>setelah baris kosong : 183
+setelah baris TOTAL  : 182</code></pre>
+          </div>
+        </div>
+        <p><code>dropna(how="all")</code> membuang baris yang <strong>seluruh</strong> kolomnya kosong — <code>how="all"</code> itu penting. Tanpa itu, bawaannya <code>how="any"</code>, yang akan membuang setiap baris yang punya <em>satu saja</em> sel kosong — termasuk tiga baris transaksi sah yang tinggal sedikit rusak dan masih bisa diselamatkan.</p>
+        <p>Baris "TOTAL" tidak kosong seluruhnya (kolom Tanggal berisi tulisan "TOTAL"), jadi ia perlu disingkirkan dengan cara lain: <strong>transaksi yang sah pasti punya nama produk.</strong></p>
+        <div class="catatan">
+          <strong>Kenapa memilih kolom <code>Produk</code> sebagai penyaring?</strong> Karena kemarin kita sudah membuktikan kolom itu bersih — lima produk, tanpa ejaan ganda. Menyaring memakai kolom yang belum diperiksa adalah cara memindahkan kesalahan, bukan membuangnya.
+        </div>
+        <div class="bahaya">
+          <strong>Mulai titik ini, <code>q1</code> berubah setiap langkah.</strong> Kalau kamu menjalankan satu sel dua kali, atau melompati sel, angkamu akan berbeda dari angka di halaman ini. Kalau sudah terlanjur bingung: jalankan ulang dari sel <code>pd.read_excel</code> di Hari 1 berurutan ke bawah. Di Colab, <em>Runtime → Restart and run all</em> melakukannya sekaligus.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rp 22.000 yang berubah jadi Rp 22</h3>
+        <span class="cek"><input type="checkbox" id="k3s2"><label for="k3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di Indonesia kita menulis dua puluh dua ribu sebagai <strong>22.000</strong> — titik sebagai pemisah ribuan. Di Python dan di Excel berbahasa Inggris, titik adalah <strong>koma desimal</strong>. Kalau sel Excel-nya berisi teks <code>"22.000"</code>, pandas membacanya sebagai angka <strong>22,0</strong>.</p>
+        <p>Tidak ada error. Tidak ada peringatan. Harga kopimu baru saja menyusut seribu kali lipat.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q1[q1["Harga Satuan"] &lt; 1000])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>       Tanggal   Cabang     Produk  Jumlah  Harga Satuan    Total
+70  12/03/2024  Seturan  Kopi Susu     4.0          22.0  88000.0
+71  26/03/2024  Seturan  Croissant     1.0          18.0  25000.0</code></pre>
+          </div>
+        </div>
+        <p>Dua baris. Perhatikan baris 70: harga satuan 22,0 tapi totalnya 88.000 untuk 4 cangkir. Angka <code>Total</code>-nya masih benar — yang rusak hanya <code>Harga Satuan</code>. Itu penting, karena berarti kerusakannya <strong>bisa dihitung mundur</strong>.</p>
+        <div class="catatan">
+          <strong>Kenapa aku memilih ambang 1000?</strong> Karena tidak ada satu pun barang di kedai ini yang harganya di bawah seribu rupiah. Ambang itu datang dari <em>pengetahuan tentang usahanya</em>, bukan dari statistik. Untuk klien lain, ambangnya lain — dan menanyakannya ke klien ("apa barang termurah yang Bapak jual?") adalah pertanyaan yang membuatmu terdengar paham, bukan bodoh.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cara mencarinya tanpa menebak ambang: uji identitas</h3>
+        <span class="cek"><input type="checkbox" id="k3s3"><label for="k3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ada cara yang lebih tajam dan tidak butuh tebakan sama sekali. Di tabel ini berlaku satu hubungan yang <strong>harus selalu benar</strong>:</p>
+        <p style="text-align:center;margin:12px 0"><code>Jumlah × Harga Satuan = Total</code></p>
+        <p>Baris mana pun yang melanggarnya, rusak. Titik. Ini persis cara berpikir kertas kerja audit: kamu tidak memeriksa setiap angka, kamu menguji hubungan yang mengikat angka-angka itu.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>hitung  = q1["Jumlah"] * q1["Harga Satuan"]
+selisih = (hitung - q1["Total"]).abs()
+print("baris tidak cocok:", (selisih &gt; 0.5).sum())
+print(q1[selisih &gt; 0.5])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>baris tidak cocok: 3
+       Tanggal     Cabang     Produk  Jumlah  Harga Satuan    Total
+70  12/03/2024    Seturan  Kopi Susu     4.0          22.0  88000.0
+71  26/03/2024    Seturan  Croissant     1.0          18.0  25000.0
+72  26/03/2024    Seturan  Croissant     4.0       25000.0     45.0</code></pre>
+          </div>
+        </div>
+        <p><strong>Tiga</strong> baris, bukan dua. Uji identitas menemukan satu baris yang luput dari pencarian harga murah: baris 72, di mana yang rusak adalah <code>Total</code>-nya (45,0 untuk 4 croissant seharga 25.000).</p>
+        <div class="catatan">
+          <strong>Kenapa <code>&gt; 0.5</code> dan bukan <code>!= 0</code>?</strong> Komputer menyimpan angka desimal dengan pembulatan halus, jadi dua angka yang secara matematika sama bisa berbeda sepersekian triliun. Membandingkan dengan <code>!=</code> akan memunculkan ratusan "selisih" palsu. Karena semua nilai di sini rupiah bulat, selisih apa pun di bawah setengah rupiah pasti bukan kesalahan sungguhan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Perbaiki dari data yang sehat, bukan dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="k3s4"><label for="k3s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Godaan terbesarnya adalah mengetik sendiri: "kan harga Kopi Susu 22.000". Jangan. Kamu tidak tahu itu, kamu <em>menebak dari pola</em>. Ambil dari datanya sendiri — dari baris-baris yang tidak rusak.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>harga_resmi = (q1[q1["Harga Satuan"] &gt; 1000]
+               .groupby("Produk")["Harga Satuan"]
+               .agg(lambda s: s.mode().iat[0]))
+print(harga_resmi)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Produk
+Americano     18000.0
+Croissant     25000.0
+Kopi Susu     22000.0
+Roti Bakar    15000.0
+Teh Manis     10000.0
+Name: Harga Satuan, dtype: float64</code></pre>
+          </div>
+        </div>
+        <p><code>mode()</code> mengambil nilai yang <strong>paling sering muncul</strong>. Dipakai di sini karena kalau ada satu-dua baris rusak lagi yang belum ketahuan, nilai yang paling sering tetap yang benar — beda dengan rata-rata, yang akan tertarik oleh angka rusak.</p>
+        <div class="aksi">
+          <span class="tag">SEBELUM MEMPERBAIKI, PERIKSA DULU</span>
+          <p>Bagaimana kalau kedai ini pernah menaikkan harga di tengah tahun? Maka satu produk punya dua harga sah, dan "memperbaiki" justru merusak. Uji dulu:</p>
+        </div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q1.groupby("Produk")["Harga Satuan"].agg(["min","max","nunique"]))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>                min      max  nunique
+Produk                               
+Americano   18000.0  18000.0        1
+Croissant      18.0  25000.0        2
+Kopi Susu      22.0  22000.0        2
+Roti Bakar  15000.0  15000.0        1
+Teh Manis   10000.0  10000.0        1</code></pre>
+          </div>
+        </div>
+        <p>Tiga produk punya tepat <strong>satu</strong> harga. Dua produk punya dua harga — dan harga keduanya yang aneh (18,0 dan 22,0) adalah baris rusak yang sudah kita kenali. Jadi tidak ada kenaikan harga di sini, dan perbaikan aman dilakukan.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>rusak_harga = q1["Harga Satuan"] &lt; 1000
+q1.loc[rusak_harga, "Harga Satuan"] = q1.loc[rusak_harga, "Produk"].map(harga_resmi)
+print("harga diperbaiki:", rusak_harga.sum())
+
+hitung      = q1["Jumlah"] * q1["Harga Satuan"]
+rusak_total = q1["Total"].isna() | ((hitung - q1["Total"]).abs() &gt; 0.5)
+q1.loc[rusak_total, "Total"] = hitung[rusak_total]
+print("total diperbaiki :", rusak_total.sum())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>harga diperbaiki: 2
+total diperbaiki : 2</code></pre>
+          </div>
+        </div>
+        <div class="catatan">
+          <strong><code>.loc[baris, kolom] = nilai</code> adalah cara pandas mengubah sebagian isi tabel.</strong> Bagian <code>rusak_harga</code> memilih barisnya, <code>"Harga Satuan"</code> memilih kolomnya, dan <code>.map(harga_resmi)</code> menerjemahkan nama produk jadi harganya. Pola ini akan kamu pakai terus-menerus.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Ujinya bilang "aman" — dan itu bohong</h3>
+        <span class="cek"><input type="checkbox" id="k3s5"><label for="k3s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Jalankan uji identitas sekali lagi untuk memastikan perbaikannya berhasil.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>hitung = q1["Jumlah"] * q1["Harga Satuan"]
+print("baris tidak cocok:", ((hitung - q1["Total"]).abs() &gt; 0.5).sum())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>baris tidak cocok: 0</code></pre></div>
+        </div>
+        <p>Nol. Semua cocok. Selesai?</p>
+        <div class="bahaya">
+          <strong>Belum. Uji ini baru saja melewatkan satu baris tanpa memberitahumu.</strong>
+          <p style="margin-top:8px">Kalau <code>Jumlah</code> kosong, maka <code>Jumlah × Harga</code> menghasilkan <code>NaN</code>. Dan setiap perbandingan yang melibatkan <code>NaN</code> selalu bernilai <em>salah</em> — termasuk <code>NaN &gt; 0.5</code>. Jadi baris itu tidak terhitung sebagai tidak cocok. Ia hilang dari laporan, bukan karena benar, tapi karena <strong>tidak bisa diuji</strong>.</p>
+        </div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print("tidak cocok      :", ((hitung - q1["Total"]).abs() &gt; 0.5).sum())
+print("TIDAK BISA DIUJI :", hitung.isna().sum())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>tidak cocok      : 0
+TIDAK BISA DIUJI : 1</code></pre>
+          </div>
+        </div>
+        <div class="catatan">
+          <strong>Ini kesalahan yang paling mahal di seluruh halaman ini, dan kamu sudah mengenalnya dari tempat kerja lama.</strong> Sebuah prosedur yang melaporkan "tidak ada temuan" padahal sebagian populasinya tidak pernah tersentuh pengujian bukan prosedur yang lolos — itu prosedur yang cakupannya bolong. Bedanya di sini: yang menyembunyikan bolongnya bukan orang, tapi aturan <code>NaN</code> di Python.
+          <p style="margin-top:8px">Mulai sekarang, setiap kali kamu menulis uji berbentuk perbandingan, tulis <strong>dua</strong> angka: berapa yang gagal, dan berapa yang tidak bisa diuji.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Pulihkan yang bisa dipulihkan</h3>
+        <span class="cek"><input type="checkbox" id="k3s6"><label for="k3s6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Identitas yang sama bisa dibalik: kalau <code>Jumlah</code> hilang tapi <code>Total</code> dan <code>Harga Satuan</code> ada, maka <code>Jumlah = Total ÷ Harga Satuan</code>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>bisa = q1["Jumlah"].isna() &amp; q1["Total"].notna() &amp; q1["Harga Satuan"].notna()
+q1.loc[bisa, "Jumlah"] = q1.loc[bisa, "Total"] / q1.loc[bisa, "Harga Satuan"]
+print("jumlah dipulihkan:", bisa.sum())
+print(q1.loc[bisa, ["Produk","Jumlah","Harga Satuan","Total"]])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>jumlah dipulihkan: 1
+       Produk  Jumlah  Harga Satuan    Total
+40  Kopi Susu     4.0       22000.0  88000.0</code></pre>
+          </div>
+        </div>
+        <p>Empat cangkir kopi susu. Bukan tebakan — dipaksa oleh aritmetika: 88.000 ÷ 22.000 hanya bisa 4.</p>
+        <div class="catatan">
+          <strong>Perhatikan tanda <code>&amp;</code>.</strong> Di pandas, "dan" untuk menggabungkan syarat ditulis <code>&amp;</code>, bukan <code>and</code>; "atau" ditulis <code>|</code>, bukan <code>or</code>. Tiap syarat harus dikurung. Kalau kamu memakai <code>and</code>, Python akan melempar error panjang tentang "truth value is ambiguous" — sekarang kamu tahu artinya cuma ini.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Data Klien 3 selesai</h3>
+      <p><strong>Catat:</strong> <code>"22.000"</code> jadi <code>22.0</code> tanpa error — titik ribuan Indonesia dibaca sebagai koma desimal · uji <strong>identitas</strong> (<code>Jumlah × Harga = Total</code>) menemukan kerusakan tanpa perlu menebak ambang · perbaiki dari data sehat pakai <code>mode()</code>, bukan dari ingatan · dan setiap uji perbandingan wajib melaporkan <strong>dua</strong> angka: yang gagal, dan yang tidak bisa diuji.</p>
+    </div>
+  </section>
+
+  <!-- ============ D4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">DATA KLIEN 4</span>
+      <h2>Teks yang tidak seragam dan tanggal yang tidak mau dibaca</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyatukan ejaan yang berbeda-beda dalam satu perintah, dan mengubah kolom tanggal berformat campur aduk jadi tanggal sungguhan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tiga cabang hantu, hilang dalam satu baris</h3>
+        <span class="cek"><input type="checkbox" id="k4s1"><label for="k4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q1["Cabang"] = q1["Cabang"].str.strip().str.title()
+print(q1["Cabang"].value_counts(dropna=False))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Cabang
+Dago       62
+Seturan    60
+Kemang     60
+Name: count, dtype: int64</code></pre>
+          </div>
+        </div>
+        <p>Enam cabang jadi tiga. Dua perintah kecil yang mengerjakannya:</p>
+        <ul>
+          <li><code>.str.strip()</code> — membuang spasi di depan dan di belakang. <code>"&nbsp;kemang&nbsp;"</code> jadi <code>"kemang"</code>.</li>
+          <li><code>.str.title()</code> — menyeragamkan huruf besar-kecil jadi Huruf Awal Kapital. <code>"kemang"</code> dan <code>"KEMANG"</code> sama-sama jadi <code>"Kemang"</code>.</li>
+        </ul>
+        <p>Bagian <code>.str</code> di depan artinya "perlakukan kolom ini sebagai teks". Tanpa itu, pandas tidak tahu <code>strip</code> yang kamu maksud apa.</p>
+        <div class="catatan">
+          <strong>Dan sekarang jawabannya berubah.</strong> Kemarin Kemang terlihat punya 57 transaksi — paling sedikit di antara tiga cabang. Setelah dirapikan, Kemang punya <strong>60</strong>, sama persis dengan Seturan. Kalau kamu terlanjur mengirim grafik kemarin, kamu sudah memberi klien kesimpulan yang salah tentang cabangnya sendiri.
+        </div>
+        <div class="bahaya">
+          <strong><code>.str.title()</code> tidak selalu aman.</strong> Ia mengubah setiap kata jadi Huruf Awal Kapital — jadi <code>"PT ABC"</code> jadi <code>"Pt Abc"</code>, dan <code>"CV Maju"</code> jadi <code>"Cv Maju"</code>. Untuk nama cabang seperti di sini, aman. Untuk nama perusahaan, pakai <code>.str.upper()</code> saja (semua huruf besar) — jelek dilihat, tapi tidak pernah merusak singkatan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tanggal: pandas mengunci satu format, lalu menyerah</h3>
+        <span class="cek"><input type="checkbox" id="k4s2"><label for="k4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kolom <code>Tanggal</code> masih teks. Cara mengubahnya jadi tanggal sungguhan adalah <code>pd.to_datetime</code>. Coba dulu cara yang paling lugu:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>t = pd.to_datetime(q1["Tanggal"], errors="coerce", dayfirst=True)
+print("gagal:", t.isna().sum())
+print("yang gagal:", q1.loc[t.isna(), "Tanggal"].tolist())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>gagal: 2
+yang gagal: ['2024-02-15', '17 Feb 2024']</code></pre>
+          </div>
+        </div>
+        <p>Aneh, bukan? <code>'2024-02-15'</code> adalah format tanggal paling baku sedunia, tapi di sini gagal. Sebabnya: pandas melihat nilai pertama (<code>18/03/2024</code>), menyimpulkan "oh, formatnya hari/bulan/tahun", lalu <strong>memaksakan format itu ke seluruh kolom</strong>. Apa pun yang tidak cocok dianggap gagal.</p>
+        <div class="catatan">
+          <strong>Dua keterangan tambahan yang wajib kamu pahami:</strong>
+          <p style="margin-top:8px"><code>dayfirst=True</code> memberitahu pandas bahwa <code>03/04/2024</code> berarti <strong>3 April</strong>, bukan 4 Maret. Indonesia menulis hari dulu, Amerika menulis bulan dulu. Kalau kamu lupa menuliskannya, sebagian tanggalmu akan tertukar hari dan bulannya — dan hanya tanggal 1–12 yang tertukar, sehingga laporan bulananmu salah dengan cara yang sulit sekali dilihat.</p>
+          <p style="margin-top:8px"><code>errors="coerce"</code> berarti "yang tidak bisa dibaca, jadikan kosong, jangan berhenti". Tanpa itu, satu nilai aneh membuat seluruh perintah gagal dengan pesan error. Dengan itu, kamu bisa <em>menghitung</em> berapa yang bermasalah — dan itu jauh lebih berguna.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Biarkan pandas membaca tiap baris sendiri-sendiri</h3>
+        <span class="cek"><input type="checkbox" id="k4s3"><label for="k4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau satu kolom memang berisi beberapa format sekaligus, katakan itu ke pandas dengan <code>format="mixed"</code>. Artinya: jangan mengunci satu pola, baca tiap nilai apa adanya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q1["Tanggal"] = pd.to_datetime(q1["Tanggal"], format="mixed", dayfirst=True)
+print("gagal sekarang:", q1["Tanggal"].isna().sum())
+print(q1.loc[[100, 101], ["Tanggal", "Cabang", "Produk"]])
+print()
+print("tipe kolom Tanggal:", q1["Tanggal"].dtype)
+print("sisa sel kosong di seluruh tabel:", q1.isna().sum().sum())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>gagal sekarang: 0
+       Tanggal  Cabang     Produk
+100 2024-02-15    Dago  Croissant
+101 2024-02-17  Kemang  Americano
+
+tipe kolom Tanggal: datetime64[ns]
+sisa sel kosong di seluruh tabel: 0</code></pre>
+          </div>
+        </div>
+        <p>Nol gagal, nol sel kosong. Kolom <code>Tanggal</code> sekarang bertipe <code>datetime64</code> — artinya kamu sudah bisa mengurutkan berdasar waktu, mengelompokkan per bulan, dan menghitung selisih hari.</p>
+        <div class="bahaya">
+          <strong>Kalau <code>format="mixed"</code> masih gagal juga</strong> — misalnya ada nilai <code>"Senin, 5 Feb"</code> atau <code>"Feb-24"</code> — jangan memaksa. Itu tandanya sebagian data memang tidak punya tanggal utuh, dan menebaknya sendiri berarti mengarang. Kumpulkan nilai yang gagal, kirim daftarnya ke klien, dan tanyakan. Satu pesan singkat sekarang jauh lebih murah daripada laporan yang harus ditarik nanti.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Data Klien 4 selesai</h3>
+      <p><strong>Catat:</strong> <code>.str.strip().str.title()</code> menyatukan ejaan yang berbeda-beda · <code>pd.to_datetime</code> mengunci satu format dari nilai pertama, jadi kolom campur aduk butuh <code>format="mixed"</code> · <code>dayfirst=True</code> wajib untuk tanggal Indonesia · <code>errors="coerce"</code> mengubah kegagalan jadi angka yang bisa dihitung, bukan error yang menghentikan semuanya.</p>
+    </div>
+  </section>
+
+  <!-- ============ D5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">DATA KLIEN 5</span>
+      <h2>Duplikat, dan keputusan yang bukan milikmu</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengukur dampak duplikat dalam rupiah dan persen, dan tahu kapan berhenti memperbaiki lalu bertanya ke klien.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Temukan dan tampilkan pasangannya</h3>
+        <span class="cek"><input type="checkbox" id="k5s1"><label for="k5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print("duplikat persis:", q1.duplicated().sum())
+print(q1[q1.duplicated(keep=False)].sort_values(["Tanggal","Produk"]))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>duplikat persis: 5
+       Tanggal  Cabang      Produk  Jumlah  Harga Satuan    Total
+77  2024-01-09  Kemang  Roti Bakar     1.0       15000.0  15000.0
+161 2024-01-09  Kemang  Roti Bakar     1.0       15000.0  15000.0
+28  2024-01-19  Kemang   Kopi Susu     3.0       22000.0  66000.0
+78  2024-01-19  Kemang   Kopi Susu     3.0       22000.0  66000.0
+5   2024-01-28    Dago  Roti Bakar     3.0       15000.0  45000.0
+180 2024-01-28    Dago  Roti Bakar     3.0       15000.0  45000.0
+181 2024-01-28    Dago  Roti Bakar     3.0       15000.0  45000.0
+140 2024-03-07  Kemang  Roti Bakar     3.0       15000.0  45000.0
+165 2024-03-07  Kemang  Roti Bakar     3.0       15000.0  45000.0</code></pre>
+          </div>
+        </div>
+        <p>Perhatikan dua angka yang berbeda. <code>duplicated()</code> menghitung <strong>5</strong> — itu jumlah baris <em>kelebihan</em>, tidak termasuk yang pertama dari tiap kelompok. <code>duplicated(keep=False)</code> menampilkan <strong>9</strong> baris — seluruh anggota tiap kelompok, termasuk yang pertama. Yang pertama untuk menghitung, yang kedua untuk dilihat mata.</p>
+        <p>28 Januari di Dago muncul <strong>tiga</strong> kali, bukan dua.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jangan langsung dibuang — ukur dulu</h3>
+        <span class="cek"><input type="checkbox" id="k5s2"><label for="k5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hampir semua tutorial akan menyuruhmu mengetik <code>df.drop_duplicates()</code> dan lanjut. Jangan. Lihat dulu berapa besar taruhannya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>d = q1.duplicated()
+dengan = q1["Total"].sum()
+tanpa  = q1[~d]["Total"].sum()
+print(f"dengan duplikat : Rp {dengan:,.0f}")
+print(f"tanpa duplikat  : Rp {tanpa:,.0f}")
+print(f"selisih         : Rp {dengan-tanpa:,.0f}  ({(dengan-tanpa)/dengan:.2%})")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>dengan duplikat : Rp 9,949,000
+tanpa duplikat  : Rp 9,733,000
+selisih         : Rp 216,000  (2.17%)</code></pre>
+          </div>
+        </div>
+        <p>Dua koma satu tujuh persen dari pendapatan klien bergantung pada satu pertanyaan yang <strong>tidak bisa dijawab oleh datanya</strong>.</p>
+        <div class="catatan">
+          <strong>Kenapa tidak bisa dijawab?</strong> Karena tabel ini tidak punya nomor transaksi. Dua baris identik bisa berarti dua hal yang sama-sama masuk akal:
+          <p style="margin-top:8px">— <strong>Kesalahan.</strong> Data terekspor dua kali, atau kasir tidak sengaja menyimpan dua kali.<br>
+          — <strong>Kenyataan.</strong> Dua orang benar-benar membeli 3 roti bakar di Dago pada hari yang sama. Untuk barang murah yang laris, ini justru <em>wajar</em>.</p>
+          <p style="margin-top:8px">Perhatikan bahwa semua duplikat di sini adalah Roti Bakar dan Kopi Susu — dua produk paling laris. Itu justru menguatkan kemungkinan kedua.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Batas antara membersihkan dan mengarang</h3>
+        <span class="cek"><input type="checkbox" id="k5s3"><label for="k5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Empat hari terakhir kamu memperbaiki banyak hal tanpa bertanya kepada siapa pun. Itu benar, karena setiap perbaikan itu <strong>dipaksa oleh aturan yang tidak bisa dibantah</strong>:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Perbaikan</th><th>Kenapa boleh diputuskan sendiri</th></tr></thead>
+            <tbody>
+              <tr><td>Baris "TOTAL" dibuang</td><td>Jelas bukan transaksi — tidak punya produk</td></tr>
+              <tr><td>Ejaan cabang disatukan</td><td>Kedainya memang cuma punya tiga cabang</td></tr>
+              <tr><td>Harga 22,0 → 22.000</td><td>Tidak ada kopi seharga Rp 22, dan totalnya membuktikannya</td></tr>
+              <tr><td>Jumlah kosong → 4</td><td>88.000 ÷ 22.000 hanya bisa 4</td></tr>
+              <tr><td><strong>Duplikat dibuang?</strong></td><td><strong>Tidak ada aturan yang memaksa. Ini keputusan bisnis.</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Baris terakhir berbeda jenis dari empat baris di atasnya. Memutuskannya sendiri berarti kamu <em>mengarang</em> angka sebesar Rp 216.000 ke dalam laporan klien, lalu menyebutnya "pembersihan data".</p>
+        <div class="aksi">
+          <span class="tag">TULIS PESANNYA SEKARANG</span>
+          <p>Begini bentuk pertanyaan yang benar — spesifik, berangka, dan menawarkan pilihan, bukan meminta klien memikirkan sendiri:</p>
+          <div class="kode"><pre><code>Pak/Bu, ada 5 baris yang identik persis dengan baris lain
+(tanggal, cabang, produk, jumlah, dan harga sama semua).
+Nilainya Rp 216.000, sekitar 2,2% dari total penjualan.
+
+Karena tidak ada nomor transaksi, saya tidak bisa memastikan
+sendiri apakah ini kesalahan ekspor atau memang dua pembelian
+yang kebetulan sama.
+
+Kalau sistem kasirnya punya nomor struk, saya bisa pastikan
+dari situ. Kalau tidak ada, saya akan tetap menghitungnya
+sebagai penjualan sah, dan saya catat asumsinya di laporan.
+Mohon dikoreksi kalau keliru.</code></pre></div>
+        </div>
+        <div class="catatan">
+          <strong>Perhatikan kalimat terakhirnya.</strong> Kamu tidak menggantung pekerjaan menunggu jawaban — kamu menyebut apa yang akan kamu lakukan kalau tidak ada jawaban, lalu jalan terus. Klien yang sibuk sering tidak membalas; yang membuat mereka marah bukan asumsimu, tapi asumsi yang <em>tidak diberitahukan</em>.
+          <p style="margin-top:8px">Ini kertas kerja yang sama seperti dulu: temuan, dampaknya berapa, alasannya tidak bisa disimpulkan sendiri, dan perlakuan yang diambil. Bedanya cuma bahasanya lebih ramah.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Data Klien 5 selesai</h3>
+      <p><strong>Catat:</strong> <code>duplicated()</code> menghitung yang berlebih, <code>duplicated(keep=False)</code> menampilkan seluruh kelompok · ukur dampak duplikat <strong>dalam rupiah dan persen</strong> sebelum memutuskan apa pun · perbaikan yang dipaksa aritmetika boleh kamu ambil sendiri, perbaikan yang butuh pengetahuan bisnis harus ditanyakan — dengan menyebut apa yang akan kamu lakukan kalau tidak dijawab.</p>
+    </div>
+  </section>
+
+  <!-- ============ D6 ============ -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">DATA KLIEN 6</span>
+      <h2>Menggabungkan sheet dan mengirim hasilnya kembali</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyatukan sheet yang nama kolomnya berbeda, dan mengirim balik berkas Excel berisi data bersih, ringkasan, dan catatan perubahan — bentuk jadi dari jasa pertama yang kamu jual.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Sheet kedua, nama kolom berbeda semua</h3>
+        <span class="cek"><input type="checkbox" id="k6s1"><label for="k6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ingat Hari 1: berkas ini punya tiga sheet, dan kita baru mengerjakan satu. Buka yang kedua.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q2 = pd.read_excel("Laporan Penjualan 2024.xlsx", sheet_name="Penjualan Q2")
+print("bentuk Q2:", q2.shape)
+print("kolom Q1:", list(q1.columns))
+print("kolom Q2:", list(q2.columns))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>bentuk Q2: (150, 6)
+kolom Q1: ['Tanggal', 'Cabang', 'Produk', 'Jumlah', 'Harga Satuan', 'Total']
+kolom Q2: ['TANGGAL', 'CABANG', 'PRODUK', 'QTY', 'HARGA', 'TOTAL']</code></pre>
+          </div>
+        </div>
+        <p>Sheet yang sama, berkas yang sama, kolom yang sama isinya — nama berbeda semua. Ini normal: sheet Q2 kemungkinan dibuat orang lain, atau diekspor dari menu yang berbeda. Tidak ada <code>skiprows</code> di sini karena header-nya memang di baris pertama.</p>
+        <p>Samakan namanya dengan <code>rename</code>, lalu jalankan pembersihan yang sama:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q2 = q2.rename(columns={"TANGGAL":"Tanggal", "CABANG":"Cabang", "PRODUK":"Produk",
+                        "QTY":"Jumlah", "HARGA":"Harga Satuan", "TOTAL":"Total"})
+q2["Tanggal"] = pd.to_datetime(q2["Tanggal"], format="mixed", dayfirst=True)
+q2["Cabang"]  = q2["Cabang"].str.strip().str.title()
+
+h = q2["Jumlah"] * q2["Harga Satuan"]
+print("Q2 tidak cocok  :", ((h - q2["Total"]).abs() &gt; 0.5).sum())
+print("Q2 tak bisa diuji:", h.isna().sum())
+print("Q2 sel kosong   :", q2.isna().sum().sum())
+print("Q2 duplikat     :", q2.duplicated().sum())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Q2 tidak cocok  : 0
+Q2 tak bisa diuji: 0
+Q2 sel kosong   : 0
+Q2 duplikat     : 1</code></pre>
+          </div>
+        </div>
+        <div class="catatan">
+          <strong>Sheet kedua ternyata hampir bersih.</strong> Ini pelajaran tersendiri: jangan menganggap seluruh berkas rusak hanya karena satu sheet-nya rusak, dan jangan pula menganggap sheet kedua pasti bersih karena yang pertama sudah kamu tangani. <strong>Jalankan empat pemeriksaan Hari 2 pada tiap sheet</strong>, setiap kali. Butuh dua menit, dan sekali waktu akan menyelamatkanmu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Satukan, dan simpan jejak asalnya</h3>
+        <span class="cek"><input type="checkbox" id="k6s2"><label for="k6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q1["Sumber"] = "Penjualan Q1"
+q2["Sumber"] = "Penjualan Q2"
+
+gabung = pd.concat([q1, q2], ignore_index=True)
+print("gabungan:", len(q1), "+", len(q2), "=", len(gabung))
+print(f"total: Rp {gabung['Total'].sum():,.0f}")
+print("rentang:", gabung["Tanggal"].min().date(), "s/d", gabung["Tanggal"].max().date())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>gabungan: 182 + 150 = 332
+total: Rp 17,947,000
+rentang: 2024-01-02 s/d 2024-06-27</code></pre>
+          </div>
+        </div>
+        <div class="catatan">
+          <strong>Kolom <code>Sumber</code> itu bukan hiasan.</strong> Begitu dua tabel menyatu, kamu kehilangan kemampuan menjawab "angka ini asalnya dari mana?" — kecuali kamu menyimpannya. Nanti kalau klien bilang "kok Maret kelihatan aneh", satu perintah <code>gabung[gabung["Sumber"]=="Penjualan Q1"]</code> membawamu kembali ke sumbernya.
+          <p style="margin-top:8px"><code>ignore_index=True</code> menomori ulang baris dari 0. Tanpa itu, nomor baris Q1 dan Q2 akan bertabrakan — ada dua baris bernomor 0, dua bernomor 1, dan seterusnya, yang membuat <code>.loc</code> berperilaku aneh nanti.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ringkasan yang sebenarnya dibayar klien</h3>
+        <span class="cek"><input type="checkbox" id="k6s3"><label for="k6s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Klien tidak membeli data bersih. Dia membeli <strong>jawaban</strong>. Data bersih cuma syarat supaya jawabannya benar.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>ringkas_cabang = (gabung.groupby("Cabang")
+                    .agg(transaksi=("Total","size"), pendapatan=("Total","sum"))
+                    .sort_values("pendapatan", ascending=False))
+ringkas_cabang["rata_per_transaksi"] = (ringkas_cabang["pendapatan"]
+                                        / ringkas_cabang["transaksi"]).round(0)
+print(ringkas_cabang)
+
+gabung["Bulan"] = gabung["Tanggal"].dt.to_period("M").astype(str)
+bulanan = gabung.groupby("Bulan")["Total"].sum()
+print()
+print(bulanan)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>         transaksi  pendapatan  rata_per_transaksi
+Cabang                                            
+Dago           112   6183000.0             55205.0
+Seturan        114   6135000.0             53816.0
+Kemang         106   5629000.0             53104.0
+
+Bulan
+2024-01    2494000.0
+2024-02    3644000.0
+2024-03    3811000.0
+2024-04    1862000.0
+2024-05    3351000.0
+2024-06    2785000.0
+Name: Total, dtype: float64</code></pre>
+          </div>
+        </div>
+        <p>Kolom <code>rata_per_transaksi</code> yang paling berharga di tabel pertama: Seturan melayani transaksi <em>terbanyak</em> (114) tapi pendapatannya di bawah Dago, karena tiap transaksinya lebih kecil. Itu temuan yang bisa ditindaklanjuti; "Dago paling besar" bukan.</p>
+        <div class="aksi">
+          <span class="tag">KERJAKAN SENDIRI</span>
+          <p>Buat ringkasan per produk: berapa unit terjual dan berapa pendapatannya, diurutkan dari pendapatan terbesar. Lalu jawab: produk mana yang <strong>paling banyak terjual</strong> tapi <strong>bukan</strong> penyumbang pendapatan terbesar?</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>produk = (gabung.groupby("Produk")
+            .agg(unit=("Jumlah","sum"), pendapatan=("Total","sum"))
+            .sort_values("pendapatan", ascending=False))
+print(produk)</code></pre></div>
+          <div class="kode"><pre><code>             unit  pendapatan
+Produk                       
+Croissant   205.0   5125000.0
+Kopi Susu   189.0   4158000.0
+Americano   193.0   3474000.0
+Roti Bakar  222.0   3330000.0
+Teh Manis   186.0   1860000.0</code></pre></div>
+          <p><strong>Roti Bakar.</strong> Paling banyak terjual (222 unit, mengalahkan Croissant yang cuma 205) tapi hanya penyumbang pendapatan keempat, karena harganya paling murah kedua. Croissant terjual lebih sedikit namun menghasilkan Rp 1,8 juta lebih banyak.</p>
+          <p style="margin-top:8px">Inilah kalimat yang membuat klien merasa uangnya terpakai: <em>"Roti Bakar adalah produk yang paling sering dibeli, tapi Croissant yang paling banyak menghasilkan. Kalau ada satu produk yang layak didorong di kasir, itu Croissant."</em></p>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Kirim balik: satu berkas, lima sheet</h3>
+        <span class="cek"><input type="checkbox" id="k6s4"><label for="k6s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Klien memakai Excel. Kirim balik Excel — bukan CSV, bukan tautan notebook. <code>pd.ExcelWriter</code> menulis beberapa sheet sekaligus ke satu berkas.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>catatan = pd.DataFrame([
+    ["Baris kosong &amp; baris TOTAL dibuang",  2, "Bukan transaksi"],
+    ["Ejaan cabang diseragamkan",            3, "' kemang', 'KEMANG', 'Kemang ' -&gt; 'Kemang'"],
+    ["Harga satuan rusak diperbaiki",        2, "'22.000' terbaca 22,0 -&gt; diambil dari daftar harga"],
+    ["Total rusak/kosong dihitung ulang",    2, "Jumlah x Harga Satuan"],
+    ["Jumlah kosong dipulihkan",             1, "Total / Harga Satuan"],
+    ["Tanggal format lain dipulihkan",       2, "'2024-02-15', '17 Feb 2024'"],
+    ["Duplikat persis DIBIARKAN",            5, "Perlu keputusan klien - Rp 216.000 (2,17%)"],
+], columns=["Perubahan", "Baris", "Keterangan"])
+
+with pd.ExcelWriter("Hasil Bersih - Kedai Senja.xlsx", engine="openpyxl") as w:
+    gabung.drop(columns=["Bulan"]).to_excel(w, sheet_name="Data Bersih", index=False)
+    ringkas_cabang.to_excel(w, sheet_name="Ringkasan Cabang")
+    bulanan.to_frame("Pendapatan").to_excel(w, sheet_name="Ringkasan Bulanan")
+    produk.to_excel(w, sheet_name="Ringkasan Produk")
+    catatan.to_excel(w, sheet_name="Catatan Perubahan", index=False)
+
+print("Berkas hasil ditulis.")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Berkas hasil ditulis.</code></pre></div>
+        </div>
+        <p>Berkasnya muncul di panel folder Colab. Klik kanan → Download untuk mengambilnya.</p>
+        <div class="catatan">
+          <strong><code>index=False</code> untuk tabel transaksi, tanpa itu untuk tabel ringkasan.</strong> Data Bersih nomor barisnya tidak berarti apa-apa bagi klien, jadi dibuang. Tapi di Ringkasan Cabang, "index"-nya adalah <em>nama cabang</em> — kalau dibuang, tabelnya kehilangan keterangan barisnya sama sekali.
+        </div>
+        <div class="bahaya">
+          <strong>Sheet "Catatan Perubahan" adalah sheet terpenting di berkas ini, dan yang paling sering dilupakan orang.</strong> Tanpa itu, kamu mengirim balik angka yang berbeda dari angka klien tanpa penjelasan — dan klien yang teliti akan menyimpulkan salah satu dari dua hal: datanya kamu rusak, atau kamu asal-asalan. Dengan sheet ini, tiap selisih punya alasan tertulis, dan baris terakhirnya menunjukkan kamu tahu batas wewenangmu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Buktikan sendiri kenapa enam hari ini perlu</h3>
+        <span class="cek"><input type="checkbox" id="k6s5"><label for="k6s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pertanyaan yang jujur: seandainya berkas itu langsung dianalisis tanpa dibersihkan, seberapa salah jawabannya? Bandingkan sendiri, khusus Q1.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>mentah = pd.read_excel("Laporan Penjualan 2024.xlsx",
+                       sheet_name="Penjualan Q1", skiprows=3)
+print("TANPA DIBERSIHKAN:")
+print(mentah.groupby("Cabang")["Total"].sum().sort_values(ascending=False))
+print("\nSETELAH DIBERSIHKAN:")
+print(q1.groupby("Cabang")["Total"].sum().sort_values(ascending=False))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>TANPA DIBERSIHKAN:
+Cabang
+Dago        3421000.0
+Seturan     3163045.0
+Kemang      2975000.0
+Kemang        90000.0
+KEMANG        75000.0
+ kemang       50000.0
+Name: Total, dtype: float64
+
+SETELAH DIBERSIHKAN:
+Cabang
+Dago       3496000.0
+Seturan    3263000.0
+Kemang     3190000.0
+Name: Total, dtype: float64</code></pre>
+          </div>
+        </div>
+        <p>Tanpa dibersihkan, laporanmu akan berisi <strong>enam cabang</strong> untuk kedai yang cuma punya tiga — dan Kemang tampak tertinggal Rp 188.045 dari Seturan. Setelah dibersihkan, jaraknya tinggal <strong>Rp 73.000</strong>, kurang dari separuhnya (39%).</p>
+        <p>Perhatikan juga angka <code>3163045</code>. Ekor "045" itu satu baris tunggal: baris 72, yang totalnya terbaca 45,0 padahal seharusnya 100.000. Sebuah angka yang <em>tidak mungkin</em> muncul dari transaksi rupiah bulat — dan tidak seorang pun akan menyadarinya di dalam grafik batang.</p>
+        <div class="bahaya">
+          <strong>Dan ini bagian yang paling perlu kamu ingat.</strong> Dua harga rusak yang lain — 22,0 dan 18,0 di baris 70 dan 71 — <strong>sama sekali tidak mengubah angka pendapatan</strong>, karena yang rusak kolom harganya, bukan kolom totalnya. Berapa kali pun kamu menjumlahkan pendapatan dan mencocokkannya, kamu tidak akan pernah menemukan keduanya.
+          <p style="margin-top:8px">Yang menemukannya cuma satu hal: <strong>uji identitas</strong> di Hari 3. Menjumlahkan total hanya memeriksa satu kolom; menguji hubungan antar kolom memeriksa seluruh tabel. Itu bedanya menyeimbangkan angka dengan benar-benar memeriksanya.</p>
+        </div>
+        <div class="catatan">
+          <strong>Ini isi percakapan penjualanmu, dan tidak perlu dilebih-lebihkan.</strong> Kamu tidak perlu bilang "data saya bersihkan sampai sempurna". Cukup: <em>"Waktu saya periksa, ada tiga cabang yang tercatat dengan enam nama berbeda, dan tiga baris harga yang terbaca ribuan kali lebih kecil. Setelah dirapikan, selisih antara Kemang dan Seturan turun dari Rp 188 ribu jadi Rp 73 ribu — kesimpulannya berubah."</em>
+          <p style="margin-top:8px">Kalimat itu berangka, spesifik, dan menunjukkan kamu memeriksa. Klien yang pernah dikecewakan freelancer sebelumnya akan langsung mendengar bedanya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal Data Klien selesai</h3>
+      <p>Enam hari lalu kamu hanya pernah membuka data yang sudah rapi lewat <code>pd.read_csv</code>. Sekarang kamu bisa menerima satu berkas Excel dari orang asing, membuka semua sheet-nya, mengukur kerusakannya dengan angka, memperbaiki yang boleh diperbaiki, menahan diri pada yang bukan wewenangmu, dan mengirim balik berkas Excel berisi data bersih, ringkasan, dan catatan perubahan.</p>
+      <p style="margin-top:14px"><strong>Itu jasa pertama di daftar Freelance 1 — utuh, dari awal sampai serah terima.</strong> Bukan latihan: bentuk berkas yang kamu kirim di Hari 6 ini adalah bentuk yang benar-benar dikirim ke klien berbayar.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Simpan notebook ini, jangan dibuang.</strong> Proyek klien pertamamu akan memakai urutan yang sama persis: baca semua sheet → empat pemeriksaan → uji identitas → rapikan teks dan tanggal → ukur duplikat → gabungkan → ringkas → tulis balik dengan catatan perubahan. Yang berubah cuma nama kolom dan nama produknya.
+      </div>
+      <a class="lanjut" href="https://claude.ai/code/artifact/e87748bf-c615-4461-951e-248010b4ae34">Lanjut ke Studi Kasus Nyata: 5 kasus →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua angka di halaman ini dihasilkan dengan menjalankan kodenya sungguhan pada berkas yang kamu buat di Hari 1 — kalau hasilmu berbeda, ada langkah yang perlu diperiksa.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "bekal-data-klien-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

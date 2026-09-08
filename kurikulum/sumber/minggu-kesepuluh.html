@@ -1,0 +1,971 @@
+<title>Minggu Kesepuluh dbt</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .tree{ font-family:"IBM Plex Mono",monospace; font-size:0.8rem; background:var(--code-bg);
+         border:1px solid var(--line); border-radius:10px; padding:13px 15px; white-space:pre; overflow-x:auto; margin:12px 0; }
+  .tree .c{ color:var(--ink-soft); }
+
+  .flow{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:14px 0; font-size:0.82rem; }
+  .flow .n{ border:1px solid var(--line); border-radius:10px; padding:10px 13px; background:var(--surface); flex:1 1 140px; }
+  .flow .n strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); margin-bottom:3px; }
+  .flow .a{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/fea52a73-a3eb-400b-8630-d09ccc516fcf">← Kembali ke M9: SQL Data Besar</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 10</span>
+  <button type="button" data-hari="64" aria-selected="true">Hari 64</button>
+  <button type="button" data-hari="65" aria-selected="false">Hari 65</button>
+  <button type="button" data-hari="66" aria-selected="false">Hari 66</button>
+  <button type="button" data-hari="67" aria-selected="false">Hari 67</button>
+  <button type="button" data-hari="68" aria-selected="false">Hari 68</button>
+  <button type="button" data-hari="69" aria-selected="false">Hari 69</button>
+  <button type="button" data-hari="70" aria-selected="false">Hari 70</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Penuntun langkah demi langkah · Lanjutan dari Minggu Kesembilan</span>
+    <h1>Minggu Kesepuluh: dbt — Pipeline Transformasi</h1>
+    <p class="lede">Setelah beberapa bulan bekerja, timmu akan punya puluhan query yang saling bergantung — query B memakai hasil query A, seseorang mengubah A, dan B diam-diam salah selama tiga minggu. dbt menyelesaikan ini dengan satu ide: tiap transformasi jadi satu file bernama, yang menyebut ketergantungannya secara eksplisit.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 64 ================= -->
+  <section class="day aktif" data-hari="64">
+    <div class="day-head">
+      <span class="n mono">HARI 64</span>
+      <h2>Memasang dbt dan memahami masalahnya</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjelaskan masalah yang diselesaikan dbt, dan punya proyek dbt kosong yang terhubung ke database.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Masalah yang diselesaikan dbt</h3>
+        <span class="cek"><input type="checkbox" id="h64s1"><label for="h64s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Bayangkan situasi ini enam bulan dari sekarang: timmu punya puluhan query yang saling bergantung. Query B memakai hasil query A. Seseorang mengubah A, dan B <strong>diam-diam salah</strong> selama tiga minggu sampai ada yang sadar. Tidak ada yang tahu urutan menjalankannya. Definisi "pendapatan" berbeda di tiga dashboard berbeda.</p>
+        <p><strong>dbt menyelesaikan ini dengan satu ide sederhana:</strong> tiap transformasi adalah satu file SQL yang menghasilkan satu tabel, dan file itu menyebut ketergantungannya secara eksplisit. dbt lalu mencari tahu sendiri urutan menjalankannya.</p>
+        <div class="flow">
+          <div class="n"><strong>SUMBER</strong>Tabel mentah dari sistem kasir</div>
+          <span class="a">→</span>
+          <div class="n"><strong>STAGING</strong>Dibersihkan, nama kolom diseragamkan</div>
+          <span class="a">→</span>
+          <div class="n"><strong>INTERMEDIATE</strong>Digabung, dihitung</div>
+          <span class="a">→</span>
+          <div class="n"><strong>MART</strong>Siap dipakai dashboard</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Memasang dbt</h3>
+        <span class="cek"><input type="checkbox" id="h64s2"><label for="h64s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Butuh terminal/command line di komputermu (bukan Colab — dbt dijalankan lokal). Kalau belum pernah pakai terminal, ini juga latihan bagus untuk kebiasaan kerja analis sungguhan.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>pip install dbt-bigquery
+dbt init kedai_analytics</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Folder baru <code>kedai_analytics/</code> berisi kerangka proyek dbt (kamu akan lihat isinya di langkah 4).</p></div>
+        <div class="catatan">
+          <strong>Pakai <code>dbt-postgres</code> kalau tidak ingin memakai BigQuery</strong> — konsepnya identik, cuma driver database yang beda. Untuk minggu ini, panduan memakai BigQuery karena sudah kamu siapkan di Minggu 9.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Mengatur koneksi — dan aturan keamanan yang wajib</h3>
+        <span class="cek"><input type="checkbox" id="h64s3"><label for="h64s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>File koneksi ada di <code>~/.dbt/profiles.yml</code> — <strong>di luar</strong> folder proyekmu, bukan di dalamnya. Untuk BigQuery, cara termudah adalah autentikasi <code>oauth</code> lewat <code>gcloud auth application-default login</code>.</p>
+        <div class="bahaya">
+          <strong>Jangan pernah menaruh kredensial di dalam folder proyek.</strong> Kalau ditaruh di dalam, risikonya besar ikut ter-<code>commit</code> ke GitHub tanpa sadar — dan begitu kredensial pernah masuk riwayat git, menghapusnya di commit berikutnya <strong>tidak cukup</strong>, riwayatnya tetap menyimpan jejak itu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Verifikasi koneksi dan lihat struktur proyek</h3>
+        <span class="cek"><input type="checkbox" id="h64s4"><label for="h64s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>dbt debug</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>All checks passed!</code> — kalau ada yang gagal, baca pesan errornya, biasanya soal kredensial atau nama proyek yang salah ketik.</p></div>
+        <p>Struktur folder yang akan kamu isi minggu ini:</p>
+        <div class="tree">kedai_analytics/
+├── dbt_project.yml          <span class="c">← pengaturan proyek</span>
+├── models/
+│   ├── staging/
+│   │   ├── _sources.yml     <span class="c">← mendaftarkan tabel mentah</span>
+│   │   ├── stg_penjualan.sql
+│   │   └── stg_produk.sql
+│   ├── intermediate/
+│   │   └── int_penjualan_dengan_laba.sql
+│   └── marts/
+│       ├── _schema.yml      <span class="c">← test &amp; dokumentasi</span>
+│       ├── fct_penjualan_harian.sql
+│       └── dim_produk.sql
+└── tests/                   <span class="c">← test khusus buatan sendiri</span></div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 64 selesai. Berhenti di sini.</h3>
+      <p><strong>Tambahkan ke catatan:</strong> dbt = tiap transformasi jadi satu file bernama dengan ketergantungan eksplisit. Struktur folder: <code>staging → intermediate → marts</code>. Kredensial selalu di luar folder proyek.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 65 ================= -->
+  <section class="day" data-hari="65">
+    <div class="day-head">
+      <span class="n mono">HARI 65</span>
+      <h2>Model staging dan intermediate</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis model dbt bertingkat, dan memahami <code>ref()</code> — fungsi tunggal yang membuat dbt tahu urutan menjalankan semuanya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Mendaftarkan sumber data mentah</h3>
+        <span class="cek"><input type="checkbox" id="h65s1"><label for="h65s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>File <code>models/staging/_sources.yml</code> memberitahu dbt di mana tabel mentahmu berada:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>version: 2
+
+sources:
+  - name: kasir
+    database: proyekku
+    schema: kedai_mentah
+    tables:
+      - name: penjualan
+      - name: produk</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Model staging — satu tugas saja: bersihkan</h3>
+        <span class="cek"><input type="checkbox" id="h65s2"><label for="h65s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>File <code>models/staging/stg_penjualan.sql</code>. Aturan model staging: <strong>tanpa logika bisnis, tanpa JOIN</strong> — cuma bersihkan dan seragamkan nama kolom.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>with sumber as (
+    select * from {{ source('kasir', 'penjualan') }}
+)
+
+select
+    id                              as penjualan_id,
+    cast(tanggal as date)           as tanggal,
+    trim(initcap(produk))           as produk,
+    trim(initcap(kota))             as kota,
+    cast(jumlah as int64)           as jumlah,
+    cast(total as numeric)          as total
+from sumber
+where jumlah is not null</code></pre>
+        </div>
+        <p>Kenali polanya: ini sama persis dengan pembersihan data kotor Minggu 6 Hari 39 (<code>TRIM</code>, <code>UPPER</code>/<code>initcap</code>, buang baris kritis kosong) — cuma sekarang ditata sebagai satu file yang bisa dijalankan ulang kapan saja.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Model intermediate — di sinilah ref() muncul</h3>
+        <span class="cek"><input type="checkbox" id="h65s3"><label for="h65s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>File <code>models/intermediate/int_penjualan_dengan_laba.sql</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>with penjualan as (
+    select * from {{ ref('stg_penjualan') }}
+),
+
+produk as (
+    select * from {{ ref('stg_produk') }}
+)
+
+select
+    p.penjualan_id,
+    p.tanggal,
+    p.produk,
+    p.kota,
+    p.jumlah,
+    p.total,
+    pr.harga,
+    pr.biaya_modal,
+    p.jumlah * (pr.harga - pr.biaya_modal) as laba
+from penjualan p
+left join produk pr on p.produk = pr.produk</code></pre>
+        </div>
+        <div class="catatan">
+          <strong><code>ref()</code> adalah inti dbt.</strong> Kamu tidak pernah menulis nama tabel secara langsung — selalu lewat <code>ref('nama_model')</code>. Dengan itu, dbt membangun grafik ketergantungan otomatis, tahu urutan yang benar, dan bisa menjalankan ulang hanya bagian yang terpengaruh saat kamu mengubah satu model. Ini juga yang memungkinkan lingkungan pengembangan dan produksi memakai kode yang sama persis.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h65s4"><label for="h65s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat <code>models/staging/stg_produk.sql</code>, mengikuti pola langkah 2 (bersihkan nama produk, cast tipe harga/biaya_modal ke numeric).</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 65 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> staging = bersihkan saja, tanpa JOIN. intermediate = gabung + hitung, pakai <code>ref()</code> ke model staging. <code>ref()</code> = dbt tahu urutan otomatis.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 66 ================= -->
+  <section class="day" data-hari="66">
+    <div class="day-head">
+      <span class="n mono">HARI 66</span>
+      <h2>Model mart, dan menjalankan pipeline</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat model mart siap-dashboard, dan menjalankan seluruh pipeline dengan satu perintah.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Model mart — lapisan siap pakai</h3>
+        <span class="cek"><input type="checkbox" id="h66s1"><label for="h66s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>File <code>models/marts/fct_penjualan_harian.sql</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>{{ config(materialized='table') }}
+
+select
+    tanggal,
+    kota,
+    count(*)          as jumlah_transaksi,
+    sum(jumlah)       as total_porsi,
+    sum(total)        as omzet,
+    sum(laba)         as laba,
+    safe_divide(sum(laba), sum(total)) as margin
+from {{ ref('int_penjualan_dengan_laba') }}
+group by tanggal, kota</code></pre>
+        </div>
+        <p><code>materialized</code> menentukan bentuk hasilnya: <code>view</code> (hemat penyimpanan, dihitung tiap kali dibuka — bagus untuk staging), <code>table</code> (dihitung sekali, cepat dibaca — bagus untuk mart), atau <code>incremental</code> (hanya menambah baris baru — untuk tabel sangat besar).</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Menjalankan pipeline</h3>
+        <span class="cek"><input type="checkbox" id="h66s2"><label for="h66s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>dbt run                              # jalankan semua model, urutan otomatis</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Daftar model dijalankan satu per satu — <code>stg_penjualan</code> dan <code>stg_produk</code> dulu (tidak bergantung pada apa pun selain sumber), lalu <code>int_penjualan_dengan_laba</code> (butuh keduanya), lalu <code>fct_penjualan_harian</code> paling akhir. Tiap baris diakhiri <code>OK</code> berwarna hijau kalau berhasil.</p></div>
+        <div class="catatan">
+          <strong>Kamu tidak menentukan urutan ini secara manual</strong> — dbt membacanya dari pemakaian <code>ref()</code> di tiap file. Ini yang dimaksud "grafik ketergantungan" di Hari 65.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Menjalankan sebagian saja</h3>
+        <span class="cek"><input type="checkbox" id="h66s3"><label for="h66s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>dbt run --select stg_penjualan+      # model ini dan semua yang bergantung padanya
+dbt run --select +fct_penjualan_harian   # model ini dan semua yang dibutuhkannya
+dbt build                            # run + test sekaligus (test dipelajari besok)</code></pre></div>
+        <p>Tanda <code>+</code> di belakang nama model artinya "dan semua turunannya" (downstream) — tanda <code>+</code> di depan artinya "dan semua yang dibutuhkannya" (upstream). Ini menghemat waktu besar di proyek dengan puluhan model — kamu tidak perlu menjalankan ulang semuanya kalau cuma satu model di ujung yang berubah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h66s4"><label for="h66s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat model mart kedua: <code>fct_produk_bulanan</code> — omzet, porsi, dan margin per produk per bulan, dari <code>int_penjualan_dengan_laba</code>. Jalankan <code>dbt run --select fct_produk_bulanan</code>.</p>
+        <details>
+          <summary>Buka petunjuk</summary>
+          <div class="isi"><div class="kode"><pre><code>{{ config(materialized='table') }}
+
+select
+    format_date('%Y-%m', tanggal) as bulan,
+    produk,
+    sum(total) as omzet,
+    sum(jumlah) as total_porsi,
+    safe_divide(sum(laba), sum(total)) as margin
+from {{ ref('int_penjualan_dengan_laba') }}
+group by bulan, produk</code></pre></div></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 66 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>dbt run</code> = jalankan semua, urutan otomatis dari <code>ref()</code>. <code>--select model+</code> = model ini + turunannya. <code>--select +model</code> = model ini + yang dibutuhkannya.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 67 ================= -->
+  <section class="day" data-hari="67">
+    <div class="day-head">
+      <span class="n mono">HARI 67</span>
+      <h2>Test otomatis: data yang memeriksa dirinya sendiri</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis test dbt yang menangkap kesalahan sebelum sampai ke dashboard pimpinan — termasuk test paling berharga: rekonsiliasi.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Pertanyaan yang merusak reputasi analis</h3>
+        <span class="cek"><input type="checkbox" id="h67s1"><label for="h67s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><em>"Angka ini benar tidak?"</em> — kalau jawabanmu selalu "sebentar saya cek dulu", kamu akan menghabiskan separuh waktumu memeriksa ulang. Test otomatis mengubah jawabannya jadi "ya, diperiksa tiap pagi jam 6" (kamu akan menjadwalkan ini di Hari 69).</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Empat test bawaan</h3>
+        <span class="cek"><input type="checkbox" id="h67s2"><label for="h67s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>File <code>models/marts/_schema.yml</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>version: 2
+
+models:
+  - name: fct_penjualan_harian
+    description: "Ringkasan penjualan harian per kota, sumber untuk dashboard utama."
+    columns:
+      - name: tanggal
+        tests:
+          - not_null
+      - name: kota
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Jakarta', 'Bandung', 'Surabaya']
+      - name: omzet
+        tests:
+          - not_null
+
+  - name: dim_produk
+    columns:
+      - name: produk
+        tests:
+          - unique
+          - not_null</code></pre>
+        </div>
+        <p>Empat test bawaan menutup sebagian besar kebutuhan: <code>unique</code>, <code>not_null</code>, <code>accepted_values</code>, dan <code>relationships</code> (memastikan tiap nilai ada di tabel lain — mendeteksi produk "yatim piatu" yang tidak ada di master).</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Test rekonsiliasi — yang paling berharga</h3>
+        <span class="cek"><input type="checkbox" id="h67s3"><label for="h67s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Test dbt adalah query yang <strong>seharusnya tidak mengembalikan baris apa pun</strong>. Kalau ada baris keluar, test gagal. File <code>tests/rekonsiliasi_omzet.sql</code> memastikan total di mart cocok dengan total di sumber:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>with dari_mart as (
+    select sum(omzet) as total from {{ ref('fct_penjualan_harian') }}
+),
+dari_sumber as (
+    select sum(total) as total from {{ ref('stg_penjualan') }}
+)
+select m.total as mart, s.total as sumber
+from dari_mart m, dari_sumber s
+where abs(m.total - s.total) > 1</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Test inilah yang harus kamu sebut saat wawancara.</strong> Test <code>not_null</code> dangkal dan semua orang punya; test rekonsiliasi menunjukkan kamu paham bahwa bahaya terbesar dalam transformasi data adalah baris yang <strong>diam-diam berlipat ganda</strong> saat JOIN — persis bug yang kamu pelajari cara menghindarinya di Minggu 9 Hari 61.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Menjalankan test</h3>
+        <span class="cek"><input type="checkbox" id="h67s4"><label for="h67s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>dbt test                    # jalankan semua test
+dbt build                   # run + test, berhenti kalau ada yang gagal</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Daftar tiap test dengan status <code>PASS</code> (hijau) atau <code>FAIL</code> (merah). Kalau ada yang <code>FAIL</code>, dbt menunjukkan berapa baris yang melanggar aturan itu.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri: buktikan test-nya benar-benar bekerja</h3>
+        <span class="cek"><input type="checkbox" id="h67s5"><label for="h67s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Rusak datanya dengan sengaja di tabel mentah — masukkan baris dengan kota "Medan" (tidak ada di daftar <code>accepted_values</code>). Jalankan <code>dbt test</code> lagi. Apakah tertangkap?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi"><p>Ya — test <code>accepted_values</code> pada kolom <code>kota</code> akan <code>FAIL</code>, menunjukkan baris "Medan" sebagai pelanggar. Ini pembuktian penting: test yang tidak pernah kamu lihat gagal patut dicurigai — mungkin test itu sebenarnya tidak benar-benar berjalan.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 67 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> test bawaan: <code>unique</code>, <code>not_null</code>, <code>accepted_values</code>, <code>relationships</code>. Test rekonsiliasi (mart vs sumber) adalah yang paling berharga — sebutkan ini di wawancara.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 68 ================= -->
+  <section class="day" data-hari="68">
+    <div class="day-head">
+      <span class="n mono">HARI 68</span>
+      <h2>Dokumentasi otomatis dan data freshness</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghasilkan situs dokumentasi dengan diagram ketergantungan yang bisa diklik, dan mendeteksi kalau data berhenti mengalir.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Menulis deskripsi</h3>
+        <span class="cek"><input type="checkbox" id="h68s1"><label for="h68s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kembali ke <code>_schema.yml</code> (Hari 67), tambahkan <code>description:</code> di tiap model dan kolom penting — ini yang akan muncul di dokumentasi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Membuat situs dokumentasi</h3>
+        <span class="cek"><input type="checkbox" id="h68s2"><label for="h68s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>dbt docs generate           # buat situs dokumentasi
+dbt docs serve               # buka di browser</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Situs lokal terbuka di browser, berisi seluruh model, kolom, deskripsi, dan <strong>diagram ketergantungan (lineage graph)</strong> yang bisa diklik — visualisasi dari <code>staging → intermediate → marts</code> yang kamu bangun tiga hari terakhir.</p></div>
+        <div class="catatan">
+          <strong>Tangkapan layar diagram ini di README GitHub-mu</strong> adalah salah satu hal paling meyakinkan yang bisa dilihat perekrut — itu menunjukkan kamu berpikir soal sistem, bukan cuma query satu per satu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Data freshness: apakah datanya masih segar?</h3>
+        <span class="cek"><input type="checkbox" id="h68s3"><label for="h68s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tambahkan ke <code>_sources.yml</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>sources:
+  - name: kasir
+    tables:
+      - name: penjualan
+        loaded_at_field: dimuat_pada
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}</code></pre>
+        </div>
+        <div class="kode"><pre><code>dbt source freshness</code></pre></div>
+        <div class="bahaya">
+          <strong>Ini menangkap kelas kegagalan yang paling menyakitkan:</strong> dashboard yang <em>terlihat</em> normal — tidak ada error, grafiknya tetap muncul — padahal angkanya beku sejak tiga hari lalu karena sumber datanya berhenti mengalir. Tanpa pengecekan freshness, kegagalan seperti ini bisa tidak disadari berminggu-minggu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h68s4"><label for="h68s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Isi deskripsi untuk semua model dan minimal 10 kolom di proyekmu. Jalankan ulang <code>dbt docs generate && dbt docs serve</code>, ambil tangkapan layar diagram ketergantungannya untuk dipakai di proyek Hari 70.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 68 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>dbt docs generate && dbt docs serve</code> = situs dokumentasi + diagram ketergantungan. <code>dbt source freshness</code> = deteksi data yang berhenti mengalir sebelum ada yang sadar.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 69 ================= -->
+  <section class="day" data-hari="69">
+    <div class="day-head">
+      <span class="n mono">HARI 69</span>
+      <h2>Ulangan dari ingatan — dbt</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Tutup catatan. Kerjakan dari ingatan, baru buka kunci jawaban.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tujuh soal</h3>
+        <span class="cek"><input type="checkbox" id="h69s1"><label for="h69s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Apa masalah utama yang diselesaikan dbt?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Apa isi model lapisan "staging", dan apa yang TIDAK boleh ada di sana?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Fungsi apa yang membuat dbt tahu urutan menjalankan model secara otomatis?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Sebutkan dua dari empat test bawaan dbt.</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Kenapa test rekonsiliasi dianggap paling berharga dibanding <code>not_null</code>?</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> (Ulangan Minggu 9) Apa beda partisi dan clustering di BigQuery?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> (Ulangan Minggu 7) Apa obat untuk masalah peeking dalam A/B test?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Puluhan query yang saling bergantung, berantakan, dan berubah diam-diam tanpa ada yang sadar — dbt menata jadi transformasi bernama dengan ketergantungan eksplisit.</p>
+            <p><strong>2.</strong> Bersihkan dan seragamkan nama kolom saja — tanpa logika bisnis, tanpa JOIN.</p>
+            <p><strong>3.</strong> <code>ref()</code>.</p>
+            <p><strong>4.</strong> <code>unique</code>, <code>not_null</code>, <code>accepted_values</code>, <code>relationships</code> (sebut dua saja).</p>
+            <p><strong>5.</strong> Karena menangkap bahaya paling umum: baris yang diam-diam berlipat ganda akibat JOIN yang salah — kesalahan yang tidak terdeteksi test dangkal seperti <code>not_null</code>.</p>
+            <p><strong>6.</strong> Partisi memecah tabel per tanggal (query yang saring tanggal hanya baca partisi relevan); clustering mengurutkan data di dalam partisi berdasarkan kolom tertentu (membuat penyaringan kolom itu lebih murah).</p>
+            <p><strong>7.</strong> Tentukan ukuran sampel/durasi di depan, jangan lihat hasilnya sampai tes selesai.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 69 selesai</h3>
+      <p>Kalau enam dari tujuh benar, lanjut ke proyek Hari 70. Kalau kurang, ulangi Hari 64-68 dulu.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 70 ================= -->
+  <section class="day" data-hari="70">
+    <div class="day-head">
+      <span class="n mono">HARI 70</span>
+      <h2>Proyek portofolio #8: pipeline dbt lengkap</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> proyek kedelapan di GitHub — pipeline dbt tiga lapis, teruji, dan terdokumentasi, salah satu proyek yang paling jarang dipunyai pelamar junior.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lengkapi proyekmu</h3>
+        <span class="cek"><input type="checkbox" id="h70s1"><label for="h70s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pastikan proyek <code>kedai_analytics</code>-mu punya:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li>3 model staging, 1 intermediate, 2 mart (Hari 64-66)</li>
+          <li>Minimal 8 test, termasuk 1 test rekonsiliasi (Hari 67)</li>
+          <li>Deskripsi di semua model dan minimal 10 kolom (Hari 68)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buktikan proyekmu bisa dijalankan dari nol</h3>
+        <span class="cek"><input type="checkbox" id="h70s2"><label for="h70s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>dbt build</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS SEMUA HIJAU</span><p>Kalau ada yang merah, perbaiki sampai <code>dbt build</code> berjalan tanpa error dari nol.</p></div>
+        <div class="bahaya">
+          <strong>"Jalan di komputer saya" bukan bukti yang cukup.</strong> Idealnya, uji dengan clone ulang proyekmu ke folder baru dan jalankan <code>dbt build</code> dari situ — ini yang membuktikan proyekmu benar-benar bisa dipakai orang lain (atau server), bukan cuma bergantung pada sesuatu yang kebetulan sudah ada di komputermu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Unggah dan perbarui README</h3>
+        <span class="cek"><input type="checkbox" id="h70s3"><label for="h70s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Unggah seluruh folder <code>kedai_analytics/</code> (kecuali <code>target/</code>, <code>logs/</code>, <code>dbt_packages/</code> — buat <code>.gitignore</code> untuk itu, kamu akan pelajari detailnya Hari 71) ke repo GitHub. Perbarui <code>README.md</code>:</p>
+        <div class="kode"><pre><code>## Proyek 8: Pipeline dbt — Kedai Kopi Senja
+
+Transformasi data tiga lapis (staging → intermediate → marts) dengan
+8+ test otomatis (termasuk rekonsiliasi mart vs sumber) dan
+dokumentasi lengkap dengan diagram ketergantungan.
+
+**Struktur:** 3 model staging, 1 intermediate, 2 mart
+**Diagram ketergantungan:** [tempel tangkapan layar dbt docs di sini]
+
+**Cara menjalankan:** `dbt build` (butuh koneksi BigQuery/PostgreSQL sendiri)</code></pre></div>
+        <div class="catatan">
+          <strong>Kenapa proyek ini bernilai tinggi:</strong> hampir semua pelamar posisi analis punya notebook berisi analisis. Sangat sedikit yang bisa menunjukkan data yang <strong>menguji dirinya sendiri</strong> dan <strong>mendokumentasikan dirinya sendiri</strong>. Ini menempatkanmu di kelompok kecil pelamar yang langsung dipanggil wawancara.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Sepuluh minggu selesai — dari query tunggal ke pipeline data</h3>
+      <p>Delapan proyek publik di GitHub-mu. Kamu sekarang paham perbedaan antara "menulis SQL yang benar" dan "membangun sistem data yang bisa dipercaya tim lain" — pembeda antara analis dan analytics engineer.</p>
+      <p style="margin-top:14px">Minggu depan: alur git yang sebenarnya (branch, pull request, review) dan laporan yang berjalan sendiri lewat GitHub Actions — dua kemampuan yang membuat kerjamu terlihat seperti pekerjaan tim profesional, bukan tugas kuliah. Masih dituntun hari demi hari.</p>
+      <a class="lanjut" href="https://claude.ai/code/artifact/b38ca0a5-abff-4b2d-b657-06b6503d0cb4">Lanjut ke M11: Git, Otomasi & Streamlit →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu10-dbt-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

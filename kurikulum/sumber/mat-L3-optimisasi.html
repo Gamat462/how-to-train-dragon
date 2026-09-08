@@ -1,0 +1,1174 @@
+<title>Optimisasi Numerik</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/f5079d99-9181-47a2-9ce4-7747feca52a3">← Kembali ke MAT L2: Aljabar linear terapan</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">MAT L3 · Optimisasi</span>
+  <button type="button" data-hari="1" aria-selected="true">O1</button>
+  <button type="button" data-hari="2" aria-selected="false">O2</button>
+  <button type="button" data-hari="3" aria-selected="false">O3</button>
+  <button type="button" data-hari="4" aria-selected="false">O4</button>
+  <button type="button" data-hari="5" aria-selected="false">O5</button>
+  <button type="button" data-hari="6" aria-selected="false">O6</button>
+  <button type="button" data-hari="7" aria-selected="false">O7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal Matematika S2 · L3 dari 4 · 7 hari</span>
+    <h1>Optimisasi: mesin yang melatih setiap model</h1>
+    <p class="lede">Target modul ini <strong>DSA5103 <em>Optimization Algorithms for Data Modelling</em></strong> di NUS — salah satu dari lima mata kuliah <em>inti wajib</em>, dan yang paling sering menenggelamkan mahasiswa yang datang dari latar belakang non-matematika di minggu ketiga.</p>
+    <p class="lede" style="margin-top:10px">Semua yang kamu latih di 49 modul sebelumnya — regresi, model churn, dashboard — dijalankan oleh satu algoritma yang belum pernah disebut sekali pun: <strong>gradient descent</strong>. Tujuh hari ini menulisnya dari nol, lalu membuktikan ia mendarat di titik yang sama persis dengan rumus regresi yang kamu turunkan di MAT L2 — <strong>selisih 9,88 × 10⁻¹⁶</strong>.</p>
+    <p class="lede" style="margin-top:10px">Dan satu hal yang jarang diajarkan: kamu akan mengukur bahwa membakukan fitur menurunkan <em>condition number</em> dari 4.022 menjadi 1,02 — hampir 4.000 kali. Itu bukan tip praktis; itu penjelasan kenapa langkah praproses yang kelihatan sepele menentukan model bisa dilatih atau tidak.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Turunan: kemiringan, dan ke mana harus melangkah</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> memahami turunan bukan sebagai rumus kalkulus, tapi sebagai <em>panah penunjuk arah</em> — dan membuktikan bahwa versi numeriknya cocok dengan versi analitiknya sampai 10 angka.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Turunan analitik vs numerik</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-1-1"><label for="mat-L3-optimisasi-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Kamu tidak perlu jago menurunkan rumus. Kamu perlu tahu <strong>apa yang diberitahukan turunan</strong>: ke arah mana fungsi naik, dan seberapa curam.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>f  = lambda x: x**2 - 4*x + 7
+df = lambda x: 2*x - 4               # turunan analitik
+
+for x0 in (0.0, 2.0, 5.0):
+    num = (f(x0+1e-6) - f(x0-1e-6)) / 2e-6      # turunan numerik
+    print(f&quot;x={x0}  f={f(x0):.4f}  analitik={df(x0):.4f}&quot;
+          f&quot;  numerik={num:.6f}  selisih={abs(num-df(x0)):.2e}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>x</th>
+<th class="n">f(x)</th>
+<th class="n">f'(x) analitik</th>
+<th class="n">f'(x) numerik</th>
+<th class="n">selisih</th>
+</tr></thead>
+            <tbody>
+              <tr><td>0</td><td class="n">7,0000</td><td class="n">−4,0000</td><td class="n">−4,000000</td><td class="n">3,29 × 10⁻¹⁰</td></tr>
+              <tr><td>2</td><td class="n">3,0000</td><td class="n"><strong>0,0000</strong></td><td class="n">0,000000</td><td class="n">0</td></tr>
+              <tr><td>5</td><td class="n">12,0000</td><td class="n">+6,0000</td><td class="n">6,000000</td><td class="n">8,39 × 10⁻¹⁰</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">CARA MEMBACANYA</span>
+          <p><strong>Turunan negatif</strong> (x=0) berarti fungsi sedang turun — melangkahlah ke kanan.<br><strong>Turunan positif</strong> (x=5) berarti sedang naik — melangkahlah ke kiri.<br><strong>Turunan nol</strong> (x=2) berarti kamu sudah di dasar. Berhenti.</p><p style="margin-top:8px">Itu seluruh isi optimisasi. Sisanya adalah cara melakukannya dengan cepat pada jutaan parameter sekaligus.</p></div>
+        <div class="catatan"><strong>Kenapa versi numerik penting padahal lebih lambat:</strong> ia dipakai untuk <em>memeriksa</em> turunan analitik yang kamu tulis sendiri. Di MAT L4 kamu akan menulis backprop dengan tangan, dan pemeriksaan gradien numerik inilah yang membuktikan kodenya benar.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Minimum, dan cara memastikannya minimum</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-1-2"><label for="mat-L3-optimisasi-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>from scipy import optimize
+res = optimize.minimize_scalar(f)
+print(&quot;scipy menemukan x* =&quot;, res.x)
+print(&quot;f(x*)              =&quot;, res.fun)
+print(&quot;turunan kedua      =&quot;, 2)      # f&#x27;&#x27;(x) = 2 &gt; 0  -&gt; memang minimum</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>scipy menemukan x* = 2.0000000000
+f(x*)              = 3.0</code></pre></div></div>
+        <div class="catatan"><strong>Turunan nol saja belum cukup.</strong> Puncak bukit juga punya turunan nol. Yang membedakan adalah turunan kedua: positif berarti lembah (minimum), negatif berarti puncak (maksimum). Untuk fungsi banyak variabel, “turunan kedua” menjadi matriks Hessian — yang akan kamu pakai di Hari 5.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p>Besok: algoritma yang melatih hampir setiap model modern, ditulis dalam empat baris.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>Gradient descent, dan satu angka yang menentukan segalanya</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menulis gradient descent sendiri, lalu membuktikan secara aljabar <em>dan</em> secara empiris kenapa learning rate yang salah membuatnya gagal total.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Empat baris yang melatih separuh AI dunia</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-2-1"><label for="mat-L3-optimisasi-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>df = lambda x: 2*x - 4
+
+x = 10.0
+for i in range(60):
+    x = x - 0.1 * df(x)          # &lt;- inilah gradient descent, seluruhnya
+print(x)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>2.0000121...</code></pre></div>
+          <p style="margin-top:8px">Mulai dari 10, berakhir di 2 — minimum yang benar. Tidak ada rumus tertutup yang dipakai; ia meraba turun.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ubah learning rate, dan lihat semuanya berantakan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-2-2"><label for="mat-L3-optimisasi-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+df = lambda x: 2*x - 4
+for lr in (0.01, 0.1, 0.5, 0.9, 0.99, 1.0, 1.01, 1.5):
+    x = 10.0
+    for i in range(60):
+        x = x - lr*df(x)
+        if not np.isfinite(x): break
+    print(f&quot;lr={lr:&lt;6} x akhir = {x}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>lr</th>
+<th class="n">x setelah 10</th>
+<th class="n">x setelah 60</th>
+<th class="n">|1−2·lr|</th>
+<th>Perilaku</th>
+</tr></thead>
+            <tbody>
+              <tr><td>0,01</td><td class="n">8,536582</td><td class="n">4,380425</td><td class="n">0,98</td><td>menuju benar, tapi terlalu lambat</td></tr>
+              <tr><td>0,1</td><td class="n">2,858993</td><td class="n">2,000012</td><td class="n">0,80</td><td>menuju benar, tapi terlalu lambat</td></tr>
+              <tr><td><strong>0,5</strong></td><td class="n"><strong>2,000000</strong></td><td class="n"><strong>2,000000</strong></td><td class="n"><strong>0,00</strong></td><td><strong>sampai persis dalam 1 langkah</strong></td></tr>
+              <tr><td>0,9</td><td class="n">2,858993</td><td class="n">2,000012</td><td class="n">0,80</td><td>menuju benar, tapi terlalu lambat</td></tr>
+              <tr><td>0,99</td><td class="n">8,536582</td><td class="n">4,380425</td><td class="n">0,98</td><td>menuju benar, tapi terlalu lambat</td></tr>
+              <tr><td>1,0</td><td class="n">10,000000</td><td class="n">10,000000</td><td class="n">1,00</td><td>berputar selamanya, tidak pernah sampai</td></tr>
+              <tr><td>1,01</td><td class="n">11,751955</td><td class="n">28,248246</td><td class="n">1,02</td><td>MELEDAK — pelan tapi menjauh</td></tr>
+              <tr><td>1,5</td><td class="n">8194,000000</td><td class="n">meledak</td><td class="n">2,00</td><td>MELEDAK — menjauh tiap langkah</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">YANG HARUS KAMU LIHAT</span>
+          <p><strong>Perhatikan lr=0,1 dan lr=0,9: hasilnya identik.</strong> Juga lr=0,01 dan lr=0,99. Itu bukan kebetulan, dan kolom keempat menjelaskan kenapa.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Buktikan aturannya, jangan hafalkan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-2-3"><label for="mat-L3-optimisasi-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Untuk f(x) = x² − 4x + 7 dengan minimum x* = 2, satu langkah gradient descent adalah:</p>
+        <div class="kode"><pre><code>x_baru = x - lr*(2x - 4)
+       = x - 2·lr·x + 4·lr
+       = x(1 - 2·lr) + 4·lr
+
+Kurangi 2 dari kedua ruas:
+
+x_baru - 2 = x(1 - 2·lr) + 4·lr - 2
+           = (1 - 2·lr)(x - 2)
+
+Jadi: JARAK KE JAWABAN dikalikan (1 - 2·lr) setiap langkah.</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>|1 − 2·lr|</th>
+<th>Artinya</th>
+<th>Terjadi ketika</th>
+</tr></thead>
+            <tbody>
+              <tr><td>&lt; 1</td><td>jarak mengecil → sampai</td><td>0 &lt; lr &lt; 1</td></tr>
+              <tr><td>= 0</td><td>jarak jadi nol seketika</td><td>lr = 0,5 (untuk fungsi ini)</td></tr>
+              <tr><td>= 1</td><td>jarak tetap → berputar selamanya</td><td>lr = 1</td></tr>
+              <tr><td>&gt; 1</td><td>jarak membesar → meledak</td><td>lr &gt; 1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code># bukti kasat mata untuk lr = 1.0
+x = 10.0
+print([round(x := x - 1.0*(2*x - 4), 4) for _ in range(6)])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>[-6.0, 10.0, -6.0, 10.0, -6.0, 10.0]</code></pre></div>
+          <p style="margin-top:8px">Melompat bolak-balik antara −6 dan 10 selamanya, tidak pernah mendekat.</p></div>
+        <div class="catatan"><strong>Inilah alasan “learning rate” jadi hal pertama yang diutak-atik semua orang saat model tidak mau belajar.</strong> Terlalu kecil: berjalan tapi tidak sampai dalam waktu yang kamu punya. Terlalu besar: nilai rugi jadi <code>NaN</code> di iterasi ketiga. Sekarang kamu tahu batasnya bukan mistis — ia bisa diturunkan.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p>Besok: kenapa titik awal yang berbeda bisa memberi jawaban berbeda — dan kenapa itu tidak pernah terjadi pada regresi.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Konveks vs tidak: kenapa jawabannya bisa berbeda-beda</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> melihat sendiri fungsi yang sama memberi dua jawaban berbeda tergantung titik awal — dan tahu kenapa regresi kebal terhadap masalah ini sementara jaringan saraf tidak.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Fungsi yang sama, lima titik awal, dua jawaban</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-3-1"><label for="mat-L3-optimisasi-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>g  = lambda x: x**4 - 8*x**3 + 18*x**2 - 11*x
+dg = lambda x: 4*x**3 - 24*x**2 + 36*x - 11
+
+for x0 in (-1.0, 0.5, 2.0, 3.0, 5.0):
+    x = x0
+    for _ in range(3000):
+        x -= 0.005 * dg(x)
+    print(f&quot;mulai x={x0:&gt;5}  -&gt;  berhenti di x={x:.5f}   g(x)={g(x):.5f}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Titik awal</th>
+<th class="n">Berhenti di</th>
+<th class="n">g(x)</th>
+<th>Jenis</th>
+</tr></thead>
+            <tbody>
+              <tr><td>−1,0</td><td class="n">0,40993</td><td class="n">−2,00731</td><td>minimum lokal</td></tr>
+              <tr><td>0,5</td><td class="n">0,40993</td><td class="n">−2,00731</td><td>minimum lokal</td></tr>
+              <tr><td>2,0</td><td class="n"><strong>3,84563</strong></td><td class="n"><strong>−12,37177</strong></td><td><strong>minimum global</strong></td></tr>
+              <tr><td>3,0</td><td class="n">3,84563</td><td class="n">−12,37177</td><td>minimum global</td></tr>
+              <tr><td>5,0</td><td class="n">3,84563</td><td class="n">−12,37177</td><td>minimum global</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>Dua dari lima titik awal berhenti di tempat yang salah</strong> — dan mereka tidak tahu itu salah. Gradient descent berhenti ketika turunannya nol; ia tidak punya cara mengetahui ada lembah yang lebih dalam di seberang bukit. g = −2,007 lawan −12,372: enam kali lebih buruk, tanpa satu pun pesan peringatan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Definisi konveks, dan cara memeriksanya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-3-2"><label for="mat-L3-optimisasi-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Fungsi konveks itu fungsi yang “berbentuk mangkuk”: tarik garis antara dua titik mana pun di grafiknya, garis itu tidak akan pernah jatuh di bawah grafik.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+def uji_konveks(f, a, b, n=2000, seed=0):
+    rng = np.random.default_rng(seed)
+    x1, x2 = rng.uniform(a, b, n), rng.uniform(a, b, n)
+    t = rng.uniform(0, 1, n)
+    kiri  = f(t*x1 + (1-t)*x2)          # nilai fungsi di titik tengah
+    kanan = t*f(x1) + (1-t)*f(x2)       # nilai garis di titik tengah
+    return (kiri &lt;= kanan + 1e-9).mean()
+
+f = lambda x: x**2 - 4*x + 7
+g = lambda x: x**4 - 8*x**3 + 18*x**2 - 11*x
+print(&quot;f konveks di&quot;, round(uji_konveks(f, -5, 5)*100, 2), &quot;% pasangan titik&quot;)
+print(&quot;g konveks di&quot;, round(uji_konveks(g, -1, 5)*100, 2), &quot;% pasangan titik&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>f konveks di 100.0 % pasangan titik
+g konveks di 59.85 % pasangan titik</code></pre></div></div>
+        <div class="hasil"><span class="tag">INI PEMBEDAANNYA</span>
+          <strong>Konveks itu sifat “semua atau tidak sama sekali”.</strong> f lolos 100% — ia konveks, dan gradient descent dijamin menemukan jawaban terbaik dari titik awal mana pun. g gagal di 40% pasangan titik, jadi ia tidak konveks, dan tidak ada jaminan apa pun.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa ini menentukan kepercayaanmu pada sebuah model</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-3-3"><label for="mat-L3-optimisasi-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Model</th>
+<th>Fungsi ruginya</th>
+<th>Konsekuensi praktis</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Regresi linear (kuadrat terkecil)</td><td><strong>Konveks</strong></td><td>Satu jawaban. Siapa pun yang menjalankan, hasilnya sama.</td></tr>
+              <tr><td>Regresi logistik</td><td><strong>Konveks</strong></td><td>Sama — hasilnya bisa direproduksi.</td></tr>
+              <tr><td>Jaringan saraf</td><td><strong>Tidak konveks</strong></td><td>Seed berbeda → hasil berbeda. Wajib dilaporkan.</td></tr>
+              <tr><td>k-means</td><td><strong>Tidak konveks</strong></td><td>Inisialisasi berbeda → klaster berbeda.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Aturan pelaporan yang harus kamu pegang.</strong> Untuk model yang tidak konveks, menjalankan sekali lalu melaporkan hasilnya adalah pelaporan yang menyesatkan. Jalankan 10 kali dengan seed berbeda dan laporkan <em>rentangnya</em>. Kalau rentangnya lebar, itu temuanmu — bukan sesuatu yang disembunyikan dengan memilih angka terbaik.</div>
+        <div class="catatan"><strong>Dan ini persis skeptisisme profesional yang sudah kamu punya.</strong> Di KAP kamu tidak menerima satu angka dari klien tanpa bertanya bagaimana ia dihasilkan dan apakah bisa diulang. Hal yang sama berlaku untuk keluaran modelmu sendiri.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p>Besok: gradient descent diadu dengan rumus tertutup pada regresi — dan mereka harus bertemu.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>Adu: gradient descent lawan rumus tertutup</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> membuktikan bahwa gradient descent mendarat di tempat yang sama persis dengan rumus regresi di MAT L2 — lalu menjawab pertanyaan yang kutinggalkan menggantung: kenapa repot-repot mengulang kalau ada rumus?</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Latih regresi dengan gradient descent</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-4-1"><label for="mat-L3-optimisasi-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(3)
+n  = 500
+x1 = np.random.uniform(0, 40, n); x2 = np.random.uniform(0, 10, n)
+y  = 150_000 + 8_500*x1 + 22_000*x2 + np.random.normal(0, 25_000, n)
+X  = np.column_stack([np.ones(n), x1, x2])
+
+beta_tutup = np.linalg.lstsq(X, y, rcond=None)[0]     # cara MAT L2
+
+# --- gradient descent, dengan pembakuan (alasannya di langkah 3) ---
+mu, sd = X[:, 1:].mean(0), X[:, 1:].std(0)
+Xs = X.copy(); Xs[:, 1:] = (X[:, 1:] - mu) / sd
+ys_mu, ys_sd = y.mean(), y.std(); ys = (y - ys_mu) / ys_sd
+
+b = np.zeros(3); mse = []
+for i in range(3000):
+    grad = (2/n) * Xs.T @ (Xs @ b - ys)
+    b -= 0.1 * grad
+    mse.append(np.mean((Xs @ b - ys)**2))
+
+b_asli = np.empty(3)
+b_asli[1:] = b[1:] * ys_sd / sd
+b_asli[0]  = ys_mu + b[0]*ys_sd - (b_asli[1:] * mu).sum()
+
+print(&quot;rumus tertutup   :&quot;, beta_tutup)
+print(&quot;gradient descent :&quot;, b_asli)
+print(&quot;selisih relatif  :&quot;, np.abs((b_asli - beta_tutup)/beta_tutup).max())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>rumus tertutup   : [144056.069    8690.4622  22087.5599]
+gradient descent : [144056.069    8690.4622  22087.5599]
+selisih relatif  : 9.882e-16</code></pre></div></div>
+        <div class="hasil"><span class="tag">INI YANG HARUS TERJADI</span>
+          <strong>Selisih relatif 9,88 × 10⁻¹⁶ — batas presisi komputer.</strong> Dua jalan yang sama sekali berbeda tiba di titik yang identik. Itu yang dijamin oleh kekonveksan dari Hari 3.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Berapa cepat ia sampai</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-4-2"><label for="mat-L3-optimisasi-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for i in (0, 9, 99, 999, 2999):
+    print(f&quot;iterasi {i+1:&gt;5}  MSE (skala baku) = {mse[i]:.5f}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Iterasi</th>
+<th class="n">MSE (skala baku)</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1</td><td class="n">0,65970</td></tr>
+              <tr><td>10</td><td class="n">0,05863</td></tr>
+              <tr><td>100</td><td class="n"><strong>0,04714</strong></td></tr>
+              <tr><td>1.000</td><td class="n">0,04714</td></tr>
+              <tr><td>3.000</td><td class="n">0,04714</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="catatan"><strong>Praktis selesai di iterasi 100.</strong> 2.900 iterasi berikutnya tidak mengubah apa pun sampai lima angka di belakang koma. Ini juga alasan setiap pustaka punya <em>early stopping</em>: berhenti ketika perbaikan sudah lebih kecil daripada ambang, bukan ketika hitungan iterasi habis.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Jawaban atas pertanyaan yang menggantung dari MAT L2</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-4-3"><label for="mat-L3-optimisasi-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Kalau rumus tertutup memberi jawaban langsung, kenapa seluruh machine learning modern memakai gradient descent? Saya mengukurnya — dan hasilnya membantah jawaban yang biasa diberikan orang.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np, time
+np.random.seed(3)
+for p in (10, 100, 1000, 3000):
+    n = 5000
+    X = np.random.normal(0, 1, (n, p)); y = np.random.normal(0, 1, n)
+    t0 = time.perf_counter(); np.linalg.inv(X.T @ X) @ X.T @ y
+    t_inv = (time.perf_counter() - t0) * 1000
+    t0 = time.perf_counter()
+    b = np.zeros(p)
+    for _ in range(200):
+        b -= 0.001 * (2/n) * X.T @ (X @ b - y)
+    t_gd = (time.perf_counter() - t0) * 1000
+    print(f&quot;p={p:&gt;5}  inv: {t_inv:&gt;9.2f} ms   GD 200 iterasi: {t_gd:&gt;9.2f} ms&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Jumlah fitur p</th>
+<th class="n">Rumus tertutup (inv)</th>
+<th class="n">Gradient descent (200 iterasi)</th>
+<th>Yang menang</th>
+</tr></thead>
+            <tbody>
+              <tr><td>10</td><td class="n">1,33 ms</td><td class="n">15,66 ms</td><td>rumus tertutup, 12×</td></tr>
+              <tr><td>100</td><td class="n">5,24 ms</td><td class="n">265,79 ms</td><td>rumus tertutup, 51×</td></tr>
+              <tr><td>1.000</td><td class="n">262,12 ms</td><td class="n">3.770,05 ms</td><td>rumus tertutup, 14×</td></tr>
+              <tr><td>3.000</td><td class="n">3.053,97 ms</td><td class="n">13.369,43 ms</td><td>rumus tertutup, 4,4×</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>Rumus tertutup menang di setiap ukuran yang bisa saya ukur — bahkan pada 3.000 fitur.</strong> Kalau kamu pernah membaca bahwa “gradient descent dipakai karena lebih cepat pada data besar”, tabel ini membantahnya untuk regresi linear biasa. Saya menuliskannya apa adanya, termasuk ketika hasilnya tidak cocok dengan cerita yang enak didengar.</div>
+<p>Jadi kenapa gradient descent menguasai machine learning modern? Tiga alasan yang sebenarnya, dan tidak satu pun soal kecepatan pada kasus di atas:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Alasan sebenarnya</th>
+<th>Penjelasan</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>1. Kebanyakan model tidak PUNYA rumus tertutup</strong></td><td>Regresi logistik, SVM, dan setiap jaringan saraf tidak memiliki penyelesaian tertutup sama sekali. Di situ gradient descent bukan alternatif yang lebih lambat — ia satu-satunya jalan. Ini alasan terpenting.</td></tr>
+              <tr><td><strong>2. Memori, bukan waktu</strong></td><td>Rumus tertutup butuh seluruh X di memori sekaligus dan membentuk matriks p×p. Pada p = 100.000, matriks itu 10 miliar sel — tidak muat, berapa pun waktu yang kamu punya. Gradient descent bisa jalan satu potongan pada satu waktu, persis <code>chunksize</code> di Python Produksi.</td></tr>
+              <tr><td><strong>3. Perbandingan di atas tidak adil sejak awal</strong></td><td>Saya memberi gradient descent 200 iterasi tanpa memeriksa apakah ia sudah cukup. Dengan <em>early stopping</em> dan learning rate yang disetel, ia jauh lebih cepat. Tapi menyetelnya butuh percobaan — dan itu sendiri biaya.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">JAWABANNYA</span>
+          <strong>Kesimpulan praktis: untuk regresi linear di data yang muat di memori, pakai <code>np.linalg.lstsq</code>.</strong> Ia lebih cepat, lebih tepat, dan tidak ada yang perlu disetel. Gradient descent kamu pelajari bukan untuk menggantikannya, tapi karena ia satu-satunya alat untuk model yang akan kamu temui di MAT L4.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai</h3>
+      <p>Besok: satu langkah praproses yang mempercepat pelatihan ribuan kali, dan bisa dijelaskan dengan angka.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>Penskalaan fitur: mengubah lembah lonjong jadi mangkuk bundar</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengukur sendiri <em>berapa besar</em> pengaruh pembakuan fitur, dan bisa menjelaskan kenapa dengan satu angka: condition number.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ukur bentuk lembahnya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-5-1"><label for="mat-L3-optimisasi-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Bentuk permukaan yang didaki gradient descent ditentukan matriks Hessian. Eigenvalue-nya memberi tahu seberapa curam ke tiap arah.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(3)
+n  = 500
+x1 = np.random.uniform(0, 40, n); x2 = np.random.uniform(0, 10, n)
+X  = np.column_stack([np.ones(n), x1, x2])
+Xs = X.copy(); Xs[:, 1:] = (X[:, 1:] - X[:, 1:].mean(0)) / X[:, 1:].std(0)
+
+for label, M in ((&quot;TANPA dibakukan &quot;, X), (&quot;DENGAN dibakukan&quot;, Xs)):
+    H = (2/n) * M.T @ M
+    ev = np.linalg.eigvalsh(H)
+    print(f&quot;{label}  min {ev.min():.4e}  max {ev.max():.4e}&quot;
+          f&quot;  condition number {ev.max()/ev.min():.4e}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th></th>
+<th class="n">Eigenvalue terkecil</th>
+<th class="n">Eigenvalue terbesar</th>
+<th class="n">Condition number</th>
+</tr></thead>
+            <tbody>
+              <tr><td>TANPA dibakukan</td><td class="n">2,6836 × 10⁻¹</td><td class="n">1,0795 × 10³</td><td class="n"><strong>4,0225 × 10³</strong></td></tr>
+              <tr><td>DENGAN dibakukan</td><td class="n">1,9804</td><td class="n">2,0196</td><td class="n"><strong>1,0198</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">CARA MEMBACANYA</span>
+          <p><strong>Condition number turun dari 4.022 menjadi 1,02 — hampir 4.000 kali.</strong></p><p style="margin-top:8px">Bacanya begini: condition number adalah <em>seberapa lonjong</em> lembahnya. Nilai 1 berarti mangkuk bundar sempurna — gradient descent meluncur lurus ke dasar. Nilai 4.022 berarti ngarai sempit dan panjang: gradiennya menunjuk ke dinding, bukan ke dasar, jadi ia memantul zig-zag.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buktikan pada waktu pelatihan sungguhan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-5-2"><label for="mat-L3-optimisasi-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(3)
+n  = 500
+x1 = np.random.uniform(0, 40, n); x2 = np.random.uniform(0, 10, n)
+y  = 150_000 + 8_500*x1 + 22_000*x2 + np.random.normal(0, 25_000, n)
+X  = np.column_stack([np.ones(n), x1, x2])
+ys = (y - y.mean()) / y.std()
+
+def latih(M, lr, iterasi=3000):
+    b = np.zeros(M.shape[1])
+    for _ in range(iterasi):
+        b -= lr * (2/len(M)) * M.T @ (M @ b - ys)
+        if not np.isfinite(b).all():
+            return None
+    return np.mean((M @ b - ys)**2)
+
+Xs = X.copy(); Xs[:, 1:] = (X[:, 1:] - X[:, 1:].mean(0)) / X[:, 1:].std(0)
+for lr in (0.5, 0.1, 0.01, 0.001, 0.0001):
+    a = latih(X, lr); b = latih(Xs, lr)
+    fa = &quot;MELEDAK&quot; if a is None else f&quot;{a:.5f}&quot;
+    fb = &quot;MELEDAK&quot; if b is None else f&quot;{b:.5f}&quot;
+    print(f&quot;lr={lr:&lt;8} tanpa dibakukan: {fa:&gt;10}   dibakukan: {fb:&gt;10}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Learning rate</th>
+<th class="n">TANPA dibakukan</th>
+<th class="n">DENGAN dibakukan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>0,5</td><td class="n"><strong>MELEDAK</strong></td><td class="n">0,04714</td></tr>
+              <tr><td>0,1</td><td class="n"><strong>MELEDAK</strong></td><td class="n">0,04714</td></tr>
+              <tr><td>0,01</td><td class="n"><strong>MELEDAK</strong></td><td class="n">0,04714</td></tr>
+              <tr><td>0,001</td><td class="n">0,20354</td><td class="n">0,04715</td></tr>
+              <tr><td>0,0001</td><td class="n">0,71346</td><td class="n">0,33720</td></tr>
+            </tbody>
+          </table>
+        </div>
+          <p style="margin-top:8px">Versi yang dibakukan mencapai MSE <strong>0,04714</strong> pada tiga learning rate berbeda — ia tidak rewel. Versi yang tidak dibakukan <strong>meledak</strong> pada ketiganya, dan pada laju yang cukup kecil untuk selamat (0,001) ia berhenti di <strong>0,20354</strong> — lebih dari empat kali lebih buruk.</p></div>
+        <div class="bahaya"><strong>Ini bukan soal kecepatan saja.</strong> Tanpa pembakuan, tidak ada satu pun learning rate yang bekerja baik: yang cukup besar untuk kolom bersatuan kecil akan meledakkan kolom bersatuan besar. Kamu bukan sedang menyetel angka — kamu sedang mencari sesuatu yang tidak ada.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Daftar periksa praproses yang bisa langsung kamu pakai</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-5-3"><label for="mat-L3-optimisasi-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Model</th>
+<th>Perlu pembakuan?</th>
+<th>Kenapa</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Regresi linear via <code>lstsq</code></td><td>Tidak</td><td>Rumus tertutup tidak mendaki apa pun</td></tr>
+              <tr><td>Regresi apa pun via gradient descent</td><td><strong>Ya</strong></td><td>Condition number, seperti di atas</td></tr>
+              <tr><td>Jaringan saraf</td><td><strong>Ya, wajib</strong></td><td>Sama, dan lebih parah karena berlapis</td></tr>
+              <tr><td>Ridge / Lasso</td><td><strong>Ya, wajib</strong></td><td>Penaltinya menghukum koefisien besar — satuan jadi menentukan</td></tr>
+              <tr><td>k-NN, k-means, SVM</td><td><strong>Ya, wajib</strong></td><td>Berbasis jarak; satuan besar mendominasi jarak</td></tr>
+              <tr><td>Pohon keputusan, random forest</td><td>Tidak</td><td>Membelah per kolom; satuan tidak relevan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Satu kesalahan yang wajib kamu hindari sejak sekarang:</strong> hitung mean dan simpangan baku <em>hanya dari data latih</em>, lalu terapkan angka yang sama itu ke data uji. Menghitungnya dari gabungan latih+uji adalah <em>kebocoran data</em> — hasil ujimu jadi terlalu bagus, dan kamu baru tahu setelah modelnya dipakai klien. Di sklearn: <code>fit</code> pada latih, <code>transform</code> pada keduanya.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 5 selesai</h3>
+      <p>Besok: optimisasi dengan kendala — dan sebuah keputusan alokasi anggaran yang bisa langsung kamu jual.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 6</span>
+      <h2>Optimisasi berkendala: alokasi anggaran yang bisa dijual</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menyelesaikan masalah optimisasi berkendala nyata — membagi anggaran terbatas — dan memverifikasi jawaban solver dengan turunan tangan.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Soalnya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-6-1"><label for="mat-L3-optimisasi-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>Kamu punya anggaran promo Rp 100 juta untuk 3 cabang.
+Imbal hasil tiap cabang menurun (menggandakan belanja TIDAK
+menggandakan hasil):
+
+    hasil_i = r_i * akar(x_i)
+
+dengan efektivitas r = [1.0, 1.6, 1.2]  (cabang B paling efektif)
+
+Kendala: x1 + x2 + x3 = 100,  semua x_i &gt;= 0
+
+Berapa alokasi yang memaksimalkan total hasil?</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tebak dulu sebelum menjalankan: apakah semuanya harus diberikan ke cabang B yang paling efektif? Tulis jawabanmu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Selesaikan dengan solver</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-6-2"><label for="mat-L3-optimisasi-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+from scipy import optimize
+
+r = np.array([1.0, 1.6, 1.2])
+neg = lambda x: -np.sum(r * np.sqrt(np.maximum(x, 0)))
+kendala = {&#x27;type&#x27;: &#x27;eq&#x27;, &#x27;fun&#x27;: lambda x: x.sum() - 100}
+
+res = optimize.minimize(neg, x0=np.array([33., 33., 34.]),
+                        constraints=[kendala], bounds=[(0, 100)]*3,
+                        method=&#x27;SLSQP&#x27;)
+print(&quot;alokasi optimal (juta) :&quot;, res.x)
+print(&quot;total imbal hasil      :&quot;, -res.fun)
+print(&quot;jumlah alokasi         :&quot;, res.x.sum())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>alokasi optimal (juta) : [20.0042 51.2037 28.792 ]
+total imbal hasil      : 22.360680
+jumlah alokasi         : 100.000000</code></pre></div>
+          <p style="margin-top:8px"><strong>Bukan semuanya ke cabang B.</strong> Karena imbal hasilnya menurun, memberi terlalu banyak ke satu cabang membuang potensi. Jawabannya membagi ke ketiganya, dengan porsi terbesar ke yang paling efektif.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Verifikasi jawaban solver dengan turunan tangan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-6-3"><label for="mat-L3-optimisasi-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Jangan pernah percaya solver tanpa memeriksanya. Metode pengali Lagrange memberi syarat: pada titik optimum, <em>turunan tiap cabang harus sama</em> — kalau tidak, memindahkan satu rupiah dari cabang berturunan kecil ke yang besar akan menaikkan total.</p>
+        <div class="kode"><pre><code>Turunan hasil cabang i terhadap x_i:
+      d/dx [ r_i * akar(x_i) ]  =  r_i / (2*akar(x_i))
+
+Syarat optimum: semua sama dengan pengali lambda.
+
+      r_i / (2*akar(x_i)) = lambda
+      akar(x_i)           = r_i / (2*lambda)
+      x_i                 = r_i^2 / (4*lambda^2)
+
+Jadi x_i SEBANDING dengan r_i KUADRAT.
+Dengan kendala jumlah = 100:
+
+      x_i = 100 * r_i^2 / (r_1^2 + r_2^2 + r_3^2)</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>analitik = 100 * r**2 / np.sum(r**2)
+print(&quot;solusi analitik :&quot;, analitik)
+print(&quot;solver SLSQP    :&quot;, res.x)
+print(&quot;selisih maksimum:&quot;, np.abs(res.x - analitik).max())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>solusi analitik : [20.  51.2 28.8]
+solver SLSQP    : [20.0042 51.2037 28.792 ]
+selisih maksimum: 7.972e-03</code></pre></div></div>
+        <div class="hasil"><span class="tag">INI YANG DIJUAL</span>
+          <strong>Aturan yang keluar dari matematika, bukan dari perasaan: alokasikan sebanding dengan efektivitas KUADRAT.</strong> r = [1,0; 1,6; 1,2] → r² = [1,0; 2,56; 1,44] → porsi [20%; 51,2%; 28,8%]. Itu kalimat yang bisa kamu tulis di memo klien.</div>
+        <div class="catatan"><strong>Selisih 8 × 10⁻³ itu wajar dan bukan kesalahan</strong> — SLSQP berhenti pada toleransi bawaannya, bukan pada presisi mesin. Yang penting: dua metode yang sepenuhnya berbeda sepakat sampai tiga angka di belakang koma.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Berapa nilai rupiah dari mengoptimalkan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-6-4"><label for="mat-L3-optimisasi-6-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>rata = np.full(3, 100/3)
+print(&quot;dibagi rata      :&quot;, -neg(rata))
+print(&quot;dioptimalkan     :&quot;, -res.fun)
+print(&quot;selisih          :&quot;, (-res.fun) - (-neg(rata)))
+print(&quot;perbaikan        :&quot;, f&quot;{((-res.fun)/(-neg(rata)) - 1)*100:.2f}%&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>dibagi rata      : 21.939310
+dioptimalkan     : 22.360680
+selisih          : 0.421369
+perbaikan        : 1.92%</code></pre></div></div>
+        <div class="bahaya"><strong>Perbaikannya cuma 1,92% — dan aku sengaja menunjukkan angka yang mengecewakan ini.</strong> Kalau kamu menjual pekerjaan ini ke klien dengan janji perbaikan besar, kamu akan salah. Optimisasi memberi keuntungan besar ketika efektivitas antar pilihan <em>berbeda jauh</em>. Ketika ketiganya mirip (1,0 · 1,6 · 1,2), pembagian rata sudah hampir sebaik yang optimal.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Ubah <code>r</code> menjadi <code>[0.2, 3.0, 0.3]</code> dan jalankan lagi.</strong> Hitung perbaikannya sendiri dulu sebelum membuka kunci di bawah.</div>
+        <details>
+          <summary>Kunci — buka setelah kamu menjalankannya</summary>
+          <div class="isi">
+            <p>Alokasi optimal <strong>[0,439 &nbsp; 98,576 &nbsp; 0,985]</strong>, total hasil <strong>30,215890</strong> lawan pembagian rata <strong>20,207259</strong>.</p>
+            <p><strong>Perbaikannya 49,53%</strong> — dua puluh lima kali lipat dibanding kasus pertama yang cuma 1,92%.</p>
+            <p><strong>Inilah aturan penjualannya:</strong> optimisasi alokasi layak dibayar ketika efektivitas antar pilihan berbeda jauh. Hitung dulu rasio r terbesar terhadap r terkecil. Kalau di bawah 2, perbaikannya akan kecil dan sebaiknya kamu katakan itu kepada klien sejak awal — bukan setelah dibayar.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 6 selesai</h3>
+      <p>Besok penutup: ujian, dan peta persis ke silabus DSA5103 di NUS.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 7</span>
+      <h2>Ujian mandiri & peta ke DSA5103</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengukur apakah enam hari ini melekat, dan melihat persis bagian mana dari DSA5103 yang sudah kamu pegang dan bagian mana yang belum.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tujuh soal</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-7-1"><label for="mat-L3-optimisasi-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. f&#x27;(x) = 0 di titik x. Sebutkan tiga kemungkinan jenis titik itu.
+2. Untuk f(x) = x^2 - 4x + 7, berapa learning rate yang menyelesaikan
+   dalam SATU langkah? Turunkan, jangan tebak.
+3. Kenapa lr=0.1 dan lr=0.9 memberi hasil yang identik persis?
+4. Model tidak konveks dijalankan dua kali, hasilnya beda.
+   Bug atau bukan? Apa yang kamu laporkan?
+5. Condition number matriks fiturmu 12.000. Apa artinya, apa tindakanmu?
+6. Anggaran 100 dibagi ke 4 pilihan, hasil = r_i*akar(x_i),
+   r = [1,2,2,1]. Hitung alokasi optimalnya di kepala.
+7. Kapan gradient descent LEBIH BURUK daripada rumus tertutup?</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis ketujuhnya dulu.</div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Minimum (lokal atau global), maksimum, atau titik belok. Turunan kedua membedakannya: positif → minimum, negatif → maksimum, nol → periksa lebih jauh.</p>
+            <p><strong>2.</strong> Jarak dikali (1−2·lr) tiap langkah. Nol ketika lr = <strong>0,5</strong>. Umumnya lr = 1/f''(x) — di sini f'' = 2.</p>
+            <p><strong>3.</strong> Karena |1−2(0,1)| = 0,8 dan |1−2(0,9)| = |−0,8| = 0,8. Faktor penyusutannya sama besar; yang satu mendekat lurus, yang satu berselang-seling tanda — tapi jaraknya menyusut dengan laju identik.</p>
+            <p><strong>4.</strong> <strong>Bukan bug.</strong> Itu perilaku yang diharapkan dari fungsi tidak konveks. Jalankan ≥10 seed, laporkan median dan rentangnya. Melaporkan hasil terbaik dari 10 percobaan tanpa menyebutkan sembilan lainnya adalah pelaporan yang menyesatkan.</p>
+            <p><strong>5.</strong> Fiturnya sangat berkorelasi atau berbeda satuan jauh. Tindakan: bakukan fitur, periksa korelasi antar prediktor, buang atau gabungkan yang berulang, dan <strong>jangan tafsirkan koefisien satu per satu</strong> sampai itu beres.</p>
+            <p><strong>6.</strong> r² = [1,4,4,1], jumlah = 10. Alokasi = <strong>[10, 40, 40, 10]</strong>.</p>
+            <p><strong>7.</strong> Ketika rumus tertutup ada, datanya muat di memori, dan fiturnya sedikit — misalnya regresi linear biasa. Di situ rumus tertutup lebih cepat, lebih tepat, dan tidak perlu disetel.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Peta ke DSA5103 — yang sudah dan yang belum</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-7-2"><label for="mat-L3-optimisasi-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Topik DSA5103 (NUS)</th>
+<th>Status setelah modul ini</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Gradien, turunan berarah</td><td><strong>Dikuasai</strong> — Hari 1–2</td></tr>
+              <tr><td>Himpunan &amp; fungsi konveks</td><td><strong>Dikuasai</strong> — Hari 3, dengan uji numerik</td></tr>
+              <tr><td>Gradient descent &amp; laju konvergensi</td><td><strong>Dikuasai</strong> — Hari 2, diturunkan sendiri</td></tr>
+              <tr><td>Bilangan kondisi &amp; prakondisi</td><td><strong>Dikuasai</strong> — Hari 5, diukur</td></tr>
+              <tr><td>Pengali Lagrange, syarat KKT</td><td><strong>Sebagian</strong> — Lagrange ya, KKT belum</td></tr>
+              <tr><td>Metode Newton &amp; kuasi-Newton (BFGS)</td><td><strong>Belum</strong></td></tr>
+              <tr><td>Gradient descent stokastik &amp; momentum</td><td><strong>Belum</strong> — sebagian muncul di MAT L4</td></tr>
+              <tr><td>Optimisasi dual, dualitas kuat</td><td><strong>Belum</strong></td></tr>
+              <tr><td>Metode titik-dalam, pemrograman semidefinit</td><td><strong>Belum</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Empat baris terakhir bukan detail kecil.</strong> DSA5103 adalah mata kuliah pascasarjana penuh; enam hari tidak bisa menggantikannya, dan aku tidak akan berpura-pura sebaliknya. Yang diberikan modul ini: kamu masuk ke minggu pertama dengan setengah kosakatanya sudah terpasang, alih-alih menghadapi semuanya sekaligus dalam bahasa asing.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Rubrik</h3>
+        <span class="cek"><input type="checkbox" id="mat-L3-optimisasi-7-3"><label for="mat-L3-optimisasi-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Skor</th>
+<th>Tindakan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>7/7</td><td>Lanjut ke MAT L4 sekarang</td></tr>
+              <tr><td>5–6</td><td>Ulangi hari yang salah, lalu lanjut</td></tr>
+              <tr><td>3–4</td><td>Ulang Hari 2, 3, dan 5 — tiga yang paling dipakai di L4</td></tr>
+              <tr><td>≤2</td><td>Ulang seluruh modul sebelum menyentuh jaringan saraf</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kalau skormu rendah, jangan lanjut ke MAT L4.</strong> Deep learning seluruhnya adalah gradient descent pada fungsi yang tidak konveks dengan fitur yang harus dibakukan — yaitu Hari 2, 3, dan 5 modul ini digabung sekaligus. Memaksa maju berarti mengulang materi ini di tempat yang jauh lebih membingungkan.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>MAT L3 selesai</h3>
+      <p>Tiga dari empat lubang tertutup. Terakhir: deep learning — yang ternyata cuma gabungan tiga hari yang baru saja kamu kerjakan.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/bf6f3e02-66dc-40a4-a649-f1c260029d36">Lanjut ke MAT L4: Deep learning dari nol →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Seluruh angka dihasilkan dengan menjalankan kodenya di Python 3.11, numpy 2.4.6, scipy 1.17.1, dengan <code>np.random.seed(3)</code>.</p>
+    <p style="margin-top:10px">Daftar topik DSA5103 merujuk halaman resmi NUS Department of Mathematics per September 2026; status “belum” di tabel Hari 7 adalah penilaian saya atas cakupan modul ini, bukan pernyataan NUS.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "mat-L3-optimisasi";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

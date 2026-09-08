@@ -1,0 +1,32 @@
+BUDI WIJAYA
+Jakarta, Indonesia · budi.wijaya@email.com · +62 812 3456 7890
+linkedin.com/in/budiwijaya · github.com/budiwijaya
+
+SUMMARY
+Data analyst with 4 years of assurance experience at a public accounting firm,
+now focused on SQL and Python analytics. Built an automated HDB resale price
+pipeline covering 240,000 transactions. Seeking analyst roles in Singapore.
+
+SKILLS
+SQL (window functions, query optimisation, BigQuery) · Python (pandas,
+scikit-learn) · dbt · Tableau · Git · statistics · dashboard design
+
+PROJECTS
+Location explains 61% of HDB resale price variance - dashboard | repo
+- Built a dbt pipeline over 240,000 Singapore HDB transactions from 2017-2024
+- Found that distance to MRT explains 61% of price variance, down from 74% before 2020
+- Scheduled daily with GitHub Actions; 12 dbt tests including a reconciliation test
+
+Coffee chain retention analysis - dashboard | repo
+- Analysed 151,088 transactions across 4 outlets over 18 months
+- Month-1 retention averaged 42%, but dropped to 13% for the December cohort
+- Reduced weekly reporting from 6 hours of manual work to a scheduled job
+
+EXPERIENCE
+Senior Auditor, Public Accounting Firm, Jakarta (2021-2025)
+- Reconciled general ledgers of up to 2 million rows against trial balances
+- Cut fieldwork on 3 recurring engagements by 40% by automating tie-out testing in Python
+- Led 4 junior auditors across 11 engagements
+
+EDUCATION
+Bachelor of Accounting, 2021

@@ -1,0 +1,909 @@
+<title>Bahasa Inggris Kerja</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/f1e55d95-3ab1-4904-b378-ff0886a08852">← Kembali ke Bekal Alat Kantor</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Bahasa Inggris Kerja</span>
+  <button type="button" data-hari="1" aria-selected="true">E1</button>
+  <button type="button" data-hari="2" aria-selected="false">E2</button>
+  <button type="button" data-hari="3" aria-selected="false">E3</button>
+  <button type="button" data-hari="4" aria-selected="false">E4</button>
+  <button type="button" data-hari="5" aria-selected="false">E5</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal Bahasa Inggris Kerja · 5 hari · disusun dari lowongan nyata</span>
+    <h1>Bahasa Inggris kerja: bukan syarat ke luar negeri, tapi pintu masuk di Jakarta</h1>
+    <p class="lede">Pindaian 41 modul pengajaran menemukan “bahasa Inggris” muncul di 5 modul dengan <strong>5 sebutan total</strong> — satu sebutan lewat di masing-masing. Tidak ada yang mengajarkannya.</p>
+    <p class="lede" style="margin-top:10px">Sementara itu lowongan Moladin menulis syaratnya begini: <em>“Strong written and verbal English communication skills, with the ability to confidently present findings to management.”</em> Dan seluruh lowongan yang saya kutip sepanjang kurikulum ini — PwC, EY, Moladin, GOTO — <strong>ditulis dalam bahasa Inggris, untuk pekerjaan di Jakarta.</strong></p>
+    <p class="lede" style="margin-top:10px">Lima hari ini disusun dari bahan yang nyata: saya menggabungkan teks lima lowongan (<strong>639 kata</strong>), menghitung kosakatanya, dan membangun daftar <strong>44 kata inti</strong> — bukan daftar seribu kata yang tidak akan kamu hafal.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Membaca lowongan berbahasa Inggris tanpa penerjemah</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> membedah teks lowongan yang sebenarnya, kalimat demi kalimat — karena kalimat yang tidak kamu pahami adalah syarat yang tidak kamu penuhi.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa modul ini ada</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-1-1"><label for="bekal-bahasa-inggris-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Pindaian 41 modul pengajaran untuk “bahasa Inggris”, “English communication”, dan “istilah Inggris”:</p>
+        <div class="kode"><pre><code>Bahasa Inggris kerja    5 modul    5 sebutan</code></pre></div>
+        <div class="bahaya"><strong>Lima modul, lima sebutan.</strong> Artinya satu sebutan lewat di tiap modul — tidak ada satu pun yang mengajarkannya. Padahal lowongan Moladin menuliskan syaratnya begini, apa adanya:<p style="margin-top:8px"><em>“<strong>Strong written and verbal English communication skills</strong>, with the ability to confidently present findings to management and gather requirements from diverse business teams.”</em></p></div>
+        <div class="catatan"><strong>Dan perhatikan hal yang lebih mendasar:</strong> seluruh lowongan yang saya kutip sepanjang kurikulum ini — PwC, EY, Moladin, GOTO, Entrust — ditulis dalam bahasa Inggris, untuk pekerjaan di Jakarta. Bahasa Inggris bukan syarat tambahan untuk kerja di luar negeri. Itu bahasa pintu masuknya di sini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bedah satu paragraf sungguhan</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-1-2"><label for="bekal-bahasa-inggris-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>&quot;Serve as the dedicated analytics touchpoint for management,
+translating raw technical pipelines into simple, high-utility
+financial and risk summaries.&quot;   — Moladin, Agustus 2026</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Potongan</th>
+<th>Artinya</th>
+<th>Yang sebenarnya diminta</th>
+</tr></thead>
+            <tbody>
+              <tr><td><em>serve as the dedicated … touchpoint</em></td><td>jadi titik hubung khusus</td><td>kamu orang yang ditanya, bukan salah satu dari banyak</td></tr>
+              <tr><td><em>translating raw technical pipelines</em></td><td>menerjemahkan alur teknis mentah</td><td>kamu paham sisi teknisnya</td></tr>
+              <tr><td><em>into simple, high-utility summaries</em></td><td>jadi ringkasan sederhana yang berguna</td><td><strong>dan bisa menjelaskannya ke orang non-teknis</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS KAMU TANGKAP</span>
+          <strong>Seluruh kalimat itu, dalam satu baris: “jadi penerjemah antara mesin dan manajemen”.</strong> Itu deskripsi pekerjaan yang sudah kamu lakukan bertahun-tahun di KAP — hanya belum pernah kamu tulis dalam bahasa ini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Sepuluh frasa lowongan yang artinya bukan yang tertulis</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-1-3"><label for="bekal-bahasa-inggris-1-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang tertulis</th>
+<th>Artinya sebenarnya</th>
+</tr></thead>
+            <tbody>
+              <tr><td><em>“a plus point”</em> / <em>“is advantageous”</em></td><td><strong>tidak wajib.</strong> Tetap melamar meski tidak punya</td></tr>
+              <tr><td><em>“Bachelor's degree in … or a matching quantitative field”</em></td><td>daftarnya tidak tertutup — Finance dan Economics diterima</td></tr>
+              <tr><td><em>“3 to 5 years of experience”</em></td><td>biasanya bisa ditawar 1–2 tahun kalau sisanya kuat</td></tr>
+              <tr><td><em>“fast-paced environment”</em></td><td>tenggatnya ketat, prioritas sering berubah</td></tr>
+              <tr><td><em>“hands-on”</em></td><td>kamu mengerjakan sendiri, bukan mengarahkan orang</td></tr>
+              <tr><td><em>“cross-functional”</em></td><td>kamu bekerja dengan tim di luar tim data</td></tr>
+              <tr><td><em>“ad-hoc”</em></td><td>permintaan dadakan, di luar laporan rutin</td></tr>
+              <tr><td><em>“stakeholders”</em></td><td>orang yang memakai hasil kerjamu dan bisa menolaknya</td></tr>
+              <tr><td><em>“ownership”</em></td><td>kalau rusak, itu urusanmu — jangan tunggu disuruh</td></tr>
+              <tr><td><em>“nice to have”</em></td><td>benar-benar tidak wajib</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Baris pertama itu yang paling mahal kalau salah baca.</strong> Lowongan PwC menyebut Python sebagai <em>“a plus point”</em> — banyak orang membacanya sebagai syarat lalu tidak melamar. Kamu sudah tahu dari Jalur Pintu B bahwa yang justru <em>wajib</em> di lowongan itu adalah pemahaman akuntansi, yang sudah kamu punya.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p>Besok: 44 kata yang benar-benar muncul, dihitung dari teks lowongannya sendiri.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>Kosakata yang benar-benar dipakai — dihitung, bukan dikarang</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menghafal daftar kata yang pendek dan tepat sasaran, karena daftarnya berasal dari hitungan atas teks lowongan sungguhan.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Cara daftar ini dibuat</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-2-1"><label for="bekal-bahasa-inggris-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Saya menggabungkan teks lima lowongan nyata (639 kata), membuang kata umum seperti <em>the</em> dan <em>and</em>, lalu menghitung sisanya.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import re, collections
+teks = open(&quot;lowongan.txt&quot;).read().lower()
+kata = re.findall(r&quot;[a-z][a-z\-&#x27;]+&quot;, teks)
+hitung = collections.Counter(k for k in kata if k not in UMUM and len(k) &gt; 2)
+print(len(kata), &quot;kata |&quot;, len(hitung), &quot;kata unik&quot;)
+print(hitung.most_common(40))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>total kata: 639 | kata unik (tanpa kata umum): 324</code></pre></div>
+          <p style="margin-top:8px">Dari 324 kata unik, sepuluh teratas menutup bagian terbesar maknanya. Ini bukan daftar 1.000 kata yang tidak akan kamu hafal — ini daftar pendek yang bisa kamu kuasai minggu ini.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Sepuluh kata tersering</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-2-2"><label for="bekal-bahasa-inggris-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th class="n">#</th>
+<th>Kata</th>
+<th class="n">Muncul</th>
+<th>Arti kerjanya</th>
+</tr></thead>
+            <tbody>
+              <tr><td class="n">1</td><td><strong>data</strong></td><td class="n">20</td><td>—</td></tr>
+              <tr><td class="n">2</td><td><strong>business</strong></td><td class="n">16</td><td>sisi usaha, bukan sisi teknis</td></tr>
+              <tr><td class="n">3</td><td><strong>management</strong></td><td class="n">7</td><td>atasan yang membaca hasilmu</td></tr>
+              <tr><td class="n">4</td><td><strong>maintain</strong></td><td class="n">7</td><td>merawat supaya tetap jalan</td></tr>
+              <tr><td class="n">5</td><td><strong>operational</strong></td><td class="n">6</td><td>urusan harian, bukan strategi</td></tr>
+              <tr><td class="n">6</td><td><strong>analytics</strong></td><td class="n">5</td><td>—</td></tr>
+              <tr><td class="n">7</td><td><strong>technical</strong></td><td class="n">5</td><td>sisi mesin</td></tr>
+              <tr><td class="n">8</td><td><strong>teams</strong></td><td class="n">4</td><td>tim lain di luar timmu</td></tr>
+              <tr><td class="n">9</td><td><strong>dashboards</strong></td><td class="n">4</td><td>—</td></tr>
+              <tr><td class="n">10</td><td><strong>performance</strong></td><td class="n">4</td><td>kinerja, biasanya diukur angka</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">BACA POLANYA, BUKAN DAFTARNYA</span>
+          <strong><em>business</em> muncul 16 kali — lebih sering daripada <em>analytics</em>, <em>technical</em>, dan <em>dashboards</em> digabung.</strong> Lowongan-lowongan ini tidak mencari orang yang pandai alat. Mereka mencari orang yang mengerti usahanya. Itu kabar baik untuk bekas auditor.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Empat kelompok yang harus kamu kuasai</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-2-3"><label for="bekal-bahasa-inggris-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Saya kelompokkan kata-kata itu menurut fungsinya dalam kalimat kerja:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kelompok</th>
+<th>Kata-katanya (angka = jumlah kemunculan)</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>Kata kerja pekerjaan</strong> (18)</td><td>maintain (7) · perform (3) · support (3) · ensure (2) · build (2) · execute (2) · develop (2) · design · translate · reconcile · monitor · extract · conduct · manage · prioritize · verify · detect · debug</td></tr>
+              <tr><td><strong>Orang &amp; pihak</strong> (9)</td><td>business (16) · management (7) · teams (4) · operations (4) · stakeholders (3) · partner (2) · leadership · auditors · units</td></tr>
+              <tr><td><strong>Hasil kerja</strong> (8)</td><td>dashboards (4) · metrics (3) · reports (2) · insights (2) · findings (2) · queries (2) · summaries · documents</td></tr>
+              <tr><td><strong>Sifat yang diminta</strong> (9)</td><td>accuracy (3) · comfortable (2) · strong (2) · integrity · detail · proactive · curious · rigorous · clear</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">JUMLAHNYA</span>
+          <strong>Empat puluh empat kata.</strong> Itu seluruh kosakata inti yang dipakai lima lowongan. Kamu bisa menghafalnya dalam tiga hari, dan setelah itu kamu bisa membaca hampir semua lowongan analis data di Jakarta tanpa penerjemah.</div>
+        <div class="catatan"><strong>Perhatikan <em>reconcile</em>, <em>verify</em>, <em>integrity</em>, dan <em>auditors</em> di daftar itu.</strong> Keempatnya kata sehari-harimu di KAP, dan keempatnya muncul di lowongan analis data. Kamu sudah punya bagian kosakata yang justru paling jarang dimiliki pelamar lain.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat kartu hafalan untuk 44 kata itu — Inggris di depan, arti kerjanya (bukan arti kamus) di belakang. Ulangi 10 menit tiap pagi selama tiga hari. Ini satu-satunya hafalan di seluruh kurikulum ini, dan ia berbayar cepat.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p>Besok: menulis. Empat bentuk tulisan yang akan kamu pakai tiap minggu, dengan kerangka yang tinggal diisi.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Menulis: empat bentuk yang dipakai tiap minggu</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> punya kerangka siap pakai untuk empat tulisan berbahasa Inggris yang paling sering diminta — supaya kamu tidak menulis dari nol tiap kali.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bentuk 1: email temuan ke manajemen</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-3-1"><label for="bekal-bahasa-inggris-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>Subject: June sales reconciliation — 3 findings, 1 needs your decision
+
+Hi [Nama],
+
+Summary: June revenue is IDR 34.06bn, 4% below target. Three issues
+found; one needs a decision from you this week.
+
+1. Dago branch is missing 15 days of transactions (1-15 June).
+   Impact: revenue understated by an estimated IDR 1.2bn.
+   Next step: I have asked IT to re-run the export. ETA Thursday.
+
+2. 72 duplicate order lines found in the POS export.
+   Impact: IDR 340m double-counted. Already excluded from the figures above.
+
+3. NEEDS YOUR DECISION: 8 customers are marked &quot;Lunas&quot; but paid less
+   than principal. Total gap IDR 45m. Should I treat these as
+   outstanding or as written off?
+
+Full workings attached. Happy to walk through it on a call.
+
+Best regards,
+[Nama]</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Bagian</th>
+<th>Kenapa harus ada</th>
+</tr></thead>
+            <tbody>
+              <tr><td><em>Subject</em> berisi angka</td><td>atasan memutuskan membuka atau tidak dari sini</td></tr>
+              <tr><td><em>Summary</em> di baris pertama</td><td>kalau mereka berhenti membaca di sini, mereka tetap dapat intinya</td></tr>
+              <tr><td><em>Impact</em> dalam rupiah</td><td>angka tanpa dampak tidak menghasilkan tindakan</td></tr>
+              <tr><td><em>Next step</em> tiap poin</td><td>menunjukkan kamu sudah bergerak, bukan cuma melapor</td></tr>
+              <tr><td><em>NEEDS YOUR DECISION</em></td><td>memisahkan yang butuh mereka dari yang sudah kamu urus</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">KENAPA INI TIDAK ASING</span>
+          <strong>Ini struktur temuan audit, ditulis dalam bahasa Inggris.</strong> Kondisi, dampak, rekomendasi. Kamu sudah menulis ratusan yang seperti ini — yang baru cuma bahasanya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bentuk 2, 3, dan 4</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-3-2"><label for="bekal-bahasa-inggris-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p><strong>Pesan Slack — meminta kejelasan (ini yang paling sering):</strong></p>
+        <div class="kode"><pre><code>Quick check before I run this: when you say &quot;active users&quot;,
+do you mean users who logged in, or users who made a transaction?
+The numbers differ by about 30%, so I want to get it right.</code></pre></div>
+<p style="margin-top:14px"><strong>Pesan commit git:</strong></p>
+        <div class="kode"><pre><code>fix: exclude duplicate order lines from June revenue
+
+72 rows had the same (order_id, product_id) pair, causing
+IDR 340m to be double-counted. Added a dedup step and a test.</code></pre></div>
+<p style="margin-top:14px"><strong>README proyek portofolio:</strong></p>
+        <div class="kode"><pre><code>## What this does
+Reconciles daily POS exports against the accounting ledger and
+flags any branch where the gap exceeds 0.5%.
+
+## Why it matters
+Manual reconciliation took 4 hours per month. This runs in 12 seconds.
+
+## How to run
+    python -m laporan.cli --berkas data/juni.xlsx --keluar hasil/
+
+## What I found
+8 of 60 loans marked as fully paid had payments below principal.</code></pre></div>
+        <div class="catatan"><strong>Perhatikan bagian <em>Why it matters</em>.</strong> Sebagian besar README hanya menjelaskan cara menjalankan. Yang membuat perekrut berhenti membaca adalah kalimat yang menyebut <em>berapa lama sebelumnya, berapa lama sesudahnya</em>. Angka itu ada di proyekmu — tulis.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kesalahan penulis Indonesia yang paling sering</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-3-3"><label for="bekal-bahasa-inggris-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Sering ditulis</th>
+<th>Seharusnya</th>
+<th>Kenapa</th>
+</tr></thead>
+            <tbody>
+              <tr><td><em>“I will inform to you”</em></td><td>“I will inform you” / “I will let you know”</td><td><em>inform</em> tidak diikuti <em>to</em></td></tr>
+              <tr><td><em>“Please kindly find attached”</em></td><td>“Attached is …” / “I've attached …”</td><td><em>please kindly</em> berlebihan; tidak dipakai penutur asli</td></tr>
+              <tr><td><em>“I am looking forward to hear”</em></td><td>“looking forward to hear<strong>ing</strong>”</td><td>setelah <em>to</em> di frasa ini, pakai <em>-ing</em></td></tr>
+              <tr><td><em>“Regarding about the report”</em></td><td>“Regarding the report”</td><td><em>regarding</em> sudah berarti <em>about</em></td></tr>
+              <tr><td><em>“Until now the data is not complete”</em></td><td>“The data is still incomplete”</td><td><em>until now</em> di Inggris berarti sudah berubah</td></tr>
+              <tr><td><em>“I will do follow up”</em></td><td>“I will follow up”</td><td><em>follow up</em> sudah kata kerja</td></tr>
+              <tr><td><em>“Can you help me to check?”</em></td><td>“Could you check …?”</td><td>lebih pendek dan lebih sopan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">KENAPA INI LAYAK DIPERBAIKI</span>
+          <strong>Ketujuhnya tidak membuatmu sulit dimengerti — semuanya masih jelas.</strong> Yang mereka lakukan adalah menandai bahwa Inggris bukan bahasa pertamamu, di setiap kalimat. Memperbaiki tujuh pola ini menghilangkan sebagian besar penanda itu, dan biayanya cuma menghafal tujuh baris.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil satu email berbahasa Inggris yang pernah kamu tulis. Cari ketujuh pola ini. Perbaiki. Simpan versi perbaikannya sebagai contoh untuk dirimu sendiri.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p>Besok: wawancara. Empat pertanyaan yang hampir pasti muncul, dengan jawaban yang disusun dari pengalaman KAP-mu.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>Wawancara dalam bahasa Inggris</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menyiapkan jawaban tertulis untuk pertanyaan yang hampir pasti ditanyakan — karena berpikir dan berbahasa asing sekaligus, di bawah tekanan, jarang berhasil tanpa persiapan.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kerangka STAR, dan kenapa ia menolongmu di bahasa asing</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-4-1"><label for="bekal-bahasa-inggris-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>S — Situation : Where were you, what was the context?     (1-2 kalimat)
+T — Task      : What were YOU responsible for?            (1 kalimat)
+A — Action    : What did you actually do?                 (3-4 kalimat)
+R — Result    : What changed? Use a number.               (1-2 kalimat)</code></pre></div>
+        <div class="hasil"><span class="tag">KENAPA INI PENTING BUATMU</span>
+          <strong>STAR bukan sekadar cara menyusun cerita — ia menghilangkan beban mengarang struktur sambil berbahasa asing.</strong> Kamu hanya perlu mengingat empat huruf, dan kalimatnya mengalir mengikuti urutan yang sudah pasti.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Empat pertanyaan, dan jawaban yang sudah kamu miliki bahannya</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-4-2"><label for="bekal-bahasa-inggris-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p><strong>1. “Tell me about yourself.”</strong> — 60 detik, tidak lebih.</p>
+        <div class="kode"><pre><code>I&#x27;m an accountant by training. I spent [X] years in audit at a
+public accounting firm, mostly reconciling large transaction sets
+and testing whether reported figures held up.
+
+The part I enjoyed most was finding why two systems disagreed —
+so I moved into data analytics and learned SQL and Python properly.
+I&#x27;ve since built [proyekmu], which reconciles POS exports against
+the ledger and flags gaps above a threshold.
+
+What I&#x27;m looking for now is a role where the audit side and the
+data side are both used — which is why this position interested me.</code></pre></div>
+<p style="margin-top:14px"><strong>2. “Tell me about a time you found an error.”</strong> — pakai STAR.</p>
+        <div class="kode"><pre><code>(S) A client&#x27;s inventory report valued their stock at IDR 218m.
+(T) I was asked to verify the figure before it went to the owner.
+(A) I compared every batch&#x27;s expiry date against the reporting date.
+    Ten batches had already expired but were still counted at full value.
+    I recalculated the figure both ways and documented the assumption.
+(R) The correct sellable value was IDR 176m — the original figure
+    was overstated by 19.3%. I reported both numbers and the gap,
+    so the owner could decide how to treat it.</code></pre></div>
+        <div class="catatan"><strong>Itu Proyek Buta P2, diceritakan dalam bahasa Inggris.</strong> Kamu tidak perlu mengarang pengalaman — kamu perlu menerjemahkan yang sudah kamu kerjakan. Setiap proyek di kurikulum ini adalah bahan jawaban wawancara.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Dua pertanyaan sisanya, dan cara menangani kemacetan</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-4-3"><label for="bekal-bahasa-inggris-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p><strong>3. “Why are you leaving accounting?”</strong> — jangan pernah menjelekkan pekerjaan lama.</p>
+        <div class="kode"><pre><code>I&#x27;m not leaving the thinking — I&#x27;m changing the tools.
+Audit taught me to ask where a number came from and whether it
+can be traced. That question is the same in analytics; the
+difference is that I can now answer it for millions of rows
+instead of a sample.</code></pre></div>
+<p style="margin-top:14px"><strong>4. “What's your biggest weakness?”</strong> — sebutkan yang nyata, lalu apa yang sedang kamu kerjakan.</p>
+        <div class="kode"><pre><code>My formal statistics background is a gap I&#x27;m actively closing —
+I came from accounting, not from a maths degree. I&#x27;ve worked
+through probability, linear algebra, and optimisation, and I now
+write my own gradient descent rather than only calling a library.
+I still consider it a work in progress rather than a strength.</code></pre></div>
+        <div class="hasil"><span class="tag">KENAPA INI BEKERJA</span>
+          <strong>Jawaban itu benar</strong> — itu persis yang kamu kerjakan di MAT L1–L4, dan kamu bisa menceritakan detailnya kalau ditanya. Kelemahan yang jujur dan sedang ditangani jauh lebih kuat daripada “saya terlalu perfeksionis”, yang setiap pewawancara sudah dengar ratusan kali.</div>
+<p style="margin-top:14px"><strong>Kalau kamu macet di tengah kalimat</strong> — dan ini akan terjadi:</p>
+        <div class="kode"><pre><code>&quot;Let me rephrase that.&quot;
+&quot;Sorry, could you repeat the question?&quot;
+&quot;Give me a second to think about that.&quot;
+&quot;I want to make sure I understood — are you asking about X or Y?&quot;
+
+Yang TIDAK boleh: diam lama, lalu menjawab pertanyaan yang salah.</code></pre></div>
+        <div class="catatan"><strong>Meminta pengulangan tidak mengurangi nilaimu.</strong> Menjawab pertanyaan yang salah karena gengsi — itu yang mengurangi. Pewawancara yang baik justru menghargai orang yang memastikan dulu; itu sifat yang mereka cari di pekerjaannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Latihan yang tidak bisa dilewati</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-4-4"><label for="bekal-bahasa-inggris-4-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Rekam dirimu sendiri</strong> menjawab keempat pertanyaan itu, dalam bahasa Inggris, tanpa membaca teks. Pakai perekam suara ponsel. Dengarkan ulang. Catat: berapa kali kamu berhenti, kata apa yang tidak keluar, dan apakah jawabanmu di bawah 90 detik.<p style="margin-top:8px">Ulangi sampai keempatnya lancar. Ini satu-satunya cara yang bekerja, dan membaca modul ini bukan penggantinya.</p></div>
+        <div class="bahaya"><strong>Kesalahan persiapan yang paling umum:</strong> menghafal jawaban kata per kata. Begitu pewawancara mengubah sedikit pertanyaannya, hafalanmu tidak cocok dan kamu kehilangan arah. Hafalkan <em>kerangkanya</em> (STAR) dan <em>angkanya</em> (19,3%, 72 baris duplikat, Rp 340 juta) — kalimatnya biarkan berubah-ubah.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai</h3>
+      <p>Besok penutup: rapat, presentasi, dan ujian mandiri.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>Rapat, presentasi, dan ujian</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> punya kalimat siap pakai untuk situasi rapat yang paling sering terjadi, lalu menguji apakah lima hari ini melekat.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kalimat siap pakai untuk rapat</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-5-1"><label for="bekal-bahasa-inggris-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Situasi</th>
+<th>Kalimatnya</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Membuka presentasi</td><td>“I'll take about ten minutes. Three findings, and one question for you at the end.”</td></tr>
+              <tr><td>Menunjukkan angka</td><td>“Revenue is IDR 34.06 billion — that's 4% below target.”</td></tr>
+              <tr><td>Menyampaikan ketidakpastian</td><td>“This figure assumes the Dago export is complete. If it isn't, the number goes up.”</td></tr>
+              <tr><td>Tidak tahu jawabannya</td><td>“I don't have that in front of me. I'll check and come back to you today.”</td></tr>
+              <tr><td>Tidak setuju dengan sopan</td><td>“That's possible. What I'm seeing in the data is slightly different — can I show you?”</td></tr>
+              <tr><td>Diminta memangkas ruang lingkup</td><td>“I can do that by Friday if we drop the branch-level breakdown. Which matters more?”</td></tr>
+              <tr><td>Menutup</td><td>“So: three findings, one decision needed from you on the write-offs. I'll send the summary today.”</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">YANG PALING BERNILAI DI TABEL INI</span>
+          <strong>Baris keempat adalah yang paling sering dihindari orang, dan yang paling menaikkan kepercayaan.</strong> “I don't know, I'll check” diucapkan dengan tenang membuatmu terdengar seperti orang yang angkanya bisa dipercaya. Menebak di depan manajemen membuat semua angkamu yang lain ikut diragukan.</div>
+        <div class="catatan"><strong>Ini juga refleks KAP.</strong> Kamu tidak pernah menandatangani sesuatu yang belum kamu uji. Kalimat itu versi lisannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Angka dan tanggal dalam bahasa Inggris</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-5-2"><label for="bekal-bahasa-inggris-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Indonesia</th>
+<th>Inggris</th>
+<th>Catatan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Rp 34.064.231.408</td><td>IDR 34,064,231,408</td><td><strong>koma untuk ribuan</strong>, titik untuk desimal — kebalikan Indonesia</td></tr>
+              <tr><td>Rp 34,06 miliar</td><td>IDR 34.06 billion</td><td><em>billion</em> = miliar; <strong><em>bukan</em></strong> triliun</td></tr>
+              <tr><td>Rp 1,2 miliar</td><td>IDR 1.2 billion</td><td>desimal pakai titik</td></tr>
+              <tr><td>4,5%</td><td>4.5%</td><td>sama</td></tr>
+              <tr><td>7 September 2026</td><td>7 September 2026 (UK) / September 7, 2026 (US)</td><td>tulis nama bulannya, jangan 07/09</td></tr>
+              <tr><td>kuartal II</td><td>Q2</td><td>—</td></tr>
+              <tr><td>semester I</td><td>H1</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Dua kesalahan yang bisa sangat mahal.</strong><p style="margin-top:8px"><strong>Satu:</strong> menulis <code>34.064</code> yang di Indonesia berarti tiga puluh empat ribu, tapi dibaca penutur Inggris sebagai <em>tiga puluh empat koma nol enam empat</em>.</p><p style="margin-top:8px"><strong>Dua:</strong> menulis <code>07/09/2026</code> — di Inggris itu 7 September, di Amerika 9 Juli. Selalu tulis nama bulannya.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ujian: tujuh soal</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-5-3"><label for="bekal-bahasa-inggris-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Lowongan menulis &quot;SQL is essential; Python is a plus point.&quot;
+   Kamu belum kuat Python. Melamar atau tidak?
+2. Terjemahkan ke Inggris yang wajar:
+   &quot;Saya akan cek dulu datanya, nanti saya kabari.&quot;
+3. Apa yang salah: &quot;Please kindly find attached the report
+   regarding about June sales.&quot;
+4. Tulis satu baris subject email untuk temuan senilai
+   Rp 45 juta yang butuh keputusan atasan.
+5. Empat huruf STAR, dan mana yang wajib berisi angka?
+6. Tulis &quot;Rp 1.250.000.000&quot; dalam format Inggris, dua cara.
+7. Pewawancara bertanya sesuatu yang tidak kamu tangkap.
+   Apa yang kamu ucapkan?</code></pre></div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <strong>Melamar.</strong> <em>“a plus point”</em> berarti tidak wajib. Ini persis lowongan PwC di Jalur Pintu B — dan yang mereka sebut wajib adalah pemahaman akuntansi, yang sudah kamu punya.</p>
+            <p><strong>2.</strong> “Let me check the data first — I'll get back to you.” <em>(Bukan “I will inform to you”.)</em></p>
+            <p><strong>3.</strong> Tiga kesalahan: <em>please kindly</em> berlebihan, <em>regarding about</em> berulang, dan kalimatnya bertele-tele. Versi benar: “Attached is the June sales report.”</p>
+            <p><strong>4.</strong> Contoh: “June receivables — IDR 45m gap on 8 accounts, decision needed”. Ada angka, ada tindakan yang diminta.</p>
+            <p><strong>5.</strong> Situation, Task, Action, Result. <strong>Result wajib berisi angka</strong> — tanpa itu ceritanya tidak berakhir di mana pun.</p>
+            <p><strong>6.</strong> “IDR 1,250,000,000” atau “IDR 1.25 billion”. Koma untuk ribuan, titik untuk desimal.</p>
+            <p><strong>7.</strong> “Sorry, could you repeat the question?” atau “I want to make sure I understood — are you asking about X or Y?” Yang tidak boleh: diam lama lalu menjawab pertanyaan yang salah.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Yang tertutup, dan batasnya</h3>
+        <span class="cek"><input type="checkbox" id="bekal-bahasa-inggris-5-4"><label for="bekal-bahasa-inggris-5-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Sebelum</th>
+<th>Sesudah</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Bahasa Inggris kerja: 5 sebutan lewat di 41 modul</td><td>5 hari, disusun dari 639 kata lowongan sungguhan</td></tr>
+              <tr><td>Tidak tahu <em>“a plus point”</em> artinya tidak wajib</td><td>Sepuluh frasa lowongan dibedah artinya</td></tr>
+              <tr><td>Menulis email dari nol tiap kali</td><td>Empat kerangka siap isi</td></tr>
+              <tr><td>Belum pernah menyiapkan jawaban wawancara Inggris</td><td>Empat jawaban tertulis dari pengalamanmu sendiri</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Yang modul ini TIDAK bisa berikan:</strong> kelancaran berbicara. Itu hanya datang dari berbicara, berulang kali, dengan orang. Modul ini memberimu kerangka, kosakata, dan jawaban yang sudah disiapkan — tapi kalau kamu tidak pernah mengucapkannya keras-keras, kamu akan tetap macet di wawancara pertama.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Cari satu teman bicara mingguan — komunitas data, rekan KAP yang bekerja di perusahaan multinasional, atau pertukaran bahasa daring. Satu jam per minggu, dalam bahasa Inggris, membahas pekerjaan. Itu bagian yang tidak bisa digantikan modul mana pun.</div>
+        <div class="catatan"><strong>Dan kalau kamu mengejar S2 di luar negeri:</strong> lima hari ini bukan persiapan IELTS. IELTS menguji kemampuan akademik yang berbeda — menulis esai argumentatif, memahami ceramah panjang. Ini menyiapkanmu untuk <em>pekerjaannya</em>, bukan untuk <em>ujiannya</em>. Keduanya perlu, dan jangan tertukar.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal Bahasa Inggris Kerja selesai</h3>
+      <p>Bahasa yang dipakai menulis setiap lowongan yang kamu incar sekarang ada di kurikulummu. Berikutnya: menulis untuk manajemen — dalam bahasa apa pun.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/2427d59c-05e9-4074-98fd-eaa65ca2758e">Lanjut ke Menulis untuk Manajemen →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini.</p>
+    <p style="margin-top:10px">Daftar kosakata dihitung dengan menjalankan kodenya atas gabungan teks lima lowongan nyata dari Indeed Indonesia (Moladin, GOTO Group, PT Adi Sarana Armada, Smart Agribusiness, PT Entrust Digital), Agustus–September 2026: 639 kata, 324 kata unik setelah kata umum dibuang.</p>
+    <p style="margin-top:10px">Contoh email, pesan, dan jawaban wawancara di modul ini saya tulis sendiri sebagai kerangka — bukan kutipan dari sumber mana pun.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "bekal-bahasa-inggris";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

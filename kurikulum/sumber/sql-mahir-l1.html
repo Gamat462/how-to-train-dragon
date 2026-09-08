@@ -1,0 +1,1405 @@
+<title>SQL Mahir Level 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/010bd5cc-8f09-449b-b3de-7bba52005d31">← Kembali ke M15: Wawancara & Lamaran</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">SQL Mahir L1</span>
+  <button type="button" data-hari="1" aria-selected="true">S1</button>
+  <button type="button" data-hari="2" aria-selected="false">S2</button>
+  <button type="button" data-hari="3" aria-selected="false">S3</button>
+  <button type="button" data-hari="4" aria-selected="false">S4</button>
+  <button type="button" data-hari="5" aria-selected="false">S5</button>
+  <button type="button" data-hari="6" aria-selected="false">S6</button>
+  <button type="button" data-hari="7" aria-selected="false">S7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">SQL Mahir · Level 1 dari 5 · kerjakan setelah Modul M6</span>
+    <h1>SQL Mahir L1: dasar yang bolong</h1>
+    <p class="lede">Modul M1, M2, dan M6 sudah membawamu dari nol sampai bisa menulis query bertingkat dengan window function. Yang belum pernah disinggung sama sekali justru hal-hal yang membuat query <strong>diam-diam salah</strong> — bukan gagal dengan pesan merah, tapi mengembalikan angka yang terlihat wajar dan keliru.</p>
+    <p class="lede" style="margin-top:10px">Tujuh hari ini menutup lubang itu: aturan <code>NULL</code>, jebakan <code>NOT IN</code> yang paling terkenal di dunia SQL, lima jenis JOIN, self join, <code>HAVING</code>, dan operasi himpunan untuk rekonsiliasi dua sistem. Semua keluaran di halaman ini dihasilkan dengan menjalankan query-nya sungguhan pada basis data yang kamu buat di Hari 1.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ S1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR 1</span>
+      <h2>NULL bukan nol, dan bukan "kosong"</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjelaskan kenapa <code>NULL = NULL</code> bukan benar, dan menyebut tiga tempat <code>NULL</code> diam-diam mengubah hasil hitunganmu.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapkan basis data latihannya</h3>
+        <span class="cek"><input type="checkbox" id="s1s1"><label for="s1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Colab baru. Sel pertama membuat basis data <code>senja.db</code> berisi tujuh tabel — pola yang sama seperti jalur migas Hari 1, jadi kamu sudah kenal caranya. Jalankan apa adanya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3, random
+from datetime import date, timedelta
+rng = random.Random(11)
+con = sqlite3.connect("senja.db")
+con.executescript("""
+DROP TABLE IF EXISTS pelanggan; DROP TABLE IF EXISTS pesanan; DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS produk; DROP TABLE IF EXISTS pegawai; DROP TABLE IF EXISTS kunjungan;
+DROP TABLE IF EXISTS pesanan_kasir;
+CREATE TABLE pelanggan (id INTEGER PRIMARY KEY, nama TEXT, kota TEXT, tanggal_daftar TEXT, id_perujuk INTEGER);
+CREATE TABLE produk    (id INTEGER PRIMARY KEY, nama TEXT, kategori TEXT, harga INTEGER, harga_beli INTEGER);
+CREATE TABLE pesanan   (id INTEGER PRIMARY KEY, pelanggan_id INTEGER, tanggal TEXT, cabang TEXT, kanal TEXT, status TEXT);
+CREATE TABLE item      (id INTEGER PRIMARY KEY, pesanan_id INTEGER, produk_id INTEGER, jumlah INTEGER, harga_saat_itu INTEGER);
+CREATE TABLE pegawai   (id INTEGER PRIMARY KEY, nama TEXT, jabatan TEXT, cabang TEXT, id_atasan INTEGER, gaji INTEGER);
+CREATE TABLE kunjungan (id INTEGER PRIMARY KEY, pelanggan_id INTEGER, waktu TEXT);
+CREATE TABLE pesanan_kasir (id INTEGER PRIMARY KEY, tanggal TEXT, cabang TEXT, nilai INTEGER);
+""")
+produk = [(1,"Kopi Susu","Minuman",22000,7000),(2,"Americano","Minuman",18000,5000),
+          (3,"Teh Manis","Minuman",10000,2000),(4,"Roti Bakar","Makanan",15000,6000),
+          (5,"Croissant","Makanan",25000,11000),(6,"Cheesecake","Makanan",30000,None),
+          (7,"Matcha Latte","Minuman",26000,None)]
+con.executemany("INSERT INTO produk VALUES (?,?,?,?,?)", produk)
+kota = ["Jakarta","Bandung","Yogyakarta",None]
+nama = ["Rina","Bayu","Sari","Dimas","Putri","Agus","Maya","Fajar","Intan","Yoga",
+        "Nadia","Reza","Lita","Hendra","Tari","Wawan","Sinta","Bagus","Vira","Andi"]
+con.executemany("INSERT INTO pelanggan VALUES (?,?,?,?,?)", [
+    (i, n, kota[rng.randrange(4)], (date(2023,1,1)+timedelta(days=rng.randrange(500))).isoformat(),
+     (rng.choice([None,None,rng.randint(1,max(1,i-1))]) if i&gt;1 else None)) for i,n in enumerate(nama,1)])
+con.executemany("INSERT INTO pegawai VALUES (?,?,?,?,?,?)", [
+    (1,"Pak Hardi","Pemilik",None,None,25000000),(2,"Bu Rina","Manajer Area","Jakarta",1,14000000),
+    (3,"Sinta","Kepala Cabang","Kemang",2,9000000),(4,"Bagus","Kepala Cabang","Dago",2,8500000),
+    (5,"Vira","Kepala Cabang","Seturan",2,8500000),(6,"Andi","Barista","Kemang",3,4500000),
+    (7,"Tari","Barista","Kemang",3,4500000),(8,"Wawan","Barista","Dago",4,4200000),
+    (9,"Yoga","Kasir","Seturan",5,4000000),(10,"Lita","Kasir","Kemang",3,4000000)])
+cab=["Kemang","Dago","Seturan"]; kan=["Dine-in","Take-away","Ojol"]; pid=iid=1
+for _ in range(400):
+    p = rng.choice([None]+list(range(1,18))+list(range(1,18)))
+    con.execute("INSERT INTO pesanan VALUES (?,?,?,?,?,?)", (pid, p,
+        (date(2024,1,1)+timedelta(days=rng.randrange(182))).isoformat(),
+        rng.choice(cab), rng.choice(kan), rng.choices(["selesai","batal"],weights=[92,8])[0]))
+    for _ in range(rng.randint(1,3)):
+        pr = rng.randrange(1,8)
+        con.execute("INSERT INTO item VALUES (?,?,?,?,?)", (iid,pid,pr,rng.randint(1,4),produk[pr-1][3])); iid+=1
+    pid+=1
+kid=1
+for p in range(1,21):
+    t = date(2024,3,1)
+    for _ in range(rng.randint(3,12)):
+        t += timedelta(days=rng.choice([0,0,1,1,2,5,9,20]))
+        con.execute("INSERT INTO kunjungan VALUES (?,?,?)",
+                    (kid,p,t.isoformat()+f" {rng.randrange(8,21):02d}:{rng.randrange(60):02d}")); kid+=1
+nilai = dict(con.execute("""SELECT o.id, SUM(i.jumlah*i.harga_saat_itu) FROM pesanan o
+    JOIN item i ON i.pesanan_id=o.id WHERE o.status='selesai' GROUP BY o.id""").fetchall())
+info = {r[0]:(r[1],r[2]) for r in con.execute("SELECT id,tanggal,cabang FROM pesanan")}
+beda = {12:50000, 199:-25000}
+for oid,v in nilai.items():
+    if oid in (7,88,251): continue
+    con.execute("INSERT INTO pesanan_kasir VALUES (?,?,?,?)", (oid,info[oid][0],info[oid][1],v+beda.get(oid,0)))
+for e,v in [(9001,120000),(9002,75000)]:
+    con.execute("INSERT INTO pesanan_kasir VALUES (?,?,?,?)", (e,"2024-04-15","Kemang",v))
+con.commit()
+print("Basis data 'senja.db' siap.")
+for t in ["pelanggan","produk","pesanan","item","pegawai","kunjungan","pesanan_kasir"]:
+    print(f"  {t:&lt;14}", con.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0], "baris")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Basis data 'senja.db' siap.
+  pelanggan      20 baris
+  produk         7 baris
+  pesanan        400 baris
+  item           788 baris
+  pegawai        10 baris
+  kunjungan      158 baris
+  pesanan_kasir  361 baris</code></pre>
+          </div>
+        </div>
+        <p>Sel kedua, alat untuk menjalankan SQL dan menampilkan hasilnya sebagai tabel:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+def q(sql):
+    return pd.read_sql(sql, con)
+
+q("SELECT * FROM produk")</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Colab menampilkan hasil <code>q(...)</code> sebagai tabel rapi, bukan teks polos.</strong> Kotak "HARUS MUNCUL" di halaman ini menampilkan versi teksnya (yang muncul kalau kamu menulis <code>print(q(...))</code>) — yang perlu kamu cocokkan angkanya, bukan spasi dan garisnya.<p style="margin-top:8px"><strong>Kalau angka barismu berbeda dari daftar di atas, berhenti dan jalankan ulang sel pertama dari awal.</strong> Seluruh angka di tujuh hari ini dihitung dari basis data itu persis. Angka acaknya dikunci lewat <code>random.Random(11)</code>, jadi hasilnya sama di komputer mana pun — asal selnya dijalankan sekali, berurutan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tiga nilai kebenaran, bukan dua</h3>
+        <span class="cek"><input type="checkbox" id="s1s2"><label for="s1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di Python, sebuah perbandingan menghasilkan <code>True</code> atau <code>False</code>. Di SQL ada <strong>tiga</strong> kemungkinan: benar, salah, dan <em>tidak diketahui</em>. Itu seluruh sumber kebingungan tentang <code>NULL</code>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT NULL = NULL      AS 'NULL=NULL',
+            NULL &lt;&gt; NULL     AS 'NULL<>NULL',
+            (NULL IS NULL)   AS 'NULL IS NULL',
+            (1 = 1)          AS benar,
+            (1 = 2)          AS salah""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  NULL=NULL  NULL<>NULL  NULL IS NULL  benar  salah
+0       None        None             1      1      0</code></pre>
+          </div>
+        </div>
+        <p>Baca pelan-pelan. <code>NULL = NULL</code> bukan benar (1) dan bukan salah (0) — hasilnya <strong><code>None</code>, yaitu NULL itu sendiri</strong>. Begitu juga <code>NULL &lt;&gt; NULL</code>.</p>
+        <p>Sebabnya masuk akal begitu kamu berhenti membaca <code>NULL</code> sebagai "kosong" dan mulai membacanya sebagai <strong>"tidak diketahui"</strong>. Kalau umur dua orang sama-sama tidak diketahui, apakah umur mereka sama? Kamu tidak tahu. Jawabannya bukan ya, bukan tidak — <em>tidak diketahui</em>.</p>
+        <div class="bahaya">
+          <strong>Dan inilah akibatnya:</strong> <code>WHERE</code> hanya meloloskan baris yang syaratnya bernilai <strong>benar</strong>. Yang bernilai "tidak diketahui" ikut dibuang, sama seperti yang salah. Jadi <code>WHERE kota &lt;&gt; 'Jakarta'</code> <em>tidak</em> mengembalikan pelanggan yang kotanya <code>NULL</code> — padahal secara logika bisnis mereka jelas bukan Jakarta.
+          <p style="margin-top:8px">Satu-satunya cara memeriksa NULL adalah <code>IS NULL</code> dan <code>IS NOT NULL</code>. Tidak pernah dengan <code>=</code> atau <code>&lt;&gt;</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>COUNT(*) dan COUNT(kolom) menjawab pertanyaan berbeda</h3>
+        <span class="cek"><input type="checkbox" id="s1s3"><label for="s1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT COUNT(*)             AS semua,
+            COUNT(kota)          AS kota_terisi,
+            COUNT(DISTINCT kota) AS kota_unik
+     FROM pelanggan""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   semua  kota_terisi  kota_unik
+0     20           14          3</code></pre>
+          </div>
+        </div>
+        <p>Dua puluh pelanggan, tapi hanya <strong>14</strong> yang punya kota. <code>COUNT(*)</code> menghitung baris; <code>COUNT(kota)</code> menghitung <em>nilai yang tidak NULL</em> di kolom itu. Enam pelanggan tidak tercatat kotanya.</p>
+        <div class="catatan">
+          <strong>Selisih dua angka ini adalah pemeriksaan kelengkapan data yang paling murah yang kamu punya.</strong> Jalankan <code>COUNT(*)</code> dan <code>COUNT(kolom)</code> berdampingan untuk tiap kolom penting sebelum menganalisis apa pun. Kalau selisihnya besar, setiap rata-rata dan setiap pengelompokan yang memakai kolom itu berdiri di atas data yang tidak lengkap — dan tidak ada yang akan memberitahumu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Rata-rata yang salah 40% tanpa satu pun pesan error</h3>
+        <span class="cek"><input type="checkbox" id="s1s4"><label for="s1s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Dua dari tujuh produk belum ada harga belinya. Berapa rata-rata harga beli?</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT COUNT(*)                              AS produk,
+            COUNT(harga_beli)                     AS ada_harga_beli,
+            ROUND(AVG(harga_beli), 1)             AS avg_abaikan_null,
+            ROUND(SUM(harga_beli)*1.0/COUNT(*),1) AS avg_anggap_nol
+     FROM produk""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   produk  ada_harga_beli  avg_abaikan_null  avg_anggap_nol
+0       7               5            6200.0          4428.6</code></pre>
+          </div>
+        </div>
+        <p>Dua jawaban, selisihnya <strong>40%</strong>, dari data yang sama persis. <code>AVG</code> membagi dengan 5 (yang terisi), bukan 7. Rumus kedua membagi dengan 7, artinya menganggap dua produk itu harga belinya nol rupiah.</p>
+        <div class="bahaya">
+          <strong>Tidak ada yang salah dari keduanya — yang salah adalah tidak tahu mana yang sedang kamu pakai.</strong> "Rata-rata harga beli produk yang datanya sudah lengkap" dan "rata-rata harga beli seluruh produk, menganggap yang belum tercatat bernilai nol" adalah dua kalimat yang berbeda. <code>AVG</code> selalu memberimu yang pertama, diam-diam.
+          <p style="margin-top:8px">Kalau kamu melaporkan <em>"rata-rata harga beli kami Rp 6.200"</em> tanpa menyebut bahwa dua produk belum tercatat, kamu memberi pernyataan yang lebih pasti daripada yang didukung datanya. Kamu sudah terlatih menghindari itu — di SQL, jebakannya cuma lebih tersembunyi.</p>
+        </div>
+        <div class="aksi">
+          <span class="tag">KERJAKAN SENDIRI</span>
+          <p>Tulis query yang menampilkan nama produk yang <code>harga_beli</code>-nya belum terisi. Lalu pikirkan: kalau kamu diminta menghitung <em>margin</em> per produk, dua produk itu harus muncul sebagai margin nol, margin 100%, atau tidak muncul sama sekali?</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>q("SELECT nama, harga, harga_beli FROM produk WHERE harga_beli IS NULL")</code></pre></div>
+          <div class="kode"><pre><code>           nama  harga harga_beli
+0    Cheesecake  30000       None
+1  Matcha Latte  26000       None</code></pre></div>
+          <p style="margin-top:8px"><strong>Tidak muncul sama sekali</strong> — dan disebutkan terpisah sebagai "2 produk belum bisa dihitung marginnya karena harga beli belum tercatat". Margin nol itu bohong (seolah dijual rugi total), margin 100% juga bohong (seolah gratis). Yang benar adalah mengakui bahwa jawabannya belum ada, lalu memberitahu siapa yang harus melengkapi datanya.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir 1 selesai</h3>
+      <p><strong>Catat:</strong> SQL punya <strong>tiga</strong> nilai kebenaran — benar, salah, tidak diketahui · <code>NULL</code> berarti "tidak diketahui", bukan "kosong" atau "nol" · <code>WHERE</code> membuang baris yang syaratnya "tidak diketahui" · periksa NULL hanya dengan <code>IS NULL</code> · <code>COUNT(*)</code> vs <code>COUNT(kolom)</code> = pemeriksaan kelengkapan termurah · <code>AVG</code> mengabaikan NULL, tidak menganggapnya nol.</p>
+    </div>
+  </section>
+
+  <!-- ============ S2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR 2</span>
+      <h2>Jebakan NOT IN — query yang menjawab "nol" padahal jawabannya tiga</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis pertanyaan "siapa yang <em>tidak</em> pernah…" dengan cara yang tidak bisa salah, dan menjelaskan kenapa cara yang paling wajar justru berbahaya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Pertanyaannya sederhana: pelanggan mana yang belum pernah memesan?</h3>
+        <span class="cek"><input type="checkbox" id="s2s1"><label for="s2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pertanyaan bisnis yang wajar — daftar itu dipakai untuk kirim promo. Cara menulisnya yang paling langsung, dan yang akan ditulis hampir semua orang:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT nama FROM pelanggan
+     WHERE id NOT IN (SELECT pelanggan_id FROM pesanan)""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Empty DataFrame
+Columns: [nama]
+Index: []</code></pre>
+          </div>
+        </div>
+        <p>Kosong. Kesimpulan yang wajar: semua pelanggan sudah pernah memesan, tidak ada yang perlu dikirimi promo. Query-nya jalan, tidak ada pesan error, hasilnya masuk akal.</p>
+        <p><strong>Dan hasilnya salah.</strong></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tanyakan hal yang sama dengan tiga cara lain</h3>
+        <span class="cek"><input type="checkbox" id="s2s2"><label for="s2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+SELECT 'NOT IN' AS cara,
+       (SELECT COUNT(*) FROM pelanggan
+        WHERE id NOT IN (SELECT pelanggan_id FROM pesanan)) AS hasil
+UNION ALL SELECT 'NOT EXISTS',
+       (SELECT COUNT(*) FROM pelanggan p
+        WHERE NOT EXISTS (SELECT 1 FROM pesanan o WHERE o.pelanggan_id = p.id))
+UNION ALL SELECT 'LEFT JOIN IS NULL',
+       (SELECT COUNT(*) FROM pelanggan p
+        LEFT JOIN pesanan o ON o.pelanggan_id = p.id WHERE o.id IS NULL)
+UNION ALL SELECT 'NOT IN + saring NULL',
+       (SELECT COUNT(*) FROM pelanggan
+        WHERE id NOT IN (SELECT pelanggan_id FROM pesanan WHERE pelanggan_id IS NOT NULL))
+""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>                   cara  hasil
+0                NOT IN      0
+1            NOT EXISTS      3
+2     LEFT JOIN IS NULL      3
+3  NOT IN + saring NULL      3</code></pre>
+          </div>
+        </div>
+        <p>Tiga cara menjawab <strong>3</strong>. Satu cara menjawab <strong>0</strong>. Mereka pertanyaan yang sama.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT nama FROM pelanggan p
+     WHERE NOT EXISTS (SELECT 1 FROM pesanan o WHERE o.pelanggan_id = p.id)
+     ORDER BY nama""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    nama
+0   Andi
+1  Bagus
+2   Vira</code></pre>
+          </div>
+        </div>
+        <p>Andi, Bagus, dan Vira nyata-nyata belum pernah memesan. Query pertama tidak menemukan mereka.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa: satu NULL merusak seluruh daftar</h3>
+        <span class="cek"><input type="checkbox" id="s2s3"><label for="s2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("SELECT COUNT(*) AS pesanan_tanpa_pelanggan_id FROM pesanan WHERE pelanggan_id IS NULL")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   pesanan_tanpa_pelanggan_id
+0                          12</code></pre>
+          </div>
+        </div>
+        <p>Dua belas pesanan dari tamu yang tidak punya akun, jadi <code>pelanggan_id</code>-nya <code>NULL</code>. Sekarang lihat apa arti <code>NOT IN</code> sebenarnya. Kalau daftarnya berisi <code>(3, 7, NULL)</code>, maka:</p>
+        <p style="text-align:center;margin:12px 0"><code>id NOT IN (3, 7, NULL)</code> &nbsp;sama dengan&nbsp; <code>id &lt;&gt; 3 AND id &lt;&gt; 7 AND id &lt;&gt; NULL</code></p>
+        <p>Bagian terakhir, <code>id &lt;&gt; NULL</code>, selalu bernilai <strong>tidak diketahui</strong> — persis seperti yang kamu lihat kemarin. Dan <code>benar AND tidak diketahui</code> hasilnya tidak diketahui. Jadi seluruh syaratnya tidak pernah bisa bernilai benar, untuk baris mana pun. <code>WHERE</code> membuang semuanya.</p>
+        <div class="bahaya">
+          <strong>Ini bukan kerusakan, ini memang aturannya.</strong> Dan akibatnya persis satu arah: <code>NOT IN</code> yang daftarnya mengandung <code>NULL</code> selalu mengembalikan <strong>nol baris</strong>. Bukan "sebagian salah" — kosong seluruhnya, setiap kali.
+          <p style="margin-top:8px">Yang membuatnya berbahaya: hasil kosong hampir tidak pernah dicurigai. "Tidak ada pelanggan yang belum memesan" terdengar seperti kabar baik, bukan seperti bug. Dan kolom yang hari ini tidak punya NULL bisa mulai punya NULL bulan depan tanpa ada yang memberitahumu — query yang dulu benar jadi salah dengan sendirinya.</p>
+        </div>
+        <div class="catatan">
+          <strong>Perhatikan bahwa <code>IN</code> biasa tidak punya masalah ini.</strong> <code>id IN (3, 7, NULL)</code> tetap benar untuk id 3 dan 7 — cukup satu bagian bernilai benar. Yang rusak hanya bentuk negatifnya, karena <code>AND</code> menuntut <em>semua</em> bagian bernilai benar.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Aturan yang dipakai seterusnya</h3>
+        <span class="cek"><input type="checkbox" id="s2s4"><label for="s2s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Bentuk</th><th>Aman?</th><th>Pakai kalau</th></tr></thead>
+            <tbody>
+              <tr><td><code>NOT EXISTS (...)</code></td><td><strong>Selalu aman</strong></td><td>Bawaan. Tidak peduli ada NULL atau tidak.</td></tr>
+              <tr><td><code>LEFT JOIN ... WHERE x IS NULL</code></td><td>Aman</td><td>Kalau kamu juga butuh kolom dari tabel kanan</td></tr>
+              <tr><td><code>NOT IN (SELECT ... WHERE kol IS NOT NULL)</code></td><td>Aman, tapi rapuh</td><td>Hindari — orang berikutnya akan menghapus penyaringnya</td></tr>
+              <tr><td><code>NOT IN (SELECT ...)</code></td><td><strong>Berbahaya</strong></td><td>Jangan, kecuali kolomnya dijamin <code>NOT NULL</code> di skema</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Jadikan <code>NOT EXISTS</code> refleks.</strong> Ia sedikit lebih panjang ditulis, tidak pernah salah, dan di sebagian besar mesin basis data kecepatannya sama atau lebih baik. Tidak ada alasan memilih <code>NOT IN</code> untuk subquery.
+          <p style="margin-top:8px">Ini juga salah satu pertanyaan wawancara SQL yang paling sering muncul untuk posisi di atas pemula. Kalau kamu bisa menjelaskan <em>kenapa</em> hasilnya nol — bukan sekadar "pakai NOT EXISTS saja" — kamu terdengar seperti orang yang pernah kena, bukan yang pernah membaca.</p>
+        </div>
+        <div class="aksi">
+          <span class="tag">KERJAKAN SENDIRI</span>
+          <p>Tulis query yang menjawab: <strong>produk mana yang belum pernah dipesan sama sekali?</strong> Pakai <code>NOT EXISTS</code>. Lalu coba versi <code>NOT IN</code>-nya dan jelaskan kenapa kali ini hasilnya sama.</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>q("""SELECT nama FROM produk pr
+     WHERE NOT EXISTS (SELECT 1 FROM item i WHERE i.produk_id = pr.id)""")</code></pre></div>
+          <div class="kode"><pre><code>Empty DataFrame
+Columns: [nama]
+Index: []</code></pre></div>
+          <p>Kosong — dan kali ini kosongnya <strong>benar</strong>: ketujuh produk memang pernah terjual.</p>
+          <p style="margin-top:8px">Versi <code>NOT IN</code>-nya memberi jawaban yang sama karena kolom <code>item.produk_id</code> tidak pernah <code>NULL</code> — setiap baris item pasti menunjuk ke sebuah produk. Di sinilah letak jebakannya: <code>NOT IN</code> berfungsi normal <em>sampai</em> suatu hari ada NULL yang masuk. Query yang kelihatan benar hari ini bisa berubah jadi salah tanpa kamu menyentuhnya.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir 2 selesai</h3>
+      <p><strong>Catat:</strong> <code>NOT IN</code> yang daftarnya mengandung <code>NULL</code> selalu mengembalikan <strong>nol baris</strong> · <code>IN</code> biasa tidak bermasalah, hanya bentuk negatifnya · pakai <code>NOT EXISTS</code> sebagai bawaan, selamanya · dan hasil kosong adalah hasil yang paling jarang dicurigai orang — justru itu yang membuatnya mahal.</p>
+    </div>
+  </section>
+
+  <!-- ============ S3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR 3</span>
+      <h2>Lima jenis JOIN, dan cara membuktikan mana yang benar</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memilih jenis JOIN dari pertanyaannya, dan memeriksa hasilnya lewat jumlah baris — bukan lewat perasaan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Periksa dulu versi mesin basis datamu</h3>
+        <span class="cek"><input type="checkbox" id="s3s1"><label for="s3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><code>RIGHT JOIN</code> dan <code>FULL OUTER JOIN</code> baru didukung SQLite sejak versi <strong>3.39</strong> (rilis 2022). Kalau versimu lebih tua, dua baris di langkah berikutnya akan gagal — jadi periksa dulu, jangan menebak.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3
+print("SQLite versi", sqlite3.sqlite_version)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>SQLite versi 3.45.1</code></pre>
+          <p style="margin-top:8px">Versimu boleh berbeda — yang penting <strong>3.39 atau lebih baru</strong>. Kalau lebih tua, lewati baris RIGHT dan FULL di langkah 2; kamu tetap bisa mengerjakan sisanya.</p>
+          </div>
+        </div>
+        <div class="catatan">
+          <strong>Kebiasaan yang layak dibawa:</strong> sebelum memakai fitur SQL yang jarang, cek dulu apakah mesinnya mendukung. PostgreSQL, BigQuery, dan SQL Server mendukung kelima JOIN sejak lama; MySQL tidak punya <code>FULL OUTER JOIN</code> sama sekali dan harus ditiru dengan <code>UNION</code>. Perbedaan dialek seperti ini yang membuat query "yang tadi jalan" tiba-tiba gagal di tempat kerja baru.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Lima JOIN pada dua tabel yang sama</h3>
+        <span class="cek"><input type="checkbox" id="s3s2"><label for="s3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+SELECT 'INNER' AS jenis, COUNT(*) AS baris
+  FROM pelanggan p JOIN pesanan o ON o.pelanggan_id = p.id
+UNION ALL SELECT 'LEFT', COUNT(*)
+  FROM pelanggan p LEFT JOIN pesanan o ON o.pelanggan_id = p.id
+UNION ALL SELECT 'RIGHT', COUNT(*)
+  FROM pelanggan p RIGHT JOIN pesanan o ON o.pelanggan_id = p.id
+UNION ALL SELECT 'FULL OUTER', COUNT(*)
+  FROM pelanggan p FULL OUTER JOIN pesanan o ON o.pelanggan_id = p.id
+UNION ALL SELECT 'CROSS', COUNT(*)
+  FROM pelanggan CROSS JOIN produk
+""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>        jenis  baris
+0       INNER    388
+1        LEFT    391
+2       RIGHT    400
+3  FULL OUTER    403
+4       CROSS    140</code></pre>
+          </div>
+        </div>
+        <p>Sekarang bagian pentingnya: <strong>kelima angka itu bisa kamu buktikan sendiri.</strong> Kamu sudah tahu dua fakta dari hari-hari sebelumnya — ada <strong>12</strong> pesanan tanpa <code>pelanggan_id</code>, dan <strong>3</strong> pelanggan tanpa pesanan.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Jenis</th><th>Baris</th><th>Dari mana angkanya</th></tr></thead>
+            <tbody>
+              <tr><td>INNER</td><td class="mono">388</td><td>Hanya pasangan yang cocok di kedua sisi</td></tr>
+              <tr><td>LEFT</td><td class="mono">391</td><td>388 + <strong>3</strong> pelanggan yang tidak punya pesanan</td></tr>
+              <tr><td>RIGHT</td><td class="mono">400</td><td>388 + <strong>12</strong> pesanan tamu = seluruh 400 pesanan</td></tr>
+              <tr><td>FULL OUTER</td><td class="mono">403</td><td>388 + 3 + 12 = semua dari dua sisi</td></tr>
+              <tr><td>CROSS</td><td class="mono">140</td><td>20 pelanggan × 7 produk, tanpa syarat sama sekali</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Inilah cara memeriksa JOIN yang seharusnya jadi refleksmu.</strong> Sebelum melihat isinya, hitung dulu barisnya dan tanyakan: <em>angka ini masuk akal tidak?</em> JOIN yang benar hampir selalu menghasilkan jumlah baris yang bisa kamu jelaskan asalnya. Kalau tidak bisa kamu jelaskan, biasanya ada baris yang berlipat ganda — bahaya nomor satu dalam menggabungkan tabel, dan persis yang diuji oleh test rekonsiliasi di Modul M10.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Pilih jenisnya dari pertanyaannya</h3>
+        <span class="cek"><input type="checkbox" id="s3s3"><label for="s3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Pertanyaannya berbunyi</th><th>Jenisnya</th></tr></thead>
+            <tbody>
+              <tr><td>"…pelanggan <strong>yang pernah</strong> memesan"</td><td><code>INNER JOIN</code></td></tr>
+              <tr><td>"<strong>semua</strong> pelanggan, berikut pesanannya <strong>kalau ada</strong>"</td><td><code>LEFT JOIN</code></td></tr>
+              <tr><td>"pelanggan yang <strong>belum pernah</strong> memesan"</td><td><code>LEFT JOIN</code> + <code>WHERE ... IS NULL</code>, atau <code>NOT EXISTS</code></td></tr>
+              <tr><td>"apa saja yang <strong>tidak cocok</strong> di antara dua sistem"</td><td><code>FULL OUTER JOIN</code>, atau <code>EXCEPT</code> dua arah (Hari 6)</td></tr>
+              <tr><td>"<strong>tiap</strong> cabang dipasangkan dengan <strong>tiap</strong> produk"</td><td><code>CROSS JOIN</code> — untuk membuat kerangka lengkap</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong><code>RIGHT JOIN</code> hampir tidak pernah perlu ditulis.</strong> <code>A RIGHT JOIN B</code> sama persis dengan <code>B LEFT JOIN A</code>, dan yang kedua jauh lebih mudah dibaca karena tabel utamanya disebut duluan. Kenali bentuknya supaya bisa membaca kode orang lain, lalu tulis sendiri selalu dengan LEFT.
+        </div>
+        <div class="catatan">
+          <strong><code>CROSS JOIN</code> terlihat tidak berguna sampai kamu butuh satu hal:</strong> kerangka yang lengkap. Kalau bulan Maret cabang Seturan tidak menjual satu pun Croissant, baris itu <em>tidak ada</em> di data — dan laporanmu akan melewatkannya, bukan menampilkannya sebagai nol. <code>CROSS JOIN</code> antara daftar cabang dan daftar produk membuat semua kombinasi lebih dulu, baru datanya ditempelkan dengan <code>LEFT JOIN</code>. Yang kosong jadi kelihatan.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir 3 selesai</h3>
+      <p><strong>Catat:</strong> hitung jumlah baris tiap JOIN dan <strong>jelaskan asal angkanya</strong> sebelum melihat isinya · LEFT = inner + yang yatim di kiri · FULL = inner + yatim kiri + yatim kanan · tulis <code>LEFT</code>, jangan <code>RIGHT</code> · <code>CROSS JOIN</code> dipakai untuk membuat kerangka lengkap supaya yang bernilai nol tetap muncul.</p>
+    </div>
+  </section>
+
+  <!-- ============ S4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR 4</span>
+      <h2>Self join: satu tabel yang menunjuk dirinya sendiri</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menggabungkan sebuah tabel dengan dirinya sendiri untuk membaca hubungan antar barisnya — perujuk, atasan, dan perbandingan antar periode.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapa merujuk siapa</h3>
+        <span class="cek"><input type="checkbox" id="s4s1"><label for="s4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tabel <code>pelanggan</code> punya kolom <code>id_perujuk</code> yang menunjuk ke <code>id</code> di tabel yang sama. Untuk membaca namanya, tabel itu harus digabung dengan dirinya sendiri — dengan <strong>dua nama alias yang berbeda</strong>, supaya SQL tahu sisi mana yang kamu maksud.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT p.nama AS pelanggan, r.nama AS perujuk
+     FROM pelanggan p
+     JOIN pelanggan r ON p.id_perujuk = r.id
+     ORDER BY p.nama""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  pelanggan perujuk
+0      Agus    Rina
+1    Hendra    Bayu
+2     Intan   Dimas
+3      Lita   Dimas
+4      Vira    Maya
+5     Wawan    Rina</code></pre>
+          </div>
+        </div>
+        <p>Perhatikan bahwa <code>p</code> dan <code>r</code> adalah tabel yang sama. Aliaslah yang membuat query ini masuk akal — tanpa itu, <code>nama</code> akan ambigu dan SQL menolak.</p>
+        <div class="bahaya">
+          <strong>Enam baris saja, dari 20 pelanggan.</strong> Ini <code>INNER JOIN</code>, jadi pelanggan yang <code>id_perujuk</code>-nya <code>NULL</code> (datang sendiri, bukan dari rujukan) hilang seluruhnya. Kalau pertanyaannya "berapa persen pelanggan datang dari rujukan?", memakai query ini sebagai penyebut akan salah — penyebutnya harus 20, bukan 6.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Hierarki: pegawai dan atasannya</h3>
+        <span class="cek"><input type="checkbox" id="s4s2"><label for="s4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pola yang sama, tapi dengan <code>LEFT JOIN</code> supaya yang tidak punya atasan tetap muncul:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT b.nama, b.jabatan, a.nama AS atasan
+     FROM pegawai b
+     LEFT JOIN pegawai a ON b.id_atasan = a.id
+     ORDER BY b.id""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>        nama        jabatan     atasan
+0  Pak Hardi        Pemilik       None
+1    Bu Rina   Manajer Area  Pak Hardi
+2      Sinta  Kepala Cabang    Bu Rina
+3      Bagus  Kepala Cabang    Bu Rina
+4       Vira  Kepala Cabang    Bu Rina
+5       Andi        Barista      Sinta
+6       Tari        Barista      Sinta
+7      Wawan        Barista      Bagus
+8       Yoga          Kasir       Vira
+9       Lita          Kasir      Sinta</code></pre>
+          </div>
+        </div>
+        <p>Sepuluh baris, semua pegawai muncul. Pak Hardi atasannya <code>None</code> — dia pemiliknya. Kalau tadi dipakai <code>INNER JOIN</code>, pemiliknya hilang dari daftar pegawai, dan tidak ada yang akan menyadarinya.</p>
+        <div class="catatan">
+          <strong>Query ini hanya membaca <em>satu</em> tingkat ke atas.</strong> Untuk pertanyaan "siapa saja yang berada di bawah Bu Rina, sampai berapa pun tingkatnya", satu self join tidak cukup — butuh <strong>recursive CTE</strong>, yang dibahas di Level 2. Kenali batasnya sekarang supaya kamu tahu kapan alat ini kurang.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Nama yang sama di dua tabel bukan berarti orang yang sama</h3>
+        <span class="cek"><input type="checkbox" id="s4s3"><label for="s4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ada yang mungkin sudah kamu perhatikan: <strong>Vira</strong>, <strong>Bagus</strong>, dan <strong>Andi</strong> muncul di tabel <code>pegawai</code> — dan mereka juga tiga pelanggan yang belum pernah memesan di Hari 2.</p>
+        <div class="bahaya">
+          <strong>Itu kebetulan, bukan hubungan.</strong> Tabel <code>pelanggan</code> dan <code>pegawai</code> tidak punya kaitan apa pun di basis data ini; namanya kebetulan diambil dari daftar yang sama. Kalau kamu menggabungkan dua tabel itu <code>ON pelanggan.nama = pegawai.nama</code>, kamu akan menghasilkan tiga baris yang terlihat bermakna dan sepenuhnya karangan.
+          <p style="margin-top:8px"><strong>Nama bukan kunci.</strong> Menggabungkan tabel lewat nama orang, nama perusahaan, atau nama produk adalah salah satu sumber kesalahan paling umum di pekerjaan nyata — apalagi di Indonesia, di mana satu orang bisa punya satu kata nama saja dan ribuan orang punya nama yang sama. Gabungkan lewat <code>id</code>. Kalau tidak ada <code>id</code> bersama, itu temuan yang harus dilaporkan, bukan masalah yang diakali.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir 4 selesai</h3>
+      <p><strong>Catat:</strong> self join = tabel yang sama, dua alias berbeda · pakai <code>LEFT</code> kalau baris tanpa pasangan harus tetap muncul (pemilik tanpa atasan) · satu self join membaca <strong>satu</strong> tingkat saja — lebih dalam butuh recursive CTE · dan jangan pernah menggabungkan tabel lewat nama orang.</p>
+    </div>
+  </section>
+
+  <!-- ============ S5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR 5</span>
+      <h2>WHERE vs HAVING, dan urutan yang sebenarnya dijalankan</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyebut urutan SQL dijalankan (bukan urutan ditulis), dan tahu kenapa itu menjelaskan hampir semua pesan error yang membingungkan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Menyaring sebelum, atau menyaring sesudah</h3>
+        <span class="cek"><input type="checkbox" id="s5s1"><label for="s5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><code>HAVING</code> tidak pernah muncul di Modul M1–M6, padahal ia setengah dari cara menyaring di SQL. Bedanya satu kalimat: <strong><code>WHERE</code> menyaring baris sebelum dikelompokkan, <code>HAVING</code> menyaring kelompok sesudah dihitung.</strong></p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT cabang, COUNT(*) AS pesanan
+     FROM pesanan
+     WHERE status = 'selesai'          -- saring BARIS dulu
+     GROUP BY cabang
+     HAVING COUNT(*) > 100             -- saring KELOMPOK sesudahnya
+     ORDER BY pesanan DESC""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    cabang  pesanan
+0     Dago      122
+1  Seturan      120
+2   Kemang      120</code></pre>
+          </div>
+        </div>
+        <p>Dua penyaring dalam satu query, mengerjakan hal yang berbeda. <code>WHERE</code> membuang pesanan yang dibatalkan sebelum apa pun dihitung. <code>HAVING</code> membuang cabang yang pesanannya 100 ke bawah — dan itu hanya bisa dinilai <em>setelah</em> jumlahnya ada.</p>
+        <div class="bahaya">
+          <strong>Coba tukar tempatnya, dan lihat apa yang terjadi:</strong>
+          <div class="kode" style="margin-top:8px"><pre><code>q("SELECT cabang FROM pesanan WHERE COUNT(*) > 100 GROUP BY cabang")</code></pre></div>
+          <div class="kode"><pre><code>OperationalError: misuse of aggregate: COUNT()</code></pre></div>
+          <p style="margin-top:8px">Bukan karena aturannya rewel. Saat <code>WHERE</code> dijalankan, pengelompokan <strong>belum terjadi</strong> — jadi <code>COUNT(*)</code> belum punya arti apa pun. Tidak ada yang bisa dihitung dari satu baris.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Urutan ditulis vs urutan dijalankan</h3>
+        <span class="cek"><input type="checkbox" id="s5s2"><label for="s5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>SQL adalah salah satu dari sedikit bahasa yang <strong>tidak dijalankan sesuai urutan tulisannya.</strong> Menghafal urutan sebenarnya sekali akan menjelaskan hampir semua error yang selama ini terasa acak.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Urutan ditulis</th><th>Urutan dijalankan</th><th>Yang terjadi</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">SELECT</td><td class="mono">1. FROM / JOIN</td><td>Tabel disiapkan dan digabung</td></tr>
+              <tr><td class="mono">FROM</td><td class="mono">2. WHERE</td><td>Baris disaring satu per satu</td></tr>
+              <tr><td class="mono">WHERE</td><td class="mono">3. GROUP BY</td><td>Baris dikumpulkan jadi kelompok</td></tr>
+              <tr><td class="mono">GROUP BY</td><td class="mono">4. HAVING</td><td>Kelompok disaring</td></tr>
+              <tr><td class="mono">HAVING</td><td class="mono">5. SELECT</td><td><strong>Alias baru lahir di sini</strong></td></tr>
+              <tr><td class="mono">ORDER BY</td><td class="mono">6. ORDER BY</td><td>Hasil akhir diurutkan</td></tr>
+              <tr><td class="mono">LIMIT</td><td class="mono">7. LIMIT</td><td>Dipotong sekian baris</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Baris kelima menjelaskan segalanya. Nama alias yang kamu buat di <code>SELECT</code> <strong>belum ada</strong> waktu <code>WHERE</code> dijalankan — tapi <em>sudah</em> ada waktu <code>ORDER BY</code> dijalankan. Itu sebabnya <code>ORDER BY pesanan DESC</code> di langkah 1 berfungsi, memakai alias yang dibuat di baris pertama.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Satu tempat di mana SQLite berbohong kepadamu</h3>
+        <span class="cek"><input type="checkbox" id="s5s3"><label for="s5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Menurut urutan di atas, memakai alias di dalam <code>WHERE</code> seharusnya gagal. Coba:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("SELECT harga*2 AS dobel FROM produk WHERE dobel > 30000")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   dobel
+0  44000
+1  36000
+2  50000
+3  60000
+4  52000</code></pre>
+          </div>
+        </div>
+        <div class="bahaya">
+          <strong>Jalan. Dan itu masalahnya.</strong> SQLite sengaja longgar dan mengizinkannya. <strong>PostgreSQL menolak query ini</strong> dengan <code>column "dobel" does not exist</code>, begitu juga SQL Server dan sebagian besar mesin lain.
+          <p style="margin-top:8px">Artinya: query yang kamu uji dan berhasil di latihan ini bisa gagal begitu dipindahkan ke basis data klien atau ke BigQuery. Ini bukan hal langka — memindahkan query antar mesin adalah pekerjaan sehari-hari analis.</p>
+          <p style="margin-top:8px"><strong>Aturan yang aman di mana pun:</strong> jangan pakai alias di <code>WHERE</code>. Tulis ulang perhitungannya (<code>WHERE harga*2 &gt; 30000</code>), atau bungkus dengan CTE lalu saring di luarnya — cara kedua yang biasanya lebih terbaca:</p>
+          <div class="kode" style="margin-top:8px"><pre><code>WITH d AS (SELECT nama, harga*2 AS dobel FROM produk)
+SELECT * FROM d WHERE dobel &gt; 30000</code></pre></div>
+        </div>
+        <div class="catatan">
+          <strong>Kebiasaan yang menyelamatkan:</strong> kalau sebuah query akan dipakai lebih dari sekali, jalankan sekali di mesin tujuannya sebelum diserahkan. "Jalan di SQLite" bukan jaminan apa pun. Perbedaan dialek yang paling sering menggigit: alias di <code>WHERE</code>, tanda kutip untuk teks (SQL standar memakai kutip tunggal — kutip ganda berarti <em>nama kolom</em>), penggabungan teks (<code>||</code> vs <code>CONCAT</code>), dan fungsi tanggal yang namanya berbeda di tiap mesin.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>FILTER: menghitung beberapa hal sekaligus dalam satu lintasan</h3>
+        <span class="cek"><input type="checkbox" id="s5s4"><label for="s5s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pertanyaan yang sering muncul: berapa pesanan tiap cabang, <em>dan</em> berapa yang batal, <em>dan</em> berapa yang selesai — dalam satu tabel. Dengan <code>WHERE</code> saja kamu harus menjalankan tiga query lalu menggabungkannya. Ada cara yang jauh lebih rapi:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT cabang,
+            COUNT(*)                                 AS semua_pesanan,
+            COUNT(*) FILTER (WHERE status='selesai') AS selesai,
+            COUNT(*) FILTER (WHERE status='batal')   AS batal
+     FROM pesanan
+     GROUP BY cabang
+     ORDER BY cabang""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    cabang  semua_pesanan  selesai  batal
+0     Dago            130      122      8
+1   Kemang            132      120     12
+2  Seturan            138      120     18</code></pre>
+          </div>
+        </div>
+        <p>Sekarang temuannya kelihatan, dan ini yang tidak terlihat di tabel Hari 1: <strong>ketiga cabang menyelesaikan pesanan hampir sama banyak</strong> (122, 120, 120), tapi <strong>Seturan membatalkan 18 pesanan, lebih dari dua kali lipat Dago.</strong> Seturan menerima pesanan paling banyak dan kehilangan paling banyak.</p>
+        <div class="catatan">
+          <strong><code>FILTER (WHERE ...)</code> adalah SQL standar</strong>, didukung SQLite (sejak 3.30) dan PostgreSQL. BigQuery tidak punya — di sana pakai <code>COUNTIF(status='selesai')</code>. Di mesin yang tidak punya keduanya, cara lamanya: <code>SUM(CASE WHEN status='selesai' THEN 1 ELSE 0 END)</code> — lebih panjang, berfungsi di mana saja, dan layak kamu kenali karena banyak kode lama memakainya.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir 5 selesai</h3>
+      <p><strong>Catat:</strong> <code>WHERE</code> menyaring baris <em>sebelum</em> dikelompokkan, <code>HAVING</code> menyaring kelompok <em>sesudah</em> · urutan jalannya FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT, dan alias lahir di langkah kelima · SQLite mengizinkan alias di <code>WHERE</code>, PostgreSQL tidak — jangan pakai · <code>COUNT(*) FILTER (WHERE ...)</code> menghitung beberapa hal dalam satu lintasan.</p>
+    </div>
+  </section>
+
+  <!-- ============ S6 ============ -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR 6</span>
+      <h2>Operasi himpunan: merekonsiliasi dua sistem</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membandingkan dua sumber data dengan <code>EXCEPT</code>, <code>INTERSECT</code>, dan <code>UNION</code>, lalu menyusun tie-out yang menjelaskan setiap rupiah selisihnya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tiga operasi, satu aturan</h3>
+        <span class="cek"><input type="checkbox" id="s6s1"><label for="s6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sampai sekarang kamu menggabungkan tabel <em>menyamping</em> dengan JOIN — kolom bertambah. Operasi himpunan menumpuk hasil <em>ke bawah</em> — baris bertambah. Syaratnya cuma satu: <strong>jumlah dan urutan kolomnya harus sama.</strong></p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Operasi</th><th>Artinya</th><th>Duplikat</th></tr></thead>
+            <tbody>
+              <tr><td><code>UNION ALL</code></td><td>Tumpuk apa adanya</td><td>Dibiarkan — <strong>dan ini yang biasanya kamu mau</strong></td></tr>
+              <tr><td><code>UNION</code></td><td>Tumpuk lalu buang kembar</td><td>Dibuang (mahal — perlu mengurutkan seluruh hasil)</td></tr>
+              <tr><td><code>INTERSECT</code></td><td>Hanya yang ada di <strong>kedua</strong> sisi</td><td>Dibuang</td></tr>
+              <tr><td><code>EXCEPT</code></td><td>Ada di kiri, <strong>tidak</strong> ada di kanan</td><td>Dibuang</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>Bawaan orang adalah menulis <code>UNION</code>, dan itu hampir selalu keliru.</strong> Kalau kamu menumpuk penjualan Januari dan Februari dengan <code>UNION</code>, dua transaksi yang kebetulan identik (produk sama, harga sama, jumlah sama) akan <strong>dianggap satu</strong> dan satunya hilang. Uangnya hilang dari laporan tanpa jejak.
+          <p style="margin-top:8px">Pakai <code>UNION ALL</code> sebagai bawaan. Pakai <code>UNION</code> hanya kalau kamu memang <em>ingin</em> membuang baris kembar dan sudah memikirkan akibatnya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kasusnya: pembukuan vs ekspor kasir</h3>
+        <span class="cek"><input type="checkbox" id="s6s2"><label for="s6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tabel <code>pesanan_kasir</code> adalah ekspor dari sistem kasir. Tabel <code>pesanan</code> + <code>item</code> adalah pembukuannya. Keduanya seharusnya sama. Pertanyaan pertama selalu: <strong>berapa banyak yang cocok, dan berapa yang tidak?</strong></p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH buku AS (
+  SELECT o.id, SUM(i.jumlah * i.harga_saat_itu) AS nilai
+  FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+  WHERE o.status = 'selesai'
+  GROUP BY o.id)
+SELECT 'selesai di pembukuan' AS keterangan, COUNT(*) AS jumlah FROM buku
+UNION ALL SELECT 'baris di ekspor kasir', COUNT(*) FROM pesanan_kasir
+UNION ALL SELECT 'id cocok',
+  (SELECT COUNT(*) FROM buku b JOIN pesanan_kasir k ON k.id = b.id)
+UNION ALL SELECT 'hanya di pembukuan',
+  (SELECT COUNT(*) FROM (SELECT id FROM buku EXCEPT SELECT id FROM pesanan_kasir))
+UNION ALL SELECT 'hanya di kasir',
+  (SELECT COUNT(*) FROM (SELECT id FROM pesanan_kasir EXCEPT SELECT id FROM buku))
+""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>              keterangan  jumlah
+0   selesai di pembukuan     362
+1  baris di ekspor kasir     361
+2               id cocok     359
+3     hanya di pembukuan       3
+4         hanya di kasir       2</code></pre>
+          </div>
+        </div>
+        <p>Angkanya langsung bisa diperiksa: <strong>359 + 3 = 362</strong> ✓ dan <strong>359 + 2 = 361</strong> ✓. Tidak ada baris yang tidak terjelaskan.</p>
+        <div class="catatan">
+          <strong>Perhatikan bahwa selisih jumlah barisnya cuma satu</strong> (362 lawan 361). Kalau kamu berhenti di situ — "cuma beda 1, dibulatkan saja" — kamu melewatkan lima masalah yang berbeda. Selisih <em>bersih</em> hampir selalu lebih kecil daripada selisih yang sebenarnya, karena kekurangan di satu sisi saling menutupi dengan kelebihan di sisi lain.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tunjukkan barisnya, bukan cuma jumlahnya</h3>
+        <span class="cek"><input type="checkbox" id="s6s3"><label for="s6s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+SELECT 'hanya pembukuan' AS sisi, id FROM (
+  SELECT id FROM pesanan WHERE status='selesai'
+  EXCEPT SELECT id FROM pesanan_kasir)
+UNION ALL
+SELECT 'hanya kasir', id FROM (
+  SELECT id FROM pesanan_kasir
+  EXCEPT SELECT id FROM pesanan WHERE status='selesai')
+""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>              sisi    id
+0  hanya pembukuan     7
+1  hanya pembukuan    88
+2  hanya pembukuan   251
+3      hanya kasir  9001
+4      hanya kasir  9002</code></pre>
+          </div>
+        </div>
+        <p>Lima nomor yang bisa ditanyakan ke orangnya. Perhatikan bentuk id-nya: 7, 88, dan 251 terlihat wajar, tapi <strong>9001 dan 9002 jelas beda pola</strong> — kemungkinan besar transaksi yang diinput manual di kasir, bukan lewat sistem pesanan. Itu petunjuk, bukan kesimpulan; yang menjawab tetap orangnya.</p>
+        <p>Selisih id saja belum cukup. Id bisa cocok tapi nilainya berbeda:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH buku AS (
+  SELECT o.id, SUM(i.jumlah * i.harga_saat_itu) AS nilai
+  FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+  WHERE o.status = 'selesai' GROUP BY o.id)
+SELECT b.id, b.nilai AS pembukuan, k.nilai AS kasir, k.nilai - b.nilai AS selisih
+FROM buku b JOIN pesanan_kasir k ON k.id = b.id
+WHERE b.nilai <> k.nilai
+ORDER BY ABS(k.nilai - b.nilai) DESC
+""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    id  pembukuan   kasir  selisih
+0   12      54000  104000    50000
+1  199      80000   55000   -25000</code></pre>
+          </div>
+        </div>
+        <div class="bahaya">
+          <strong>Dua baris ini tidak akan pernah ditemukan oleh <code>EXCEPT</code> pada id.</strong> Id-nya cocok sempurna di kedua sistem — yang berbeda hanya angkanya. Rekonsiliasi yang berhenti di "id mana yang hilang" selalu melewatkan jenis kesalahan ini, dan justru inilah yang paling sering terjadi di dunia nyata: transaksi yang sama, dicatat dengan nilai berbeda.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tie-out: menjelaskan setiap rupiah selisihnya</h3>
+        <span class="cek"><input type="checkbox" id="s6s4"><label for="s6s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sekarang bagian yang membedakan analis dari orang yang cuma menjalankan query. Total dua sistem berbeda. Pertanyaannya bukan "berapa selisihnya", tapi <strong>"apakah selisih itu bisa dijelaskan seluruhnya"</strong>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH buku AS (
+  SELECT o.id, SUM(i.jumlah * i.harga_saat_itu) AS nilai
+  FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+  WHERE o.status = 'selesai' GROUP BY o.id)
+SELECT 'Total pembukuan' AS keterangan, (SELECT SUM(nilai) FROM buku) AS rupiah
+UNION ALL SELECT '(-) hanya di pembukuan',
+  -(SELECT COALESCE(SUM(nilai),0) FROM buku WHERE id NOT IN (SELECT id FROM pesanan_kasir))
+UNION ALL SELECT '(+) hanya di kasir',
+  (SELECT COALESCE(SUM(nilai),0) FROM pesanan_kasir WHERE id NOT IN (SELECT id FROM buku))
+UNION ALL SELECT '(+/-) selisih nilai id sama',
+  (SELECT COALESCE(SUM(k.nilai-b.nilai),0) FROM buku b JOIN pesanan_kasir k ON k.id=b.id)
+UNION ALL SELECT '= Total kasir', (SELECT SUM(nilai) FROM pesanan_kasir)
+""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>                    keterangan    rupiah
+0              Total pembukuan  35739000
+1       (-) hanya di pembukuan   -222000
+2           (+) hanya di kasir    195000
+3  (+/-) selisih nilai id sama     25000
+4                = Total kasir  35737000</code></pre>
+          </div>
+        </div>
+        <p>Periksa sendiri: <strong>35.739.000 − 222.000 + 195.000 + 25.000 = 35.737.000</strong> ✓</p>
+        <p>Selisih bersihnya cuma <strong>Rp 2.000</strong> — angka yang, kalau dilihat sendirian, terlihat seperti pembulatan yang bisa diabaikan. Padahal di baliknya ada <strong>Rp 442.000</strong> pergerakan dari lima masalah berbeda yang saling menutupi.</p>
+        <div class="catatan">
+          <strong>Ini kertas kerja yang sudah kamu buat bertahun-tahun, ditulis dalam SQL.</strong> Bentuknya sama persis: saldo A, daftar penyebab, saldo B, dan jumlahnya harus tutup. Yang membuatnya bernilai bukan menemukan selisihnya — komputer bisa. Yang bernilai adalah bersikeras bahwa selisih bersih Rp 2.000 tidak boleh dilaporkan sebelum keempat penyebabnya berdiri sendiri-sendiri.
+          <p style="margin-top:8px">Di Freelance 11 ini disebut "Pemeriksaan Angka" — satu-satunya lini jasa yang hampir tidak punya saingan. Hari ini kamu baru saja mengerjakan versi lengkapnya.</p>
+        </div>
+        <div class="aksi">
+          <span class="tag">KERJAKAN SENDIRI</span>
+          <p>Tie-out di atas memakai <code>NOT IN</code> di dua tempat. Setelah Hari 2, kamu tahu itu berbahaya. Periksa: kenapa di sini <em>kebetulan</em> aman, dan tulis ulang keduanya dengan <code>NOT EXISTS</code>.</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <p>Aman karena <code>pesanan_kasir.id</code> dan <code>buku.id</code> keduanya kunci utama — tidak mungkin <code>NULL</code>. Tapi "kebetulan aman" bukan alasan yang baik untuk membiarkannya; orang berikutnya yang menyalin pola ini ke kolom lain akan kena. Versi yang tidak bergantung pada kebetulan:</p>
+          <div class="kode"><pre><code>-(SELECT COALESCE(SUM(nilai),0) FROM buku b
+   WHERE NOT EXISTS (SELECT 1 FROM pesanan_kasir k WHERE k.id = b.id))</code></pre></div>
+          <div class="kode"><pre><code> (SELECT COALESCE(SUM(nilai),0) FROM pesanan_kasir k
+   WHERE NOT EXISTS (SELECT 1 FROM buku b WHERE b.id = k.id))</code></pre></div>
+          <p style="margin-top:8px">Hasilnya sama persis: −222.000 dan 195.000. Bedanya, versi ini tetap benar kalau suatu hari kolomnya boleh <code>NULL</code>.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir 6 selesai</h3>
+      <p><strong>Catat:</strong> <code>UNION ALL</code> sebagai bawaan — <code>UNION</code> diam-diam membuang transaksi kembar yang sah · <code>EXCEPT</code> dua arah menemukan yang hilang di tiap sisi · id cocok belum berarti nilainya cocok, periksa terpisah · dan selisih <strong>bersih</strong> selalu lebih kecil daripada masalah yang sebenarnya, karena kekurangan dan kelebihan saling menutupi.</p>
+    </div>
+  </section>
+
+  <!-- ============ S7 ============ -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR 7</span>
+      <h2>Ulangan dari ingatan — dan satu soal terapan</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Tutup halaman ini, jawab dari ingatan, baru buka kuncinya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Delapan soal</h3>
+        <span class="cek"><input type="checkbox" id="s7s1"><label for="s7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Berapa nilai kebenaran yang ada di SQL, dan apa hasil <code>NULL = NULL</code>?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Kenapa <code>WHERE kota &lt;&gt; 'Jakarta'</code> tidak mengembalikan pelanggan yang kotanya <code>NULL</code>?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Sebuah query <code>NOT IN (SELECT ...)</code> mengembalikan nol baris. Apa yang pertama kali kamu curigai?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Tabel A punya 100 baris, tabel B punya 250 baris. <code>A LEFT JOIN B</code> menghasilkan 260 baris. Apa artinya?</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Apa beda <code>WHERE</code> dan <code>HAVING</code>, dan kenapa <code>COUNT(*)</code> tidak boleh ada di <code>WHERE</code>?</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> Kenapa <code>UNION ALL</code> lebih aman daripada <code>UNION</code> untuk menumpuk data penjualan dua bulan?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> Dua sistem dibandingkan. Semua id cocok. Apakah rekonsiliasinya selesai?</p>
+        <p style="margin-bottom:12px"><strong>8.</strong> (Ulangan M6) Kenapa CTE lebih mudah dibaca daripada subquery bersarang?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Tiga: benar, salah, dan tidak diketahui. <code>NULL = NULL</code> menghasilkan NULL (tidak diketahui), bukan benar.</p>
+            <p><strong>2.</strong> Karena <code>NULL &lt;&gt; 'Jakarta'</code> bernilai "tidak diketahui", dan <code>WHERE</code> hanya meloloskan yang bernilai <em>benar</em>.</p>
+            <p><strong>3.</strong> Ada <code>NULL</code> di dalam daftar subquery-nya. Satu saja sudah membuat seluruh hasilnya kosong. Ganti ke <code>NOT EXISTS</code>.</p>
+            <p><strong>4.</strong> 260 &gt; 100, jadi ada baris kiri yang berpasangan dengan <strong>lebih dari satu</strong> baris kanan — kunci di B tidak unik. Kalau kamu menjumlahkan nilai setelah JOIN ini, angkanya berlipat. Ini bahaya nomor satu dalam menggabungkan tabel.</p>
+            <p><strong>5.</strong> <code>WHERE</code> menyaring baris sebelum <code>GROUP BY</code>; <code>HAVING</code> menyaring kelompok sesudahnya. <code>COUNT(*)</code> belum punya arti saat <code>WHERE</code> berjalan, karena kelompoknya belum terbentuk.</p>
+            <p><strong>6.</strong> <code>UNION</code> membuang baris yang identik. Dua transaksi berbeda yang kebetulan sama persis (produk, jumlah, harga, tanggal sama) akan dianggap satu, dan uangnya hilang dari total tanpa jejak.</p>
+            <p><strong>7.</strong> Belum. Id yang cocok masih bisa berbeda <em>nilainya</em> — dan itu jenis selisih yang paling sering terjadi. Bandingkan nilainya secara terpisah.</p>
+            <p><strong>8.</strong> CTE dibaca dari atas ke bawah seperti resep; subquery bersarang dibaca dari dalam ke luar.</p>
+          </div>
+        </details>
+        <div class="catatan">
+          <strong>Kalau tujuh dari delapan benar, lanjut ke Level 2.</strong> Kalau kurang, ulangi hari yang jawabannya meleset — jangan lanjut. Level 2 (window function sampai tuntas) berdiri di atas semua ini.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Soal terapan: laporan yang tidak boleh bohong</h3>
+        <span class="cek"><input type="checkbox" id="s7s2"><label for="s7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">
+          <span class="tag">KERJAKAN, ± 30 MENIT</span>
+          <p>Buat satu query yang menampilkan, <strong>per cabang</strong>: jumlah pesanan selesai, jumlah pesanan batal, jumlah pelanggan unik yang pernah memesan di sana, dan nilai penjualan selesai. Syaratnya:</p>
+          <ol style="font-size:0.93rem;padding-left:20px;margin:6px 0 0">
+            <li>Pesanan tamu (<code>pelanggan_id</code> NULL) tetap dihitung di jumlah pesanan dan nilai — mereka pembeli sungguhan.</li>
+            <li>Tapi <strong>tidak</strong> dihitung sebagai pelanggan unik, karena kita tidak tahu mereka siapa.</li>
+            <li>Cabang tetap muncul walaupun ada angka yang nol.</li>
+          </ol>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>q("""
+SELECT o.cabang,
+       COUNT(*) FILTER (WHERE o.status='selesai')     AS pesanan_selesai,
+       COUNT(*) FILTER (WHERE o.status='batal')       AS pesanan_batal,
+       COUNT(DISTINCT o.pelanggan_id)                 AS pelanggan_unik,
+       SUM(CASE WHEN o.status='selesai'
+                THEN i.jumlah * i.harga_saat_itu END) AS nilai_selesai
+FROM pesanan o
+LEFT JOIN item i ON i.pesanan_id = o.id
+GROUP BY o.cabang
+ORDER BY o.cabang
+""")</code></pre></div>
+          <div class="kode"><pre><code>    cabang  pesanan_selesai  pesanan_batal  pelanggan_unik  nilai_selesai
+0     Dago              238             15              17       12665000
+1   Kemang              242             19              17       11669000
+2  Seturan              239             35              17       11405000</code></pre></div>
+          <div class="bahaya">
+            <strong>Query di atas SALAH — dan perhatikan baik-baik salahnya di sebelah mana.</strong> Karena ada <code>JOIN</code> ke <code>item</code>, satu pesanan berisi 3 item muncul sebagai <strong>3 baris</strong>. Jadi <code>COUNT(*)</code> menghitung item, bukan pesanan: Dago tercatat <strong>238</strong> pesanan selesai, padahal Hari 5 sudah membuktikan angkanya <strong>122</strong>.
+            <p style="margin-top:8px"><strong>Tapi kolom <code>nilai_selesai</code> justru benar</strong> (12.665.000 — sama persis dengan versi yang benar di bawah). <code>SUM</code> menjumlahkan tiap baris item satu kali, jadi ia tidak ikut berlipat.</p>
+            <p style="margin-top:8px">Inilah yang membuatnya berbahaya: laporannya <strong>separuh benar</strong>. Nilai rupiahnya tepat dan bisa dicocokkan dengan pembukuan, sehingga siapa pun yang memeriksa totalnya akan menyimpulkan laporan ini beres — sementara jumlah pesanannya dua kali lipat dari kenyataan, dan setiap "rata-rata per pesanan" yang dihitung darinya salah setengahnya.</p>
+          </div>
+          <p>Yang benar: hitung pesanan dan nilai <strong>di dua tingkat berbeda</strong>, baru digabungkan.</p>
+          <div class="kode"><pre><code>q("""
+WITH nilai_per_pesanan AS (
+  SELECT o.id, o.cabang, o.status, o.pelanggan_id,
+         (SELECT COALESCE(SUM(i.jumlah * i.harga_saat_itu), 0)
+          FROM item i WHERE i.pesanan_id = o.id) AS nilai
+  FROM pesanan o)
+SELECT cabang,
+       COUNT(*) FILTER (WHERE status='selesai')  AS pesanan_selesai,
+       COUNT(*) FILTER (WHERE status='batal')    AS pesanan_batal,
+       COUNT(DISTINCT pelanggan_id)              AS pelanggan_unik,
+       SUM(nilai) FILTER (WHERE status='selesai') AS nilai_selesai
+FROM nilai_per_pesanan
+GROUP BY cabang
+ORDER BY cabang
+""")</code></pre></div>
+          <div class="kode"><pre><code>    cabang  pesanan_selesai  pesanan_batal  pelanggan_unik  nilai_selesai
+0     Dago              122              8              17       12665000
+1   Kemang              120             12              17       11669000
+2  Seturan              120             18              17       11405000</code></pre></div>
+          <p style="margin-top:8px">Jumlah pesanannya sekarang cocok dengan Hari 5 (122, 120, 120) — itu pemeriksaannya. Dan <code>COUNT(DISTINCT pelanggan_id)</code> mengembalikan 17, bukan 20: <code>COUNT DISTINCT</code> mengabaikan <code>NULL</code>, jadi pesanan tamu otomatis tidak terhitung sebagai pelanggan. Syarat kedua terpenuhi tanpa perlu penyaring tambahan — persis pelajaran Hari 1.</p>
+          <p style="margin-top:8px">Total ketiga cabang: 12.665.000 + 11.669.000 + 11.405.000 = <strong>35.739.000</strong>, sama dengan total pembukuan di Hari 6. Dua jalan berbeda, satu angka. Itu cara kamu tahu keduanya benar.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir Level 1 selesai</h3>
+      <p>Tujuh hari ini tidak menambah satu pun kata kunci yang "keren". Yang ditambahkannya adalah hal-hal yang membuat query <strong>diam-diam salah</strong> — dan kemampuan mencurigainya sebelum ada yang menegur.</p>
+      <p style="margin-top:14px"><strong>Yang paling berharga dari Level 1:</strong> kebiasaan menghitung jumlah baris dan menjelaskan asalnya sebelum melihat isi hasilnya. Hampir semua kesalahan SQL yang mahal — JOIN yang melipatgandakan, <code>NOT IN</code> yang mengosongkan, <code>UNION</code> yang menelan transaksi — ketahuan dari jumlah baris yang tidak bisa dijelaskan.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Berikutnya di <a href="https://claude.ai/code/artifact/07cb0fb0-1240-471b-85b7-f691b8a585bd">Level 2</a>:</strong> window function sampai tuntas — <code>ROWS BETWEEN</code> dan bedanya dengan <code>RANGE</code>, <code>LEAD</code>, <code>NTILE</code>, <code>FIRST_VALUE</code>, persentil, dan recursive CTE untuk menelusuri hierarki sampai ke dasarnya. Modul M6 baru menyentuh permukaannya.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/07cb0fb0-1240-471b-85b7-f691b8a585bd">Lanjut ke SQL Mahir L2: window function tuntas →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua keluaran di halaman ini dihasilkan dengan menjalankan query-nya sungguhan pada basis data yang kamu buat di Hari 1 — kalau hasilmu berbeda, ada sel yang perlu dijalankan ulang.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "sql-mahir-l1-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

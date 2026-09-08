@@ -1,0 +1,759 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/7044e726-f69e-4b48-a3d5-b6e277c79164">← Kembali ke SQL Mahir L5</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">SQL Produksi</span>
+  <button type="button" data-hari="1" aria-selected="true">P1</button>
+  <button type="button" data-hari="2" aria-selected="false">P2</button>
+  <button type="button" data-hari="3" aria-selected="false">P3</button>
+  <button type="button" data-hari="4" aria-selected="false">P4</button>
+  <button type="button" data-hari="5" aria-selected="false">P5</button>
+  <button type="button" data-hari="6" aria-selected="false">P6</button>
+  <button type="button" data-hari="7" aria-selected="false">P7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">SQL Produksi · lanjutan sesudah SQL Mahir L1–L5</span>
+    <h1>SQL Produksi: kosakata yang tidak dimiliki SQLite</h1>
+    <p class="lede">Lima level SQL Mahir mengajarimu berpikir dalam SQL, dan semuanya di SQLite. Tapi kantor tidak memakai SQLite — kantor memakai PostgreSQL, BigQuery, Snowflake, atau SQL Server. Bahasanya sama; <strong>kosakatanya lebih besar</strong>, dan yang ekstra itu justru yang menghemat paling banyak waktumu.</p>
+    <p class="lede" style="margin-top:10px">Tujuh hari ini menutup delapan hal yang <strong>tidak ada satu pun</strong> di seluruh kurikulum sebelumnya — saya periksa dengan mencacah seluruh 44 modul, bukan mengira-ira. Kita pakai <strong>DuckDB</strong>: satu baris pemasangan, jalan di Colab, dan tata bahasanya nyaris identik dengan PostgreSQL.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ P1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">SQL PRODUKSI · 1</span>
+      <h2>Pasang DuckDB, dan buktikan datanya masih sama</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjalankan SQL bergaya PostgreSQL di atas <code>senja.db</code> yang sudah kamu kenal — tanpa memasang server apa pun.</p>
+
+    <div class="catatan">
+      <strong>Kenapa DuckDB, bukan langsung PostgreSQL.</strong> PostgreSQL butuh server yang dipasang, dijalankan, dan dikonfigurasi — tiga hal yang bisa memakan satu hari penuh sebelum kamu menulis satu query. DuckDB dipasang dengan <code>pip install duckdb</code> dan langsung jalan, tapi mendukung hampir semua tata bahasa lanjutan yang dipakai PostgreSQL dan BigQuery. Kamu belajar kosakatanya dulu; memindahkannya ke server sungguhan nanti tinggal mengganti baris koneksi.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Pasang dan muat data lamamu</h3>
+        <span class="cek"><input type="checkbox" id="u1s1"><label for="u1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Jalankan di folder yang sama dengan <code>senja.db</code>. Di Colab, jalankan baris <code>pip</code> lebih dulu di sel terpisah.</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>pip install duckdb</code></pre>
+        </div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import duckdb, sqlite3, pandas as pd
+pd.set_option("display.width", 210)
+
+# DuckDB tidak membaca berkas SQLite secara langsung tanpa ekstensi,
+# jadi kita pindahkan tabelnya lewat pandas — cara ini jalan di mana saja.
+lite = sqlite3.connect("senja.db")
+c = duckdb.connect()
+for t in ["pelanggan","produk","pesanan","item","pegawai","kunjungan","pesanan_kasir"]:
+    c.register(t, pd.read_sql(f"SELECT * FROM {t}", lite))
+
+def q(sql):
+    return c.execute(sql).df()
+
+print([r[0] for r in c.execute("SHOW TABLES").fetchall()])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>['item', 'kunjungan', 'pegawai', 'pelanggan', 'pesanan', 'pesanan_kasir', 'produk']</code></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Uji kesinambungan — angka lama harus muncul lagi</h3>
+        <span class="cek"><input type="checkbox" id="u1s2"><label for="u1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sebelum mempelajari apa pun yang baru, buktikan dulu mesin barunya memberi jawaban yang sama. Ini kebiasaan yang sama seperti tie-out di kertas kerja: <strong>ganti alat, angkanya tidak boleh berubah.</strong></p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+SELECT p.cabang, SUM(i.jumlah*i.harga_saat_itu) AS omzet, COUNT(DISTINCT p.id) AS pesanan
+FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+WHERE p.status = 'selesai'
+GROUP BY p.cabang ORDER BY omzet DESC""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    cabang       omzet  pesanan
+0     Dago  12665000.0      122
+1   Kemang  11669000.0      120
+2  Seturan  11405000.0      120</code></pre></div>
+        </div>
+        <p>Tiga angka yang sama persis dengan SQL Mahir L1. Mesinnya beda, jawabannya identik — sekarang kamu boleh percaya pada yang berikutnya.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Satu perbedaan yang akan kamu lihat:</strong> omzetnya tertulis <code>12665000.0</code>, bukan <code>12665000</code>. DuckDB mengembalikannya sebagai desimal karena kolom <code>harga_saat_itu</code> masuk lewat pandas sebagai <code>float64</code>. Bukan salah — tapi biasakan memperhatikan tipe data saat berpindah mesin, karena di tempat lain perbedaan seperti ini bisa menggeser pembulatan.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">SQL PRODUKSI · 2</span>
+      <h2>Subtotal dan total tanpa satu pun UNION</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat laporan bertingkat — rincian, subtotal per cabang, dan total keseluruhan — dalam <strong>satu query</strong>, dan menandai tiap baris jenisnya apa.</p>
+
+    <p>Ini bentuk laporan yang paling sering diminta orang keuangan, dan yang paling menyiksa kalau dikerjakan dengan cara lama: satu query untuk rincian, satu untuk subtotal, satu untuk total, lalu <code>UNION ALL</code> ketiganya dan berharap urutannya benar.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>ROLLUP: satu query, tiga tingkat</h3>
+        <span class="cek"><input type="checkbox" id="u2s1"><label for="u2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+SELECT COALESCE(p.cabang, '&gt;&gt; SEMUA CABANG') AS cabang,
+       COALESCE(p.kanal , '&gt;&gt; subtotal')     AS kanal,
+       CASE WHEN GROUPING(p.cabang) = 1 THEN 'TOTAL'
+            WHEN GROUPING(p.kanal)  = 1 THEN 'subtotal'
+            ELSE 'rincian' END AS jenis,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet
+FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+WHERE p.status = 'selesai'
+GROUP BY ROLLUP (p.cabang, p.kanal)
+ORDER BY GROUPING(p.cabang), p.cabang, GROUPING(p.kanal), p.kanal""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>             cabang        kanal     jenis       omzet
+0              Dago      Dine-in   rincian   3974000.0
+1              Dago         Ojol   rincian   4221000.0
+2              Dago    Take-away   rincian   4470000.0
+3              Dago  &gt;&gt; subtotal  subtotal  12665000.0
+4            Kemang      Dine-in   rincian   3144000.0
+5            Kemang         Ojol   rincian   4583000.0
+6            Kemang    Take-away   rincian   3942000.0
+7            Kemang  &gt;&gt; subtotal  subtotal  11669000.0
+8           Seturan      Dine-in   rincian   4257000.0
+9           Seturan         Ojol   rincian   2560000.0
+10          Seturan    Take-away   rincian   4588000.0
+11          Seturan  &gt;&gt; subtotal  subtotal  11405000.0
+12  &gt;&gt; SEMUA CABANG  &gt;&gt; subtotal     TOTAL  35739000.0</code></pre></div>
+        </div>
+        <p>Tiga belas baris: sembilan rincian, tiga subtotal, satu total. Cocokkan subtotalnya dengan P1 — 12.665.000 / 11.669.000 / 11.405.000, dan totalnya 35.739.000. Semuanya keluar dari <strong>satu</strong> query.</p>
+
+        <div class="catatan" style="margin-top:12px">
+          <strong>Dua hal yang membuat ini bekerja.</strong><br>
+          <code>ROLLUP (a, b)</code> memerintahkan mesin menghitung tiga tingkat sekaligus: per <code>(a,b)</code>, per <code>(a)</code>, dan keseluruhan. Baris subtotal punya <code>NULL</code> di kolom yang sedang "diabaikan".<br>
+          <code>GROUPING(kolom)</code> mengembalikan <strong>1</strong> kalau <code>NULL</code> itu buatan ROLLUP, dan <strong>0</strong> kalau memang datanya kosong. Tanpa itu, subtotal cabang tidak bisa dibedakan dari baris yang cabangnya benar-benar kosong.
+        </div>
+
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Dan di situlah bahayanya kalau kamu memakai <code>COALESCE</code> saja tanpa <code>GROUPING</code>.</strong> Di <code>senja.db</code> ada 12 pesanan yang <code>pelanggan_id</code>-nya kosong. Kalau kamu me-ROLLUP kolom yang isinya memang mengandung <code>NULL</code>, baris "data kosong" dan baris "subtotal" akan terlihat persis sama di laporanmu — dan angkanya akan dijumlahkan dua kali oleh siapa pun yang membacanya. <code>GROUPING()</code> ada justru untuk itu.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>GROUPING SETS: pilih sendiri tingkat mana yang mau</h3>
+        <span class="cek"><input type="checkbox" id="u2s2"><label for="u2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><code>ROLLUP (a,b)</code> memberimu tingkat <code>(a,b)</code>, <code>(a)</code>, dan total — selalu bersarang. Kalau yang kamu mau adalah per-cabang <em>dan</em> per-kanal secara terpisah (bukan bersarang), pakai <code>GROUPING SETS</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+SELECT COALESCE(p.cabang,'—') AS cabang, COALESCE(p.kanal,'—') AS kanal,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet
+FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+WHERE p.status = 'selesai'
+GROUP BY GROUPING SETS ((p.cabang), (p.kanal), ())
+ORDER BY cabang, kanal""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    cabang      kanal       omzet
+0     Dago          —  12665000.0
+1   Kemang          —  11669000.0
+2  Seturan          —  11405000.0
+3        —    Dine-in  11375000.0
+4        —       Ojol  11364000.0
+5        —  Take-away  13000000.0
+6        —          —  35739000.0</code></pre></div>
+        </div>
+        <p>Tujuh baris: 3 per cabang + 3 per kanal + 1 total. Bandingkan dengan 13 baris ROLLUP tadi — <strong>dua bentuk laporan yang berbeda, dan kamu memilih mana yang diminta, bukan menerima apa adanya.</strong></p>
+        <p style="margin-top:8px">Periksa silang: 12.665.000 + 11.669.000 + 11.405.000 = 35.739.000, dan 11.375.000 + 11.364.000 + 13.000.000 = 35.739.000 juga. <strong>Dua jalur potong yang berbeda bertemu di total yang sama</strong> — itu tie-out, dan itu cara kamu tahu laporannya benar sebelum ada yang bertanya.</p>
+        <div class="catatan">
+          <strong>Yang perlu kamu ingat cuma tiga kata.</strong> <code>ROLLUP</code> = bersarang, untuk hierarki (negara → provinsi → kota). <code>CUBE</code> = semua kombinasi yang mungkin, jarang dipakai dan cepat membengkak. <code>GROUPING SETS</code> = kamu sebut sendiri tingkat mana saja yang mau, dan ini yang paling sering benar.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">SQL PRODUKSI · 3</span>
+      <h2>QUALIFY dan LATERAL: dua jalan pintas yang menghapus CTE</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis top-N per kelompok dalam satu query tanpa CTE bertingkat, dan menjalankan subquery per baris yang <em>tidak</em> lambat.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>QUALIFY: menyaring hasil window function</h3>
+        <span class="cek"><input type="checkbox" id="u3s1"><label for="u3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di SQL Mahir L3 kamu belajar bahwa <code>WHERE ROW_NUMBER() OVER (…) &lt;= 2</code> ditolak, karena <code>WHERE</code> berjalan sebelum window function dihitung — sehingga kamu <em>harus</em> memakai dua CTE bertingkat. <code>QUALIFY</code> adalah klausa yang berjalan <strong>sesudah</strong> window function, dan menghapus keharusan itu:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+SELECT p.cabang, pr.nama AS produk,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet,
+       ROW_NUMBER() OVER (PARTITION BY p.cabang
+                          ORDER BY SUM(i.jumlah * i.harga_saat_itu) DESC) AS urutan
+FROM pesanan p
+JOIN item   i  ON i.pesanan_id = p.id
+JOIN produk pr ON pr.id = i.produk_id
+WHERE p.status = 'selesai'
+GROUP BY p.cabang, pr.nama
+QUALIFY urutan &lt;= 2
+ORDER BY p.cabang, urutan""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    cabang        produk      omzet  urutan
+0     Dago  Matcha Latte  2574000.0       1
+1     Dago     Croissant  2450000.0       2
+2   Kemang  Matcha Latte  2080000.0       1
+3   Kemang    Roti Bakar  1890000.0       2
+4  Seturan    Cheesecake  2250000.0       1
+5  Seturan  Matcha Latte  1976000.0       2</code></pre></div>
+        </div>
+        <p>Hasilnya <strong>identik</strong> dengan versi dua-CTE di SQL Mahir L3 — bandingkan sendiri, angkanya sama persis. Bedanya: satu klausa menggantikan dua belas baris.</p>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Tapi jangan buang cara lamanya.</strong> <code>QUALIFY</code> ada di DuckDB, BigQuery, Snowflake, dan Databricks — <strong>tidak ada</strong> di PostgreSQL dan MySQL. Di dua mesin itu kamu tetap harus memakai pola dua-CTE dari L3. Jadi yang kamu tambahkan hari ini bukan pengganti, tapi pilihan kedua — dan mengetahui mana yang tersedia di mesin mana adalah bagian dari pekerjaannya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>LATERAL: subquery yang boleh melihat baris di sebelahnya</h3>
+        <span class="cek"><input type="checkbox" id="u3s2"><label for="u3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di SQL Mahir L4 kamu mengukur bahwa subquery berkorelasi bisa 1.036 kali lebih lambat. <code>LATERAL</code> adalah bentuk yang <em>terlihat</em> seperti subquery berkorelasi tapi ditulis di <code>FROM</code> — dan mesin memperlakukannya jauh lebih baik. Gunanya: mengambil <strong>beberapa baris teratas untuk tiap induk</strong>, sesuatu yang tidak bisa dilakukan subquery skalar biasa.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+SELECT pl.nama, t.id AS pesanan_id, t.tanggal, t.nilai
+FROM (SELECT id, nama FROM pelanggan WHERE id IN (1,2,3)) pl,
+LATERAL (
+  SELECT p.id, p.tanggal, SUM(i.jumlah * i.harga_saat_itu) AS nilai
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.pelanggan_id = pl.id AND p.status = 'selesai'
+  GROUP BY p.id, p.tanggal
+  ORDER BY p.tanggal DESC
+  LIMIT 2
+) t
+ORDER BY pl.nama, t.tanggal DESC""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   nama  pesanan_id     tanggal     nilai
+0  Bayu         168  2024-06-28   45000.0
+1  Bayu         308  2024-06-19  220000.0
+2  Rina         120  2024-06-24   70000.0
+3  Rina         215  2024-06-23   44000.0
+4  Sari         347  2024-06-27  157000.0
+5  Sari         143  2024-06-17  190000.0</code></pre></div>
+        </div>
+        <p><strong>Perhatikan <code>WHERE p.pelanggan_id = pl.id</code> di dalam kurung.</strong> Itu menyebut <code>pl</code> dari luar — persis yang membuat subquery biasa jadi "berkorelasi". Bedanya, di sini ia ada di <code>FROM</code>, boleh mengembalikan <strong>banyak baris</strong>, dan boleh punya <code>LIMIT</code> sendiri.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Kapan LATERAL adalah jawabannya:</strong> "3 pesanan terakhir tiap pelanggan", "5 produk terlaris tiap kategori beserta rinciannya", "transaksi pertama tiap orang sesudah dia mendaftar". Semua berbentuk <em>untuk tiap induk, ambil beberapa anak teratas</em>. Bisa juga dikerjakan dengan <code>ROW_NUMBER</code> + saring, dan sering itu lebih cepat — tapi <code>LATERAL</code> jauh lebih mudah dibaca ketika logika "anak"-nya rumit.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">SQL PRODUKSI · 4</span>
+      <h2>Hari yang hilang dari laporanmu</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membangun tulang punggung kalender dengan <code>generate_series</code>, dan mengerti kenapa tanpa itu rata-rata bergerakmu diam-diam salah.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lihat dulu masalahnya</h3>
+        <span class="cek"><input type="checkbox" id="u4s1"><label for="u4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+SELECT COUNT(DISTINCT p.tanggal) AS hari_ada_transaksi
+FROM pesanan p
+WHERE p.status='selesai' AND p.cabang='Dago'
+  AND p.tanggal BETWEEN '2024-06-01' AND '2024-06-30'""").to_string())
+
+print(q("""
+SELECT p.tanggal, COUNT(DISTINCT p.id) AS pesanan
+FROM pesanan p
+WHERE p.status='selesai' AND p.cabang='Dago'
+  AND p.tanggal BETWEEN '2024-06-01' AND '2024-06-10'
+GROUP BY p.tanggal ORDER BY p.tanggal""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   hari_ada_transaksi
+0                  15
+
+      tanggal  pesanan
+0  2024-06-04        1
+1  2024-06-06        1
+2  2024-06-08        2
+3  2024-06-09        3
+4  2024-06-10        3</code></pre></div>
+        </div>
+        <p><strong>Juni punya 30 hari; cabang Dago hanya bertransaksi di 15 di antaranya.</strong> Dan laporan harian tanggal 1–10 cuma memuat <strong>5 baris</strong> — tanggal 1, 2, 3, 5, dan 7 lenyap sama sekali.</p>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Kenapa ini lebih berbahaya daripada sekadar tampilan kurang rapi.</strong> Kalau kamu menghitung rata-rata bergerak 7 hari di atas hasil ini, <code>ROWS BETWEEN 6 PRECEDING</code> akan merata-ratakan <em>tujuh baris terakhir yang kebetulan ada</em> — yang di sini membentang lebih dari dua minggu kalender. Angkanya keluar, terlihat wajar, dan salah. Ini persis jenis kesalahan diam-diam yang kamu latih untuk curigai sejak Level 1.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>generate_series: bikin kalendernya sendiri</h3>
+        <span class="cek"><input type="checkbox" id="u4s2"><label for="u4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+WITH kalender AS (
+  SELECT unnest(generate_series(DATE '2024-06-01', DATE '2024-06-10',
+                                INTERVAL 1 DAY))::DATE AS hari
+),
+nyata AS (
+  SELECT CAST(p.tanggal AS DATE) AS hari, COUNT(DISTINCT p.id) AS pesanan
+  FROM pesanan p WHERE p.status='selesai' AND p.cabang='Dago'
+  GROUP BY 1
+)
+SELECT k.hari, dayname(k.hari) AS nama_hari,
+       COALESCE(n.pesanan, 0) AS pesanan,
+       ROUND(AVG(COALESCE(n.pesanan,0)) OVER (ORDER BY k.hari
+             ROWS BETWEEN 6 PRECEDING AND CURRENT ROW), 2) AS rata_7hari
+FROM kalender k LEFT JOIN nyata n ON n.hari = k.hari
+ORDER BY k.hari""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>        hari  nama_hari  pesanan  rata_7hari
+0 2024-06-01   Saturday        0        0.00
+1 2024-06-02     Sunday        0        0.00
+2 2024-06-03     Monday        0        0.00
+3 2024-06-04    Tuesday        1        0.25
+4 2024-06-05  Wednesday        0        0.20
+5 2024-06-06   Thursday        1        0.33
+6 2024-06-07     Friday        0        0.29
+7 2024-06-08   Saturday        2        0.57
+8 2024-06-09     Sunday        3        1.00
+9 2024-06-10     Monday        3        1.43</code></pre></div>
+        </div>
+        <p>Sepuluh baris untuk sepuluh hari — lima di antaranya nol, dan nol itu <strong>informasi</strong>, bukan ketiadaan data. Sekarang rata-rata bergeraknya benar-benar tujuh hari.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Pola ini punya nama di dunia kerja: <em>date spine</em> atau tulang punggung kalender.</strong> Bentuknya selalu sama: buat deret tanggal lengkap &rarr; <code>LEFT JOIN</code> data nyata ke deret itu &rarr; <code>COALESCE(...,0)</code>. Dipakai di hampir setiap dasbor harian yang pernah dibuat orang. Di PostgreSQL tulisannya <code>generate_series('2024-06-01'::date, '2024-06-10'::date, '1 day')</code>; di BigQuery <code>GENERATE_DATE_ARRAY</code>. Konsepnya identik.
+        </div>
+        <div class="aksi" style="margin-top:12px">Latihan: ubah kalendernya jadi satu bulan penuh Juni (sampai <code>2024-06-30</code>) dan hitung berapa hari yang pesanannya nol. Jawabannya harus <strong>15</strong> — cocok dengan langkah 1.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">SQL PRODUKSI · 5</span>
+      <h2>Statistik langsung di dalam SQL</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung median, kuartil, dan batas pencilan tanpa menariknya ke pandas — dan mengganti tumpukan <code>SUM(CASE WHEN…)</code> dengan satu kata.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>percentile_cont: median yang tidak perlu diakali</h3>
+        <span class="cek"><input type="checkbox" id="u5s1"><label for="u5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di SQL Mahir L5 kamu menghitung median dengan trik <code>ROW_NUMBER</code> dan <code>(jml+1)/2</code>, karena SQLite tidak punya fungsinya. Database produksi punya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+WITH nilai AS (
+  SELECT p.id, SUM(i.jumlah * i.harga_saat_itu) AS total
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status = 'selesai' GROUP BY p.id
+)
+SELECT COUNT(*) AS pesanan,
+       ROUND(AVG(total)) AS rata_rata,
+       percentile_cont(0.25) WITHIN GROUP (ORDER BY total) AS q1,
+       percentile_cont(0.50) WITHIN GROUP (ORDER BY total) AS median,
+       percentile_cont(0.75) WITHIN GROUP (ORDER BY total) AS q3,
+       percentile_cont(0.90) WITHIN GROUP (ORDER BY total) AS p90
+FROM nilai""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   pesanan  rata_rata       q1   median        q3       p90
+0      362    98727.0  54250.0  90000.0  139750.0  168900.0</code></pre></div>
+        </div>
+        <p><strong>362 pesanan, median 90.000, rata-rata 98.727</strong> — persis angka yang kamu dapat dengan trik manual di L5. Bedanya: enam baris jadi satu, dan sekarang kamu juga punya kuartil dan persentil ke-90 tanpa tambahan usaha.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong><code>WITHIN GROUP (ORDER BY …)</code> itu bentuk baku untuk <em>ordered-set aggregate</em></strong> — agregat yang hasilnya bergantung pada urutan, bukan cuma pada kumpulannya. Tata bahasanya sama persis di PostgreSQL. Ada juga <code>percentile_disc</code>, yang selalu mengembalikan nilai yang <em>benar-benar ada</em> di data, sementara <code>percentile_cont</code> boleh menginterpolasi di antara dua nilai. Untuk uang, <code>_disc</code> sering lebih jujur.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Batas pencilan dengan IQR — deteksi anomali tanpa meninggalkan SQL</h3>
+        <span class="cek"><input type="checkbox" id="u5s2"><label for="u5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+WITH nilai AS (
+  SELECT p.id, SUM(i.jumlah * i.harga_saat_itu) AS total
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status='selesai' GROUP BY p.id
+),
+batas AS (
+  SELECT percentile_cont(0.25) WITHIN GROUP (ORDER BY total) AS q1,
+         percentile_cont(0.75) WITHIN GROUP (ORDER BY total) AS q3
+  FROM nilai
+)
+SELECT b.q1, b.q3, b.q3 - b.q1 AS iqr,
+       b.q3 + 1.5*(b.q3-b.q1) AS batas_atas,
+       COUNT(*)   FILTER (WHERE n.total &gt; b.q3 + 1.5*(b.q3-b.q1)) AS jumlah_pencilan,
+       SUM(n.total) FILTER (WHERE n.total &gt; b.q3 + 1.5*(b.q3-b.q1)) AS nilai_pencilan
+FROM nilai n CROSS JOIN batas b
+GROUP BY b.q1, b.q3""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>        q1        q3      iqr  batas_atas  jumlah_pencilan  nilai_pencilan
+0  54250.0  139750.0  85500.0    268000.0                1        308000.0</code></pre></div>
+        </div>
+        <p>Aturan IQR — pencilan = di atas <code>Q3 + 1,5 × IQR</code> — adalah cara baku menandai nilai yang layak diperiksa. Di sini batasnya <strong>268.000</strong>, dan cuma <strong>satu</strong> pesanan melewatinya: yang bernilai 308.000, transaksi terbesar di seluruh data.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Bagi kamu ini bukan konsep baru, cuma namanya yang baru.</strong> "Tandai transaksi yang jauh di atas kebiasaan, lalu periksa" adalah prosedur audit analitis substantif. Yang berubah cuma: dulu kamu memilih ambangnya dengan pertimbangan, sekarang datanya yang menghitung ambang itu — dan kamu tetap yang memutuskan apakah 1,5 itu angka yang tepat.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>FILTER: pengganti SUM(CASE WHEN …) yang jauh lebih terbaca</h3>
+        <span class="cek"><input type="checkbox" id="u5s3"><label for="u5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(q("""
+SELECT p.cabang,
+       COUNT(DISTINCT p.id)                                       AS semua_pesanan,
+       COUNT(DISTINCT p.id) FILTER (WHERE p.kanal = 'Ojol')       AS ojol,
+       COUNT(DISTINCT p.id) FILTER (WHERE p.pelanggan_id IS NULL) AS tanpa_pelanggan,
+       ROUND(100.0 * COUNT(DISTINCT p.id) FILTER (WHERE p.kanal='Ojol')
+             / COUNT(DISTINCT p.id), 1)                           AS persen_ojol,
+       SUM(i.jumlah*i.harga_saat_itu) FILTER (WHERE p.kanal='Ojol') AS omzet_ojol
+FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+WHERE p.status = 'selesai'
+GROUP BY p.cabang ORDER BY p.cabang""").to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    cabang  semua_pesanan  ojol  tanpa_pelanggan  persen_ojol  omzet_ojol
+0     Dago            122    43                4         35.2   4221000.0
+1   Kemang            120    43                2         35.8   4583000.0
+2  Seturan            120    30                3         25.0   2560000.0</code></pre></div>
+        </div>
+        <p><strong>Seturan cuma 25% Ojol, dua cabang lain 35%.</strong> Selisih sepuluh poin pada satu cabang — pertanyaan yang layak diajukan ke pemiliknya, dan muncul dari satu query.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Kenapa <code>FILTER</code> lebih baik daripada <code>SUM(CASE WHEN … THEN 1 ELSE 0 END)</code>.</strong> Bukan soal kecepatan — hampir sama. Soal <strong>bisa dibaca dan bisa diperiksa</strong>: niatnya tertulis di depan (<em>hitung, yang mana saja</em>), tidak ada <code>ELSE 0</code> yang mudah terlupa, dan <code>COUNT(DISTINCT …) FILTER</code> bekerja apa adanya sementara versi <code>CASE</code>-nya berbelit. Ada di PostgreSQL dan DuckDB; di BigQuery dan SQL Server kamu tetap pakai <code>CASE</code>.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P6 ============ -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">SQL PRODUKSI · 6</span>
+      <h2>Memuat data berulang tanpa menggandakan apa pun</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis skrip pemuatan yang <strong>aman dijalankan dua kali</strong> — kemampuan yang membedakan skrip mainan dari skrip yang boleh dipasang di jadwal.</p>
+
+    <div class="bahaya">
+      <strong>Ini hari yang paling langsung berguna untuk pekerjaan klienmu.</strong> Di Bekal Kirim Hasil kamu memasang skrip laporan yang jalan otomatis tiap minggu. Pertanyaan yang belum pernah dijawab: <em>apa yang terjadi kalau skrip itu jalan dua kali?</em> Jawabannya, kalau kamu memakai <code>INSERT</code> biasa: datamu tergandakan, laporan berikutnya salah, dan tidak ada satu pun pesan error.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin tabel ringkasan dengan kunci yang benar</h3>
+        <span class="cek"><input type="checkbox" id="u6s1"><label for="u6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import duckdb, pandas as pd
+c = duckdb.connect()          # basis data baru, terpisah
+
+c.execute("""CREATE TABLE ringkasan_harian (
+  hari DATE, cabang TEXT, pesanan INT, omzet BIGINT,
+  PRIMARY KEY (hari, cabang)       -- satu baris per hari per cabang. Ini kuncinya.
+)""")
+
+batch1 = pd.DataFrame({"hari":["2024-06-01","2024-06-01","2024-06-02"],
+                       "cabang":["Dago","Kemang","Dago"],
+                       "pesanan":[3,5,4], "omzet":[300000,510000,420000]})
+c.register("batch", batch1)
+c.execute("INSERT INTO ringkasan_harian SELECT hari::DATE, cabang, pesanan, omzet FROM batch")
+print("sesudah muat pertama:", c.execute("SELECT COUNT(*) FROM ringkasan_harian").fetchone()[0], "baris")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>sesudah muat pertama: 3 baris</code></pre></div>
+        </div>
+        <p><code>PRIMARY KEY (hari, cabang)</code> adalah janji: <strong>tidak boleh ada dua baris untuk kombinasi hari dan cabang yang sama.</strong> Tanpa janji itu, semua yang berikutnya tidak mungkin.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jalankan ulang, dan lihat apa yang menyelamatkanmu</h3>
+        <span class="cek"><input type="checkbox" id="u6s2"><label for="u6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>try:
+    c.execute("INSERT INTO ringkasan_harian SELECT hari::DATE, cabang, pesanan, omzet FROM batch")
+except Exception as e:
+    print("ditolak:", str(e).split(chr(10))[0][:90])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>ditolak: Constraint Error: Duplicate key "hari: 2024-06-01, cabang: Dago" violates primary key cons</code></pre></div>
+        </div>
+        <p><strong>Ditolak — dan itu kabar baik.</strong> Tanpa <code>PRIMARY KEY</code>, perintah yang sama akan diterima dengan tenang, dan tabelmu sekarang berisi enam baris untuk tiga hari. Laporan berikutnya melaporkan omzet dua kali lipat, dan tidak ada yang tahu sampai ada yang merekonsiliasi.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Tapi "gagal" bukan tujuan akhirnya.</strong> Skrip terjadwal yang gagal tiap kali jalan ulang sama tidak bergunanya dengan yang menggandakan data. Yang kamu mau: <em>jalankan berapa kali pun, hasilnya sama</em>. Istilahnya <strong>idempoten</strong>, dan itu isi langkah berikutnya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>ON CONFLICT: sisipkan kalau baru, perbarui kalau sudah ada</h3>
+        <span class="cek"><input type="checkbox" id="u6s3"><label for="u6s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Sekarang datanya direvisi: 1 Juni di Dago ternyata 4 pesanan (bukan 3) senilai 395.000, dan ada data baru 3 Juni di Kemang. Satu perintah harus menangani keduanya.</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>revisi = pd.DataFrame({"hari":["2024-06-01","2024-06-03"],
+                       "cabang":["Dago","Kemang"],
+                       "pesanan":[4,6], "omzet":[395000,640000]})
+c.register("revisi", revisi)
+
+c.execute("""
+INSERT INTO ringkasan_harian
+SELECT hari::DATE, cabang, pesanan, omzet FROM revisi
+ON CONFLICT (hari, cabang) DO UPDATE SET
+    pesanan = EXCLUDED.pesanan,
+    omzet   = EXCLUDED.omzet""")
+
+print(c.execute("SELECT * FROM ringkasan_harian ORDER BY hari, cabang").df().to_string())
+print("\ntotal baris:", c.execute("SELECT COUNT(*) FROM ringkasan_harian").fetchone()[0])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>        hari  cabang  pesanan   omzet
+0 2024-06-01    Dago        4  395000
+1 2024-06-01  Kemang        5  510000
+2 2024-06-02    Dago        4  420000
+3 2024-06-03  Kemang        6  640000
+
+total baris: 4</code></pre></div>
+        </div>
+        <p><strong>Empat baris, bukan lima.</strong> Baris 1 Juni Dago <em>diperbarui</em> dari 3 pesanan/300.000 jadi 4 pesanan/395.000; baris 3 Juni Kemang <em>ditambahkan</em>. Satu perintah, dua perilaku, dan jalankan berapa kali pun hasilnya tetap sama.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong><code>EXCLUDED</code> adalah kata kunci untuk "baris yang tadi mau disisipkan".</strong> Jadi <code>SET omzet = EXCLUDED.omzet</code> berarti "pakai nilai baru". Kalau kamu justru ingin mempertahankan yang lama dan mengabaikan yang baru, cukup <code>ON CONFLICT DO NOTHING</code>. Tata bahasa ini persis sama di PostgreSQL dan SQLite modern; di BigQuery dan SQL Server namanya <code>MERGE</code>, bentuknya beda tapi maksudnya sama.
+        </div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Aturan yang layak kamu bawa ke tiap skrip terjadwal:</strong> sebelum memasang apa pun di jadwal, jalankan dua kali berturut-turut lalu bandingkan <code>COUNT(*)</code> dan total nilainya. Kalau berubah, skripmu belum siap dipasang. Pemeriksaan ini makan waktu tiga puluh detik dan mencegah jenis kesalahan yang biasanya baru ketahuan setelah tiga bulan.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P7 ============ -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">SQL PRODUKSI · 7</span>
+      <h2>JSON, dan pindah ke database kantor</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membongkar kolom JSON dari ekspor ERP atau API, dan tahu persis apa yang berubah ketika kamu pindah ke PostgreSQL atau BigQuery.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kolom yang isinya satu dokumen utuh</h3>
+        <span class="cek"><input type="checkbox" id="u7s1"><label for="u7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Makin banyak sistem menyimpan satu transaksi sebagai satu dokumen JSON, bukan sebagai kolom-kolom rapi. Kalau klienmu memakai sistem kasir modern, ekspornya akan berbentuk seperti ini.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>c.execute("CREATE TABLE pesanan_api (id INT, payload JSON)")
+c.execute("""INSERT INTO pesanan_api VALUES
+ (1,'{"pelanggan":{"nama":"Rina","kota":"Jakarta"},"kanal":"Ojol",
+      "item":[{"produk":"Kopi Susu","qty":2},{"produk":"Croissant","qty":1}],
+      "promo":["NEWUSER","ONGKIR"]}'),
+ (2,'{"pelanggan":{"nama":"Bayu","kota":null},"kanal":"Dine-in",
+      "item":[{"produk":"Matcha Latte","qty":3}],"promo":[]}')""")
+
+print(c.execute("""
+SELECT id,
+       payload-&gt;'pelanggan'-&gt;&gt;'nama' AS nama,
+       payload-&gt;'pelanggan'-&gt;&gt;'kota' AS kota,
+       payload-&gt;&gt;'kanal'              AS kanal,
+       json_array_length(payload-&gt;'item')  AS jml_item,
+       json_array_length(payload-&gt;'promo') AS jml_promo
+FROM pesanan_api ORDER BY id""").df().to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   id  nama     kota    kanal  jml_item  jml_promo
+0   1  Rina  Jakarta     Ojol         2          2
+1   2  Bayu     None  Dine-in         1          0</code></pre></div>
+        </div>
+        <p>Dua operator yang perlu kamu bedakan: <code>-&gt;</code> mengembalikan <strong>JSON</strong> (masih bisa ditelusuri lebih dalam), <code>-&gt;&gt;</code> mengembalikan <strong>teks biasa</strong> (siap dipakai). Itu sebabnya <code>payload-&gt;'pelanggan'-&gt;&gt;'nama'</code> — masuk dulu sebagai JSON, keluar sebagai teks. Tata bahasa ini identik di PostgreSQL.</p>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Perhatikan <code>kota</code> baris kedua: <code>None</code>.</strong> Di JSON aslinya tertulis <code>"kota": null</code>. Semua aturan tiga-nilai dari Level 1 berlaku penuh di sini — dan sekarang <code>NULL</code>-nya datang dari tempat yang lebih mudah luput dari perhatian.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>unnest: mengubah array jadi baris</h3>
+        <span class="cek"><input type="checkbox" id="u7s2"><label for="u7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kolom <code>item</code> berisi <em>daftar</em> produk. Untuk menganalisisnya, daftar itu harus dipecah jadi satu baris per produk — dan di sinilah <code>LATERAL</code> dari P3 bertemu JSON:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(c.execute("""
+SELECT p.id,
+       json_extract_string(x.item, '$.produk')        AS produk,
+       CAST(json_extract_string(x.item, '$.qty') AS INT) AS qty
+FROM pesanan_api p,
+     LATERAL (SELECT unnest(json_extract(p.payload, '$.item[*]')) AS item) x
+ORDER BY p.id, produk""").df().to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   id        produk  qty
+0   1     Croissant    1
+1   1     Kopi Susu    2
+2   2  Matcha Latte    3</code></pre></div>
+        </div>
+        <p>Dua dokumen JSON jadi tiga baris tabel biasa — dan mulai titik ini, semua yang kamu pelajari sejak Level 1 berlaku lagi seperti biasa.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Peta pindahan: DuckDB ke database kantor</h3>
+        <span class="cek"><input type="checkbox" id="u7s3"><label for="u7s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Simpan tabel ini. Ini yang kamu buka di minggu pertama bekerja, ketika mesin barunya menolak query yang tadinya jalan.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Yang kamu pelajari</th><th>PostgreSQL</th><th>BigQuery</th><th>SQL Server</th></tr></thead>
+            <tbody>
+              <tr><td><code>ROLLUP</code> / <code>GROUPING SETS</code> / <code>GROUPING()</code></td><td>sama</td><td>sama</td><td>sama</td></tr>
+              <tr><td><code>QUALIFY</code></td><td><strong>tidak ada</strong> — pakai dua CTE (L3)</td><td>sama</td><td><strong>tidak ada</strong></td></tr>
+              <tr><td><code>LATERAL</code></td><td>sama</td><td><code>UNNEST</code> di <code>FROM</code></td><td><code>CROSS APPLY</code></td></tr>
+              <tr><td><code>generate_series</code></td><td>sama</td><td><code>GENERATE_DATE_ARRAY</code></td><td>CTE rekursif (L2)</td></tr>
+              <tr><td><code>percentile_cont … WITHIN GROUP</code></td><td>sama</td><td><code>PERCENTILE_CONT</code> sbg window</td><td>sbg window</td></tr>
+              <tr><td><code>FILTER (WHERE …)</code></td><td>sama</td><td><strong>tidak ada</strong> — pakai <code>CASE</code></td><td><strong>tidak ada</strong> — pakai <code>CASE</code></td></tr>
+              <tr><td><code>ON CONFLICT DO UPDATE</code></td><td>sama</td><td><code>MERGE</code></td><td><code>MERGE</code></td></tr>
+              <tr><td><code>-&gt;</code> dan <code>-&gt;&gt;</code> untuk JSON</td><td>sama</td><td><code>JSON_VALUE</code></td><td><code>JSON_VALUE</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:14px">
+          <strong>Baca kolom PostgreSQL dari atas ke bawah:</strong> enam dari delapan tertulis "sama". Itu bukan kebetulan — DuckDB memang sengaja mengikuti tata bahasa PostgreSQL. Jadi yang kamu latih tujuh hari ini bukan kemampuan yang cuma berlaku di satu alat.
+        </div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Dan baca kolom BigQuery serta SQL Server:</strong> di situ ada tiga "tidak ada". Artinya kemampuan lama dari Level 1–5 <strong>tidak menjadi usang</strong> — pola dua-CTE, <code>SUM(CASE WHEN…)</code>, dan CTE rekursif tetap kamu perlukan. Yang kamu punya sekarang adalah <em>dua</em> cara untuk tiap masalah, dan kemampuan memilih sesuai mesin yang ada di depanmu. Itu yang membedakan orang yang hafal satu dialek dari orang yang paham SQL.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Produksi selesai</h3>
+      <p>Delapan hal yang tidak ada di 44 modul sebelumnya, sekarang ada: laporan bertingkat tanpa UNION, penyaringan window function, subquery per baris yang tidak lambat, kalender yang menolak kehilangan hari, statistik tanpa meninggalkan SQL, pemuatan ulang yang aman, dan JSON.</p>
+      <p style="margin-top:10px">Yang paling langsung mengubah pekerjaanmu di antara semuanya: <strong>P6</strong>. Skrip terjadwal yang aman dijalankan dua kali adalah syarat sebelum kamu boleh menagih klien secara bulanan — dan itu satu-satunya bentuk penghasilan freelance yang berulang tanpa mencari klien baru.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Berikutnya:</strong> Python Lanjut — mengubah kode notebook jadi alat yang bisa dipakai berulang, diuji, dan dipasang di jadwal. Sama seperti hari ini, isinya hal-hal yang saya buktikan belum ada di kurikulum dengan mencacah seluruh modul: <code>logging</code>, <code>argparse</code>, generator, pemrosesan bertahap, dan pengujian dengan pytest.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/e5ebbbde-69c2-4a12-a118-9eaa29210949">Lanjut ke Python Produksi: dari notebook jadi alat →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua keluaran di halaman ini dihasilkan dengan menjalankan kodenya sungguhan pada DuckDB 1.5.5 di atas <code>senja.db</code> yang sama seperti Level 1–5.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

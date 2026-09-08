@@ -1,0 +1,2056 @@
+<title>Minggu Keempat Belas Portofolio &amp; CV</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/59473952-fe59-4f21-b945-840ac06a7cee">← Kembali ke Migas L5: Cadangan & keputusan $3 juta</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 14</span>
+  <button type="button" data-hari="1" aria-selected="true">92</button>
+  <button type="button" data-hari="2" aria-selected="false">93</button>
+  <button type="button" data-hari="3" aria-selected="false">94</button>
+  <button type="button" data-hari="4" aria-selected="false">95</button>
+  <button type="button" data-hari="5" aria-selected="false">96</button>
+  <button type="button" data-hari="6" aria-selected="false">97</button>
+  <button type="button" data-hari="7" aria-selected="false">98</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Minggu 14 · Hari 92-98 · ditulis ulang mengikuti pola Bekal Python</span>
+    <h1>Portofolio, CV, dan wawancara SQL — diukur, bukan dikira</h1>
+    <p class="lede">Minggu ini isinya hal-hal yang biasanya cuma bisa dinilai dengan perasaan: apakah README-ku sudah bagus, apakah CV-ku sudah cukup, apakah aku sudah siap ditanya SQL. Versi ini mengganti perasaan itu dengan <strong>tiga skrip pemeriksa dan satu basis data latihan</strong> yang bisa kamu jalankan sendiri.</p>
+    <p class="lede" style="margin-top:10px">Versi sebelumnya menjelaskan empat soal SQL wawancara lewat jawaban jadi sepanjang 15 baris yang tinggal dibaca. Versi ini membangun tiap jawaban selapis demi selapis pada basis data sungguhan — dan membuktikan dua bug diam yang menjatuhkan kandidat: <code>NOT IN</code> yang mengembalikan nol karena satu NULL, dan retensi yang terbaca <strong>100% di setiap kohor</strong> hanya karena satu kata diganti.</p>
+    <p class="lede" style="margin-top:10px">Semua keluaran di kotak “HARUS MUNCUL” diperoleh dengan menjalankan perintahnya sungguhan: DuckDB 1.5.5, Python 3.11.15, git 2.43.0. Kalau angkamu berbeda, salah satu dari kita salah ketik — dan kamu punya datanya untuk membuktikan yang mana.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 92</span>
+      <h2>Memilih capstone: satu proyek dalam mengalahkan lima yang dangkal</h2>
+      <span class="waktu">± 60 menit perencanaan (+ 3–5 hari kerja dicicil)</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> punya berkas rencana konkret untuk satu proyek yang cukup dalam untuk dibicarakan 30 menit di wawancara, dan cukup jelas untuk dimengerti dalam 30 detik oleh perekrut.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat berkas rencananya lebih dulu, sebelum berpikir</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-1"><label for="minggu-keempatbelas-v2-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat folder <code>capstone/</code> dan satu berkas kosong di dalamnya. Rencana yang cuma di kepala tidak pernah selesai.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>mkdir -p capstone &amp;&amp; cd capstone
+touch RENCANA.md</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Satu berkas kosong bernama <code>RENCANA.md</code>. Sisa hari ini kamu mengisinya, dan di akhir kamu memeriksanya dengan perintah.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Daftar proyek yang sudah kamu punya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-2"><label for="minggu-keempatbelas-v2-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis di <code>RENCANA.md</code> daftar proyek Minggu 6–13 milikmu, satu baris per proyek, dengan format: nama · data apa · berapa baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>## Kandidat
+- Dashboard kedai kopi · transaksi POS · 151.088 baris
+- Pipeline dbt HDB · data.gov.sg · 240.000 baris
+- Model churn · data langganan · 8.000 baris</code></pre></div>
+<p>Capstone bukan proyek baru dari nol. Ia salah satu proyek yang sudah ada, <strong>diperdalam sampai selesai betul</strong>. Membuat yang baru dari nol adalah cara tercepat untuk punya dua belas proyek setengah jadi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Coret yang tidak lolos syarat pertama: datanya harus berantakan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-3"><label for="minggu-keempatbelas-v2-1-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Untuk tiap kandidat, jawab satu pertanyaan: <em>apakah ada bagian membersihkan data yang sungguhan?</em> Coret yang jawabannya tidak.</div>
+        <div class="bahaya"><strong>Dataset kompetisi yang sudah bersih adalah jebakan.</strong> Titanic, Iris, dan sejenisnya menunjukkan kamu bisa menjalankan kode — bukan bahwa kamu bisa bekerja. Bagian yang paling dinilai perekrut justru bagian yang paling tidak menyenangkan: apa yang rusak di data itu dan apa keputusanmu.</div>
+<p>Kalau semua kandidatmu bersih, ambil satu dan <strong>rusakkan sumbernya</strong> — pakai data mentah aslinya, bukan versi yang sudah kamu bersihkan minggu lalu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Syarat kedua: judulnya harus bisa berbentuk temuan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-4"><label for="minggu-keempatbelas-v2-1-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Untuk tiap kandidat yang tersisa, coba tulis satu judul yang berisi <strong>angka</strong>. Kalau kamu tidak bisa, proyeknya belum cukup dalam.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Judul lemah</th>
+<th>Judul yang lolos</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Analisis Data HDB</td><td>Lokasi menentukan 61% harga HDB — dan menurun sejak 2020</td></tr>
+              <tr><td>Dashboard Penjualan Kedai Kopi</td><td>Retensi bulan pertama 42%, tapi kohor Desember cuma 13%</td></tr>
+              <tr><td>Prediksi Churn Pelanggan</td><td>Tiga sinyal memprediksi 71% pelanggan yang berhenti</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Perhatikan yang berubah: kolom kiri menyebut <em>apa yang kamu kerjakan</em>, kolom kanan menyebut <em>apa yang kamu temukan</em>. Yang kedua tidak bisa ditulis kalau analisisnya belum selesai — itulah gunanya syarat ini.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Syarat ketiga: relevan dengan pasar tujuanmu</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-5"><label for="minggu-keempatbelas-v2-1-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis di <code>RENCANA.md</code>: negara tujuanmu, dan sumber data terbuka negara itu yang bisa kamu pakai.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Tujuan</th>
+<th>Sumber</th>
+<th>Contoh dataset</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Singapura</td><td><code>data.gov.sg</code></td><td>Resale Flat Prices — ratusan ribu baris, ada dimensi waktu dan lokasi</td></tr>
+              <tr><td>Singapura</td><td>LTA DataMall</td><td>data transportasi, diperbarui berkala</td></tr>
+              <tr><td>Australia</td><td><code>data.gov.au</code> / ABS</td><td>sensus, ekonomi, kesehatan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kenapa ini bukan sekadar gaya-gayaan:</strong> perekrut di Singapura mengenali "Resale Flat Prices" tanpa perlu kamu jelaskan. Itu memotong separuh usaha menjelaskan proyekmu, dan sisa waktunya bisa dipakai membahas temuanmu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Tulis enam bagian susunannya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-6"><label for="minggu-keempatbelas-v2-1-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin kerangka ini ke <code>RENCANA.md</code>, lalu isi tiap baris dengan satu kalimat konkret.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>## Susunan
+1. Pertanyaan bisnis  :
+2. Data &amp; pembersihan :
+3. Pipeline           :
+4. Analisis berlapis  :
+5. Hasil yang diklik  :
+6. Temuan &amp; batasan   :</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Bagian</th>
+<th>Yang harus ada</th>
+<th>Kenapa</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1</td><td>satu kalimat, berbentuk pertanyaan</td><td>kalau butuh dua kalimat, pertanyaanmu belum tajam</td></tr>
+              <tr><td>2</td><td>dari mana, berapa baris, apa yang rusak, keputusanmu</td><td>bagian yang paling sering dilewati orang lain</td></tr>
+              <tr><td>3</td><td>dbt + penjadwalan kalau relevan</td><td>membedakan analis dari orang yang menjalankan notebook</td></tr>
+              <tr><td>4</td><td>deskriptif → perbandingan → model/uji</td><td>menunjukkan kedalaman, bukan sekadar grafik</td></tr>
+              <tr><td>5</td><td>tautan hidup, bukan tangkapan layar</td><td>perekrut mengklik tautan, jarang menjalankan notebook</td></tr>
+              <tr><td>6</td><td>lima temuan berangka, tiga rekomendasi, satu batasan</td><td>batasan adalah bagian yang paling membedakan</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Tulis bagian batasan sekarang, bukan nanti</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-7"><label for="minggu-keempatbelas-v2-1-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis satu paragraf batasan di <code>RENCANA.md</code> — sekarang, sebelum analisisnya dikerjakan.</div>
+        <div class="kode"><pre><code>## Batasan
+Analisis ini korelasional, bukan sebab-akibat: tidak ada eksperimen, dan
+faktor yang tidak saya ukur bisa menjelaskan sebagian pola yang saya temukan.</code></pre></div>
+        <div class="catatan"><strong>Ini senjata rahasianya.</strong> Hampir tidak ada pelamar junior yang menuliskannya. Menuliskannya di awal juga menjaga analisismu jujur — kamu sudah menyatakan apa yang tidak bisa kamu buktikan sebelum tergoda membuktikannya.</div>
+<p>Ini kelanjutan langsung dari Minggu 5 Hari 32: korelasi bukan sebab-akibat. Bedanya, di sini kamu menuliskannya di tempat yang dibaca orang.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Periksa rencanamu dengan perintah, bukan perasaan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-8"><label for="minggu-keempatbelas-v2-1-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dua baris. Yang pertama menghitung apakah keenam bagian ada, yang kedua mencari bagian yang masih kosong.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>grep -cE &quot;^[1-6]\. &quot; RENCANA.md
+grep -n &quot;:$&quot; RENCANA.md</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>6</code></pre></div></div>
+<p>Angka <strong>6</strong>, lalu <strong>tidak ada apa-apa lagi</strong>. Perintah kedua mencari baris yang berakhir dengan titik dua — artinya bagian yang kamu salin tapi belum kamu isi.</p>
+<p>Kalau rencanamu belum lengkap, yang muncul seperti ini — dan tiap baris menyebut nomor barisnya:</p>
+        <div class="hasil"><span class="tag">KALAU BELUM SELESAI</span>
+                  <div class="kode"><pre><code>3:2. Data &amp; pembersihan :
+4:3. Pipeline           :
+6:5. Hasil yang diklik  :</code></pre></div></div>
+        <div class="catatan"><strong>Beri dirimu 3–5 hari kerja untuk capstone-nya,</strong> dicicil di sela Hari 93–98. Hari-hari berikutnya sengaja tidak menuntut capstone selesai — yang dituntut cuma rencananya ada.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-1-9"><label for="minggu-keempatbelas-v2-1-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Sebutkan tiga syarat proyek capstone dan enam bagian susunannya, dengan suara keras.</div>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p><strong>Tiga syarat:</strong> data nyata dan berantakan · pertanyaan bisnis yang
+            bisa dijadikan judul berangka · relevan dengan pasar tujuan.</p>
+            <p><strong>Enam bagian:</strong> pertanyaan bisnis · data &amp; pembersihan ·
+            pipeline · analisis berlapis · hasil yang bisa diklik · temuan &amp; batasan.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 92 selesai. Berhenti di sini — mulai kerjakan capstone-mu di sela hari berikutnya.</h3>
+      <p><strong>Tempel di catatanmu:</strong> tiga syarat (data berantakan · judul berangka · relevan pasar tujuan) · enam bagian susunan · bagian batasan ditulis di awal, bukan di akhir.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 93</span>
+      <h2>README yang dinilai 60 detik — dan skrip yang mengukurnya</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menulis README yang lolos sepuluh pemeriksaan terukur, lalu mengujinya pada orang yang belum pernah mendengar namamu.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ambil pemeriksanya dulu</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-1"><label for="minggu-keempatbelas-v2-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dari paket zip, salin <code>data-dan-skrip/minggu-14/periksa_readme.py</code> ke folder <code>capstone/</code>-mu. Jalankan tanpa argumen dulu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python periksa_readme.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>pakai: python periksa_readme.py README.md</code></pre></div></div>
+<p>Skrip ini memeriksa sepuluh hal yang <strong>bisa dihitung</strong> — bukan selera. Sisa hari ini kamu menulis README sampai kesepuluhnya lolos.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tulis README seburuk mungkin dulu, lalu ukur</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-2"><label for="minggu-keempatbelas-v2-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat <code>README.md</code> berisi persis tiga baris ini. Ini bentuk README yang paling sering dikirim pelamar.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code># Analisis Data HDB
+
+Proyek ini menganalisis data harga rumah di Singapura menggunakan Python,
+pandas, dan matplotlib.</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lalu jalankan pemeriksanya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python periksa_readme.py README.md</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] ada judul H1             # Analisis Data HDB
+[CEK] judul memuat angka       judul temuan biasanya berangka, mis. &#x27;61% harga ditentukan lokasi&#x27;
+[CEK] judul bukan &#x27;analisis X&#x27; judul yang dimulai &#x27;Analisis ...&#x27; adalah nama dataset, bukan temuan
+[CEK] tautan hidup             0 tautan http ditemukan
+[CEK] tautan di paruh atas     tautan dashboard harus terlihat tanpa menggulung layar
+[CEK] gambar                   0 gambar ditemukan
+[CEK] temuan berangka          0 poin berangka (target 3)
+[CEK] bagian Data              menjelaskan sumber, jumlah baris, apa yang rusak
+[CEK] bagian Batasan           bagian yang hampir tidak pernah ditulis pelamar lain
+[CEK] cara menjalankan         perintah yang benar-benar berhasil dijalankan orang lain
+
+lolos 1 dari 10 pemeriksaan</code></pre></div></div>
+<p><strong>1 dari 10.</strong> Dan README ini bukan karangan — ini bentuk yang benar-benar dikirim orang, termasuk orang yang analisisnya bagus.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ganti judulnya jadi temuan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-3"><label for="minggu-keempatbelas-v2-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ubah baris pertama <code>README.md</code>-mu jadi kalimat yang memuat angka, lalu jalankan pemeriksanya lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code># Lokasi menentukan 61% harga HDB — dan pengaruhnya menurun sejak 2020</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] judul memuat angka       judul temuan biasanya berangka, mis. &#x27;61% harga ditentukan lokasi&#x27;
+[OK ] judul bukan &#x27;analisis X&#x27; judul yang dimulai &#x27;Analisis ...&#x27; adalah nama dataset, bukan temuan</code></pre></div></div>
+<p>Perhatikan apa yang berubah dari kedua judul itu. Yang lama menyebut <em>apa yang kamu kerjakan</em>. Yang baru menyebut <em>apa yang kamu temukan</em> — dan angka membuatnya bisa dipercaya.</p>
+        <div class="catatan"><strong>Judul yang dimulai dengan "Analisis" hampir selalu lemah,</strong> karena semua orang menganalisis; yang membedakan adalah hasilnya. Pemeriksa ini menolaknya secara otomatis.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Taruh tautan hidup di paruh atas</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-4"><label for="minggu-keempatbelas-v2-2-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan dua baris ini tepat di bawah paragraf pembuka — bukan di bawah halaman.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>**[Lihat dashboard →](https://contoh.streamlit.app)** · **[Baca notebook →](https://github.com/contoh/hdb)**
+
+![Tangkapan layar dashboard](gambar/dashboard.png)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] tautan hidup             2 tautan http ditemukan
+[OK ] tautan di paruh atas     tautan dashboard harus terlihat tanpa menggulung layar
+[OK ] gambar                   1 gambar ditemukan</code></pre></div></div>
+        <div class="bahaya"><strong>Pemeriksa ini menuntut tautannya ada di 12 baris pertama.</strong> Bukan tanpa alasan: perekrut memberimu 30–60 detik. Kalau tautan dashboard berada di bawah lima paragraf instalasi, ia tidak akan pernah diklik.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Tulis tiga temuan berangka</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-5"><label for="minggu-keempatbelas-v2-2-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan bagian <code>## Temuan</code> berisi tiga poin bernomor, <strong>masing-masing memuat angka</strong>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>## Temuan
+
+1. **Jarak ke MRT menjelaskan 61% ragam harga** pada 2017–2019, turun jadi 44% pada 2021–2024.
+2. **Flat 4-kamar naik 38%** sepanjang periode, dibanding 22% untuk 3-kamar.
+3. **Sisa sewa di bawah 60 tahun memotong harga rata-rata 18%**, makin tajam sejak 2021.</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] temuan berangka          3 poin berangka (target 3)</code></pre></div></div>
+<p>Pola tiap poin sama: <strong>angka + arah + periode</strong>. Poin tanpa angka bukan temuan, itu kesan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Tulis bagian Data — yang paling sering dilewati</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-6"><label for="minggu-keempatbelas-v2-2-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan <code>## Data</code>: dari mana, berapa baris, rentang waktu, <strong>apa yang rusak dan apa keputusanmu</strong>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>## Data
+
+Sumber: data.gov.sg &quot;Resale Flat Prices&quot;, 240.118 baris, Januari 2017 – Juni 2024.
+Masalah yang ditemukan: nama estate ditulis tiga versi berbeda (ANG MO KIO,
+Ang Mo Kio, AMK); 1.204 baris tanpa sisa masa sewa, dibuang setelah dicek
+tidak terkonsentrasi di satu tahun.</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] bagian Data              menjelaskan sumber, jumlah baris, apa yang rusak</code></pre></div></div>
+        <div class="catatan"><strong>Kalimat terakhir itu yang paling bernilai:</strong> "dibuang setelah dicek tidak terkonsentrasi di satu tahun". Itu bukan pembersihan data, itu <em>pertimbangan</em> — dan pertimbangan yang ditulis adalah satu-satunya bukti bahwa kamu memikirkannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Tulis cara menjalankan yang benar-benar berhasil</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-7"><label for="minggu-keempatbelas-v2-2-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan <code>## Menjalankan sendiri</code> dengan tiga baris perintah. Lalu — dan ini bagian yang wajib — <strong>jalankan sendiri di folder kosong</strong>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>## Menjalankan sendiri
+
+```
+git clone https://github.com/[username]/[repo].git &amp;&amp; cd [repo]
+pip install -r requirements.txt
+streamlit run app.py
+```</code></pre></div>
+        <div class="bahaya"><strong>Perintah yang tidak pernah kamu uji dari folder kosong hampir selalu salah.</strong> Yang paling sering: berkas yang lupa di-commit karena kena <code>.gitignore</code>, dan pustaka yang terpasang di komputermu berbulan-bulan lalu tapi tidak ada di <code>requirements.txt</code>. Perekrut yang mencobanya dan gagal tidak akan mengirim pesan bertanya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Tulis batasan, lalu lolos sepuluh dari sepuluh</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-8"><label for="minggu-keempatbelas-v2-2-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan <code>## Batasan</code>, lalu jalankan pemeriksanya untuk terakhir kali.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>## Batasan
+
+Analisis ini korelasional, bukan sebab-akibat: tidak ada eksperimen, dan faktor
+yang tidak saya ukur (misalnya mutu sekolah di sekitar) bisa menjelaskan
+sebagian pola yang saya temukan.</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] ada judul H1             # Lokasi menentukan 61% harga HDB — dan pengaruhnya menurun 
+[OK ] judul memuat angka       judul temuan biasanya berangka, mis. &#x27;61% harga ditentukan lokasi&#x27;
+[OK ] judul bukan &#x27;analisis X&#x27; judul yang dimulai &#x27;Analisis ...&#x27; adalah nama dataset, bukan temuan
+[OK ] tautan hidup             2 tautan http ditemukan
+[OK ] tautan di paruh atas     tautan dashboard harus terlihat tanpa menggulung layar
+[OK ] gambar                   1 gambar ditemukan
+[OK ] temuan berangka          3 poin berangka (target 3)
+[OK ] bagian Data              menjelaskan sumber, jumlah baris, apa yang rusak
+[OK ] bagian Batasan           bagian yang hampir tidak pernah ditulis pelamar lain
+[OK ] cara menjalankan         perintah yang benar-benar berhasil dijalankan orang lain
+
+lolos 10 dari 10 pemeriksaan</code></pre></div></div>
+<p>Dari <strong>1 dari 10</strong> jadi <strong>10 dari 10</strong>, dan kamu bisa melihat tiap langkah yang membuatnya berubah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Uji yang tidak bisa dilakukan skrip</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-9"><label for="minggu-keempatbelas-v2-2-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Minta seseorang yang <strong>bukan orang data</strong> membaca README-mu selama 60 detik. Lalu tutup layarnya dan tanya: apa isinya?</div>
+        <div class="bahaya"><strong>Kalau dia tidak bisa menyebutkan satu temuan pun, README-mu belum selesai</strong> — meski lolos 10 dari 10. Skrip cuma bisa memeriksa apakah bagiannya ada; ia tidak bisa memeriksa apakah kalimatmu bisa dimengerti.</div>
+<p>Dua pemeriksaan ini saling melengkapi, dan keduanya perlu. Skripnya menangkap yang terlewat; manusianya menangkap yang tidak terbaca.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-2-10"><label for="minggu-keempatbelas-v2-2-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Sebutkan urutan enam bagian README dan alasan tiap bagian ada di posisi itu.</div>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p>Judul temuan berangka → paragraf pertanyaan bisnis → tautan hidup → gambar →
+            Temuan → Data → Cara kerja → Menjalankan sendiri → Batasan.</p>
+            <p>Alasannya satu: <strong>urutannya mengikuti perhatian pembaca yang menurun</strong>.
+            Yang paling meyakinkan ditaruh di tempat yang pasti terbaca; yang butuh niat
+            (cara instalasi) ditaruh di bawah.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 93 selesai.</h3>
+      <p><strong>Tempel di catatanmu:</strong> judul = temuan berangka, bukan nama dataset · tautan hidup di 12 baris pertama · bagian Data menyebut apa yang rusak dan keputusanmu · Batasan selalu ada · uji dengan orang non-data, 60 detik.</p><p style="margin-top:8px">Simpan <code>periksa_readme.py</code>. Jalankan lagi tiap kali kamu menyelesaikan proyek baru — sepuluh detik, dan menangkap hal yang kamu lupakan setiap kali.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 94</span>
+      <h2>Profil GitHub yang bisa dinilai dalam sekali pandang</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> profil yang menyebutkan temuan, bukan tumpukan repo latihan — dan riwayat commit yang terlihat seperti pekerjaan, bukan unggahan.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lihat profilmu seperti orang asing melihatnya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-3-1"><label for="minggu-keempatbelas-v2-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka <code>github.com/[username-mu]</code> di jendela penyamaran (<em>incognito</em>), supaya kamu melihatnya sebagai orang yang belum login. Beri dirimu 30 detik, lalu tutup.</div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Tuliskan apa yang kamu ingat. Biasanya: deretan nama repositori tanpa keterangan, sebagian bernama <code>latihan-1</code> atau <code>tugas-sql</code>, dan tidak ada satu kalimat pun yang menyebutkan siapa kamu.</p></div>
+<p>Itulah yang dilihat perekrut. Sisa hari ini memperbaiki tepat itu — bukan kodemu, yang jarang dibaca.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Sematkan empat repositori, dan sembunyikan sisanya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-3-2"><label for="minggu-keempatbelas-v2-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Di halaman profilmu, klik <strong>Customize your pins</strong>. Pilih tepat empat.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Slot</th>
+<th>Isi</th>
+<th>Kenapa</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1</td><td>capstone (Hari 92–93)</td><td>proyek terdalammu, dibaca pertama</td></tr>
+              <tr><td>2</td><td>satu proyek SQL/pipeline murni</td><td>membuktikan kemampuan teknis inti</td></tr>
+              <tr><td>3</td><td>satu dashboard dengan tautan hidup</td><td>satu-satunya yang bisa diklik dan langsung terlihat</td></tr>
+              <tr><td>4</td><td>satu proyek beda jenis (ML/statistik)</td><td>menunjukkan keluasan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Repositori latihan setengah jadi merugikanmu, bukan menambah.</strong> Jadikan privat atau arsipkan. Sepuluh repo bagus di antara empat puluh repo kosong terlihat seperti empat puluh repo kosong.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Isi deskripsi dan topik tiap repo yang disematkan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-3-3"><label for="minggu-keempatbelas-v2-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka tiap repo tersemat → klik ikon gerigi di kanan atas → isi <strong>Description</strong> dan <strong>Topics</strong>.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kolom</th>
+<th>Isi yang benar</th>
+<th>Contoh</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Description</td><td>kalimat temuan, sama dengan judul README-mu</td><td>Lokasi menentukan 61% harga HDB, dan menurun sejak 2020</td></tr>
+              <tr><td>Topics</td><td>tag alat, huruf kecil, dipisah spasi</td><td><code>sql python dbt bigquery streamlit</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Tanpa deskripsi, kartu repo di halaman profilmu tampil kosong — meski isinya bagus. Topics juga membuat repomu muncul di pencarian GitHub berdasarkan alat.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Buat README profil</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-3-4"><label for="minggu-keempatbelas-v2-3-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat repositori baru dengan nama <strong>persis sama</strong> dengan username GitHub-mu, centang <em>Add a README file</em>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>username: budiwijaya  -&gt;  nama repo: budiwijaya</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>GitHub menampilkan kotak biru bertuliskan <em>"You found a secret! budiwijaya/budiwijaya is a special repository..."</em> — itu tanda namanya sudah tepat. Isi README-nya otomatis muncul di paling atas halaman profilmu.</p></div>
+        <div class="catatan"><strong>Kalau kotak birunya tidak muncul,</strong> nama repomu tidak sama persis dengan username — periksa huruf besar-kecil dan tanda hubung.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Isi README profil dengan tiga hal saja</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-3-5"><label for="minggu-keempatbelas-v2-3-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ganti seluruh isi README profil dengan ini, sesuaikan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>### Budi Wijaya
+
+Mantan auditor KAP, sekarang data analyst. SQL · Python · dbt · Tableau.
+Sedang mencari posisi analis di Singapura.
+
+- **[Harga HDB Singapura](https://github.com/budiwijaya/hdb)** — lokasi menentukan 61% harga, dan menurun sejak 2020
+- **[Retensi kedai kopi](https://github.com/budiwijaya/kopi)** — retensi bulan-1 42%, kohor Desember cuma 13%
+- **[Prediksi churn](https://github.com/budiwijaya/churn)** — tiga sinyal memprediksi 71% pelanggan yang berhenti
+
+budi.wijaya@email.com · [LinkedIn](https://linkedin.com/in/budiwijaya)</code></pre></div>
+<p>Tiga hal: <strong>siapa kamu, apa yang kamu cari, tiga proyek terbaik dengan temuannya.</strong> Tidak ada ikon animasi, tidak ada grafik statistik GitHub, tidak ada daftar bahasa pemrograman berbentuk lencana warna-warni.</p>
+        <div class="catatan"><strong>Kenapa tanpa hiasan:</strong> lencana dan animasi memenuhi layar pertama, dan mendorong turun satu-satunya bagian yang berguna — tautan ke proyekmu beserta temuannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Periksa riwayat commit capstone-mu</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-3-6"><label for="minggu-keempatbelas-v2-3-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka folder capstone-mu di terminal. Dua perintah.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git rev-list --count HEAD
+git log --pretty=&quot;%h %s&quot; --shortstat</code></pre></div>
+        <div class="hasil"><span class="tag">KALAU RIWAYATMU BURUK</span>
+                  <div class="kode"><pre><code>1
+d6e65dd upload project
+ 9 files changed, 9 insertions(+)</code></pre></div></div>
+<p><strong>Satu commit berisi seluruh proyek.</strong> Itu bukan riwayat kerja, itu unggahan. Perekrut yang membuka tab <em>Commits</em> melihat satu baris bertuliskan <code>upload project</code>, dan tidak ada yang bisa disimpulkan darinya.</p>
+        <div class="hasil"><span class="tag">YANG SEHARUSNYA</span>
+                  <div class="kode"><pre><code>4
+73f04d3 Tambah bagian batasan ke README
+ 1 file changed, 6 insertions(+)
+cfbede8 Samakan tiga versi penulisan nama estate
+ 2 files changed, 4 insertions(+)
+02ee8aa Muat data mentah dari CSV
+ 1 file changed, 1 insertion(+)
+7da015c Kerangka proyek dan README awal
+ 1 file changed, 1 insertion(+)</code></pre></div></div>
+        <div class="catatan"><strong>Tujuh huruf-angka di kiri pasti beda di layarmu</strong> — itu sidik jari commit, dihitung dari isi, waktu, dan namamu. Yang penting bentuknya: beberapa commit, masing-masing menyentuh sedikit berkas, dengan pesan yang menyebutkan satu perubahan.</div>
+<p>Riwayat yang bertahap menunjukkan <strong>urutan berpikirmu</strong>. Itu satu-satunya bagian portofolio yang tidak bisa dipalsukan belakangan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Kalau capstone-mu belum selesai, ini justru kesempatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-3-7"><label for="minggu-keempatbelas-v2-3-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Capstone-mu memang belum selesai (Hari 92 memberi 3–5 hari). Sisa pekerjaannya kerjakan dengan alur git Minggu 11 Hari 71: satu cabang per perubahan, pesan commit yang menjelaskan <em>kenapa</em>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git switch -c bersihkan-nama-estate
+# kerjakan
+git commit -m &quot;Samakan tiga versi penulisan nama estate&quot; \
+  -m &quot;ANG MO KIO / Ang Mo Kio / AMK sebelumnya terhitung tiga wilayah berbeda.&quot;</code></pre></div>
+        <div class="catatan"><strong>Jangan memalsukan riwayat.</strong> Memecah satu commit besar jadi sepuluh commit palsu bertanggal sama akan terlihat, dan itu jauh lebih buruk daripada satu commit jujur. Yang bisa kamu perbaiki adalah pekerjaan yang <em>belum</em> kamu commit.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-3-8"><label for="minggu-keempatbelas-v2-3-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Buka profil GitHub-mu di jendela penyamaran lagi, 30 detik, lalu tutup dan tulis apa yang kamu ingat.</div>
+<p>Bandingkan dengan catatan yang kamu tulis di langkah 1. Kalau sekarang kamu bisa menyebut <strong>satu temuan berangka</strong> dari salah satu proyekmu, halamannya sudah bekerja.</p>
+        <div class="catatan"><strong>Kalau yang kamu ingat masih nama repositori, bukan temuan,</strong> berarti deskripsi repomu masih menyebut alat, bukan hasil. Ganti.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 94 selesai.</h3>
+      <p><strong>Tempel di catatanmu:</strong> 4 repo tersemat, sisanya privat/arsip · deskripsi repo = kalimat temuan, bukan nama alat · README profil di repo bernama sama dengan username · commit bertahap, tidak dipalsukan.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 95</span>
+      <h2>CV yang lolos mesin dan meyakinkan manusia — dan skrip yang mengukurnya</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> CV satu halaman berbahasa Inggris yang lolos delapan pemeriksaan terukur, termasuk kecocokan kata kunci dengan iklan lowongan sungguhan.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lihat CV-mu seperti mesin melihatnya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-1"><label for="minggu-keempatbelas-v2-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka PDF CV-mu yang sekarang. Tekan <kbd>Ctrl</kbd>+<kbd>A</kbd> lalu <kbd>Ctrl</kbd>+<kbd>C</kbd>. Tempel ke berkas teks kosong, simpan sebagai <code>cv.txt</code>.</div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Kalau hasil tempelannya rapi dan urut atas-ke-bawah: bagus. Kalau kalimatnya tercampur acak, kolomnya tertukar, atau sebagian tidak ikut sama sekali — itu bukan kesalahan salin.</p></div>
+        <div class="bahaya"><strong>Itulah persis yang dibaca sistem penyaring otomatis (ATS).</strong> Sebagian besar lamaran di Singapura dan Australia lewat sistem itu sebelum dilihat manusia, dan sistem itu membaca teks, bukan tata letak. Teks di dalam gambar tidak terbaca sama sekali.</div>
+<p>Belum punya CV? Buat <code>cv.txt</code> kosong — hari ini kamu menulisnya dari nol.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ambil pemeriksanya, lalu ukur CV yang buruk</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-2"><label for="minggu-keempatbelas-v2-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin <code>data-dan-skrip/minggu-14/periksa_cv.py</code> dan <code>cv-lemah.txt</code> dari paket zip. Jalankan pada yang lemah dulu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python periksa_cv.py cv-lemah.txt</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] panjang            33 kata (batas wajar satu halaman: 700)
+[CEK] bagian baku        tidak ada: experience, education
+[CEK] email              kontak email
+[CEK] linkedin           tautan LinkedIn
+[CEK] github             tautan GitHub
+[CEK] poin berangka      0 dari 3 poin memuat angka (target 60%)
+[CEK] tanpa kata lemah   ditemukan: responsible for, helped with, worked on
+
+lolos 1 dari 7 pemeriksaan</code></pre></div></div>
+<p>Isi <code>cv-lemah.txt</code> cuma sepuluh baris, dan tujuh pemeriksaan menemukan enam masalah. Buka berkasnya dan baca — kamu akan mengenali bentuknya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Aturan format yang tidak bisa ditawar</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-3"><label for="minggu-keempatbelas-v2-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca tabel ini sekali, lalu buka CV-mu dan perbaiki yang melanggar.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Lakukan</th>
+<th>Hindari</th>
+<th>Alasan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Satu kolom, atas ke bawah</td><td>Dua kolom, sidebar</td><td>ATS sering membaca kolom acak, kalimat tercampur</td></tr>
+              <tr><td>Judul baku: Experience, Education, Skills</td><td>Judul kreatif "My Journey"</td><td>ATS mencari kata kunci baku</td></tr>
+              <tr><td>Kirim sebagai PDF berbasis teks</td><td>Gambar, ikon, tabel rumit</td><td>teks di dalam gambar tidak terbaca sama sekali</td></tr>
+              <tr><td>Satu halaman</td><td>Dua halaman (untuk &lt;5 tahun pengalaman)</td><td>perekrut memindai 7 detik</td></tr>
+              <tr><td>Salin kata dari iklan lowongan</td><td>Sinonim kreatif</td><td>"Power BI" bukan "Microsoft BI tools"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kenapa pemeriksa tadi menolak "My Journey":</strong> ia mencari kata <code>experience</code>, <code>education</code>, dan <code>skills</code> di mana pun di CV-mu. Sistem ATS sungguhan melakukan hal yang sama, cuma lebih banyak variasinya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Rumus tiga bagian untuk tiap poin</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-4"><label for="minggu-keempatbelas-v2-4-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil satu poin di CV-mu yang paling lemah. Tulis ulang dengan rumus: <strong>tindakan + cara + hasil berangka</strong>.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Lemah</th>
+<th>Kuat</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Responsible for creating dashboards and reports using Tableau</td><td>Built an automated Tableau dashboard replacing 6 hours of manual weekly reporting, now used by 12 people across 3 teams</td></tr>
+              <tr><td>Worked on data cleaning for the finance team</td><td>Reconciled general ledgers of up to 2 million rows against trial balances, cutting fieldwork on 3 recurring engagements by 40%</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Bagian ketiga — <strong>hasil berangka</strong> — yang paling sering hilang, dan justru itu satu-satunya bagian yang bisa dipercaya. Dua yang pertama bisa ditulis siapa saja.</p>
+        <div class="catatan"><strong>Angkanya tidak harus mengesankan, cuma harus benar.</strong> "Digunakan 12 orang di 3 tim" lebih kuat daripada "meningkatkan efisiensi secara signifikan", meski 12 bukan angka besar.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Susunan CV untuk pelamar pindah karier</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-5"><label for="minggu-keempatbelas-v2-4-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat kerangka <code>cv.txt</code>-mu dengan urutan ini. Perhatikan posisi <em>Projects</em>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>NAMA LENGKAP
+Kota, Negara · email · telepon · linkedin.com/in/... · github.com/...
+
+SUMMARY
+SKILLS
+PROJECTS
+EXPERIENCE
+EDUCATION</code></pre></div>
+        <div class="bahaya"><strong>PROJECTS di atas EXPERIENCE</strong> — itu yang membedakan CV pindah karier dari CV biasa. Kalau pengalaman kerjamu belum di bidang data, menaruhnya lebih dulu berarti tujuh detik pertama perekrut habis membaca hal yang tidak relevan.</div>
+        <div class="catatan"><strong>Pengalaman lamamu tetap ditulis, tapi ditulis ulang.</strong> Sebagai mantan auditor, "rekonsiliasi buku besar dua juta baris" adalah pekerjaan data — tulis begitu, jangan tulis "melaksanakan prosedur audit".</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Isi bagian Projects dengan capstone-mu</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-6"><label for="minggu-keempatbelas-v2-4-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis tiga proyek. Judulnya sama dengan judul README-mu kemarin — temuan berangka, bukan nama dataset.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>PROJECTS
+Location explains 61% of HDB resale price variance - dashboard | repo
+- Built a dbt pipeline over 240,000 Singapore HDB transactions from 2017-2024
+- Found that distance to MRT explains 61% of price variance, down from 74% before 2020
+- Scheduled daily with GitHub Actions; 12 dbt tests including a reconciliation test</code></pre></div>
+<p>Tiga poin, tiga fungsi: <strong>apa yang dibangun</strong> (dan sebesar apa), <strong>apa yang ditemukan</strong> (berangka), <strong>bagaimana dijalankan</strong> (yang membuktikan ini bukan notebook sekali jalan).</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Jalankan pemeriksanya pada CV-mu</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-7"><label for="minggu-keempatbelas-v2-4-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin ulang seluruh teks CV barumu ke <code>cv.txt</code>, lalu jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python periksa_cv.py cv.txt</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] panjang            220 kata (batas wajar satu halaman: 700)
+[OK ] bagian baku        lengkap
+[OK ] email              kontak email
+[OK ] linkedin           tautan LinkedIn
+[OK ] github             tautan GitHub
+[OK ] poin berangka      9 dari 9 poin memuat angka (target 60%)
+[OK ] tanpa kata lemah   bersih
+
+lolos 7 dari 7 pemeriksaan</code></pre></div></div>
+        <div class="catatan"><strong>Angka "220 kata" dan "9 poin" akan beda di CV-mu</strong> — itu isi CV-mu sendiri. Yang harus sama: semua baris bertanda <code>[OK ]</code>, dan baris terakhir menyebut lolos semua. Contoh di atas keluaran dari <code>cv-kuat.txt</code> yang ikut di paket zip; buka dan bandingkan dengan punyamu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Uji terhadap iklan lowongan sungguhan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-8"><label for="minggu-keempatbelas-v2-4-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka satu iklan lowongan analis di Singapura atau Australia. Salin bagian <em>Requirements</em>-nya ke <code>iklan.txt</code>. Lalu jalankan dengan dua argumen.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python periksa_cv.py cv.txt iklan.txt</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[OK ] kata kunci iklan   8 dari 11 kata kunci alat ada di CV | belum ada: etl, looker, warehouse
+
+lolos 8 dari 8 pemeriksaan</code></pre></div></div>
+        <div class="bahaya"><strong>Tiga kata yang "belum ada" itu bukan daftar belanja.</strong> Tambahkan hanya yang benar-benar kamu kuasai. Menulis <em>Looker</em> di CV karena skrip menyebutnya akan berbalik menyerangmu di menit kelima wawancara — dan itu kegagalan yang jauh lebih mahal daripada tidak dipanggil.</div>
+<p>Yang boleh langsung ditambahkan: kata yang <strong>sinonim</strong> dengan yang sudah kamu kuasai. Kalau kamu memakai BigQuery, kata <code>warehouse</code> memang layak ada di CV-mu — cuma belum tertulis.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Ulangi dengan sepuluh iklan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-9"><label for="minggu-keempatbelas-v2-4-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Kumpulkan sepuluh iklan lowongan, satukan jadi satu berkas, jalankan sekali.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>cat iklan-*.txt &gt; semua-iklan.txt
+python periksa_cv.py cv.txt semua-iklan.txt</code></pre></div>
+<p>Kata yang muncul di banyak iklan sekaligus adalah kata yang <strong>benar-benar dicari pasar</strong>, bukan yang kamu kira dicari. Kalau ada alat yang muncul terus dan kamu belum menguasainya, itu daftar belajarmu berikutnya — bukan daftar tulisanmu.</p>
+        <div class="catatan"><strong>Simpan berkas iklan-iklan itu.</strong> Minggu depan, di modul wawancara, berkas yang sama dipakai untuk menyiapkan jawaban.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-4-10"><label for="minggu-keempatbelas-v2-4-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Jawab empat pertanyaan ini dengan suara keras.</div>
+<ol>
+          <li>Kenapa CV dua kolom berbahaya, padahal kelihatannya lebih rapi?</li>
+          <li>Apa tiga bagian rumus tiap poin, dan bagian mana yang paling sering hilang?</li>
+          <li>Kenapa PROJECTS ditaruh di atas EXPERIENCE untuk pelamar pindah karier?</li>
+          <li>Kapan kata kunci dari iklan <em>tidak</em> boleh ditambahkan ke CV?</li>
+        </ol>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p><strong>1.</strong> ATS membaca teksnya, bukan tata letaknya — kolom sering terbaca
+            acak sehingga kalimatnya tercampur, dan sebagian bisa hilang sama sekali.</p>
+            <p><strong>2.</strong> Tindakan + cara + hasil berangka. Yang paling sering hilang
+            adalah hasil berangka, dan itu satu-satunya bagian yang bisa diverifikasi.</p>
+            <p><strong>3.</strong> Karena tujuh detik pertama perekrut harus jatuh pada bukti
+            kemampuan data, bukan pada pekerjaan lama yang belum relevan.</p>
+            <p><strong>4.</strong> Kalau kamu tidak menguasainya. Kata kunci membuatmu lolos
+            penyaring lalu gagal di wawancara — hasil akhir yang lebih buruk.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 95 selesai.</h3>
+      <p><strong>Tempel di catatanmu:</strong> satu kolom · PDF berbasis teks · satu halaman · judul bagian baku · tindakan+cara+hasil berangka di tiap poin · PROJECTS di atas EXPERIENCE · kata kunci ditambahkan hanya kalau benar dikuasai.</p><p style="margin-top:8px">Jalankan <code>periksa_cv.py</code> lagi tiap kali kamu mengubah CV. Sepuluh detik, dan menangkap hal yang matamu sudah terlalu terbiasa untuk melihat.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 96</span>
+      <h2>LinkedIn: yang menentukan cuma headline, sisanya menyusul</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> profil yang muncul di pencarian perekrut, dan meyakinkan begitu dibuka — diuji pada orang sungguhan, bukan diperkirakan sendiri.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Cari dirimu sendiri seperti perekrut mencarimu</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-1"><label for="minggu-keempatbelas-v2-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka LinkedIn di jendela penyamaran. Di kotak pencarian ketik <code>data analyst</code> dan saring lokasi ke kota tujuanmu. Lihat bentuk hasilnya.</div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Tiap hasil cuma menampilkan tiga hal: <strong>foto, nama, dan headline</strong>. Jabatan sekarang, pengalaman, dan About tidak terlihat sama sekali sampai kartunya diklik.</p></div>
+<p>Itu sebabnya headline adalah satu-satunya bagian profil yang menentukan apakah kamu diklik. Sisa profilmu baru berguna <em>setelah</em> headline-nya bekerja.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tulis headline dengan empat bagian</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-2"><label for="minggu-keempatbelas-v2-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Klik pensil di bagian atas profilmu → kolom <strong>Headline</strong>. Ganti isinya mengikuti pola ini.</div>
+        <div class="kode"><pre><code>Ex-auditor turned Data Analyst | SQL · Python · dbt | Built a daily HDB price pipeline | Open to roles in Singapore</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Bagian</th>
+<th>Isi</th>
+<th>Kenapa</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1</td><td>jabatan yang kamu tuju</td><td>kata yang diketik perekrut di kotak pencarian</td></tr>
+              <tr><td>2</td><td>tiga alat, bukan sepuluh</td><td>sepuluh alat terbaca sebagai daftar hafalan</td></tr>
+              <tr><td>3</td><td>satu bukti konkret</td><td>bagian yang hampir tidak pernah ada di headline orang lain</td></tr>
+              <tr><td>4</td><td>lokasi yang kamu tuju</td><td>banyak perekrut menyaring lokasi lebih dulu</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Batas headline LinkedIn 220 karakter.</strong> Contoh di atas 115 karakter — masih separuh jatah. Yang lebih penting: bagian awalnya yang terbaca di hasil pencarian, jadi taruh jabatan di paling depan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Periksa panjangnya sebelum menyimpan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-3"><label for="minggu-keempatbelas-v2-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tempel headline-mu ke dalam perintah ini dan jalankan, sebelum menyimpannya di LinkedIn.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python3 -c &quot;h=&#x27;Ex-auditor turned Data Analyst | SQL · Python · dbt | Built a daily HDB price pipeline | Open to roles in Singapore&#x27;; print(len(h), &#x27;karakter&#x27;)&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>115 karakter</code></pre></div></div>
+<p>Di bawah 220 aman. Di atas itu LinkedIn memotongnya tanpa memberitahu, dan yang terpotong adalah bagian akhir — yaitu lokasi tujuanmu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Setel lokasi</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-4"><label for="minggu-keempatbelas-v2-5-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Klik pensil profil → gulung ke <strong>Location</strong>.</div>
+        <div class="bahaya"><strong>Ini keputusan, bukan pengaturan.</strong> Menyetel lokasi ke kota tujuan membuatmu muncul di pencarian perekrut di sana — tapi kalau kamu belum punya izin kerja, itu harus dijelaskan, bukan disembunyikan.</div>
+<p>Jalan tengah yang jujur: setel lokasi ke kota tujuan, dan tulis satu kalimat di About: <em>"Currently in Jakarta, relocating to Singapore and open to sponsorship discussions."</em> Perekrut yang tidak bisa mensponsori akan berhenti di situ — dan itu menghemat waktu kalian berdua.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Tulis About dalam tiga paragraf</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-5"><label for="minggu-keempatbelas-v2-5-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Klik <strong>Add profile section → About</strong>. Tiga paragraf, orang pertama, bukan daftar kata kunci.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Paragraf</th>
+<th>Isi</th>
+<th>Panjang</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1</td><td>apa yang kamu kerjakan sekarang dan dari mana kamu datang</td><td>2–3 kalimat</td></tr>
+              <tr><td>2</td><td>bukti terbaikmu — satu proyek, dengan angka</td><td>2–3 kalimat</td></tr>
+              <tr><td>3</td><td>apa yang kamu cari, dan status relokasi</td><td>1–2 kalimat</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Orang pertama, bukan orang ketiga.</strong> "Saya membangun..." bukan "Budi adalah seorang analis yang...". Menulis tentang diri sendiri sebagai orang ketiga terbaca janggal di LinkedIn dan hanya lazim di biografi pembicara konferensi.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Isi Featured — bagian yang paling sering diklik</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-6"><label for="minggu-keempatbelas-v2-5-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Add profile section → Recommended → Add featured</strong>. Tambahkan tautan dashboard capstone-mu dan satu repositori.</div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Kotak besar bergambar muncul tepat di bawah About, dengan gambar pratinjau dari halaman yang kamu tautkan.</p></div>
+<p>Ini satu-satunya bagian profil LinkedIn yang punya <strong>gambar besar</strong>, dan gambar mengalahkan teks. Kalau cuma satu bagian yang sempat kamu isi hari ini, isi ini.</p>
+        <div class="catatan"><strong>Kalau gambar pratinjaunya tidak muncul,</strong> halaman yang kamu tautkan tidak punya gambar pembuka. Untuk repositori GitHub, unggah tangkapan layar dashboard sebagai gambar sosial repo di Settings → Social preview.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Unggah satu tulisan pendek</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-7"><label for="minggu-keempatbelas-v2-5-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat satu unggahan tentang capstone-mu. Empat kalimat, bukan lebih.</div>
+        <div class="kode"><pre><code>Baru selesai menganalisis 240.000 transaksi rumah HDB Singapura 2017-2024.
+
+Temuan yang paling mengejutkan saya: jarak ke MRT menjelaskan 61% ragam
+harga sebelum 2020, tapi cuma 44% sesudahnya.
+
+Yang paling sulit ternyata bukan analisisnya, tapi menyadari bahwa nama
+estate ditulis tiga versi berbeda dan diam-diam terhitung tiga wilayah.
+
+Dashboard-nya di sini: [tautan]</code></pre></div>
+<p>Polanya: <strong>apa yang dikerjakan → satu temuan berangka → satu hal yang sulit → tautan.</strong> Bagian ketiga yang membuatnya terbaca seperti orang, bukan seperti pengumuman.</p>
+        <div class="catatan"><strong>Satu unggahan tentang pekerjaanmu sendiri lebih berguna daripada dua puluh kali membagikan artikel orang lain.</strong> Perekrut yang membuka tab Aktivitasmu mencari bukti kamu mengerjakan sesuatu, bukan bukti kamu membaca sesuatu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Uji profilmu pada manusia</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-8"><label for="minggu-keempatbelas-v2-5-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Kirim tautan profilmu ke satu orang. Minta ia membacanya 60 detik, lalu tutup dan sebutkan apa yang ia ingat.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang ia sebut</th>
+<th>Artinya</th>
+</tr></thead>
+            <tbody>
+              <tr><td>satu temuan berangka dari proyekmu</td><td>profilmu bekerja</td></tr>
+              <tr><td>daftar alat yang kamu kuasai</td><td>headline-mu terlalu penuh alat, kurang bukti</td></tr>
+              <tr><td>pekerjaan lamamu</td><td>About-mu masih bercerita mundur, bukan maju</td></tr>
+              <tr><td>"kayaknya kamu cari kerja"</td><td>cukup, tapi belum ada alasan untuk menghubungimu</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Ini uji yang sama dengan README Hari 93, dan alasannya sama: kamu sudah terlalu terbiasa dengan tulisanmu sendiri untuk bisa menilainya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-5-9"><label for="minggu-keempatbelas-v2-5-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Sebutkan empat bagian headline dan tiga paragraf About, dengan suara keras.</div>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p><strong>Headline:</strong> jabatan yang dituju · tiga alat · satu bukti konkret ·
+            lokasi tujuan. Maksimal 220 karakter, bagian terpenting di depan.</p>
+            <p><strong>About:</strong> (1) apa yang kamu kerjakan dan dari mana kamu datang,
+            (2) bukti terbaik dengan angka, (3) apa yang kamu cari dan status relokasi.
+            Orang pertama.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 96 selesai.</h3>
+      <p><strong>Tempel di catatanmu:</strong> hasil pencarian cuma menampilkan foto, nama, headline · headline = jabatan + 3 alat + 1 bukti + lokasi (≤220 karakter) · About 3 paragraf orang pertama · Featured punya gambar besar, isi itu dulu · unggahan tentang pekerjaanmu &gt; membagikan artikel orang.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 97</span>
+      <h2>Empat soal SQL wawancara — dijalankan, bukan dibaca</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengerjakan empat pola SQL yang paling sering diuji di wawancara pada basis data sungguhan, dan membuktikan sendiri dua bug diam yang menjatuhkan kandidat.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapkan basis data latihannya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-1"><label for="minggu-keempatbelas-v2-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin <code>data-dan-skrip/minggu-14/buat_soal_sql.py</code> dari paket zip. Pasang DuckDB, lalu jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>pip install duckdb
+python buat_soal_sql.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>pengguna: 120
+pesanan : 346
+pengguna tanpa pesanan: 14</code></pre></div></div>
+<p>Berkas <code>wawancara.duckdb</code> muncul. Isinya dua tabel — <code>pengguna(id, nama, tanggal_daftar, kota)</code> dan <code>pesanan(id, user_id, tanggal, nilai)</code> — bentuk yang paling sering dipakai soal wawancara.</p>
+        <div class="catatan"><strong>Kenapa DuckDB, bukan BigQuery:</strong> ia berjalan di berkas lokal, tanpa akun dan tanpa biaya, dan sintaksnya sangat dekat dengan Postgres dan BigQuery. Yang kamu latih di sini terpakai apa adanya di wawancara.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Siapkan cara menjalankan query</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-2"><label for="minggu-keempatbelas-v2-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin juga <code>jalankan.py</code> dari folder yang sama. Lalu buat berkas <code>query.sql</code> berisi satu baris ini, simpan, dan jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>SELECT COUNT(*) AS pesanan, MIN(tanggal) AS awal, MAX(tanggal) AS akhir FROM pesanan;</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python jalankan.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌─────────┬────────────┬────────────┐
+│ pesanan │    awal    │   akhir    │
+│  int64  │    date    │    date    │
+├─────────┼────────────┼────────────┤
+│     346 │ 2025-10-05 │ 2026-06-30 │
+└─────────┴────────────┴────────────┘</code></pre></div></div>
+<p><strong>Alur kerjamu sepanjang hari ini:</strong> tulis SQL di <code>query.sql</code> → simpan → <code>python jalankan.py</code> → bandingkan dengan kotak HARUS MUNCUL. Sama seperti papan tulis di wawancara, cuma ada tombol jalankan.</p>
+        <div class="catatan"><strong>Selalu lakukan ini lebih dulu di wawancara sungguhan.</strong> Sebelum menjawab, tanyakan atau periksa rentang datanya. Kandidat yang menulis <code>WHERE tanggal >= '2026-01-01'</code> pada data yang mulai Oktober 2025 menjawab pertanyaan yang berbeda dari yang ditanyakan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>SOAL 1 — pelanggan yang hilang. Kerjakan dulu, jangan buka jawabannya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-3"><label for="minggu-keempatbelas-v2-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Cari pelanggan yang belanja di Maret 2026 tapi tidak di April 2026.</strong> Beri dirimu 10 menit. Tulis sendiri, jalankan sendiri.</div>
+<p>Tiga langkah berikut memandumu <em>tanpa</em> memberi jawabannya. Kerjakan dulu; kalau macet, ikuti langkah-langkah itu.</p>
+        <div class="catatan"><strong>Di wawancara sungguhan, ucapkan ini keras-keras sebelum mengetik:</strong> <em>"Saya akan ambil pembeli Maret, ambil pembeli April, lalu cari yang ada di daftar pertama tapi tidak di kedua."</em> Pewawancara menilai rencananya, bukan cuma hasilnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Bangun jawaban Soal 1 selapis demi selapis</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-4"><label for="minggu-keempatbelas-v2-6-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan yang paling sederhana dulu — jangan langsung menulis query akhir.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>SELECT COUNT(DISTINCT user_id) AS pembeli_maret FROM pesanan
+WHERE tanggal &gt;= DATE &#x27;2026-03-01&#x27; AND tanggal &lt; DATE &#x27;2026-04-01&#x27;;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌───────────────┐
+│ pembeli_maret │
+│     int64     │
+├───────────────┤
+│            38 │
+└───────────────┘</code></pre></div></div>
+<p>38 orang belanja di Maret. Ganti tanggalnya ke April dan kamu dapat <strong>39</strong>. Dua angka ini yang membatasi jawaban akhirmu — hasilnya tidak mungkin lebih dari 38.</p>
+        <div class="catatan"><strong>Perhatikan <code>&lt; DATE '2026-04-01'</code>, bukan <code>&lt;= '2026-03-31'</code>.</strong> Kalau kolomnya suatu hari berubah jadi bertipe waktu, versi kedua diam-diam membuang seluruh transaksi tanggal 31 setelah pukul 00:00.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Sambungkan keduanya dan lihat NULL-nya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-5"><label for="minggu-keempatbelas-v2-6-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan ini, lalu perhatikan kolom kanan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>SELECT m.user_id, a.user_id AS user_april
+FROM (SELECT DISTINCT user_id FROM pesanan
+      WHERE tanggal &gt;= DATE &#x27;2026-03-01&#x27; AND tanggal &lt; DATE &#x27;2026-04-01&#x27;) m
+LEFT JOIN (SELECT DISTINCT user_id FROM pesanan
+      WHERE tanggal &gt;= DATE &#x27;2026-04-01&#x27; AND tanggal &lt; DATE &#x27;2026-05-01&#x27;) a
+  ON a.user_id = m.user_id
+ORDER BY m.user_id LIMIT 6;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌─────────┬────────────┐
+│ user_id │ user_april │
+│  int32  │   int32    │
+├─────────┼────────────┤
+│       6 │       NULL │
+│      10 │       NULL │
+│      11 │         11 │
+│      13 │       NULL │
+│      16 │       NULL │
+│      20 │       NULL │
+└─────────┴────────────┘</code></pre></div></div>
+<p><strong>NULL di kolom kanan artinya "tidak ketemu di April".</strong> Itulah seluruh isi pola <em>anti-join</em>: LEFT JOIN dulu supaya yang tidak berpasangan tetap muncul, lalu saring yang kanannya kosong.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Saring, dan Soal 1 selesai</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-6"><label for="minggu-keempatbelas-v2-6-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan satu baris <code>WHERE</code> pada query tadi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>WHERE a.user_id IS NULL</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL (kalau dibungkus COUNT)</span>
+                  <div class="kode"><pre><code>┌────────┐
+│ hilang │
+│ int64  │
+├────────┤
+│     24 │
+└────────┘</code></pre></div></div>
+<p><strong>24 pelanggan hilang dari 38 pembeli Maret.</strong> Angkanya masuk akal: lebih kecil dari 38, seperti yang kamu perkirakan di langkah 4.</p>
+        <div class="catatan"><strong>Kebiasaan yang membedakan kandidat:</strong> setelah dapat angka, ucapkan apakah ia masuk akal. "24 dari 38, sekitar 63% tidak kembali — itu tinggi, saya akan cek apakah April memang bulan sepi." Itu bunyi analis, bukan bunyi orang yang menghafal sintaks.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Jebakan NOT IN — buktikan sendiri, jangan percaya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-7"><label for="minggu-keempatbelas-v2-6-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Banyak orang menjawab Soal 1 dengan <code>NOT IN</code>. Jalankan ini untuk melihat kenapa itu berbahaya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>SELECT &#x27;NOT IN&#x27; AS cara, COUNT(*) AS hasil
+FROM (VALUES (1),(2),(3)) t(x) WHERE x NOT IN (SELECT * FROM (VALUES (2),(NULL)) s(y))
+UNION ALL
+SELECT &#x27;NOT EXISTS&#x27;, COUNT(*)
+FROM (VALUES (1),(2),(3)) t(x)
+WHERE NOT EXISTS (SELECT 1 FROM (VALUES (2),(NULL)) s(y) WHERE s.y = t.x);</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌────────────┬───────┐
+│    cara    │ hasil │
+│  varchar   │ int64 │
+├────────────┼───────┤
+│ NOT IN     │     0 │
+│ NOT EXISTS │     2 │
+└────────────┴───────┘</code></pre></div></div>
+        <div class="bahaya"><strong>Jawaban yang benar adalah 2, dan <code>NOT IN</code> memberi 0 — tanpa satu pun peringatan.</strong> Satu NULL di dalam subquery membuat seluruh hasil kosong, karena <code>x NOT IN (2, NULL)</code> tidak pernah bisa dipastikan benar. Ini bug diam yang membuat laporan kosong dan tidak ada yang tahu kenapa.</div>
+<p>Menyebutkan ini di wawancara — sambil menunjukkan angkanya — adalah nilai tambah yang jarang diberikan pelamar junior.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>SOAL 2 — tiga pelanggan terbesar tiap kota</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-8"><label for="minggu-keempatbelas-v2-6-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Untuk tiap kota, cari 3 pelanggan dengan total belanja terbesar.</strong> Kerjakan sendiri dulu. Kalau macet, mulai dari yang paling sederhana:</p></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>SELECT u.kota, u.nama, SUM(p.nilai) AS belanja
+FROM pesanan p JOIN pengguna u ON p.user_id = u.id
+GROUP BY u.kota, u.nama
+ORDER BY belanja DESC LIMIT 5;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌──────────┬─────────────────┬─────────┐
+│   kota   │      nama       │ belanja │
+│ varchar  │     varchar     │ int128  │
+├──────────┼─────────────────┼─────────┤
+│ Jakarta  │ Farhan Ramadhan │ 7566000 │
+│ Surabaya │ Jihan Pratama   │ 4916000 │
+│ Surabaya │ Gita Saputra    │ 4652000 │
+│ Surabaya │ Citra Saputra   │ 4401000 │
+│ Surabaya │ Bella Pratama   │ 4177000 │
+└──────────┴─────────────────┴─────────┘</code></pre></div></div>
+<p>Perhatikan masalahnya: <code>LIMIT 5</code> mengambil lima teratas <em>keseluruhan</em>, empat di antaranya dari Surabaya. Yang diminta tiga teratas <strong>per kota</strong>. Itulah yang tidak bisa dilakukan <code>LIMIT</code>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Beri nomor urut di dalam tiap kota</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-9"><label for="minggu-keempatbelas-v2-6-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bungkus query tadi sebagai CTE, lalu tambahkan satu kolom.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>ROW_NUMBER() OVER (PARTITION BY kota ORDER BY belanja DESC) AS rn</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌─────────┬────────────────┬─────────┬───────┐
+│  kota   │      nama      │ belanja │  rn   │
+│ varchar │    varchar     │ int128  │ int64 │
+├─────────┼────────────────┼─────────┼───────┤
+│ Bandung │ Hana Ramadhan  │ 3661000 │     1 │
+│ Bandung │ Andi Ramadhan  │ 3633000 │     2 │
+│ Bandung │ Naufal Pratama │ 3621000 │     3 │
+│ Bandung │ Gita Ramadhan  │ 3520000 │     4 │
+│ Bandung │ Irfan Wijaya   │ 3419000 │     5 │
+└─────────┴────────────────┴─────────┴───────┘</code></pre></div></div>
+<p>Nomornya mulai ulang dari 1 di tiap kota — itulah arti <code>PARTITION BY</code>. Sekarang saring dengan <code>WHERE rn &lt;= 3</code> di lapisan berikutnya, dan Soal 2 selesai: 12 baris, tiga per kota.</p>
+        <div class="bahaya"><strong><code>WHERE rn &lt;= 3</code> tidak bisa ditaruh di query yang sama.</strong> Fungsi jendela dihitung <em>setelah</em> <code>WHERE</code>, jadi kolomnya belum ada saat penyaringan berjalan. Harus dibungkus jadi CTE kedua. Ini kesalahan yang hampir semua orang buat sekali seumur hidup.</div>
+        <div class="catatan"><strong>Pertanyaan lanjutan yang hampir pasti datang:</strong> "bagaimana kalau ada nilai seri di posisi ketiga?" Jawab: <code>ROW_NUMBER</code> memilih sembarang satu, <code>RANK</code> menyertakan semua yang seri. Lalu tanyakan balik: <em>"yang diinginkan bisnisnya yang mana?"</em> — itu jawaban terbaiknya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>SOAL 3 — retensi, dan satu kata yang mengubah hasilnya jadi 100%</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-10"><label for="minggu-keempatbelas-v2-6-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Dari pelanggan yang mendaftar tiap bulan, berapa persen yang belanja lagi di bulan berikutnya?</strong> Kerjakan dulu, lalu jalankan versi ini.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>WITH kohor AS (
+  SELECT id AS user_id, DATE_TRUNC(&#x27;month&#x27;, tanggal_daftar) AS bulan_daftar FROM pengguna
+), aktif AS (
+  SELECT DISTINCT user_id, DATE_TRUNC(&#x27;month&#x27;, tanggal) AS bulan_aktif FROM pesanan
+)
+SELECT k.bulan_daftar, COUNT(DISTINCT k.user_id) AS ukuran_kohor,
+       COUNT(DISTINCT a.user_id) AS kembali,
+       ROUND(100.0*COUNT(DISTINCT a.user_id)/COUNT(DISTINCT k.user_id),1) AS retensi
+FROM kohor k
+LEFT JOIN aktif a ON a.user_id = k.user_id
+     AND a.bulan_aktif = k.bulan_daftar + INTERVAL 1 MONTH
+GROUP BY k.bulan_daftar ORDER BY k.bulan_daftar;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌─────────────────────┬──────────────┬─────────┬─────────┐
+│    bulan_daftar     │ ukuran_kohor │ kembali │ retensi │
+│      timestamp      │    int64     │  int64  │ double  │
+├─────────────────────┼──────────────┼─────────┼─────────┤
+│ 2025-10-01 00:00:00 │           25 │       7 │    28.0 │
+│ 2025-11-01 00:00:00 │           26 │      11 │    42.3 │
+│ 2025-12-01 00:00:00 │           23 │       3 │    13.0 │
+│ 2026-01-01 00:00:00 │           23 │       9 │    39.1 │
+│ 2026-02-01 00:00:00 │           23 │      11 │    47.8 │
+└─────────────────────┴──────────────┴─────────┴─────────┘</code></pre></div></div>
+<p>Retensi bulan pertama antara 13% dan 48%. Kohor Desember paling buruk — angka seperti itulah yang jadi temuan di laporanmu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Ganti satu kata, dan lihat kebohongannya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-11"><label for="minggu-keempatbelas-v2-6-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ubah <code>LEFT JOIN</code> jadi <code>INNER JOIN</code>. Ganti satu kata saja, jalankan lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>INNER JOIN aktif a ON a.user_id = k.user_id</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌─────────────────────┬──────────────┬─────────┬─────────┐
+│    bulan_daftar     │ ukuran_kohor │ kembali │ retensi │
+│      timestamp      │    int64     │  int64  │ double  │
+├─────────────────────┼──────────────┼─────────┼─────────┤
+│ 2025-10-01 00:00:00 │            7 │       7 │   100.0 │
+│ 2025-11-01 00:00:00 │           11 │      11 │   100.0 │
+│ 2025-12-01 00:00:00 │            3 │       3 │   100.0 │
+│ 2026-01-01 00:00:00 │            9 │       9 │   100.0 │
+│ 2026-02-01 00:00:00 │           11 │      11 │   100.0 │
+└─────────────────────┴──────────────┴─────────┴─────────┘</code></pre></div></div>
+        <div class="bahaya"><strong>Retensi 100% di setiap kohor.</strong> INNER JOIN membuang pelanggan yang tidak kembali — sehingga penyebutnya ikut menyusut, dan yang tersisa cuma orang yang kembali. Kolom <code>ukuran_kohor</code> berubah dari 25 jadi 7 tanpa ada yang memberitahu.</div>
+<p><strong>Ini bukan sekadar "hasilnya agak lebih baik" — hasilnya mustahil, dan tetap terlihat rapi.</strong> Sebutkan alasan ini keras-keras saat menulis LEFT JOIN di wawancara; itu satu kalimat yang menunjukkan kamu tahu apa yang kamu hindari.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>SOAL 4 — jeda antar pesanan, dan NULL yang wajib disaring</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-12"><label for="minggu-keempatbelas-v2-6-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Hitung rata-rata selisih hari antara dua pesanan berturut-turut tiap pelanggan.</strong> Kerjakan dulu. Lalu lihat bentuk mentahnya untuk satu orang.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>SELECT user_id, tanggal,
+       LAG(tanggal) OVER (PARTITION BY user_id ORDER BY tanggal) AS sebelumnya
+FROM pesanan WHERE user_id = 24 ORDER BY tanggal;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌─────────┬────────────┬────────────┐
+│ user_id │  tanggal   │ sebelumnya │
+│  int32  │    date    │    date    │
+├─────────┼────────────┼────────────┤
+│      24 │ 2026-04-19 │ NULL       │
+│      24 │ 2026-04-21 │ 2026-04-19 │
+│      24 │ 2026-05-05 │ 2026-04-21 │
+│      24 │ 2026-05-07 │ 2026-05-05 │
+│      24 │ 2026-05-31 │ 2026-05-07 │
+│      24 │ 2026-06-15 │ 2026-05-31 │
+│      24 │ 2026-06-19 │ 2026-06-15 │
+└─────────┴────────────┴────────────┘</code></pre></div></div>
+<p><strong>Baris pertama tiap pelanggan selalu NULL</strong> — tidak ada pesanan sebelumnya. Tujuh pesanan menghasilkan enam jeda, bukan tujuh.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">13</span>
+        <h3>Hitung berapa NULL yang harus dibuang</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-13"><label for="minggu-keempatbelas-v2-6-13">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan ini untuk seluruh tabel sebelum menghitung rata-rata.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>WITH jeda AS (
+  SELECT user_id, tanggal - LAG(tanggal) OVER (PARTITION BY user_id ORDER BY tanggal) AS d
+  FROM pesanan
+)
+SELECT COUNT(*) AS semua, COUNT(d) AS ada_isinya, COUNT(*) - COUNT(d) AS null_nya FROM jeda;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌───────┬────────────┬──────────┐
+│ semua │ ada_isinya │ null_nya │
+│ int64 │   int64    │  int64   │
+├───────┼────────────┼──────────┤
+│   346 │        240 │      106 │
+└───────┴────────────┴──────────┘</code></pre></div></div>
+<p><strong>106 dari 346 baris kosong</strong> — itu 106 pelanggan yang punya pesanan. Tambahkan <code>WHERE d IS NOT NULL</code> sebelum <code>AVG(d)</code>, dan Soal 4 selesai.</p>
+        <div class="catatan"><strong>Sebenarnya <code>AVG</code> di SQL sudah mengabaikan NULL,</strong> jadi rata-ratanya kebetulan benar. Yang salah adalah kalau kamu memakai <code>COUNT(*)</code> sebagai jumlah jeda, atau menghitung sendiri <code>SUM(d)/COUNT(*)</code> — di situ 106 baris kosong ikut jadi penyebut. Menyebut hal ini di wawancara jauh lebih berkesan daripada sekadar menulis <code>IS NOT NULL</code>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">14</span>
+        <h3>Lima langkah mengerjakan soal SQL di depan orang</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-14"><label for="minggu-keempatbelas-v2-6-14">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca lima langkah ini, lalu kerjakan ulang Soal 1 sambil <strong>mengucapkan tiap langkahnya keras-keras</strong>.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Langkah</th>
+<th>Yang kamu ucapkan</th>
+<th>Yang dinilai</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1</td><td>ulangi soalnya dengan kalimatmu sendiri</td><td>menangkap salah paham sebelum menulis 20 baris salah</td></tr>
+              <tr><td>2</td><td>tanyakan yang ambigu</td><td>pesanan batal dihitung? zona waktu? kalau seri?</td></tr>
+              <tr><td>3</td><td>ucapkan rencana sebelum mengetik</td><td>"kumpulkan per pelanggan, beri peringkat, saring"</td></tr>
+              <tr><td>4</td><td>tulis bertahap, tunjukkan hasil tiap lapis</td><td>cara kerja yang bisa dipercaya, bukan tebakan besar</td></tr>
+              <tr><td>5</td><td>periksa kasus khusus di akhir</td><td>NULL, nilai seri, pembagian nol</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kandidat yang langsung mengetik dalam diam sering kalah</strong> dari kandidat yang berpikir keras walau jawabannya sedikit lebih lambat. Yang dinilai adalah apakah kamu bisa diajak bekerja, dan itu cuma terlihat kalau kamu bersuara.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">15</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-6-15"><label for="minggu-keempatbelas-v2-6-15">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini dan tutup terminalmu. Buka lagi, dan kerjakan keempat soal dari nol tanpa melihat apa pun.</div>
+<p>Empat pola yang harus keluar dari ingatan: <strong>anti-join</strong> (LEFT JOIN + IS NULL) · <strong>peringkat per kelompok</strong> (ROW_NUMBER + PARTITION BY, disaring di CTE kedua) · <strong>retensi</strong> (LEFT JOIN wajib) · <strong>jeda</strong> (LAG + kesadaran baris pertama NULL).</p>
+        <div class="catatan"><strong>Angkanya juga harus cocok:</strong> 24 · 12 baris · retensi 13–48% · 106 baris NULL. Kalau angkamu beda, querymu beda — dan itu informasi, bukan kegagalan.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 97 selesai.</h3>
+      <p><strong>Tempel di catatanmu:</strong> anti-join = LEFT JOIN + <code>IS NULL</code> · <code>NOT IN</code> + NULL = hasil kosong diam-diam · <code>WHERE rn &lt;= 3</code> harus di CTE terpisah · retensi dengan INNER JOIN = 100% palsu · LAG menghasilkan NULL di baris pertama tiap partisi.</p><p style="margin-top:8px">Basis datanya jangan dihapus. Besok dipakai lagi, dan sesudah itu tiap kali kamu mau memanaskan tangan sebelum wawancara.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 98</span>
+      <h2>Latihan lisan, dan menutup capstone dengan pemeriksaan</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengerjakan keempat soal SQL dari ingatan sambil bersuara, dan menutup capstone dengan pemeriksaan yang bisa dijalankan, bukan perasaan sudah selesai.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kosongkan query.sql, lalu kerjakan Soal 1 dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-1"><label for="minggu-keempatbelas-v2-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hapus seluruh isi <code>query.sql</code>. Tutup halaman Hari 97. Nyalakan perekam suara di HP-mu. Kerjakan Soal 1 sambil mengucapkan tiap langkahnya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>echo &quot;&quot; &gt; query.sql</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>┌────────┐
+│ hilang │
+│ int64  │
+├────────┤
+│     24 │
+└────────┘</code></pre></div></div>
+<p>Angkanya harus <strong>24</strong>. Kalau beda, querymu beda — dan itu justru yang mau kamu temukan hari ini, bukan besok di depan pewawancara.</p>
+        <div class="catatan"><strong>Perekamnya bukan hiasan.</strong> Yang mau kamu dengar bukan jawabannya, tapi berapa lama kamu diam. Diam panjang di tengah pengerjaan adalah hal yang paling sering membuat kandidat kalah, dan kamu tidak bisa menyadarinya tanpa mendengar rekamanmu sendiri.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kerjakan Soal 2, 3, dan 4 dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-2"><label for="minggu-keempatbelas-v2-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu per satu, masih dengan suara keras. Catat soal mana yang butuh lebih dari sepuluh menit.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Soal</th>
+<th>Angka yang harus keluar</th>
+<th>Kalau salah, ulangi bagian</th>
+</tr></thead>
+            <tbody>
+              <tr><td>2</td><td>12 baris, 3 per kota</td><td>ROW_NUMBER + PARTITION BY, saring di CTE kedua</td></tr>
+              <tr><td>3</td><td>retensi 28,0 / 42,3 / 13,0 / 39,1 / 47,8</td><td>LEFT JOIN, bukan INNER</td></tr>
+              <tr><td>4</td><td>346 baris, 240 ada isinya, 106 NULL</td><td>LAG menghasilkan NULL di baris pertama tiap partisi</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kalau satu soal butuh lebih dari sepuluh menit, itu bukan soal yang kamu kuasai</strong> — itu soal yang kamu ingat pernah lihat. Bedanya besar, dan cuma ketahuan lewat latihan seperti ini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Dengarkan rekamanmu</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-3"><label for="minggu-keempatbelas-v2-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Putar rekamannya. Hitung tiga hal sambil mendengar.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang dihitung</th>
+<th>Target</th>
+<th>Kalau meleset</th>
+</tr></thead>
+            <tbody>
+              <tr><td>berapa detik diam terpanjang</td><td>di bawah 15 detik</td><td>biasakan mengucapkan "saya sedang memikirkan..." alih-alih diam</td></tr>
+              <tr><td>apakah kamu mengulang soalnya di awal</td><td>selalu</td><td>ini langkah yang paling murah dan paling sering dilewati</td></tr>
+              <tr><td>apakah kamu menyebut satu kasus khusus</td><td>minimal satu per soal</td><td>NULL, nilai seri, atau pembagian nol</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Mendengar rekaman diri sendiri tidak enak. Itu justru tandanya berguna — kamu sedang mendengar apa yang didengar pewawancara.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Kerjakan sepuluh soal baru di luar</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-4"><label for="minggu-keempatbelas-v2-7-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka StrataScratch atau DataLemur. Pilih sepuluh soal tingkat <em>medium</em>. Untuk tiap soal, jalankan lima langkah Hari 97.</div>
+        <div class="catatan"><strong>Sepuluh soal medium jauh lebih berguna daripada empat puluh soal easy.</strong> Soal <em>easy</em> menguji apakah kamu hafal sintaks; soal <em>medium</em> menguji apakah kamu bisa memecah masalah — dan itu yang diuji di wawancara.</div>
+<p>Catat pola mana yang masih terasa asing. Daftar itu — bukan jumlah soal yang selesai — yang jadi bahan review sebelum wawancara sungguhan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Kembali ke capstone dan jalankan ketiga pemeriksa</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-5"><label for="minggu-keempatbelas-v2-7-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka folder capstone-mu. Jalankan tiga hal yang sudah kamu punya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>grep -n &quot;:$&quot; RENCANA.md
+python periksa_readme.py README.md
+python periksa_cv.py cv.txt</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>lolos 10 dari 10 pemeriksaan
+lolos 7 dari 7 pemeriksaan</code></pre></div></div>
+<p>Perintah pertama tidak boleh mengeluarkan apa pun. Dua berikutnya harus lolos penuh. Tiga perintah, dua puluh detik, dan kamu tahu persis di mana kamu berdiri.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Uji capstone-mu dari folder kosong</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-6"><label for="minggu-keempatbelas-v2-7-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ini pemeriksaan yang tidak bisa diwakili skrip. Clone repositorimu sendiri ke folder baru dan jalankan dari nol.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>cd /tmp
+git clone https://github.com/[username]/[repo].git uji-bersih
+cd uji-bersih
+pip install -r requirements.txt</code></pre></div>
+        <div class="bahaya"><strong>Kalau gagal di sini, portofoliomu gagal di tangan perekrut</strong> — dan mereka tidak akan mengirim pesan bertanya. Dua penyebab yang hampir selalu muncul: berkas yang lupa di-commit karena kena <code>.gitignore</code>, dan pustaka yang terpasang di komputermu berbulan-bulan lalu tapi tidak ada di <code>requirements.txt</code>.</div>
+<p>Lalu buka tautan dashboard-mu dari HP dengan wifi dimatikan. Kalau tidak terbuka, ia sedang berjalan di komputermu, bukan di internet.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Periksa tidak ada kredensial di seluruh riwayat</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-7"><label for="minggu-keempatbelas-v2-7-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu perintah, di dalam folder capstone-mu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git log -p --all | grep -iE &quot;password|api_key|secret|BEGIN PRIVATE KEY&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tidak ada satu baris pun keluaran.</p></div>
+        <div class="bahaya"><strong>Kalau ada keluaran, kunci itu harus diganti hari ini juga</strong> — bukan dihapus. Riwayat git menyimpan semua versi lama, dan repositori yang pernah publik harus dianggap sudah terbaca. Ini pelajaran Minggu 11 Hari 72, dan di sinilah ia diperiksa.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Checklist Minggu 14</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-8"><label for="minggu-keempatbelas-v2-7-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Centang satu per satu. Jangan mencentang yang belum kamu buktikan.</div>
+<ol>
+          <li>Capstone selesai, dashboard hidup, dibuka dari HP dengan wifi mati</li>
+          <li>README lolos 10 dari 10, dan lolos uji 60 detik pada orang non-data</li>
+          <li>4 repositori tersemat, tiap satu punya deskripsi berisi temuan</li>
+          <li>README profil GitHub terisi, tiga proyek dengan temuannya</li>
+          <li>CV lolos 8 dari 8, termasuk kecocokan kata kunci dengan iklan sungguhan</li>
+          <li>LinkedIn: headline ≤220 karakter, About 3 paragraf, Featured terisi</li>
+          <li>14 soal SQL dikerjakan (4 Hari 97 + 10 Hari 98), semuanya sambil bersuara</li>
+          <li>Tidak ada kredensial di seluruh riwayat git capstone</li>
+        </ol>
+        <div class="catatan"><strong>Kalau ada satu yang belum tercentang, tulis tanggalnya.</strong> Minggu depan adalah minggu terakhir dan isinya wawancara — bukan waktu yang baik untuk menemukan bahwa dashboard-mu sudah mati.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-keempatbelas-v2-7-9"><label for="minggu-keempatbelas-v2-7-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup semuanya. Jawab dengan suara keras: sebutkan empat pola SQL Hari 97 beserta jebakan masing-masing.</div>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p><strong>Anti-join</strong> — LEFT JOIN + <code>IS NULL</code>. Jebakan:
+            <code>NOT IN</code> dengan NULL di dalamnya memberi hasil kosong tanpa peringatan.</p>
+            <p><strong>Peringkat per kelompok</strong> — <code>ROW_NUMBER() OVER (PARTITION BY
+            ...)</code>. Jebakan: <code>WHERE rn &lt;= 3</code> tidak bisa di query yang sama,
+            harus CTE kedua.</p>
+            <p><strong>Retensi kohor</strong> — LEFT JOIN wajib. Jebakan: INNER JOIN membuat
+            setiap kohor terlihat 100%.</p>
+            <p><strong>Jeda antar kejadian</strong> — <code>LAG</code> dengan
+            <code>PARTITION BY</code>. Jebakan: baris pertama tiap partisi selalu NULL.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Empat belas minggu selesai — portofolio, CV, dan profil siap dipamerkan</h3>
+      <p>Capstone-mu, profil GitHub, CV, dan LinkedIn sekarang saling terhubung dan konsisten: judul yang sama, temuan yang sama, angka yang sama. Dan empat pola SQL yang paling sering diuji sudah kamu kerjakan pada data sungguhan, bukan kamu baca.</p><p style="margin-top:10px"><strong>Tiga skrip yang kamu punya sekarang</strong> — <code>periksa_readme.py</code>, <code>periksa_cv.py</code>, dan <code>jalankan.py</code> dengan basis data latihannya — jangan dihapus. Ketiganya dipakai lagi setiap kali kamu menyelesaikan proyek baru atau menyiapkan wawancara.</p><p style="margin-top:10px">Minggu depan, dan terakhir: wawancara studi kasus, wawancara perilaku, strategi melamar ke Singapura dan Australia, serta visa, gaji, dan negosiasi tawaran — sampai ke garis akhir dua belas bulan ini.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/010bd5cc-8f09-449b-b3de-7bba52005d31">Lanjut ke M15: Wawancara & Lamaran →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Skrip dan berkas latihan (<code>periksa_readme.py</code>, <code>periksa_cv.py</code>, <code>buat_soal_sql.py</code>, <code>jalankan.py</code>, beserta CV contoh) ada di <code>data-dan-skrip/minggu-14/</code> di paket zip. Kotak “YANG HARUS TERLIHAT” menggambarkan tampilan di layar GitHub atau LinkedIn, bukan keluaran terminal.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu-keempatbelas-v2";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

@@ -1,0 +1,1122 @@
+<title>SQL Mahir Level 2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/caff475b-354e-4331-84f9-d7fd36fe51b4">← Kembali ke SQL Mahir L1: dasar yang bolong</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">SQL Mahir L2</span>
+  <button type="button" data-hari="1" aria-selected="true">W1</button>
+  <button type="button" data-hari="2" aria-selected="false">W2</button>
+  <button type="button" data-hari="3" aria-selected="false">W3</button>
+  <button type="button" data-hari="4" aria-selected="false">W4</button>
+  <button type="button" data-hari="5" aria-selected="false">W5</button>
+  <button type="button" data-hari="6" aria-selected="false">W6</button>
+  <button type="button" data-hari="7" aria-selected="false">W7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">SQL Mahir · Level 2 dari 5 · lanjutan dari Level 1</span>
+    <h1>SQL Mahir L2: window function sampai tuntas</h1>
+    <p class="lede">Modul M6 mengenalkanmu pada <code>ROW_NUMBER</code>, <code>LAG</code>, dan <code>PARTITION BY</code> — cukup untuk menjawab pertanyaan yang biasa. Tapi ia tidak pernah menyebut <strong>frame</strong>, dan frame adalah bagian yang menentukan apakah running total-mu benar atau meleset satu hari penuh.</p>
+    <p class="lede" style="margin-top:10px">Tujuh hari ini: apa yang sebenarnya terjadi di balik <code>OVER</code>, <code>ROWS</code> lawan <code>RANGE</code> (yang bawaannya bukan yang kamu kira), jebakan <code>LAST_VALUE</code>, peringkat dan persentil, lalu <strong>recursive CTE</strong> untuk menelusuri hierarki dan membuat deret tanggal. Basis datanya sama seperti Level 1 — <code>senja.db</code>.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ W1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L2 · 1</span>
+      <h2>Apa yang sebenarnya dikerjakan OVER</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjelaskan beda window function dan <code>GROUP BY</code> dalam satu kalimat, dan tahu kapan hanya window function yang bisa menjawab.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buka kembali basis datanya</h3>
+        <span class="cek"><input type="checkbox" id="w1s1"><label for="w1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau sesi Colab-mu sudah berakhir, jalankan ulang sel pembuat <code>senja.db</code> dari Level 1 Hari 1. Kalau berkasnya masih ada, cukup sambungkan lagi:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3, pandas as pd
+con = sqlite3.connect("senja.db")
+def q(sql): return pd.read_sql(sql, con)
+
+q("SELECT COUNT(*) AS pesanan FROM pesanan")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   pesanan
+0      400</code></pre></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>GROUP BY meringkas. Window function tidak.</h3>
+        <span class="cek"><input type="checkbox" id="w1s2"><label for="w1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Itu seluruh bedanya, dan semua yang lain mengalir dari situ. <code>GROUP BY</code> menukar banyak baris jadi satu. Window function menghitung hal yang sama <strong>tanpa membuang satu baris pun</strong>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT cabang, SUM(i.jumlah*i.harga_saat_itu) AS nilai_cabang
+     FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+     WHERE o.status='selesai'
+     GROUP BY cabang ORDER BY cabang""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    cabang  nilai_cabang
+0     Dago      12665000
+1   Kemang      11669000
+2  Seturan      11405000</code></pre></div>
+        </div>
+        <p>Tiga baris. Rinciannya hilang — memang itu gunanya. Sekarang pertanyaan yang <code>GROUP BY</code> <strong>tidak bisa</strong> jawab: <em>tiap baris item itu berapa persen dari total cabangnya?</em> Untuk menjawabnya kamu butuh baris aslinya <em>dan</em> totalnya, berdampingan.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""SELECT o.id, o.cabang,
+            i.jumlah*i.harga_saat_itu AS nilai_baris,
+            SUM(i.jumlah*i.harga_saat_itu) OVER (PARTITION BY o.cabang) AS nilai_cabang,
+            ROUND(i.jumlah*i.harga_saat_itu * 100.0 /
+                  SUM(i.jumlah*i.harga_saat_itu) OVER (PARTITION BY o.cabang), 3) AS persen_dari_cabang
+     FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+     WHERE o.status='selesai'
+     ORDER BY o.cabang, o.id LIMIT 6""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   id cabang  nilai_baris  nilai_cabang  persen_dari_cabang
+0   1   Dago        22000      12665000               0.174
+1   1   Dago        88000      12665000               0.695
+2   1   Dago       104000      12665000               0.821
+3   3   Dago        66000      12665000               0.521
+4  10   Dago        45000      12665000               0.355
+5  10   Dago        50000      12665000               0.395</code></pre></div>
+        </div>
+        <p>Perhatikan kolom <code>nilai_cabang</code>: <strong>12665000 berulang di tiap baris</strong> — angka yang sama persis dengan hasil <code>GROUP BY</code> tadi. Itu bukti bahwa keduanya menghitung hal yang sama; bedanya cuma window function menempelkannya ke tiap baris, bukan menggantikan barisnya.</p>
+        <div class="catatan">
+          <strong>Kalimat yang layak dihafal:</strong> <em><code>GROUP BY</code> menjawab "berapa totalnya"; window function menjawab "berapa bagian baris ini dari totalnya".</em> Setiap kali pertanyaannya mengandung kata <strong>"dibanding"</strong>, <strong>"peringkat ke"</strong>, <strong>"sebelumnya"</strong>, atau <strong>"berjalan"</strong> — jawabannya window function.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tiga bagian di dalam OVER</h3>
+        <span class="cek"><input type="checkbox" id="w1s3"><label for="w1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Bagian</th><th>Artinya</th><th>Kalau dihilangkan</th></tr></thead>
+            <tbody>
+              <tr><td><code>PARTITION BY</code></td><td>Bagi jadi kelompok, hitung ulang tiap kelompok</td><td>Seluruh tabel jadi satu kelompok</td></tr>
+              <tr><td><code>ORDER BY</code></td><td>Urutkan di dalam kelompok</td><td>Tidak ada urutan — <strong>dan frame jadi seluruh kelompok</strong></td></tr>
+              <tr><td><code>ROWS</code>/<code>RANGE</code> (frame)</td><td>Baris mana saja yang ikut dihitung</td><td>Bawaannya berubah tergantung ada <code>ORDER BY</code> atau tidak</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>Baris ketiga itu isi seluruh Hari 2, dan hampir tidak pernah diajarkan.</strong> Menambahkan <code>ORDER BY</code> ke dalam <code>OVER</code> tidak cuma mengurutkan — ia <strong>diam-diam mengubah frame</strong> dari "seluruh kelompok" menjadi "dari awal sampai baris ini". Itu sebabnya <code>SUM(...) OVER (PARTITION BY x)</code> memberi total, sedangkan <code>SUM(...) OVER (PARTITION BY x ORDER BY y)</code> memberi running total — perubahan besar dari menambahkan dua kata.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L2 · 1 selesai</h3>
+      <p><strong>Catat:</strong> <code>GROUP BY</code> meringkas dan membuang baris; window function menghitung sambil menyimpan semua baris · <code>PARTITION BY</code> = kelompok, <code>ORDER BY</code> = urutan <em>dan diam-diam mengubah frame</em> · pertanyaan yang mengandung "dibanding", "peringkat", "sebelumnya", atau "berjalan" hampir selalu butuh window function.</p>
+    </div>
+  </section>
+
+  <!-- ============ W2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L2 · 2</span>
+      <h2>ROWS lawan RANGE: bawaannya bukan yang kamu kira</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjelaskan kenapa running total per tanggal bisa memberi dua jawaban berbeda, dan memilih yang benar dengan sadar.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Contoh terkecil yang menunjukkan bedanya</h3>
+        <span class="cek"><input type="checkbox" id="w2s1"><label for="w2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Empat baris, dua di antaranya bernilai kembar:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH t(nama, nilai) AS (VALUES ('a',10),('b',20),('c',20),('d',30))
+SELECT nama, nilai,
+  SUM(nilai) OVER (ORDER BY nilai
+       ROWS  BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS pakai_ROWS,
+  SUM(nilai) OVER (ORDER BY nilai
+       RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS pakai_RANGE
+FROM t ORDER BY nilai, nama""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  nama  nilai  pakai_ROWS  pakai_RANGE
+0    a     10          10           10
+1    b     20          30           50
+2    c     20          50           50
+3    d     30          80           80</code></pre></div>
+        </div>
+        <p>Baris b dan c nilainya sama-sama 20. Lihat apa yang terjadi:</p>
+        <ul>
+          <li><strong><code>ROWS</code></strong> menghitung <em>baris demi baris</em>: b dapat 10+20 = 30, c dapat 10+20+20 = 50.</li>
+          <li><strong><code>RANGE</code></strong> menghitung <em>berdasarkan nilai</em>: karena b dan c seri, keduanya melihat seluruh kelompok seri itu sekaligus — dua-duanya dapat 50.</li>
+        </ul>
+        <div class="bahaya">
+          <strong>Dan inilah yang penting: <code>RANGE</code> adalah bawaannya.</strong> Kalau kamu menulis <code>SUM(nilai) OVER (ORDER BY nilai)</code> tanpa menyebut frame sama sekali, yang kamu dapat adalah kolom <code>pakai_RANGE</code> — bukan yang <code>ROWS</code>. Sebagian besar orang mengira sebaliknya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Di data sungguhan, bedanya jadi satu hari penuh</h3>
+        <span class="cek"><input type="checkbox" id="w2s2"><label for="w2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Contoh di atas terasa seperti kasus buatan. Ia berhenti terasa begitu begitu kamu membuat running total penjualan <strong>per tanggal</strong>, karena satu tanggal hampir selalu punya beberapa baris.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH harian AS (
+  SELECT o.tanggal, o.cabang, SUM(i.jumlah*i.harga_saat_itu) AS nilai
+  FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+  WHERE o.status='selesai' AND o.tanggal BETWEEN '2024-01-01' AND '2024-01-05'
+  GROUP BY o.tanggal, o.cabang)
+SELECT tanggal, cabang, nilai,
+  SUM(nilai) OVER (ORDER BY tanggal
+       ROWS  BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS kum_ROWS,
+  SUM(nilai) OVER (ORDER BY tanggal
+       RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS kum_RANGE
+FROM harian ORDER BY tanggal, cabang""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>      tanggal   cabang   nilai  kum_ROWS  kum_RANGE
+0  2024-01-01     Dago  112000    112000     112000
+1  2024-01-03     Dago  217000    329000     555000
+2  2024-01-03   Kemang  160000    489000     555000
+3  2024-01-03  Seturan   66000    555000     555000
+4  2024-01-04     Dago  374000    929000    1113000
+5  2024-01-04   Kemang   60000    989000    1113000
+6  2024-01-04  Seturan  124000   1113000    1113000
+7  2024-01-05     Dago  150000   1263000    1263000</code></pre></div>
+        </div>
+        <p>Tanggal 3 punya tiga baris (tiga cabang). <code>ROWS</code> memberi tiga angka berbeda — 329.000, 489.000, 555.000 — yang <strong>bergantung pada urutan cabang muncul</strong>. <code>RANGE</code> memberi 555.000 untuk ketiganya: kumulatif sampai akhir tanggal 3, apa pun urutan cabangnya.</p>
+        <div class="catatan">
+          <strong>Mana yang benar? Tergantung pertanyaannya — dan biasanya <code>RANGE</code>.</strong>
+          <p style="margin-top:8px">Kalau grafikmu berjudul "penjualan kumulatif per tanggal", angka untuk tanggal 3 <em>harus</em> 555.000. Angka 329.000 dan 489.000 tidak punya arti sama sekali — mereka adalah "kumulatif sampai sebagian cabang tanggal 3", yang bukan pertanyaan siapa pun.</p>
+          <p style="margin-top:8px">Kalau <code>ROWS</code> yang kamu pakai dan datanya diurutkan berbeda besok, angkanya <strong>ikut berubah</strong> tanpa datanya berubah. Itu ciri bug yang paling sulit dilacak.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Kapan <code>ROWS</code> justru yang benar:</strong> saat frame-nya memang soal <em>jumlah baris</em>, bukan soal nilai — misalnya rata-rata bergerak 7 baris terakhir. Untuk itu <code>RANGE</code> malah keliru, karena ia menghitung berdasarkan jarak nilai, bukan cacah baris.
+          <div class="kode" style="margin-top:8px"><pre><code>AVG(nilai) OVER (ORDER BY tanggal ROWS BETWEEN 6 PRECEDING AND CURRENT ROW)</code></pre></div>
+          <p style="margin-top:8px">Aturan praktisnya: <strong>selalu tulis frame-nya secara eksplisit.</strong> Query yang menyebut <code>ROWS BETWEEN ...</code> atau <code>RANGE BETWEEN ...</code> memberitahu pembaca berikutnya bahwa kamu memang memilih, bukan kebetulan mendapat bawaan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L2 · 2 selesai</h3>
+      <p><strong>Catat:</strong> <code>ORDER BY</code> di dalam <code>OVER</code> diam-diam memasang frame "dari awal sampai baris ini" · bawaannya <strong><code>RANGE</code></strong>, yang memperlakukan nilai seri sebagai satu blok · <code>ROWS</code> menghitung baris demi baris dan hasilnya bergantung urutan · untuk kumulatif per tanggal pakai <code>RANGE</code>, untuk rata-rata bergerak N baris pakai <code>ROWS</code> · dan tulis frame-nya selalu.</p>
+    </div>
+  </section>
+
+  <!-- ============ W3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L2 · 3</span>
+      <h2>LAG, LEAD, dan jebakan LAST_VALUE</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membandingkan baris dengan baris sebelum dan sesudahnya, dan tahu kenapa <code>LAST_VALUE</code> hampir selalu memberi jawaban yang salah kalau ditulis apa adanya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>LAG melihat ke belakang, LEAD ke depan</h3>
+        <span class="cek"><input type="checkbox" id="w3s1"><label for="w3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Modul M6 sudah memperkenalkan <code>LAG</code>. <code>LEAD</code> adalah kembarannya ke arah sebaliknya, dan tidak pernah disebut di sana.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH b AS (
+  SELECT substr(o.tanggal,1,7) AS bulan, SUM(i.jumlah*i.harga_saat_itu) AS nilai
+  FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+  WHERE o.status='selesai' GROUP BY 1)
+SELECT bulan, nilai,
+  LAG(nilai)  OVER (ORDER BY bulan) AS bulan_lalu,
+  LEAD(nilai) OVER (ORDER BY bulan) AS bulan_depan,
+  ROUND((nilai - LAG(nilai) OVER (ORDER BY bulan)) * 100.0
+        / LAG(nilai) OVER (ORDER BY bulan), 1) AS tumbuh_persen
+FROM b ORDER BY bulan""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>     bulan    nilai  bulan_lalu  bulan_depan  tumbuh_persen
+0  2024-01  5968000         NaN    6351000.0            NaN
+1  2024-02  6351000   5968000.0    5574000.0            6.4
+2  2024-03  5574000   6351000.0    5754000.0          -12.2
+3  2024-04  5754000   5574000.0    6272000.0            3.2
+4  2024-05  6272000   5754000.0    5820000.0            9.0
+5  2024-06  5820000   6272000.0          NaN           -7.2</code></pre></div>
+        </div>
+        <p>Baris pertama <code>bulan_lalu</code>-nya <code>NaN</code>, baris terakhir <code>bulan_depan</code>-nya <code>NaN</code> — tidak ada yang sebelum Januari dan tidak ada setelah Juni. Itu benar, bukan kerusakan.</p>
+        <div class="bahaya">
+          <strong>Tapi <code>NaN</code> di kolom pertumbuhan adalah lubang yang harus kamu tutup sendiri.</strong> Kalau angka ini masuk ke laporan atau grafik, baris Januari akan tampil kosong atau — lebih buruk — dibaca sebagai nol persen oleh alat yang menggantikannya. Sebutkan apa adanya:
+          <div class="kode" style="margin-top:8px"><pre><code>COALESCE(CAST(ROUND(...) AS TEXT), 'tidak ada pembanding') AS tumbuh</code></pre></div>
+          <p style="margin-top:8px">Ini pelajaran Level 1 Hari 1 yang muncul lagi: bulan pertama bukan "tumbuh 0%", melainkan "tidak diketahui". Perbedaan itu penting justru saat orang lain membaca laporanmu.</p>
+        </div>
+        <div class="catatan">
+          <strong>Menulis <code>LAG(nilai) OVER (...)</code> tiga kali seperti di atas terasa boros</strong>, dan memang. Mesin basis data yang baik menghitungnya sekali saja, jadi ini bukan soal kecepatan — soal keterbacaan. Kalau query-nya makin panjang, hitung <code>LAG</code>-nya di CTE terpisah lalu pakai namanya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>LAST_VALUE yang tidak memberi nilai terakhir</h3>
+        <span class="cek"><input type="checkbox" id="w3s2"><label for="w3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini jebakan window function yang paling sering ditanyakan di wawancara, dan paling sering bikin orang bingung berjam-jam.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+SELECT nama, harga,
+  FIRST_VALUE(harga) OVER (ORDER BY harga) AS first_v,
+  LAST_VALUE(harga)  OVER (ORDER BY harga) AS last_v_TANPA_frame,
+  LAST_VALUE(harga)  OVER (ORDER BY harga
+      ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_v_DENGAN_frame
+FROM produk ORDER BY harga""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>           nama  harga  first_v  last_v_TANPA_frame  last_v_DENGAN_frame
+0     Teh Manis  10000    10000               10000                30000
+1    Roti Bakar  15000    10000               15000                30000
+2     Americano  18000    10000               18000                30000
+3     Kopi Susu  22000    10000               22000                30000
+4     Croissant  25000    10000               25000                30000
+5  Matcha Latte  26000    10000               26000                30000
+6    Cheesecake  30000    10000               30000                30000</code></pre></div>
+        </div>
+        <p>Lihat kolom ketiga. <code>LAST_VALUE</code> tanpa frame mengembalikan <strong>harga baris itu sendiri</strong> — 10000, 15000, 18000, dan seterusnya. Bukan 30000.</p>
+        <div class="bahaya">
+          <strong>Penyebabnya persis pelajaran kemarin.</strong> Frame bawaannya adalah "dari awal sampai baris ini". Jadi saat SQL mencari "nilai terakhir di dalam frame", frame-nya <em>berakhir di baris yang sedang dihitung</em> — maka nilai terakhirnya ya baris itu sendiri.
+          <p style="margin-top:8px"><code>FIRST_VALUE</code> tidak kena karena "nilai pertama" memang selalu di awal frame, dan awal frame-nya tetap dari baris paling awal. Itu sebabnya <code>FIRST_VALUE</code> terlihat "berfungsi" dan <code>LAST_VALUE</code> terlihat "rusak" — padahal keduanya mengikuti aturan yang sama.</p>
+          <p style="margin-top:8px"><strong>Perbaikannya wajib ditulis penuh:</strong> <code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>. Tidak ada jalan pintas.</p>
+        </div>
+        <div class="catatan">
+          <strong>Cara yang lebih sering dipakai orang berpengalaman: hindari <code>LAST_VALUE</code>.</strong> Balik urutannya dan pakai <code>FIRST_VALUE</code> — <code>FIRST_VALUE(harga) OVER (ORDER BY harga DESC)</code> memberi 30000 tanpa perlu menulis frame sama sekali. Lebih pendek, dan tidak ada yang bisa lupa.
+        </div>
+        <div class="aksi">
+          <span class="tag">KERJAKAN SENDIRI</span>
+          <p>Buat query yang menampilkan tiap produk berikut <strong>produk termurah dan termahal di kategorinya</strong> (Minuman / Makanan). Pakai <code>PARTITION BY</code>, dan hindari <code>LAST_VALUE</code>.</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>q("""
+SELECT nama, kategori, harga,
+  FIRST_VALUE(nama) OVER (PARTITION BY kategori ORDER BY harga)      AS termurah,
+  FIRST_VALUE(nama) OVER (PARTITION BY kategori ORDER BY harga DESC) AS termahal
+FROM produk ORDER BY kategori, harga""")</code></pre></div>
+          <div class="kode"><pre><code>           nama kategori  harga    termurah      termahal
+0    Roti Bakar  Makanan  15000  Roti Bakar    Cheesecake
+1     Croissant  Makanan  25000  Roti Bakar    Cheesecake
+2    Cheesecake  Makanan  30000  Roti Bakar    Cheesecake
+3     Teh Manis  Minuman  10000   Teh Manis  Matcha Latte
+4     Americano  Minuman  18000   Teh Manis  Matcha Latte
+5     Kopi Susu  Minuman  22000   Teh Manis  Matcha Latte
+6  Matcha Latte  Minuman  26000   Teh Manis  Matcha Latte</code></pre></div>
+          <p style="margin-top:8px">Dua <code>FIRST_VALUE</code> dengan arah urutan berlawanan, tanpa satu pun frame ditulis — dan hasilnya benar di semua baris.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L2 · 3 selesai</h3>
+      <p><strong>Catat:</strong> <code>LEAD</code> = kebalikan <code>LAG</code> · baris pertama/terakhir menghasilkan <code>NULL</code>, dan itu "tidak ada pembanding", bukan nol · <code>LAST_VALUE</code> tanpa frame mengembalikan baris itu sendiri — akibat frame bawaan · perbaikannya <code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>, atau lebih baik: balik urutannya dan pakai <code>FIRST_VALUE</code>.</p>
+    </div>
+  </section>
+
+  <!-- ============ W4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L2 · 4</span>
+      <h2>Peringkat, kuartil, dan persentil</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memilih di antara tiga fungsi peringkat yang hasilnya berbeda saat ada nilai seri, dan membagi pelanggan jadi kelompok dengan <code>NTILE</code>.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tiga fungsi peringkat, tiga jawaban berbeda</h3>
+        <span class="cek"><input type="checkbox" id="w4s1"><label for="w4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH t(nama, nilai) AS (VALUES ('a',30),('b',20),('c',20),('d',10))
+SELECT nama, nilai,
+  ROW_NUMBER() OVER (ORDER BY nilai DESC) AS row_number,
+  RANK()       OVER (ORDER BY nilai DESC) AS rank,
+  DENSE_RANK() OVER (ORDER BY nilai DESC) AS dense_rank
+FROM t ORDER BY nilai DESC, nama""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  nama  nilai  row_number  rank  dense_rank
+0    a     30           1     1           1
+1    b     20           2     2           2
+2    c     20           3     2           2
+3    d     10           4     4           3</code></pre></div>
+        </div>
+        <p>b dan c seri di nilai 20. Perhatikan baris terakhir — di situlah ketiganya berpisah:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Fungsi</th><th>Untuk yang seri</th><th>Nomor berikutnya</th><th>Pakai kalau</th></tr></thead>
+            <tbody>
+              <tr><td><code>ROW_NUMBER</code></td><td>Dipaksa berbeda (2, 3)</td><td>Berurutan</td><td>Butuh <strong>tepat satu</strong> baris per kelompok — dedup, ambil yang terbaru</td></tr>
+              <tr><td><code>RANK</code></td><td>Sama (2, 2)</td><td><strong>Melompat ke 4</strong></td><td>Peringkat kompetisi — dua juara kedua, tidak ada juara ketiga</td></tr>
+              <tr><td><code>DENSE_RANK</code></td><td>Sama (2, 2)</td><td>Lanjut ke 3</td><td>Butuh tingkatan rapat tanpa lompatan — misal "3 tingkat harga teratas"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong><code>ROW_NUMBER</code> yang seri urutannya tidak dijamin.</strong> b dan c sama-sama bernilai 20; yang mana dapat nomor 2 ditentukan mesin, dan bisa berubah antar-jalankan. Kalau kamu memakai <code>ROW_NUMBER() = 1</code> untuk memilih "satu baris per pelanggan", pastikan <code>ORDER BY</code>-nya <strong>selalu memisahkan seri sampai tuntas</strong> — tambahkan kolom pemecah seperti <code>ORDER BY tanggal DESC, id DESC</code>. Tanpa itu, hasil query-mu tidak stabil, dan itu jenis bug yang muncul sesekali lalu hilang lagi.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>NTILE: membagi pelanggan jadi empat kelompok</h3>
+        <span class="cek"><input type="checkbox" id="w4s2"><label for="w4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH b AS (
+  SELECT o.pelanggan_id, SUM(i.jumlah*i.harga_saat_itu) AS belanja
+  FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+  WHERE o.status='selesai' AND o.pelanggan_id IS NOT NULL
+  GROUP BY o.pelanggan_id)
+SELECT p.nama, b.belanja,
+  NTILE(4) OVER (ORDER BY b.belanja DESC)            AS kuartil,
+  RANK()   OVER (ORDER BY b.belanja DESC)            AS peringkat,
+  ROUND(PERCENT_RANK() OVER (ORDER BY b.belanja), 2) AS persentil
+FROM b JOIN pelanggan p ON p.id = b.pelanggan_id
+ORDER BY b.belanja DESC""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>      nama  belanja  kuartil  peringkat  persentil
+0    Dimas  2971000        1          1       1.00
+1     Lita  2797000        1          2       0.94
+2     Rina  2767000        1          3       0.88
+3     Yoga  2612000        1          4       0.81
+4     Sari  2568000        1          5       0.75
+5   Hendra  2320000        2          6       0.69
+6     Maya  2160000        2          7       0.63
+7     Bayu  2154000        2          8       0.56
+8     Tari  2005000        2          9       0.50
+9    Sinta  1888000        3         10       0.44
+10   Intan  1788000        3         11       0.38
+11    Agus  1694000        3         12       0.31
+12   Nadia  1651000        3         13       0.25
+13   Wawan  1572000        4         14       0.19
+14    Reza  1459000        4         15       0.13
+15   Putri  1308000        4         16       0.06
+16   Fajar  1095000        4         17       0.00</code></pre></div>
+        </div>
+        <p>Tujuh belas pelanggan dibagi empat. Hitung anggotanya: kuartil 1 dapat <strong>5</strong> orang, sisanya <strong>4</strong> masing-masing. 17 tidak habis dibagi 4, dan <code>NTILE</code> membagikan sisanya ke kelompok-kelompok <strong>paling awal</strong>.</p>
+        <div class="bahaya">
+          <strong><code>NTILE</code> memaksa jumlah anggota hampir sama rata — bukan memotong di nilai yang bermakna.</strong> Kalau tiga orang belanjanya nyaris sama tapi kebetulan jatuh di batas, dua masuk kuartil 1 dan satu masuk kuartil 2, padahal selisihnya tidak berarti apa-apa. <code>NTILE</code> menjawab "siapa 25% teratas", bukan "siapa yang belanjanya besar".
+          <p style="margin-top:8px">Kalau yang kamu butuhkan batas yang <em>bermakna</em> — misalnya "pelanggan di atas Rp 2 juta" — pakai <code>CASE WHEN</code> dengan ambang yang kamu tentukan bersama klien, bukan <code>NTILE</code>. Ambang bisnis datang dari bisnis, bukan dari pembagian rata.</p>
+        </div>
+        <div class="catatan">
+          <strong><code>PERCENT_RANK</code> berjalan dari 0 sampai 1</strong>, dan perhatikan bahwa <strong>Fajar dapat 0.00 dan Dimas dapat 1.00</strong> — nilai terendah selalu tepat 0, tertinggi selalu tepat 1, karena rumusnya <code>(peringkat − 1) / (jumlah baris − 1)</code>. Jangan dibaca sebagai "Fajar 0% dari total belanja"; artinya "Fajar berada di titik terbawah urutan".
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L2 · 4 selesai</h3>
+      <p><strong>Catat:</strong> <code>ROW_NUMBER</code> memaksa nomor unik (dan tidak stabil kalau seri tidak dipecah), <code>RANK</code> melompat setelah seri, <code>DENSE_RANK</code> tidak melompat · selalu tambahkan kolom pemecah seri di <code>ORDER BY</code> · <code>NTILE</code> menyamakan jumlah anggota, bukan mencari batas bermakna — untuk ambang bisnis pakai <code>CASE WHEN</code>.</p>
+    </div>
+  </section>
+
+  <!-- ============ W5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L2 · 5</span>
+      <h2>Recursive CTE: menelusuri hierarki sampai ke dasar</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis query yang memanggil dirinya sendiri untuk menelusuri hubungan bertingkat — sesuatu yang tidak bisa dilakukan JOIN berapa pun banyaknya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa self join tidak cukup</h3>
+        <span class="cek"><input type="checkbox" id="w5s1"><label for="w5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di Level 1 Hari 4 kamu membaca pegawai dan atasannya dengan self join. Itu bekerja untuk <strong>satu</strong> tingkat. Untuk "siapa saja di bawah Bu Rina, berapa pun dalamnya", kamu harus menambah JOIN untuk tiap tingkat — dan kamu tidak tahu ada berapa tingkat sampai kamu melihat datanya. Kalau besok ada tingkat baru, query-mu diam-diam melewatkannya.</p>
+        <p><strong>Recursive CTE</strong> memecahkan itu: query yang mengulang dirinya sendiri sampai tidak ada lagi baris baru.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH RECURSIVE pohon AS (
+  -- 1. titik awal: yang tidak punya atasan
+  SELECT id, nama, jabatan, id_atasan, 1 AS tingkat, nama AS jalur
+  FROM pegawai WHERE id_atasan IS NULL
+
+  UNION ALL
+
+  -- 2. langkah berulang: ambil bawahan dari yang sudah ketemu
+  SELECT p.id, p.nama, p.jabatan, p.id_atasan,
+         t.tingkat + 1, t.jalur || ' > ' || p.nama
+  FROM pegawai p JOIN pohon t ON p.id_atasan = t.id)
+SELECT tingkat, nama, jabatan, jalur FROM pohon ORDER BY jalur""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>   tingkat       nama        jabatan                                jalur
+0        1  Pak Hardi        Pemilik                            Pak Hardi
+1        2    Bu Rina   Manajer Area                  Pak Hardi > Bu Rina
+2        3      Bagus  Kepala Cabang          Pak Hardi > Bu Rina > Bagus
+3        4      Wawan        Barista  Pak Hardi > Bu Rina > Bagus > Wawan
+4        3      Sinta  Kepala Cabang          Pak Hardi > Bu Rina > Sinta
+5        4       Andi        Barista   Pak Hardi > Bu Rina > Sinta > Andi
+6        4       Lita          Kasir   Pak Hardi > Bu Rina > Sinta > Lita
+7        4       Tari        Barista   Pak Hardi > Bu Rina > Sinta > Tari
+8        3       Vira  Kepala Cabang           Pak Hardi > Bu Rina > Vira
+9        4       Yoga          Kasir    Pak Hardi > Bu Rina > Vira > Yoga</code></pre></div>
+        </div>
+        <p>Seluruh struktur organisasi, empat tingkat, dari satu query — dan query-nya tidak berubah kalau besok ada tingkat kelima.</p>
+        <div class="catatan">
+          <strong>Tiga bagian yang harus ada, selalu:</strong>
+          <p style="margin-top:8px"><strong>1. Titik awal</strong> (bagian sebelum <code>UNION ALL</code>) — baris yang bisa ditemukan tanpa mengulang. Di sini: pegawai tanpa atasan.<br>
+          <strong>2. <code>UNION ALL</code></strong> — bukan <code>UNION</code>. Ingat Level 1 Hari 6: <code>UNION</code> akan membuang baris yang kebetulan identik, dan di sini itu bisa memotong cabang pohon.<br>
+          <strong>3. Langkah berulang</strong> — bagian yang menyebut nama CTE-nya sendiri (<code>pohon</code>), menempel pada baris yang sudah ditemukan putaran sebelumnya.</p>
+          <p style="margin-top:8px">Kolom <code>tingkat</code> dan <code>jalur</code> tidak wajib, tapi hampir selalu berguna: <code>tingkat</code> memberi kedalaman, <code>jalur</code> memberi urutan tampil yang rapi lewat <code>ORDER BY jalur</code>.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Kalau datanya melingkar, query ini tidak akan pernah berhenti.</strong> Andai A atasannya B dan B atasannya A, recursive CTE berputar selamanya sampai memori habis. Di data pegawai sungguhan hal itu terjadi lebih sering daripada dugaanmu — biasanya akibat salah input.
+          <p style="margin-top:8px">Pengaman yang murah: batasi kedalamannya. Tambahkan <code>WHERE t.tingkat &lt; 10</code> di langkah berulang. Kalau hasilnya menyentuh tingkat 10, itu bukan hierarki yang dalam — itu lingkaran yang harus dilaporkan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Mulai dari tengah, bukan dari puncak</h3>
+        <span class="cek"><input type="checkbox" id="w5s2"><label for="w5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pertanyaan yang lebih sering muncul: bukan "seluruh pohon", tapi "semua yang berada di bawah <em>orang ini</em>". Cukup ganti titik awalnya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH RECURSIVE bawahan AS (
+  SELECT id, nama, 0 AS jarak FROM pegawai WHERE id = 2      -- Bu Rina
+  UNION ALL
+  SELECT p.id, p.nama, b.jarak + 1
+  FROM pegawai p JOIN bawahan b ON p.id_atasan = b.id)
+SELECT nama, jarak FROM bawahan WHERE jarak > 0 ORDER BY jarak, nama""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>    nama  jarak
+0  Bagus      1
+1  Sinta      1
+2   Vira      1
+3   Andi      2
+4   Lita      2
+5   Tari      2
+6  Wawan      2
+7   Yoga      2</code></pre></div>
+        </div>
+        <p>Delapan orang di bawah Bu Rina: tiga kepala cabang langsung, dan lima staf di bawah mereka. <code>WHERE jarak &gt; 0</code> membuang Bu Rina sendiri dari daftar.</p>
+        <div class="catatan">
+          <strong>Pola yang sama menjawab banyak hal di luar organisasi:</strong> siapa saja yang direkomendasikan oleh pelanggan A, lalu direkomendasikan lagi oleh mereka (rantai rujukan di tabel <code>pelanggan</code>) · kategori produk yang bersarang · komponen di dalam komponen. Bentuknya selalu sama: satu tabel yang menunjuk dirinya sendiri.
+        </div>
+        <div class="aksi">
+          <span class="tag">KERJAKAN SENDIRI</span>
+          <p>Tabel <code>pelanggan</code> punya <code>id_perujuk</code>. Tulis recursive CTE yang menampilkan seluruh <strong>rantai rujukan yang berasal dari Rina (id 1)</strong> — siapa yang dia rujuk, lalu siapa yang dirujuk oleh mereka, dan seterusnya.</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>q("""
+WITH RECURSIVE rantai AS (
+  SELECT id, nama, 0 AS jarak FROM pelanggan WHERE id = 1
+  UNION ALL
+  SELECT p.id, p.nama, r.jarak + 1
+  FROM pelanggan p JOIN rantai r ON p.id_perujuk = r.id
+  WHERE r.jarak < 10)
+SELECT nama, jarak FROM rantai WHERE jarak > 0 ORDER BY jarak, nama""")</code></pre></div>
+          <div class="kode"><pre><code>    nama  jarak
+0   Agus      1
+1  Wawan      1</code></pre></div>
+          <p style="margin-top:8px">Hanya dua, dan keduanya jarak 1 — Agus dan Wawan tidak merujuk siapa pun lagi, jadi rantainya berhenti. Perhatikan <code>WHERE r.jarak &lt; 10</code>: pengaman lingkaran yang dibahas di langkah 1, dipasang sejak awal.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L2 · 5 selesai</h3>
+      <p><strong>Catat:</strong> recursive CTE = titik awal + <code>UNION ALL</code> + langkah yang menyebut namanya sendiri · pakai <code>UNION ALL</code>, jangan <code>UNION</code> · bawa kolom <code>tingkat</code>/<code>jarak</code> dan <code>jalur</code> · <strong>selalu pasang batas kedalaman</strong> supaya data yang melingkar tidak menggantung query-mu.</p>
+    </div>
+  </section>
+
+  <!-- ============ W6 ============ -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L2 · 6</span>
+      <h2>Membuat deret tanggal: hari yang nol tetap harus muncul</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat kerangka tanggal lengkap dengan recursive CTE, supaya hari tanpa transaksi tampil sebagai nol — bukan hilang.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Masalahnya: yang tidak ada tidak akan muncul</h3>
+        <span class="cek"><input type="checkbox" id="w6s1"><label for="w6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau tanggal 2 Januari kedai tutup, tidak ada baris pesanan untuk tanggal itu. <code>GROUP BY tanggal</code> hanya bisa mengelompokkan baris yang ada — jadi 2 Januari <strong>tidak muncul sama sekali</strong>, bukan muncul sebagai nol.</p>
+        <p>Akibatnya: grafik garismu menyambung langsung dari tanggal 1 ke tanggal 3, seolah tidak ada apa-apa yang terlewat. Rata-rata harianmu membagi dengan jumlah hari <em>yang ada datanya</em>, bukan jumlah hari sebenarnya — jadi terlalu tinggi.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH RECURSIVE tgl(d) AS (
+  SELECT '2024-01-01'
+  UNION ALL
+  SELECT date(d, '+1 day') FROM tgl WHERE d < '2024-01-07')
+SELECT t.d AS tanggal,
+       COALESCE(SUM(i.jumlah*i.harga_saat_itu), 0) AS nilai
+FROM tgl t
+LEFT JOIN pesanan o ON o.tanggal = t.d AND o.status = 'selesai'
+LEFT JOIN item i ON i.pesanan_id = o.id
+GROUP BY t.d ORDER BY t.d""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>      tanggal   nilai
+0  2024-01-01  112000
+1  2024-01-02       0
+2  2024-01-03  443000
+3  2024-01-04  558000
+4  2024-01-05  150000
+5  2024-01-06  422000
+6  2024-01-07       0</code></pre></div>
+        </div>
+        <p>Tujuh baris untuk tujuh hari. <strong>2 dan 7 Januari muncul sebagai nol</strong> — bukan hilang. Tanpa kerangka ini kamu akan mendapat lima baris dan tidak pernah tahu dua hari itu ada.</p>
+        <div class="catatan">
+          <strong>Tiga hal yang membuat query ini benar:</strong>
+          <p style="margin-top:8px"><strong>1.</strong> Recursive CTE membuat deret tanggalnya lebih dulu — data belum disentuh sama sekali.<br>
+          <strong>2.</strong> <code>LEFT JOIN</code> dari deret ke data, bukan sebaliknya. Kerangka harus di sisi kiri.<br>
+          <strong>3.</strong> <code>AND o.status='selesai'</code> ditaruh di <code>ON</code>, <strong>bukan</strong> di <code>WHERE</code>. Kalau ditaruh di <code>WHERE</code>, baris tanggal yang tidak punya pasangan akan ikut terbuang dan <code>LEFT JOIN</code>-nya berubah jadi <code>INNER JOIN</code> — kesalahan yang sangat sering terjadi.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Poin ketiga layak dicoba sendiri sekarang.</strong> Pindahkan <code>AND o.status='selesai'</code> dari <code>ON</code> ke <code>WHERE</code>, jalankan lagi, dan hitung barisnya: dari 7 turun jadi 5. Dua hari nol lenyap, dan tidak ada pesan apa pun. Ini salah satu bug JOIN paling umum di dunia, dan sekarang kamu bisa mengenalinya dari jumlah baris — persis kebiasaan yang dibangun di Level 1 Hari 3.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kerangka penuh: tiap tanggal × tiap cabang</h3>
+        <span class="cek"><input type="checkbox" id="w6s2"><label for="w6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Gabungkan dengan <code>CROSS JOIN</code> dari Level 1 Hari 3, dan kamu punya kerangka dua dimensi — tiap cabang punya baris untuk tiap hari, terisi atau tidak.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>q("""
+WITH RECURSIVE tgl(d) AS (
+  SELECT '2024-01-01'
+  UNION ALL SELECT date(d,'+1 day') FROM tgl WHERE d < '2024-01-03'),
+kerangka AS (
+  SELECT t.d, c.cabang FROM tgl t
+  CROSS JOIN (SELECT DISTINCT cabang FROM pesanan) c)
+SELECT k.d AS tanggal, k.cabang,
+       COALESCE(SUM(i.jumlah*i.harga_saat_itu), 0) AS nilai
+FROM kerangka k
+LEFT JOIN pesanan o ON o.tanggal = k.d AND o.cabang = k.cabang AND o.status='selesai'
+LEFT JOIN item i ON i.pesanan_id = o.id
+GROUP BY k.d, k.cabang ORDER BY k.d, k.cabang""")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>      tanggal   cabang   nilai
+0  2024-01-01     Dago  112000
+1  2024-01-01   Kemang       0
+2  2024-01-01  Seturan       0
+3  2024-01-02     Dago       0
+4  2024-01-02   Kemang       0
+5  2024-01-02  Seturan       0
+6  2024-01-03     Dago  217000
+7  2024-01-03   Kemang  160000
+8  2024-01-03  Seturan   66000</code></pre></div>
+        </div>
+        <p>Sembilan baris: 3 tanggal × 3 cabang, tanpa satu pun yang hilang. Angka tanggal 3 cocok dengan yang kamu lihat di Hari 2 (217.000 / 160.000 / 66.000) — itu pemeriksaannya.</p>
+        <div class="catatan">
+          <strong>Inilah bentuk data yang dibutuhkan hampir semua grafik dan dashboard.</strong> Alat visualisasi tidak bisa menggambar sesuatu yang tidak ada barisnya; ia akan menyambung garis melewati hari kosong, atau menghilangkan cabang dari legenda di bulan ia tidak berjualan. Membuat kerangka lengkap lebih dulu adalah langkah yang membedakan laporan yang benar dari laporan yang terlihat benar.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir L2 · 6 selesai</h3>
+      <p><strong>Catat:</strong> <code>GROUP BY</code> tidak bisa memunculkan hari yang tidak ada barisnya · buat deret tanggal dengan recursive CTE, lalu <code>LEFT JOIN</code> data ke deret itu · syarat tambahan taruh di <code>ON</code>, bukan <code>WHERE</code>, atau <code>LEFT JOIN</code>-mu berubah jadi <code>INNER</code> · <code>CROSS JOIN</code> membuat kerangka dua dimensi tanggal × kategori.</p>
+    </div>
+  </section>
+
+  <!-- ============ W7 ============ -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L2 · 7</span>
+      <h2>Ulangan dari ingatan</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Tutup halaman ini, jawab dari ingatan, baru buka kuncinya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Delapan soal</h3>
+        <span class="cek"><input type="checkbox" id="w7s1"><label for="w7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Satu kalimat: apa beda <code>GROUP BY</code> dan window function?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Apa yang berubah kalau kamu menambahkan <code>ORDER BY</code> ke dalam <code>OVER (PARTITION BY x)</code>?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Frame apa yang jadi bawaan kalau ada <code>ORDER BY</code> tapi frame-nya tidak ditulis?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Running total per tanggal, tiap tanggal punya 3 baris cabang. <code>ROWS</code> atau <code>RANGE</code>, dan kenapa?</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Kenapa <code>LAST_VALUE(x) OVER (ORDER BY x)</code> tidak memberi nilai terakhir? Dua cara memperbaikinya.</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> Nilai 30, 20, 20, 10. Berapa nomor untuk baris terakhir menurut <code>ROW_NUMBER</code>, <code>RANK</code>, dan <code>DENSE_RANK</code>?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> Tiga bagian wajib sebuah recursive CTE, dan satu pengaman yang harus selalu ada.</p>
+        <p style="margin-bottom:12px"><strong>8.</strong> Kenapa syarat tambahan di <code>LEFT JOIN</code> harus ditaruh di <code>ON</code> dan bukan <code>WHERE</code>?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <code>GROUP BY</code> meringkas banyak baris jadi satu; window function menghitung hal yang sama tanpa membuang baris.</p>
+            <p><strong>2.</strong> Selain mengurutkan, ia diam-diam memasang frame "dari awal kelompok sampai baris ini" — jadi total berubah menjadi running total.</p>
+            <p><strong>3.</strong> <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>.</p>
+            <p><strong>4.</strong> <code>RANGE</code>. Ketiga baris satu tanggal akan mendapat angka yang sama, yaitu kumulatif sampai akhir tanggal itu. <code>ROWS</code> memberi tiga angka berbeda yang bergantung pada urutan cabang — angka yang tidak menjawab pertanyaan siapa pun, dan bisa berubah kalau urutannya berubah.</p>
+            <p><strong>5.</strong> Karena frame bawaannya berakhir di baris yang sedang dihitung, jadi "nilai terakhir dalam frame" adalah baris itu sendiri. Perbaikan: tulis <code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>, atau balik urutannya dan pakai <code>FIRST_VALUE</code>.</p>
+            <p><strong>6.</strong> <code>ROW_NUMBER</code> = 4, <code>RANK</code> = 4 (melompat, karena dua baris berbagi peringkat 2), <code>DENSE_RANK</code> = 3.</p>
+            <p><strong>7.</strong> Titik awal, <code>UNION ALL</code> (bukan <code>UNION</code>), dan langkah berulang yang menyebut nama CTE-nya sendiri. Pengamannya: batas kedalaman (<code>WHERE tingkat &lt; 10</code>) supaya data yang melingkar tidak membuat query berputar selamanya.</p>
+            <p><strong>8.</strong> Syarat di <code>WHERE</code> dijalankan setelah JOIN selesai, jadi baris kiri yang tidak punya pasangan (nilainya <code>NULL</code>) ikut terbuang — <code>LEFT JOIN</code>-nya berubah jadi <code>INNER JOIN</code>. Di kerangka tanggal Hari 6, akibatnya 7 baris turun jadi 5 dan dua hari nol lenyap.</p>
+          </div>
+        </details>
+        <div class="catatan">
+          <strong>Kalau tujuh dari delapan benar, kamu siap ke Level 3.</strong> Soal nomor 3, 5, dan 8 adalah yang paling sering muncul di wawancara SQL untuk posisi menengah — bukan karena sulit, tapi karena hampir tidak ada yang mempelajarinya sampai pernah tertipu sekali.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Satu soal terapan</h3>
+        <span class="cek"><input type="checkbox" id="w7s2"><label for="w7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">
+          <span class="tag">KERJAKAN, ± 25 MENIT</span>
+          <p>Buat satu query yang menampilkan, untuk <strong>tiap cabang tiap bulan</strong>: nilai penjualan bulan itu, nilai bulan sebelumnya di cabang yang sama, pertumbuhan persennya, dan nilai kumulatif sejak Januari. Bulan Januari harus jelas terlihat tidak punya pembanding.</p>
+        </div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="kode"><pre><code>q("""
+WITH bulanan AS (
+  SELECT o.cabang, substr(o.tanggal,1,7) AS bulan,
+         SUM(i.jumlah*i.harga_saat_itu) AS nilai
+  FROM pesanan o JOIN item i ON i.pesanan_id = o.id
+  WHERE o.status='selesai'
+  GROUP BY o.cabang, substr(o.tanggal,1,7))
+SELECT cabang, bulan, nilai,
+  LAG(nilai) OVER (PARTITION BY cabang ORDER BY bulan) AS bulan_lalu,
+  ROUND((nilai - LAG(nilai) OVER (PARTITION BY cabang ORDER BY bulan)) * 100.0
+        / LAG(nilai) OVER (PARTITION BY cabang ORDER BY bulan), 1) AS tumbuh,
+  SUM(nilai) OVER (PARTITION BY cabang ORDER BY bulan
+       ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS kumulatif
+FROM bulanan
+ORDER BY cabang, bulan""")</code></pre></div>
+          <div class="kode"><pre><code>  cabang    bulan    nilai  bulan_lalu  tumbuh  kumulatif
+0   Dago  2024-01  2834000         NaN     NaN    2834000
+1   Dago  2024-02  2731000   2834000.0    -3.6    5565000
+2   Dago  2024-03  1286000   2731000.0   -52.9    6851000
+3   Dago  2024-04  1664000   1286000.0    29.4    8515000
+4   Dago  2024-05  1568000   1664000.0    -5.8   10083000
+5   Dago  2024-06  2582000   1568000.0    64.7   12665000</code></pre></div>
+          <p style="margin-top:8px">(Enam baris pertama dari 18 — tiga cabang × enam bulan.) Perhatikan Maret Dago: turun <strong>52,9%</strong> lalu naik lagi <strong>64,7%</strong> di Juni. Guncangan sebesar itu di data sekecil ini biasanya bukan tren — melainkan tanda bahwa satu bulan punya sedikit hari transaksi. Angka pertumbuhan bulanan selalu perlu dilihat bersama jumlah harinya sebelum diceritakan ke klien.</p>
+          <p style="margin-top:8px"><strong>Tiga hal yang membuat query ini benar:</strong> <code>PARTITION BY cabang</code> membuat <code>LAG</code> berhenti di batas cabang, jadi Januari Kemang tidak mengambil Juni Dago sebagai "bulan lalu". Frame ditulis eksplisit <code>ROWS BETWEEN ...</code>, walaupun di sini <code>RANGE</code> juga benar karena tiap cabang cuma punya satu baris per bulan — menuliskannya membuat maksudnya tidak perlu ditebak. Dan <code>NaN</code> di Januari dibiarkan apa adanya, bukan diganti nol.</p>
+          <p style="margin-top:8px"><strong>Pemeriksaannya:</strong> kumulatif Dago di baris terakhir = <strong>12.665.000</strong>, sama persis dengan total Dago di Hari 1. Kalau angkanya beda, ada yang salah dengan partisi atau frame-nya.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>SQL Mahir Level 2 selesai</h3>
+      <p>Modul M6 memberimu window function sebagai daftar nama fungsi. Tujuh hari ini memberimu <strong>frame</strong> — bagian yang menentukan jawabannya, dan yang tidak pernah disebut di mana pun sebelumnya.</p>
+      <p style="margin-top:14px"><strong>Dua hal yang paling sering menyelamatkan:</strong> menuliskan frame secara eksplisit walaupun bawaannya sudah benar, dan memastikan <code>ORDER BY</code> di dalam <code>OVER</code> memecah seri sampai tuntas. Keduanya mencegah query yang hasilnya berubah-ubah tanpa datanya berubah.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Berikutnya di <a href="https://claude.ai/code/artifact/eff7b693-41fe-43a5-a667-14e294c3e7d9">Level 3</a>:</strong> pola yang benar-benar ditanyakan di wawancara dan dipakai di pekerjaan — deduplikasi, <em>gaps and islands</em>, sesi pengguna, top-N per kelompok, pivot, dan funnel. Semuanya dibangun dari yang sudah kamu punya di Level 1 dan 2.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/eff7b693-41fe-43a5-a667-14e294c3e7d9">Lanjut ke SQL Mahir L3: enam pola wawancara →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua keluaran di halaman ini dihasilkan dengan menjalankan query-nya sungguhan pada <code>senja.db</code> — basis data yang sama seperti Level 1.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "sql-mahir-l2-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

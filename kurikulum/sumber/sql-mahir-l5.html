@@ -1,0 +1,1296 @@
+<title>SQL Mahir L5</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/2d44eed8-d057-4afc-b429-974231efea42">← Kembali ke SQL Mahir L4: kinerja & keandalan</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">SQL Mahir L5</span>
+  <button type="button" data-hari="1" aria-selected="true">P1</button>
+  <button type="button" data-hari="2" aria-selected="false">P2</button>
+  <button type="button" data-hari="3" aria-selected="false">P3</button>
+  <button type="button" data-hari="4" aria-selected="false">P4</button>
+  <button type="button" data-hari="5" aria-selected="false">P5</button>
+  <button type="button" data-hari="6" aria-selected="false">P6</button>
+  <button type="button" data-hari="7" aria-selected="false">P7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">SQL Mahir · Level 5 dari 5 · level terakhir</span>
+    <h1>SQL Mahir L5: ujian, wawancara, dan bukti bahwa kamu bisa</h1>
+    <p class="lede">Empat level sebelumnya membangun kemampuannya. Level ini soal <strong>menunjukkannya</strong> — di depan pewawancara yang menatap layarmu, atau di depan klien yang menunggu jawaban dan tidak peduli query-mu seindah apa.</p>
+    <p class="lede" style="margin-top:10px">Semua soal di sini dijawab pada <code>senja.db</code> dan <code>besar.db</code> yang sudah kamu punya, dan <strong>tiap kunci jawaban di halaman ini dijalankan sungguhan</strong> sebelum ditulis. Kalau angkamu beda, salah satu dari kita salah ketik — dan kamu punya datanya untuk membuktikan yang mana.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ P1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L5 · 1</span>
+      <h2>Yang sebenarnya diuji, dan satu jebakan yang menjatuhkan paling banyak orang</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memakai satu kerangka empat langkah untuk soal SQL apa pun, dan tidak akan pernah lagi tertipu oleh <code>NOT IN</code>.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kerangka empat langkah</h3>
+        <span class="cek"><input type="checkbox" id="r1s1"><label for="r1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pewawancara SQL yang bagus tidak sedang memeriksa hafalanmu. Ia memeriksa <strong>apakah kamu berpikir sebelum mengetik</strong>. Itu satu-satunya hal yang membedakan orang yang bisa dilepas ke data klien dari yang tidak.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Langkah</th><th>Yang kamu ucapkan</th><th>Kenapa ini yang dinilai</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Ulangi soalnya</strong></td><td>"Jadi yang dicari adalah … per … untuk periode …, betul?"</td><td>Membuktikan kamu tidak akan mengerjakan hal yang salah selama tiga hari.</td></tr>
+              <tr><td><strong>2. Sebut asumsimu</strong></td><td>"Aku akan hitung hanya pesanan berstatus selesai, dan membuang yang pelanggan_id-nya kosong. Kalau kamu mau yang lain, bilang."</td><td>Ini bagian yang paling sering dilewati kandidat, dan paling diingat pewawancara.</td></tr>
+              <tr><td><strong>3. Tulis dari FROM, bukan dari SELECT</strong></td><td>"Tabel mana dulu … disambung ke apa … disaring apa … baru dikelompokkan."</td><td>Urutan itu urutan eksekusi sungguhan (Level 1). Menulis mengikutinya membuatmu jarang tersesat.</td></tr>
+              <tr><td><strong>4. Periksa jawabanmu</strong></td><td>"Ada 400 pesanan, hasilnya 362 — sisanya yang batal. Masuk akal."</td><td>Menunjukkan kamu tidak akan mengirim angka yang belum kamu percayai sendiri.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:14px">
+          <strong>Langkah 4 itu yang membedakan orang dengan latar akuntansi, dan itu keunggulanmu.</strong> Kamu sudah bertahun-tahun terbiasa bertanya "ini balance tidak?" sebelum menyerahkan apa pun. Kebanyakan kandidat data analyst tidak punya refleks itu — mereka menjalankan query, melihat ada angka keluar, lalu menyerahkannya. Ucapkan pemeriksaanmu dengan suara keras di wawancara; itu bukan basa-basi, itu barang dagangan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jebakan <code>NOT IN</code>: dua jawaban, satu benar, dan bedanya tidak terlihat</h3>
+        <span class="cek"><input type="checkbox" id="r1s2"><label for="r1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini soal yang paling sering dipakai untuk memisahkan kandidat. Pertanyaannya sederhana: <strong>berapa pelanggan yang belum pernah memesan sama sekali?</strong> Jawab dulu sendiri sebelum menjalankan apa pun.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3
+con = sqlite3.connect("senja.db")
+
+a = "SELECT COUNT(*) FROM pelanggan WHERE id NOT IN (SELECT pelanggan_id FROM pesanan)"
+b = """SELECT COUNT(*) FROM pelanggan pl
+       WHERE NOT EXISTS (SELECT 1 FROM pesanan p WHERE p.pelanggan_id = pl.id)"""
+c = """SELECT COUNT(*) FROM pelanggan
+       WHERE id NOT IN (SELECT pelanggan_id FROM pesanan WHERE pelanggan_id IS NOT NULL)"""
+
+print("NOT IN               :", con.execute(a).fetchone()[0])
+print("NOT EXISTS           :", con.execute(b).fetchone()[0])
+print("NOT IN + IS NOT NULL :", con.execute(c).fetchone()[0])</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>NOT IN               : 0
+NOT EXISTS           : 3
+NOT IN + IS NOT NULL : 3</code></pre></div>
+        </div>
+        <p><strong>Nol lawan tiga.</strong> Dan yang berbahaya: nol bukan pesan error. Nol adalah jawaban yang enak dibaca — "bagus, semua pelanggan kita aktif" — yang akan kamu tulis di laporan dengan percaya diri penuh, dan itu salah.</p>
+        <p style="margin-top:8px"><strong>Sebabnya logika tiga nilai dari Level 1.</strong> Kolom <code>pesanan.pelanggan_id</code> berisi 12 baris <code>NULL</code>. Ketika SQL memeriksa <code>18 NOT IN (5, 9, NULL, …)</code>, ia harus memutuskan apakah 18 berbeda dari <code>NULL</code> — dan jawabannya bukan "ya", bukan "tidak", tapi <strong>tidak diketahui</strong>. Satu <code>NULL</code> saja di dalam daftar membuat seluruh <code>NOT IN</code> tidak pernah bisa bernilai benar, untuk baris mana pun. Hasilnya: nol baris, selamanya.</p>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Aturan yang layak kamu hafalkan mati-matian:</strong> jangan pakai <code>NOT IN</code> pada subquery, titik. Pakai <code>NOT EXISTS</code>, yang kebal terhadap <code>NULL</code> dan biasanya juga lebih cepat. Kalau kamu tetap ingin memakai <code>NOT IN</code>, wajib tambahkan <code>WHERE kolomnya IS NOT NULL</code> di dalam subquery-nya — dan kamu harus ingat itu tiap kali, seumur hidup. <code>NOT EXISTS</code> tidak menuntut kamu mengingat apa pun.
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Cara menjawabnya di wawancara, kalau ini keluar.</strong> Jangan cuma menulis <code>NOT EXISTS</code> lalu diam. Ucapkan: "Aku pakai <code>NOT EXISTS</code>, bukan <code>NOT IN</code>, karena kalau kolom di subquery-nya ada <code>NULL</code>, <code>NOT IN</code> akan mengembalikan nol baris tanpa error." Kalimat itu memberi tahu pewawancara bahwa kamu pernah tertipu olehnya dan sudah tidak akan lagi — dan itu jauh lebih meyakinkan daripada jawaban yang kebetulan benar.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L5 · 2</span>
+      <h2>Lima soal live coding: yang benar-benar diketik di depan orang</h2>
+      <span class="waktu">± 90 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyelesaikan lima soal tingkat dasar–menengah dalam waktu wajar, dan tahu jebakan yang disembunyikan di masing-masing.</p>
+
+    <div class="aksi">Aturan mainnya: <strong>tulis dulu, jalankan, baru buka kunci.</strong> Kalau kamu buka kuncinya lebih dulu, kamu sedang membaca, bukan berlatih — dan wawancara tidak menyediakan tombol buka kunci. Pasang pengatur waktu 10 menit per soal.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Soal 1–2: agregasi dan hasil kosong</h3>
+        <span class="cek"><input type="checkbox" id="r2s1"><label for="r2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>SOAL 1  Berapa omzet tiap cabang, dan berapa pesanan yang menghasilkannya?
+        Urutkan dari yang terbesar. Hitung hanya pesanan yang selesai.
+
+SOAL 2  Produk apa saja yang tidak pernah dipesan sama sekali?</code></pre></div>
+        <details>
+          <summary>Kunci soal 1</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>SELECT p.cabang,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet,
+       COUNT(DISTINCT p.id)             AS pesanan
+FROM pesanan p
+JOIN item i ON i.pesanan_id = p.id
+WHERE p.status = 'selesai'
+GROUP BY p.cabang
+ORDER BY omzet DESC</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>    cabang     omzet  pesanan
+0     Dago  12665000      122
+1   Kemang  11669000      120
+2  Seturan  11405000      120</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Jebakannya ada di <code>COUNT(DISTINCT p.id)</code>.</strong> Karena kita menyambung ke <code>item</code>, satu pesanan yang berisi tiga produk muncul sebagai tiga baris. <code>COUNT(*)</code> akan menghitungnya tiga kali dan kamu akan melaporkan jumlah pesanan yang terlalu besar — tanpa ada yang aneh terlihat. Ini kesalahan nomor satu di semua query yang menggabungkan tabel induk dengan tabel rincinya.</p>
+          <p style="margin-top:8px"><strong>Cara memeriksanya, dan ucapkan ini keras-keras:</strong> 122 + 120 + 120 = 362, dan tabel <code>pesanan</code> berisi 400 baris dengan 38 di antaranya batal. 400 − 38 = 362. Cocok.</p>
+        </details>
+        <details>
+          <summary>Kunci soal 2</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>SELECT pr.id, pr.nama FROM produk pr
+WHERE NOT EXISTS (SELECT 1 FROM item i WHERE i.produk_id = pr.id)</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>Empty DataFrame
+Columns: [id, nama]
+Index: []</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Kosong. Dan itu jawabannya.</strong> Ketujuh produk pernah dipesan. Soal ini ada di sini justru karena hasil kosong membuat banyak orang panik dan mulai mengubah-ubah query yang sebenarnya sudah benar.</p>
+          <p style="margin-top:8px">Yang harus kamu lakukan ketika hasilnya kosong: <strong>buktikan bahwa kosong itu benar</strong>, jangan langsung percaya dan jangan langsung panik. Jalankan versi terbalik — <code>SELECT pr.nama, COUNT(i.id) FROM produk pr LEFT JOIN item i ON i.produk_id = pr.id GROUP BY pr.id, pr.nama</code> — dan lihat ketujuhnya memang punya angka di atas nol.</p>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>           nama  baris_item  unit
+0    Roti Bakar         137   326
+1     Americano         109   279
+2     Kopi Susu         106   274
+3  Matcha Latte         111   267
+4    Cheesecake         107   256
+5     Croissant         108   253
+6     Teh Manis         110   252</code></pre></div>
+          </div>
+          <p style="margin-top:10px">Sekarang kamu bisa bilang "tidak ada" dengan yakin, bukan dengan harap-harap cemas. Dan perhatikan: soal ini adalah <code>NOT EXISTS</code> lagi — pola yang sama dengan jebakan kemarin.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Soal 3–5: rata-rata, penyaringan kelompok, dan periode</h3>
+        <span class="cek"><input type="checkbox" id="r2s2"><label for="r2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>SOAL 3  Berapa rata-rata NILAI SATU PESANAN di tiap kanal penjualan?
+        (Perhatikan baik-baik: rata-rata per pesanan, bukan per baris item.)
+
+SOAL 4  Pelanggan mana yang memesan lebih dari 25 kali?
+
+SOAL 5  Tiga bulan dengan omzet tertinggi.</code></pre></div>
+        <details>
+          <summary>Kunci soal 3</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>WITH nilai AS (
+  SELECT p.id, p.kanal, SUM(i.jumlah * i.harga_saat_itu) AS total
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status = 'selesai'
+  GROUP BY p.id, p.kanal            -- kumpulkan jadi SATU BARIS per pesanan dulu
+)
+SELECT kanal, COUNT(*) AS pesanan, ROUND(AVG(total)) AS rata_rata
+FROM nilai GROUP BY kanal ORDER BY rata_rata DESC</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>       kanal  pesanan  rata_rata
+0    Dine-in      110   103409.0
+1       Ojol      116    97966.0
+2  Take-away      136    95588.0</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Ini soal dua tingkat, dan di situlah nilainya.</strong> Kamu tidak bisa langsung <code>AVG(i.jumlah * i.harga_saat_itu)</code> — itu memberi rata-rata <em>per baris item</em>, bukan per pesanan. Pesanan harus dijadikan satu baris dulu (CTE <code>nilai</code>), baru dirata-ratakan. Kandidat yang melewati langkah ini mendapat angka yang jauh lebih kecil dan tidak menyadarinya.</p>
+          <p style="margin-top:8px">Periksa lagi: 110 + 116 + 136 = 362. Cocok dengan soal 1.</p>
+        </details>
+        <details>
+          <summary>Kunci soal 4</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>SELECT pl.nama, COUNT(*) AS pesanan
+FROM pelanggan pl JOIN pesanan p ON p.pelanggan_id = pl.id
+GROUP BY pl.id, pl.nama
+HAVING COUNT(*) &gt; 25
+ORDER BY pesanan DESC, pl.nama</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>     nama  pesanan
+0    Rina       32
+1    Lita       30
+2   Dimas       26
+3  Hendra       26
+</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Jebakannya: <code>HAVING</code>, bukan <code>WHERE</code>.</strong> <code>WHERE</code> menyaring baris <em>sebelum</em> dikelompokkan, jadi ia tidak bisa melihat <code>COUNT(*)</code> yang baru ada setelah pengelompokan. <code>HAVING</code> menyaring kelompok <em>sesudahnya</em>. Kalau kamu menulis <code>WHERE COUNT(*) &gt; 25</code>, SQLite menolak dengan pesan <code>misuse of aggregate: COUNT()</code>.</p>
+          <p style="margin-top:8px"><strong>Jebakan kedua yang lebih halus:</strong> <code>GROUP BY pl.id, pl.nama</code>, bukan <code>GROUP BY pl.nama</code> saja. Kalau ada dua pelanggan bernama sama, mengelompokkan berdasarkan nama akan menggabungkan mereka jadi satu orang. Di data ini kebetulan tidak terjadi — tapi "kebetulan tidak terjadi" bukan alasan untuk menulis query yang salah, dan pewawancara yang jeli akan menanyakannya.</p>
+          <p style="margin-top:8px"><strong>Dan yang ketiga:</strong> <code>ORDER BY pesanan DESC, pl.nama</code> — dengan nama sebagai pemecah seri. Dimas dan Hendra sama-sama 26. Tanpa pemecah seri, urutan keduanya tidak dijamin dan hasilmu bisa berubah-ubah antar-jalankan. Di laporan yang dikirim tiap hari ke klien, urutan yang berubah sendiri tanpa sebab adalah pertanyaan yang tidak enak dijawab.</p>
+        </details>
+        <details>
+          <summary>Kunci soal 5</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>SELECT substr(p.tanggal,1,7) AS bulan,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet
+FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+WHERE p.status = 'selesai'
+GROUP BY bulan ORDER BY omzet DESC LIMIT 3</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>     bulan    omzet
+0  2024-02  6351000
+1  2024-05  6272000
+2  2024-01  5968000</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Yang layak kamu ucapkan setelah menjawab:</strong> "Februari menang tipis dari Mei — 6.351.000 lawan 6.272.000, beda 1,3%. Tapi Februari 2024 punya 29 hari dan Mei punya 31, jadi selisih setipis ini bisa jadi cuma soal jumlah hari. Mau aku hitung per hari?"</p>
+          <p style="margin-top:8px">Lalu hitung, karena hasilnya bukan yang kamu duga:</p>
+          <div class="kode" style="margin-top:8px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>SELECT substr(p.tanggal,1,7) AS bulan,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet,
+       COUNT(DISTINCT p.tanggal) AS hari_ada_pesanan,
+       ROUND(SUM(i.jumlah * i.harga_saat_itu) * 1.0 / COUNT(DISTINCT p.tanggal)) AS per_hari_aktif
+FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+WHERE p.status = 'selesai'
+GROUP BY bulan ORDER BY omzet DESC</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>     bulan    omzet  hari_ada_pesanan  per_hari_aktif
+0  2024-02  6351000                25   254040.0
+1  2024-05  6272000                23   272696.0
+2  2024-01  5968000                28   213143.0
+3  2024-06  5820000                22   264545.0
+4  2024-04  5754000                25   230160.0
+5  2024-03  5574000                28   199071.0</code></pre></div>
+          </div>
+          <p style="margin-top:10px">Tiga cara membagi, tiga pemenang berbeda:</p>
+          <ul>
+            <li><strong>Omzet mentah</strong> → Februari (6.351.000), unggul 1,3%.</li>
+            <li><strong>Dibagi hari kalender</strong> → Februari lagi, dan justru makin unggul: 6.351.000/29 = <strong>219.000</strong> lawan 6.272.000/31 = <strong>202.323</strong>. Beda 8%.</li>
+            <li><strong>Dibagi hari yang benar-benar ada pesanan</strong> → <strong>Mei</strong> yang menang: 272.696 lawan 254.040. Februari punya 25 hari berpesanan, Mei cuma 23.</li>
+          </ul>
+          <p style="margin-top:8px">Ketiganya benar. Ketiganya menjawab pertanyaan yang sedikit berbeda: <em>bulan mana paling banyak menghasilkan</em>, <em>bulan mana paling produktif per hari kalender</em>, dan <em>bulan mana paling ramai di hari-hari kedainya buka</em>. Yang salah cuma satu hal: menyebut salah satunya sebagai "bulan terbaik" tanpa mengatakan yang mana yang kamu maksud.</p>
+          <p style="margin-top:8px">Itulah jawaban yang membuatmu diingat. Query pertamanya empat baris dan semua kandidat bisa menulisnya; yang membedakan adalah <strong>tahu bahwa pertanyaannya belum selesai ketika query-nya selesai.</strong></p>
+          <div class="catatan" style="margin-top:10px">
+            <strong>Dan satu catatan kinerja dari Level 4:</strong> <code>substr(p.tanggal,1,7)</code> di <code>GROUP BY</code> tidak apa-apa — pengelompokan memang harus menyentuh semua baris. Yang berbahaya adalah <code>substr()</code> di <code>WHERE</code>, karena di situlah ia mematikan index. Tahu bedanya adalah tanda kamu paham alasannya, bukan cuma hafal aturannya.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L5 · 3</span>
+      <h2>Empat soal tingkat lanjut: yang memisahkan junior dari yang bukan</h2>
+      <span class="waktu">± 100 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyelesaikan soal yang butuh window function tanpa melihat contoh, termasuk satu yang tidak punya fungsi bawaannya di SQLite.</p>
+
+    <div class="aksi">Empat soal ini adalah tingkat yang dipakai untuk posisi data analyst berpengalaman. Pengatur waktu 15 menit per soal. Tidak apa-apa kalau belum bisa — tapi cobalah dulu sampai mentok sebelum membuka kunci; mentok yang kamu alami sendiri jauh lebih lengket di ingatan daripada jawaban yang kamu baca.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Soal 6–7: peringkat dalam kelompok, dan membandingkan dengan baris sebelumnya</h3>
+        <span class="cek"><input type="checkbox" id="r3s1"><label for="r3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>SOAL 6  Dua produk dengan omzet terbesar DI TIAP CABANG.
+        (Hasilnya harus 6 baris: 2 produk × 3 cabang.)
+
+SOAL 7  Untuk cabang Dago: omzet tiap bulan, omzet bulan sebelumnya,
+        selisihnya, dan pertumbuhannya dalam persen.</code></pre></div>
+        <details>
+          <summary>Kunci soal 6</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>WITH omzet AS (
+  SELECT p.cabang, pr.nama AS produk,
+         SUM(i.jumlah * i.harga_saat_itu) AS omzet
+  FROM pesanan p
+  JOIN item   i  ON i.pesanan_id = p.id
+  JOIN produk pr ON pr.id = i.produk_id
+  WHERE p.status = 'selesai'
+  GROUP BY p.cabang, pr.nama
+),
+peringkat AS (
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY cabang ORDER BY omzet DESC) AS urutan
+  FROM omzet
+)
+SELECT cabang, urutan, produk, omzet
+FROM peringkat WHERE urutan &lt;= 2
+ORDER BY cabang, urutan</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>    cabang  urutan        produk    omzet
+0     Dago       1  Matcha Latte  2574000
+1     Dago       2     Croissant  2450000
+2   Kemang       1  Matcha Latte  2080000
+3   Kemang       2    Roti Bakar  1890000
+4  Seturan       1    Cheesecake  2250000
+5  Seturan       2  Matcha Latte  1976000</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Ini pola "top-N per kelompok", dan bentuknya selalu sama:</strong> ringkas dulu di satu CTE, beri nomor urut di CTE kedua dengan <code>ROW_NUMBER() OVER (PARTITION BY kelompok ORDER BY ukuran DESC)</code>, lalu saring <code>urutan &lt;= N</code> di query luar.</p>
+          <p style="margin-top:8px"><strong>Kenapa harus dua tingkat.</strong> Kamu tidak bisa menulis <code>WHERE ROW_NUMBER() OVER (…) &lt;= 2</code> langsung. Dari urutan eksekusi di Level 1: <code>WHERE</code> dijalankan jauh sebelum window function dihitung, jadi di saat <code>WHERE</code> bekerja, nomor urutnya belum ada. Ini pertanyaan lanjutan yang hampir pasti ditanyakan — siapkan jawabannya.</p>
+          <p style="margin-top:8px"><strong>Pertanyaan lanjutan kedua: kenapa <code>ROW_NUMBER</code>, bukan <code>RANK</code>?</strong> Karena kalau ada dua produk dengan omzet persis sama di peringkat 2, <code>RANK</code> memberi keduanya angka 2 dan hasilmu jadi 3 baris untuk cabang itu — soalnya minta 2. <code>ROW_NUMBER</code> selalu memberi tepat 2. Mana yang benar tergantung apa yang diminta, dan jawaban terbaik adalah menyebut bahwa kamu tahu bedanya: "Aku pakai <code>ROW_NUMBER</code> supaya jumlahnya persis dua; kalau seri harus ikut semua, aku ganti <code>RANK</code>."</p>
+        </details>
+        <details>
+          <summary>Kunci soal 7</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>WITH bulanan AS (
+  SELECT p.cabang, substr(p.tanggal,1,7) AS bulan,
+         SUM(i.jumlah * i.harga_saat_itu) AS omzet
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status = 'selesai'
+  GROUP BY p.cabang, bulan
+)
+SELECT bulan, omzet,
+       LAG(omzet) OVER (PARTITION BY cabang ORDER BY bulan) AS bulan_lalu,
+       omzet - LAG(omzet) OVER (PARTITION BY cabang ORDER BY bulan) AS selisih,
+       ROUND(100.0 * (omzet - LAG(omzet) OVER (PARTITION BY cabang ORDER BY bulan))
+             / LAG(omzet) OVER (PARTITION BY cabang ORDER BY bulan), 1) AS persen
+FROM bulanan
+WHERE cabang = 'Dago'
+ORDER BY bulan</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>     bulan    omzet  bulan_lalu    selisih  persen
+0  2024-01  2834000         NaN        NaN     NaN
+1  2024-02  2731000   2834000.0  -103000.0    -3.6
+2  2024-03  1286000   2731000.0 -1445000.0   -52.9
+3  2024-04  1664000   1286000.0   378000.0    29.4
+4  2024-05  1568000   1664000.0   -96000.0    -5.8
+5  2024-06  2582000   1568000.0  1014000.0    64.7</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Baris pertama kosong, dan itu benar.</strong> Januari tidak punya bulan sebelumnya, jadi <code>LAG</code> memberi <code>NULL</code>, dan semua hitungan yang menyentuh <code>NULL</code> ikut jadi <code>NULL</code>. Jangan menutupinya dengan <code>COALESCE(…, 0)</code> — menulis "pertumbuhan Januari 0%" adalah berbohong; yang benar adalah "tidak diketahui". <code>NULL</code> di sini adalah jawaban yang jujur.</p>
+          <p style="margin-top:8px"><strong>Bacanya, dan ini yang dinilai:</strong> Maret jatuh <strong>52,9%</strong> lalu Juni melonjak <strong>64,7%</strong>. Persentase sebesar itu di angka sekecil ini hampir selalu berarti satu dari dua hal — ada kejadian nyata (cabang tutup renovasi, ada pesanan borongan), atau ada data yang belum masuk. Jawaban yang benar bukan "Dago tumbuh 64,7%", tapi <strong>"ada yang perlu ditanyakan tentang Maret dan Juni sebelum angka ini dipakai."</strong></p>
+          <div class="catatan" style="margin-top:10px">
+            <strong>Kalau ditanya "kenapa <code>100.0</code>, bukan <code>100</code>?"</strong> Karena di SQLite (dan di PostgreSQL) pembagian dua bilangan bulat menghasilkan bilangan bulat: <code>-103000 * 100 / 2834000</code> akan jadi <code>-3</code>, bukan <code>-3,6</code>. Menulis <code>100.0</code> memaksa hitungannya jadi desimal. Ini kesalahan yang tidak pernah memunculkan error dan diam-diam membulatkan semua persentasemu ke bawah.
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Soal 8–9: median tanpa fungsi median, dan total berjalan</h3>
+        <span class="cek"><input type="checkbox" id="r3s2"><label for="r3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>SOAL 8  Berapa MEDIAN nilai satu pesanan?
+        (SQLite tidak punya fungsi MEDIAN. Itu bagian dari soalnya.)
+
+SOAL 9  Omzet tiap bulan, disertai total berjalan sejak awal tahun.</code></pre></div>
+        <details>
+          <summary>Kunci soal 8</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>WITH nilai AS (
+  SELECT p.id, SUM(i.jumlah * i.harga_saat_itu) AS total
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status = 'selesai' GROUP BY p.id
+),
+urut AS (
+  SELECT total,
+         ROW_NUMBER() OVER (ORDER BY total) AS n,
+         COUNT(*)     OVER ()               AS jml
+  FROM nilai
+)
+SELECT ROUND(AVG(total)) AS median
+FROM urut
+WHERE n IN ((jml + 1) / 2, (jml + 2) / 2)</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>    median
+0  90000.0</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Trik <code>(jml+1)/2</code> dan <code>(jml+2)/2</code> itu yang menyelesaikan dua kasus sekaligus</strong>, dan justru karena pembagian bilangan bulat membulatkan ke bawah. Kalau jumlahnya <strong>ganjil</strong> (misalnya 7): (7+1)/2 = 4 dan (7+2)/2 = 4 — baris yang sama, diambil sekali. Kalau <strong>genap</strong> (misalnya 8): (8+1)/2 = 4 dan (8+2)/2 = 5 — dua baris tengah, lalu <code>AVG</code> merata-ratakannya. Satu query, tanpa <code>CASE</code>.</p>
+          <p style="margin-top:8px"><code>COUNT(*) OVER ()</code> dengan kurung kosong berarti "hitung seluruh baris hasil, tanpa dipecah kelompok" — itulah cara menempelkan angka total ke tiap baris tanpa <code>JOIN</code> tambahan.</p>
+          <p style="margin-top:8px"><strong>Sekarang bagian yang membuat soal ini berharga.</strong> Jalankan juga rata-ratanya:</p>
+          <div class="kode" style="margin-top:8px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>WITH nilai AS (
+  SELECT p.id, SUM(i.jumlah * i.harga_saat_itu) AS total
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status='selesai' GROUP BY p.id)
+SELECT COUNT(*) AS pesanan, ROUND(AVG(total)) AS rata_rata,
+       MIN(total) AS terkecil, MAX(total) AS terbesar
+FROM nilai</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>   pesanan  rata_rata  terkecil  terbesar
+0      362    98727.0     10000    308000</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Median 90.000, rata-rata 98.727.</strong> Rata-rata lebih tinggi 9,7% karena ditarik ke atas oleh pesanan-pesanan besar sampai 308.000 — sementara separuh pesanan sebenarnya di bawah 90.000.</p>
+          <p style="margin-top:8px">Kalau klien bertanya "berapa biasanya orang belanja di sini?", <strong>90.000 adalah jawaban yang lebih jujur daripada 98.727.</strong> Kemampuan mengatakan itu — dan tahu kapan rata-rata menyesatkan — adalah nilai tambah yang tidak ada hubungannya dengan sintaks SQL, dan justru itu yang dibayar.</p>
+        </details>
+        <details>
+          <summary>Kunci soal 9</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>WITH bulanan AS (
+  SELECT substr(p.tanggal,1,7) AS bulan,
+         SUM(i.jumlah * i.harga_saat_itu) AS omzet
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status = 'selesai' GROUP BY bulan
+)
+SELECT bulan, omzet,
+       SUM(omzet) OVER (ORDER BY bulan
+                        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS total_berjalan
+FROM bulanan ORDER BY bulan</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>     bulan    omzet  total_berjalan
+0  2024-01  5968000         5968000
+1  2024-02  6351000        12319000
+2  2024-03  5574000        17893000
+3  2024-04  5754000        23647000
+4  2024-05  6272000        29919000
+5  2024-06  5820000        35739000</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Bagian <code>ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> itu wajib ditulis, dan ini pertanyaan jebakan favorit.</strong> Tanpa itu, bawaan SQL bukan "tidak ada bingkai" melainkan <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> — dan <code>RANGE</code> memperlakukan semua baris dengan <em>nilai urut yang sama</em> sebagai satu kesatuan. Di sini tiap bulan unik jadi hasilnya kebetulan sama. Begitu ada dua baris dengan bulan yang sama, <code>RANGE</code> akan menjumlahkan keduanya sekaligus di kedua baris, dan total berjalanmu melompat.</p>
+          <p style="margin-top:8px"><strong>Kebiasaan yang aman: selalu tulis <code>ROWS</code> secara eksplisit</strong> untuk total berjalan dan rata-rata bergerak. Menulisnya tidak merugikan apa-apa; tidak menulisnya adalah bug yang muncul enam bulan kemudian, di data yang berbeda, ketika kamu sudah lupa pernah menulis query ini.</p>
+          <p style="margin-top:8px">Periksa: 35.739.000 di baris terakhir. Bandingkan dengan soal 1 — 12.665.000 + 11.669.000 + 11.405.000 = 35.739.000. Cocok.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L5 · 4</span>
+      <h2>Soal yang sengaja ambigu, dan kenapa menjawabnya langsung itu kesalahan</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali pertanyaan yang punya lebih dari satu jawaban benar, dan membuktikan dengan angka bahwa bedanya besar.</p>
+
+    <p>Sebagian pewawancara sengaja memberi soal yang tidak lengkap, dan mereka <em>berharap</em> kamu bertanya balik. Kandidat yang langsung mengetik akan mendapat jawaban yang benar secara SQL dan salah secara pekerjaan. Klien melakukan hal yang sama, cuma tanpa sengaja.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>"Berapa pelanggan aktif kita?"</h3>
+        <span class="cek"><input type="checkbox" id="r4s1"><label for="r4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalimat itu terdengar sangat jelas. Tulis dulu jawabanmu — satu query, satu angka — sebelum lanjut membaca.</p>
+        <div class="aksi">Kita pakai <code>besar.db</code> dari Level 4 (800.000 transaksi, 50.000 pelanggan, dua tahun), karena di <code>senja.db</code> yang cuma 20 pelanggan semua bacaan memberi angka yang sama dan kamu tidak akan melihat masalahnya.</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3
+c = sqlite3.connect("besar.db")
+akhir = "(SELECT MAX(tanggal) FROM transaksi)"
+
+bacaan = [
+ ("pernah bertransaksi sama sekali",
+  "SELECT COUNT(DISTINCT pelanggan_id) FROM transaksi"),
+ ("bertransaksi dalam 365 hari terakhir",
+  f"SELECT COUNT(DISTINCT pelanggan_id) FROM transaksi WHERE tanggal &gt;= date({akhir},'-365 day')"),
+ ("bertransaksi dalam 90 hari terakhir",
+  f"SELECT COUNT(DISTINCT pelanggan_id) FROM transaksi WHERE tanggal &gt;= date({akhir},'-90 day')"),
+ ("bertransaksi dalam 30 hari terakhir",
+  f"SELECT COUNT(DISTINCT pelanggan_id) FROM transaksi WHERE tanggal &gt;= date({akhir},'-30 day')"),
+ ("&gt;= 2 kali dalam 90 hari terakhir",
+  f"""SELECT COUNT(*) FROM (SELECT pelanggan_id FROM transaksi
+      WHERE tanggal &gt;= date({akhir},'-90 day')
+      GROUP BY pelanggan_id HAVING COUNT(*) &gt;= 2)"""),
+ ("&gt;= 2 BULAN berbeda dalam 90 hari terakhir",
+  f"""SELECT COUNT(*) FROM (SELECT pelanggan_id FROM transaksi
+      WHERE tanggal &gt;= date({akhir},'-90 day')
+      GROUP BY pelanggan_id HAVING COUNT(DISTINCT substr(tanggal,1,7)) &gt;= 2)"""),
+]
+for nama, sql in bacaan:
+    print(f"  {nama:42s} {c.execute(sql).fetchone()[0]:>7,}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  pernah bertransaksi sama sekali              50,000
+  bertransaksi dalam 365 hari terakhir         49,983
+  bertransaksi dalam 90 hari terakhir          43,263
+  bertransaksi dalam 30 hari terakhir          24,768
+  &gt;= 2 kali dalam 90 hari terakhir             29,616
+  &gt;= 2 BULAN berbeda dalam 90 hari terakhir    24,007</code></pre></div>
+        </div>
+        <p><strong>Dari 24.007 sampai 50.000.</strong> Angka tertinggi lebih dari <strong>dua kali lipat</strong> angka terendah, dan keenamnya adalah bacaan yang masuk akal dari kalimat yang sama persis.</p>
+        <p style="margin-top:8px">Bayangkan konsekuensinya. Kalau klien memakai angka ini untuk menghitung biaya per pelanggan aktif, memilih 50.000 atau memilih 24.007 mengubah hasilnya dua kali lipat. Kalau dipakai untuk menghitung target pertumbuhan, bedanya adalah selisih antara "kita baik-baik saja" dan "separuh pelanggan kita menghilang".</p>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Kesalahan sesungguhnya bukan memilih yang salah — itu tidak ada.</strong> Kesalahannya adalah <em>memilih diam-diam</em>: mengetik satu query, mengirim satu angka, dan tidak pernah menyebut bahwa ada lima angka lain yang sama benarnya. Enam bulan kemudian ada orang lain yang menghitung ulang dengan definisi berbeda, angkanya tidak cocok, dan yang dipertanyakan adalah kompetensimu — bukan definisinya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kalimat yang kamu ucapkan sebagai ganti mengetik</h3>
+        <span class="cek"><input type="checkbox" id="r4s2"><label for="r4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tiga pertanyaan ini menutup hampir semua ambiguitas di pekerjaan data analyst. Hafalkan bentuknya, bukan kata-katanya.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Pertanyaan</th><th>Contoh kalimatnya</th><th>Yang diselamatkan</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Batas waktunya sampai mana?</strong></td><td>"Aktif ini dalam berapa lama terakhir — 30 hari, 90 hari, atau seumur hidup?"</td><td>Selisih 24.768 lawan 50.000.</td></tr>
+              <tr><td><strong>Yang gagal ikut atau tidak?</strong></td><td>"Pesanan yang dibatalkan dihitung atau dibuang?"</td><td>38 dari 400 pesanan di <code>senja.db</code> — hampir 10%.</td></tr>
+              <tr><td><strong>Yang kosong diapakan?</strong></td><td>"Ada 12 pesanan tanpa pelanggan_id. Dibuang, atau dihitung sebagai pelanggan tak dikenal?"</td><td>Jebakan <code>NOT IN</code> di P1, dan tiap agregasi setelahnya.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:14px">
+          <strong>Kalau tidak ada yang bisa ditanya</strong> — pewawancara bilang "terserah kamu", atau klien sedang tidak bisa dihubungi dan pekerjaannya harus jalan — jangan berhenti. <strong>Pilih satu, tulis alasannya, dan lanjutkan.</strong> Satu kalimat di atas hasilnya sudah cukup: <em>"Aktif = pernah bertransaksi dalam 90 hari terakhir (43.263 pelanggan). Kalau definisinya berbeda, angka ini berubah — dengan 30 hari jadi 24.768."</em>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>Kalimat itu punya nama di pekerjaan nyata: <em>catatan asumsi</em>,</strong> dan tempatnya di bagian atas tiap laporan yang kamu kirim, bukan di catatan kaki. Dua sampai empat baris: apa yang dihitung, apa yang dibuang, dan tanggal datanya. Klien yang membacanya akan mengoreksimu di hari pertama kalau ada yang keliru — dan koreksi di hari pertama itu murah. Koreksi di bulan keenam yang mahal.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L5 · 5</span>
+      <h2>Pertanyaan lisan: menjelaskan tanpa mengetik</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjawab sepuluh pertanyaan konsep dengan kalimat yang pendek, benar, dan tidak terdengar seperti hafalan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Sepuluh pertanyaan, dan jawaban yang bisa diucapkan</h3>
+        <span class="cek"><input type="checkbox" id="r5s1"><label for="r5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Cara memakainya: baca pertanyaannya, <strong>jawab dengan suara keras</strong> — sungguhan, bersuara — lalu buka jawabannya. Mengucapkan itu keterampilan yang terpisah dari mengetahui, dan wawancara menguji yang pertama.</div>
+
+        <details>
+          <summary>1. Apa bedanya <code>WHERE</code> dan <code>HAVING</code>?</summary>
+          <p style="margin-top:10px"><code>WHERE</code> menyaring baris sebelum dikelompokkan; <code>HAVING</code> menyaring kelompok sesudahnya. Jadi <code>WHERE</code> tidak bisa memakai <code>COUNT</code> atau <code>SUM</code>, karena angka itu belum ada saat ia bekerja.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Dan kalau saringannya bisa ditaruh di <code>WHERE</code>, taruh di situ — membuang baris lebih awal berarti lebih sedikit yang harus dikelompokkan."</p>
+        </details>
+        <details>
+          <summary>2. Apa bedanya <code>INNER JOIN</code> dan <code>LEFT JOIN</code>?</summary>
+          <p style="margin-top:10px"><code>INNER</code> hanya menyimpan baris yang punya pasangan di kedua tabel. <code>LEFT</code> menyimpan semua baris tabel kiri, dan mengisi <code>NULL</code> di mana pasangannya tidak ada.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Yang penting: pertanyaan 'siapa yang belum pernah pesan' cuma bisa dijawab dengan <code>LEFT JOIN</code> lalu <code>WHERE kanan.id IS NULL</code>, atau dengan <code>NOT EXISTS</code>. <code>INNER JOIN</code> menghapus persis orang-orang yang sedang kita cari."</p>
+        </details>
+        <details>
+          <summary>3. Kenapa <code>COUNT(*)</code> dan <code>COUNT(kolom)</code> bisa beda?</summary>
+          <p style="margin-top:10px"><code>COUNT(*)</code> menghitung baris. <code>COUNT(kolom)</code> menghitung baris yang kolomnya <strong>tidak <code>NULL</code></strong>.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Di <code>senja.db</code>, <code>COUNT(*)</code> pada tabel pesanan memberi 400 tapi <code>COUNT(pelanggan_id)</code> memberi 388, karena ada 12 pesanan tanpa pelanggan. Selisih dua angka itu adalah cara tercepat menghitung <code>NULL</code> di sebuah kolom."</p>
+        </details>
+        <details>
+          <summary>4. Apa itu window function, dan kapan dipakai?</summary>
+          <p style="margin-top:10px">Fungsi yang menghitung sesuatu dari sekelompok baris <strong>tanpa menggabungkan barisnya jadi satu</strong>. <code>GROUP BY</code> memberi 3 baris dari 400; window function tetap memberi 400 baris, masing-masing membawa angka kelompoknya.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Dipakai kalau tiap baris perlu dibandingkan dengan kelompoknya — peringkat dalam kelompok, persentase terhadap total, selisih dengan bulan lalu, total berjalan."</p>
+        </details>
+        <details>
+          <summary>5. Kenapa <code>NULL = NULL</code> tidak menghasilkan benar?</summary>
+          <p style="margin-top:10px">Karena <code>NULL</code> bukan sebuah nilai — ia berarti "tidak diketahui". Dua hal yang sama-sama tidak diketahui belum tentu sama. Jadi hasilnya bukan benar, bukan salah, tapi <em>tidak diketahui</em>. Itulah sebabnya kita menulis <code>IS NULL</code>, bukan <code>= NULL</code>.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Dan itu juga yang membuat <code>NOT IN</code> berbahaya: satu <code>NULL</code> di dalam daftarnya membuat seluruh kondisi tidak pernah benar, dan hasilnya nol baris tanpa satu pun pesan error."</p>
+        </details>
+        <details>
+          <summary>6. Apa itu index, dan kapan tidak dipakai?</summary>
+          <p style="margin-top:10px">Daftar terurut dari satu kolom atau lebih, supaya basis data bisa melompat langsung ke barisnya alih-alih membaca semua. Tidak dipakai kalau kolomnya dibungkus fungsi, kalau <code>LIKE</code>-nya diawali <code>%</code>, atau kalau ia bukan kolom terkiri dari index gabungan.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Aku pernah mengukurnya: di tabel 800.000 baris, satu index mengubah pencarian dari 51 ms jadi 0,008 ms. Tapi tiga index membuat berkasnya dua kali lebih besar dan penulisan tiga kali lebih lambat, jadi index bukan sesuatu yang ditambahkan kalau-kalau berguna."</p>
+        </details>
+        <details>
+          <summary>7. Apa itu transaksi, dan kapan kamu memerlukannya?</summary>
+          <p style="margin-top:10px">Sekumpulan perintah yang berhasil semua atau gagal semua. Diperlukan tiap kali satu kejadian bisnis butuh lebih dari satu perintah — mencatat pembayaran sambil mengubah status pesanan, atau menghapus data bulan lalu sebelum memasukkan yang baru.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Sama seperti jurnal: debit dan kredit dicatat bersama atau tidak sama sekali. Tanpa transaksi, perintah pertama yang berhasil akan tetap tersimpan meski yang kedua ditolak — dan itu jenis kesalahan yang tidak memunculkan pesan apa pun."</p>
+        </details>
+        <details>
+          <summary>8. Apa bedanya <code>VIEW</code> dan tabel ringkasan?</summary>
+          <p style="margin-top:10px"><code>VIEW</code> adalah query yang diberi nama — tidak menyimpan apa-apa, dijalankan ulang tiap dipanggil, jadi selalu terbaru tapi selambat query aslinya. Tabel ringkasan menyimpan hasilnya — sangat cepat dibaca, tapi basi begitu data barunya masuk.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Aku pakai view untuk yang harus akurat detik ini, dan tabel ringkasan untuk dasbor yang dibaca berkali-kali. Dan tabel ringkasan selalu kuberi kolom waktu pembuatannya, supaya yang membaca tahu angkanya sesegar apa."</p>
+        </details>
+        <details>
+          <summary>9. Query-mu lambat. Apa yang kamu lakukan pertama?</summary>
+          <p style="margin-top:10px">Menjalankan <code>EXPLAIN QUERY PLAN</code> — atau <code>EXPLAIN ANALYZE</code> di PostgreSQL — dan mencari <code>SCAN</code> pada tabel besar. Bukan langsung menambah index, karena kalau penyebabnya bentuk query-nya, index tidak akan menolong sama sekali.</p>
+          <p style="margin-top:8px"><em>Nilai tambah:</em> "Yang paling sering kutemukan adalah subquery berkorelasi. Pernah kuukur satu: 7,9 detik jadi 7,6 milidetik cuma dengan memindahkannya ke CTE, dengan hasil yang identik. Bebannya naik seperti kuadrat, jadi ia terlihat baik-baik saja di data contoh dan menggantung di data sungguhan."</p>
+        </details>
+        <details>
+          <summary>10. Bagaimana kamu tahu hasil query-mu benar?</summary>
+          <p style="margin-top:10px">Ini pertanyaan terpenting di daftar ini, dan yang paling sering dijawab dengan buruk.</p>
+          <p style="margin-top:8px">Jawabannya: "Aku cocokkan totalnya dengan angka yang sudah diketahui. Kalau tabel pesanan berisi 400 baris dan 38 batal, hasil per cabang harus berjumlah 362 — dan aku periksa itu tiap kali. Lalu aku punya berkas pemeriksaan mutu yang jalan sebelum apa pun dikirim: baris yatim, nilai yang tidak masuk akal, dan rekonsiliasi dengan sistem lain. Tiap pemeriksaan punya batas, jadi kalau angkanya naik dari kemarin aku tahu di hari yang sama."</p>
+          <div class="catatan" style="margin-top:10px">
+            <strong>Kalau kamu cuma bisa menyiapkan satu jawaban dari sepuluh ini, siapkan yang ini.</strong> Sembilan pertanyaan pertama bisa dijawab siapa pun yang belajar seminggu. Yang ini cuma bisa dijawab orang yang pernah mengirim angka salah, atau yang cukup berhati-hati untuk tidak pernah melakukannya. Latar belakang audit-mu membuat jawaban ini terdengar wajar dari mulutmu — pakai itu.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P6 ============ -->
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L5 · 6</span>
+      <h2>Ujian akhir: satu brief klien, lima level sekaligus</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengerjakan pekerjaan analis yang lengkap dari satu kalimat permintaan — dan menemukan bahwa jawaban yang benar dimulai dengan menolak menjawabnya.</p>
+
+    <div class="bahaya">
+      <strong>Ini bentuk take-home test yang sesungguhnya diberikan</strong>, dan bentuk permintaan klien yang sesungguhnya datang. Kerjakan berurutan, jangan lompat ke kuncinya. Sediakan dua jam. Kalau kamu bisa menyelesaikan ini sendiri, kamu sudah selesai dengan jalur SQL ini — dan kamu punya bukti yang bisa ditunjukkan, bukan perasaan.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Brief-nya</h3>
+        <span class="cek"><input type="checkbox" id="r6s1"><label for="r6s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>Dari: Pemilik Kopi Senja
+Perihal: Cabang mana yang sebaiknya kami tutup?
+
+Halo, kami sedang mempertimbangkan menutup satu cabang tahun ini.
+Tolong lihat datanya dan beri tahu cabang mana yang paling lemah.
+Datanya ada di senja.db. Terima kasih.</code></pre></div>
+        <p style="margin-top:10px">Itu saja. Satu kalimat, dan keputusan yang menyangkut pekerjaan orang.</p>
+        <div class="aksi">Sebelum menulis satu pun <code>SELECT</code>: tuliskan di kertas <strong>tiga pemeriksaan yang akan kamu jalankan lebih dulu</strong>, dan <strong>dua pertanyaan yang akan kamu ajukan ke pemiliknya</strong>. Baru lanjut.</div>
+        <details>
+          <summary>Bandingkan dengan daftarku</summary>
+          <p style="margin-top:10px"><strong>Tiga pemeriksaan sebelum menghitung apa pun:</strong></p>
+          <ol>
+            <li>Jalankan <code>uji_mutu.py</code> dari Level 4. Kalau data kasir dan sistem tidak cocok, angka omzet per cabang belum bisa dipercaya.</li>
+            <li>Periksa kelengkapan kolom yang akan kupakai — terutama <code>harga_beli</code>, karena "lemah" hampir pasti soal laba, bukan cuma omzet.</li>
+            <li>Periksa rentang tanggalnya. Kalau satu cabang baru buka bulan April, membandingkan totalnya dengan cabang yang buka sejak Januari adalah membandingkan dua hal berbeda.</li>
+          </ol>
+          <p style="margin-top:10px"><strong>Dua pertanyaan ke pemiliknya:</strong></p>
+          <ol>
+            <li>"Lemah itu maksudnya omzet paling kecil, laba paling kecil, atau tren paling turun? Ketiganya bisa menunjuk cabang yang berbeda."</li>
+            <li>"Apa ada biaya per cabang — sewa, gaji, listrik — yang tidak ada di basis data ini? Karena tanpa itu aku cuma bisa bicara laba kotor, bukan cabang mana yang merugi."</li>
+          </ol>
+          <p style="margin-top:10px">Pertanyaan kedua itu yang paling penting, dan paling sering dilewati. <strong>Data yang kamu punya tidak bisa menjawab pertanyaan yang diajukan.</strong> Mengatakannya di awal adalah pekerjaan; menyembunyikannya dan tetap memberi jawaban adalah masalah.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kerjakan: empat query, dan satu yang menjebak</h3>
+        <span class="cek"><input type="checkbox" id="r6s2"><label for="r6s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>U1  Laba kotor tiap cabang: omzet, HPP, dan selisihnya.
+U2  Berapa omzet yang HPP-nya tidak diketahui, dan dari produk apa?
+U3  Ulangi U1, tapi laporkan juga berapa persen omzet yang HPP-nya ada.
+U4  Berapa persen omzet tiap cabang datang dari 3 pelanggan terbesarnya?
+U5  Bandingkan kuartal 1 (Jan-Mar) dengan kuartal 2 (Apr-Jun) per cabang.</code></pre></div>
+
+        <details>
+          <summary>Kunci U1 — dan kenapa jawaban ini salah</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>SELECT p.cabang,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet,
+       SUM(i.jumlah * pr.harga_beli)    AS hpp,
+       SUM(i.jumlah * (i.harga_saat_itu - pr.harga_beli)) AS laba_kotor
+FROM pesanan p
+JOIN item   i  ON i.pesanan_id = p.id
+JOIN produk pr ON pr.id = i.produk_id
+WHERE p.status = 'selesai'
+GROUP BY p.cabang ORDER BY laba_kotor DESC</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>    cabang     omzet      hpp  laba_kotor
+0   Kemang  11669000  2701000     5148000
+1     Dago  12665000  2719000     5062000
+2  Seturan  11405000  2455000     4724000</code></pre></div>
+          </div>
+          <p style="margin-top:10px">Rapi, meyakinkan, dan siap dikirim. <strong>Dan salah.</strong> Lihat aritmetikanya: Dago beromzet 12.665.000 dengan HPP 2.719.000 — berarti marginnya 78,5%. Untuk kedai kopi, margin kotor 78% itu tidak masuk akal. Angka yang terlalu bagus adalah gejala, bukan kabar baik.</p>
+          <p style="margin-top:8px">Aritmetika ini yang harus kamu jalankan di kepala pada tiap hasil sebelum mengirimnya. Ia gratis, dan ia yang menyelamatkanmu.</p>
+        </details>
+
+        <details>
+          <summary>Kunci U2 — menemukan penyebabnya</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>SELECT pr.nama, COUNT(*) AS baris_item,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet_terdampak
+FROM item i
+JOIN produk  pr ON pr.id = i.produk_id
+JOIN pesanan p  ON p.id  = i.pesanan_id
+WHERE pr.harga_beli IS NULL AND p.status = 'selesai'
+GROUP BY pr.nama</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>           nama  baris_item  omzet_terdampak
+0    Cheesecake          90          6300000
+1  Matcha Latte         105          6630000</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Ketemu.</strong> Dua produk tidak punya <code>harga_beli</code>, dan keduanya menyumbang <strong>12.930.000</strong> — sekitar 36% dari total omzet 35.739.000.</p>
+          <p style="margin-top:8px"><strong>Dan inilah bagian yang paling penting di seluruh ujian ini:</strong> di U1, <code>SUM(i.jumlah * pr.harga_beli)</code> tidak error dan tidak memberi peringatan apa pun. SQL <em>melewati</em> baris yang <code>NULL</code> saat menjumlahkan. Jadi omzetnya lengkap 100%, HPP-nya cuma dari 64% barang, dan selisihnya disebut "laba kotor". Angka itu bukan laba kotor apa pun — ia campuran dua hal yang tidak boleh dikurangkan.</p>
+          <div class="bahaya" style="margin-top:10px">
+            <strong>Ini bentuk kesalahan yang paling berbahaya dalam pekerjaan data, dan sudah tiga kali muncul di jalur ini.</strong> Di Bekal Data Klien: <code>.sum()</code> pada tabel kosong memberi 0, bukan error. Di Level 1: <code>NOT IN</code> dengan <code>NULL</code> memberi nol baris, bukan error. Di sini: <code>SUM</code> atas kolom setengah kosong memberi angka yang rapi, bukan error. <strong>Tidak ada satu pun yang gagal dengan berisik.</strong> Satu-satunya pertahanan adalah kebiasaan bertanya "berapa banyak baris yang sebenarnya ikut dihitung di sini?" — tiap kali, termasuk saat hasilnya terlihat wajar.
+          </div>
+        </details>
+
+        <details>
+          <summary>Kunci U3 — cara melaporkannya dengan jujur</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>SELECT p.cabang,
+       SUM(i.jumlah * i.harga_saat_itu) AS omzet,
+       SUM(CASE WHEN pr.harga_beli IS NOT NULL
+                THEN i.jumlah * i.harga_saat_itu ELSE 0 END) AS omzet_ada_hpp,
+       ROUND(100.0 * SUM(CASE WHEN pr.harga_beli IS NOT NULL
+                              THEN i.jumlah * i.harga_saat_itu ELSE 0 END)
+             / SUM(i.jumlah * i.harga_saat_itu), 1) AS cakupan_persen,
+       SUM(i.jumlah * (i.harga_saat_itu - pr.harga_beli)) AS laba_kotor_sebagian
+FROM pesanan p
+JOIN item   i  ON i.pesanan_id = p.id
+JOIN produk pr ON pr.id = i.produk_id
+WHERE p.status = 'selesai'
+GROUP BY p.cabang ORDER BY omzet DESC</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>    cabang     omzet  omzet_ada_hpp  cakupan_persen  laba_kotor_sebagian
+0     Dago  12665000        7781000            61.4              5062000
+1   Kemang  11669000        7849000            67.3              5148000
+2  Seturan  11405000        7179000            62.9              4724000</code></pre></div>
+          </div>
+          <p style="margin-top:10px">Sekarang angkanya bercerita jujur. Kolom <code>cakupan_persen</code> mengubah "laba kotor Dago 5.062.000" menjadi "laba kotor dari 61,4% omzet Dago". Yang kedua bisa dipertanggungjawabkan; yang pertama tidak.</p>
+          <p style="margin-top:8px"><strong>Perhatikan juga bahwa cakupannya berbeda-beda per cabang</strong> — 61,4% sampai 67,3%. Artinya membandingkan ketiga angka laba kotor itu satu sama lain juga tidak sah: masing-masing dihitung dari porsi omzet yang berbeda. Nama kolomnya <code>laba_kotor_sebagian</code>, bukan <code>laba_kotor</code>, dan penamaan itu bukan kesopanan — itu bagian dari kebenarannya.</p>
+        </details>
+
+        <details>
+          <summary>Kunci U4 dan U5 — dua sudut yang tidak butuh harga_beli</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>-- U4  konsentrasi pelanggan
+WITH per_pel AS (
+  SELECT p.cabang, p.pelanggan_id, SUM(i.jumlah * i.harga_saat_itu) AS nilai
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status = 'selesai' AND p.pelanggan_id IS NOT NULL
+  GROUP BY p.cabang, p.pelanggan_id),
+beri_peringkat AS (
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY cabang ORDER BY nilai DESC) AS urutan,
+            SUM(nilai)   OVER (PARTITION BY cabang) AS total_cabang
+  FROM per_pel)
+SELECT cabang, SUM(nilai) AS tiga_teratas, MAX(total_cabang) AS total,
+       ROUND(100.0 * SUM(nilai) / MAX(total_cabang), 1) AS persen
+FROM beri_peringkat WHERE urutan &lt;= 3 GROUP BY cabang ORDER BY persen DESC</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>    cabang  tiga_teratas     total  persen
+0   Kemang       3759000  11534000    32.6
+1     Dago       3652000  12174000    30.0
+2  Seturan       3109000  11101000    28.0</code></pre></div>
+          </div>
+          <p style="margin-top:10px">Kemang paling bergantung pada sedikit orang: <strong>32,6% omzetnya dari tiga pelanggan.</strong> Itu risiko yang tidak terlihat dari angka omzet mana pun. Perhatikan juga <code>total</code> di sini (11.534.000) lebih kecil daripada omzet Kemang di U3 (11.669.000) — selisihnya adalah pesanan yang <code>pelanggan_id</code>-nya kosong, yang sengaja kita buang karena tidak bisa dihubungkan ke siapa pun. Selisih yang kamu <em>ketahui sebabnya</em> bukan masalah; selisih yang kamu tidak sadari ada, itu masalah.</p>
+          <div class="kode" style="margin-top:12px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>-- U5  tren kuartal
+WITH bulanan AS (
+  SELECT p.cabang, substr(p.tanggal,1,7) AS bulan,
+         SUM(i.jumlah * i.harga_saat_itu) AS omzet
+  FROM pesanan p JOIN item i ON i.pesanan_id = p.id
+  WHERE p.status = 'selesai' GROUP BY p.cabang, bulan)
+SELECT cabang,
+  SUM(CASE WHEN bulan &lt;= '2024-03' THEN omzet ELSE 0 END) AS kuartal_1,
+  SUM(CASE WHEN bulan &gt;= '2024-04' THEN omzet ELSE 0 END) AS kuartal_2,
+  SUM(CASE WHEN bulan &gt;= '2024-04' THEN omzet ELSE 0 END)
+  - SUM(CASE WHEN bulan &lt;= '2024-03' THEN omzet ELSE 0 END) AS selisih
+FROM bulanan GROUP BY cabang ORDER BY selisih</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>    cabang  kuartal_1  kuartal_2  selisih
+0     Dago    6851000    5814000 -1037000
+1  Seturan    5745000    5660000   -85000
+2   Kemang    5297000    6372000  1075000</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Dan sekarang gambarnya berbalik.</strong> Dago — yang omzetnya paling besar — adalah satu-satunya cabang yang turun tajam: <strong>−1.037.000</strong>, sekitar 15%. Kemang — yang omzetnya paling kecil — satu-satunya yang naik, <strong>+1.075.000</strong>. Seturan praktis datar.</p>
+          <p style="margin-top:8px">Pola <code>SUM(CASE WHEN … THEN … ELSE 0 END)</code> itu cara membuat kolom perbandingan berdampingan di SQL — bentuk yang sama seperti pivot funnel di Level 3.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tulis jawabannya — enam kalimat, bukan enam tabel</h3>
+        <span class="cek"><input type="checkbox" id="r6s3"><label for="r6s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Tulis balasan untuk pemilik Kopi Senja. Maksimal 200 kata, boleh melampirkan tabel tapi jawabannya harus ada di kalimatnya. Tulis dulu sendiri.</div>
+        <details>
+          <summary>Bandingkan dengan versiku</summary>
+          <div class="kode" style="margin-top:10px"><pre><code>Halo Pak/Bu,
+
+Sebelum menjawab, satu hal yang perlu saya sampaikan: data harga beli
+untuk Cheesecake dan Matcha Latte kosong. Kedua produk itu menyumbang
+Rp 12.930.000 atau 36% dari omzet, jadi laba kotor per cabang BELUM
+bisa dihitung dengan benar. Kalau data itu bisa dilengkapi, saya
+kirimkan angka labanya dalam sehari.
+
+Dari yang bisa dihitung sekarang:
+
+- Dago beromzet paling besar (Rp 12,7 juta) TAPI paling cepat turun:
+  kuartal 2 anjlok Rp 1,04 juta atau 15% dibanding kuartal 1.
+- Kemang beromzet paling kecil (Rp 11,7 juta) tapi satu-satunya yang
+  NAIK, +Rp 1,08 juta. Risikonya: 32,6% omzetnya dari 3 pelanggan saja.
+- Seturan datar di kedua sisi.
+
+Saran saya: jangan tutup apa pun berdasarkan omzet, karena omzet
+menunjuk Kemang dan tren menunjuk Dago. Yang perlu diketahui dulu
+adalah biaya sewa dan gaji per cabang — keduanya tidak ada di data ini,
+dan keputusan tutup-buka ditentukan oleh itu, bukan oleh omzet.
+
+Tiga catatan mutu data lain saya lampirkan terpisah.</code></pre></div>
+          <p style="margin-top:10px"><strong>Perhatikan apa yang TIDAK ada di balasan itu:</strong> nama cabang yang harus ditutup. Karena datanya memang tidak bisa menjawab itu, dan berpura-pura bisa adalah cara tercepat kehilangan klien setelah keputusannya terbukti keliru.</p>
+          <p style="margin-top:8px"><strong>Dan perhatikan apa yang ADA:</strong> satu masalah data yang mereka belum tahu, dua temuan yang saling bertentangan dan dijelaskan pertentangannya, satu permintaan yang jelas (biaya per cabang), dan satu tenggat (sehari setelah datanya lengkap). Itu balasan yang membuat orang menyewamu lagi.</p>
+          <div class="catatan" style="margin-top:10px">
+            <strong>Kalau kamu sampai di sini dan balasanmu mirip ini, jalur SQL-nya selesai.</strong> Bukan karena kamu hafal semua sintaks — kamu tidak, dan tidak perlu. Tapi karena kamu menjalankan pemeriksaan sebelum menghitung, menemukan lubang yang tidak memunculkan error, dan menolak memberi jawaban yang tidak didukung datanya. Itu tiga hal yang tidak bisa ditanyakan di wawancara sintaks, dan tiga hal yang menentukan apakah kamu dipanggil lagi.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P7 ============ -->
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n mono">SQL MAHIR L5 · 7</span>
+      <h2>Nilai dirimu sendiri, lalu tentukan langkah berikutnya</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengatakan dengan tepat apa yang sudah kamu kuasai dan apa yang belum — dengan bukti, bukan perasaan — dan tahu ke mana melangkah setelah SQLite.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Rubrik: centang hanya yang bisa kamu lakukan tanpa membuka catatan</h3>
+        <span class="cek"><input type="checkbox" id="r7s1"><label for="r7s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Aturannya keras dan itu memang gunanya: centang hanya kalau kamu bisa mengerjakannya <strong>sekarang, di basis data kosong, tanpa membuka halaman ini</strong>. "Pernah baca dan paham" tidak dihitung. Yang tidak tercentang bukan kegagalan — itu daftar latihanmu minggu depan.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Level</th><th>Kalau ini bisa kamu lakukan tanpa contekan…</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>L1</strong><br><span class="mono">dasar</span></td>
+                <td>Menyambung tiga tabel dan tahu kenapa <code>LEFT</code> bukan <code>INNER</code> · menjelaskan kenapa <code>NOT IN</code> berbahaya · menghitung <code>NULL</code> di sebuah kolom · mencocokkan hasil per kelompok dengan total keseluruhan</td>
+              </tr>
+              <tr>
+                <td><strong>L2</strong><br><span class="mono">window</span></td>
+                <td>Menulis <code>ROW_NUMBER() OVER (PARTITION BY … ORDER BY …)</code> dari nol · menjelaskan bedanya dengan <code>RANK</code> dan <code>DENSE_RANK</code> · menulis total berjalan dengan <code>ROWS</code> eksplisit dan tahu kenapa <code>RANGE</code> tidak aman · memakai <code>LAG</code> untuk pertumbuhan bulanan</td>
+              </tr>
+              <tr>
+                <td><strong>L3</strong><br><span class="mono">pola</span></td>
+                <td>Deduplikasi dengan <code>ROW_NUMBER</code> · top-N per kelompok · gaps-and-islands · membuat pivot dengan <code>SUM(CASE WHEN …)</code> · dan untuk tiap pola, menyebut keputusan bisnis yang tersembunyi di dalamnya</td>
+              </tr>
+              <tr>
+                <td><strong>L4</strong><br><span class="mono">kinerja</span></td>
+                <td>Membaca <code>EXPLAIN QUERY PLAN</code> dan membedakan <code>SCAN</code> dari <code>SEARCH</code> · menyebut tiga cara membunuh index tanpa sadar · menjelaskan aturan kolom terkiri · memakai <code>BEGIN</code>/<code>ROLLBACK</code> dengan benar · menulis berkas uji mutu berambang</td>
+              </tr>
+              <tr>
+                <td><strong>L5</strong><br><span class="mono">terapan</span></td>
+                <td>Menyebut asumsimu sebelum menjawab · mengenali soal yang punya banyak jawaban benar dan membuktikannya dengan angka · menemukan lubang data yang tidak memunculkan error · menulis balasan yang menolak menjawab pertanyaan yang datanya tidak sanggup</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:14px">
+          <strong>Cara membaca hasilnya.</strong> L1–L2 tercentang penuh sudah cukup untuk melamar posisi data analyst pemula di Indonesia. L1–L3 penuh membuatmu lolos hampir semua tes SQL live coding. L4 adalah yang membedakanmu dari kandidat lain yang juga bisa menulis window function. L5 tidak diuji di tes SQL mana pun — ia diuji di bulan ketiga bekerja, ketika ada yang bertanya "angka ini dari mana?".
+        </div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Kalau banyak yang belum tercentang, itu hasil yang benar, bukan kabar buruk.</strong> Tidak ada yang menguasai lima level ini dalam sekali baca. Cara memperbaikinya bukan mengulang membaca — tapi menutup halamannya, membuka <code>senja.db</code>, dan mencoba menulis ulang satu query yang belum tercentang dari nol. Gagal, buka kuncinya, tutup lagi, ulangi besok. Itu satu-satunya cara yang bekerja, dan ia bekerja untuk semua orang.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Dari SQLite ke basis data yang dipakai perusahaan</h3>
+        <span class="cek"><input type="checkbox" id="r7s2"><label for="r7s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hampir semua yang kamu pelajari berlaku di mana-mana. Ini yang berbeda, supaya kamu tidak terkejut di hari pertama.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Hal</th><th>SQLite (yang kamu pakai)</th><th>PostgreSQL / BigQuery / SQL Server</th></tr></thead>
+            <tbody>
+              <tr><td>Alias di <code>WHERE</code></td><td>Boleh: <code>SELECT x AS y … WHERE y &gt; 5</code></td><td><strong>Ditolak.</strong> Alias baru ada di <code>SELECT</code>, yang jalan setelah <code>WHERE</code>. Ini kebiasaan buruk yang hanya SQLite yang mengizinkan — jangan bawa.</td></tr>
+              <tr><td>Tipe kolom</td><td>Longgar — angka bisa masuk ke kolom teks</td><td>Ketat. Salah tipe = error. Ini kabar baik: kesalahan ketahuan lebih awal.</td></tr>
+              <tr><td>Tanggal</td><td>Teks <code>'2024-01-31'</code> + fungsi <code>date()</code></td><td>Tipe <code>DATE</code> sungguhan, <code>DATE_TRUNC</code>, <code>INTERVAL '1 month'</code>. Lebih enak, konsepnya sama.</td></tr>
+              <tr><td><code>ROLLUP</code>, <code>GROUPING SETS</code>, <code>QUALIFY</code></td><td>Tidak ada</td><td>Ada (<code>QUALIFY</code> di BigQuery/Snowflake) — jalan pintas untuk yang tadi butuh dua CTE.</td></tr>
+              <tr><td>Foreign key</td><td>Mati kecuali dinyalakan tiap koneksi</td><td>Selalu menyala.</td></tr>
+              <tr><td>Membaca rencana</td><td><code>EXPLAIN QUERY PLAN</code></td><td><code>EXPLAIN ANALYZE</code> — lebih rinci, dengan waktu sungguhan per langkah.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:14px">
+          <strong>Cara pindah yang paling murah:</strong> pasang PostgreSQL lewat Docker di komputermu, muat ulang <code>senja.db</code> ke dalamnya, lalu jalankan ulang <strong>soal 6 sampai 9 dari P3</strong>. Yang berubah cuma beberapa nama fungsi. Setelah itu kamu boleh menulis "PostgreSQL" di CV-mu tanpa berbohong, karena kamu memang sudah menjalankan query window function di atasnya.
+        </div>
+        <p style="margin-top:12px">Setelah itu, dua hal yang paling menambah nilai jualmu, berurutan:</p>
+        <ol>
+          <li><strong>dbt</strong> — cara industri menyusun transformasi SQL jadi berkas-berkas yang berurutan, dengan pengujian bawaan. Berkas <code>uji_mutu.py</code> dari Level 4 adalah versi buatan tangan dari apa yang dilakukan dbt; kamu sudah paham gunanya sebelum melihat alatnya, dan itu urutan belajar yang benar.</li>
+          <li><strong>Satu proyek nyata dengan data publik Indonesia</strong> — BPS, Kemenkeu, atau data terbuka pemda. Bukan latihan lagi: ambil data yang berantakan sungguhan, bersihkan, dan tulis satu temuan yang tidak terlihat dari angka mentahnya. Itu yang masuk portofolio, dan itu yang ditanyakan di wawancara.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Jalur SQL Mahir selesai — kelima level</h3>
+      <p>Tiga puluh lima hari, dari <code>SELECT</code> pertama sampai menolak menjawab brief klien yang datanya tidak sanggup. Yang kamu bawa keluar bukan hafalan sintaks — sintaks bisa dicari kapan saja. Yang kamu bawa keluar adalah tiga kebiasaan yang tidak bisa dicari: <strong>menyebut asumsi sebelum menjawab, mencocokkan total sebelum mengirim, dan mengukur sebelum menyimpulkan.</strong></p>
+      <p style="margin-top:10px">Dan satu hal yang berlaku untuk seluruh jalur ini: <strong>tiap angka yang kamu baca di lima level ini dihasilkan dengan menjalankan kodenya, bukan dengan mengingat-ingat.</strong> Kalau ada satu kebiasaan yang layak kamu bawa dari halaman-halaman ini ke pekerjaanmu, itu dia.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Ke mana sekarang.</strong> SQL-mu sudah cukup untuk bekerja. Yang belum selesai ada di tempat lain di rute ini: <a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a"><strong>Bekal Data Klien</strong></a> untuk data yang datang sebagai Excel berantakan, <a href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760"><strong>Bekal Kirim Hasil</strong></a> untuk mengantarkannya sampai ke tangan klien, <a href="https://claude.ai/code/artifact/e653810a-9c48-4b3e-af6e-8d439618c677"><strong>Bekal Rahasia Klien</strong></a> sebelum klien pertamamu, dan <a href="https://claude.ai/code/artifact/c1664d77-5877-4da8-ade7-764018718b5c"><strong>Jalur Freelance</strong></a> untuk mengubah semua ini jadi penghasilan.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/15ba1f07-96fd-4636-b694-f2cf31f020cd">Lanjut ke SQL Produksi: kosakata database kantor →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua kunci jawaban di halaman ini dijalankan sungguhan pada <code>senja.db</code> dan <code>besar.db</code> sebelum ditulis.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "sql-mahir-l5-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

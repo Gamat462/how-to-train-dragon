@@ -1,0 +1,942 @@
+<title>Minggu Kelima Visualisasi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  .swatch{ display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/7709a33d-1165-48f7-9534-e29934144e94">← Kembali ke M4: Statistik & A/B Test</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 5</span>
+  <button type="button" data-hari="29" aria-selected="true">Hari 29</button>
+  <button type="button" data-hari="30" aria-selected="false">Hari 30</button>
+  <button type="button" data-hari="31" aria-selected="false">Hari 31</button>
+  <button type="button" data-hari="32" aria-selected="false">Hari 32</button>
+  <button type="button" data-hari="33" aria-selected="false">Hari 33</button>
+  <button type="button" data-hari="34" aria-selected="false">Hari 34</button>
+  <button type="button" data-hari="35" aria-selected="false">Hari 35</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Penuntun langkah demi langkah · Lanjutan dari Minggu Keempat</span>
+    <h1>Minggu Kelima: Visualisasi Data</h1>
+    <p class="lede">Kamu sudah bisa menghitung angka yang benar (Minggu 1–4). Minggu ini kamu belajar menampilkannya dengan <strong>jujur</strong> — karena grafik yang sama persis, dengan sumbu yang diatur berbeda, bisa membuat perbedaan kecil terlihat dramatis atau perbedaan besar terlihat sepele. Ditutup dengan dashboard 4-panel sebagai proyek portofolio keempat.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 29 ================= -->
+  <section class="day aktif" data-hari="29">
+    <div class="day-head">
+      <span class="n mono">HARI 29</span>
+      <h2>Memilih jenis grafik yang tepat</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat bar chart pertamamu dengan matplotlib, dan tahu kapan memakai bar, line, atau scatter — keputusan yang salah di sini membuat grafik paling indah pun jadi tidak berguna.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Muat ulang data + uji ingatan</h3>
+        <span class="cek"><input type="checkbox" id="h29s1"><label for="h29s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Colab baru. Tempel <code>import pandas as pd</code> dan data kedai kopi (Hari 15 langkah 4).</p>
+        <p><strong>Tanpa melihat:</strong> tulis kode untuk omzet total per produk, diurutkan dari terbesar.</p>
+        <details>
+          <summary>Cek jawabanku</summary>
+          <div class="isi"><p><code>df.groupby("produk")["total"].sum().sort_values(ascending=False)</code></p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bar chart pertamamu</h3>
+        <span class="cek"><input type="checkbox" id="h29s2"><label for="h29s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>omzet_produk = df.groupby("produk")["total"].sum().sort_values(ascending=False)
+omzet_produk.plot(kind="bar", title="Omzet per produk", ylabel="Rupiah")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>4 batang tegak, diurut dari tertinggi: Kopi Susu (1.914.000), Americano (828.000), Roti Bakar (660.000), Croissant (600.000). <code>.plot()</code> adalah cara tercepat menggambar grafik langsung dari Series/DataFrame pandas — di baliknya memakai matplotlib.</p></div>
+        <div class="catatan">
+          <strong>Kenapa diurutkan (<code>sort_values</code>) sebelum digambar?</strong> Mata manusia membandingkan tinggi batang jauh lebih cepat kalau urutannya masuk akal (terbesar ke terkecil), bukan urutan abjad. Ini kebiasaan kecil yang langsung membuat grafikmu lebih mudah dibaca.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tiga jenis grafik, tiga pertanyaan berbeda</h3>
+        <span class="cek"><input type="checkbox" id="h29s3"><label for="h29s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Jenis grafik</th><th>Menjawab pertanyaan</th><th>Contoh</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Bar (batang)</strong></td><td>Membandingkan kategori berbeda</td><td>omzet per produk, per kota</td></tr>
+              <tr><td><strong>Line (garis)</strong></td><td>Menunjukkan tren dari waktu ke waktu</td><td>omzet per bulan selama 2 tahun</td></tr>
+              <tr><td><strong>Scatter (titik)</strong></td><td>Menunjukkan hubungan antara dua angka</td><td>jumlah transaksi vs omzet harian</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Simpan tabel ini.</strong> Kesalahan paling umum pemula: memakai line chart untuk data kategori (kota tidak punya "urutan waktu"), atau bar chart untuk tren waktu panjang (912 batang berdempetan tidak terbaca). Minggu ini kamu akan mempraktikkan ketiganya dengan data yang tepat untuk masing-masing.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h29s4"><label for="h29s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat bar chart omzet per kota (Jakarta vs Bandung). Jenis grafik apa yang tepat, dan kenapa?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>df.groupby("kota")["total"].sum().sort_values(ascending=False).plot(
+    kind="bar", title="Omzet per kota", ylabel="Rupiah")</code></pre></div>
+            <p>Bar chart tepat karena "kota" adalah kategori, bukan urutan waktu — kita membandingkan dua kelompok berbeda, bukan menunjukkan tren.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 29 selesai. Berhenti di sini.</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>series.plot(kind="bar"/"line"/"scatter", title=..., ylabel=...)</code>. Bar = bandingkan kategori · Line = tren waktu · Scatter = hubungan dua angka.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 30 ================= -->
+  <section class="day" data-hari="30">
+    <div class="day-head">
+      <span class="n mono">HARI 30</span>
+      <h2>Sumbu yang jujur vs yang menyesatkan</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali dan menghindari trik visual paling umum yang membuat grafik "berbohong" tanpa mengubah satu angka pun — memotong sumbu-y.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Muat data omzet harian</h3>
+        <span class="cek"><input type="checkbox" id="h30s1"><label for="h30s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Dari <code>bootcamp/data/</code>, unggah <code>omzet_harian.csv</code> ke Colab (cara sama seperti Hari 20).</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+oh = pd.read_csv("omzet_harian.csv", parse_dates=["tanggal"])
+print(oh.shape)
+oh.head()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>(912, 7)</code> — 912 hari, dari 2024-01-01 sampai 2026-06-30. Kolom <code>akhir_pekan</code> berisi True/False.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bandingkan omzet hari kerja vs akhir pekan</h3>
+        <span class="cek"><input type="checkbox" id="h30s2"><label for="h30s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>rata2 = oh.groupby("akhir_pekan")["omzet"].mean()
+rata2.index = ["Hari kerja", "Akhir pekan"]
+print(rata2)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>Hari kerja      8772363</code><br><code>Akhir pekan    10952785</code></p><p style="margin-top:6px">Akhir pekan lebih tinggi <strong>25%</strong> — beda nyata, tapi bukan beda yang ekstrim.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Versi yang menyesatkan</h3>
+        <span class="cek"><input type="checkbox" id="h30s3"><label for="h30s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Gambar grafiknya, tapi sumbu-y dipotong supaya <strong>tidak</strong> mulai dari 0:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>ax = rata2.plot(kind="bar", title="Omzet: hari kerja vs akhir pekan (versi menyesatkan)")
+ax.set_ylim(8500000, 11000000)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Batang "Akhir pekan" terlihat <strong>lebih dari 4x</strong> lebih tinggi dari "Hari kerja" — padahal selisih aslinya cuma 25%. <code>set_ylim(8500000, ...)</code> memotong bagian bawah sumbu, membesar-besarkan perbedaan visual secara dramatis.</p></div>
+        <div class="bahaya">
+          <strong>Ini trik visual paling umum di media dan presentasi bisnis yang ingin membuat cerita terdengar lebih dramatis.</strong> Secara teknis tidak ada angka yang salah — cuma sumbunya yang diatur untuk menipu mata. Kalau kamu melihat grafik bar dengan sumbu-y tidak dimulai dari 0, curigai dulu sebelum percaya kesimpulannya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Versi yang jujur</h3>
+        <span class="cek"><input type="checkbox" id="h30s4"><label for="h30s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>ax = rata2.plot(kind="bar", title="Omzet: hari kerja vs akhir pekan (versi jujur)")
+ax.set_ylim(0, None)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Kedua batang terlihat mirip tinggi, dengan akhir pekan sedikit lebih tinggi — proporsional dengan selisih 25% yang sebenarnya. Ini gambaran yang jujur.</p></div>
+        <div class="catatan">
+          <strong>Aturan praktis:</strong> bar chart <strong>selalu mulai dari 0</strong>, tanpa pengecualian — karena panjang batang adalah bahasa visual yang dibaca sebagai proporsi. Line chart kadang boleh tidak mulai dari 0 (untuk melihat detail tren kecil), tapi harus diberi label jelas supaya pembaca tidak salah baca. matplotlib defaultnya sudah otomatis mulai dari 0 untuk bar chart, jadi jebakan ini biasanya baru muncul kalau seseorang <em>sengaja</em> mengubahnya seperti langkah 3 tadi.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h30s5"><label for="h30s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat bar chart omzet rata-rata per hari (Senin–Minggu, kolom <code>hari</code>), diurutkan dari tertinggi, dengan sumbu yang jujur. Hari apa yang tertinggi?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>oh.groupby("hari")["omzet"].mean().sort_values(ascending=False).plot(
+    kind="bar", title="Rata-rata omzet per hari", ylabel="Rupiah")</code></pre></div>
+            <p><strong>Sabtu</strong> tertinggi (11.339.500), <strong>Selasa</strong> terendah (7.744.454) — masuk akal, akhir pekan memang lebih ramai.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 30 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> bar chart wajib mulai dari sumbu-y = 0. Kalau melihat grafik yang tidak mulai dari 0, curiga dulu — itu bisa membesar-besarkan perbedaan kecil.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 31 ================= -->
+  <section class="day" data-hari="31">
+    <div class="day-head">
+      <span class="n mono">HARI 31</span>
+      <h2>Tren waktu: line chart dan rata-rata bergerak</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menggambar tren 2,5 tahun data dengan line chart, dan menghaluskan data harian yang berisik dengan rata-rata bergerak (rolling average).</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Muat ulang + uji ingatan</h3>
+        <span class="cek"><input type="checkbox" id="h31s1"><label for="h31s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Muat ulang <code>omzet_harian.csv</code>. <strong>Tanpa melihat:</strong> tulis kode untuk rata-rata omzet hari kerja vs akhir pekan.</p>
+        <details>
+          <summary>Cek jawabanku</summary>
+          <div class="isi"><p><code>oh.groupby("akhir_pekan")["omzet"].mean()</code></p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa 912 titik harian tidak terbaca</h3>
+        <span class="cek"><input type="checkbox" id="h31s2"><label for="h31s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>oh.set_index("tanggal")["omzet"].plot(title="Omzet harian mentah")</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Garis zig-zag yang sangat berisik — naik turun tajam tiap hari (efek akhir pekan dari Hari 30) sehingga tren jangka panjangnya tenggelam dalam noise harian.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ringkas per bulan</h3>
+        <span class="cek"><input type="checkbox" id="h31s3"><label for="h31s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>oh["bulan"] = oh["tanggal"].dt.to_period("M")
+bulanan = oh.groupby("bulan")["omzet"].sum()
+bulanan.plot(kind="line", title="Omzet bulanan, Jan 2024 - Jun 2026", marker="o")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Garis naik jelas dari Rp 43,6 juta (Jan 2024) ke puncak Rp 568,4 juta (Mei 2026), lalu mulai mendatar di bulan-bulan terakhir. <code>.dt.to_period("M")</code> mengelompokkan tanggal jadi "bulan-tahun" (mis. 2024-01), <code>marker="o"</code> menambah titik bulat di tiap bulan supaya lebih mudah dibaca.</p></div>
+        <div class="catatan">
+          <strong>Bacaan yang benar:</strong> ini pertumbuhan 12x lipat dalam 2,5 tahun yang mulai <em>melandai</em> — bukan lagi tumbuh eksponensial. Kalau kamu presentasi ke manajemen, ini titik penting untuk didiskusikan: apakah pasar sudah jenuh, atau perlu strategi baru (cabang baru, produk baru) untuk melanjutkan pertumbuhan?
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Menghaluskan data harian: rolling average</h3>
+        <span class="cek"><input type="checkbox" id="h31s4"><label for="h31s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kadang kamu butuh detail harian tapi tanpa noise akhir-pekan-vs-hari-kerja. Solusinya: rata-rata 7 hari terakhir yang "bergerak" tiap hari.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>oh["rata7"] = oh["omzet"].rolling(7).mean()
+oh.set_index("tanggal")[["omzet", "rata7"]].plot(
+    title="Omzet harian: mentah vs rata-rata 7 hari", alpha=0.5)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Dua garis: garis <code>omzet</code> masih zig-zag (transparan, <code>alpha=0.5</code>), garis <code>rata7</code> jauh lebih mulus mengikuti tren sebenarnya di atasnya.</p></div>
+        <div class="bahaya">
+          <strong>Perhatikan enam baris pertama <code>rata7</code> akan kosong (NaN).</strong> Wajar — rata-rata 7 hari butuh minimal 7 hari data, jadi 6 hari pertama belum cukup data untuk dihitung. Ini bukan data rusak.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h31s5"><label for="h31s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat line chart <code>jumlah_transaksi</code> bulanan (bukan <code>omzet</code>). Apakah bentuk trennya mirip dengan omzet bulanan?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>oh.groupby("bulan")["jumlah_transaksi"].sum().plot(kind="line", marker="o")</code></pre></div>
+            <p>Ya, bentuknya sangat mirip — masuk akal, karena lebih banyak transaksi hampir selalu berarti lebih banyak omzet. Kamu akan membuktikan hubungan ini secara angka besok dengan scatter plot.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 31 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>.dt.to_period("M")</code> + <code>groupby</code> = ringkas jadi bulanan. <code>.rolling(7).mean()</code> = rata-rata bergerak untuk menghaluskan data harian yang berisik.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 32 ================= -->
+  <section class="day" data-hari="32">
+    <div class="day-head">
+      <span class="n mono">HARI 32</span>
+      <h2>Scatter plot dan korelasi bukan sebab-akibat</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat scatter plot, menghitung korelasi, dan menjelaskan kenapa korelasi tinggi <strong>tidak pernah</strong> membuktikan sebab-akibat dengan sendirinya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Scatter plot pertamamu</h3>
+        <span class="cek"><input type="checkbox" id="h32s1"><label for="h32s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Muat ulang <code>omzet_harian.csv</code>. Setiap titik di scatter plot adalah satu hari — posisinya ditentukan oleh dua angka sekaligus:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>oh.plot(kind="scatter", x="jumlah_transaksi", y="omzet",
+        title="Jumlah transaksi vs omzet harian", alpha=0.4)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Titik-titik membentuk pola naik dari kiri-bawah ke kanan-atas yang sangat rapat — makin banyak transaksi, makin tinggi omzet, dan hubungannya sangat konsisten (titik-titiknya nyaris membentuk garis lurus).</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Mengukur kekuatan hubungan: korelasi</h3>
+        <span class="cek"><input type="checkbox" id="h32s2"><label for="h32s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>oh["jumlah_transaksi"].corr(oh["omzet"])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><strong>0.991</strong></p></div>
+        <p>Korelasi (r) berkisar dari <strong>-1</strong> (berlawanan sempurna) sampai <strong>+1</strong> (searah sempurna), 0 berarti tidak ada hubungan linier. 0,991 sangat dekat ke +1 — hubungan yang nyaris sempurna.</p>
+        <div class="catatan">
+          <strong>Tapi ini bukan temuan yang menarik.</strong> Lebih banyak transaksi <em>secara matematis hampir pasti</em> berarti lebih banyak omzet (kecuali semua transaksi baru bernilai nol) — keduanya dihitung dari sumber yang sama. Korelasi yang benar-benar berguna untuk analis adalah antara dua hal yang <strong>tidak</strong> otomatis terkait secara matematis — misalnya cuaca vs omzet, atau harga promo vs jumlah pengunjung.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa korelasi ≠ sebab-akibat</h3>
+        <span class="cek"><input type="checkbox" id="h32s3"><label for="h32s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Contoh klasik yang wajib kamu ingat: <strong>penjualan es krim</strong> dan <strong>jumlah orang tenggelam</strong> berkorelasi tinggi sepanjang tahun. Bukan karena es krim menyebabkan orang tenggelam — keduanya sama-sama naik saat <strong>musim panas</strong>. Musim panas adalah <em>variabel penyebab tersembunyi</em> (confounding variable) yang menggerakkan keduanya.</p>
+        <div class="bahaya">
+          <strong>Setiap kali kamu menemukan korelasi tinggi antara dua hal di data pekerjaan nanti, tanyakan:</strong> apakah A benar-benar menyebabkan B? Apakah B menyebabkan A (arahnya terbalik)? Atau adakah C (variabel ketiga) yang menyebabkan keduanya? Cuma eksperimen terkontrol seperti A/B test (Hari 27) yang bisa membuktikan sebab-akibat dengan meyakinkan — korelasi dari data historis saja tidak pernah cukup.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h32s4"><label for="h32s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hitung korelasi antara <code>diskon</code> dan <code>omzet</code>. Apakah hasilnya sekuat korelasi <code>jumlah_transaksi</code> vs <code>omzet</code>? Kalau tidak, kenapa itu masuk akal?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>oh["diskon"].corr(oh["omzet"])</code></pre></div>
+            <p>Hasilnya jauh lebih lemah dari 0,991 — masuk akal, karena diskon dan omzet tidak dihitung dari rumus yang sama seperti transaksi-omzet. Ini korelasi yang lebih "asli" dan lebih layak diselidiki lebih lanjut (apakah diskon lebih besar justru menurunkan margin walau menaikkan omzet kotor?).</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 32 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>kolom_a.corr(kolom_b)</code> → -1 sampai +1. Korelasi tinggi tidak pernah membuktikan sebab-akibat sendirian — selalu curigai variabel ketiga.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 33 ================= -->
+  <section class="day" data-hari="33">
+    <div class="day-head">
+      <span class="n mono">HARI 33</span>
+      <h2>Ulangan dari ingatan — Visualisasi</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Tutup catatan. Kerjakan dari ingatan, baru buka kunci jawaban.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tujuh soal</h3>
+        <span class="cek"><input type="checkbox" id="h33s1"><label for="h33s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Kamu punya data omzet per kota (5 kota). Jenis grafik apa yang tepat?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Kamu punya omzet harian selama setahun. Jenis grafik apa yang tepat, dan kenapa data mentahnya perlu diringkas dulu?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Bar chart wajib dimulai dari sumbu-y berapa? Apa akibatnya kalau tidak?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Tulis kode pandas untuk rata-rata bergerak 7 hari pada kolom <code>omzet</code>.</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Dua kolom punya korelasi 0,95. Apa itu <em>otomatis</em> membuktikan yang satu menyebabkan yang lain? Jelaskan dengan contoh es krim.</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> (Ulangan Minggu 4) Apa bedanya mean dan median saat ada outlier ekstrim?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> (Ulangan Minggu 3) Tulis kode pandas padanan <code>WHERE kota='Jakarta' AND kategori='Minuman'</code>.</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Bar chart — membandingkan kategori berbeda.</p>
+            <p><strong>2.</strong> Line chart, karena menunjukkan tren waktu. Data mentah harian (365+ titik) terlalu berisik/padat — perlu diringkas per bulan atau dihaluskan dengan rolling average dulu.</p>
+            <p><strong>3.</strong> Dari 0. Kalau tidak, perbedaan kecil bisa terlihat jauh lebih dramatis dari yang sebenarnya (membesar-besarkan secara visual).</p>
+            <p><strong>4.</strong> <code>oh["omzet"].rolling(7).mean()</code></p>
+            <p><strong>5.</strong> Tidak. Korelasi tinggi bisa muncul karena variabel ketiga (contoh: musim panas menyebabkan penjualan es krim DAN jumlah orang tenggelam naik bersamaan, bukan es krim menyebabkan tenggelam).</p>
+            <p><strong>6.</strong> Mean tertarik ke arah outlier (bisa naik/turun drastis), median relatif tidak berubah karena hanya peduli posisi tengah data terurut.</p>
+            <p><strong>7.</strong> <code>df[(df.kota=="Jakarta") &amp; (df.kategori=="Minuman")]</code></p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 33 selesai</h3>
+      <p>Kalau enam dari tujuh benar, lanjut ke dashboard. Kalau kurang, ulangi Hari 29–32 dulu — visualisasi yang jujur akan terus kamu pakai di setiap laporan mulai sekarang.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 34 ================= -->
+  <section class="day" data-hari="34">
+    <div class="day-head">
+      <span class="n mono">HARI 34</span>
+      <h2>Dashboard sederhana: banyak grafik, satu cerita</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menggabungkan beberapa grafik jadi satu dashboard 4-panel dengan <code>subplots</code>, dan memilih warna yang aman untuk pembaca buta warna.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenalan dengan subplots</h3>
+        <span class="cek"><input type="checkbox" id="h34s1"><label for="h34s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sampai sekarang tiap grafik berdiri sendiri. <code>plt.subplots</code> membuat kanvas berisi beberapa grafik sekaligus, tersusun grid.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import matplotlib.pyplot as plt
+
+fig, sumbu = plt.subplots(2, 2, figsize=(11, 8))
+print(sumbu.shape)</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>(2, 2)</code> — grid 2 baris x 2 kolom, jadi <code>sumbu</code> berisi 4 "kotak" untuk 4 grafik terpisah: <code>sumbu[0,0]</code> (kiri-atas), <code>sumbu[0,1]</code> (kanan-atas), <code>sumbu[1,0]</code> (kiri-bawah), <code>sumbu[1,1]</code> (kanan-bawah).</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Isi keempat panel</h3>
+        <span class="cek"><input type="checkbox" id="h34s2"><label for="h34s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Muat ulang <code>omzet_harian.csv</code>. Tiap panel memakai pola yang sama seperti hari-hari sebelumnya, tapi dengan <code>ax=sumbu[baris,kolom]</code> supaya masuk ke kotak yang benar:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>oh["bulan"] = oh["tanggal"].dt.to_period("M").astype(str)
+oh["rata7"] = oh["omzet"].rolling(7).mean()
+
+fig, sumbu = plt.subplots(2, 2, figsize=(11, 8))
+
+# kiri-atas: tren bulanan
+oh.groupby("bulan")["omzet"].sum().plot(ax=sumbu[0,0], kind="line", title="Omzet bulanan")
+
+# kanan-atas: rata-rata 7 hari
+oh.set_index("tanggal")["rata7"].plot(ax=sumbu[0,1], title="Rata-rata 7 hari (dihaluskan)")
+
+# kiri-bawah: bar hari kerja vs akhir pekan
+rp = oh.groupby("akhir_pekan")["omzet"].mean()
+rp.index = ["Hari kerja", "Akhir pekan"]
+rp.plot(ax=sumbu[1,0], kind="bar", title="Rata-rata: kerja vs akhir pekan", ylim=(0, None))
+
+# kanan-bawah: scatter transaksi vs omzet
+oh.plot(ax=sumbu[1,1], kind="scatter", x="jumlah_transaksi", y="omzet",
+        title="Transaksi vs omzet", alpha=0.3)
+
+plt.tight_layout()
+plt.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Satu kanvas berisi 4 grafik rapi, masing-masing dengan judulnya sendiri — ringkasan visual bisnis Kedai Kopi Senja dalam satu pandangan. <code>plt.tight_layout()</code> mencegah judul dan label saling bertabrakan.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Warna yang aman untuk semua pembaca</h3>
+        <span class="cek"><input type="checkbox" id="h34s3"><label for="h34s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sekitar 1 dari 12 laki-laki punya buta warna merah-hijau. Kombinasi merah-hijau untuk "buruk vs baik" — sangat umum dipakai — justru <strong>tidak terbaca</strong> bagi mereka. Palet yang aman untuk kebanyakan kondisi buta warna:</p>
+        <p style="margin:10px 0">
+          <span class="swatch" style="background:#0F6E63"></span>teal <code>#0F6E63</code> &nbsp;
+          <span class="swatch" style="background:#9C6B25"></span>oranye-emas <code>#9C6B25</code> &nbsp;
+          <span class="swatch" style="background:#1C2430"></span>biru gelap <code>#1C2430</code>
+        </p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>rp.plot(ax=sumbu[1,0], kind="bar", color=["#0F6E63", "#9C6B25"])</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Kebiasaan cepat:</strong> hindari pasangan merah-hijau untuk membedakan kategori penting. Kalau harus memakai merah untuk "buruk", tambahkan penanda kedua (pola, label angka, atau posisi) supaya tidak bergantung pada warna saja untuk menyampaikan informasi.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 34 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>plt.subplots(baris, kolom)</code> → grid grafik, tiap grafik pakai <code>ax=sumbu[i,j]</code>. Hindari kombinasi merah-hijau untuk kategori penting.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 35 ================= -->
+  <section class="day" data-hari="35">
+    <div class="day-head">
+      <span class="n mono">HARI 35</span>
+      <h2>Proyek portofolio #4: dashboard bisnis</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> proyek keempat di GitHub — dashboard 4-panel dengan tulisan interpretasi, format yang biasa dipakai analis untuk laporan bulanan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Susun notebook</h3>
+        <span class="cek"><input type="checkbox" id="h35s1"><label for="h35s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Notebook Colab baru, judul <strong>04-dashboard-omzet</strong>. Susunan (pakai sel teks Colab untuk tiap judul bagian):</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li><strong># Dashboard Omzet Kedai Kopi Senja</strong> — 2 kalimat konteks</li>
+          <li><strong>## Data</strong> — muat <code>omzet_harian.csv</code>, <code>.info()</code></li>
+          <li><strong>## Dashboard</strong> — kode 4-panel dari Hari 34 langkah 2-3, dengan warna aman</li>
+          <li><strong>## Temuan</strong> — 3-4 kalimat interpretasi tiap panel (lihat langkah 2)</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tulis interpretasi, bukan cuma deskripsi</h3>
+        <span class="cek"><input type="checkbox" id="h35s2"><label for="h35s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Perbedaan analis pemula dan analis berpengalaman: pemula menulis <em>apa yang terlihat</em> ("omzet naik dari waktu ke waktu"). Analis berpengalaman menulis <em>apa artinya untuk bisnis</em>:</p>
+        <details>
+          <summary>Contoh tulisan temuan (bandingkan dengan tulisanmu)</summary>
+          <div class="isi">
+            <p><strong>Tren bulanan:</strong> omzet tumbuh 12x lipat dari Jan 2024 (Rp 43,6 juta) ke Mei 2026 (Rp 568,4 juta), tapi laju pertumbuhan mulai melandai di kuartal terakhir — perlu didiskusikan apakah pasar sudah jenuh atau butuh strategi baru.</p>
+            <p><strong>Rata-rata 7 hari:</strong> menghilangkan efek akhir-pekan-vs-hari-kerja, memperlihatkan tren dasar yang lebih jelas untuk perencanaan stok.</p>
+            <p><strong>Hari kerja vs akhir pekan:</strong> akhir pekan 25% lebih tinggi — pertimbangkan menambah staf/stok di akhir pekan.</p>
+            <p><strong>Transaksi vs omzet:</strong> korelasi 0,99 — sebagian besar didorong volume transaksi, bukan nilai per transaksi. Strategi menaikkan omzet lewat "belanja lebih besar per transaksi" (upsell) mungkin lebih efektif daripada sekadar menambah jumlah pengunjung yang sudah tinggi.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Unggah ke GitHub</h3>
+        <span class="cek"><input type="checkbox" id="h35s3"><label for="h35s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Unduh <code>.ipynb</code>, unggah ke repo GitHub yang sama seperti proyek 1-3. Perbarui <code>README.md</code>:</p>
+        <div class="kode"><pre><code>## Proyek 4: Dashboard Omzet
+
+Dashboard 4-panel (tren bulanan, rata-rata bergerak, perbandingan
+hari kerja/akhir pekan, korelasi transaksi-omzet) dari 912 hari
+data omzet, dengan interpretasi bisnis di tiap panel.
+
+**Temuan utama:** omzet tumbuh 12x dalam 2,5 tahun namun mulai
+melandai; akhir pekan 25% lebih tinggi dari hari kerja.
+
+**Berkas:** [04-dashboard-omzet.ipynb](04-dashboard-omzet.ipynb)</code></pre></div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Lima minggu selesai — SQL, pandas, statistik, dan visualisasi</h3>
+      <p>Empat proyek publik di GitHub-mu sekarang: eksplorasi data, EDA dengan grafik, uji hipotesis A/B test, dan dashboard bisnis. Ini portofolio yang solid untuk posisi <em>junior data analyst</em>.</p>
+      <p style="margin-top:14px">Minggu depan: kembali ke SQL, kali ini window function, CTE, dan data yang benar-benar kotor — kemampuan yang sering muncul di tes teknis wawancara. Masih dituntun hari demi hari.</p>
+      <a class="lanjut" href="https://claude.ai/code/artifact/7a1dae30-ebd4-4de7-bbce-722bbbf0be7e">Lanjut ke M6: SQL Lanjutan →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu5-viz-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

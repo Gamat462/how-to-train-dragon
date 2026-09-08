@@ -1,0 +1,1006 @@
+<title>Minggu Ketujuh Statistik Lanjutan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .verdict{ display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
+  .verdict > div{ flex:1 1 200px; border-radius:12px; padding:12px 14px; border:1px solid var(--line); }
+  .verdict .m{ display:block; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); }
+  .verdict .v{ display:block; font-family:"Fraunces",serif; font-size:1.3rem; font-weight:600; margin:3px 0; }
+  .verdict .s{ display:block; font-size:0.76rem; color:var(--ink-soft); }
+  .verdict .ok{ background:var(--teal-soft); border-color:var(--teal); }
+  .verdict .ok .v{ color:var(--teal); }
+  .verdict .bad{ background:var(--alert-soft); border-color:var(--alert); }
+  .verdict .bad .v{ color:var(--alert); }
+  .verdict .meh{ background:var(--gold-soft); border-color:var(--gold); }
+  .verdict .meh .v{ color:var(--gold); }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/e653810a-9c48-4b3e-af6e-8d439618c677">← Kembali ke Bekal Rahasia Klien</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 7</span>
+  <button type="button" data-hari="43" aria-selected="true">Hari 43</button>
+  <button type="button" data-hari="44" aria-selected="false">Hari 44</button>
+  <button type="button" data-hari="45" aria-selected="false">Hari 45</button>
+  <button type="button" data-hari="46" aria-selected="false">Hari 46</button>
+  <button type="button" data-hari="47" aria-selected="false">Hari 47</button>
+  <button type="button" data-hari="48" aria-selected="false">Hari 48</button>
+  <button type="button" data-hari="49" aria-selected="false">Hari 49</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Penuntun langkah demi langkah · Lanjutan dari Minggu Keenam</span>
+    <h1>Minggu Ketujuh: Statistik Lanjutan</h1>
+    <p class="lede">Minggu 4 mengajarimu menguji apakah beda itu nyata. Minggu ini mengajarimu <strong>tidak tertipu oleh hasil ujimu sendiri</strong> — lewat confidence interval, effect size, dan bukti simulasi bahwa "mengintip" hasil tiap hari bisa membuat 1 dari 4 tes "menang" padahal fiturnya sama sekali tidak berpengaruh. Ini yang membedakan analis yang dipercaya dari yang cuma menjalankan skrip.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 43 ================= -->
+  <section class="day aktif" data-hari="43">
+    <div class="day-head">
+      <span class="n mono">HARI 43</span>
+      <h2>Confidence interval: jawaban yang jujur</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> melaporkan hasil A/B test sebagai rentang (confidence interval), bukan satu angka p-value — kebiasaan yang langsung terlihat oleh pewawancara sebagai tanda analis yang matang.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Muat ulang data + uji ingatan</h3>
+        <span class="cek"><input type="checkbox" id="h43s1"><label for="h43s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Colab baru. Muat <code>abtest_checkout.csv</code> (Hari 27). <strong>Tanpa melihat:</strong> tulis kode tingkat konversi tiap grup dan p-value-nya.</p>
+        <details>
+          <summary>Cek jawabanku</summary>
+          <div class="isi"><p>Konversi: <code>ab.groupby("grup")["konversi"].mean()</code> → kontrol 11,225%, perlakuan 12,775%. p-value: <code>chi2_contingency(pd.crosstab(ab.grup, ab.konversi), correction=False)</code> → 0,0329.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Masalah dengan p-value saja</h3>
+        <span class="cek"><input type="checkbox" id="h43s2"><label for="h43s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>p-value cuma menjawab ya/tidak: "apakah bedanya nyata?" Tapi atasanmu akan bertanya lanjutan: <strong>"seberapa besar bedanya, dan seberapa yakin kita?"</strong> p-value tidak menjawab itu. Confidence interval (CI) menjawabnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Menghitung CI 95%</h3>
+        <span class="cek"><input type="checkbox" id="h43s3"><label for="h43s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import numpy as np
+
+p1 = ab[ab.grup=="kontrol"]["konversi"].mean()
+p2 = ab[ab.grup=="perlakuan"]["konversi"].mean()
+n1 = n2 = 4000
+
+se_ci = np.sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n2)
+selisih = p2 - p1
+lo, hi = selisih - 1.96*se_ci, selisih + 1.96*se_ci
+
+print(f"selisih = {selisih*100:.2f} poin persen")
+print(f"CI 95%  = [{lo*100:.2f}, {hi*100:.2f}] poin persen")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>selisih = 1.55 poin persen</code><br><code>CI 95%  = [0.13, 2.97] poin persen</code></p></div>
+        <p><strong>Baca begini:</strong> efek sebenarnya kemungkinan besar ada di antara +0,13 dan +2,97 poin persen. Rentangnya <strong>lebar sekali</strong> — batas bawahnya nyaris nol. Kita tahu efeknya positif, tapi hampir tidak tahu <em>seberapa</em> positif.</p>
+        <div class="catatan">
+          <strong>Hubungan CI dan p-value:</strong> kalau CI 95% tidak memuat angka nol, maka otomatis p &lt; 0,05. Keduanya bicara hal yang sama — tapi CI memberi jauh lebih banyak informasi (besaran dan ketidakpastian), bukan cuma ya/tidak. <strong>Mulai sekarang, selalu laporkan CI di samping p-value.</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h43s4"><label for="h43s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hitung CI 95% untuk selisih AOV (nilai pesanan pembeli, dari Hari 27 langkah 4). Apakah CI-nya memuat nol? Apakah itu cocok dengan p = 0,043 yang sudah kamu hitung?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>se_aov = np.sqrt(aov_kontrol.var(ddof=1)/len(aov_kontrol) + aov_perlakuan.var(ddof=1)/len(aov_perlakuan))
+d_aov = aov_perlakuan.mean() - aov_kontrol.mean()
+print(d_aov - 1.96*se_aov, d_aov + 1.96*se_aov)</code></pre></div>
+            <p>CI ≈ <strong>[−6.324, −107]</strong> rupiah. Tidak memuat nol (cocok dengan p=0,043, yang signifikan) — tapi perhatikan batas atasnya <strong>nyaris menyentuh nol</strong>. Buktinya ada, tapi tipis.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 43 selesai. Berhenti di sini.</h3>
+      <p><strong>Tambahkan ke catatan:</strong> CI 95% = selisih ± 1,96×SE. Kalau CI tidak memuat 0, itu sama dengan p&lt;0,05 — tapi CI memberi tahu <em>seberapa besar</em>, bukan cuma ya/tidak.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 44 ================= -->
+  <section class="day" data-hari="44">
+    <div class="day-head">
+      <span class="n mono">HARI 44</span>
+      <h2>Effect size: signifikan belum tentu berarti</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung Cohen's d, dan menjelaskan kenapa hasil yang "signifikan secara statistik" bisa saja tidak penting secara bisnis.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Masalah dengan sampel besar</h3>
+        <span class="cek"><input type="checkbox" id="h44s1"><label for="h44s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ingat Hari 24 (Central Limit Theorem): makin besar sampel, makin sempit ketidakpastiannya. Konsekuensinya: dengan sampel <strong>cukup besar</strong>, perbedaan sekecil apa pun — bahkan yang tidak ada artinya secara bisnis — akan lolos jadi "signifikan secara statistik". <strong>Effect size</strong> mengukur besarnya perbedaan dalam satuan yang tidak bergantung pada ukuran sampel.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Cohen's d</h3>
+        <span class="cek"><input type="checkbox" id="h44s2"><label for="h44s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>sp = np.sqrt(
+    ((len(aov_kontrol)-1)*aov_kontrol.var(ddof=1) +
+     (len(aov_perlakuan)-1)*aov_perlakuan.var(ddof=1)) /
+    (len(aov_kontrol)+len(aov_perlakuan)-2)
+)
+d = (aov_perlakuan.mean() - aov_kontrol.mean()) / sp
+print(f"Cohen's d = {d:.3f}")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>Cohen's d = -0.131</code></p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Membaca ukurannya</h3>
+        <span class="cek"><input type="checkbox" id="h44s3"><label for="h44s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>|d|</th><th>Ukuran efek</th></tr></thead>
+            <tbody>
+              <tr><td>~0,2</td><td>Kecil</td></tr>
+              <tr><td>~0,5</td><td>Sedang</td></tr>
+              <tr><td>~0,8</td><td>Besar</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>d = 0,131 itu <strong>sangat kecil</strong> — signifikan secara statistik (p=0,043 dari Hari 26-27), tapi nyaris tidak berarti secara praktis. Penurunan Rp 3.216 per pesanan mungkin tidak layak dikhawatirkan sendirian — tapi tetap perlu dicek lewat pendapatan total (RPV), seperti yang kamu lakukan di Hari 27.</p>
+        <div class="bahaya">
+          <strong>Ini kesalahan yang sangat sering dilakukan analis pemula:</strong> melihat p&lt;0,05 lalu langsung menyimpulkan "penting". p-value hanya bicara soal <em>kepercayaan bahwa efeknya bukan nol</em> — bukan soal <em>seberapa besar</em> efeknya. Selalu laporkan effect size di samping p-value, terutama untuk sampel besar.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h44s4"><label for="h44s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Effect size untuk proporsi (seperti konversi) dihitung beda (disebut Cohen's h), tapi intuisinya sama. Tanpa menghitung persis, menurutmu: selisih konversi 1,55 poin persen (dari 11,2% ke 12,8%) itu efek besar atau kecil secara <em>relatif</em>?</p>
+        <details>
+          <summary>Buka diskusi</summary>
+          <div class="isi"><p>Secara absolut kecil (1,55pp), tapi secara <em>relatif</em> itu kenaikan 13,8% dari baseline — cukup besar untuk bisnis. Ini contoh kenapa "besar" itu tergantung konteks: pp absolut vs persen relatif bisa memberi kesan sangat berbeda. Selalu sebutkan keduanya saat melapor.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 44 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> Cohen's d ≈0,2 kecil / 0,5 sedang / 0,8 besar. Signifikan (p kecil) ≠ penting (effect size besar) — sampel besar bisa membuat efek sepele jadi "signifikan".</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 45 ================= -->
+  <section class="day" data-hari="45">
+    <div class="day-head">
+      <span class="n mono">HARI 45</span>
+      <h2>Peeking: kenapa mengintip hasil setiap hari itu curang</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuktikan sendiri lewat simulasi kenapa menghentikan tes begitu "menang" adalah kesalahan statistik yang sangat umum — dan sangat merugikan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kebiasaan yang terlihat masuk akal</h3>
+        <span class="cek"><input type="checkbox" id="h45s1"><label for="h45s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Bayangkan kamu menjalankan A/B test, mengecek hasilnya <strong>tiap hari</strong>, dan berhenti begitu p&lt;0,05 muncul — "kenapa buang waktu kalau sudah menang?" Kedengarannya efisien dan hemat waktu. Sebenarnya ini salah satu kesalahan paling mahal di dunia A/B testing.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buktinya: A/A test — dua grup yang identik</h3>
+        <span class="cek"><input type="checkbox" id="h45s2"><label for="h45s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kita simulasikan dua grup yang <strong>benar-benar sama</strong> (tidak ada fitur baru, tidak ada efek apa pun), lalu lihat berapa sering pengecekan berulang membuat kita "menang" secara kebetulan:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>rng = np.random.default_rng(2024)
+
+def simulasi_peek(jumlah_cek, n_total=4000, p=0.11, percobaan=4000):
+    titik = np.linspace(n_total // jumlah_cek, n_total, jumlah_cek).astype(int)
+    palsu = 0
+    for _ in range(percobaan):
+        a = rng.random(n_total) < p      # dua grup, TIDAK ADA efek sungguhan
+        b = rng.random(n_total) < p
+        for t in titik:
+            x1, x2 = a[:t].sum(), b[:t].sum()
+            pp = (x1 + x2) / (2*t)
+            se = np.sqrt(pp*(1-pp)*2/t)
+            if se > 0 and abs((x2-x1)/t/se) > 1.96:
+                palsu += 1
+                break                     # berhenti begitu "menang"
+    return palsu / percobaan
+
+for c in (1, 5, 20):
+    print(f"cek {c:2d}x -> {simulasi_peek(c)*100:.1f}% 'menang' padahal tidak ada efek")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL (butuh sekitar 1-2 menit menjalankan)</span>
+          <p><code>cek  1x ->  4.8% 'menang' padahal tidak ada efek</code><br>
+          <code>cek  5x -> 13.8% 'menang' padahal tidak ada efek</code><br>
+          <code>cek 20x -> 25.8% 'menang' padahal tidak ada efek</code></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa ini terjadi</h3>
+        <span class="cek"><input type="checkbox" id="h45s3"><label for="h45s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Cek 1x: hasilnya persis 4,8% ≈ 5% — sesuai teori (α=0,05). Tapi begitu kamu cek <strong>20 kali</strong> dan berhenti begitu menang, angka false positive-nya meledak ke <strong>25,8%</strong> — lebih dari 1 dari 4!</p>
+        <div class="bahaya">
+          <strong>Kalau timmu mengecek dashboard A/B test tiap hari selama 20 hari dan langsung merayakan begitu p&lt;0,05 muncul, satu dari empat "kemenangan" seperti itu murni kebetulan — fitur barunya sama sekali tidak berpengaruh.</strong> Ini bukan teori, ini penyebab utama kenapa banyak "kemenangan" A/B test tidak pernah terlihat efeknya di angka bisnis riil setelah diluncurkan.
+        </div>
+        <div class="catatan">
+          <strong>Obatnya:</strong> tentukan ukuran sampel/durasi tes <em>di depan</em> (kamu akan belajar caranya Hari 48), lalu <strong>jangan lihat hasilnya sampai tes selesai</strong>. Kalau memang perlu memantau progres secara berkala, gunakan metode sequential testing yang dirancang khusus untuk itu — bukan uji-t/chi-square biasa yang diulang-ulang.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h45s4"><label for="h45s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Jalankan <code>simulasi_peek(40)</code> — 40 kali pengecekan. Berapa persen false positive-nya? Apakah kenaikannya dari 20x ke 40x sebesar dari 5x ke 20x?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi"><p>Sekitar <strong>31%</strong>. Naik dari 25,8% ke 31% (kenaikan 5pp), lebih kecil dari kenaikan 5x→20x (13,8%→25,8%, kenaikan 12pp). Makin sering mengintip makin buruk, tapi laju kenaikannya melambat — karena pengecekan yang berdekatan waktu hasilnya cenderung mirip (tidak sepenuhnya independen).</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 45 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> mengintip hasil A/B test berulang kali dan berhenti saat "menang" membuat tingkat false positive melonjak jauh di atas 5% — buktinya dari simulasi A/A test sendiri, bukan cuma teori.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 46 ================= -->
+  <section class="day" data-hari="46">
+    <div class="day-head">
+      <span class="n mono">HARI 46</span>
+      <h2>Multiple comparisons: menguji banyak metrik sekaligus</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjelaskan kenapa menguji banyak metrik memperbesar peluang menemukan "kemenangan" palsu, dan menerapkan koreksi Bonferroni.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Jebakan kedua: menguji terlalu banyak hal</h3>
+        <span class="cek"><input type="checkbox" id="h46s1"><label for="h46s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tiap uji statistik dengan α=0,05 punya peluang 5% menghasilkan false positive <strong>walau tidak ada efek sungguhan</strong> (ingat: itu definisi p-value dari Hari 26). Kalau kamu menguji banyak metrik sekaligus (konversi, AOV, RPV, retensi, waktu di halaman, ...), peluang <em>setidaknya satu</em> yang "menang" secara kebetulan naik cepat.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Hitung peluangnya</h3>
+        <span class="cek"><input type="checkbox" id="h46s2"><label for="h46s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>for m in (1, 5, 10, 20):
+    peluang = (1 - 0.95**m) * 100
+    print(f"{m:2d} metrik -> peluang minimal 1 false positive: {peluang:.1f}%")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code> 1 metrik -> peluang minimal 1 false positive:  5.0%</code><br>
+          <code> 5 metrik -> peluang minimal 1 false positive: 22.6%</code><br>
+          <code>10 metrik -> peluang minimal 1 false positive: 40.1%</code><br>
+          <code>20 metrik -> peluang minimal 1 false positive: 64.2%</code></p>
+        </div>
+        <p>Dengan 20 metrik yang diuji, ada peluang <strong>64%</strong> setidaknya satu akan "signifikan" murni karena kebetulan — bukan karena ada efek sungguhan. Rumusnya <code>1 - 0.95^m</code>: peluang <em>tidak ada satu pun</em> false positive dari m uji independen adalah 0,95 pangkat m.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Obatnya: satu metrik utama + koreksi Bonferroni</h3>
+        <span class="cek"><input type="checkbox" id="h46s3"><label for="h46s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><strong>Cara terbaik:</strong> tentukan satu metrik utama <em>sebelum</em> tes dimulai (ingat Hari 27 — RPV). Metrik lain jadi pendukung, bukan penentu keputusan.</p>
+        <p><strong>Kalau memang harus menguji banyak metrik sekaligus</strong> sebagai metrik utama, perketat ambang batasnya — <strong>koreksi Bonferroni</strong>: bagi 0,05 dengan jumlah uji.</p>
+        <div class="kode"><pre><code>jumlah_metrik = 8
+ambang_bonferroni = 0.05 / jumlah_metrik
+print(ambang_bonferroni)</code></pre></div>
+        <div class="hasil"><span class="tag">HASIL</span><p><code>0.00625</code> — dengan 8 metrik, p harus lebih kecil dari 0,00625 (bukan 0,05) untuk dianggap signifikan.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Jebakan tersembunyi: memotong data sampai ketemu kemenangan</h3>
+        <span class="cek"><input type="checkbox" id="h46s4"><label for="h46s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tes gagal secara keseluruhan, lalu seseorang bilang: <em>"tapi coba lihat pengguna Android di Jakarta usia 25-34 — di situ naik 40%!"</em> Ini adalah multiple comparisons dalam bentuk tersembunyi — memecah data ke banyak segmen sampai ketemu satu yang "menang" itu sama saja dengan menguji banyak metrik, hampir selalu kebetulan.</p>
+        <div class="bahaya">
+          <strong>Analisis per segmen boleh dilakukan — tapi hasilnya adalah hipotesis untuk tes berikutnya, bukan kesimpulan final.</strong> Kalau kamu menemukan pola menarik di satu segmen setelah tes selesai, jalankan tes baru yang <em>khusus</em> menguji segmen itu, dengan hipotesis yang ditentukan di awal — jangan langsung ambil kesimpulan dari pola yang "ditemukan" setelah melihat data.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h46s5"><label for="h46s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Timmu menguji 8 metrik dan salah satunya keluar dengan p=0,03. Apakah kamu percaya itu efek nyata?</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi"><p>Jangan langsung percaya. Dengan 8 metrik, peluang minimal satu false positive = 1-0,95⁸ = <strong>33,7%</strong>. Ambang Bonferroni untuk 8 metrik = 0,05/8 = <strong>0,00625</strong>, dan p=0,03 <strong>tidak lolos</strong> ambang itu. Perlakukan sebagai hipotesis, lalu uji ulang khusus metrik itu di tes terpisah.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 46 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> peluang false positive naik dengan jumlah metrik yang diuji (<code>1-0.95^m</code>). Koreksi Bonferroni: ambang = 0,05/jumlah uji. Tentukan satu metrik utama sebelum tes dimulai.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 47 ================= -->
+  <section class="day" data-hari="47">
+    <div class="day-head">
+      <span class="n mono">HARI 47</span>
+      <h2>Ulangan dari ingatan — CI, Effect Size, Peeking</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Tutup catatan. Kerjakan dari ingatan, baru buka kunci jawaban.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tujuh soal</h3>
+        <span class="cek"><input type="checkbox" id="h47s1"><label for="h47s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Apa yang diberitahukan confidence interval yang tidak diberitahukan p-value?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Sebuah efek punya p=0,001 tapi Cohen's d=0,03. Apa artinya, dan kenapa keduanya bisa "bertentangan" begitu?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Kalau kamu mengecek hasil A/B test 20 kali dan berhenti begitu p&lt;0,05, berapa persen kira-kira peluang "menang palsu" walau tidak ada efek sungguhan?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Apa obat untuk masalah peeking?</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Timmu menguji 10 metrik sekaligus tanpa metrik utama yang ditentukan di awal. Berapa peluang minimal satu false positive, dan apa solusinya?</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> (Ulangan Minggu 6) Apa bedanya <code>RANK</code> dan <code>DENSE_RANK</code>?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> (Ulangan Minggu 5) Kenapa bar chart wajib dimulai dari sumbu-y = 0?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Seberapa besar efeknya dan seberapa lebar ketidakpastiannya — bukan cuma "signifikan atau tidak".</p>
+            <p><strong>2.</strong> Signifikan secara statistik (p kecil, cukup bukti efeknya bukan nol) tapi effect size-nya sangat kecil (nyaris tidak berarti secara praktis) — biasanya terjadi karena sampel sangat besar membuat efek sekecil apa pun jadi "signifikan".</p>
+            <p><strong>3.</strong> Sekitar <strong>26%</strong> (dari simulasi Hari 45).</p>
+            <p><strong>4.</strong> Tentukan ukuran sampel/durasi di depan, jangan lihat hasilnya sampai tes selesai (atau pakai sequential testing kalau memang perlu memantau).</p>
+            <p><strong>5.</strong> 1-0,95¹⁰ = <strong>40,1%</strong>. Solusi: tentukan satu metrik utama di awal, atau pakai koreksi Bonferroni (ambang = 0,005 untuk 10 metrik).</p>
+            <p><strong>6.</strong> Keduanya kasih peringkat sama untuk yang seri, tapi <code>RANK</code> melompati nomor berikutnya, <code>DENSE_RANK</code> tidak.</p>
+            <p><strong>7.</strong> Karena panjang batang dibaca sebagai proporsi — memotong sumbu bisa membesar-besarkan perbedaan kecil secara visual.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 47 selesai</h3>
+      <p>Kalau enam dari tujuh benar, lanjut ke Hari 48. Kalau kurang, ulangi Hari 43-46 — ini kemampuan yang paling sering ditanya di wawancara data analyst tingkat menengah ke atas.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 48 ================= -->
+  <section class="day" data-hari="48">
+    <div class="day-head">
+      <span class="n mono">HARI 48</span>
+      <h2>Merancang tes dari awal: berapa sampel yang dibutuhkan?</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung ukuran sampel sebelum tes dimulai, dan mengevaluasi apakah tes yang sudah selesai (Hari 27) sebenarnya cukup kuat untuk dipercaya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Empat masukan yang dibutuhkan</h3>
+        <span class="cek"><input type="checkbox" id="h48s1"><label for="h48s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sebelum tes dimulai, jawab dulu:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Baseline</strong> — konversi sekarang (11%)</li>
+          <li><strong>MDE</strong> (minimum detectable effect) — kenaikan terkecil yang <em>layak diperjuangkan</em> bisnis. Ini keputusan bisnis, bukan statistik.</li>
+          <li><strong>α</strong> — biasanya 0,05 (ambang batas false positive yang kamu terima)</li>
+          <li><strong>Power</strong> — biasanya 0,80 (peluang mendeteksi efek kalau memang ada)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Menghitung ukuran sampel</h3>
+        <span class="cek"><input type="checkbox" id="h48s2"><label for="h48s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>from scipy import stats
+
+def n_per_grup(p1, mde_relatif, alpha=0.05, power=0.80):
+    p2 = p1 * (1 + mde_relatif)
+    z_a = stats.norm.ppf(1 - alpha/2)
+    z_b = stats.norm.ppf(power)
+    pbar = (p1 + p2) / 2
+    n = (z_a*np.sqrt(2*pbar*(1-pbar)) +
+         z_b*np.sqrt(p1*(1-p1) + p2*(1-p2)))**2 / (p2-p1)**2
+    return int(np.ceil(n))
+
+for mde in (0.05, 0.10, 0.15, 0.20):
+    n = n_per_grup(0.11, mde)
+    print(f"MDE {int(mde*100):2d}% relatif -> {n:7,} per grup ({2*n:,} total)")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <p><code>MDE  5% relatif ->  51,912 per grup (103,824 total)</code><br>
+          <code>MDE 10% relatif ->  13,253 per grup ( 26,506 total)</code><br>
+          <code>MDE 15% relatif ->   6,011 per grup ( 12,022 total)</code><br>
+          <code>MDE 20% relatif ->   3,449 per grup (  6,898 total)</code></p>
+        </div>
+        <div class="catatan">
+          <strong>Perhatikan betapa mahalnya efek kecil:</strong> mendeteksi kenaikan 5% butuh <strong>15 kali lebih banyak</strong> pengunjung dibanding kenaikan 20%. Inilah kenapa perusahaan dengan trafik kecil sebaiknya hanya menguji perubahan besar — menguji perubahan warna tombol butuh trafik yang mereka tidak punya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kabar buruk: hitung ulang power tes Hari 27</h3>
+        <span class="cek"><input type="checkbox" id="h48s3"><label for="h48s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sekarang tes kebalikannya — tes Hari 27 sudah selesai dengan n=4.000 per grup. Berapa <strong>power</strong> tes itu sebenarnya?</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>p1, p2, n = 0.11225, 0.12775, 4000
+z_a = stats.norm.ppf(0.975)
+se_null = np.sqrt(2*((p1+p2)/2)*(1-(p1+p2)/2)/n)
+se_alt  = np.sqrt(p1*(1-p1)/n + p2*(1-p2)/n)
+power = (1 - stats.norm.cdf((z_a*se_null - (p2-p1))/se_alt)
+           + stats.norm.cdf((-z_a*se_null - (p2-p1))/se_alt))
+print(f"power = {power*100:.1f}%")</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>power = 56.9%</code></p></div>
+        <div class="bahaya">
+          <strong>Hanya 57%.</strong> Padahal efeknya benar-benar ada di data kita. Artinya kalau eksperimen ini diulang 100 kali dengan trafik segini, <strong>43 kali di antaranya akan gagal menemukan efek yang nyata</strong> — kita di Hari 27 sebenarnya <em>beruntung</em>. Untuk mendeteksi kenaikan 13,8% dengan power 80% yang layak, seharusnya dipakai sekitar 7.000 pengunjung per grup, bukan 4.000.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Menyusun ulang kesimpulan Hari 27 dengan lebih jujur</h3>
+        <span class="cek"><input type="checkbox" id="h48s4"><label for="h48s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sekarang uji RPV (Hari 27 langkah 5) secara formal — bukan cuma bandingkan mean-nya:</p>
+        <div class="kode"><pre><code>t, p = stats.ttest_ind(
+    ab[ab.grup=="perlakuan"]["nilai_pesanan"],
+    ab[ab.grup=="kontrol"]["nilai_pesanan"],
+    equal_var=False
+)
+print(f"t = {t:.4f}   p = {p:.4f}")</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><code>t = 1.4149   p = 0.1571</code></p></div>
+        <div class="verdict">
+          <div class="ok"><span class="m">Konversi</span><span class="v">+13,8%</span><span class="s">p=0,033 · CI [+0,13, +2,97]pp</span></div>
+          <div class="bad"><span class="m">Nilai pesanan</span><span class="v">−3,9%</span><span class="s">p=0,043 · d=−0,13 (sangat kecil)</span></div>
+          <div class="meh"><span class="m">Pendapatan/pengunjung</span><span class="v">+9,4%</span><span class="s">p=0,157 · TIDAK signifikan</span></div>
+        </div>
+        <div class="bahaya">
+          <strong>Ini mengubah rekomendasi Hari 27.</strong> Waktu itu kamu menyimpulkan "RPV naik, jadi luncurkan" — cukup masuk akal untuk analis pemula. Tapi sekarang kamu tahu: RPV naik 9,4% <strong>secara angka</strong>, tapi <strong>tidak signifikan secara statistik</strong> (p=0,157) — bisa saja itu kebetulan. Ditambah power tes cuma 57%. <strong>Rekomendasi yang lebih tepat: lanjutkan tes 2 minggu lagi</strong> dengan trafik lebih besar, bukan langsung meluncurkan berdasarkan bukti yang masih lemah.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h48s5"><label for="h48s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau perusahaan ingin MDE 13,8% (sama seperti efek yang sebenarnya terjadi) dengan power 80%, kira-kira berapa n per grup dibutuhkan? (Petunjuk: interpolasi dari tabel langkah 2, atau jalankan <code>n_per_grup(0.11, 0.138)</code>.)</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi"><p><code>n_per_grup(0.11, 0.138)</code> → sekitar <strong>7.000</strong> per grup — mengonfirmasi angka yang disebut di langkah 3. Tes Hari 27 memakai 4.000, jauh di bawah kebutuhan sebenarnya untuk power 80%.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 48 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> hitung ukuran sampel dari baseline+MDE+α+power <em>sebelum</em> tes mulai. Setelah tes selesai, hitung power sungguhannya — power rendah (&lt;80%) berarti hasil "gagal" bisa jadi cuma karena sampel kurang besar, bukan karena tidak ada efek.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 49 ================= -->
+  <section class="day" data-hari="49">
+    <div class="day-head">
+      <span class="n mono">HARI 49</span>
+      <h2>Proyek portofolio #6: laporan keputusan A/B test</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> proyek keenam di GitHub — laporan satu halaman gaya yang benar-benar dipakai di tim produk, menggabungkan CI, effect size, power, dan kesadaran soal peeking/multiple comparisons.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Susun notebook</h3>
+        <span class="cek"><input type="checkbox" id="h49s1"><label for="h49s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Notebook Colab baru, judul <strong>06-abtest-laporan-keputusan</strong>. Susunan:</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li><strong>## Data</strong> — muat <code>abtest_checkout.csv</code></li>
+          <li><strong>## Analisis lengkap</strong> — ketiga metrik (konversi, AOV, RPV) dengan p-value, CI, dan effect size untuk masing-masing</li>
+          <li><strong>## Power &amp; ukuran sampel</strong> — power tes ini (57%), dan tabel ukuran sampel untuk beberapa MDE</li>
+          <li><strong>## Grafik</strong> — bar chart konversi <strong>dengan error bar</strong> (lihat langkah 2), histogram nilai pesanan kedua grup bertumpuk</li>
+          <li><strong>## Laporan keputusan</strong> — enam bagian dari langkah 3</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Grafik dengan error bar</h3>
+        <span class="cek"><input type="checkbox" id="h49s2"><label for="h49s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import matplotlib.pyplot as plt
+
+n1 = n2 = 4000
+err = [1.96*np.sqrt(p1*(1-p1)/n1), 1.96*np.sqrt(p2*(1-p2)/n2)]
+plt.bar(["kontrol", "perlakuan"], [p1, p2], yerr=err, capsize=8, color=["#9C6B25", "#0F6E63"])
+plt.title("Tingkat konversi dengan interval ketidakpastian 95%")
+plt.ylim(0, None)
+plt.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Dua batang dengan garis kecil ("kumis") di atasnya menunjukkan rentang ketidakpastian.</p></div>
+        <div class="bahaya">
+          <strong>Grafik bar chart konversi TANPA error bar adalah grafik yang menyembunyikan ketidakpastian.</strong> Setelah minggu ini, jangan pernah membuat grafik perbandingan tanpa menunjukkan seberapa yakin kamu pada angkanya — kebiasaan ini langsung terlihat oleh siapa pun yang paham statistik.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Laporan keputusan enam bagian</h3>
+        <span class="cek"><input type="checkbox" id="h49s3"><label for="h49s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Format satu halaman yang dipakai di tim produk sungguhan — pimpinan membaca dari atas dan sering berhenti setelah bagian 2, jadi urutannya penting:</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Keputusan &amp; alasan (satu paragraf)</strong></li>
+          <li><strong>Angka utama (satu tabel)</strong> — tiap metrik: kontrol, perlakuan, selisih, CI, p</li>
+          <li><strong>Rancangan tes</strong> — metrik utama, ukuran sampel, durasi</li>
+          <li><strong>Yang kami temukan</strong> — termasuk yang mengganggu (AOV turun)</li>
+          <li><strong>Batasan</strong> — power 57%, durasi pendek, dst.</li>
+          <li><strong>Langkah berikutnya</strong> — sampel tambahan yang dibutuhkan, keputusan untuk tiap kemungkinan hasil</li>
+        </ol>
+        <details>
+          <summary>Contoh bagian 1 (bandingkan dengan tulisanmu)</summary>
+          <div class="isi"><p>"Rekomendasi: lanjutkan tes 2 minggu lagi dengan trafik lebih besar. Konversi naik meyakinkan (p=0,033), tapi dampak ke pendapatan per pengunjung belum terbukti signifikan (p=0,157) dan tes ini kekurangan daya (power hanya 57%)."</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Unggah dan perbarui README</h3>
+        <span class="cek"><input type="checkbox" id="h49s4"><label for="h49s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>## Proyek 6: Laporan Keputusan A/B Test
+
+Analisis lengkap tiga metrik (konversi, AOV, RPV) dengan confidence
+interval dan effect size, perhitungan power (57% - kurang dari
+ambang layak 80%), dan simulasi pembuktian kenapa "mengintip" hasil
+berulang kali membesar-besarkan tingkat false positive.
+
+**Rekomendasi:** lanjutkan tes, bukan langsung luncurkan - power
+belum cukup dan metrik pendapatan belum signifikan.
+
+**Berkas:** [06-abtest-laporan-keputusan.ipynb](06-abtest-laporan-keputusan.ipynb)</code></pre></div>
+        <div class="catatan">
+          <strong>Latih ini dengan suara keras sebelum wawancara:</strong> "Kenapa tidak boleh menghentikan tes begitu hasilnya signifikan?" — jawab dengan angka simulasi Hari 45 (5%→26% false positive). "Metrik utama naik tapi metrik lain turun, apa yang kamu lakukan?" — jawab dengan RPV sebagai metrik gabungan. Pewawancara sangat menghargai jawaban yang pakai angka konkret, bukan cuma teori.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Tujuh minggu selesai — statistik terapan tingkat menengah dikuasai</h3>
+      <p>Enam proyek publik di GitHub-mu, dan kemampuan yang jarang dimiliki analis junior: berani bilang "belum cukup bukti" dengan alasan yang bisa dipertanggungjawabkan secara statistik (power, CI, effect size), bukan sekadar mengikuti p&lt;0,05.</p>
+      <p style="margin-top:14px">Minggu depan: visualisasi lanjutan — plotly untuk grafik interaktif, lalu Tableau dan Power BI secukupnya untuk lolos saringan lowongan yang mensyaratkannya. Masih dituntun hari demi hari.</p>
+      <a class="lanjut" href="https://claude.ai/code/artifact/62446bd7-6166-47dc-b19d-9359b7ea8b99">Lanjut ke M8: Visualisasi Lanjutan & BI →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu7-stat-lanjut-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

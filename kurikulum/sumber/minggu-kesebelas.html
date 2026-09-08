@@ -1,0 +1,2165 @@
+<title>Minggu Kesebelas Git &amp; Streamlit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/26a3ee5f-9d8a-4679-9977-37c06da48459">← Kembali ke M10: dbt</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 11</span>
+  <button type="button" data-hari="1" aria-selected="true">71</button>
+  <button type="button" data-hari="2" aria-selected="false">72</button>
+  <button type="button" data-hari="3" aria-selected="false">73</button>
+  <button type="button" data-hari="4" aria-selected="false">74</button>
+  <button type="button" data-hari="5" aria-selected="false">75</button>
+  <button type="button" data-hari="6" aria-selected="false">76</button>
+  <button type="button" data-hari="7" aria-selected="false">77</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Minggu 11 · Hari 71-77 · ditulis ulang mengikuti pola Bekal Python</span>
+    <h1>Git, Otomasi &amp; Streamlit: berhenti mengirim berkas, mulai mengirim tautan</h1>
+    <p class="lede">Minggu ini kamu berhenti menjadi orang yang mengirim <em>laporan-final-v3-REVISI.xlsx</em> lewat WhatsApp, dan mulai menjadi orang yang mengirim satu tautan yang isinya memperbarui dirinya sendiri tiap Senin pagi.</p>
+    <p class="lede" style="margin-top:10px">Versi sebelumnya menjelaskan alur git dalam satu blok kode 24 baris berisi tujuh perintah sekaligus. Versi ini memecahnya jadi <strong>langkah-langkah satu gagasan</strong> — satu sampai empat baris kode, lalu kotak <strong>HARUS MUNCUL</strong> berisi keluaran persis yang harus kamu lihat sebelum lanjut.</p>
+    <p class="lede" style="margin-top:10px">Setiap keluaran git dan Python di halaman ini diperoleh dengan menjalankan perintahnya sungguhan; setiap angka di bagian Streamlit dibaca dari aplikasi yang benar-benar berjalan di browser. Kalau angkamu berbeda dariku, salah satu dari kita salah ketik — dan kamu punya datanya untuk membuktikan yang mana.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 71</span>
+      <h2>Git yang benar-benar kamu ketik, bukan yang kamu baca</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menjalankan satu perubahan lewat alur git lengkap — cabang, diff, commit, gabung — dan tahu membedakan berkas yang <em>dipilih</em> dari yang cuma <em>berubah</em>.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat folder latihan dan nyalakan git di dalamnya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-1"><label for="minggu-kesebelas-v2-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka Terminal (Mac: Terminal · Windows: Git Bash). Ketik empat baris ini satu per satu, tekan Enter tiap baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>mkdir latihan-git
+cd latihan-git
+git init -b main</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Initialized empty Git repository in /home/kamu/latihan-git/.git/</code></pre></div></div>
+<p>Satu folder tersembunyi bernama <code>.git</code> baru saja dibuat di situ. Seluruh riwayat proyek nanti tinggal di dalam folder itu — bukan di cloud, bukan di GitHub.</p>
+        <div class="catatan"><strong>Kalau muncul <code>git: command not found</code>:</strong> git belum terpasang. Mac: ketik <code>xcode-select --install</code>. Windows: pasang Git for Windows dari <code>git-scm.com</code>, lalu buka Git Bash, bukan CMD.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Beri tahu git kamu siapa</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-2"><label for="minggu-kesebelas-v2-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ganti nama dan email di bawah dengan milikmu, lalu jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git config user.name &quot;Nama Kamu&quot;
+git config user.email &quot;email@kamu.com&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tidak ada apa-apa yang muncul. Kursor langsung kembali ke baris baru.</p></div>
+        <div class="catatan"><strong>Tidak ada keluaran itu benar.</strong> Sebagian besar perintah git yang berhasil memang diam. Yang berisik justru yang gagal. Kalau kamu menunggu ucapan selamat dari git, kamu akan menunggu selamanya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Buat berkas pertama, lalu tanya git apa yang ia lihat</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-3"><label for="minggu-kesebelas-v2-1-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dua baris. Yang pertama membuat berkas <code>README.md</code>, yang kedua bertanya ke git.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>echo &quot;# Analisis Penjualan Toko&quot; &gt; README.md
+git status</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>On branch main
+
+No commits yet
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+	README.md
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)</code></pre></div></div>
+<p><strong>Untracked</strong> artinya git melihat berkas itu ada, tapi belum mau mengurusnya. Git tidak pernah menyimpan apa pun tanpa kamu suruh — itu fitur, bukan kelalaian.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Simpan versi pertama</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-4"><label for="minggu-kesebelas-v2-1-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dua langkah, dan ini pasangan yang akan kamu ketik ribuan kali seumur hidup.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git add README.md
+git commit -m &quot;Commit pertama: README proyek&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[main (root-commit) 282f1a3] Commit pertama: README proyek
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md</code></pre></div></div>
+        <div class="catatan"><strong>Tujuh huruf-angka itu punyamu pasti beda.</strong> <code>282f1a3</code> adalah sidik jari commit — dihitung dari isi, waktu, dan namamu. Tidak ada dua orang di dunia yang mendapat angka sama. Yang harus sama denganku cuma <code>1 file changed, 1 insertion(+)</code>.</div>
+<p><code>git add</code> memilih apa yang mau disimpan. <code>git commit</code> menyimpannya sungguhan, dengan catatan kenapa. Dua perintah, bukan satu, dan sebentar lagi kamu tahu kenapa pemisahan itu berharga.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Buat cabang sebelum mengubah apa pun</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-5"><label for="minggu-kesebelas-v2-1-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git switch -c catatan-metodologi</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Switched to a new branch &#x27;catatan-metodologi&#x27;</code></pre></div></div>
+<p>Cabang (<em>branch</em>) adalah salinan pekerjaan yang bisa kamu rusak tanpa merusak <code>main</code>. Di portofolio pribadi ini terasa berlebihan. Di tim, mengubah <code>main</code> langsung adalah pelanggaran yang membuat orang menegurmu di hari pertama.</p>
+        <div class="catatan"><strong>Kalau git-mu tua dan menolak <code>switch</code>:</strong> pakai <code>git checkout -b catatan-metodologi</code>. Sama persis hasilnya. <code>switch</code> baru ada sejak git 2.23 (2019) dan lebih sulit disalahketik.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Ubah berkasnya, lalu lihat bedanya baris demi baris</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-6"><label for="minggu-kesebelas-v2-1-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan tiga baris ke README, lalu minta git menunjukkan perubahannya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>printf &quot;\n## Metodologi\n\nRetur dihitung negatif, bukan dibuang.\n&quot; &gt;&gt; README.md
+git diff</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>diff --git a/README.md b/README.md
+index 440f372..2dffde4 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1,5 @@
+ # Analisis Penjualan Toko
++
++## Metodologi
++
++Retur dihitung negatif, bukan dibuang.</code></pre></div></div>
+<p>Baris berawalan <code>+</code> ditambahkan; kalau ada <code>-</code> berarti dihapus. Inilah yang dibaca orang saat mereview pekerjaanmu — dan inilah yang harus kamu baca sendiri sebelum menyerahkannya.</p>
+        <div class="catatan"><strong>Kalau layarnya berhenti dan ada tanda <code>:</code> di bawah:</strong> git sedang menahan tampilan supaya bisa digulung. Tekan <kbd>q</kbd> untuk keluar. Ini yang paling sering membuat pemula mengira terminalnya menggantung.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Perhatikan kolom yang bergeser satu spasi</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-7"><label for="minggu-kesebelas-v2-1-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan <code>git status -s</code> — versi ringkasnya. Lalu <code>git add</code>, lalu jalankan lagi. Perhatikan baik-baik posisi hurufnya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git status -s
+git add README.md
+git status -s</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code> M README.md
+M  README.md</code></pre></div></div>
+<p>Dua baris itu <strong>tidak sama</strong>. Yang pertama: spasi dulu, baru <code>M</code>. Yang kedua: <code>M</code> dulu, baru spasi. Kalau di layarmu terlihat mirip, hitung spasinya.</p>
+<p><strong>Kolom kiri = sudah dipilih untuk disimpan. Kolom kanan = berubah tapi belum dipilih.</strong> Satu spasi geser, dua arti berbeda. Sekali kamu melihatnya, kamu tidak bisa tidak melihatnya lagi.</p>
+<details>
+          <summary>Kenapa git repot memisahkan "dipilih" dan "berubah"?</summary>
+          <div class="isi">
+            <p>Karena kamu sering mengubah lima berkas sekaligus, tapi cuma tiga di antaranya
+            yang layak disimpan bersama sebagai satu perubahan yang masuk akal. Yang dua lagi
+            — misalnya berkas berisi kata sandi percobaan — tidak boleh ikut.</p>
+            <p>Coba sendiri: jalankan <code>git diff</code> sekarang, sesudah <code>git add</code>.
+            Hasilnya <strong>kosong</strong>. Bukan karena perubahanmu hilang, tapi karena
+            <code>git diff</code> hanya menunjukkan yang <em>belum</em> dipilih. Untuk melihat
+            yang sudah dipilih, pakai <code>git diff --staged</code>. Ini jebakan yang membuat
+            orang panik dan mengetik ulang pekerjaannya.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Tulis pesan commit yang masih berguna enam bulan lagi</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-8"><label for="minggu-kesebelas-v2-1-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Perintah ini punya dua <code>-m</code>. Yang pertama judul, yang kedua alasan. Salin apa adanya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git commit -m &quot;Jelaskan perlakuan retur di README&quot; \
+  -m &quot;Pembaca perlu tahu retur dihitung negatif, bukan dibuang.&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[catatan-metodologi 1b1d321] Jelaskan perlakuan retur di README
+ 1 file changed, 4 insertions(+)</code></pre></div></div>
+<p>Judul menjawab <em>apa</em>. Badan menjawab <em>kenapa</em>. Kode sudah memberitahu apa yang berubah — yang tidak bisa dibaca dari kode adalah alasannya.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Pesan yang buruk</th>
+<th>Pesan yang berguna</th>
+<th>Kenapa</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>update</code></td><td><code>Perbaiki JOIN ganda di mart harian</code></td><td>Enam bulan lagi kamu perlu tahu apa yang berubah</td></tr>
+              <tr><td><code>fix bug</code></td><td><code>Ganti inner join jadi left join supaya produk tanpa penjualan tetap muncul</code></td><td>Menjelaskan keputusan, bukan cuma tindakan</td></tr>
+              <tr><td><code>asdfgh</code></td><td><code>Tambah test rekonsiliasi omzet mart vs sumber</code></td><td>Riwayat commit adalah dokumentasi yang tidak pernah basi</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Lihat riwayatnya, lalu kembali ke main</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-9"><label for="minggu-kesebelas-v2-1-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tiga baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git log --oneline
+git switch main
+cat README.md</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>1b1d321 Jelaskan perlakuan retur di README
+282f1a3 Commit pertama: README proyek
+Switched to branch &#x27;main&#x27;
+# Analisis Penjualan Toko</code></pre></div></div>
+<p><strong>Bagian Metodologi hilang dari README.</strong> Itu bukan kerusakan — itu inti cabang. Perubahanmu masih utuh di cabang <code>catatan-metodologi</code>; <code>main</code> memang belum tahu apa-apa soal itu.</p>
+        <div class="bahaya"><strong>Jangan panik di titik ini.</strong> Berkas yang “hilang” saat berpindah cabang adalah pemandangan normal yang paling sering membuat pemula mengira pekerjaannya lenyap. Ketik <code>git switch catatan-metodologi</code> dan isinya kembali. Tidak ada yang hilang selama sudah di-<em>commit</em>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Gabungkan, lalu bersihkan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-10"><label for="minggu-kesebelas-v2-1-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dari <code>main</code>, jalankan dua baris ini.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git merge catatan-metodologi
+git branch -d catatan-metodologi</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Updating 282f1a3..1b1d321
+Fast-forward
+ README.md | 4 ++++
+ 1 file changed, 4 insertions(+)
+Deleted branch catatan-metodologi (was 1b1d321).</code></pre></div></div>
+<p><em>Fast-forward</em> artinya <code>main</code> tidak berubah sejak cabang dibuat, jadi git cukup memajukan penunjuknya — tidak ada yang perlu didamaikan.</p>
+        <div class="catatan"><strong>Di tim, langkah ini tidak kamu lakukan sendiri.</strong> Kamu <code>git push</code>, membuka <em>pull request</em> di GitHub, dan orang lain yang menekan tombol gabung setelah membaca diff-mu. Perintahnya sama; yang berbeda cuma siapa yang menekannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-1-11"><label for="minggu-kesebelas-v2-1-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Buka folder baru, dan kerjakan seluruh alur tadi dari nol tanpa melihat: init → config → berkas → add → commit → cabang → ubah → diff → commit → main → merge → hapus cabang.</div>
+<p>Kalau macet di satu perintah, jangan buka halaman ini — ketik <code>git status</code> dulu. Sembilan dari sepuluh kali, git sendiri yang memberitahu perintah berikutnya di dalam tanda kurung. Membaca keluaran git adalah keterampilan yang lebih berharga daripada menghafal perintahnya.</p>
+        <div class="catatan"><strong>Kalau perlu tiga kali percobaan, itu wajar.</strong> Yang tidak wajar adalah menyalin ulang dari halaman ini dan merasa sudah bisa.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 71 selesai. Berhenti di sini.</h3>
+      <p><strong>Tempel di catatanmu:</strong> <code>switch -c</code> → ubah → <code>diff</code> → <code>add</code> → <code>commit -m</code> → <code>switch main</code> → <code>merge</code> → <code>branch -d</code>.</p><p style="margin-top:8px">Dan satu kebiasaan: ketik <code>git status</code> sebelum dan sesudah setiap perintah, sampai kamu bisa menebak keluarannya sebelum menekan Enter.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 72</span>
+      <h2>Kredensial yang terlanjur masuk git tidak bisa dihapus</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menulis <code>.gitignore</code> yang benar, membuktikan sendiri kenapa ia tidak menyelamatkan berkas yang terlanjur ter-commit, dan menyusun proyek Python yang bisa dijalankan ulang orang lain.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat dua hal yang tidak boleh masuk git</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-1"><label for="minggu-kesebelas-v2-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Masih di folder <code>latihan-git</code>. Buat satu berkas kata sandi dan satu folder data besar, lalu tanya git.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>printf &quot;DB_PASSWORD=rahasia123\n&quot; &gt; .env
+mkdir data
+head -c 300000 /dev/urandom &gt; data/mentah.csv
+git status -s</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>?? .env
+?? data/</code></pre></div></div>
+<p>Dua tanda tanya artinya git belum melacaknya, tapi <strong>siap</strong> melacaknya. Satu <code>git add .</code> yang terlalu cepat, dan kata sandi klienmu masuk ke internet.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tulis daftar yang harus diabaikan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-2"><label for="minggu-kesebelas-v2-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat berkas bernama <code>.gitignore</code> — pakai titik di depan — berisi empat baris ini, lalu tanya git lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>printf &quot;.env\ndata/\n__pycache__/\nvenv/\n&quot; &gt; .gitignore
+git status -s</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>?? .gitignore</code></pre></div></div>
+<p><code>.env</code> dan <code>data/</code> lenyap dari daftar. Yang tersisa cuma <code>.gitignore</code> itu sendiri — dan berkas itu memang <em>harus</em> ikut ter-commit, supaya siapa pun yang meng-<em>clone</em> proyekmu mewarisi aturan yang sama.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Buktikan aturan mana yang menangkap berkas mana</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-3"><label for="minggu-kesebelas-v2-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jangan percaya begitu saja. Tanya git aturan baris ke berapa yang bekerja.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git check-ignore -v .env data/mentah.csv</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>.gitignore:1:.env	.env
+.gitignore:2:data/	data/mentah.csv</code></pre></div></div>
+<p>Dibaca begini: <em>berkas .gitignore, baris 1, aturan <code>.env</code></em> — itu yang menangkap <code>.env</code>. Kalau nanti ada berkas yang <em>seharusnya</em> diabaikan tapi tetap muncul, perintah ini yang memberitahu kenapa.</p>
+        <div class="catatan"><strong>Daftar minimal untuk proyek data:</strong> <code>.env</code> · <code>*.key</code> · <code>data/</code> · <code>*.xlsx</code> · <code>__pycache__/</code> · <code>.ipynb_checkpoints/</code> · <code>venv/</code>. Tiga kategori: kredensial, data klien, dan sampah yang bisa dibuat ulang.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Sekarang jebakannya: commit dulu, ignore belakangan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-4"><label for="minggu-kesebelas-v2-2-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Kita sengaja melakukan kesalahan yang paling sering terjadi. Simpan <code>.gitignore</code>, lalu buat kunci API dan commit — <em>sebelum</em> sempat memasukkannya ke daftar abaikan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git add .gitignore &amp;&amp; git commit -q -m &quot;Tambah .gitignore&quot;
+printf &quot;API_KEY=abc123\n&quot; &gt; kunci.txt
+git add kunci.txt &amp;&amp; git commit -q -m &quot;Simpan kunci API&quot;
+echo &quot;kunci.txt&quot; &gt;&gt; .gitignore
+git status -s</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code> M .gitignore</code></pre></div></div>
+<p><code>kunci.txt</code> <strong>tidak muncul</strong> di daftar — dan itu justru kabar buruk. Ia tidak muncul bukan karena diabaikan, tapi karena tidak ada yang berubah padanya. Ia sudah jadi milik git.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Tanya git berkas apa saja yang sudah jadi miliknya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-5"><label for="minggu-kesebelas-v2-2-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Satu baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git ls-files</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>.gitignore
+README.md
+kunci.txt</code></pre></div></div>
+        <div class="bahaya"><strong>Inilah aturan yang harus kamu hafal: <code>.gitignore</code> hanya berlaku untuk berkas yang belum pernah di-commit.</strong> Begitu sebuah berkas masuk, menambahkannya ke <code>.gitignore</code> tidak berpengaruh sama sekali. Git akan terus melacaknya, selamanya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Hentikan pelacakannya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-6"><label for="minggu-kesebelas-v2-2-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dua baris. <code>--cached</code> artinya hapus dari git, tapi berkasnya di komputermu tetap ada.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git rm --cached kunci.txt
+git commit -q -am &quot;Berhenti melacak kunci.txt&quot;
+git ls-files</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>rm &#x27;kunci.txt&#x27;
+.gitignore
+README.md</code></pre></div></div>
+<p>Sekarang bersih. Berkasnya masih ada di foldermu, tapi git sudah melepasnya.</p>
+        <div class="catatan"><strong>Tanpa <code>--cached</code>, berkasnya ikut terhapus dari komputermu.</strong> <code>git rm kunci.txt</code> menghapus dua-duanya. Satu kata yang lupa diketik, dan berkas aslinya hilang.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Sekarang periksa apakah kunci itu benar-benar hilang</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-7"><label for="minggu-kesebelas-v2-2-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jangan percaya. Cari isinya di seluruh riwayat.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git log -p --all -- kunci.txt | grep &quot;^+API_KEY&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>+API_KEY=abc123</code></pre></div></div>
+        <div class="bahaya"><strong>Kuncinya masih ada.</strong> Kamu sudah menghapus berkasnya, sudah commit pembersihannya, sudah menambahkannya ke <code>.gitignore</code> — dan isinya tetap bisa dibaca siapa pun yang meng-<em>clone</em> repositorimu. Riwayat git menyimpan semua versi lama; itu memang gunanya.</div>
+<p><strong>Jadi obatnya bukan teknis, tapi administratif: ganti kuncinya.</strong> Cabut kunci API itu di dasbor penyedianya, terbitkan yang baru. Membersihkan riwayat git bisa dilakukan (<code>git filter-repo</code>), tapi kalau repositorimu pernah publik walau lima menit, anggap kuncinya sudah bocor. Robot pemindai GitHub lebih cepat darimu.</p>
+<details>
+          <summary>Cara kerja yang membuat ini tidak pernah terjadi</summary>
+          <div class="isi">
+            <p>Tulis <code>.gitignore</code> sebagai berkas <strong>pertama</strong> di setiap
+            proyek baru — sebelum ada satu pun berkas lain, sebelum commit pertama.
+            Butuh sepuluh detik, dan menutup seluruh kelas kesalahan ini.</p>
+            <p>Dan biasakan mengetik <code>git status</code> lalu membaca daftarnya sebelum
+            <code>git add .</code>. Titik di belakang <code>add</code> berarti "semuanya",
+            termasuk yang tidak kamu sadari ada.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Susun folder proyek yang bisa dijalankan orang lain</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-8"><label for="minggu-kesebelas-v2-2-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Empat folder, tiga berkas kosong.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>mkdir -p src hasil data-contoh
+touch src/muat.py src/olah.py src/laporan.py
+find . -maxdepth 2 -not -path &#x27;./.git*&#x27; -not -path &#x27;./venv*&#x27; | sort</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>.
+./.env
+./README.md
+./data
+./data-contoh
+./data/mentah.csv
+./hasil
+./kunci.txt
+./src
+./src/laporan.py
+./src/muat.py
+./src/olah.py</code></pre></div></div>
+<p>Perhatikan <code>.env</code>, <code>data/mentah.csv</code>, dan <code>kunci.txt</code> masih di situ. Diabaikan git bukan berarti terhapus dari komputermu — mereka tetap ada dan tetap bisa kamu pakai, cuma tidak ikut ke internet.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Folder</th>
+<th>Isinya</th>
+<th>Masuk git?</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>src/</code></td><td>kode Python</td><td>ya</td></tr>
+              <tr><td><code>data/</code></td><td>data klien asli</td><td><strong>tidak pernah</strong></td></tr>
+              <tr><td><code>data-contoh/</code></td><td>beberapa baris palsu supaya orang bisa mencoba</td><td>ya</td></tr>
+              <tr><td><code>hasil/</code></td><td>keluaran yang dibuat skrip</td><td>boleh, kalau kecil</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Folder <code>data-contoh/</code> itu yang membedakan portofolio yang bisa dicoba orang dari portofolio yang cuma bisa dilihat. Perekrut yang tertarik akan meng-<em>clone</em> repomu; kalau skripmu langsung gagal karena tidak ada datanya, ketertarikan itu berhenti di situ.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Buat lingkungan virtual</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-9"><label for="minggu-kesebelas-v2-2-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dua baris. Baris kedua Mac/Linux; kalau kamu di Windows Git Bash pakai <code>source venv/Scripts/activate</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python3 -m venv venv
+source venv/bin/activate
+pip list</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Package    Version
+---------- -------
+pip        24.0
+setuptools 79.0.1</code></pre></div></div>
+        <div class="catatan"><strong>Kalau ada tambahan <code>[notice] A new release of pip is available</code>:</strong> abaikan. Itu iklan pembaruan pip, bukan kesalahan, dan muncul di hampir semua venv baru.</div>
+<p><strong>Kosong — dan itu memang tujuannya.</strong> Semua pustaka yang pernah kamu pasang di komputer ini tidak terlihat dari dalam sini. Kamu mulai dari nol, sama seperti server yang akan menjalankan kodemu nanti.</p>
+        <div class="catatan"><strong>Nama folder di depan prompt terminalmu berubah jadi <code>(venv)</code>.</strong> Itu satu-satunya tanda bahwa lingkungan virtualnya aktif. Kalau tanda itu tidak ada, <code>pip install</code>-mu masuk ke Python sistem, bukan ke proyek ini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Pasang pandas, lalu bekukan daftarnya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-10"><label for="minggu-kesebelas-v2-2-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dua baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>pip install pandas
+pip freeze &gt; requirements.txt
+cat requirements.txt</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>numpy==2.4.6
+pandas==3.0.5
+python-dateutil==2.9.0.post0
+six==1.17.0</code></pre></div></div>
+        <div class="catatan"><strong>Nomor versimu boleh berbeda dariku</strong> — itu versi terbaru saat kamu memasangnya. Yang harus sama adalah bentuknya: satu pustaka per baris, dengan tanda <code>==</code> dan nomor versi yang tepat.</div>
+<p>Kamu memasang <strong>satu</strong> pustaka, tapi daftarnya berisi <strong>empat</strong>. Tiga sisanya adalah pustaka yang dibutuhkan pandas. Inilah sebabnya <code>requirements.txt</code> dibuat oleh <code>pip freeze</code>, bukan diketik tangan — kamu tidak tahu apa saja yang diam-diam ikut terpasang.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Simpan, lalu buktikan .env tidak ikut</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-11"><label for="minggu-kesebelas-v2-2-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Commit semuanya, lalu periksa daftar berkas yang dilacak git.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git add . &amp;&amp; git commit -q -m &quot;Struktur proyek, venv, dan requirements&quot;
+git ls-files</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>.gitignore
+README.md
+requirements.txt
+src/laporan.py
+src/muat.py
+src/olah.py</code></pre></div></div>
+<p><code>.env</code>, folder <code>data/</code>, dan seluruh isi <code>venv/</code> — yang berisi ribuan berkas — tidak ada satu pun di daftar. Itu bukti bahwa <code>.gitignore</code>-mu bekerja, dan bukti itu kamu dapat dalam satu perintah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-2-12"><label for="minggu-kesebelas-v2-2-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat folder proyek baru dari nol, tanpa melihat halaman ini. Urutannya: <code>git init</code> → <strong>.gitignore duluan</strong> → struktur folder → venv → <code>pip install</code> → <code>pip freeze</code> → commit pertama.</div>
+<p>Lalu jawab dua pertanyaan tanpa membuka apa pun: <strong>(a)</strong> kenapa <code>.gitignore</code> harus jadi berkas pertama, dan <strong>(b)</strong> apa yang kamu lakukan kalau kunci API sudah terlanjur ter-commit dua minggu lalu.</p>
+<details>
+          <summary>Jawaban</summary>
+          <div class="isi">
+            <p><strong>(a)</strong> Karena <code>.gitignore</code> tidak berlaku surut. Berkas yang
+            sudah pernah ter-commit akan terus dilacak meskipun namanya ditambahkan belakangan.</p>
+            <p><strong>(b)</strong> Cabut kunci itu dan terbitkan yang baru. Menghapus berkasnya
+            tidak menghapus riwayatnya, dan repositori yang pernah publik harus dianggap sudah
+            terbaca. Membersihkan riwayat adalah langkah kedua, bukan pertama.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 72 selesai. Berhenti di sini.</h3>
+      <p><strong>Tempel di catatanmu:</strong> <code>.gitignore</code> ditulis sebelum commit pertama · <code>git check-ignore -v</code> untuk membuktikan · <code>git ls-files</code> untuk melihat apa yang sudah jadi milik git · kunci yang pernah ter-commit <strong>diganti</strong>, bukan dihapus.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 73</span>
+      <h2>Laporan yang berjalan sendiri tiap Senin pagi</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menulis skrip laporan yang memeriksa hasilnya sendiri, lalu menjadwalkannya di GitHub Actions — gratis, dan terlihat di portofoliomu sebagai lencana hijau.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapkan data contoh yang ikut masuk repo</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-1"><label for="minggu-kesebelas-v2-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dari paket zip, salin <code>data-dan-skrip/minggu-11/buat_contoh.py</code> ke folder proyekmu. Lalu satu perintah.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python buat_contoh.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris ditulis: 400
+omzet total  : Rp 224.907.000</code></pre></div></div>
+<p>Berkas <code>data-contoh/penjualan.csv</code> muncul: 400 baris penjualan enam bulan, dengan kolom <code>tanggal</code>, <code>nota</code>, <code>produk</code>, <code>qty</code>, <code>harga</code>, dan <code>jumlah</code>.</p>
+        <div class="catatan"><strong>Angka acaknya berkunci tetap (<code>Random(11)</code> di dalam skripnya),</strong> jadi berkasmu isinya sama persis dengan berkasku. Setiap angka di sisa hari ini harus cocok denganmu. Kalau tidak cocok, salah satu dari kita salah ketik — dan kamu punya datanya untuk membuktikan yang mana.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Baca dan hitung satu angka</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-2"><label for="minggu-kesebelas-v2-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat berkas <code>laporan.py</code>. Isi empat baris ini dulu — jangan lebih.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+
+df = pd.read_csv(&quot;data-contoh/penjualan.csv&quot;, parse_dates=[&quot;tanggal&quot;])
+print(df.shape)
+print(df[&quot;jumlah&quot;].sum())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>(400, 6)
+224907000</code></pre></div></div>
+<p>400 baris, 6 kolom, omzet Rp 224.907.000. Simpan angka itu — semua yang kamu hitung sesudah ini harus tetap berjumlah sama.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tambah kolom bulan, lalu kelompokkan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-3"><label for="minggu-kesebelas-v2-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan tiga baris ke <code>laporan.py</code>, jalankan lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>df[&quot;bulan&quot;] = df[&quot;tanggal&quot;].dt.strftime(&quot;%Y-%m&quot;)
+bulanan = df.groupby(&quot;bulan&quot;).agg(nota=(&quot;nota&quot;, &quot;size&quot;), omzet=(&quot;jumlah&quot;, &quot;sum&quot;))
+print(bulanan)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>         nota     omzet
+bulan                  
+2024-01    75  40606000
+2024-02    60  27246000
+2024-03    61  37041000
+2024-04    72  42260000
+2024-05    66  34812000
+2024-06    66  42942000</code></pre></div></div>
+<p><code>.dt.strftime("%Y-%m")</code> memotong tanggal jadi tahun-bulan. Kolom teks itu yang lalu jadi kunci pengelompokan — dan karena bentuknya <code>2024-01</code>, urutan abjadnya kebetulan sama dengan urutan waktunya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Pasang satu baris yang membuat skrip ini pantas dijalankan tanpa diawasi</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-4"><label for="minggu-kesebelas-v2-3-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan satu baris <code>assert</code> setelah <code>bulanan</code> dibuat.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>assert int(bulanan[&quot;omzet&quot;].sum()) == int(df[&quot;jumlah&quot;].sum()), &quot;rekap tidak sama dengan sumber&quot;
+print(&quot;rekap cocok dengan sumber&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>rekap cocok dengan sumber</code></pre></div></div>
+<p>Baris ini membandingkan hasil rekapmu dengan sumbernya. Kalau suatu hari data masuk berubah bentuk dan rekapmu diam-diam kehilangan baris, skrip ini <strong>berhenti</strong> — bukan mengirimkan angka yang salah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Lihat wujud kegagalannya sekali, supaya kamu mengenalinya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-5"><label for="minggu-kesebelas-v2-3-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ubah sementara <code>== int(df["jumlah"].sum())</code> jadi <code>== int(df["jumlah"].sum()) + 1</code>, jalankan, lalu kembalikan lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>assert int(bulanan[&quot;omzet&quot;].sum()) == int(df[&quot;jumlah&quot;].sum()) + 1, &quot;rekap tidak sama dengan sumber&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Traceback (most recent call last):
+  File &quot;laporan.py&quot;, line 8, in &lt;module&gt;
+    assert int(bulanan[&quot;omzet&quot;].sum()) == int(df[&quot;jumlah&quot;].sum()) + 1, &quot;rekap tidak sama dengan sumber&quot;
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: rekap tidak sama dengan sumber</code></pre></div></div>
+        <div class="catatan"><strong>Nomor barisnya dan alamat berkasnya pasti beda di layarmu</strong> — Python menyebut jalur lengkap foldermu. Yang harus sama adalah baris terakhir: <code>AssertionError</code> diikuti pesan yang kamu tulis sendiri.</div>
+<p>Skripnya mati dengan kode keluar <strong>1</strong>. Itu angka yang dibaca GitHub Actions untuk memutuskan lencana merah atau hijau. Inilah yang menghubungkan satu baris <code>assert</code> di kodemu dengan email peringatan di kotak masukmu.</p>
+        <div class="bahaya"><strong>Jangan lupa mengembalikan <code>+ 1</code>-nya.</strong> Jalankan sekali lagi dan pastikan tulisannya kembali <code>rekap cocok dengan sumber</code> sebelum lanjut.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Tulis hasilnya ke berkas</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-6"><label for="minggu-kesebelas-v2-3-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ganti bagian <code>print</code>-mu dengan blok ini. Perhatikan fungsi <code>rp()</code> di atas.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>from datetime import datetime, timezone
+
+def rp(x):
+    return &quot;Rp &quot; + f&quot;{int(x):,}&quot;.replace(&quot;,&quot;, &quot;.&quot;)
+
+waktu = datetime.now(timezone.utc).strftime(&quot;%Y-%m-%d %H:%M UTC&quot;)
+with open(&quot;hasil/ringkasan.md&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;# Ringkasan Penjualan\n\n&quot;)
+    f.write(f&quot;Diperbarui otomatis: {waktu}\n\n&quot;)
+    f.write(f&quot;{len(df)} nota, omzet {rp(df[&#x27;jumlah&#x27;].sum())}\n\n&quot;)
+    f.write(&quot;## Per bulan\n\n```\n&quot; + bulanan.to_string() + &quot;\n```\n&quot;)
+
+print(&quot;baris dibaca:&quot;, len(df))
+print(&quot;omzet total :&quot;, rp(df[&quot;jumlah&quot;].sum()))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris dibaca: 400
+omzet total : Rp 224.907.000</code></pre></div></div>
+<details>
+          <summary>Kenapa pemformatan rupiahnya dibuat fungsi terpisah?</summary>
+          <div class="isi">
+            <p>Karena versi yang ditulis langsung di tempat menghasilkan bug yang tidak terlihat.
+            Coba jalankan dua baris ini dan bandingkan:</p>
+            <div class="kode"><pre><code>n = 224907000
+print(f"400 nota, omzet Rp {n:,}".replace(",", "."))</code></pre></div>
+            <p>Keluarannya <code>400 nota. omzet Rp 224.907.000</code> — koma setelah kata
+            <em>nota</em> ikut berubah jadi titik. <code>.replace()</code> tidak tahu mana koma
+            pemisah ribuan dan mana koma kalimat; ia mengganti semuanya.</p>
+            <p>Dengan <code>rp()</code>, penggantian hanya terjadi di dalam angka. Ini bug nyata
+            yang saya buat sendiri saat menulis modul ini, dan baru ketahuan karena keluarannya
+            dibaca ulang.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Izinkan satu berkas hasil masuk git — dan perhatikan bintangnya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-7"><label for="minggu-kesebelas-v2-3-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan dua baris ini ke <code>.gitignore</code>, lalu buktikan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>printf &quot;hasil/*\n!hasil/ringkasan.md\n&quot; &gt;&gt; .gitignore
+git check-ignore -v hasil/ringkasan.md</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>.gitignore:5:!hasil/ringkasan.md	hasil/ringkasan.md</code></pre></div></div>
+        <div class="bahaya"><strong>Harus <code>hasil/*</code>, bukan <code>hasil/</code>.</strong> Kalau kamu menulis <code>hasil/</code>, git tidak akan pernah masuk ke dalam folder itu, sehingga baris pengecualian <code>!hasil/ringkasan.md</code> di bawahnya <em>tidak pernah terbaca</em>. Berkasnya tetap terabaikan, tanpa peringatan apa pun. Satu tanda bintang.</div>
+        <div class="catatan"><strong>Nomor barisnya (<code>:5:</code>) boleh beda</strong> — tergantung berapa baris yang sudah ada di <code>.gitignore</code>-mu. Yang harus sama adalah tanda seru di depan nama berkasnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Tulis separuh atas berkas jadwal: kapan ia berjalan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-8"><label for="minggu-kesebelas-v2-3-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat folder dan berkasnya. Namanya harus tepat — dua tingkat folder, dan berakhiran <code>.yml</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>mkdir -p .github/workflows
+touch .github/workflows/laporan.yml</code></pre></div>
+<p>Isi enam baris pertamanya:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>name: Laporan mingguan
+
+on:
+  schedule:
+    - cron: &quot;0 23 * * 0&quot;
+  workflow_dispatch:</code></pre></div>
+<p>Dua pemicu: <code>schedule</code> menjalankannya sesuai jadwal, <code>workflow_dispatch</code> memberimu tombol untuk menjalankannya sekarang juga.</p>
+        <div class="bahaya"><strong>Spasi di YAML bukan hiasan.</strong> Kalau nanti GitHub bilang <em>“Invalid workflow file”</em>, sembilan dari sepuluh kali penyebabnya indentasi. YAML tidak menerima tab — hanya spasi.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Tulis separuh bawahnya: apa yang ia kerjakan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-9"><label for="minggu-kesebelas-v2-3-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Lanjutkan di berkas yang sama, di bawah baris <code>workflow_dispatch:</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>jobs:
+  buat-laporan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: &quot;3.11&quot;
+      - run: pip install -r requirements.txt
+      - run: python laporan.py</code></pre></div>
+<p>Baca dari atas: sewa satu komputer Ubuntu → ambil kodemu → pasang Python 3.11 → pasang pustaka dari <code>requirements.txt</code> → jalankan skripmu. Persis yang kamu lakukan sendiri di Hari 72, tapi dikerjakan mesin.</p>
+        <div class="catatan"><strong><code>permissions: contents: write</code> itu wajib</strong> untuk langkah berikutnya, yang menyimpan hasilnya kembali ke repositori. Tanpa baris itu, <code>git push</code> dari dalam Actions ditolak.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Tulis langkah terakhir: simpan hasilnya kembali</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-10"><label for="minggu-kesebelas-v2-3-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan blok ini di bawah <code>- run: python laporan.py</code>, dengan indentasi yang sama.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>      - name: Simpan hasilnya kembali ke repo
+        run: |
+          git config user.name &quot;github-actions[bot]&quot;
+          git config user.email &quot;github-actions[bot]@users.noreply.github.com&quot;
+          git add hasil/
+          git diff --staged --quiet || git commit -m &quot;Laporan otomatis $(date -u +%F)&quot;
+          git push</code></pre></div>
+<p>Robot Actions harus punya nama dan email seperti manusia — itu syarat git, bukan gaya. Baris <code>git diff --staged --quiet ||</code> yang paling penting, dan langkah nanti menjelaskan kenapa.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Baca baris jadwalnya, karena jamnya bukan jam Indonesia</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-11"><label for="minggu-kesebelas-v2-3-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hitung sendiri: <code>cron: "0 23 * * 0"</code> itu jam berapa WIB?</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang kamu inginkan (WIB)</th>
+<th>Yang ditulis di cron (UTC)</th>
+<th>Kolom cron</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Senin 06:00</td><td>Minggu 23:00</td><td><code>0 23 * * 0</code></td></tr>
+              <tr><td>Senin 07:00</td><td>Senin 00:00</td><td><code>0 0 * * 1</code></td></tr>
+              <tr><td>Tiap hari 08:00</td><td>Tiap hari 01:00</td><td><code>0 1 * * *</code></td></tr>
+              <tr><td>Tiap hari 17:00</td><td>Tiap hari 10:00</td><td><code>0 10 * * *</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+<p><strong>WIB = UTC + 7.</strong> Jadi untuk mendapat jam WIB, kurangi 7 dari jam UTC. Kalau hasilnya negatif, jadwalnya jatuh di <em>hari sebelumnya</em> menurut UTC — itulah kenapa Senin pagi ditulis sebagai hari Minggu.</p>
+        <div class="bahaya"><strong>Jadwal GitHub Actions tidak tepat waktu.</strong> Ia sering terlambat 5–30 menit, dan pada jam sibuk bisa lebih. Jangan pakai untuk hal yang bergantung pada menit. Untuk laporan mingguan, ini tidak masalah sama sekali.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Kirim ke GitHub dan jalankan sekali dengan tangan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-12"><label for="minggu-kesebelas-v2-3-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Commit dan push. Lalu di GitHub buka tab <strong>Actions</strong>, pilih <em>Laporan mingguan</em> di kiri, klik tombol <strong>Run workflow</strong>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git add . &amp;&amp; git commit -m &quot;Tambah laporan otomatis mingguan&quot;
+git push -u origin main</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Di tab Actions muncul satu baris pekerjaan dengan lingkaran kuning berputar, lalu berubah jadi <strong>centang hijau</strong> dalam 30–90 detik. Klik barisnya untuk melihat catatan tiap langkah — termasuk <code>omzet total : Rp 224.907.000</code> yang kamu cetak tadi.</p></div>
+        <div class="catatan"><strong>Kalau <code>workflow_dispatch</code> tidak kamu tulis, tombol <em>Run workflow</em> tidak muncul</strong> dan kamu harus menunggu sampai hari Senin untuk tahu skripmu jalan atau tidak. Selalu pasang baris itu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">13</span>
+        <h3>Pahami baris yang mencegah commit kosong</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-13"><label for="minggu-kesebelas-v2-3-13">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baris ini yang paling sering disalin tanpa dimengerti. Coba sendiri di komputermu, dua kali berturut-turut tanpa mengubah apa pun.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git add hasil/
+git diff --staged --quiet || git commit -m &quot;Laporan otomatis&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Kali pertama: sebuah commit dibuat. Kali kedua, tanpa perubahan apa pun: tidak terjadi apa-apa, dan tidak ada pesan error.</p></div>
+<p><code>git diff --staged --quiet</code> berhasil (benar) kalau <strong>tidak ada</strong> perubahan. Tanda <code>||</code> berarti "kalau perintah sebelumnya gagal, jalankan yang ini". Jadi commit hanya terjadi ketika benar-benar ada yang berubah.</p>
+        <div class="catatan"><strong>Tanpa baris ini, workflow-mu gagal setiap minggu ketika datanya tidak berubah</strong> — <code>git commit</code> tanpa perubahan mengembalikan kode keluar 1, dan GitHub menandainya merah. Lencana merah yang bukan karena kesalahan apa pun adalah cara tercepat membuat orang berhenti mempercayai lencananya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">14</span>
+        <h3>Simpan kredensial di tempat yang benar</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-14"><label for="minggu-kesebelas-v2-3-14">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Belum dipakai hari ini, tapi wajib kamu tahu sekarang. Di GitHub: <strong>Settings → Secrets and variables → Actions → New repository secret</strong>. Beri nama <code>DB_PASSWORD</code>.</div>
+<p>Lalu di workflow-mu, tambahkan di bawah langkah yang membutuhkannya:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>      - run: python laporan.py
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}</code></pre></div>
+<p>Di dalam Python, bacanya <code>os.environ["DB_PASSWORD"]</code> — sama persis seperti membaca dari berkas <code>.env</code> di komputermu. Kodemu tidak perlu tahu bedanya.</p>
+        <div class="catatan"><strong>GitHub menyensor nilai rahasia di catatan Actions secara otomatis.</strong> Kalau kamu tidak sengaja mencetaknya, yang muncul <code>***</code>. Jangan mengandalkan itu — penyensoran hanya bekerja untuk kecocokan persis, dan gagal kalau nilainya sudah kamu potong atau ubah.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">15</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-3-15"><label for="minggu-kesebelas-v2-3-15">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Jawab enam pertanyaan ini dengan suara keras, lalu periksa.</div>
+<ol>
+          <li>Apa gunanya baris <code>assert</code> di skrip yang berjalan tanpa diawasi?</li>
+          <li>Kenapa <code>hasil/</code> di .gitignore membuat <code>!hasil/ringkasan.md</code> tidak berfungsi?</li>
+          <li>Jam 8 pagi WIB ditulis bagaimana di cron?</li>
+          <li>Kenapa <code>workflow_dispatch</code> hampir selalu perlu ditulis?</li>
+          <li>Apa yang terjadi kalau <code>git commit</code> dijalankan tanpa perubahan?</li>
+          <li>Di mana kata sandi disimpan supaya bisa dipakai Actions tapi tidak masuk repo?</li>
+        </ol>
+<details>
+          <summary>Jawaban</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Menghentikan skrip dengan kode keluar 1 kalau hasilnya tidak
+            masuk akal, sehingga Actions menandainya merah — lebih baik daripada mengirim angka
+            yang salah tanpa suara.</p>
+            <p><strong>2.</strong> Karena git tidak pernah masuk ke folder yang seluruhnya
+            diabaikan, jadi baris pengecualian di dalamnya tidak pernah dibaca. Harus
+            <code>hasil/*</code>.</p>
+            <p><strong>3.</strong> <code>0 1 * * *</code> — 08:00 WIB dikurangi 7 jam = 01:00 UTC.</p>
+            <p><strong>4.</strong> Supaya ada tombol <em>Run workflow</em> untuk menguji sekarang,
+            tanpa menunggu jadwalnya tiba.</p>
+            <p><strong>5.</strong> Ia gagal dengan kode keluar 1, dan Actions menandai
+            pekerjaannya merah padahal tidak ada yang salah.</p>
+            <p><strong>6.</strong> Repository secrets di Settings, dibaca lewat
+            <code>${{ secrets.NAMA }}</code> dan diteruskan sebagai variabel lingkungan.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 73 selesai. Berhenti di sini.</h3>
+      <p><strong>Tempel di catatanmu:</strong> <code>assert</code> membuat skrip gagal dengan berisik · <code>hasil/*</code> bukan <code>hasil/</code> · WIB = UTC + 7 · <code>workflow_dispatch</code> selalu dipasang · <code>git diff --staged --quiet ||</code> mencegah commit kosong.</p><p style="margin-top:8px">Yang kamu punya sekarang: satu repositori yang memperbarui laporannya sendiri tiap minggu, tanpa kamu sentuh. Itu satu kalimat yang bisa kamu ucapkan di wawancara, dan tautannya bisa dibuka orang saat itu juga.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 74</span>
+      <h2>Dari notebook jadi aplikasi yang bisa dibuka dari HP</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> membangun aplikasi web berfilter hanya dengan Python, membuktikan sendiri kenapa Streamlit menjalankan ulang seluruh skripmu, dan menerbitkannya gratis.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Pasang Streamlit</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-1"><label for="minggu-kesebelas-v2-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Pastikan lingkungan virtualmu aktif — ada tulisan <code>(venv)</code> di depan prompt. Lalu satu baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>pip install streamlit</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Successfully installed altair-6.2.2 ... streamlit-1.63.0</code></pre></div></div>
+        <div class="catatan"><strong>Pemasangannya lama, 1–3 menit, dan mengunduh belasan pustaka lain.</strong> Itu wajar: Streamlit membawa server web sendiri. Nomor versimu boleh lebih baru dari <code>1.63.0</code>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tiga baris pertama</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-2"><label for="minggu-kesebelas-v2-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat berkas <code>app.py</code> berisi tepat tiga baris ini.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import streamlit as st
+
+st.title(&quot;Penjualan Toko Sumber Rejeki&quot;)
+st.write(&quot;Halo dari aplikasi pertamaku&quot;)</code></pre></div>
+<p>Lalu jalankan — perhatikan, <strong>bukan</strong> <code>python app.py</code>:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>streamlit run app.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.1.5:8501</code></pre></div></div>
+<p>Browser terbuka sendiri dan menampilkan judul besar <strong>Penjualan Toko Sumber Rejeki</strong> dengan satu baris teks di bawahnya. Tidak ada satu huruf HTML pun yang kamu tulis.</p>
+        <div class="bahaya"><strong>Kalau kamu menjalankan <code>python app.py</code>,</strong> yang muncul adalah peringatan panjang dan halaman kosong. Streamlit bukan skrip biasa — ia server, dan harus dijalankan lewat perintah <code>streamlit run</code>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Biarkan terminalnya jalan, dan pahami kenapa</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-3"><label for="minggu-kesebelas-v2-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jangan tutup terminalnya. Kembali ke editor, ubah <code>st.write</code> jadi kalimat lain, simpan, lalu lihat browsernya.</div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Di pojok kanan atas browser muncul tombol <strong>Rerun</strong> / <strong>Always rerun</strong>. Klik <em>Always rerun</em> sekali, dan sejak itu setiap kali kamu menyimpan berkas, halamannya berubah sendiri.</p></div>
+        <div class="catatan"><strong>Terminal yang “menggantung” itu benar.</strong> Server harus terus hidup selama aplikasinya dipakai. Untuk menghentikannya nanti: <kbd>Ctrl</kbd>+<kbd>C</kbd> di terminal itu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tampilkan tabelnya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-4"><label for="minggu-kesebelas-v2-4-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ganti isi <code>app.py</code> dengan ini. Simpan, lihat browser.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+import streamlit as st
+
+st.title(&quot;Penjualan Toko Sumber Rejeki&quot;)
+df = pd.read_csv(&quot;data-contoh/penjualan.csv&quot;, parse_dates=[&quot;tanggal&quot;])
+st.dataframe(df)</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Tabel 400 baris yang bisa digulung, diurutkan dengan mengklik judul kolomnya, dan dicari isinya. Kolom <code>tanggal</code> tertulis <code>2024-01-02 00:00:00</code>.</p></div>
+<p><strong>Jam <code>00:00:00</code> itu mengganggu, dan itu salahmu, bukan salah Streamlit.</strong> <code>parse_dates</code> membuat kolomnya bertipe waktu lengkap; datanya memang tidak punya jam. Perbaikannya satu baris, dan biarkan dulu — kita kembali ke sini nanti.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Tiga angka besar di atas tabel</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-5"><label for="minggu-kesebelas-v2-4-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sisipkan blok ini <em>sebelum</em> <code>st.dataframe(df)</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def rp(x):
+    return &quot;Rp &quot; + f&quot;{int(x):,}&quot;.replace(&quot;,&quot;, &quot;.&quot;)
+
+k1, k2, k3 = st.columns(3)
+k1.metric(&quot;Nota&quot;, len(df))
+k2.metric(&quot;Omzet&quot;, rp(df[&quot;jumlah&quot;].sum()))
+k3.metric(&quot;Rata-rata per nota&quot;, rp(df[&quot;jumlah&quot;].mean()))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Nota                Omzet                    Rata-rata per nota
+400                 Rp 224.907.000           Rp 562.267</code></pre></div></div>
+<p><code>st.columns(3)</code> membagi lebar halaman jadi tiga, dan tiap kolom punya perintah gambarnya sendiri. Fungsi <code>rp()</code> yang sama dari Hari 73 dipakai lagi di sini — itulah gunanya menulisnya sebagai fungsi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Pasang satu filter, dan lihat semuanya ikut berubah</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-6"><label for="minggu-kesebelas-v2-4-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sisipkan dua baris ini <em>sesudah</em> <code>df = pd.read_csv(...)</code>, lalu ganti setiap <code>df</code> di bagian metrik dan tabel menjadi <code>f</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>pilih = st.sidebar.selectbox(&quot;Produk&quot;, [&quot;(semua)&quot;] + sorted(df[&quot;produk&quot;].unique()))
+f = df if pilih == &quot;(semua)&quot; else df[df[&quot;produk&quot;] == pilih]</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Simpan. Di panel kiri muncul kotak pilihan. Pilih <strong>Pasir m3</strong>.</div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Nota                Omzet                    Rata-rata per nota
+78                  Rp 86.720.000            Rp 1.111.794</code></pre></div></div>
+<p><strong>Tiga angka dan seluruh tabel berubah, dan kamu tidak menulis satu baris pun untuk menghubungkannya.</strong> Inilah satu-satunya hal ajaib di Streamlit, dan langkah berikutnya menjelaskan bagaimana ia melakukannya.</p>
+        <div class="catatan"><strong>Kalau panel kirinya tidak terlihat:</strong> ada tanda panah kecil di pojok kiri atas untuk membukanya. Di layar HP, panel itu memang tertutup secara bawaan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Pahami satu-satunya hal yang harus kamu percaya tentang Streamlit</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-7"><label for="minggu-kesebelas-v2-4-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca kalimat ini pelan-pelan, lalu buktikan sendiri di langkah berikutnya.</div>
+        <div class="bahaya"><strong>Setiap kali kamu menyentuh apa pun di halaman, Streamlit menjalankan ulang seluruh <code>app.py</code> dari baris pertama sampai terakhir.</strong> Bukan sebagian. Semuanya.</div>
+<p>Itu sebabnya filtermu bekerja tanpa kode penghubung: variabel <code>pilih</code> berisi nilai baru, dan semua baris di bawahnya dihitung ulang dengan nilai itu. Sederhana, dan mahal.</p>
+<p>Mahal, karena <code>pd.read_csv</code> juga ikut dijalankan ulang setiap kali. Untuk 400 baris tidak terasa. Untuk 5 juta baris atau satu query ke gudang data, aplikasimu jadi tidak bisa dipakai.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Buktikan sendiri berapa kali datanya dibaca ulang</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-8"><label for="minggu-kesebelas-v2-4-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ganti baris <code>pd.read_csv</code> jadi fungsi berikut, jalankan, lalu <strong>ganti pilihan produk tiga kali</strong> sambil melihat terminalmu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def muat():
+    print(&quot;&gt;&gt;&gt; MEMUAT DATA DARI CSV&quot;)
+    return pd.read_csv(&quot;data-contoh/penjualan.csv&quot;, parse_dates=[&quot;tanggal&quot;])
+
+df = muat()</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>&gt;&gt;&gt; MEMUAT DATA DARI CSV
+&gt;&gt;&gt; MEMUAT DATA DARI CSV
+&gt;&gt;&gt; MEMUAT DATA DARI CSV
+&gt;&gt;&gt; MEMUAT DATA DARI CSV</code></pre></div></div>
+<p><strong>Empat kali:</strong> sekali saat halaman dibuka, lalu sekali untuk tiap kali kamu mengganti pilihan. Bukan tebakan — hitung sendiri baris di terminalmu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Pasang satu baris yang menghentikannya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-9"><label for="minggu-kesebelas-v2-4-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan satu baris <code>@st.cache_data</code> tepat di atas <code>def muat():</code>. Jalankan ulang dari awal (Ctrl+C lalu <code>streamlit run app.py</code>), dan ganti produk tiga kali lagi.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>@st.cache_data
+def muat():
+    print(&quot;&gt;&gt;&gt; MEMUAT DATA DARI CSV&quot;)
+    return pd.read_csv(&quot;data-contoh/penjualan.csv&quot;, parse_dates=[&quot;tanggal&quot;])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>&gt;&gt;&gt; MEMUAT DATA DARI CSV</code></pre></div></div>
+<p><strong>Satu baris, bukan empat.</strong> Streamlit menyimpan hasil fungsi itu dan memakainya kembali. Skripnya tetap dijalankan ulang seluruhnya — yang dilewati cuma isi fungsi yang ditandai.</p>
+        <div class="catatan"><strong>Kapan hasilnya dihitung ulang:</strong> kalau kode di dalam fungsinya berubah, atau kalau argumennya berbeda. Jadi kalau kamu mengubah isi CSV-nya tanpa mengubah kodenya, aplikasinya masih menampilkan data lama — tekan tombol <em>Clear cache</em> di menu tiga titik pojok kanan atas.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Tambahkan grafik</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-10"><label for="minggu-kesebelas-v2-4-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sisipkan tiga baris ini sebelum <code>st.dataframe(f)</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>f = f.copy()
+f[&quot;bulan&quot;] = f[&quot;tanggal&quot;].dt.strftime(&quot;%Y-%m&quot;)
+st.bar_chart(f.groupby(&quot;bulan&quot;)[&quot;jumlah&quot;].sum())</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Grafik batang enam bulan yang ikut berubah saat filter diganti. Sumbu kirinya menampilkan <code>5,000,000</code> sampai <code>45,000,000</code>.</p></div>
+        <div class="catatan"><strong>Perhatikan koma di sumbu grafiknya.</strong> Streamlit memformat angka dengan gaya Inggris, dan itu tidak mengikuti fungsi <code>rp()</code>-mu. Untuk laporan berbahasa Indonesia yang serius, ini harus diatur terpisah — atau angkanya dibuat dalam satuan juta supaya tidak membingungkan.</div>
+<details>
+          <summary>Kenapa <code>f.copy()</code> perlu?</summary>
+          <div class="isi">
+            <p>Karena <code>f</code> adalah potongan dari <code>df</code>, dan menambahkan kolom
+            langsung ke potongan membuat pandas mengeluarkan
+            <code>SettingWithCopyWarning</code> — peringatan yang berarti "aku tidak yakin kamu
+            sedang mengubah yang mana". <code>.copy()</code> membuat salinan mandiri sehingga
+            tidak ada keraguan.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Terbitkan gratis</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-11"><label for="minggu-kesebelas-v2-4-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Pastikan <code>app.py</code>, <code>requirements.txt</code>, dan folder <code>data-contoh/</code> sudah ter-push ke GitHub. Lalu buka <strong>share.streamlit.io</strong>, masuk dengan akun GitHub, klik <strong>New app</strong>, pilih repositori dan berkas <code>app.py</code>.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>streamlit
+pandas</code></pre></div>
+<p>Isi <code>requirements.txt</code>-mu minimal harus memuat dua baris itu — server Streamlit Cloud memasang persis apa yang tertulis di sana, dan tidak tahu apa pun tentang komputermu.</p>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Dalam 2–5 menit muncul tautan permanen berbentuk <code>https://[nama-app].streamlit.app</code> yang bisa dibuka siapa pun, termasuk dari HP.</p></div>
+        <div class="bahaya"><strong>Aplikasi ini publik.</strong> Siapa pun yang punya tautannya bisa melihat seluruh isi datanya. Yang kamu terbitkan harus data contoh atau data terbuka — <em>tidak pernah</em> data klien, sekalipun namanya sudah kamu ganti. Ini aturan yang sama dengan Bekal Rahasia Klien, dan di sini pelanggarannya permanen: halaman yang pernah publik bisa sudah terindeks mesin pencari.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-4-12"><label for="minggu-kesebelas-v2-4-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tutup halaman ini. Buat aplikasi Streamlit baru dari nol, dengan berkas CSV lain milikmu, tanpa melihat contoh ini.</div>
+<p>Targetnya: judul, satu filter di panel kiri, dua angka <code>st.metric</code>,
+        satu grafik, satu tabel, dan <code>@st.cache_data</code> di fungsi pemuat data.
+        Enam hal, dan semuanya sudah kamu ketik hari ini.</p>
+<details>
+          <summary>Kalau macet di satu bagian</summary>
+          <div class="isi">
+            <p>Streamlit punya satu kebiasaan yang menolong: ketik <code>st.write(apa_saja)</code>
+            dan ia akan mencari cara menampilkannya — DataFrame jadi tabel, angka jadi teks,
+            grafik jadi grafik. Kalau kamu tidak tahu perintah yang tepat,
+            <code>st.write</code> hampir selalu jalan.</p>
+            <p>Dan pesan error Streamlit muncul <strong>di halaman webnya</strong>, bukan cuma di
+            terminal — lengkap dengan nomor baris. Baca yang di browser dulu.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 74 selesai. Berhenti di sini.</h3>
+      <p><strong>Tempel di catatanmu:</strong> <code>streamlit run app.py</code>, bukan <code>python app.py</code> · setiap interaksi menjalankan ulang seluruh berkas · <code>@st.cache_data</code> di fungsi pemuat data · yang diterbitkan hanya data contoh.</p><p style="margin-top:8px">Empat hari terakhir menghasilkan satu hal yang bisa kamu kirim lewat WhatsApp: tautan yang hidup, isinya diperbarui sendiri tiap minggu oleh GitHub Actions.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 75</span>
+      <h2>Ulangan dari ingatan — dikerjakan di terminal, bukan dijawab di kepala</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> tidak ada materi baru. Enam soal, semuanya dikerjakan tanpa membuka catatan, sebagian besar dengan mengetik perintah sungguhan.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Aturan mainnya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-5-1"><label for="minggu-kesebelas-v2-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya"><strong>Tutup catatanmu, tutup empat hari sebelumnya, tutup Google.</strong> Enam soal di bawah dikerjakan <em>di terminal</em>, bukan dijawab di kepala. Membaca ulang terasa seperti belajar tapi tidak mengikat apa pun; memanggil dari ingatan yang mengikat.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat folder kosong bernama <code>ujian-11</code> dan masuk ke dalamnya. Semua soal dikerjakan di situ.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>mkdir ujian-11 &amp;&amp; cd ujian-11</code></pre></div>
+<p>Kalau satu soal macet lebih dari tiga menit, lewati dan lanjut. Kembali ke Hari 71–74 untuk bagian yang macet — itu justru informasi paling berguna dari ulangan ini.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Soal 1 — repositori siap pakai dalam lima perintah</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-5-2"><label for="minggu-kesebelas-v2-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dari folder kosong tadi, buat repositori git yang sudah punya <code>.gitignore</code> benar dan satu commit. Jangan melihat contoh.</div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>.gitignore
+README.md</code></pre></div></div>
+<p>Itu keluaran <code>git ls-files</code> setelah commit pertamamu. Kalau ada berkas ketiga yang tidak kamu sengaja, itu jawaban salah.</p>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>git init -b main
+printf ".env\ndata/\nvenv/\n__pycache__/\n" &gt; .gitignore
+echo "# Proyek" &gt; README.md
+git add .
+git commit -m "Kerangka proyek"</code></pre></div>
+            <p>Urutannya yang dinilai: <code>.gitignore</code> ada <strong>sebelum</strong>
+            commit pertama.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Soal 2 — buktikan .env benar-benar diabaikan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-5-3"><label for="minggu-kesebelas-v2-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat berkas <code>.env</code> berisi apa saja. Lalu buktikan dengan <strong>dua</strong> perintah berbeda bahwa git mengabaikannya.</div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>.gitignore:1:.env	.env</code></pre></div></div>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p>Bukti pertama: <code>git status -s</code> — daftarnya kosong, artinya git tidak
+            melihat berkas baru. Bukti kedua, yang lebih kuat karena menyebut alasannya:</p>
+            <div class="kode"><pre><code>git check-ignore -v .env</code></pre></div>
+            <p>Bukti kedua lebih berharga saat ada yang tidak beres, karena ia menyebutkan
+            baris ke berapa di <code>.gitignore</code> yang bekerja.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Soal 3 — cabang, ubah, gabung, hapus</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-5-4"><label for="minggu-kesebelas-v2-5-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tanpa melihat: buat cabang baru, ubah README, commit di cabang itu, kembali ke <code>main</code>, gabungkan, lalu hapus cabangnya.</div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Fast-forward
+ README.md | 1 +
+Deleted branch coba (was aa38a5a).</code></pre></div></div>
+        <div class="catatan"><strong>Nama cabang dan tujuh huruf-angkanya bebas.</strong> Yang harus sama: kata <code>Fast-forward</code> dan kalimat <code>Deleted branch</code>.</div>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>git switch -c coba
+echo "baris baru" &gt;&gt; README.md
+git commit -am "Tambah baris"
+git switch main
+git merge coba
+git branch -d coba</code></pre></div>
+            <p><code>commit -am</code> menggabungkan <code>add</code> dan <code>commit</code> —
+            tapi hanya untuk berkas yang <em>sudah</em> dilacak git. Berkas baru tetap butuh
+            <code>git add</code> tersendiri.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Soal 4 — dua soal yang dijawab dengan menulis, bukan mengetik</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-5-5"><label for="minggu-kesebelas-v2-5-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis jawabannya di kertas atau catatan, satu-dua kalimat, sebelum membuka kunci.</div>
+<ol>
+          <li>Kunci API-mu ter-commit dua minggu lalu, repositorinya publik. Kamu sudah menghapus
+          berkasnya dan menambahkannya ke <code>.gitignore</code>. Apakah masalahnya selesai?
+          Kalau belum, apa langkah pertamamu?</li>
+          <li>Kamu menulis <code>hasil/</code> lalu <code>!hasil/ringkasan.md</code> di
+          <code>.gitignore</code>, tapi berkasnya tetap tidak mau masuk git. Kenapa?</li>
+        </ol>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p><strong>1.</strong> Belum selesai. Riwayat git menyimpan semua versi lama, jadi
+            kuncinya masih bisa dibaca siapa pun yang meng-clone. Langkah pertama:
+            <strong>cabut kunci itu dan terbitkan yang baru</strong>. Membersihkan riwayat adalah
+            langkah kedua, dan untuk repositori yang pernah publik ia tidak menyelamatkan apa pun —
+            robot pemindai bekerja dalam hitungan menit.</p>
+            <p><strong>2.</strong> Karena git tidak pernah masuk ke folder yang seluruhnya
+            diabaikan, sehingga baris pengecualian di dalamnya tidak pernah terbaca. Harus
+            <code>hasil/*</code> — dengan tanda bintang.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Soal 5 — jadwal dan lencana</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-5-6"><label for="minggu-kesebelas-v2-5-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jawab tiga ini tanpa membuka apa pun.</div>
+<ol>
+          <li>Tulis baris <code>cron</code> untuk berjalan tiap hari jam 08:00 WIB.</li>
+          <li>Apa yang terjadi kalau workflow-mu menjalankan <code>git commit</code> di minggu
+          ketika datanya tidak berubah sama sekali — dan bagaimana mencegahnya?</li>
+          <li>Kenapa <code>workflow_dispatch</code> hampir selalu ditulis?</li>
+        </ol>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <code>0 1 * * *</code> — WIB = UTC + 7, jadi 08:00 WIB adalah
+            01:00 UTC.</p>
+            <p><strong>2.</strong> <code>git commit</code> tanpa perubahan mengembalikan kode
+            keluar 1, jadi pekerjaannya ditandai <strong>merah</strong> padahal tidak ada yang
+            salah. Dicegah dengan
+            <code>git diff --staged --quiet || git commit -m "..."</code>.</p>
+            <p><strong>3.</strong> Supaya ada tombol <em>Run workflow</em> untuk menguji sekarang
+            juga, tanpa menunggu jadwalnya tiba.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Soal 6 — Streamlit dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-5-7"><label for="minggu-kesebelas-v2-5-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis aplikasi Streamlit terpendek yang menampilkan judul, satu filter, dan satu angka — dari ingatan, lalu jalankan. Boleh salah; yang dinilai apakah kamu tahu bentuknya.</div>
+<details>
+          <summary>Kunci</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>import pandas as pd
+import streamlit as st
+
+@st.cache_data
+def muat():
+    return pd.read_csv("data-contoh/penjualan.csv")
+
+df = muat()
+st.title("Penjualan")
+pilih = st.sidebar.selectbox("Produk", sorted(df["produk"].unique()))
+st.metric("Nota", len(df[df["produk"] == pilih]))</code></pre></div>
+            <p>Dan satu pertanyaan yang harus kamu bisa jawab: <strong>kenapa
+            <code>@st.cache_data</code> ada di situ?</strong> Karena setiap interaksi menjalankan
+            ulang seluruh berkas dari baris pertama, termasuk pembacaan datanya.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Hitung skormu, lalu putuskan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-5-8"><label for="minggu-kesebelas-v2-5-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Beri satu poin per soal yang benar tanpa membuka kunci. Enam soal.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Skor</th>
+<th>Artinya</th>
+<th>Lakukan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>5–6</td><td>Sudah melekat</td><td>Lanjut ke Hari 76</td></tr>
+              <tr><td>3–4</td><td>Bentuknya tahu, detailnya belum</td><td>Ulangi hari yang salahnya, lalu ujian lagi besok</td></tr>
+              <tr><td>0–2</td><td>Masih membaca, belum mengerjakan</td><td>Ulangi Hari 71–74 dengan mengetik ulang semuanya</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Skor rendah di sini murah; skor rendah saat wawancara mahal.</strong> Mengulang dua hari sekarang jauh lebih hemat daripada melanjutkan dengan fondasi yang belum menempel.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 75 selesai.</h3>
+      <p>Kalau lima dari enam benar, lanjut ke proyek besar Hari 76–77. Kalau kurang, ulangi hari yang salahnya dulu — proyek dua hari ke depan menumpuk semuanya sekaligus, dan lubang kecil di sini jadi lubang besar di sana.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 76</span>
+      <h2>Proyek #9 bagian 1: pipeline yang menjalankan dirinya sendiri</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menyatukan sepuluh minggu terakhir jadi satu sistem — sumber, gudang, transformasi bertest, dan jadwal otomatis — dengan angka kontrol yang bisa dicocokkan di tiap lapisan.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lihat bentuk akhirnya sebelum mulai</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-6-1"><label for="minggu-kesebelas-v2-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Gambar empat kotak ini di kertas. Sungguh — di kertas, sekarang. Kamu akan memakainya lagi besok sebagai diagram di README.</div>
+        <div class="diagram">
+          <div class="kotak"><strong>1. SUMBER</strong>CSV mentah</div>
+          <span class="panah">→</span>
+          <div class="kotak"><strong>2. GUDANG</strong>BigQuery</div>
+          <span class="panah">→</span>
+          <div class="kotak"><strong>3. TRANSFORMASI</strong>dbt + test</div>
+          <span class="panah">→</span>
+          <div class="kotak"><strong>4. TAMPILAN</strong>Streamlit</div>
+        </div>
+<p>Dan satu panah lagi yang tidak terlihat di gambar: <strong>GitHub Actions</strong> yang menjalankan kotak 2 dan 3 tiap hari tanpa kamu sentuh.</p>
+<p>Semua bagiannya sudah kamu kerjakan terpisah selama tiga minggu terakhir. Dua hari ini cuma menyambungnya — dan justru sambungannya yang membuat proyek ini bernilai, karena hampir tidak ada pelamar yang punya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Pilih datanya, dan pilih yang lebih besar dari contoh</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-6-2"><label for="minggu-kesebelas-v2-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Putuskan sekarang, tulis pilihanmu, lalu unduh datanya.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Pilihan</th>
+<th>Kapan dipilih</th>
+<th>Ukuran</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Data kedai kopi (Minggu 10)</td><td>kamu ingin cepat dan sudah kenal datanya</td><td>151.088 baris</td></tr>
+              <tr><td><code>data.gov.sg</code> — Resale Flat Prices</td><td>target kerjamu Singapura</td><td>ratusan ribu baris</td></tr>
+              <tr><td><code>data.gov.au</code> / data ABS</td><td>target kerjamu Australia</td><td>bervariasi</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Data lokal negara tujuan punya nilai tambah yang nyata.</strong> Perekrut di Singapura mengenali "Resale Flat Prices" tanpa perlu dijelaskan, dan itu memotong separuh usaha menjelaskan proyekmu.</div>
+        <div class="bahaya"><strong>Jangan memakai data klien, sekalipun namanya sudah kamu ganti.</strong> Proyek ini akan publik dan permanen. Aturan Bekal Rahasia Klien berlaku penuh di sini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Muat ke gudang data</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-6-3"><label for="minggu-kesebelas-v2-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ikuti pola Minggu 9: buat dataset baru di BigQuery, unggah CSV-nya sebagai tabel mentah. Lalu hitung satu angka kontrol dan simpan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>SELECT COUNT(*) AS baris, SUM(harga) AS total
+FROM `proyekmu.mentah.penjualan`;</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Dua angka. Tulis keduanya di catatanmu.</p></div>
+<p><strong>Dua angka itu yang akan kamu pakai untuk membuktikan bahwa seluruh pipeline-mu tidak kehilangan apa pun.</strong> Setiap lapisan sesudah ini harus bisa dicocokkan kembali ke sini. Tanpa angka kontrol, kamu cuma berharap.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Bangun tiga lapis dbt</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-6-4"><label for="minggu-kesebelas-v2-6-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ikuti pola Minggu 10. Target minimalnya bukan sekadar meniru latihan minggu lalu.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Lapisan</th>
+<th>Jumlah minimal</th>
+<th>Isinya</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>staging/</code></td><td>1 model per tabel sumber</td><td>ganti nama kolom, betulkan tipe</td></tr>
+              <tr><td><code>intermediate/</code></td><td>minimal 2</td><td>gabungan dan perhitungan antara</td></tr>
+              <tr><td><code>marts/</code></td><td>minimal 2</td><td>tabel siap pakai untuk dashboard</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p><strong>Minimal 10 test</strong>, dan salah satunya <em>harus</em> test rekonsiliasi: total di mart dibandingkan dengan angka kontrol yang kamu catat di langkah 3. Semua model punya <code>description</code>.</p>
+        <div class="catatan"><strong>Kenapa dua mart, bukan satu?</strong> Karena besok kamu harus bisa menjelaskan keputusan itu dalam satu kalimat. Jawaban yang bagus terdengar seperti: <em>“satu mart menjawab pertanyaan waktu, satu menjawab pertanyaan produk; menggabungkannya memaksa dashboard mengagregasi ulang tiap kali.”</em></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Jalankan dari nol untuk membuktikan bukan cuma jalan di komputermu</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-6-5"><label for="minggu-kesebelas-v2-6-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Clone repositorimu sendiri ke folder baru yang benar-benar kosong, lalu jalankan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>cd /tmp
+git clone https://github.com/[username]/[repo].git uji-bersih
+cd uji-bersih
+python3 -m venv venv &amp;&amp; source venv/bin/activate
+pip install -r requirements.txt
+dbt build</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p><code>dbt build</code> selesai hijau, semua model terbangun dan semua test lulus — di folder yang tidak pernah kamu sentuh sebelumnya.</p></div>
+        <div class="bahaya"><strong>Ini langkah yang paling sering dilewati dan paling sering menjatuhkan.</strong> Proyek yang cuma jalan di komputermu akan gagal di depan perekrut yang mencobanya. Penyebab paling umum: berkas yang lupa di-commit karena terlanjur masuk <code>.gitignore</code>, dan pustaka yang kamu pasang berbulan-bulan lalu tapi tidak ada di <code>requirements.txt</code>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Pasang penjadwalan otomatis</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-6-6"><label for="minggu-kesebelas-v2-6-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ikuti pola Hari 73, tapi workflow-nya menjalankan <code>dbt build</code>, bukan skrip laporan.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>name: dbt harian
+
+on:
+  schedule:
+    - cron: &quot;0 21 * * *&quot;
+  workflow_dispatch:</code></pre></div>
+<p>Bagian <code>jobs:</code>-nya sama persis dengan Hari 73 — checkout, setup-python, <code>pip install -r requirements.txt</code> — kecuali dua baris terakhir:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>      - run: dbt build
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GCP_SA_KEY }}</code></pre></div>
+<p><code>0 21 * * *</code> = <strong>04:00 WIB tiap hari</strong> (21:00 UTC + 7 jam, jatuh di hari berikutnya). Kunci layanan Google disimpan sebagai <em>repository secret</em> bernama <code>GCP_SA_KEY</code> — tidak pernah di dalam berkas.</p>
+        <div class="catatan"><strong>Jalankan sekali dengan tombol <em>Run workflow</em> sekarang juga.</strong> Jangan menunggu jam 4 pagi untuk tahu ada salah ketik di nama secret-mu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Pasang lencananya</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-6-7"><label for="minggu-kesebelas-v2-6-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tambahkan satu baris ini di paling atas README-mu, ganti dua tanda kurung siku dengan milikmu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>![status](https://github.com/[username]/[repo]/actions/workflows/dbt.yml/badge.svg)</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Lencana hijau bertuliskan <strong>passing</strong> di paling atas halaman repositorimu.</p></div>
+<p>Lencana ini bukan hiasan. Ia bukti visual bahwa pipeline-mu <em>benar-benar berjalan</em> dan test-nya <em>benar-benar lulus</em> — hari ini, bukan waktu kamu terakhir menyentuhnya. Perekrut yang tahu artinya akan langsung melihatnya.</p>
+        <div class="bahaya"><strong>Lencana merah lebih buruk daripada tidak ada lencana.</strong> Kalau pipeline-mu gagal dan kamu biarkan, kamu sedang memasang bukti permanen bahwa kamu tidak memperhatikan pekerjaanmu sendiri. Perbaiki atau lepas lencananya.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 76 selesai. Berhenti di sini — lanjutkan besok.</h3>
+      <p>Sistemmu sekarang berjalan sendiri sampai lapisan dbt, dan buktinya ada di lencana hijau di README-mu. Besok: tampilan publik, README yang menjual, dan latihan menjelaskannya dalam 90 detik.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 77</span>
+      <h2>Proyek #9 bagian 2: dashboard publik dan cara menceritakannya</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menyelesaikan proyek kesembilan — pipeline sampai dashboard, semuanya berjalan sendiri — dan bisa menjelaskannya dalam 90 detik tanpa membuka kode.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Sambungkan dashboard ke mart, bukan ke CSV</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-7-1"><label for="minggu-kesebelas-v2-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Salin <code>app.py</code> dari Hari 74. Ganti bagian pemuat datanya jadi query ke mart dbt-mu.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>@st.cache_data(ttl=3600)
+def muat():
+    return pd.read_gbq(&quot;SELECT * FROM `proyekmu.marts.penjualan_bulanan`&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Dashboard yang sama persis seperti Hari 74, tapi angkanya datang dari gudang data yang diperbarui sendiri tiap pagi.</p></div>
+        <div class="catatan"><strong><code>ttl=3600</code> itu tambahan penting.</strong> Tanpa itu, cache-nya tidak pernah kedaluwarsa dan dashboard-mu menampilkan angka kemarin selamanya — meskipun pipeline-mu sudah memperbaruinya. Satu jam adalah kompromi yang wajar untuk data harian.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Terbitkan, lalu buka dari HP</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-7-2"><label for="minggu-kesebelas-v2-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Terbitkan ke Streamlit Community Cloud (pola Hari 74). Lalu ambil HP-mu, matikan wifi, dan buka tautannya lewat data seluler.</div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Dashboard terbuka dan bisa dipakai di layar kecil.</p></div>
+        <div class="catatan"><strong>Mematikan wifi itu bukan lelucon.</strong> Itu cara tercepat memastikan kamu tidak sedang melihat versi yang jalan di komputermu sendiri. Dan perekrut yang membuka tautanmu <em>akan</em> membukanya dari HP.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tulis README yang menjual</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-7-3"><label for="minggu-kesebelas-v2-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Susun README-mu dengan enam bagian ini, urutannya persis seperti ini.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Urutan</th>
+<th>Bagian</th>
+<th>Kenapa di posisi itu</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Lencana status</td><td>bukti pertama yang terlihat tanpa membaca</td></tr>
+              <tr><td>2</td><td>Satu kalimat: sistem ini melakukan apa</td><td>pembaca memutuskan lanjut atau tidak di sini</td></tr>
+              <tr><td>3</td><td>Tautan hidup ke dashboard</td><td>sebelum ada alasan untuk berhenti membaca</td></tr>
+              <tr><td>4</td><td>Diagram alur empat kotak</td><td>arsitektur dalam satu pandangan</td></tr>
+              <tr><td>5</td><td>Tangkapan layar lineage graph dbt</td><td>bukti transformasinya berlapis, bukan satu query</td></tr>
+              <tr><td>6</td><td>Keputusan desain — 3–4 kalimat</td><td>bagian yang membedakanmu dari pelamar lain</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Tautan hidup harus di paruh atas.</strong> Orang yang membuka repositorimu memberimu sekitar dua puluh detik. Kalau tautan dashboard-nya ada di bawah setelah lima paragraf instalasi, ia tidak akan pernah diklik.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tulis bagian yang paling jarang ada di portofolio orang</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-7-4"><label for="minggu-kesebelas-v2-7-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis bagian <strong>Keputusan desain</strong>. Tiga sampai empat kalimat, menjawab "kenapa begini" bukan "apa ini".</div>
+<p>Contoh bentuk yang baik — tirulah polanya, bukan isinya:</p>
+        <div class="kode"><pre><code>## Keputusan desain
+
+Dua mart, bukan satu: satu menjawab pertanyaan waktu (omzet per bulan),
+satu menjawab pertanyaan produk. Menggabungkannya memaksa dashboard
+mengagregasi ulang tiap kali filter diganti.
+
+Jadwal harian, bukan tiap jam: datanya sendiri hanya diperbarui harian,
+jadi menjalankan lebih sering hanya membakar kuota tanpa menambah apa pun.
+
+Retur dihitung sebagai nilai negatif, bukan dibuang, supaya omzet bersih
+di dashboard bisa dicocokkan langsung ke total di sistem sumber.</code></pre></div>
+<p><strong>Perhatikan bahwa tiap kalimat menyebut alternatif yang tidak dipilih.</strong> Itu yang membedakan "saya membuat dua mart" dari "saya memutuskan dua mart". Yang pertama laporan pekerjaan; yang kedua bukti cara berpikir.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Periksa dengan daftar tutup</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-7-5"><label for="minggu-kesebelas-v2-7-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Enam baris. Centang satu per satu, dan jangan mencentang yang belum kamu buktikan sendiri.</div>
+<ol>
+          <li><code>dbt build</code> hijau dari clone bersih di folder baru</li>
+          <li>Minimal 10 test, termasuk satu rekonsiliasi mart lawan angka kontrol sumber</li>
+          <li>GitHub Actions berjalan terjadwal, lencana hijau di README</li>
+          <li>Dashboard hidup, dibuka dari HP dengan wifi mati</li>
+          <li>Tidak ada satu pun kredensial di repositori — <strong>periksa seluruh riwayat</strong>,
+          bukan hanya kondisi terakhir</li>
+          <li>Kamu bisa menjelaskan tiap keputusan desain selama 5 menit tanpa membuka kode</li>
+        </ol>
+<p>Untuk baris kelima, jangan mengandalkan ingatan:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>git log -p --all | grep -iE &quot;password|api_key|secret|BEGIN PRIVATE KEY&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tidak ada satu baris pun keluaran. Kalau ada, kunci itu harus diganti hari ini juga — bukan dihapus.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Latih menjelaskannya dalam 90 detik</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-7-6"><label for="minggu-kesebelas-v2-7-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Nyalakan perekam suara di HP-mu. Jawab pertanyaan ini dengan suara keras, sekali jalan, tanpa berhenti. Lalu dengarkan rekamannya.</div>
+        <div class="catatan"><em>"Ceritakan satu proyek yang paling kamu banggakan."</em></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Detik</th>
+<th>Isi</th>
+<th>Contoh pembuka</th>
+</tr></thead>
+            <tbody>
+              <tr><td>0–15</td><td>konteks: data apa, pertanyaan apa</td><td>"Data harga rumah second Singapura, ratusan ribu baris…"</td></tr>
+              <tr><td>15–45</td><td>arsitektur empat lapis</td><td>"Sumbernya masuk BigQuery, dbt menyusunnya tiga lapis…"</td></tr>
+              <tr><td>45–70</td><td><strong>satu</strong> keputusan teknis yang kamu timbang</td><td>"Saya sempat menggabungkan jadi satu mart, tapi…"</td></tr>
+              <tr><td>70–90</td><td>hasil dan apa yang berjalan sendiri</td><td>"Sekarang ia memperbarui dirinya tiap pagi, tautannya…"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Dengarkan rekamanmu sendiri. Ini bagian yang tidak enak dan paling berguna.</strong> Yang biasanya terdengar: terlalu lama di bagian konteks, dan bagian keputusan teknis dilewati sama sekali — padahal itu satu-satunya bagian yang tidak bisa ditiru pelamar lain.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Ulangi sampai tidak perlu catatan</h3>
+        <span class="cek"><input type="checkbox" id="minggu-kesebelas-v2-7-7"><label for="minggu-kesebelas-v2-7-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Rekam ulang dua kali lagi, tanpa membaca tabel di atas.</div>
+<p>Target: rekaman ketiga terdengar seperti bercerita, bukan menghafal. Kalau masih terdengar seperti membaca daftar, biasanya penyebabnya bukan kurang latihan — tapi kamu belum benar-benar memutuskan keputusan teknis mana yang mau kamu ceritakan.</p>
+        <div class="catatan"><strong>Pilih satu, bukan tiga.</strong> Satu keputusan yang kamu ceritakan lengkap dengan alternatif yang kamu tolak jauh lebih kuat daripada tiga keputusan yang disebut sambil lalu.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Sebelas minggu selesai — dari satu query ke satu sistem</h3>
+      <p>Sembilan proyek publik di GitHub-mu, termasuk satu sistem menyeluruh yang berjalan tanpa kamu sentuh. Kombinasi SQL + Python + statistik + visualisasi + <em>analytics engineering</em> ini menutup hampir seluruh syarat teknis posisi <em>data analyst</em> di Singapura dan Australia — termasuk beberapa yang biasanya baru dikuasai di posisi <em>analytics engineer</em>.</p><p style="margin-top:10px"><strong>Yang membuat proyek ini bernilai:</strong> hampir semua pelamar posisi analis punya notebook berisi analisis. Sangat sedikit yang bisa menunjukkan data yang bertransformasi sendiri, menguji dirinya sendiri, dan menyajikan hasilnya lewat tautan yang hidup saat itu juga.</p><p style="margin-top:10px">Minggu depan: <em>Product &amp; Business Analytics</em> — cohort, retensi, LTV/CAC, dan peramalan. Bagian di mana kamu berhenti jadi orang yang menjalankan query, dan mulai jadi orang yang menjawab pertanyaan bisnis.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/5b5ec5dd-823f-475a-b3ef-7e825575a760">Lanjut ke Bekal Kirim Hasil →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Keluaran yang tertulis di kotak “HARUS MUNCUL” dihasilkan dengan menjalankan perintahnya di git 2.43.0, Python 3.11.15, pandas 3.0.5, dan Streamlit 1.63.0. Kotak “YANG HARUS TERLIHAT” menggambarkan apa yang muncul di layar GitHub atau di browser, bukan keluaran terminal.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu-kesebelas-v2";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

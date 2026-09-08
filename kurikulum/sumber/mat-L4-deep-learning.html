@@ -1,0 +1,1130 @@
+<title>Deep Learning dari Nol</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/6dc7de48-3ed0-4126-8455-a2c82e7bad4c">← Kembali ke MAT L3: Optimisasi numerik</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">MAT L4 · Deep Learning</span>
+  <button type="button" data-hari="1" aria-selected="true">D1</button>
+  <button type="button" data-hari="2" aria-selected="false">D2</button>
+  <button type="button" data-hari="3" aria-selected="false">D3</button>
+  <button type="button" data-hari="4" aria-selected="false">D4</button>
+  <button type="button" data-hari="5" aria-selected="false">D5</button>
+  <button type="button" data-hari="6" aria-selected="false">D6</button>
+  <button type="button" data-hari="7" aria-selected="false">D7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal Matematika S2 · L4 dari 4 · 7 hari</span>
+    <h1>Deep learning: menulisnya sendiri sebelum memanggilnya</h1>
+    <p class="lede">Target modul ini dua mata kuliah wajib sekaligus: <strong>DSA5106 <em>Deep Learning: Foundations and Techniques</em></strong> di NUS dan <strong>COMP90051 <em>Statistical Machine Learning</em></strong> di Melbourne.</p>
+    <p class="lede" style="margin-top:10px">Tujuh hari ini kamu menulis jaringan saraf dari nol dengan numpy — maju, rugi, backpropagation, pelatihan — lalu membuktikan gradien tanganmu benar sampai <strong>10⁻¹¹</strong>, dan hasil akhirnya identik dengan <code>sklearn</code> sampai jumlah parameternya: <strong>17</strong>.</p>
+    <p class="lede" style="margin-top:10px">Lalu Hari 5 menguji klaim terbesar bidang ini dengan uji latih/uji yang jujur. Hasilnya tidak seperti yang dijual orang: dari 9 parameter ke <strong>132.609 parameter</strong>, akurasi uji hanya naik <strong>3,8 poin persen</strong> — dan regresi logistik dengan 3 parameter tertinggal cuma 4,04 poin. Aku menuliskannya apa adanya.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Satu neuron = regresi logistik yang sudah kamu kenal</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> melihat bahwa “neuron” bukan hal baru — itu regresi logistik dari M13, digambar ulang — lalu menemukan sifat sigmoid yang menjelaskan kenapa jaringan dalam susah dilatih.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bongkar istilahnya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-1-1"><label for="mat-L4-deep-learning-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Istilah deep learning</th>
+<th>Yang sudah kamu kenal</th>
+<th>Dari modul</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Neuron</td><td>Satu regresi logistik</td><td>M13</td></tr>
+              <tr><td>Bobot (weight)</td><td>Koefisien β</td><td>MAT L2 Hari 4</td></tr>
+              <tr><td>Bias</td><td>Intersep β₀</td><td>MAT L2 Hari 4</td></tr>
+              <tr><td>Fungsi aktivasi</td><td>Sigmoid / logit</td><td>M13</td></tr>
+              <tr><td>Fungsi rugi (loss)</td><td>Log-loss / cross-entropy</td><td>M13</td></tr>
+              <tr><td>Pelatihan (training)</td><td>Gradient descent</td><td>MAT L3 Hari 2</td></tr>
+              <tr><td>Backpropagation</td><td>Aturan rantai untuk menghitung gradien</td><td>baru — Hari 3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          <strong>Enam dari tujuh baris sudah kamu kuasai.</strong> Yang benar-benar baru hanya satu: backpropagation. Deep learning bukan bidang baru yang harus kamu masuki dari nol — ia susunan berlapis dari hal yang sudah kamu punya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Sigmoid, dan cacatnya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-1-2"><label for="mat-L4-deep-learning-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+sig = lambda z: 1/(1 + np.exp(-z))
+
+for z in (-4, -2, -1, 0, 1, 2, 4):
+    print(f&quot;z={z:&gt;3}  sigmoid={sig(z):.6f}  turunan={sig(z)*(1-sig(z)):.6f}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>z</th>
+<th class="n">sigmoid(z)</th>
+<th class="n">turunan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>−4</td><td class="n">0,017986</td><td class="n">0,017663</td></tr>
+              <tr><td>−2</td><td class="n">0,119203</td><td class="n">0,104994</td></tr>
+              <tr><td>−1</td><td class="n">0,268941</td><td class="n">0,196612</td></tr>
+              <tr><td>0</td><td class="n">0,500000</td><td class="n"><strong>0,250000</strong></td></tr>
+              <tr><td>1</td><td class="n">0,731059</td><td class="n">0,196612</td></tr>
+              <tr><td>2</td><td class="n">0,880797</td><td class="n">0,104994</td></tr>
+              <tr><td>4</td><td class="n">0,982014</td><td class="n"><strong>0,017663</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>Turunan terbesar sigmoid cuma 0,25, dan di z=4 sudah tinggal 0,0177.</strong> Ingat MAT L3: gradient descent bergerak sebanding dengan gradien. Kalau gradiennya nyaris nol, ia praktis berhenti belajar.<p style="margin-top:8px">Sekarang kalikan: pada jaringan 10 lapis, gradien di lapis pertama dikali sekitar 0,25 sepuluh kali → 0,25¹⁰ ≈ <strong>9,5 × 10⁻⁷</strong>. Lapis-lapis awal berhenti belajar sama sekali. Ini disebut <em>vanishing gradient</em>, dan inilah alasan sebagian besar jaringan modern memakai ReLU, bukan sigmoid.</p></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;0.25 ** 10 =&quot;, 0.25 ** 10)
+relu  = lambda z: np.maximum(0, z)
+drelu = lambda z: (z &gt; 0).astype(float)
+print(&quot;turunan ReLU di z=4:&quot;, drelu(np.array([4.0])))   # tetap 1, tidak menyusut</code></pre></div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p>Besok: bukti bahwa satu lapis tidak akan pernah cukup, dengan soal yang butuh empat baris data.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>XOR: bukti empat baris bahwa satu lapis tidak cukup</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> melihat sendiri satu soal yang mustahil dipecahkan model linear — dan mengerti persis kenapa lapisan tersembunyi diperlukan, bukan sekadar bagus punya.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Soal terkecil yang mematahkan regresi</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-2-1"><label for="mat-L4-deep-learning-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+from sklearn.linear_model import LogisticRegression
+
+X = np.array([[0,0],[0,1],[1,0],[1,1]], float)
+y = np.array([0, 1, 1, 0], float)         # XOR: benar kalau TEPAT SATU yang 1
+
+lr = LogisticRegression().fit(X, y)
+print(&quot;akurasi   :&quot;, lr.score(X, y))
+print(&quot;prediksi  :&quot;, lr.predict(X))
+print(&quot;koefisien :&quot;, lr.coef_[0], &quot; intersep:&quot;, lr.intercept_[0])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>akurasi   : 0.5
+prediksi  : [0. 0. 0. 0.]
+koefisien : [0. 0.]  intersep: 0.0</code></pre></div></div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          <strong>Akurasi 50% — sama dengan melempar koin.</strong> Dan lihat koefisiennya: <strong>nol semua</strong>. Modelnya tidak gagal menemukan garis yang bagus; ia menemukan bahwa <em>tidak ada</em> garis yang lebih baik daripada menebak.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa mustahil — gambar di kertas</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-2-2"><label for="mat-L4-deep-learning-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>     x2
+      |
+    1 |  (0,1)=1        (1,1)=0
+      |
+    0 |  (0,0)=0        (1,0)=1
+      +------------------------ x1
+         0               1
+
+Coba tarik SATU garis lurus yang menaruh kedua titik &quot;1&quot;
+di satu sisi dan kedua titik &quot;0&quot; di sisi lain.</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil kertas, gambar keempat titiknya, dan coba sungguhan selama dua menit. Rasa mentok itu bagian dari materinya — inilah yang menghentikan penelitian jaringan saraf selama hampir dua puluh tahun setelah 1969.</div>
+        <div class="catatan"><strong>Titik-titik yang bernilai 1 berada di dua sudut yang berseberangan secara diagonal.</strong> Tidak ada garis lurus yang bisa memisahkan pasangan diagonal dari pasangan diagonal lainnya. Yang dibutuhkan adalah <em>dua</em> garis — dan lapisan tersembunyi persisnya adalah cara memasang beberapa garis lalu menggabungkan hasilnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kaitkan ke pekerjaanmu</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-2-3"><label for="mat-L4-deep-learning-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan"><strong>XOR terlihat seperti mainan, tapi polanya ada di data kerjamu.</strong> “Transaksi mencurigakan kalau nilainya besar <em>atau</em> jamnya aneh — tapi tidak kalau keduanya, karena itu pola tutup buku yang normal.” Itu XOR. Model linear akan gagal menangkapnya, seberapa pun banyak datamu.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sebelum menyimpulkan “datanya kurang” ketika model linearmu buruk, tanyakan dulu: <strong>apakah hubungannya memang tidak bisa dipisahkan garis lurus?</strong> Cara memeriksa yang murah: tambahkan kolom interaksi <code>x1*x2</code> dan latih ulang. Kalau tiba-tiba membaik, kamu butuh model non-linear, bukan data tambahan.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p>Besok bagian tersulit sekaligus paling memuaskan: backpropagation, dihitung tangan lalu dibuktikan benar sampai 10⁻¹¹.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Backpropagation, dihitung tangan lalu dibuktikan</h2>
+      <span class="waktu">± 3,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menurunkan sendiri gradien jaringan dua lapis dengan aturan rantai, lalu membuktikannya benar dengan pemeriksaan gradien numerik — teknik yang dipakai setiap peneliti untuk memvalidasi kode barunya.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Aturan rantai, dalam satu kalimat</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-3-1"><label for="mat-L4-deep-learning-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Backpropagation bukan algoritma baru. Ia aturan rantai kalkulus yang diterapkan berulang, dari belakang ke depan.</p>
+        <div class="kode"><pre><code>Jalur maju:
+    Z1 = X @ W1 + b1        A1 = tanh(Z1)
+    Z2 = A1 @ W2 + b2       A2 = sigmoid(Z2)
+    L  = cross_entropy(A2, y)
+
+Untuk tahu seberapa besar W1 mempengaruhi L, rantai mundur:
+
+    dL/dW1 = dL/dA2 · dA2/dZ2 · dZ2/dA1 · dA1/dZ1 · dZ1/dW1
+
+Itu saja. &quot;Backprop&quot; = menghitung rantai itu efisien,
+menyimpan hasil antara, bukan menghitung ulang.</code></pre></div>
+        <div class="catatan"><strong>Kenapa disebut “mundur”:</strong> suku pertama rantainya adalah di ujung keluaran, dan tiap suku berikutnya melangkah satu lapis ke belakang. Kamu menghitung kesalahan di ujung, lalu menyalahkan mundur lapis demi lapis.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tulis kodenya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-3-2"><label for="mat-L4-deep-learning-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+sig = lambda z: 1/(1+np.exp(-z))
+X = np.array([[0,0],[0,1],[1,0],[1,1]], float)
+y = np.array([0, 1, 1, 0], float)
+n = len(X)
+
+rng = np.random.default_rng(42)
+W1 = rng.normal(0,1,(2,2)); b1 = np.zeros(2)
+W2 = rng.normal(0,1,(2,1)); b2 = np.zeros(1)
+
+def maju(X, W1, b1, W2, b2):
+    Z1 = X @ W1 + b1; A1 = np.tanh(Z1)
+    Z2 = A1 @ W2 + b2; A2 = sig(Z2)
+    return Z1, A1, Z2, A2
+
+def rugi(A2, y):
+    e = 1e-12
+    return -np.mean(y*np.log(A2.ravel()+e) + (1-y)*np.log(1-A2.ravel()+e))
+
+Z1, A1, Z2, A2 = maju(X, W1, b1, W2, b2)
+print(&quot;rugi awal =&quot;, rugi(A2, y))
+
+# ---- backprop, empat baris inti ----
+dZ2 = (A2 - y.reshape(-1,1)) / n
+dW2 = A1.T @ dZ2;            db2 = dZ2.sum(0)
+dZ1 = (dZ2 @ W2.T) * (1 - A1**2)      # turunan tanh = 1 - tanh^2
+dW1 = X.T @ dZ1;             db1 = dZ1.sum(0)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>rugi awal = 0.928743</code></pre></div></div>
+        <div class="hasil"><span class="tag">YANG PALING SERING BIKIN BINGUNG</span>
+          <strong>Perhatikan baris <code>dZ2 = (A2 − y)/n</code>.</strong> Turunan cross-entropy terhadap keluaran sigmoid menyederhana menjadi “prediksi dikurangi kebenaran”. Kesederhanaan itu bukan kebetulan — pasangan sigmoid + cross-entropy dipilih justru karena menghasilkan bentuk ini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Buktikan kodemu benar — pemeriksaan gradien</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-3-3"><label for="mat-L4-deep-learning-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Bagaimana kamu tahu turunan yang kamu tulis tidak salah? Bandingkan dengan turunan numerik dari MAT L3 Hari 1.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def numerik(param, idx):
+    eps = 1e-6
+    asli = param[idx]
+    param[idx] = asli + eps; a = rugi(maju(X,W1,b1,W2,b2)[3], y)
+    param[idx] = asli - eps; b = rugi(maju(X,W1,b1,W2,b2)[3], y)
+    param[idx] = asli
+    return (a - b) / (2*eps)
+
+for nama, par, grad in ((&quot;W1&quot;, W1, dW1), (&quot;W2&quot;, W2, dW2)):
+    for idx in np.ndindex(par.shape):
+        g = numerik(par, idx)
+        print(f&quot;d{nama}{idx}  backprop={grad[idx]:&gt;11.8f}&quot;
+              f&quot;  numerik={g:&gt;11.8f}  selisih={abs(grad[idx]-g):.2e}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Parameter</th>
+<th class="n">Backprop (tanganmu)</th>
+<th class="n">Numerik</th>
+<th class="n">Selisih</th>
+</tr></thead>
+            <tbody>
+              <tr><td>dW1(0,0)</td><td class="n">0,13757916</td><td class="n">0,13757916</td><td class="n">5,04 × 10⁻¹¹</td></tr>
+              <tr><td>dW1(0,1)</td><td class="n">−0,01327682</td><td class="n">−0,01327682</td><td class="n">4,66 × 10⁻¹¹</td></tr>
+              <tr><td>dW1(1,0)</td><td class="n">0,22454316</td><td class="n">0,22454316</td><td class="n">1,04 × 10⁻¹¹</td></tr>
+              <tr><td>dW1(1,1)</td><td class="n">0,07074974</td><td class="n">0,07074974</td><td class="n">1,95 × 10⁻¹¹</td></tr>
+              <tr><td>dW2(0,0)</td><td class="n">−0,13323549</td><td class="n">−0,13323549</td><td class="n">1,10 × 10⁻¹¹</td></tr>
+              <tr><td>dW2(1,0)</td><td class="n">−0,09402731</td><td class="n">−0,09402731</td><td class="n">1,38 × 10⁻¹¹</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          <strong>Keenam gradien cocok sampai 10⁻¹¹.</strong> Backprop yang kamu tulis benar — dibuktikan, bukan diharapkan.</div>
+        <div class="catatan"><strong>Ini teknik kerja, bukan latihan sekolah.</strong> Setiap kali seseorang menulis lapisan atau fungsi rugi baru, hal pertama yang dilakukan adalah pemeriksaan gradien. Ia menangkap kesalahan tanda dan indeks yang jika tidak, akan muncul sebagai “model tidak mau belajar” tanpa satu pun pesan error.</div>
+        <div class="bahaya"><strong>Kenapa <code>eps = 1e-6</code> dan bukan lebih kecil.</strong> Terlalu besar, pendekatannya kasar. Terlalu kecil, pengurangan dua bilangan yang nyaris sama kehilangan presisi float dan hasilnya jadi sampah. Coba <code>eps = 1e-12</code> dan lihat sendiri selisihnya justru membesar.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p>Kamu baru menurunkan dan memverifikasi backpropagation. Besok kamu pakai untuk memecahkan XOR yang kemarin mustahil.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>Latih XOR dari nol, lalu adu dengan sklearn</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menyatukan semuanya — maju, rugi, backprop, gradient descent — menjadi jaringan yang bekerja, lalu membuktikan hasilnya setara pustaka profesional.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Lingkar pelatihan lengkap</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-4-1"><label for="mat-L4-deep-learning-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+sig = lambda z: 1/(1+np.exp(-z))
+X = np.array([[0,0],[0,1],[1,0],[1,1]], float)
+y = np.array([0,1,1,0], float); n = len(X)
+rng = np.random.default_rng(42)
+
+W1 = rng.normal(0,1,(2,4)); b1 = np.zeros(4)      # 4 neuron tersembunyi
+W2 = rng.normal(0,1,(4,1)); b2 = np.zeros(1)
+lrate = 0.5; jejak = []
+
+for it in range(5001):
+    Z1 = X @ W1 + b1; A1 = np.tanh(Z1)
+    Z2 = A1 @ W2 + b2; A2 = sig(Z2)
+    jejak.append(-np.mean(y*np.log(A2.ravel()+1e-12) +
+                          (1-y)*np.log(1-A2.ravel()+1e-12)))
+    dZ2 = (A2 - y.reshape(-1,1)) / n
+    dW2 = A1.T @ dZ2; db2 = dZ2.sum(0)
+    dZ1 = (dZ2 @ W2.T) * (1 - A1**2)
+    dW1 = X.T @ dZ1;  db1 = dZ1.sum(0)
+    W2 -= lrate*dW2; b2 -= lrate*db2
+    W1 -= lrate*dW1; b1 -= lrate*db1
+
+for it in (0, 10, 100, 500, 1000, 2000, 5000):
+    print(f&quot;iterasi {it:&gt;5}  rugi = {jejak[it]:.6f}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Iterasi</th>
+<th class="n">Rugi</th>
+</tr></thead>
+            <tbody>
+              <tr><td>0</td><td class="n">0,721792</td></tr>
+              <tr><td>10</td><td class="n">0,641630</td></tr>
+              <tr><td>100</td><td class="n">0,145909</td></tr>
+              <tr><td>500</td><td class="n">0,011645</td></tr>
+              <tr><td>1.000</td><td class="n">0,005143</td></tr>
+              <tr><td>2.000</td><td class="n">0,002386</td></tr>
+              <tr><td>5.000</td><td class="n"><strong>0,000898</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Lihat hasilnya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-4-2"><label for="mat-L4-deep-learning-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>Z1 = X @ W1 + b1; A1 = np.tanh(Z1); A2 = sig(A1 @ W2 + b2)
+print(&quot;prediksi   :&quot;, A2.ravel().round(4))
+print(&quot;dibulatkan :&quot;, (A2.ravel() &gt; 0.5).astype(int))
+print(&quot;target     :&quot;, y.astype(int))
+print(&quot;akurasi    :&quot;, ((A2.ravel() &gt; 0.5) == y).mean())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>prediksi   : [0.0001 0.9988 0.9991 0.0013]
+dibulatkan : [0 1 1 0]
+target     : [0 1 1 0]
+akurasi    : 1.0</code></pre></div></div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          <strong>Akurasi 100% pada soal yang kemarin mentok di 50%.</strong> Bedanya cuma satu: empat neuron di antara masukan dan keluaran. Kamu menulis seluruh jaringannya sendiri — 17 parameter, tanpa satu pun pustaka deep learning.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Adu dengan sklearn</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-4-3"><label for="mat-L4-deep-learning-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>from sklearn.neural_network import MLPClassifier
+m = MLPClassifier(hidden_layer_sizes=(4,), activation=&#x27;tanh&#x27;,
+                  solver=&#x27;lbfgs&#x27;, max_iter=5000, random_state=1).fit(X, y)
+print(&quot;akurasi sklearn :&quot;, m.score(X, y))
+print(&quot;prediksi        :&quot;, m.predict(X))
+print(&quot;parameter kita   :&quot;, W1.size + b1.size + W2.size + b2.size)
+print(&quot;parameter sklearn:&quot;, sum(c.size for c in m.coefs_) +
+                            sum(i.size for i in m.intercepts_))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>akurasi sklearn : 1.0
+prediksi        : [0. 1. 1. 0.]
+parameter kita   : 17
+parameter sklearn: 17</code></pre></div></div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          <strong>Jumlah parameternya sama persis: 17.</strong> Arsitektur yang kamu tulis identik dengan yang dibangun sklearn. Perbedaannya cuma cara mengoptimalkan (kita gradient descent, sklearn L-BFGS) — dan keduanya sampai ke jawaban yang sama.</div>
+        <div class="catatan"><strong>Hitung sendiri 17-nya:</strong> W1 berukuran 2×4 = 8, b1 = 4, W2 berukuran 4×1 = 4, b2 = 1. Total 17. Kemampuan menghitung jumlah parameter dari arsitektur adalah pertanyaan wawancara yang umum, dan sekarang kamu tahu dari mana angkanya.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai</h3>
+      <p>Besok pertanyaan yang paling jarang dijawab jujur: apakah menambah lapisan benar-benar membantu? Aku sudah mengukurnya, dan jawabannya tidak seperti yang dijual orang.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>Apakah lebih dalam benar-benar lebih baik? Diukur</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menguji sendiri klaim paling umum di deep learning — bahwa lebih banyak lapisan berarti lebih baik — dengan uji latih/uji yang jujur, dan menerima jawabannya apa pun itu.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapkan uji yang jujur</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-5-1"><label for="mat-L4-deep-learning-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+from sklearn.datasets import make_moons
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPClassifier
+
+Xm, ym = make_moons(n_samples=1200, noise=0.30, random_state=5)
+Xtr, Xte, ytr, yte = train_test_split(Xm, ym, test_size=0.35,
+                                      random_state=5, stratify=ym)
+sc = StandardScaler().fit(Xtr)                # fit HANYA pada latih
+Xtr_s, Xte_s = sc.transform(Xtr), sc.transform(Xte)
+print(&quot;latih:&quot;, len(Xtr), &quot; uji:&quot;, len(Xte))</code></pre></div>
+        <div class="catatan"><strong><code>StandardScaler().fit(Xtr)</code> — hanya pada data latih.</strong> Ini pelajaran MAT L3 Hari 5 yang dipakai sungguhan. Mem-<em>fit</em> pada gabungan latih+uji adalah kebocoran data, dan akan membuat seluruh tabel di bawah ini bohong.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Enam arsitektur, dari 9 sampai 132.609 parameter</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-5-2"><label for="mat-L4-deep-learning-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for h in [(2,), (4,), (16,), (64,), (64,64), (256,256,256)]:
+    mm = MLPClassifier(hidden_layer_sizes=h, activation=&#x27;relu&#x27;, solver=&#x27;adam&#x27;,
+                       max_iter=3000, random_state=5, alpha=1e-6).fit(Xtr_s, ytr)
+    npar = sum(c.size for c in mm.coefs_) + sum(i.size for i in mm.intercepts_)
+    a, b = mm.score(Xtr_s, ytr), mm.score(Xte_s, yte)
+    print(f&quot;{str(h):&lt;18}{npar:&gt;8}  latih {a:.4f}  uji {b:.4f}  selisih {a-b:.4f}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Arsitektur</th>
+<th class="n">Parameter</th>
+<th class="n">Akurasi latih</th>
+<th class="n">Akurasi uji</th>
+<th class="n">Selisih</th>
+</tr></thead>
+            <tbody>
+              <tr><td>(2,)</td><td class="n">9</td><td class="n">0,8692</td><td class="n">0,8571</td><td class="n">0,0121</td></tr>
+              <tr><td>(4,)</td><td class="n">17</td><td class="n">0,8551</td><td class="n">0,8595</td><td class="n">−0,0044</td></tr>
+              <tr><td>(16,)</td><td class="n">65</td><td class="n">0,8692</td><td class="n">0,8500</td><td class="n">0,0192</td></tr>
+              <tr><td>(64,)</td><td class="n">257</td><td class="n">0,9192</td><td class="n"><strong>0,8976</strong></td><td class="n">0,0216</td></tr>
+              <tr><td>(64, 64)</td><td class="n">4.417</td><td class="n">0,9244</td><td class="n"><strong>0,8976</strong></td><td class="n">0,0267</td></tr>
+              <tr><td>(256, 256, 256)</td><td class="n"><strong>132.609</strong></td><td class="n">0,9231</td><td class="n">0,8952</td><td class="n">0,0278</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">INI HASILNYA</span>
+          <p><strong>Baca kolom “akurasi uji” dari atas ke bawah: 0,8571 → 0,8976 → 0,8952.</strong></p><p style="margin-top:8px">Dari <strong>9 parameter</strong> ke <strong>132.609 parameter</strong> — naik <strong>14.734 kali</strong> — akurasi uji hanya naik dari 85,71% ke 89,52%. Itu <strong>3,8 poin persen</strong>. Dan arsitektur terbesar justru sedikit lebih buruk daripada (64,) yang 516 kali lebih kecil.</p></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>from sklearn.linear_model import LogisticRegression
+lg = LogisticRegression().fit(Xtr_s, ytr)
+print(&quot;regresi logistik  latih&quot;, round(lg.score(Xtr_s,ytr),4),
+      &quot; uji&quot;, round(lg.score(Xte_s,yte),4))</code></pre></div>
+        <div class="hasil"><span class="tag">PEMBANDING YANG WAJIB</span>
+          <div class="kode"><pre><code>regresi logistik  latih 0.85  uji 0.8548</code></pre></div>
+          <p style="margin-top:8px">Regresi logistik biasa — <strong>3 parameter</strong>, yang sudah kamu kuasai sejak M13 — mendapat <strong>85,48%</strong>. Jaringan 132.609 parameter mendapat 89,52%. Selisihnya <strong>4,04 poin persen</strong>.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa aku menunjukkan hasil yang mengecewakan ini</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-5-3"><label for="mat-L4-deep-learning-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya"><strong>Karena inilah yang akan kamu temui di pekerjaan nyata, dan hampir tidak ada kursus yang mengatakannya.</strong> Pada data tabular berukuran sedang — yang menjadi 90% pekerjaan analis — jaringan dalam biasanya mengalahkan model sederhana dengan selisih beberapa poin persen, dengan ongkos: waktu latih jauh lebih lama, penyetelan yang rumit, dan model yang tidak bisa kamu jelaskan ke klien.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Pertanyaan yang harus kamu ajukan</th>
+<th>Kenapa</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Berapa hasilnya kalau pakai regresi logistik?</td><td>Kalau tidak dihitung, kamu tidak tahu jaringanmu menambah apa pun.</td></tr>
+              <tr><td>Berapa hasilnya kalau pakai gradient boosting?</td><td>Di data tabular ia sering mengalahkan jaringan saraf, dengan penyetelan jauh lebih sedikit.</td></tr>
+              <tr><td>Apakah 3,8 poin persen itu bernilai bagi klien?</td><td>Kadang ya (deteksi penipuan bervolume besar), sering tidak.</td></tr>
+              <tr><td>Apakah aku bisa menjelaskan model ini?</td><td>132.609 parameter tidak bisa dijelaskan. Regresi logistik bisa.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kapan deep learning memang menang telak:</strong> gambar, suara, teks, dan video — data yang strukturnya berdimensi sangat tinggi dan berpola spasial atau berurutan. Di sana selisihnya bukan 4 poin persen, tapi puluhan. Untuk tabel berisi kolom rupiah dan tanggal, ia jarang jadi jawaban terbaik.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Regularisasi: apa yang terjadi kalau ditekan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-5-4"><label for="mat-L4-deep-learning-5-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for al in (1e-6, 1e-3, 1e-1, 1.0, 10.0):
+    mm = MLPClassifier(hidden_layer_sizes=(256,256,256), activation=&#x27;relu&#x27;,
+                       solver=&#x27;adam&#x27;, max_iter=3000, random_state=5,
+                       alpha=al).fit(Xtr_s, ytr)
+    a, b = mm.score(Xtr_s, ytr), mm.score(Xte_s, yte)
+    print(f&quot;alpha={al:&lt;8} latih {a:.4f}  uji {b:.4f}  selisih {a-b:.4f}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>alpha</th>
+<th class="n">Akurasi latih</th>
+<th class="n">Akurasi uji</th>
+<th class="n">Selisih</th>
+</tr></thead>
+            <tbody>
+              <tr><td>0,000001</td><td class="n">0,9231</td><td class="n">0,8952</td><td class="n">0,0278</td></tr>
+              <tr><td>0,001</td><td class="n">0,9231</td><td class="n">0,8929</td><td class="n">0,0302</td></tr>
+              <tr><td>0,1</td><td class="n">0,9167</td><td class="n">0,8929</td><td class="n">0,0238</td></tr>
+              <tr><td>1,0</td><td class="n">0,9205</td><td class="n">0,8952</td><td class="n">0,0253</td></tr>
+              <tr><td>10,0</td><td class="n"><strong>0,8551</strong></td><td class="n">0,8571</td><td class="n"><strong>−0,0020</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">CARA MEMBACANYA</span>
+          <p><strong>Baris terakhir menarik dan jujur.</strong> Dengan alpha = 10, selisih latih−uji jadi <strong>negatif</strong> — modelnya tidak lagi menghafal sama sekali. Tapi akurasi ujinya turun ke 0,8571, yaitu <em>sama dengan jaringan 9 parameter</em>. Regularisasi yang terlalu kuat menghapus 132.608 parameter sisanya secara efektif.</p><p style="margin-top:8px">Dan perhatikan: alpha 0,000001 sampai 1,0 nyaris tidak mengubah apa pun (0,8952 → 0,8929 → 0,8929 → 0,8952). Penyetelan yang banyak orang habiskan berhari-hari, di kasus ini, tidak menghasilkan apa-apa.</p></div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 5 selesai</h3>
+      <p>Besok: daftar periksa yang membuat modelmu bisa dipercaya orang lain — dan bagian yang paling sering dilewati praktisi.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 6</span>
+      <h2>Membuat model yang bisa dipertanggungjawabkan</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengubah “modelku akurasinya 89%” menjadi laporan yang bisa ditelaah orang lain — memakai refleks kertas kerja yang sudah kamu punya.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Akurasi tunggal hampir selalu menyesatkan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-6-1"><label for="mat-L4-deep-learning-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.neural_network import MLPClassifier
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# data timpang: hanya 3% kelas positif -- seperti deteksi kecurangan
+X, y = make_classification(n_samples=4000, n_features=10, weights=[0.97],
+                           flip_y=0.01, random_state=5)
+Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.3,
+                                      random_state=5, stratify=y)
+sc = StandardScaler().fit(Xtr)
+Xtr, Xte = sc.transform(Xtr), sc.transform(Xte)
+
+print(&quot;proporsi positif:&quot;, round(ytr.mean(), 4))
+print(&quot;akurasi kalau SELALU menjawab &#x27;negatif&#x27;:&quot;, round(1 - yte.mean(), 4))
+
+m = MLPClassifier(hidden_layer_sizes=(32,), max_iter=2000,
+                  random_state=5).fit(Xtr, ytr)
+print(&quot;akurasi model:&quot;, round(m.score(Xte, yte), 4))
+print(confusion_matrix(yte, m.predict(Xte)))
+print(classification_report(yte, m.predict(Xte), digits=4))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>proporsi positif: 0.035
+akurasi kalau SELALU menjawab &#39;negatif&#39;: 0.965
+akurasi model: 0.9683
+
+[[1147   11]
+ [  27   15]]</code></pre></div></div>
+        <div class="hasil"><span class="tag">INI YANG DISEMBUNYIKAN AKURASI</span>
+          <p><strong>Model kalah telak justru saat kelihatan menang.</strong></p><p style="margin-top:8px">Menjawab “negatif” untuk semuanya memberi akurasi <strong>0,965</strong>. Model dengan 32 neuron memberi <strong>0,9683</strong> — lebih baik <strong>0,33 poin persen</strong>.</p><p style="margin-top:8px">Sekarang baca confusion matrix-nya: dari <strong>42 kasus positif yang sebenarnya</strong> (27+15), model hanya menangkap <strong>15</strong>. Recall-nya <strong>35,7%</strong>. Ia melewatkan hampir dua pertiga kasus yang justru menjadi alasan model itu dibuat.</p></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Hitung sendiri precision-nya dari matriks itu: 15 / (15+11) = <strong>57,7%</strong>. Bandingkan dengan hasil Bayes di MAT L1 Hari 4 (32,1%). Pola yang sama muncul lagi, dan sekarang kamu punya dua cara menghitungnya.</div>
+        <div class="bahaya"><strong>Pada data yang timpang, model yang tidak melakukan apa-apa sudah mendapat akurasi tinggi.</strong> Melaporkan akurasi saja pada kasus seperti ini adalah bentuk penyesatan yang paling mudah dilakukan tanpa niat buruk. Yang harus dilaporkan: <em>recall</em> (berapa banyak kasus nyata yang tertangkap) dan <em>precision</em> (berapa banyak alarm yang benar) — dan ingat Bayes di MAT L1 Hari 4: pada kejadian langka, precision akan rendah bahkan untuk model yang bagus.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Daftar periksa sebelum menyerahkan model</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-6-2"><label for="mat-L4-deep-learning-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Periksa</th>
+<th>Kenapa</th>
+<th>Padanannya di kertas kerja</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Data uji tidak pernah dipakai melatih atau menyetel</td><td>Kalau tidak, angka ujimu fiktif</td><td>Independensi pengujian</td></tr>
+              <tr><td>Scaler di-<em>fit</em> hanya pada data latih</td><td>Kebocoran data</td><td>Pisah data uji sejak awal</td></tr>
+              <tr><td>Ada model pembanding sederhana</td><td>Tanpa ini, kamu tidak tahu modelmu menambah apa</td><td>Prosedur alternatif</td></tr>
+              <tr><td>Dijalankan ≥5 seed, dilaporkan rentangnya</td><td>Jaringan tidak konveks (MAT L3 Hari 3)</td><td>Pengujian ulang</td></tr>
+              <tr><td>Metrik selain akurasi</td><td>Akurasi menipu pada data timpang</td><td>Materialitas</td></tr>
+              <tr><td>Confusion matrix disertakan</td><td>Menunjukkan jenis kesalahannya, bukan cuma jumlah</td><td>Rincian temuan</td></tr>
+              <tr><td>Jumlah parameter vs jumlah baris latih</td><td>Parameter &gt; baris = hafalan</td><td>Kecukupan bukti</td></tr>
+              <tr><td>Versi data &amp; seed dicatat</td><td>Supaya bisa diulang orang lain</td><td>Jejak audit</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kolom ketiga bukan hiasan.</strong> Delapan baris ini adalah kertas kerja, ditulis ulang untuk model. Kamu sudah punya refleksnya dari KAP; yang berubah cuma nama berkasnya. Ini keunggulan yang tidak dimiliki sebagian besar orang yang baru belajar machine learning.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Jalankan beberapa seed dan laporkan rentangnya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-6-3"><label for="mat-L4-deep-learning-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+from sklearn.neural_network import MLPClassifier
+skor = []
+for s in range(10):
+    mm = MLPClassifier(hidden_layer_sizes=(64,), max_iter=3000,
+                       random_state=s).fit(Xtr, ytr)
+    skor.append(mm.score(Xte, yte))
+skor = np.array(skor)
+print(&quot;10 seed:&quot;, skor.round(4))
+print(f&quot;median {np.median(skor):.4f}  min {skor.min():.4f}&quot;
+      f&quot;  max {skor.max():.4f}  rentang {skor.max()-skor.min():.4f}&quot;)</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan, lalu tulis satu kalimat laporan dengan format ini: <em>“Akurasi uji median 0,xxxx dari 10 seed (rentang 0,xxxx–0,xxxx).”</em> Itu kalimat yang bisa ditelaah orang. “Akurasi 0,xxxx” tidak.</div>
+        <div class="bahaya"><strong>Kalau kamu menjalankan 10 seed lalu melaporkan yang terbaik, itu bukan pelaporan — itu memilih hasil.</strong> Sama seperti mengintip hasil A/B test berulang kali sampai p-value-nya bagus, yang sudah kamu ukur akibatnya di Modul M7: tingkat false positive melonjak dari 5% ke 26%.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 6 selesai</h3>
+      <p>Besok penutup: ujian, peta ke DSA5106 dan COMP90051, dan jalan ke PyTorch.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 7</span>
+      <h2>Ujian, peta silabus, dan langkah berikutnya</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengukur hasil empat modul sekaligus, melihat persis apa yang sudah tertutup, dan tahu langkah teknis berikutnya yang jujur.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Delapan soal penutup</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-7-1"><label for="mat-L4-deep-learning-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. Jaringan: masukan 5, tersembunyi 8, keluaran 1.
+   Berapa jumlah parameternya? Hitung, jangan tebak.
+2. Kenapa sigmoid menyebabkan vanishing gradient? Sebutkan angkanya.
+3. Kenapa XOR tidak bisa dipecahkan model linear?
+4. Apa fungsi pemeriksaan gradien numerik, dan kenapa eps=1e-12 buruk?
+5. Model latih 0.99, uji 0.83. Diagnosis dan dua tindakan.
+6. Data 97% negatif. Modelmu akurasi 0.97. Sudah bagus?
+7. Jaringan yang sama dijalankan 2 seed, hasil beda 3 poin persen.
+   Apa yang kamu laporkan?
+8. Kapan kamu memilih regresi logistik dibanding jaringan saraf?</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis kedelapan jawabanmu dulu.</div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="isi">
+            <p><strong>1.</strong> W1 = 5×8 = 40, b1 = 8, W2 = 8×1 = 8, b2 = 1. Total <strong>57</strong>.</p>
+            <p><strong>2.</strong> Turunan sigmoid maksimum <strong>0,25</strong>, dan di z=4 sudah 0,0177. Pada jaringan berlapis, gradien lapis awal adalah hasil kali turunan tiap lapis: 0,25¹⁰ ≈ <strong>9,5 × 10⁻⁷</strong>. Lapis awal berhenti belajar.</p>
+            <p><strong>3.</strong> Kelas “1” menempati dua sudut yang berseberangan diagonal. Tidak ada satu garis lurus yang memisahkan pasangan diagonal dari pasangan diagonal lain. Terbukti: regresi logistik mendapat akurasi 0,5 dengan koefisien nol.</p>
+            <p><strong>4.</strong> Membuktikan turunan analitik yang kamu tulis benar. <code>eps=1e-12</code> buruk karena mengurangkan dua bilangan yang nyaris sama menghilangkan presisi float — hasilnya justru lebih meleset, bukan lebih tepat.</p>
+            <p><strong>5.</strong> Overfitting: selisih 16 poin persen. Tindakan: perbesar regularisasi (alpha), kecilkan arsitektur, tambah data, atau early stopping. Perhatikan dari Hari 5: memperbesar alpha terlalu jauh menghapus keunggulan modelnya sekalian.</p>
+            <p><strong>6.</strong> <strong>Belum tentu.</strong> Menjawab “negatif” untuk semuanya sudah memberi 0,97. Laporkan recall, precision, dan confusion matrix.</p>
+            <p><strong>7.</strong> Bahwa fungsi ruginya tidak konveks, sehingga hasilnya memang bergantung inisialisasi. Laporkan median dan rentang dari ≥5 seed — bukan salah satu dari keduanya.</p>
+            <p><strong>8.</strong> Ketika datanya tabular dan berukuran sedang, ketika modelnya harus bisa dijelaskan, ketika selisih akurasinya kecil, dan ketika kamu butuh hasil yang bisa diulang persis. Dari Hari 5: 3 parameter memberi 0,8548 lawan 132.609 parameter memberi 0,8952.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Peta ke DSA5106 dan COMP90051</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-7-2"><label for="mat-L4-deep-learning-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Topik</th>
+<th>Status setelah modul ini</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Perceptron, fungsi aktivasi</td><td><strong>Dikuasai</strong> — Hari 1</td></tr>
+              <tr><td>Keterbatasan model linear</td><td><strong>Dikuasai</strong> — Hari 2</td></tr>
+              <tr><td>Backpropagation &amp; aturan rantai</td><td><strong>Dikuasai</strong> — Hari 3, diverifikasi 10⁻¹¹</td></tr>
+              <tr><td>Lingkar pelatihan &amp; fungsi rugi</td><td><strong>Dikuasai</strong> — Hari 4</td></tr>
+              <tr><td>Kapasitas model, overfitting, regularisasi</td><td><strong>Dikuasai</strong> — Hari 5, diukur</td></tr>
+              <tr><td>Vanishing gradient &amp; pilihan aktivasi</td><td><strong>Sebagian</strong> — sebabnya ya, penanganan lanjutan belum</td></tr>
+              <tr><td>SGD, momentum, Adam</td><td><strong>Belum</strong> — kita pakai gradient descent penuh</td></tr>
+              <tr><td>Dropout, batch normalisation</td><td><strong>Belum</strong></td></tr>
+              <tr><td>CNN (gambar), RNN &amp; Transformer (urutan)</td><td><strong>Belum</strong> — ini inti DSA5106</td></tr>
+              <tr><td>Teori pembelajaran statistik, batas VC</td><td><strong>Belum</strong> — ini inti COMP90051</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Lima baris terakhir adalah bagian terbesar kedua mata kuliah itu, dan modul ini tidak menyentuhnya.</strong> Enam hari tidak bisa menggantikan satu semester, dan aku lebih suka menuliskannya di sini daripada membiarkanmu mengira sudah siap. Yang kamu dapat: fondasinya — dan fondasi itulah yang biasanya tidak dimiliki mahasiswa non-teknik di minggu pertama.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Langkah teknis berikutnya, dengan satu peringatan jujur</h3>
+        <span class="cek"><input type="checkbox" id="mat-L4-deep-learning-7-3"><label for="mat-L4-deep-learning-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Setelah menulis jaringan dari nol, langkah wajar berikutnya adalah PyTorch — pustaka yang dipakai DSA5106 dan hampir semua riset.</p>
+        <div class="bahaya"><strong>Peringatan yang harus kamu tahu:</strong> PyTorch tidak terpasang di lingkungan tempat modul ini disusun, jadi <em>saya tidak bisa menjalankan dan memverifikasi kode PyTorch mana pun</em>. Semua angka di enam hari sebelumnya saya jalankan sendiri; kalau saya menempelkan kode PyTorch di sini, itu akan jadi satu-satunya bagian yang tidak diuji. Saya tidak melakukannya.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Langkah</th>
+<th>Di mana</th>
+<th>Kenapa aman</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Pasang PyTorch</td><td>Google Colab — <strong>sudah terpasang</strong></td><td>Tidak perlu instalasi, GPU gratis</td></tr>
+              <tr><td>Tulis ulang jaringan Hari 4 dengan PyTorch</td><td>Colab</td><td>Kamu sudah tahu jawaban benarnya: 17 parameter, akurasi 1,0 — jadi kamu bisa memverifikasi sendiri</td></tr>
+              <tr><td>Bandingkan gradien PyTorch dengan backprop tanganmu</td><td>Colab</td><td><code>autograd</code> harus memberi angka yang sama dengan tabel Hari 3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Ini tugas terakhir seluruh jalur matematika.</strong> Buka Colab, tulis ulang jaringan XOR Hari 4 memakai <code>torch.nn</code>, dan pastikan tiga hal cocok: jumlah parameter <strong>17</strong>, akurasi akhir <strong>1,0</strong>, dan gradien awal yang sama dengan tabel Hari 3. Kalau ketiganya cocok, kamu sudah bisa membaca kode deep learning siapa pun.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Jalur Bekal Matematika S2 selesai — keempat lubang tertutup</h3>
+      <p>Empat modul, 28 hari. Empat topik yang pemindaian 49 modul sebelumnya melaporkan bernilai <strong>nol</strong>, sekarang punya isi yang setiap angkanya kamu hasilkan sendiri.</p><p style="margin-top:10px">Yang berubah bukan cuma peluang diterimanya lamaran S2-mu. Yang berubah: kamu sudah menguji sendiri klaim terbesar bidang ini — bahwa lebih dalam berarti lebih baik — dan menemukan bahwa di data tabular, <strong>132.609 parameter mengalahkan 3 parameter hanya sejauh 4,04 poin persen.</strong> Itu jenis skeptisisme yang membuatmu dibayar, dan kamu membawanya dari KAP, bukan dari sini.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">Seluruh rute selesai — kembali ke indeks →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Seluruh angka dihasilkan dengan menjalankan kodenya di Python 3.11, numpy 2.4.6, scikit-learn 1.9.0, dengan seed yang tertulis di tiap potongan kode.</p>
+    <p style="margin-top:10px"><strong>PyTorch tidak terpasang di lingkungan tempat modul ini disusun</strong>, sehingga tidak ada satu pun kode PyTorch yang saya tempelkan di sini — saya tidak memuat kode yang tidak bisa saya jalankan. Jalur ke PyTorch ada di Hari 7 Langkah 3, dikerjakan di Google Colab yang sudah memasangnya.</p>
+    <p style="margin-top:10px">Nama dan status wajib mata kuliah merujuk halaman resmi NUS Department of Mathematics dan University of Melbourne Handbook per September 2026.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "mat-L4-deep-learning";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

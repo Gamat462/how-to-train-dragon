@@ -1,0 +1,1669 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">← Kembali ke indeks rute</a></div>
+
+<nav class="nav" aria-label="Pilih kasus">
+  <span class="lbl">Studi Kasus</span>
+  <button type="button" data-hari="1" aria-selected="true">K1</button>
+  <button type="button" data-hari="2" aria-selected="false">K2</button>
+  <button type="button" data-hari="3" aria-selected="false">K3</button>
+  <button type="button" data-hari="4" aria-selected="false">K4</button>
+  <button type="button" data-hari="5" aria-selected="false">K5</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Studi Kasus Nyata · 5 kasus · dikerjakan setelah Bekal Data Klien</span>
+    <h1>Lima berkas klien yang berantakan seperti aslinya</h1>
+    <p class="lede">Semua latihan sampai titik ini memakai data yang <strong>sudah rapi</strong> — dan itu kebohongan kecil yang harus dibayar nanti. Berkas klien sungguhan tidak punya header di baris satu, angkanya bukan angka, nama pelanggan ditulis empat cara berbeda, dan ada baris total nyempil di tengah data.</p>
+    <p class="lede" style="margin-top:10px">Lima kasus di sini dibuat dengan <strong>kekacauan yang benar-benar terjadi</strong> di ekspor aplikasi kasir, CSV Excel Indonesia, dan rekap buatan tangan. Tiap kasus punya satu temuan yang <em>tidak terlihat</em> sampai kamu memeriksanya — dan di tiap kasus, temuan itulah yang sebenarnya dibayar orang.</p>
+
+    <div class="bahaya" style="margin-top:16px">
+      <strong>Aturan main.</strong> Tiap kasus punya tiga langkah: <em>bikin berkasnya</em>, <em>temukan masalahnya sendiri</em>, lalu <em>buka kunci jawaban</em>. Kalau kamu buka kunci sebelum mencoba, kamu sedang membaca — dan yang dijual seorang analis bukan bacaan, tapi refleks curiga. Berkasnya dibuat dengan angka acak berkunci tetap, jadi <strong>angkamu harus sama persis dengan angkaku</strong>. Kalau beda, salah satu dari kita salah ketik, dan kamu punya datanya untuk membuktikan yang mana.
+    </div>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ K1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">KASUS 1 · toko bangunan</span>
+      <h2>Kolom yang paling terlihat bersih justru yang sudah rusak</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <p class="tujuan"><strong>Selesai kasus ini kamu bisa:</strong> membaca ekspor aplikasi kasir yang headernya bukan di baris satu, dan menemukan satu kolom yang diam-diam kehilangan tiga angka nol.</p>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk ke WhatsApp-mu:</strong><br>
+      <em>"Mas, saya punya data penjualan toko dari Januari sampai Juni. Bisa dibikinin laporan? Saya mau tahu bulan mana yang paling ramai, barang apa yang paling laku, sama pelanggan mana yang paling besar. File-nya saya kirim ya. Oh iya kadang ada retur juga, itu yang minus."</em><br>
+      <span class="mono" style="font-size:0.85rem">— Pak Herman, Toko Bangunan Sumber Rejeki</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="k1s1"><label for="k1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Simpan sebagai <code>gen_k1.py</code> lalu jalankan <code>python gen_k1.py</code>. Skrip ini membuat berkas Excel yang berantakannya <strong>dibuat sengaja</strong>, meniru ekspor aplikasi kasir murah. Setelah berkasnya jadi, <strong>buka di Excel dan lihat sendiri</strong> sebelum menyentuh Python — itu yang akan kamu lakukan dengan berkas klien sungguhan.</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Kasus 1 — Toko Bangunan Sumber Rejeki.
+Meniru ekspor Excel dari aplikasi kasir murah: judul di sel gabungan,
+header bukan di baris 1, angka jadi teks, tanggal tiga format,
+baris subtotal nyempil, dan footer cetak di bawah."""
+import random
+from datetime import date, timedelta
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment
+
+rng = random.Random(2024)
+
+PRODUK = [
+    ("SMN-40KG",  "Semen Gresik 40kg",        62000,  48000),
+    ("SMN 40KG",  "Semen Gresik 40 kg",       62000,  48000),   # kode sama, tulisan beda
+    ("BTA-MRH",   "Bata Merah (per 100)",     95000,  72000),
+    ("PSR-M3",    "Pasir Beton (m3)",        320000, 245000),
+    ("CAT-5KG",   "Cat Tembok Avian 5kg",    185000, 142000),
+    ("cat-5kg",   "Cat tembok avian 5 kg",   185000, 142000),   # kode huruf kecil
+    ("PPA-4IN",   "Pipa PVC 4 inci",          78000,  59000),
+    ("KRM-60",    "Keramik 60x60 (dus)",     145000, 112000),
+    ("PKU-KG",    "Paku 5cm (kg)",            24000,  17000),
+]
+
+PELANGGAN = [
+    "Budi Santoso", "budi santoso", "BUDI SANTOSO", "Budi  Santoso",  # satu orang, empat tulisan
+    "CV Karya Abadi", "Cv Karya Abadi", "CV. Karya Abadi",
+    "Toko Berkah", "toko berkah",
+    "Hj. Aminah", "Pak Slamet", "Ibu Ratna", "PT Mitra Bangun",
+    "Umum", "umum", "-",
+]
+
+def fmt_tanggal(d, gaya):
+    if gaya == 0: return d.strftime("%d/%m/%Y")      # 01/03/2024
+    if gaya == 1: return d.strftime("%Y-%m-%d")      # 2024-03-01
+    return d.strftime("%d-%b-%y")                     # 01-Mar-24
+
+def rupiah_teks(n):
+    return f"{n:,}".replace(",", ".")                 # 1250000 -&gt; "1.250.000"
+
+wb = Workbook()
+ws = wb.active
+ws.title = "Sheet1"
+
+# --- judul di sel gabungan, header baru di baris 6 ---
+ws.merge_cells("B1:H1"); ws["B1"] = "TOKO BANGUNAN SUMBER REJEKI"
+ws["B1"].font = Font(bold=True, size=14); ws["B1"].alignment = Alignment(horizontal="center")
+ws.merge_cells("B2:H2"); ws["B2"] = "Jl. Raya Bogor KM 24 No. 88, Depok"
+ws["B2"].alignment = Alignment(horizontal="center")
+ws.merge_cells("B3:H3"); ws["B3"] = "LAPORAN PENJUALAN PERIODE JAN - JUN 2024"
+ws["B3"].font = Font(bold=True); ws["B3"].alignment = Alignment(horizontal="center")
+# baris 4 &amp; 5 kosong
+
+HEADER = ["No", "Tanggal", "No. Nota", "Kode Barang", "Nama Barang",
+          "Qty", "Harga Satuan", "Jumlah", "Pelanggan"]
+for i, h in enumerate(HEADER):
+    c = ws.cell(row=6, column=2+i, value=h); c.font = Font(bold=True)
+
+baris = 7
+no = 0
+total_baris_data = 0
+for bulan in range(1, 7):
+    subtotal = 0
+    hari_awal = date(2024, bulan, 1)
+    hari_akhir = date(2024, bulan+1, 1) - timedelta(days=1) if bulan &lt; 12 else date(2024,12,31)
+    n_trx = rng.randint(22, 30)
+    for _ in range(n_trx):
+        no += 1
+        d = hari_awal + timedelta(days=rng.randrange((hari_akhir-hari_awal).days + 1))
+        kode, nama, jual, _beli = PRODUK[rng.randrange(len(PRODUK))]
+        qty = rng.choice([1,1,2,2,3,4,5,10,20])
+        # ~6% retur: qty negatif, tanpa penanda apa pun
+        if rng.random() &lt; 0.06:
+            qty = -rng.choice([1,2])
+        jumlah = qty * jual
+        subtotal += jumlah
+        ws.cell(row=baris, column=2, value=no)
+        ws.cell(row=baris, column=3, value=fmt_tanggal(d, rng.randrange(3)))
+        ws.cell(row=baris, column=4, value=f"NT{bulan:02d}{no:04d}")
+        ws.cell(row=baris, column=5, value=kode)
+        ws.cell(row=baris, column=6, value=nama)
+        ws.cell(row=baris, column=7, value=qty)
+        ws.cell(row=baris, column=8, value=rupiah_teks(jual))     # TEKS, bukan angka
+        ws.cell(row=baris, column=9, value=rupiah_teks(jumlah))   # TEKS
+        ws.cell(row=baris, column=10, value=PELANGGAN[rng.randrange(len(PELANGGAN))])
+        baris += 1
+        total_baris_data += 1
+    # baris subtotal nyempil di tengah data
+    c = ws.cell(row=baris, column=6, value=f"TOTAL BULAN {bulan:02d}"); c.font = Font(bold=True)
+    c2 = ws.cell(row=baris, column=9, value=rupiah_teks(subtotal)); c2.font = Font(bold=True)
+    baris += 2   # + satu baris kosong pemisah
+
+# footer cetak
+ws.cell(row=baris+1, column=2, value="Dicetak oleh: Admin Kasir")
+ws.cell(row=baris+2, column=2, value="Tanggal cetak: 05/07/2024")
+ws.cell(row=baris+3, column=2, value="Aplikasi Kasir Pro v2.1 - Lisensi: TOKO SUMBER REJEKI")
+
+wb.save("Laporan Penjualan Toko Sumber Rejeki.xlsx")
+print("baris transaksi asli :", total_baris_data)
+print("baris terakhir dipakai:", baris+3)
+</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>baris transaksi asli : 167
+baris terakhir dipakai: 189</code></pre></div>
+        </div>
+        <p><strong>167.</strong> Simpan angka itu. Sampai akhir kasus ini kamu harus bisa membuktikan bahwa hasil bersihmu berisi tepat 167 baris — tidak 170, tidak 183.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Baca dengan refleks pertama, lalu lihat apa yang rusak</h3>
+        <span class="cek"><input type="checkbox" id="k1s2"><label for="k1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+BERKAS = "Laporan Penjualan Toko Sumber Rejeki.xlsx"
+
+df = pd.read_excel(BERKAS)          # refleks pertama semua orang
+print("bentuk:", df.shape)
+print("kolom :", list(df.columns))
+print(df.head(8).to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>bentuk: (188, 10)
+kolom : ['Unnamed: 0', 'TOKO BANGUNAN SUMBER REJEKI', 'Unnamed: 2', ... ]</code></pre></div>
+        </div>
+        <p>Nama tokonya jadi nama kolom. Header aslinya ada di baris ke-6, jadi lompati lima baris pertama:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>df = pd.read_excel(BERKAS, skiprows=5)
+print(df[["Kode Barang","Qty","Harga Satuan","Jumlah"]].head(6).to_string())
+print("\ntipe tiap kolom:")
+print(df.dtypes.to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  Kode Barang   Qty  Harga Satuan     Jumlah
+0     CAT-5KG   2.0         185.0    370.000
+1      PSR-M3  10.0         320.0  3.200.000
+2      PKU-KG   4.0          24.0     96.000
+3      KRM-60   2.0         145.0    290.000
+4     cat-5kg   5.0         185.0    925.000
+5     cat-5kg   5.0         185.0    925.000
+
+tipe tiap kolom:
+Unnamed: 0      float64
+No               object
+Tanggal          object
+No. Nota         object
+Kode Barang      object
+Nama Barang      object
+Qty             float64
+Harga Satuan    float64
+Jumlah           object</code></pre></div>
+        </div>
+        <div class="aksi"><strong>Berhenti di sini dan cari sendiri.</strong> Ada satu kolom di tabel itu yang sudah rusak permanen, dan justru kolom itu yang tipenya terlihat paling benar. Mana? Kenapa tetangganya selamat?</div>
+        <details>
+          <summary>Buka jawabannya</summary>
+          <p style="margin-top:10px"><strong><code>Harga Satuan</code> = 185,0.</strong> Harga cat sesungguhnya <strong>185.000</strong>. Pandas membaca teks <code>"185.000"</code> sebagai bilangan desimal 185 koma nol nol nol — karena di sebagian besar dunia, titik adalah pemisah desimal. Tiga angka nol hilang, tanpa satu pun pesan error, dan hasilnya <code>float64</code> yang terlihat sangat meyakinkan.</p>
+          <p style="margin-top:8px"><strong>Sekarang kenapa <code>Jumlah</code> selamat.</strong> Jalankan ini:</p>
+          <div class="kode" style="margin-top:8px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>j = df["Jumlah"].dropna().astype(str)
+print("Jumlah dengan 1 titik  :", (j.str.count(r"\.") == 1).sum())
+print("Jumlah dengan >=2 titik:", (j.str.count(r"\.") >= 2).sum())</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>Jumlah dengan 1 titik  : 135
+Jumlah dengan >=2 titik: 38</code></pre></div>
+          </div>
+          <div class="bahaya" style="margin-top:10px">
+            <strong>Baca ini pelan-pelan, karena inilah pelajaran terpenting di kasus ini.</strong> Kolom <code>Jumlah</code> selamat <em>bukan karena kamu pintar</em>. Ia selamat karena kebetulan ada 38 transaksi bernilai di atas satu juta, sehingga angkanya bertitik dua — dan satu nilai saja yang gagal jadi <code>float</code> membuat pandas menyerah dan menyimpan <strong>seluruh kolom</strong> sebagai teks. Kalau toko ini kebetulan tidak pernah menjual di atas Rp 999.999, kolom <code>Jumlah</code> juga akan hancur diam-diam, dan laporanmu akan meleset seribu kali lipat.
+          </div>
+          <p style="margin-top:10px"><strong>Jadi obatnya bukan "hati-hati", tapi kebiasaan:</strong> untuk berkas dari luar, baca dulu semuanya sebagai teks — <code>dtype=str</code> — lalu <em>kamu</em> yang memutuskan mana yang jadi angka dan bagaimana caranya. Jangan biarkan pandas menebak, karena tebakannya benar 95% dan salahnya tidak bersuara.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Bersihkan, lalu buktikan bersihnya</h3>
+        <span class="cek"><input type="checkbox" id="k1s3"><label for="k1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Tulis sendiri dulu. Targetnya: 167 baris, semua tanggal terbaca, dan totalnya <strong>sama persis</strong> dengan penjumlahan enam baris "TOTAL BULAN" yang ada di dalam berkas. Baris subtotal itu bukan sampah — itu <strong>angka kontrol</strong> yang diberikan klien tanpa sadar, dan kamu harus mengambilnya sebelum membuangnya.</div>
+        <details>
+          <summary>Buka kunci jawaban</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>import pandas as pd, re
+pd.set_option("display.width", 200)
+BERKAS = "Laporan Penjualan Toko Sumber Rejeki.xlsx"
+
+def ke_angka(s):
+    if pd.isna(s): return pd.NA
+    t = re.sub(r"[^0-9\-]", "", str(s))
+    return int(t) if t not in ("", "-") else pd.NA
+
+raw = pd.read_excel(BERKAS, skiprows=5, dtype=str)
+raw = raw.drop(columns=[c for c in raw.columns if str(c).startswith("Unnamed")])
+
+# 1. angka kontrol dari baris subtotal, DIAMBIL SEBELUM dibuang
+sub = raw[raw["Nama Barang"].astype(str).str.startswith("TOTAL BULAN", na=False)]
+KONTROL = int(sub["Jumlah"].map(ke_angka).sum())
+
+# 2. baris transaksi = baris yang kolom No-nya benar-benar angka
+d = raw[raw["No"].fillna("").str.fullmatch(r"\d+")].copy()
+
+# 3. angka
+for asal, baru in [("Qty","qty"), ("Harga Satuan","harga"), ("Jumlah","jumlah")]:
+    d[baru] = d[asal].map(ke_angka).astype("Int64")
+
+# 4. tanggal tiga format sekaligus
+d["tanggal"] = pd.to_datetime(d["Tanggal"], format="mixed", dayfirst=True, errors="coerce")
+
+# 5. nama pelanggan — perhatikan urutannya
+d["pelanggan"] = (d["Pelanggan"]
+    .str.strip().str.replace(r"\s+", " ", regex=True)      # sebelum astype(str)!
+    .str.title()
+    .str.replace(r"^(Cv|Pt|Ud|Cv\.|Pt\.)\s+", lambda m: m.group(1).upper().rstrip(".") + " ", regex=True)
+    .replace({"-": pd.NA})
+    .fillna("Tanpa Nama"))
+
+# 6. kode barang
+d["kode"] = d["Kode Barang"].str.upper().str.replace(r"[\s\-]", "", regex=True)
+d["retur"] = d["qty"] &lt; 0
+
+print("=== PEMERIKSAAN ===")
+print("baris transaksi     :", len(d))
+print("tanggal gagal dibaca:", int(d["tanggal"].isna().sum()))
+print("nilai kosong        :", int(d[["qty","harga","jumlah"]].isna().sum().sum()))
+hasil = int(d["jumlah"].sum())
+print("total bersih        :", f"{hasil:,}".replace(",","."))
+print("angka kontrol       :", f"{KONTROL:,}".replace(",","."))
+print("selisih             :", hasil - KONTROL)
+print("cek harga x qty     :", int((d["qty"]*d["harga"] != d["jumlah"]).sum()), "baris tidak konsisten")
+
+print("\n=== HASIL 1: omzet per bulan ===")
+d["bulan"] = d["tanggal"].dt.strftime("%Y-%m")
+print(d.groupby("bulan").agg(transaksi=("jumlah","size"), omzet=("jumlah","sum")).to_string())
+
+print("\n=== HASIL 2: lima barang teratas ===")
+print(d.groupby("kode").agg(unit=("qty","sum"), omzet=("jumlah","sum"))
+        .sort_values("omzet", ascending=False).head(5).to_string())
+
+print("\n=== HASIL 3: pelanggan teratas ===")
+print(d.groupby("pelanggan").agg(nota=("jumlah","size"), omzet=("jumlah","sum"))
+        .sort_values("omzet", ascending=False).head(6).to_string())
+
+print("\n=== HASIL 4: retur ===")
+r = d[d["retur"]]
+print("jumlah retur:", len(r), "| nilai:", f'{int(r["jumlah"].sum()):,}'.replace(",","."),
+      "| persen dari omzet kotor:",
+      round(abs(r["jumlah"].sum()) / d.loc[~d["retur"],"jumlah"].sum() * 100, 2), "%")
+
+print("\n=== dampak pembersihan ===")
+print("pelanggan unik sebelum:", d["Pelanggan"].nunique(), "-&gt; sesudah:", d["pelanggan"].nunique())
+print("kode barang   sebelum:", d["Kode Barang"].nunique(), "-&gt; sesudah:", d["kode"].nunique())
+</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>=== PEMERIKSAAN ===
+baris transaksi     : 167
+tanggal gagal dibaca: 0
+nilai kosong        : 0
+total bersih        : 140.581.000
+angka kontrol       : 140.581.000
+selisih             : 0
+cek harga x qty     : 0 baris tidak konsisten
+
+=== HASIL 1: omzet per bulan ===
+         transaksi     omzet
+bulan
+2024-01         29  16209000
+2024-02         29  29537000
+2024-03         30  22638000
+2024-04         23  21756000
+2024-05         29  25060000
+2024-06         27  25381000
+
+=== HASIL 3: pelanggan teratas ===
+                nota     omzet
+pelanggan
+Toko Berkah       30  32663000
+CV Karya Abadi    31  27176000
+Budi Santoso      36  17269000
+Umum              17  15151000
+Pak Slamet        16  11811000
+Tanpa Nama         7  11140000
+
+=== dampak pembersihan ===
+pelanggan unik sebelum: 16 -> sesudah: 9
+kode barang   sebelum: 9 -> sesudah: 7</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Empat hal di kunci itu yang layak kamu tiru, bukan sekadar salin:</strong></p>
+          <ol>
+            <li><strong>Angka kontrol diambil sebelum barisnya dibuang.</strong> Enam baris "TOTAL BULAN" dijumlahkan lebih dulu jadi Rp 140.581.000, baru dihapus. Di akhir, hasil bersihmu dicocokkan ke angka itu dan selisihnya harus <strong>nol</strong>. Tanpa ini kamu cuma <em>berharap</em> pembersihanmu benar.</li>
+            <li><strong>Barisnya disaring pakai <code>str.fullmatch(r"\d+")</code>, bukan <code>dropna()</code>.</strong> Kalau kamu cuma membuang baris kosong, tiga baris footer — <em>"Dicetak oleh: Admin Kasir"</em> dan kawan-kawan — akan lolos, karena kolom <code>No</code>-nya terisi teks. Hasilnya 170 baris, bukan 167, dan tiga transaksi hantu bertanggal kosong masuk ke laporanmu.</li>
+            <li><strong><code>.str.strip()</code> dijalankan sebelum <code>.astype(str)</code>.</strong> Kalau urutannya dibalik, sel kosong berubah jadi <strong>teks <code>"nan"</code></strong>, lalu <code>.str.title()</code> mengubahnya jadi pelanggan bernama <strong>"Nan"</strong> yang muncul rapi di laporanmu seolah-olah manusia.</li>
+            <li><strong><code>.str.title()</code> merusak singkatan badan usaha.</strong> "CV Karya Abadi" jadi <strong>"Cv Karya Abadi"</strong>, "PT Mitra" jadi "Pt Mitra". Harus dikembalikan setelahnya. Klien akan langsung melihat ini di laporanmu, dan yang mereka simpulkan bukan "ada bug kecil" tapi "orang ini tidak memeriksa hasilnya".</li>
+          </ol>
+        </details>
+        <div class="catatan" style="margin-top:14px">
+          <strong>Yang kamu laporkan ke Pak Herman:</strong> Februari puncaknya (Rp 29,5 juta, hampir dua kali Januari). Cat tembok dan pasir beton menyumbang Rp 100 juta dari Rp 140,6 juta — <strong>71% omzet dari dua barang saja</strong>. Retur cuma 0,35%, sehat. Dan satu hal yang tidak ia minta tapi paling berguna: <strong>16 nama pelanggan di datanya sebenarnya cuma 9 orang</strong>, dan 7 nota senilai Rp 11,1 juta tidak punya nama pelanggan sama sekali. Selama ini ia tidak bisa tahu siapa pelanggan terbesarnya, karena Budi Santoso terpecah jadi empat orang.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ K2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">KASUS 2 · klinik</span>
+      <h2>Dua berkas, dan tiga cara menggabungkannya dengan salah</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <p class="tujuan"><strong>Selesai kasus ini kamu bisa:</strong> menggabungkan dua berkas dari dua aplikasi berbeda tanpa meledakkan jumlah baris, dan tahu kenapa kebiasaan bagus dari Kasus 1 justru bikin celaka di sini.</p>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>"Selamat siang. Klinik kami mau tahu pendapatan per penjamin — BPJS, umum, asuransi. Datanya ada dua: data kunjungan dari sistem pendaftaran (Excel), sama data tagihan dari sistem kasir (CSV). Dua-duanya beda aplikasi jadi maaf agak ribet. Rasanya ada yang tidak cocok tapi kami tidak tahu di mana."</em><br>
+      <span class="mono" style="font-size:0.85rem">— Bu Ratih, Klinik Pratama Sehat Bersama</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin kedua berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="k2s1"><label for="k2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Kasus 2 — Klinik Pratama Sehat Bersama.
+Dua berkas dari dua aplikasi berbeda yang harus disambung:
+  kunjungan.xlsx  -&gt; ID pasien tersimpan sebagai ANGKA (nol di depan hilang)
+  tagihan.csv     -&gt; ID pasien sebagai TEKS '0007', pemisah ';', desimal ','
+"""
+import random, csv
+from datetime import date, timedelta
+from openpyxl import Workbook
+
+rng = random.Random(7)
+
+NAMA = [
+ (1, "Siti Nurhaliza"), (2, "Ahmad Fauzi"), (3, "Dewi Lestari"), (4, "Bambang Wijaya"),
+ (5, "Rina Marlina"), (6, "Joko Susilo"), (7, "Maya Sari"), (8, "Hendra Gunawan"),
+ (9, "Fitri Handayani"), (10, "Agus Setiawan"), (11, "Nur Aini"), (12, "Rudi Hartono"),
+ (13, "Lilis Suryani"), (14, "Dedi Kurniawan"), (15, "Sri Wahyuni"),
+]
+# variasi ejaan nama untuk pasien yang sama (dientri ulang oleh petugas berbeda)
+VARIASI = {
+ 1: ["Siti Nurhaliza", "Siti Nurhalizah", "SITI NURHALIZA", "siti nurhaliza"],
+ 4: ["Bambang Wijaya", "Bambang Widjaja", "BAMBANG WIJAYA"],
+ 9: ["Fitri Handayani", "Fitri Handayanti"],
+}
+LAYANAN = [
+ ("Pemeriksaan Umum",       50000),
+ ("Pemeriksaan Gigi",      150000),
+ ("Cek Laboratorium",      275000),
+ ("Suntik Imunisasi",      120000),
+ ("Kontrol Kehamilan",     180000),
+ ("Perawatan Luka",         85000),
+]
+PENJAMIN = ["BPJS", "bpjs", "B.P.J.S", "BPJS Kesehatan", "Umum", "umum", "UMUM",
+            "Asuransi", "asuransi swasta"]
+
+kunjungan = []
+kode = 0
+for _ in range(240):
+    kode += 1
+    pid = rng.randrange(1, 16)
+    nama = rng.choice(VARIASI.get(pid, [dict(NAMA)[pid]]))
+    d = date(2024, 1, 1) + timedelta(days=rng.randrange(182))
+    lay, tarif = LAYANAN[rng.randrange(len(LAYANAN))]
+    pj = PENJAMIN[rng.randrange(len(PENJAMIN))]
+    kunjungan.append(dict(kode=f"K{kode:04d}", pid=pid, nama=nama, tgl=d,
+                          layanan=lay, tarif=tarif, penjamin=pj))
+
+# --- kunjungan.xlsx : ID pasien sebagai ANGKA ---
+wb = Workbook(); ws = wb.active; ws.title = "Kunjungan"
+ws.append(["Kode Kunjungan", "ID Pasien", "Nama Pasien", "Tanggal", "Layanan", "Penjamin"])
+for k in kunjungan:
+    ws.append([k["kode"], k["pid"], k["nama"], k["tgl"].strftime("%d/%m/%Y"),
+               k["layanan"], k["penjamin"]])
+wb.save("Kunjungan Pasien 2024.xlsx")
+
+# --- tagihan.csv : ID pasien sebagai TEKS berpadding, ';' dan desimal ',' ---
+baris = []
+no = 0
+digandakan = 0
+for k in kunjungan:
+    # 92% kunjungan ada tagihannya
+    if rng.random() &gt; 0.92:
+        continue
+    no += 1
+    diskon = rng.choice([0, 0, 0, 0, 0.10, 0.20])
+    total = k["tarif"] * (1 - diskon)
+    baris.append([f"INV{no:05d}", k["kode"], f"{k['pid']:04d}",
+                  k["tgl"].strftime("%Y-%m-%d"),
+                  f"{k['tarif']:.2f}".replace(".", ","),
+                  f"{diskon*100:.2f}".replace(".", ","),
+                  f"{total:.2f}".replace(".", ",")])
+    # 4% tagihan tercatat DUA KALI untuk kunjungan yang sama
+    if rng.random() &lt; 0.04:
+        no += 1
+        digandakan += 1
+        baris.append([f"INV{no:05d}", k["kode"], f"{k['pid']:04d}",
+                      k["tgl"].strftime("%Y-%m-%d"),
+                      f"{k['tarif']:.2f}".replace(".", ","),
+                      f"{diskon*100:.2f}".replace(".", ","),
+                      f"{total:.2f}".replace(".", ",")])
+
+with open("Tagihan Klinik 2024.csv", "w", newline="", encoding="utf-8") as f:
+    w = csv.writer(f, delimiter=";")
+    w.writerow(["No Invoice","Kode Kunjungan","ID Pasien","Tanggal","Tarif","Diskon %","Total"])
+    w.writerows(baris)
+
+print("kunjungan       :", len(kunjungan))
+print("tagihan (baris) :", len(baris))
+print("tagihan ganda   :", digandakan)
+print("kunjungan tanpa tagihan:", len(kunjungan) - (len(baris) - digandakan))
+</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>kunjungan       : 240
+tagihan (baris) : 233
+tagihan ganda   : 11
+kunjungan tanpa tagihan: 18</code></pre></div>
+        </div>
+        <p>Empat angka itu adalah jawaban yang harus kamu temukan sendiri nanti. Tutup dulu, jangan diintip lagi.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tiga cara menggabungkan, tiga cara gagal</h3>
+        <span class="cek"><input type="checkbox" id="k2s2"><label for="k2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+
+# --- cara 1: read_csv polos ---
+t = pd.read_csv("Tagihan Klinik 2024.csv")
+print("cara 1 -> bentuk:", t.shape)
+print("        kolom:", list(t.columns))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>cara 1 -> bentuk: (233, 1)
+        kolom: ['No Invoice;Kode Kunjungan;ID Pasien;Tanggal;Tarif;Diskon %;Total']</code></pre></div>
+        </div>
+        <p><strong>Satu kolom.</strong> Ini CSV buatan Excel berbahasa Indonesia: pemisahnya titik koma, bukan koma — karena koma sudah dipakai sebagai pemisah desimal. Berkas seperti ini datang dari klien Indonesia hampir setiap kali.</p>
+
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code># --- cara 2: pakai kebiasaan dari Kasus 1, dtype=str ---
+t  = pd.read_csv("Tagihan Klinik 2024.csv", sep=";", dtype=str)
+k  = pd.read_excel("Kunjungan Pasien 2024.xlsx", dtype=str)
+print("tagihan   ID Pasien:", list(t["ID Pasien"].head(4)))
+print("kunjungan ID Pasien:", list(k["ID Pasien"].head(4)))
+print("hasil merge:", len(k.merge(t, on="ID Pasien", how="inner")), "baris")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>tagihan   ID Pasien: ['0006', '0002', '0015', '0007']
+kunjungan ID Pasien: ['6', '2', '15', '7']
+hasil merge: 0 baris</code></pre></div>
+        </div>
+        <div class="bahaya">
+          <strong>Nol baris — dan tidak ada satu pun pesan error.</strong> Kebiasaan yang menyelamatkanmu di Kasus 1 (<code>dtype=str</code>) justru yang membunuhmu di sini: satu berkas menyimpan ID sebagai <code>"0006"</code>, satunya sebagai <code>"6"</code>. Sebagai teks keduanya beda. <strong>Tidak ada satu pun setelan baca yang aman untuk semua berkas.</strong> Yang aman cuma satu kebiasaan: sesudah menggabung, <em>selalu</em> periksa jumlah barisnya masuk akal atau tidak.
+        </div>
+
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code># --- cara 3: tipe sudah benar, tapi kuncinya salah ---
+t = pd.read_csv("Tagihan Klinik 2024.csv", sep=";", decimal=",")
+k = pd.read_excel("Kunjungan Pasien 2024.xlsx")
+print("kunjungan:", len(k), "| tagihan:", len(t))
+for kunci in ["ID Pasien", "Kode Kunjungan"]:
+    print(f"  merge on '{kunci}': {len(k.merge(t, on=kunci, how='inner'))} baris")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>kunjungan: 240 | tagihan: 233
+  merge on 'ID Pasien': 4041 baris
+  merge on 'Kode Kunjungan': 233 baris</code></pre></div>
+        </div>
+        <p><strong>4.041 baris dari 240 dan 233.</strong> Ini yang paling berbahaya dari ketiganya, karena hasilnya tidak kosong — ia penuh, rapi, dan siap dijumlahkan. Satu pasien punya banyak kunjungan, jadi menggabung lewat <code>ID Pasien</code> memasangkan <em>setiap</em> kunjungan pasien itu dengan <em>setiap</em> tagihannya. Kalau kamu lanjut menghitung pendapatan dari sini, angkanya belasan kali lipat.</p>
+        <div class="catatan">
+          <strong>Aturan yang menutup ketiganya sekaligus:</strong> sesudah <code>merge</code>, baris pertama yang kamu tulis adalah <code>print(len(hasil))</code>. Untuk gabungan satu-ke-satu, jumlahnya tidak boleh lebih besar daripada tabel terbesar. Kalau membengkak, kuncimu tidak unik. Kalau nol, tipe atau isi kuncimu tidak sama. Satu baris <code>print</code> menangkap dua bug yang keduanya diam.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cari yang tidak cocok, lalu jawab pertanyaan Bu Ratih</h3>
+        <span class="cek"><input type="checkbox" id="k2s3"><label for="k2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Kerjakan sendiri dulu: (a) berapa tagihan ganda dan berapa nilainya, (b) berapa kunjungan yang belum ditagih, (c) berapa pasien yang sebenarnya sama tapi namanya beda, (d) pendapatan per penjamin.</div>
+        <details>
+          <summary>Buka kunci jawaban</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>import pandas as pd
+pd.set_option("display.width", 220)
+
+k = pd.read_excel("Kunjungan Pasien 2024.xlsx")
+t = pd.read_csv("Tagihan Klinik 2024.csv", sep=";", decimal=",")
+
+# --- samakan tipe kunci SEBELUM menggabung ---
+for df in (k, t):
+    df["ID Pasien"] = df["ID Pasien"].astype(int)
+
+print("=== 1. TAGIHAN GANDA ===")
+ganda = t[t.duplicated("Kode Kunjungan", keep=False)].sort_values("Kode Kunjungan")
+print("baris tagihan terlibat:", len(ganda), "| kunjungan terdampak:", ganda["Kode Kunjungan"].nunique())
+print(ganda.head(4)[["No Invoice","Kode Kunjungan","Tanggal","Total"]].to_string(index=False))
+nilai_ganda = t[t.duplicated("Kode Kunjungan", keep="first")]["Total"].sum()
+print("nilai yang tercatat dua kali:", f"{nilai_ganda:,.0f}".replace(",","."))
+
+t_bersih = t.drop_duplicates("Kode Kunjungan", keep="first")
+print("tagihan sesudah dedup:", len(t_bersih))
+
+print("\n=== 2. KUNJUNGAN TANPA TAGIHAN ===")
+g = k.merge(t_bersih, on="Kode Kunjungan", how="left", indicator=True, suffixes=("","_tag"))
+belum = g[g["_merge"] == "left_only"]
+print("kunjungan belum ditagih:", len(belum))
+print(belum.groupby("Layanan").size().to_string())
+
+print("\n=== 3. NAMA PASIEN GANDA ===")
+print("nama unik mentah :", k["Nama Pasien"].nunique())
+print("ID pasien unik   :", k["ID Pasien"].nunique())
+per_id = k.groupby("ID Pasien")["Nama Pasien"].nunique()
+print("ID dengan &gt;1 ejaan nama:", int((per_id &gt; 1).sum()))
+for pid in per_id[per_id &gt; 1].index:
+    print(f"  ID {pid}: {sorted(k.loc[k['ID Pasien']==pid,'Nama Pasien'].unique())}")
+
+print("\n=== 4. PENJAMIN ===")
+print("nilai mentah:", sorted(k["Penjamin"].unique()))
+def rapikan_penjamin(s):
+    x = str(s).upper().replace(".", "").replace(" ", "")
+    if x.startswith("BPJS"): return "BPJS"
+    if x.startswith("UMUM"): return "Umum"
+    if x.startswith("ASURANSI"): return "Asuransi"
+    return "Lainnya"
+g["penjamin"] = g["Penjamin"].map(rapikan_penjamin)
+print("sesudah dirapikan:", sorted(g["penjamin"].unique()))
+
+print("\n=== HASIL: pendapatan per penjamin (hanya yang sudah ditagih) ===")
+h = g[g["_merge"] == "both"]
+print(h.groupby("penjamin").agg(kunjungan=("Total","size"),
+                                pendapatan=("Total","sum")).to_string())
+print("\ntotal pendapatan bersih:", f'{h["Total"].sum():,.0f}'.replace(",","."))
+print("total tagihan mentah   :", f'{t["Total"].sum():,.0f}'.replace(",","."))
+print("selisih (tagihan ganda):", f'{t["Total"].sum() - h["Total"].sum():,.0f}'.replace(",","."))
+
+print("\n=== HASIL: potensi pendapatan yang belum ditagih ===")
+tarif = {"Pemeriksaan Umum":50000,"Pemeriksaan Gigi":150000,"Cek Laboratorium":275000,
+         "Suntik Imunisasi":120000,"Kontrol Kehamilan":180000,"Perawatan Luka":85000}
+print("nilai kunjungan tanpa tagihan:",
+      f'{belum["Layanan"].map(tarif).sum():,.0f}'.replace(",","."))
+</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>=== 1. TAGIHAN GANDA ===
+baris tagihan terlibat: 22 | kunjungan terdampak: 11
+nilai yang tercatat dua kali: 1.415.000
+
+=== 2. KUNJUNGAN TANPA TAGIHAN ===
+kunjungan belum ditagih: 18
+
+=== 3. NAMA PASIEN GANDA ===
+nama unik mentah : 20
+ID pasien unik   : 15
+ID dengan &gt;1 ejaan nama: 3
+  ID 1: ['SITI NURHALIZA', 'Siti Nurhalizah', 'siti nurhaliza']
+  ID 4: ['BAMBANG WIJAYA', 'Bambang Widjaja', 'Bambang Wijaya']
+  ID 9: ['Fitri Handayani', 'Fitri Handayanti']
+
+=== HASIL: pendapatan per penjamin ===
+          kunjungan  pendapatan
+penjamin
+Asuransi         51   6853000.0
+BPJS            100  14273500.0
+Umum             71   9038500.0
+
+total pendapatan bersih: 30.165.000
+total tagihan mentah   : 31.580.000
+selisih (tagihan ganda): 1.415.000
+
+nilai kunjungan tanpa tagihan: 2.745.000</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Perhatikan <code>indicator=True</code> pada <code>merge</code>.</strong> Itu menambahkan kolom <code>_merge</code> berisi <code>both</code>, <code>left_only</code>, atau <code>right_only</code> — cara paling murah menemukan baris yang tidak punya pasangan. Tanpa itu, 18 kunjungan tanpa tagihan akan hilang begitu saja dari <code>how="inner"</code>, dan kamu tidak akan pernah tahu ada Rp 2,7 juta yang belum ditagih.</p>
+          <p style="margin-top:8px"><strong>Dan perhatikan urutan kerjanya:</strong> buang tagihan ganda <em>dulu</em>, baru gabungkan. Kalau dibalik, 11 tagihan ganda itu akan menggandakan barisnya di hasil gabungan, dan pendapatanmu naik Rp 1,4 juta tanpa terlihat.</p>
+        </details>
+        <div class="catatan" style="margin-top:14px">
+          <strong>Yang kamu laporkan ke Bu Ratih:</strong> "Rasanya ada yang tidak cocok" itu benar, dan ada tiga hal. Pertama, <strong>11 kunjungan tertagih dua kali senilai Rp 1.415.000</strong> — pasiennya mungkin sudah membayar dobel. Kedua, <strong>18 kunjungan belum ditagih sama sekali, potensi Rp 2.745.000</strong>. Ketiga, <strong>tiga pasien tercatat dengan ejaan nama berbeda-beda</strong>, jadi riwayat medisnya terpecah — ini bukan soal uang, tapi soal keselamatan pasien, dan justru itu yang paling mendesak. Pendapatan bersih semester satu: <strong>Rp 30.165.000</strong>, 47% dari BPJS.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ K3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">KASUS 3 · kontraktor</span>
+      <h2>Tabel pemetaan adalah keputusan bisnis, bukan pekerjaan teknis</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <p class="tujuan"><strong>Selesai kasus ini kamu bisa:</strong> menyambungkan dua daftar yang tidak punya satu pun nama yang sama, dan tahu bahwa satu baris di tabel pemetaanmu bisa menggeser margin proyek 9 poin persen.</p>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>"Pak, tolong dicek proyek mana yang rugi. Sheet RAB itu bikinan kantor, sheet Realisasi itu bikinan orang lapangan. Namanya beda-beda karena beda orang yang ngisi. Saya cuma mau tahu proyek mana yang biayanya jebol dari anggaran."</em><br>
+      <span class="mono" style="font-size:0.85rem">— Pak Yanto, CV Karya Mandiri</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="k3s1"><label for="k3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Kasus 3 — CV Karya Mandiri (kontraktor).
+Dua sheet dalam satu workbook, dibuat dua orang berbeda:
+  'RAB'      -&gt; nama proyek versi marketing
+  'Realisasi'-&gt; nama proyek versi lapangan, plus biaya campur teks &amp; angka
+"""
+import random
+from datetime import date, timedelta
+from openpyxl import Workbook
+from openpyxl.styles import Font
+
+rng = random.Random(31)
+
+PROYEK = [
+ # (nama di RAB,                     nama di Realisasi,          nilai kontrak, rab)
+ ("Pembangunan Ruko Depok 2 Lantai", "RUKO DEPOK - 2024",        850_000_000, 690_000_000),
+ ("Renovasi Kantor PT Sinar Mas",    "renovasi kantor sinarmas",  320_000_000, 268_000_000),
+ ("Gudang Logistik Cibitung",        "GUDANG CIBITUNG",         1_240_000_000, 985_000_000),
+ ("Rumah Tinggal Bpk. Handoko",      "Rmh Bpk Handoko",           540_000_000, 448_000_000),
+ ("Pagar &amp; Taman Perumahan Griya",   "PAGAR TAMAN GRIYA",         185_000_000, 149_000_000),
+ ("Masjid Al-Ikhlas Tahap 2",        "MASJID AL IKHLAS TAHAP II", 410_000_000, 352_000_000),
+ ("Kios Pasar Modern Bekasi",        "KIOS PASAR BEKASI",         275_000_000, 221_000_000),
+]
+KATEGORI = ["Material", "Upah Tukang", "Sewa Alat", "Transport", "Subkontraktor", "Overhead"]
+
+wb = Workbook()
+
+# ---------- Sheet RAB ----------
+ws = wb.active; ws.title = "RAB"
+ws["A1"] = "CV KARYA MANDIRI - RENCANA ANGGARAN BIAYA 2024"; ws["A1"].font = Font(bold=True, size=12)
+ws.append([]); 
+for i, h in enumerate(["Nama Proyek", "Nilai Kontrak", "Total RAB", "Target Margin"]):
+    c = ws.cell(row=3, column=1+i, value=h); c.font = Font(bold=True)
+r = 4
+for nama, _, kontrak, rab in PROYEK:
+    ws.cell(row=r, column=1, value=nama)
+    ws.cell(row=r, column=2, value=kontrak)
+    ws.cell(row=r, column=3, value=rab)
+    ws.cell(row=r, column=4, value=(kontrak - rab) / kontrak)
+    r += 1
+
+# ---------- Sheet Realisasi ----------
+ws2 = wb.create_sheet("Realisasi")
+for i, h in enumerate(["Tanggal", "Proyek", "Kategori", "Uraian", "Biaya"]):
+    c = ws2.cell(row=1, column=1+i, value=h); c.font = Font(bold=True)
+r = 2
+n_baris = 0
+total_per_proyek = {}
+for nama_rab, nama_real, kontrak, rab in PROYEK:
+    # realisasi 88%-118% dari RAB -&gt; ada yang untung, ada yang jebol
+    faktor = rng.uniform(0.88, 1.18)
+    target = int(rab * faktor)
+    terkumpul = 0
+    while terkumpul &lt; target * 0.97:
+        sisa = target - terkumpul
+        biaya = min(sisa, int(rng.uniform(0.03, 0.15) * target))
+        biaya = max(biaya, 500_000)
+        biaya = round(biaya, -4)
+        terkumpul += biaya
+        d = date(2024, 1, 1) + timedelta(days=rng.randrange(210))
+        kat = KATEGORI[rng.randrange(len(KATEGORI))]
+        # separuh biaya ditulis sebagai TEKS "Rp 15.000.000", separuh sebagai angka
+        if rng.random() &lt; 0.5:
+            nilai = f"Rp {biaya:,}".replace(",", ".")
+        else:
+            nilai = biaya
+        ws2.cell(row=r, column=1, value=d.strftime("%d/%m/%Y"))
+        ws2.cell(row=r, column=2, value=nama_real)
+        ws2.cell(row=r, column=3, value=kat)
+        ws2.cell(row=r, column=4, value=f"{kat} termin {rng.randint(1,4)}")
+        ws2.cell(row=r, column=5, value=nilai)
+        r += 1; n_baris += 1
+    total_per_proyek[nama_real] = terkumpul
+
+# satu proyek muncul di Realisasi tapi TIDAK ada di RAB (pekerjaan tambahan)
+for _ in range(6):
+    biaya = round(rng.randint(8_000_000, 25_000_000), -4)
+    d = date(2024, 5, 1) + timedelta(days=rng.randrange(60))
+    ws2.cell(row=r, column=1, value=d.strftime("%d/%m/%Y"))
+    ws2.cell(row=r, column=2, value="PEK. TAMBAH KURANG RUKO DEPOK")
+    ws2.cell(row=r, column=3, value="Material")
+    ws2.cell(row=r, column=4, value="Tambahan permintaan owner")
+    ws2.cell(row=r, column=5, value=f"Rp {biaya:,}".replace(",", "."))
+    r += 1; n_baris += 1
+    total_per_proyek["PEK. TAMBAH KURANG RUKO DEPOK"] = \
+        total_per_proyek.get("PEK. TAMBAH KURANG RUKO DEPOK", 0) + biaya
+
+wb.save("RAB vs Realisasi CV Karya Mandiri.xlsx")
+print("proyek di RAB      :", len(PROYEK))
+print("baris realisasi    :", n_baris)
+print("proyek di Realisasi:", len(total_per_proyek))
+for k, v in total_per_proyek.items():
+    print(f"  {k:32s} {v:&gt;14,}".replace(",", "."))
+</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>proyek di RAB      : 7
+baris realisasi    : 86
+proyek di Realisasi: 8</code></pre></div>
+        </div>
+        <p><strong>7 lawan 8.</strong> Ada satu nama di Realisasi yang tidak punya pasangan di RAB. Menemukannya mudah; memutuskan mau diapakan itu yang sulit — dan itu yang dibayar.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Dua masalah sekaligus: kolom biaya dan nama proyek</h3>
+        <span class="cek"><input type="checkbox" id="k3s2"><label for="k3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+BERKAS = "RAB vs Realisasi CV Karya Mandiri.xlsx"
+print(pd.ExcelFile(BERKAS).sheet_names)
+
+rab  = pd.read_excel(BERKAS, sheet_name="RAB", skiprows=2)
+real = pd.read_excel(BERKAS, sheet_name="Realisasi")
+
+print(real["Biaya"].head(6).to_string())
+print("tipe:", real["Biaya"].dtype)
+teks = real["Biaya"].map(lambda x: isinstance(x, str)).sum()
+print(f"berupa TEKS: {teks} | berupa ANGKA: {len(real)-teks}")
+
+print("\ndi RAB      :", sorted(rab["Nama Proyek"].tolist()))
+print("\ndi Realisasi:", sorted(real["Proyek"].unique().tolist()))
+print("\nmerge langsung:",
+      len(rab.merge(real, left_on="Nama Proyek", right_on="Proyek", how="inner")), "baris")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>['RAB', 'Realisasi']
+0         26520000
+1         87820000
+2         29080000
+3         35210000
+4    Rp 91.190.000
+5    Rp 43.280.000
+tipe: object
+berupa TEKS: 44 | berupa ANGKA: 42
+
+di RAB      : ['Gudang Logistik Cibitung', 'Kios Pasar Modern Bekasi', ...]
+
+di Realisasi: ['GUDANG CIBITUNG', 'KIOS PASAR BEKASI', ...]
+
+merge langsung: 0 baris</code></pre></div>
+        </div>
+        <p><strong>44 baris teks, 42 baris angka, di satu kolom yang sama.</strong> Ini terjadi ketika dua orang mengisi sheet yang sama: satu mengetik "Rp 91.190.000", satu menempel angka dari kalkulator. Kolomnya jadi <code>object</code>, dan <code>.sum()</code> di atasnya akan menyambung teks, bukan menjumlahkan angka.</p>
+        <div class="bahaya">
+          <strong>Dan nol baris cocok — itu kabar baik.</strong> Sungguh. Gagal total lebih aman daripada gagal sebagian. Kalau kebetulan ada dua-tiga nama yang cocok, kamu akan dapat hasil yang <em>terisi</em> tapi cuma memuat sebagian proyek, dan hampir pasti kamu tidak akan sadar. Nol memaksamu berhenti dan berpikir.
+        </div>
+        <div class="aksi">Sebelum lanjut: buat sendiri tabel pemetaan nama proyeknya. Delapan nama Realisasi ke tujuh nama RAB. Perhatikan baik-baik nama kedelapan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Satu baris pemetaan yang menggeser margin 9 poin</h3>
+        <span class="cek"><input type="checkbox" id="k3s3"><label for="k3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka kunci jawaban</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>import pandas as pd, re
+pd.set_option("display.width", 220)
+BERKAS = "RAB vs Realisasi CV Karya Mandiri.xlsx"
+
+print("=== sheet apa saja yang ada ===")
+print(pd.ExcelFile(BERKAS).sheet_names)
+
+rab  = pd.read_excel(BERKAS, sheet_name="RAB", skiprows=2)
+real = pd.read_excel(BERKAS, sheet_name="Realisasi")
+print("\nRAB:", rab.shape, "| Realisasi:", real.shape)
+
+print("\n=== kolom Biaya: campur teks dan angka ===")
+print(real["Biaya"].head(6).to_string())
+print("tipe kolom Biaya:", real["Biaya"].dtype)
+teks  = real["Biaya"].map(lambda x: isinstance(x, str)).sum()
+print(f"baris berupa TEKS: {teks} | berupa ANGKA: {len(real)-teks}")
+print("kalau langsung .sum():", real["Biaya"].sum() if real["Biaya"].dtype != object else "GAGAL / hasil aneh")
+
+def ke_angka(x):
+    if pd.isna(x): return 0
+    if isinstance(x, (int, float)): return int(x)
+    t = re.sub(r"[^0-9\-]", "", str(x))
+    return int(t) if t not in ("", "-") else 0
+real["biaya"] = real["Biaya"].map(ke_angka)
+print("sesudah dibersihkan, total:", f'{real["biaya"].sum():,}'.replace(",","."))
+
+print("\n=== nama proyek di dua sheet TIDAK SAMA ===")
+print("di RAB      :", sorted(rab["Nama Proyek"].tolist()))
+print("\ndi Realisasi:", sorted(real["Proyek"].unique().tolist()))
+
+print("\n=== kalau nekat merge langsung ===")
+coba = rab.merge(real, left_on="Nama Proyek", right_on="Proyek", how="inner")
+print("baris hasil merge:", len(coba), " &lt;-- tidak ada satu pun yang cocok")
+
+# --- tabel pemetaan dibuat MANUAL, karena ini keputusan manusia ---
+PETA = {
+ "RUKO DEPOK - 2024":             "Pembangunan Ruko Depok 2 Lantai",
+ "PEK. TAMBAH KURANG RUKO DEPOK": "Pembangunan Ruko Depok 2 Lantai",   # pekerjaan tambah masuk ke proyek induk
+ "renovasi kantor sinarmas":      "Renovasi Kantor PT Sinar Mas",
+ "GUDANG CIBITUNG":               "Gudang Logistik Cibitung",
+ "Rmh Bpk Handoko":               "Rumah Tinggal Bpk. Handoko",
+ "PAGAR TAMAN GRIYA":             "Pagar &amp; Taman Perumahan Griya",
+ "MASJID AL IKHLAS TAHAP II":     "Masjid Al-Ikhlas Tahap 2",
+ "KIOS PASAR BEKASI":             "Kios Pasar Modern Bekasi",
+}
+belum = set(real["Proyek"].unique()) - set(PETA)
+assert not belum, f"belum dipetakan: {belum}"
+real["proyek_baku"] = real["Proyek"].map(PETA)
+
+rekap = (real.groupby("proyek_baku")["biaya"].sum().rename("realisasi").reset_index()
+         .merge(rab, left_on="proyek_baku", right_on="Nama Proyek", how="outer"))
+rekap["selisih"]    = rekap["Total RAB"] - rekap["realisasi"]
+rekap["serapan_%"]  = (rekap["realisasi"] / rekap["Total RAB"] * 100).round(1)
+rekap["laba"]       = rekap["Nilai Kontrak"] - rekap["realisasi"]
+rekap["margin_%"]   = (rekap["laba"] / rekap["Nilai Kontrak"] * 100).round(1)
+rekap["target_%"]   = (rekap["Target Margin"] * 100).round(1)
+
+print("\n=== HASIL: RAB lawan realisasi ===")
+print(rekap[["proyek_baku","Nilai Kontrak","Total RAB","realisasi","serapan_%","laba","margin_%","target_%"]]
+      .sort_values("margin_%").to_string(index=False))
+
+print("\n=== proyek yang RAB-nya jebol ===")
+j = rekap[rekap["selisih"] &lt; 0]
+print(j[["proyek_baku","Total RAB","realisasi","selisih"]].to_string(index=False))
+
+print("\n=== total ===")
+print("nilai kontrak :", f'{rekap["Nilai Kontrak"].sum():,.0f}'.replace(",","."))
+print("total RAB     :", f'{rekap["Total RAB"].sum():,.0f}'.replace(",","."))
+print("realisasi     :", f'{rekap["realisasi"].sum():,.0f}'.replace(",","."))
+print("laba kotor    :", f'{rekap["laba"].sum():,.0f}'.replace(",","."))
+print("margin rata2  :", round(rekap["laba"].sum()/rekap["Nilai Kontrak"].sum()*100,1), "%")
+print("tie-out ke sheet Realisasi:", int(rekap["realisasi"].sum()) - int(real["biaya"].sum()))
+</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>=== HASIL: RAB lawan realisasi ===
+                    proyek_baku  Nilai Kontrak  Total RAB  realisasi  serapan_%      laba  margin_%  target_%
+       Masjid Al-Ikhlas Tahap 2      410000000  352000000  408020000      115.9   1980000       0.5      14.1
+       Gudang Logistik Cibitung     1240000000  985000000 1154370000      117.2  85630000       6.9      20.6
+   Renovasi Kantor PT Sinar Mas      320000000  268000000  262860000       98.1  57140000      17.9      16.2
+Pembangunan Ruko Depok 2 Lantai      850000000  690000000  688590000       99.8 161410000      19.0      18.8
+  Pagar &amp; Taman Perumahan Griya      185000000  149000000  147800000       99.2  37200000      20.1      19.5
+     Rumah Tinggal Bpk. Handoko      540000000  448000000  421770000       94.1 118230000      21.9      17.0
+       Kios Pasar Modern Bekasi      275000000  221000000  198590000       89.9  76410000      27.8      19.6
+
+=== proyek yang RAB-nya jebol ===
+             proyek_baku  Total RAB  realisasi    selisih
+Gudang Logistik Cibitung  985000000 1154370000 -169370000
+Masjid Al-Ikhlas Tahap 2  352000000  408020000  -56020000
+
+=== total ===
+nilai kontrak : 3.820.000.000
+total RAB     : 3.113.000.000
+realisasi     : 3.282.000.000
+laba kotor    : 538.000.000
+margin rata2  : 14.1 %
+tie-out ke sheet Realisasi: 0</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>Perhatikan <code>assert</code> di kunci itu:</strong></p>
+          <div class="kode" style="margin-top:8px"><pre><code>belum = set(real["Proyek"].unique()) - set(PETA)
+assert not belum, f"belum dipetakan: {belum}"</code></pre></div>
+          <p style="margin-top:8px">Satu baris ini yang membuat pemetaan manual aman dipakai. Kalau bulan depan Pak Yanto menambah proyek baru dan mengirim berkas yang sama, skripmu akan <strong>berhenti dengan berisik</strong> dan menyebut nama proyek yang belum kamu petakan — bukan diam-diam membuangnya dari laporan. Pemetaan manual tanpa <code>assert</code> adalah bom waktu; dengan <code>assert</code>, ia alat yang jujur.</p>
+        </details>
+
+        <div class="bahaya" style="margin-top:14px">
+          <strong>Sekarang bagian yang sebenarnya penting, dan yang tidak bisa dijawab Python.</strong> Nama kedelapan itu <code>"PEK. TAMBAH KURANG RUKO DEPOK"</code> senilai Rp 78.850.000 — pekerjaan tambah di luar kontrak. Di kunci jawaban ia saya masukkan ke proyek induknya. Itu <strong>keputusan</strong>, dan inilah harganya:
+        </div>
+        <div class="tabel-bungkus" style="margin-top:12px">
+          <table>
+            <thead><tr><th>Keputusan pemetaan</th><th>Realisasi Ruko Depok</th><th>Margin</th></tr></thead>
+            <tbody>
+              <tr><td>Pekerjaan tambah <strong>dipisah</strong> sebagai proyek sendiri</td><td class="mono">609.740.000</td><td class="mono"><strong>28,3%</strong></td></tr>
+              <tr><td>Pekerjaan tambah <strong>digabung</strong> ke proyek induk</td><td class="mono">688.590.000</td><td class="mono"><strong>19,0%</strong></td></tr>
+              <tr><td colspan="2">Selisih dari satu baris tabel pemetaan</td><td class="mono"><strong>9,3 poin</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top:12px">Dua-duanya bisa dibenarkan. Digabung, kalau owner belum membayar tambahan itu — maka biayanya memang menggerus margin proyek. Dipisah, kalau tambahan itu ditagihkan terpisah dan ada nilai kontraknya sendiri — maka menggabungkannya membuat proyek induk terlihat lebih buruk daripada kenyataannya.</p>
+        <p style="margin-top:8px"><strong>Yang tidak bisa dibenarkan adalah memilih salah satu tanpa bertanya, lalu menyerahkan angkanya seolah-olah cuma ada satu jawaban.</strong> Pertanyaan ke Pak Yanto cuma satu kalimat: <em>"Pekerjaan tambah kurang Ruko Depok Rp 78,85 juta ini sudah ditagihkan ke owner terpisah, atau masuk kontrak yang Rp 850 juta?"</em> — dan jawabannya menggeser margin proyek terbesarnya sembilan poin.</p>
+
+        <div class="catatan" style="margin-top:14px">
+          <strong>Yang kamu laporkan ke Pak Yanto:</strong> dua proyek jebol dari RAB — <strong>Gudang Cibitung Rp 169,4 juta (serapan 117%)</strong> dan <strong>Masjid Al-Ikhlas Rp 56 juta (serapan 116%)</strong>. Masjid yang paling gawat: target margin 14,1%, kenyataannya <strong>0,5%</strong> — proyek Rp 410 juta yang menghasilkan laba Rp 1,98 juta, praktis kerja gratis. Sebaliknya Kios Pasar Bekasi selesai di 90% RAB dengan margin 27,8%. Satu pertanyaan terbuka soal pekerjaan tambah Ruko Depok, dan satu catatan proses: selama nama proyek ditulis bebas oleh dua tim, laporan seperti ini harus dibuat manual tiap bulan.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ K4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">KASUS 4 · yayasan</span>
+      <h2>Rp 45 juta yang hilang karena orang mengetik "LUNAS"</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <p class="tujuan"><strong>Selesai kasus ini kamu bisa:</strong> mengubah tabel melebar jadi memanjang, menafsirkan sel yang isinya campur angka dan kata, dan menemukan kenapa laporan buatan tangan klien meleset puluhan juta.</p>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>"Assalamualaikum. Kami mau minta tolong dihitung tunggakan SPP. Bendahara bilang tunggakan kita Rp 93 juta, tapi saya merasa kok kebanyakan ya. Rekapnya dibuat TU pakai Excel, satu kolom satu bulan. Mohon dicek."</em><br>
+      <span class="mono" style="font-size:0.85rem">— Pak Zaenal, Yayasan Bina Cendekia</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="k4s1"><label for="k4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Kasus 4 — Yayasan Bina Cendekia.
+Rekap SPP dalam bentuk MELEBAR: satu kolom per bulan.
+Isinya campur: angka, teks 'LUNAS', '-', kosong, dan catatan bebas.
+"""
+import random
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment
+
+rng = random.Random(99)
+BULAN = ["Jul","Agu","Sep","Okt","Nov","Des","Jan","Feb","Mar","Apr","Mei","Jun"]
+KELAS = ["7A","7B","8A","8B","9A","9B"]
+SPP   = {"7A":450000,"7B":450000,"8A":475000,"8B":475000,"9A":500000,"9B":500000}
+
+nama_depan = ["Andi","Bella","Citra","Dimas","Eka","Farhan","Gita","Hana","Irfan","Jihan",
+              "Kirana","Lukman","Mira","Naufal","Okta","Putri","Qori","Rizky","Salsa","Tegar",
+              "Umar","Vina","Wahyu","Yuda","Zahra","Aditya","Bunga","Cahya","Dewa","Elsa"]
+nama_blkg = ["Pratama","Wijaya","Saputra","Ramadhan","Anggraini","Nugroho","Permata","Hidayat",
+             "Kusuma","Maulana"]
+
+wb = Workbook(); ws = wb.active; ws.title = "Rekap SPP"
+ws.merge_cells("A1:P1")
+ws["A1"] = "YAYASAN BINA CENDEKIA — REKAP PEMBAYARAN SPP TP 2023/2024"
+ws["A1"].font = Font(bold=True, size=12); ws["A1"].alignment = Alignment(horizontal="center")
+
+HEAD = ["NIS","Nama Siswa","Kelas","SPP/Bulan"] + BULAN + ["Keterangan"]
+for i,h in enumerate(HEAD):
+    c = ws.cell(row=3, column=1+i, value=h); c.font = Font(bold=True)
+
+r = 4
+n_siswa = 0
+n_lunas = 0
+fakta = []      # kebenaran yang kita simpan untuk memverifikasi jawaban nanti
+for i in range(72):
+    nis = f"2023{i+1:03d}"
+    nama = f"{nama_depan[i % len(nama_depan)]} {nama_blkg[rng.randrange(len(nama_blkg))]}"
+    kelas = KELAS[i % len(KELAS)]
+    spp = SPP[kelas]
+    # 7% siswa keluar di tengah tahun
+    keluar_di = rng.randrange(4, 11) if rng.random() &lt; 0.07 else None
+    ket = ""
+    if keluar_di is not None:
+        ket = f"Pindah sekolah bulan {BULAN[keluar_di]}"
+    ws.cell(row=r, column=1, value=nis)
+    ws.cell(row=r, column=2, value=nama)
+    ws.cell(row=r, column=3, value=kelas)
+    ws.cell(row=r, column=4, value=spp)
+    bayar_total = 0
+    bayar_angka = 0
+    tunggak_bulan = 0
+    for j, b in enumerate(BULAN):
+        kol = 5 + j
+        if keluar_di is not None and j &gt;= keluar_di:
+            ws.cell(row=r, column=kol, value="-")          # sudah keluar
+            continue
+        p = rng.random()
+        if p &lt; 0.72:                                        # bayar penuh, ditulis angka
+            ws.cell(row=r, column=kol, value=spp); bayar_total += spp; bayar_angka += spp
+        elif p &lt; 0.84:                                      # bayar penuh, ditulis 'LUNAS'
+            ws.cell(row=r, column=kol, value="LUNAS"); bayar_total += spp; n_lunas += 1
+        elif p &lt; 0.90:                                      # cicil sebagian
+            sebagian = int(round(spp * rng.choice([0.4,0.5,0.6]), -3))
+            ws.cell(row=r, column=kol, value=sebagian); bayar_total += sebagian; bayar_angka += sebagian
+            tunggak_bulan += 1
+        elif p &lt; 0.96:                                      # belum bayar, dikosongkan
+            tunggak_bulan += 1
+        else:                                               # belum bayar, ditulis catatan
+            ws.cell(row=r, column=kol, value=rng.choice(["blm","BELUM","nunggak","x"]))
+            tunggak_bulan += 1
+    ws.cell(row=r, column=17, value=ket)
+    bulan_wajib = keluar_di if keluar_di is not None else 12
+    fakta.append(dict(nis=nis, kelas=kelas, spp=spp, bulan_wajib=bulan_wajib,
+                      bayar=bayar_total, bayar_angka=bayar_angka, tagihan=spp*bulan_wajib))
+    r += 1; n_siswa += 1
+
+# baris total di bawah: TU memakai =SUM() Excel, yang MENGABAIKAN teks 'LUNAS'
+versi_tu = sum(f["bayar_angka"] for f in fakta)
+c = ws.cell(row=r+1, column=2, value="TOTAL DITERIMA (versi TU)"); c.font = Font(bold=True)
+c2 = ws.cell(row=r+1, column=16, value=versi_tu); c2.font = Font(bold=True)
+wb.save("Rekap SPP Yayasan Bina Cendekia.xlsx")
+
+benar_tagihan = sum(f["tagihan"] for f in fakta)
+benar_bayar   = sum(f["bayar"] for f in fakta)
+print("siswa            :", n_siswa)
+print("total tagihan     :", f"{benar_tagihan:,}".replace(",","."))
+print("total diterima    :", f"{benar_bayar:,}".replace(",","."))
+print("tunggakan         :", f"{benar_tagihan-benar_bayar:,}".replace(",","."))
+print("siswa pindah      :", sum(1 for f in fakta if f["bulan_wajib"] &lt; 12))
+print()
+print("sel bertuliskan LUNAS :", n_lunas)
+print("versi TU (=SUM Excel) :", f"{versi_tu:,}".replace(",","."))
+print("selisih yang disembunyikan LUNAS:", f"{benar_bayar-versi_tu:,}".replace(",","."))
+</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>siswa            : 72
+total tagihan     : 399.050.000
+total diterima    : 351.247.000
+tunggakan         : 47.803.000
+siswa pindah      : 5
+
+sel bertuliskan LUNAS : 95
+versi TU (=SUM Excel) : 305.897.000
+selisih yang disembunyikan LUNAS: 45.350.000</code></pre></div>
+        </div>
+        <div class="aksi">Skrip ini mencetak jawabannya karena ia yang <em>membuat</em> datanya. Tutup layar ini sekarang, dan cari sendiri angka itu dari berkas Excel-nya. Tunggakan sebenarnya bukan Rp 93 juta — tapi kamu harus membuktikannya, bukan mempercayaiku.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bentuk melebar, dan sel yang isinya bukan angka</h3>
+        <span class="cek"><input type="checkbox" id="k4s2"><label for="k4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd, numpy as np
+BULAN = ["Jul","Agu","Sep","Okt","Nov","Des","Jan","Feb","Mar","Apr","Mei","Jun"]
+
+df = pd.read_excel("Rekap SPP Yayasan Bina Cendekia.xlsx", skiprows=2)
+print("bentuk:", df.shape)
+d = df[df["NIS"].notna()].copy()
+
+semua = pd.concat([d[b] for b in BULAN])
+jenis = semua.map(lambda x: "kosong" if pd.isna(x)
+                  else ("angka" if isinstance(x,(int,float,np.integer)) else f"teks: {x}"))
+print(jenis.value_counts().to_string())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>teks: LUNAS       95
+teks: -           25
+teks: BELUM        9
+teks: blm          8
+teks: nunggak      7
+teks: x            5</code></pre></div>
+        </div>
+        <p>Enam macam teks di kolom yang seharusnya berisi rupiah, dan <strong>tiap satunya punya arti berbeda</strong>:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Isi sel</th><th>Artinya</th><th>Nilainya</th><th>Wajib bayar?</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">450000</td><td>bayar, sejumlah itu</td><td>450.000</td><td>ya</td></tr>
+              <tr><td class="mono">LUNAS</td><td>bayar penuh, tapi ditulis kata</td><td><strong>sebesar SPP</strong></td><td>ya</td></tr>
+              <tr><td class="mono">225000</td><td>bayar sebagian</td><td>225.000</td><td>ya</td></tr>
+              <tr><td class="mono">(kosong)</td><td>belum bayar</td><td>0</td><td>ya</td></tr>
+              <tr><td class="mono">blm / BELUM / nunggak / x</td><td>belum bayar</td><td>0</td><td>ya</td></tr>
+              <tr><td class="mono">-</td><td>siswa sudah pindah</td><td>0</td><td><strong>TIDAK</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya" style="margin-top:12px">
+          <strong>Baris terakhir itu yang paling mahal kalau salah.</strong> Sel kosong dan sel <code>-</code> sama-sama tidak berisi uang, tapi yang satu berarti "belum bayar" dan yang satu berarti "tidak ditagih". Kalau kamu perlakukan <code>-</code> sebagai tunggakan, kamu akan menagih lima anak yang sudah pindah sekolah sebesar <strong>Rp 11.350.000</strong> untuk bulan-bulan yang tidak pernah mereka jalani. Perbedaan ini tidak ada di data; ia ada di kolom <strong>Keterangan</strong> dan di kepala orang TU.
+        </div>
+        <div class="aksi">Sekarang ubah tabelnya dari melebar jadi memanjang dengan <code>melt</code>, tafsirkan tiap sel, dan hitung tunggakan sebenarnya. Bandingkan dengan angka TU di baris paling bawah berkas.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Jawabannya, dan kenapa bendahara salah</h3>
+        <span class="cek"><input type="checkbox" id="k4s3"><label for="k4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <details>
+          <summary>Buka kunci jawaban</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>import pandas as pd, numpy as np
+pd.set_option("display.width", 220)
+BERKAS = "Rekap SPP Yayasan Bina Cendekia.xlsx"
+BULAN = ["Jul","Agu","Sep","Okt","Nov","Des","Jan","Feb","Mar","Apr","Mei","Jun"]
+
+df = pd.read_excel(BERKAS, skiprows=2)
+print("bentuk mentah:", df.shape)
+print(df.head(3).to_string())
+
+tu = df[df["Nama Siswa"].astype(str).str.startswith("TOTAL DITERIMA", na=False)]
+VERSI_TU = int(tu["Jun"].iloc[0])
+print("\nangka yang dilaporkan TU:", f"{VERSI_TU:,}".replace(",","."))
+
+d = df[df["NIS"].notna()].copy()
+print("siswa:", len(d))
+
+print("\n=== isi sel bulan itu apa saja? ===")
+semua = pd.concat([d[b] for b in BULAN])
+jenis = semua.map(lambda x: "kosong" if pd.isna(x) else ("angka" if isinstance(x,(int,float,np.integer)) else f"teks: {x}"))
+print(jenis.value_counts().to_string())
+
+# --- ubah dari MELEBAR jadi MEMANJANG ---
+panjang = d.melt(id_vars=["NIS","Nama Siswa","Kelas","SPP/Bulan","Keterangan"],
+                 value_vars=BULAN, var_name="bulan", value_name="isi")
+panjang["urut"] = panjang["bulan"].map({b:i for i,b in enumerate(BULAN)})
+print("\nbentuk memanjang:", panjang.shape, f"({len(d)} siswa x {len(BULAN)} bulan)")
+
+TEKS_LUNAS  = {"LUNAS","lunas","Lunas"}
+TEKS_BELUM  = {"blm","BELUM","nunggak","x"}
+TEKS_KELUAR = {"-"}
+
+def tafsir(row):
+    v = row["isi"]
+    if pd.isna(v):                      return pd.Series(["belum bayar", 0, 1])
+    if isinstance(v, (int, float, np.integer)):
+        return pd.Series(["bayar", int(v), 1])
+    s = str(v).strip()
+    if s in TEKS_LUNAS:                 return pd.Series(["bayar", int(row["SPP/Bulan"]), 1])
+    if s in TEKS_KELUAR:                return pd.Series(["tidak wajib", 0, 0])
+    if s in TEKS_BELUM:                 return pd.Series(["belum bayar", 0, 1])
+    return pd.Series(["tak dikenali", 0, 1])
+
+panjang[["status","dibayar","wajib"]] = panjang.apply(tafsir, axis=1)
+print("\n=== hasil penafsiran tiap sel ===")
+print(panjang["status"].value_counts().to_string())
+assert (panjang["status"] == "tak dikenali").sum() == 0
+
+panjang["tagihan"] = panjang["wajib"] * panjang["SPP/Bulan"]
+panjang["kurang"]  = panjang["tagihan"] - panjang["dibayar"]
+
+print("\n=== PEMERIKSAAN ===")
+diterima = int(panjang["dibayar"].sum())
+tagihan  = int(panjang["tagihan"].sum())
+print("total tagihan       :", f"{tagihan:,}".replace(",","."))
+print("total diterima      :", f"{diterima:,}".replace(",","."))
+print("tunggakan sebenarnya:", f"{tagihan-diterima:,}".replace(",","."))
+print("versi TU            :", f"{VERSI_TU:,}".replace(",","."))
+print("SELISIH             :", f"{diterima-VERSI_TU:,}".replace(",","."),
+      f'&lt;- dari {(panjang["isi"].isin(TEKS_LUNAS)).sum()} sel bertuliskan "LUNAS"')
+
+print("\n=== HASIL: tunggakan per kelas ===")
+print(panjang.groupby("Kelas").agg(siswa=("NIS","nunique"), tagihan=("tagihan","sum"),
+      diterima=("dibayar","sum"), tunggakan=("kurang","sum"))
+      .assign(persen=lambda x: (x.tunggakan/x.tagihan*100).round(1)).to_string())
+
+print("\n=== HASIL: 8 siswa dengan tunggakan terbesar ===")
+per = (panjang.groupby(["NIS","Nama Siswa","Kelas"])
+       .agg(bulan_wajib=("wajib","sum"), tunggakan=("kurang","sum"),
+            bulan_nunggak=("status", lambda s: (s=="belum bayar").sum()))
+       .reset_index().sort_values("tunggakan", ascending=False))
+print(per.head(8).to_string(index=False))
+
+print("\n=== HASIL: siswa pindah (bulan wajibnya &lt; 12) ===")
+pindah = per[per["bulan_wajib"] &lt; 12]
+print(len(pindah), "siswa | tunggakan mereka:",
+      f'{int(pindah["tunggakan"].sum()):,}'.replace(",","."))
+print(pindah[["NIS","Nama Siswa","Kelas","bulan_wajib","tunggakan"]].to_string(index=False))
+</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>bentuk memanjang: (864, 8) (72 siswa x 12 bulan)
+
+=== hasil penafsiran tiap sel ===
+status
+bayar          766
+belum bayar     73
+tidak wajib     25
+
+=== PEMERIKSAAN ===
+total tagihan       : 399.050.000
+total diterima      : 351.247.000
+tunggakan sebenarnya: 47.803.000
+versi TU            : 305.897.000
+SELISIH             : 45.350.000 &lt;- dari 95 sel bertuliskan "LUNAS"
+
+=== HASIL: tunggakan per kelas ===
+       siswa     tagihan  diterima   tunggakan  persen
+Kelas
+7A        12  60300000.0  52560000   7740000.0    12.8
+7B        12  59850000.0  52380000   7470000.0    12.5
+8A        12  68400000.0  56908000  11492000.0    16.8
+8B        12  66500000.0  61799000   4701000.0     7.1
+9A        12  72000000.0  64000000   8000000.0    11.1
+9B        12  72000000.0  63600000   8400000.0    11.7
+
+=== HASIL: siswa pindah (bulan wajibnya &lt; 12) ===
+5 siswa | tunggakan mereka: 1.575.000</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong>864 = 72 × 12.</strong> Itu pemeriksaan pertama sesudah <code>melt</code>, dan ia gratis. Kalau hasilnya bukan 864, ada kolom bulan yang tertinggal atau ada baris bukan-siswa yang ikut terbawa.</p>
+          <p style="margin-top:8px"><strong>Dan <code>assert</code> pada "tak dikenali":</strong> tiap sel harus jatuh ke salah satu kategori yang kamu kenal. Kalau tahun depan TU menulis "cicil" atau "gratis beasiswa", skripmu berhenti dan memberitahumu — bukan diam-diam menghitungnya sebagai nol dan menaikkan tunggakan.</p>
+        </details>
+
+        <div class="bahaya" style="margin-top:14px">
+          <strong>Kenapa bendahara bilang Rp 93 juta.</strong> Ia memakai <code>=SUM()</code> Excel di sepanjang baris. Fungsi <code>SUM</code> <strong>mengabaikan sel berisi teks</strong> — tidak error, tidak memberi peringatan, cuma menganggapnya nol. Ada <strong>95 sel bertuliskan "LUNAS"</strong>, dan tiap satunya adalah pembayaran penuh yang menguap dari penjumlahan. Total yang menguap: <strong>Rp 45.350.000</strong>.
+        </div>
+        <p style="margin-top:12px">Akibatnya berantai: TU mencatat penerimaan Rp 305.897.000 padahal yang masuk Rp 351.247.000, sehingga tunggakan terlihat Rp 93.153.000 padahal sebenarnya <strong>Rp 47.803.000</strong>. Yayasan hampir menagih puluhan juta rupiah kepada <strong>orang tua yang sudah membayar</strong> — dan orang tua yang ditagih padahal sudah lunas tidak akan mengirim koreksi sopan; mereka akan marah, dan mereka benar.</p>
+
+        <div class="catatan" style="margin-top:14px">
+          <strong>Yang kamu laporkan ke Pak Zaenal:</strong> firasatnya benar. Tunggakan bukan Rp 93 juta tapi <strong>Rp 47,8 juta</strong> — selisih Rp 45,35 juta murni kesalahan penjumlahan, bukan uang hilang. Kelas <strong>8A paling berat (16,8%)</strong>, 8B paling sehat (7,1%). Lima siswa pindah di tengah tahun; tunggakan mereka cuma Rp 1,575 juta dan sebaiknya dipisahkan dari daftar tagih aktif. Dan satu saran proses yang lebih berharga daripada angkanya: <strong>minta TU berhenti menulis "LUNAS"</strong> dan mengetik nominalnya. Satu aturan itu menghapus seluruh masalah ini selamanya.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ K5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">KASUS 5 · distributor</span>
+      <h2>Rekening koran, dan Rp 424 juta yang bukan pelunasan piutang</h2>
+      <span class="waktu">± 150 menit</span>
+    </div>
+    <p class="tujuan"><strong>Selesai kasus ini kamu bisa:</strong> mencocokkan mutasi bank berketerangan bebas ke pelanggan, menyusun umur piutang yang tie-out ke saldo, dan menolak asumsi yang akan membuat piutang kurang saji 43%.</p>
+
+    <div class="catatan">
+      <strong>Pesan yang masuk:</strong><br>
+      <em>"Selamat pagi. Kami butuh daftar umur piutang per 30 Juni untuk keperluan audit. Data faktur ada di Excel, pembayaran bisa dilihat dari rekening koran. Bagian akuntansi kami baru satu orang jadi belum sempat direkonsiliasi. Bisa dibantu?"</em><br>
+      <span class="mono" style="font-size:0.85rem">— Ibu Christine, PT Anugerah Jaya</span>
+    </div>
+
+    <div class="bahaya">
+      <strong>Kasus ini yang paling dekat dengan pekerjaan lamamu, dan paling mahal tarifnya.</strong> Rekonsiliasi piutang ke bank adalah prosedur audit baku — bedanya, sekarang kamu mengerjakannya dengan 55 baris mutasi dalam hitungan menit, bukan dengan stabilo dan printout. Kalau ada satu kasus di halaman ini yang layak masuk portofoliomu, ini kasusnya.
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin kedua berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="k5s1"><label for="k5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>"""Kasus 5 — PT Anugerah Jaya (distributor).
+Piutang.xlsx : faktur beredar per pelanggan
+RekKoran.csv : mutasi bank, keterangan berupa teks bebas seperti aslinya
+"""
+import random, csv
+from datetime import date, timedelta
+from openpyxl import Workbook
+from openpyxl.styles import Font
+
+rng = random.Random(555)
+TGL_LAPORAN = date(2024, 6, 30)
+
+PELANGGAN = [
+ # (nama resmi,               cara bank menuliskannya)
+ ("PT Sumber Makmur Sentosa", ["TRF DR PT SUMBER MAKMUR", "TRANSFER PT SUMBER MAKMUR SENTOSA", "PT SUMBERMAKMUR"]),
+ ("CV Berkah Jaya Abadi",     ["KREDIT CV BERKAH JAYA", "TRF CV BERKAH JAYA ABADI", "SETORAN CV BERKAH"]),
+ ("Toko Bahagia",             ["SETORAN TUNAI TOKO BAHAGIA", "TRF TOKO BAHAGIA"]),
+ ("UD Sinar Terang",          ["TRF DR UD SINAR TERANG", "UD SINARTERANG"]),
+ ("PT Mitra Niaga Utama",     ["TRANSFER PT MITRA NIAGA", "TRF PT MITRA NIAGA UTAMA"]),
+ ("Toko Sejahtera",           ["SETORAN TOKO SEJAHTERA", "TRF TK SEJAHTERA"]),
+ ("CV Anugerah Pangan",       ["TRF CV ANUGERAH PANGAN"]),
+ ("PT Global Distribusi",     ["TRANSFER PT GLOBAL DISTRIBUSI", "TRF PT GLOBAL DIST"]),
+]
+
+# --- buat faktur ---
+faktur = []
+no = 0
+for nama, _ in PELANGGAN:
+    for _ in range(rng.randint(4, 9)):
+        no += 1
+        tgl = TGL_LAPORAN - timedelta(days=rng.randrange(5, 175))
+        nilai = round(rng.randint(8_000_000, 95_000_000), -5)
+        faktur.append(dict(no=f"INV/2024/{no:04d}", pelanggan=nama, tanggal=tgl,
+                           jatuh_tempo=tgl + timedelta(days=30), nilai=nilai))
+
+wb = Workbook(); ws = wb.active; ws.title = "Piutang"
+ws["A1"] = "PT ANUGERAH JAYA - DAFTAR PIUTANG PER 30 JUNI 2024"
+ws["A1"].font = Font(bold=True, size=12)
+for i,h in enumerate(["No Faktur","Pelanggan","Tgl Faktur","Jatuh Tempo","Nilai Faktur"]):
+    c = ws.cell(row=3, column=1+i, value=h); c.font = Font(bold=True)
+for r, f in enumerate(faktur, start=4):
+    ws.cell(row=r, column=1, value=f["no"])
+    ws.cell(row=r, column=2, value=f["pelanggan"])
+    ws.cell(row=r, column=3, value=f["tanggal"].strftime("%d/%m/%Y"))
+    ws.cell(row=r, column=4, value=f["jatuh_tempo"].strftime("%d/%m/%Y"))
+    ws.cell(row=r, column=5, value=f["nilai"])
+wb.save("Daftar Piutang PT Anugerah Jaya.xlsx")
+
+# --- buat mutasi bank ---
+mutasi = []
+terbayar = {}
+for f in faktur:
+    p = rng.random()
+    if p &lt; 0.55:      bayar = f["nilai"]                      # lunas
+    elif p &lt; 0.72:    bayar = round(f["nilai"] * rng.choice([0.3,0.5,0.6]), -5)  # sebagian
+    else:             bayar = 0                                # belum bayar
+    if bayar:
+        d = f["jatuh_tempo"] + timedelta(days=rng.randrange(-10, 25))
+        if d &gt; TGL_LAPORAN: d = TGL_LAPORAN - timedelta(days=rng.randrange(1,10))
+        ket = rng.choice(dict(PELANGGAN)[f["pelanggan"]])
+        mutasi.append((d, ket, int(bayar)))
+        terbayar[f["pelanggan"]] = terbayar.get(f["pelanggan"], 0) + int(bayar)
+
+# transaksi bank yang BUKAN pelunasan piutang
+for _ in range(14):
+    d = TGL_LAPORAN - timedelta(days=rng.randrange(1, 180))
+    ket, n = rng.choice([
+        ("BIAYA ADM BULANAN", -25000),
+        ("BUNGA GIRO", rng.randint(15000, 90000)),
+        ("PAJAK BUNGA", -rng.randint(3000, 18000)),
+        ("TRF KE SUPPLIER PT INDOFOOD", -rng.randint(20_000_000, 60_000_000)),
+        ("SETORAN MODAL DIREKTUR", rng.randint(50_000_000, 150_000_000)),
+        ("BIAYA TRANSFER RTGS", -6500),
+    ])
+    mutasi.append((d, ket, n))
+
+# dua setoran dari pihak yang tidak dikenali sama sekali
+for _ in range(2):
+    d = TGL_LAPORAN - timedelta(days=rng.randrange(1, 90))
+    mutasi.append((d, rng.choice(["TRF DR PT MAJU BERSAMA", "SETORAN TUNAI TANPA KETERANGAN"]),
+                   rng.randint(5_000_000, 20_000_000)))
+
+mutasi.sort(key=lambda x: x[0])
+with open("Rekening Koran Juni 2024.csv", "w", newline="", encoding="utf-8") as fh:
+    w = csv.writer(fh, delimiter=";")
+    w.writerow(["Tanggal","Keterangan","Debet","Kredit"])
+    for d, ket, n in mutasi:
+        deb = f"{-n:,}".replace(",",".") if n &lt; 0 else ""
+        kre = f"{n:,}".replace(",",".")  if n &gt; 0 else ""
+        w.writerow([d.strftime("%d/%m/%Y"), ket, deb, kre])
+
+total_faktur = sum(f["nilai"] for f in faktur)
+total_bayar  = sum(terbayar.values())
+print("faktur           :", len(faktur), "| nilai:", f"{total_faktur:,}".replace(",","."))
+print("baris rek koran  :", len(mutasi))
+print("pelunasan piutang:", f"{total_bayar:,}".replace(",","."))
+print("saldo piutang    :", f"{total_faktur-total_bayar:,}".replace(",","."))
+</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>faktur           : 53 | nilai: 2.524.400.000
+baris rek koran  : 55
+pelunasan piutang: 1.544.500.000
+saldo piutang    : 979.900.000</code></pre></div>
+        </div>
+        <p>Buka <code>Rekening Koran Juni 2024.csv</code> dan baca kolom Keterangan pelan-pelan. Itu bentuk aslinya: singkatan, nama tidak lengkap, dan transaksi yang sama sekali bukan urusan pelanggan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Asumsi yang paling mahal di seluruh halaman ini</h3>
+        <span class="cek"><input type="checkbox" id="k5s2"><label for="k5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Hampir semua orang mulai dari sini: jumlahkan semua uang masuk, kurangkan dari total faktur, selesai.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd, re
+
+pi = pd.read_excel("Daftar Piutang PT Anugerah Jaya.xlsx", skiprows=2)
+rk = pd.read_csv("Rekening Koran Juni 2024.csv", sep=";", dtype=str)
+
+def ke_angka(x):
+    if pd.isna(x) or str(x).strip() == "": return 0
+    t = re.sub(r"[^0-9]", "", str(x))
+    return int(t) if t else 0
+
+rk["kredit"] = rk["Kredit"].map(ke_angka)
+masuk = rk[rk["kredit"] &gt; 0]
+
+print("total faktur   :", f'{pi["Nilai Faktur"].sum():,}'.replace(",","."))
+print("total uang masuk:", f'{masuk["kredit"].sum():,}'.replace(",","."))
+print("saldo piutang?? :", f'{pi["Nilai Faktur"].sum() - masuk["kredit"].sum():,}'.replace(",","."))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>total faktur   : 2.524.400.000
+total uang masuk: 1.968.606.050
+saldo piutang?? : 555.793.950</code></pre></div>
+        </div>
+        <div class="aksi">Angka Rp 555.793.950 itu rapi, masuk akal, dan <strong>salah sebesar Rp 424 juta</strong>. Sebelum membuka apa pun: cetak daftar keterangan uang masuk dan baca satu per satu. Mana yang bukan pelunasan piutang?</div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print(masuk["Keterangan"].value_counts().to_string())</code></pre>
+        </div>
+        <details>
+          <summary>Kalau sudah kamu baca sendiri, buka ini</summary>
+          <p style="margin-top:10px">Uang masuk ke rekening perusahaan datang dari banyak sumber, dan cuma sebagian yang melunasi piutang dagang:</p>
+          <ul>
+            <li><strong>Setoran modal direktur</strong> — Rp 398.476.419. Ini setoran ekuitas, bukan pelanggan membayar.</li>
+            <li><strong>Bunga giro</strong> — Rp 83.599. Pendapatan bunga bank.</li>
+            <li><strong>TRF DR PT MAJU BERSAMA</strong> — Rp 8.756.514. Nama ini <em>tidak ada</em> di daftar pelanggan.</li>
+            <li><strong>SETORAN TUNAI TANPA KETERANGAN</strong> — Rp 16.789.518. Tidak ada petunjuk sama sekali.</li>
+          </ul>
+          <p style="margin-top:10px">Total yang bukan pelunasan: <strong>Rp 424.106.050</strong>. Kalau semuanya dianggap pelunasan, piutang jadi <strong>kurang saji 43,3%</strong> — dan piutang kurang saji artinya laba dan aset ikut salah. Di kertas kerja audit, salah saji sebesar ini pada satu akun bukan temuan kecil.</p>
+          <div class="catatan" style="margin-top:10px">
+            <strong>Dua item terakhir tidak boleh kamu putuskan sendiri.</strong> Rp 25.546.032 dari PT Maju Bersama dan setoran tunai tanpa keterangan harus <em>ditanyakan</em>, bukan ditebak. Bisa jadi pelanggan baru, bisa jadi pembayaran lewat pihak ketiga, bisa jadi salah setor. Menaruhnya di daftar "perlu konfirmasi" adalah jawaban yang benar — dan daftar itu bagian dari hasil kerjamu, bukan tanda kamu gagal.
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cocokkan, susun umurnya, buktikan tie-out-nya</h3>
+        <span class="cek"><input type="checkbox" id="k5s3"><label for="k5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Kerjakan sendiri: buat tabel pemetaan keterangan bank ke nama pelanggan, hitung saldo per pelanggan, lalu susun aging 5 kelompok umur dengan pembayaran diterapkan <strong>FIFO</strong> — faktur tertua dilunasi lebih dulu. Bukti bahwa kamu benar: total aging harus <strong>sama persis</strong> dengan total saldo piutang.</div>
+        <details>
+          <summary>Buka kunci jawaban</summary>
+          <div class="kode" style="margin-top:10px">
+            <button class="salin" type="button">Salin</button>
+            <pre><code>import pandas as pd, re
+from datetime import date
+pd.set_option("display.width", 230)
+TGL = pd.Timestamp("2024-06-30")
+
+pi = pd.read_excel("Daftar Piutang PT Anugerah Jaya.xlsx", skiprows=2)
+rk = pd.read_csv("Rekening Koran Juni 2024.csv", sep=";", dtype=str)
+print("faktur:", pi.shape, "| rekening koran:", rk.shape)
+
+def ke_angka(x):
+    if pd.isna(x) or str(x).strip() == "": return 0
+    t = re.sub(r"[^0-9]", "", str(x))
+    return int(t) if t else 0
+
+rk["kredit"] = rk["Kredit"].map(ke_angka)
+rk["debet"]  = rk["Debet"].map(ke_angka)
+rk["tanggal"] = pd.to_datetime(rk["Tanggal"], format="%d/%m/%Y")
+pi["tanggal"] = pd.to_datetime(pi["Tgl Faktur"], format="%d/%m/%Y")
+pi["jatuh_tempo"] = pd.to_datetime(pi["Jatuh Tempo"], format="%d/%m/%Y")
+
+print("\n=== 1. mana yang uang MASUK ===")
+masuk = rk[rk["kredit"] &gt; 0].copy()
+print("baris kredit:", len(masuk), "| nilai:", f'{masuk["kredit"].sum():,}'.replace(",","."))
+
+print("\n=== 2. cocokkan keterangan bank ke pelanggan ===")
+# kunci pencarian dibuat MANUAL: ini pekerjaan manusia, bukan tebakan mesin
+PETA = {
+ "SUMBERMAKMUR":     "PT Sumber Makmur Sentosa",
+ "SUMBER MAKMUR":    "PT Sumber Makmur Sentosa",
+ "BERKAH JAYA":      "CV Berkah Jaya Abadi",
+ "CV BERKAH":        "CV Berkah Jaya Abadi",
+ "TOKO BAHAGIA":     "Toko Bahagia",
+ "SINAR TERANG":     "UD Sinar Terang",
+ "SINARTERANG":      "UD Sinar Terang",
+ "MITRA NIAGA":      "PT Mitra Niaga Utama",
+ "TOKO SEJAHTERA":   "Toko Sejahtera",
+ "TK SEJAHTERA":     "Toko Sejahtera",
+ "ANUGERAH PANGAN":  "CV Anugerah Pangan",
+ "GLOBAL DISTRIBUSI":"PT Global Distribusi",
+ "GLOBAL DIST":      "PT Global Distribusi",
+}
+def cocokkan(ket):
+    k = str(ket).upper()
+    for kunci, nama in PETA.items():
+        if kunci in k: return nama
+    return None
+masuk["pelanggan"] = masuk["Keterangan"].map(cocokkan)
+
+cocok = masuk[masuk["pelanggan"].notna()]
+tidak = masuk[masuk["pelanggan"].isna()]
+print("kredit tercocokkan  :", len(cocok), "|", f'{cocok["kredit"].sum():,}'.replace(",","."))
+print("kredit TIDAK cocok  :", len(tidak), "|", f'{tidak["kredit"].sum():,}'.replace(",","."))
+print("\nyang tidak cocok — harus ditanyakan ke klien:")
+print(tidak[["Tanggal","Keterangan","kredit"]].to_string(index=False))
+
+print("\n=== 3. saldo piutang per pelanggan ===")
+f = pi.groupby("Pelanggan")["Nilai Faktur"].agg(["count","sum"]).rename(
+    columns={"count":"faktur","sum":"nilai_faktur"})
+b = cocok.groupby("pelanggan")["kredit"].sum().rename("dibayar")
+s = f.join(b).fillna(0)
+s["saldo"] = s["nilai_faktur"] - s["dibayar"]
+s["tertagih_%"] = (s["dibayar"]/s["nilai_faktur"]*100).round(1)
+print(s.sort_values("saldo", ascending=False).to_string())
+print("\nTOTAL saldo piutang:", f'{s["saldo"].sum():,.0f}'.replace(",","."))
+
+print("\n=== 4. umur piutang (aging) berbasis faktur tertua ===")
+# pembayaran diterapkan FIFO: faktur paling tua dilunasi lebih dulu
+pi = pi.sort_values(["Pelanggan","tanggal"]).reset_index(drop=True)
+bayar_sisa = b.to_dict()
+sisa_faktur = []
+for _, row in pi.iterrows():
+    p = row["Pelanggan"]; n = row["Nilai Faktur"]
+    pakai = min(bayar_sisa.get(p, 0), n)
+    bayar_sisa[p] = bayar_sisa.get(p, 0) - pakai
+    sisa_faktur.append(n - pakai)
+pi["sisa"] = sisa_faktur
+pi["umur"] = (TGL - pi["jatuh_tempo"]).dt.days
+
+def ember(h):
+    if h &lt;= 0:  return "1. Belum jatuh tempo"
+    if h &lt;= 30: return "2. 1-30 hari"
+    if h &lt;= 60: return "3. 31-60 hari"
+    if h &lt;= 90: return "4. 61-90 hari"
+    return "5. &gt; 90 hari"
+pi["kelompok"] = pi["umur"].map(ember)
+ag = pi[pi["sisa"] &gt; 0].groupby("kelompok").agg(faktur=("sisa","size"), nilai=("sisa","sum"))
+ag["persen"] = (ag["nilai"]/ag["nilai"].sum()*100).round(1)
+print(ag.to_string())
+print("\ntotal aging:", f'{ag["nilai"].sum():,.0f}'.replace(",","."),
+      "| cocok dengan saldo?", int(ag["nilai"].sum()) == int(s["saldo"].sum()))
+
+print("\n=== 5. piutang macet (&gt;90 hari) per pelanggan ===")
+macet = pi[(pi["sisa"] &gt; 0) &amp; (pi["umur"] &gt; 90)]
+print(macet.groupby("Pelanggan")["sisa"].agg(["size","sum"]).to_string())
+print("total macet:", f'{macet["sisa"].sum():,.0f}'.replace(",","."),
+      f'({macet["sisa"].sum()/s["saldo"].sum()*100:.1f}% dari saldo)')
+</code></pre>
+          </div>
+          <div class="hasil" style="margin-top:10px">
+            <span class="tag">HARUS MUNCUL</span>
+            <div class="kode"><pre><code>kredit tercocokkan  : 39 | 1.544.500.000
+kredit TIDAK cocok  : 8 | 424.106.050
+
+=== 3. saldo piutang per pelanggan ===
+                          faktur  nilai_faktur    dibayar      saldo  tertagih_%
+CV Berkah Jaya Abadi           9     524900000  259400000  265500000        49.4
+PT Sumber Makmur Sentosa       5     286400000  139800000  146600000        48.8
+CV Anugerah Pangan             7     311600000  169900000  141700000        54.5
+Toko Sejahtera                 8     337500000  227000000  110500000        67.3
+Toko Bahagia                   6     313900000  215400000   98500000        68.6
+UD Sinar Terang                6     208800000  119100000   89700000        57.0
+PT Mitra Niaga Utama           5     259400000  175100000   84300000        67.5
+PT Global Distribusi           7     281900000  238800000   43100000        84.7
+
+TOTAL saldo piutang: 979.900.000
+
+=== 4. umur piutang (aging) ===
+                      faktur      nilai  persen
+1. Belum jatuh tempo       5  245700000    25.1
+2. 1-30 hari              11  423500000    43.2
+3. 31-60 hari              8  258700000    26.4
+4. 61-90 hari              1   32900000     3.4
+5. &gt; 90 hari               1   19100000     1.9
+
+total aging: 979.900.000 | cocok dengan saldo? True</code></pre></div>
+          </div>
+          <p style="margin-top:10px"><strong><code>cocok dengan saldo? True</code> adalah baris terpenting di seluruh keluaran itu.</strong> Aging disusun lewat jalur yang sama sekali berbeda dari saldo — per faktur, diurutkan tanggal, dengan pembayaran diterapkan berurutan. Dua jalur berbeda yang bertemu di angka yang sama adalah bukti; satu jalur saja cuma harapan.</p>
+          <p style="margin-top:8px"><strong>Kenapa FIFO.</strong> Data pembayaran cuma menyebut jumlah dan nama, bukan faktur mana yang dilunasi. Jadi kamu <em>harus</em> memilih aturan penerapan, dan FIFO — tertua dulu — adalah yang lazim dan yang paling konservatif untuk aging. Sebut asumsi itu di laporanmu. Kalau klien punya bukti bahwa pelanggan tertentu membayar faktur tertentu, aturannya berubah dan angkanya ikut berubah.</p>
+        </details>
+
+        <div class="catatan" style="margin-top:14px">
+          <strong>Yang kamu laporkan ke Ibu Christine:</strong> saldo piutang per 30 Juni <strong>Rp 979.900.000</strong> dari 53 faktur. Yang berumur di atas 90 hari cuma <strong>Rp 19,1 juta (1,9%)</strong> — sehat. Tapi ada tiga hal yang lebih penting daripada angkanya. Pertama, <strong>Rp 424.106.050 uang masuk bukan pelunasan piutang</strong>, mayoritas setoran modal direktur; kalau ini tercampur, piutang kurang saji 43%. Kedua, <strong>Rp 25.546.032 dari dua setoran belum bisa diidentifikasi</strong> dan butuh konfirmasi. Ketiga, <strong>CV Berkah Jaya Abadi menahan Rp 265,5 juta — 27% dari seluruh piutang</strong>, dengan tingkat tertagih terendah kedua (49,4%); konsentrasi sebesar itu pada satu pelanggan adalah risiko tersendiri yang tidak terlihat dari daftar faktur mana pun.
+        </div>
+
+        <div class="selesai-hari">
+          <h3>Lima kasus selesai</h3>
+          <p>Lima berkas, lima jenis kekacauan, dan lima temuan yang tidak diminta siapa pun tapi justru itu yang berharga: Rp 11,1 juta nota tanpa nama, tiga pasien dengan riwayat medis terpecah, satu proyek bermargin 0,5%, Rp 45,35 juta yang dikira tunggakan padahal sudah dibayar, dan Rp 424 juta setoran yang bukan pelunasan.</p>
+          <p style="margin-top:10px">Tidak satu pun dari lima itu muncul karena kamu pandai memakai pandas. Semuanya muncul karena satu kebiasaan yang sama: <strong>angka yang rapi diperiksa, bukan dipercaya.</strong> Itu yang kamu bawa dari ruang audit, dan itu yang paling sedikit dimiliki orang yang belajar data dari kursus.</p>
+          <div class="catatan" style="margin-top:14px">
+            <strong>Cara memakai ini sebagai portofolio.</strong> Kelima kasus ini datanya buatan, jadi kamu <strong>boleh memublikasikannya</strong> — tidak ada rahasia klien yang bocor, dan ini satu-satunya cara jujur menunjukkan kemampuan membersihkan data sebelum kamu punya klien sungguhan. Untuk tiap kasus, tulis satu halaman: <em>berkas seperti apa yang masuk</em>, <em>apa yang rusak dan bagaimana kamu tahu</em>, <em>apa temuannya</em>, dan <em>satu pertanyaan yang kamu ajukan ke klien</em>. Bagian terakhir itu yang paling jarang ditulis orang, dan yang paling meyakinkan bagi yang membacanya. Sesudah punya klien sungguhan, ganti isinya mengikuti aturan di <strong>Bekal Rahasia Klien</strong> — jangan pernah menempelkan data klien asli ke portofolio, sekalipun sudah kamu anggap tidak sensitif.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua berkas di halaman ini dibuat dengan angka acak berkunci tetap, dan setiap keluaran dihasilkan dengan menjalankan kodenya sungguhan — bukan dari ingatan.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

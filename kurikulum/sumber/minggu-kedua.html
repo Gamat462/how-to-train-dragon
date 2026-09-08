@@ -1,0 +1,1189 @@
+<title>Minggu Kedua SQL</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{
+    max-width:820px; margin:0 auto 14px; font-size:0.85rem;
+  }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0;
+    font-size:0.85rem;
+  }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/df7c645b-ee38-4ee1-b60c-499ee6055467">← Kembali ke M1: SQL dari nol</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 2</span>
+  <button type="button" data-hari="8" aria-selected="true">Hari 8</button>
+  <button type="button" data-hari="9" aria-selected="false">Hari 9</button>
+  <button type="button" data-hari="10" aria-selected="false">Hari 10</button>
+  <button type="button" data-hari="11" aria-selected="false">Hari 11</button>
+  <button type="button" data-hari="12" aria-selected="false">Hari 12</button>
+  <button type="button" data-hari="13" aria-selected="false">Hari 13</button>
+  <button type="button" data-hari="14" aria-selected="false">Hari 14</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Penuntun langkah demi langkah · Lanjutan dari Minggu Pertama</span>
+    <h1>Minggu Kedua SQL</h1>
+    <p class="lede">Minggu lalu kamu belajar dengan satu tabel. Minggu ini kamu belajar menggabungkan dua tabel — dan di akhir minggu, kamu memindahkan semua kemampuanmu ke data 151.088 baris yang sesungguhnya, lalu membuat proyek pertama untuk portofolio GitHub-mu.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 8 ================= -->
+  <section class="day aktif" data-hari="8">
+    <div class="day-head">
+      <span class="n mono">HARI 8</span>
+      <h2>Menggabungkan dua tabel</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung <em>laba</em>, bukan cuma omzet. Ini pertanyaan yang tidak bisa dijawab satu tabel saja — dan itulah alasan JOIN ada.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa satu tabel tidak cukup</h3>
+        <span class="cek"><input type="checkbox" id="h8s1"><label for="h8s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tabel <code>penjualan</code> yang kamu pakai minggu lalu punya kolom <code>total</code> — itu <strong>omzet</strong> (uang yang masuk). Tapi pemilik kedai tidak hanya peduli omzet, dia peduli <strong>laba</strong> (omzet dikurangi biaya modal).</p>
+        <p>Masalahnya: tabel <code>penjualan</code> tidak tahu berapa biaya modal tiap produk. Informasi itu ada di tabel <strong>lain</strong>, bernama <code>produk</code>. JOIN adalah cara menyatukan dua tabel supaya kamu bisa memakai kolom dari keduanya sekaligus.</p>
+        <div class="diagram">
+          <div class="kotak"><strong>penjualan</strong>tahu: apa yang terjual, berapa banyak</div>
+          <span class="panah">+</span>
+          <div class="kotak"><strong>produk</strong>tahu: harga jual, biaya modal</div>
+          <span class="panah">=</span>
+          <div class="kotak"><strong>JOIN</strong>bisa hitung laba</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Siapkan dua tabel</h3>
+        <span class="cek"><input type="checkbox" id="h8s2"><label for="h8s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buka <span class="mono">sqliteonline.com</span>. Tempel <strong>tabel <code>penjualan</code> dari Hari 1</strong> dulu (buka Minggu 1 kalau perlu menyalinnya), Run. Lalu tempel tabel baru ini <strong>di bawahnya</strong>, di editor yang sama, dan Run lagi:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>CREATE TABLE produk (
+  nama_produk TEXT, harga_jual INTEGER, biaya_modal INTEGER
+);
+
+INSERT INTO produk VALUES
+('Kopi Susu'   , 22000,  9000),
+('Americano'   , 18000,  6000),
+('Roti Bakar'  , 15000,  7000),
+('Croissant'   , 20000, 11000),
+('Matcha Latte', 25000, 12000);</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">YANG HARUS TERJADI</span>
+          <p>Panel kiri sekarang menunjukkan <strong>dua tabel</strong>: <code>penjualan</code> dan <code>produk</code>. Coba lihat isi <code>produk</code>: <code>SELECT * FROM produk;</code> → 5 baris.</p>
+        </div>
+        <div class="catatan">
+          <strong>Perhatikan:</strong> <code>Matcha Latte</code> ada di tabel <code>produk</code> tapi <strong>tidak pernah muncul</strong> di tabel <code>penjualan</code>. Itu disengaja — produk baru yang belum laku. Ingat ini, kita pakai di Hari 9.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>JOIN pertamamu</h3>
+        <span class="cek"><input type="checkbox" id="h8s3"><label for="h8s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT p.produk, p.jumlah, pr.biaya_modal
+FROM penjualan p
+JOIN produk pr ON p.produk = pr.nama_produk
+LIMIT 5;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">YANG HARUS MUNCUL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>produk</th><th class="n">jumlah</th><th class="n">biaya_modal</th></tr></thead>
+              <tbody>
+                <tr><td>Kopi Susu</td><td class="n">12</td><td class="n">9000</td></tr>
+                <tr><td>Roti Bakar</td><td class="n">5</td><td class="n">7000</td></tr>
+                <tr><td>Americano</td><td class="n">8</td><td class="n">6000</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>Perhatikan tiga hal baru:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><code>p</code> dan <code>pr</code> adalah <strong>singkatan nama tabel</strong> — supaya kamu tidak perlu menulis <code>penjualan.produk</code> berkali-kali. Kamu bebas memilih hurufnya.</li>
+          <li><code>JOIN produk pr</code> = "gabungkan dengan tabel produk, dan panggil dia <code>pr</code>"</li>
+          <li><code>ON p.produk = pr.nama_produk</code> = "gabungkan baris yang nama produknya <strong>sama</strong>". Ini disebut <em>kunci penggabung</em>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Hitung laba</h3>
+        <span class="cek"><input type="checkbox" id="h8s4"><label for="h8s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sekarang tambahkan perhitungan. Laba per baris = jumlah × (harga jual − biaya modal).</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT p.produk, p.jumlah,
+       p.jumlah * (pr.harga_jual - pr.biaya_modal) AS laba
+FROM penjualan p
+JOIN produk pr ON p.produk = pr.nama_produk
+ORDER BY laba DESC
+LIMIT 5;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HASIL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>produk</th><th class="n">jumlah</th><th class="n">laba</th></tr></thead>
+              <tbody>
+                <tr><td>Kopi Susu</td><td class="n">22</td><td class="n">286.000</td></tr>
+                <tr><td>Kopi Susu</td><td class="n">20</td><td class="n">260.000</td></tr>
+                <tr><td>Kopi Susu</td><td class="n">18</td><td class="n">234.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p><strong>Ini query pertamamu yang menjawab pertanyaan yang tidak bisa dijawab satu tabel saja.</strong> Sebelum ini kamu hanya tahu Kopi Susu <em>laku banyak</em>. Sekarang kamu tahu dia juga <em>menghasilkan laba banyak</em> — dua hal yang kedengarannya sama tapi bisa sangat berbeda.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Laba per produk, diringkas</h3>
+        <span class="cek"><input type="checkbox" id="h8s5"><label for="h8s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Gabungkan JOIN dengan <code>GROUP BY</code> yang sudah kamu kuasai minggu lalu:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT p.produk,
+       SUM(p.total) AS omzet,
+       SUM(p.jumlah * (pr.harga_jual - pr.biaya_modal)) AS laba
+FROM penjualan p
+JOIN produk pr ON p.produk = pr.nama_produk
+GROUP BY p.produk
+ORDER BY laba DESC;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HASIL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>produk</th><th class="n">omzet</th><th class="n">laba</th></tr></thead>
+              <tbody>
+                <tr><td>Kopi Susu</td><td class="n">1.914.000</td><td class="n">1.131.000</td></tr>
+                <tr><td>Americano</td><td class="n">828.000</td><td class="n">552.000</td></tr>
+                <tr><td>Roti Bakar</td><td class="n">660.000</td><td class="n">352.000</td></tr>
+                <tr><td>Croissant</td><td class="n">600.000</td><td class="n">270.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:8px">Total laba semua produk: <strong>2.305.000</strong> (dari omzet 4.002.000 — berarti margin rata-rata sekitar 58%).</p>
+        </div>
+        <p>Peringkatnya <strong>sama</strong> dengan peringkat omzet minggu lalu — Kopi Susu tetap nomor satu di keduanya. Tapi itu kebetulan pada data kecil ini. Besok kamu akan lihat kasus di mana peringkatnya <strong>berbeda</strong>.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 8 selesai</h3>
+      <p><strong>Tambahkan ke catatan tulis tanganmu:</strong></p>
+      <ul>
+        <li><code>JOIN tabel_lain alias ON syarat_gabung</code></li>
+        <li>Alias (<code>p</code>, <code>pr</code>) = singkatan nama tabel, kamu yang pilih</li>
+        <li><code>ON</code> = kolom mana yang harus <strong>sama</strong> di kedua tabel</li>
+        <li>JOIN bisa digabung dengan <code>GROUP BY</code>, <code>WHERE</code>, <code>ORDER BY</code> — semua yang sudah kamu tahu</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= HARI 9 ================= -->
+  <section class="day" data-hari="9">
+    <div class="day-head">
+      <span class="n mono">HARI 9</span>
+      <h2>Data yang hilang saat JOIN</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali jebakan JOIN paling umum — data yang diam-diam hilang tanpa peringatan — dan cara menghindarinya.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Percobaan: di mana Matcha Latte?</h3>
+        <span class="cek"><input type="checkbox" id="h9s1"><label for="h9s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Siapkan ulang kedua tabel (Hari 1 + Hari 8 langkah 2). Lalu jalankan ini:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT pr.nama_produk, COUNT(p.id) AS jumlah_transaksi
+FROM produk pr
+JOIN penjualan p ON pr.nama_produk = p.produk
+GROUP BY pr.nama_produk;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">YANG HARUS MUNCUL</span>
+          <p><strong>Hanya 4 baris.</strong> Matcha Latte <strong>tidak ada</strong> di hasilnya — padahal dia ada di tabel <code>produk</code>.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Ini yang terjadi:</strong> <code>JOIN</code> biasa (nama lengkapnya <code>INNER JOIN</code>) hanya menampilkan baris yang <strong>cocok di kedua tabel</strong>. Matcha Latte ada di <code>produk</code> tapi tidak pernah muncul di <code>penjualan</code> — jadi dia dibuang, diam-diam, tanpa pesan error apa pun.
+        </div>
+        <p>Kalau atasanmu bertanya <em>"produk mana yang belum pernah laku?"</em>, query di atas tidak bisa menjawabnya — karena produk itu sudah hilang dari hasilnya sebelum kamu sempat melihatnya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>LEFT JOIN — jangan buang apa pun</h3>
+        <span class="cek"><input type="checkbox" id="h9s2"><label for="h9s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ganti <code>JOIN</code> jadi <code>LEFT JOIN</code>, dan balik urutan tabelnya supaya <code>produk</code> ada di kiri:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT pr.nama_produk, COUNT(p.id) AS jumlah_transaksi
+FROM produk pr
+LEFT JOIN penjualan p ON pr.nama_produk = p.produk
+GROUP BY pr.nama_produk;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HASIL — sekarang 5 baris</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>nama_produk</th><th class="n">jumlah_transaksi</th></tr></thead>
+              <tbody>
+                <tr><td>Kopi Susu</td><td class="n">5</td></tr>
+                <tr><td>Americano</td><td class="n">5</td></tr>
+                <tr><td>Roti Bakar</td><td class="n">5</td></tr>
+                <tr><td>Croissant</td><td class="n">5</td></tr>
+                <tr><td>Matcha Latte</td><td class="n">0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p><code>LEFT JOIN</code> artinya: "pertahankan <strong>semua</strong> baris dari tabel kiri (<code>produk</code>), meskipun tidak ada pasangannya di kanan". Kalau tidak ada pasangan, kolom dari tabel kanan diisi kosong (NULL), dan <code>COUNT</code> menghitungnya sebagai 0.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kapan pakai yang mana</h3>
+        <span class="cek"><input type="checkbox" id="h9s3"><label for="h9s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Pertanyaan</th><th>Pakai</th></tr></thead>
+            <tbody>
+              <tr><td>"Berapa laba dari produk yang <strong>terjual</strong>?"</td><td><code>JOIN</code> biasa — produk yang tidak laku memang tidak relevan</td></tr>
+              <tr><td>"Produk mana yang <strong>belum pernah</strong> laku?"</td><td><code>LEFT JOIN</code> — kamu justru butuh yang "hilang" itu</td></tr>
+              <tr><td>"Semua produk, dengan omzetnya (0 kalau belum laku)"</td><td><code>LEFT JOIN</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Aturan aman untuk pemula:</strong> kalau ragu, coba dulu dengan <code>LEFT JOIN</code> dari tabel yang paling penting untuk dipertahankan lengkap. Kalau ternyata semua baris cocok, hasilnya akan sama persis dengan <code>JOIN</code> biasa — jadi tidak ada ruginya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri: margin per produk</h3>
+        <span class="cek"><input type="checkbox" id="h9s4"><label for="h9s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Margin (%) = laba dibagi omzet, dikali 100. Tulis query untuk menghitung margin persen tiap produk, urut dari <strong>terkecil</strong>. Petunjuk: butuh <code>JOIN</code> biasa (bukan LEFT — Matcha Latte tidak relevan di sini karena omzetnya 0, nanti kamu akan membagi dengan nol).</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT p.produk,
+       ROUND(SUM(p.jumlah*(pr.harga_jual-pr.biaya_modal)) * 100.0
+             / SUM(p.total), 1) AS margin_persen
+FROM penjualan p
+JOIN produk pr ON p.produk = pr.nama_produk
+GROUP BY p.produk
+ORDER BY margin_persen;</code></pre></div>
+            <p>Hasil: Croissant <strong>45,0%</strong> · Roti Bakar <strong>53,3%</strong> · Kopi Susu <strong>59,1%</strong> · Americano <strong>66,7%</strong></p>
+            <p style="margin-top:8px"><strong>Ini yang saya maksud "peringkatnya bisa berbeda":</strong> berdasarkan laba (Hari 8), urutannya Kopi Susu → Americano → Roti Bakar → Croissant. Tapi berdasarkan <em>margin</em>, Americano justru yang paling efisien, dan Croissant paling boros. Kopi Susu unggul karena <em>volume</em>, bukan karena marginnya paling tinggi. Dua sudut pandang, dua kesimpulan berbeda — dan seorang analis harus tahu menyebut keduanya.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 9 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong></p>
+      <ul>
+        <li><code>JOIN</code> biasa = buang baris yang tidak cocok di kedua tabel (diam-diam!)</li>
+        <li><code>LEFT JOIN</code> = pertahankan semua baris tabel kiri</li>
+        <li>Margin ≠ laba — volume besar bisa menang di laba tapi kalah di margin</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= HARI 10 ================= -->
+  <section class="day" data-hari="10">
+    <div class="day-head">
+      <span class="n mono">HARI 10</span>
+      <h2>Ulangi semuanya dari ingatan</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Sama seperti Hari 4 minggu lalu — tapi kali ini soalnya mencampur <strong>semua</strong> yang sudah kamu pelajari sejak Hari 1. Ini yang membuat semuanya benar-benar melekat.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapkan kedua tabel, tutup catatan</h3>
+        <span class="cek"><input type="checkbox" id="h10s1"><label for="h10s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tempel ulang <code>penjualan</code> (Hari 1) dan <code>produk</code> (Hari 8). Tutup semua catatanmu. Kerjakan 8 soal di bawah berurutan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Delapan soal campuran</h3>
+        <span class="cek"><input type="checkbox" id="h10s2"><label for="h10s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:14px"><strong>1.</strong> <em>(Hari 1)</em> Berapa total baris di tabel <code>penjualan</code>?</p>
+        <p style="margin-bottom:14px"><strong>2.</strong> <em>(Hari 2)</em> Berapa total omzet transaksi di Bandung?</p>
+        <p style="margin-bottom:14px"><strong>3.</strong> <em>(Hari 3)</em> Berapa omzet tiap kategori (Makanan/Minuman), urut dari terbesar?</p>
+        <p style="margin-bottom:14px"><strong>4.</strong> <em>(Hari 5)</em> Berapa omzet tiap bulan?</p>
+        <p style="margin-bottom:14px"><strong>5.</strong> <em>(Hari 8)</em> Berapa total laba dari <strong>semua</strong> transaksi (satu angka saja, tanpa dikelompokkan)?</p>
+        <p style="margin-bottom:14px"><strong>6.</strong> <em>(Hari 8+3)</em> Berapa laba tiap kota (Jakarta vs Bandung)?</p>
+        <p style="margin-bottom:14px"><strong>7.</strong> <em>(Hari 9)</em> Tampilkan semua produk beserta omzetnya, <strong>termasuk</strong> yang belum pernah laku.</p>
+        <p style="margin-bottom:14px"><strong>8.</strong> <em>(Gabungan)</em> Kota mana yang laba per transaksinya lebih besar — Jakarta atau Bandung?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <code>SELECT COUNT(*) FROM penjualan;</code> → <strong>20</strong></p>
+            <p><strong>2.</strong> <code>SELECT SUM(total) FROM penjualan WHERE kota='Bandung';</code> → <strong>1.587.000</strong></p>
+            <p><strong>3.</strong> <code>SELECT kategori, SUM(total) AS omzet FROM penjualan GROUP BY kategori ORDER BY omzet DESC;</code><br>
+               → Minuman 2.742.000 · Makanan 1.260.000</p>
+            <p><strong>4.</strong> <code>SELECT SUBSTR(tanggal,1,7) AS bulan, SUM(total) AS omzet FROM penjualan GROUP BY bulan;</code><br>
+               → Jan 1.328.000 · Feb 1.693.000 · Mar 981.000</p>
+            <p><strong>5.</strong> <pre style="margin:6px 0"><code>SELECT SUM(p.jumlah*(pr.harga_jual-pr.biaya_modal)) AS laba
+FROM penjualan p JOIN produk pr ON p.produk=pr.nama_produk;</code></pre>→ <strong>2.305.000</strong></p>
+            <p><strong>6.</strong> <pre style="margin:6px 0"><code>SELECT p.kota, SUM(p.jumlah*(pr.harga_jual-pr.biaya_modal)) AS laba
+FROM penjualan p JOIN produk pr ON p.produk=pr.nama_produk
+GROUP BY p.kota;</code></pre>→ Jakarta <strong>1.375.000</strong> · Bandung <strong>930.000</strong></p>
+            <p><strong>7.</strong> <pre style="margin:6px 0"><code>SELECT pr.nama_produk, COALESCE(SUM(p.total),0) AS omzet
+FROM produk pr LEFT JOIN penjualan p ON pr.nama_produk=p.produk
+GROUP BY pr.nama_produk;</code></pre>→ 5 baris, Matcha Latte omzetnya 0</p>
+            <p><strong>8.</strong> Jakarta: 1.375.000 ÷ 12 transaksi = <strong>114.583/transaksi</strong>. Bandung: 930.000 ÷ 8 = <strong>116.250/transaksi</strong>. <strong>Bandung sedikit lebih tinggi</strong> per transaksi, meski labanya lebih kecil secara total — karena transaksinya lebih sedikit. Ini pola yang sama seperti yang kamu temukan Hari 6 soal omzet.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Nilai dirimu jujur</h3>
+        <span class="cek"><input type="checkbox" id="h10s3"><label for="h10s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>6–8 benar</strong> — kamu siap ke data besar. Lanjut Hari 11.</li>
+          <li><strong>4–5 benar</strong> — lanjut Hari 11, tapi ulangi soal 5–7 (JOIN) lagi besok pagi sebelum mulai.</li>
+          <li><strong>0–3 benar</strong> — ulangi Hari 8–9 dulu. JOIN adalah fondasi untuk hampir semua yang tersisa di jalur ini — jangan dilanjutkan dalam keadaan rapuh.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 10 selesai</h3>
+      <p>Kalau soal nomor 6 dan 8 tadi terasa lancar tanpa membuka catatan, itu tanda kuat: JOIN bukan lagi sesuatu yang kamu hafal, tapi sesuatu yang kamu pahami.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 11 ================= -->
+  <section class="day" data-hari="11">
+    <div class="day-head">
+      <span class="n mono">HARI 11</span>
+      <h2>Pindah ke data sungguhan</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini:</strong> data 20 baris yang kamu pakai dua minggu ini diganti dengan data 151.088 baris — seukuran yang benar-benar dipakai di pekerjaan analis. Semua perintah yang sudah kamu kuasai tetap berlaku persis sama.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ambil berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="h11s1"><label for="h11s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buka berkas <code>bootcamp-data-analyst.zip</code> yang sudah kamu terima sebelumnya. Ekstrak (klik kanan → Extract / Ekstrak Semua). Kamu akan melihat folder <code>bootcamp/</code>.</p>
+        <p>Yang kita pakai hari ini hanya folder <code>bootcamp/data/</code>. Abaikan dulu semua folder lain (<code>tugas/</code>, <code>migas/</code>, <code>sql/</code>) — belum saatnya.</p>
+        <div class="hasil">
+          <span class="tag">YANG HARUS ADA</span>
+          <p>Di dalam <code>bootcamp/data/</code>: berkas bernama <code>transaksi.csv</code> (ukurannya sekitar 9 MB — jauh lebih besar dari yang kamu ketik manual selama ini) dan <code>transaksi_item.csv</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buka halaman baru, kosong</h3>
+        <span class="cek"><input type="checkbox" id="h11s2"><label for="h11s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buka <span class="mono">sqliteonline.com</span> di tab <strong>baru</strong> (bukan menimpa yang lama, supaya data Minggu 1–2 tidak tercampur). Editornya harus kosong.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Impor transaksi.csv</h3>
+        <span class="cek"><input type="checkbox" id="h11s3"><label for="h11s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di panel kiri sqliteonline, cari tombol <strong>Import</strong> (biasanya ikon panah masuk, atau menu titik tiga di sebelah nama database). Klik, lalu pilih <strong>Import from CSV</strong>.</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li>Pilih berkas <code>transaksi.csv</code> dari folder <code>bootcamp/data/</code></li>
+          <li>Nama tabel: ketik <code>transaksi</code></li>
+          <li>Centang opsi <strong>"first row is header"</strong> / "baris pertama adalah judul kolom" — ini penting, kalau tidak dicentang, judul kolomnya ikut masuk sebagai data</li>
+          <li>Klik Import / OK</li>
+        </ol>
+        <div class="hasil">
+          <span class="tag">YANG HARUS TERJADI</span>
+          <p>Proses mungkin makan waktu 10–30 detik — jangan tutup halamannya. Setelah selesai, tabel <code>transaksi</code> muncul di panel kiri.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Kalau gagal atau sangat lambat:</strong> beberapa versi sqliteonline membatasi ukuran impor. Kalau macet lebih dari 2 menit, buka halaman baru dan coba lagi. Kalau tetap gagal, alternatifnya: pasang <a href="https://sqlitebrowser.org" target="_blank" rel="noopener">DB Browser for SQLite</a> di komputermu (gratis) — dia lebih kuat untuk data besar dan langkahnya mirip.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Verifikasi — jangan lewati ini</h3>
+        <span class="cek"><input type="checkbox" id="h11s4"><label for="h11s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ini kebiasaan yang membedakan analis yang bisa dipercaya: <strong>selalu periksa data yang baru dimuat, sebelum menganalisis apa pun.</strong></p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT COUNT(*) FROM transaksi;</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><strong>151088</strong> — kalau angkamu berbeda, impor belum sempurna. Ulangi langkah 3.</p></div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT SUM(total) FROM transaksi;</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><strong>8567304450</strong></p></div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT MIN(tanggal), MAX(tanggal) FROM transaksi;</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span><p><strong>2024-01-01</strong> sampai <strong>2026-06-30</strong></p></div>
+        <p>Ketiganya cocok? <strong>Data 2,5 tahun penuh sudah siap kamu analisis</strong> — dan cara mengaksesnya persis sama dengan tabel 20 baris yang kamu pakai dua minggu ini.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Rasakan bedanya</h3>
+        <span class="cek"><input type="checkbox" id="h11s5"><label for="h11s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Jalankan query yang sama persis dengan Hari 3, hanya beda nama tabel:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT saluran, COUNT(*) AS transaksi, ROUND(AVG(total)) AS rata2
+FROM transaksi
+GROUP BY saluran
+ORDER BY rata2 DESC;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HASIL</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>saluran</th><th class="n">transaksi</th><th class="n">rata2</th></tr></thead>
+              <tbody>
+                <tr><td>Delivery</td><td class="n">28.307</td><td class="n">57.677</td></tr>
+                <tr><td>Takeaway</td><td class="n">53.068</td><td class="n">56.620</td></tr>
+                <tr><td>Dine-in</td><td class="n">69.713</td><td class="n">56.373</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>Query yang sama, dari data 20 baris ke 151.088 baris — <strong>tidak ada yang berubah dari caramu menulisnya.</strong> Itulah kekuatan SQL: yang kamu pelajari di data kecil bekerja identik di data besar.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 11 selesai</h3>
+      <p>Kamu baru saja memuat dan memverifikasi data seukuran yang dipakai di pekerjaan sungguhan. Besok kita analisis lebih dalam — termasuk JOIN tiga tabel sekaligus.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 12 ================= -->
+  <section class="day" data-hari="12">
+    <div class="day-head">
+      <span class="n mono">HARI 12</span>
+      <h2>JOIN tiga tabel di data besar</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjawab pertanyaan bisnis sungguhan dari data sungguhan — cabang mana yang paling untung, produk apa yang paling laku, dan kenapa dua pertanyaan itu punya jawaban berbeda.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Impor dua tabel lagi</h3>
+        <span class="cek"><input type="checkbox" id="h12s1"><label for="h12s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di halaman sqliteonline yang sama dengan Hari 11 (tabel <code>transaksi</code> masih ada), ulangi cara Import untuk dua berkas ini dari folder <code>bootcamp/data/</code>:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><code>transaksi_item.csv</code> → nama tabel <code>transaksi_item</code></li>
+          <li><code>produk.csv</code> → nama tabel <code>produk</code></li>
+          <li><code>cabang.csv</code> → nama tabel <code>cabang</code></li>
+        </ul>
+        <p>Verifikasi:</p>
+        <div class="kode"><pre><code>SELECT COUNT(*) FROM transaksi_item;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS</span><p><strong>278303</strong></p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa perlu tiga tabel sekarang</h3>
+        <span class="cek"><input type="checkbox" id="h12s2"><label for="h12s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di data kecil, satu transaksi = satu produk. Di data sungguhan ini, <strong>satu transaksi bisa berisi beberapa produk</strong> — persis seperti struk belanja asli. Karena itu ada tabel terpisah <code>transaksi_item</code>: satu baris per produk dalam satu struk.</p>
+        <div class="diagram">
+          <div class="kotak"><strong>transaksi</strong>1 struk = 1 baris</div>
+          <span class="panah">→</span>
+          <div class="kotak"><strong>transaksi_item</strong>1 produk dlm struk = 1 baris</div>
+          <span class="panah">→</span>
+          <div class="kotak"><strong>produk</strong>harga &amp; biaya modal</div>
+        </div>
+        <p>Untuk menghitung laba, kamu perlu menggabungkan <strong>ketiganya</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>JOIN tiga tabel</h3>
+        <span class="cek"><input type="checkbox" id="h12s3"><label for="h12s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>SELECT pr.nama_produk,
+       ROUND(SUM(ti.nilai)) AS omzet,
+       ROUND(SUM(ti.jumlah * (pr.harga - pr.biaya_modal))) AS laba
+FROM transaksi t
+JOIN transaksi_item ti ON t.transaksi_id = ti.transaksi_id
+JOIN produk pr ON ti.produk_id = pr.produk_id
+WHERE t.tanggal LIKE '2025%'
+GROUP BY pr.nama_produk
+ORDER BY laba DESC
+LIMIT 5;</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HASIL — 5 produk paling untung di 2025</span>
+          <div class="tabel-bungkus">
+            <table>
+              <thead><tr><th>produk</th><th class="n">omzet</th><th class="n">laba</th></tr></thead>
+              <tbody>
+                <tr><td>Cappuccino</td><td class="n">411.150.000</td><td class="n">246.690.000</td></tr>
+                <tr><td>Matcha Latte</td><td class="n">454.412.000</td><td class="n">243.435.000</td></tr>
+                <tr><td>Latte</td><td class="n">403.350.000</td><td class="n">233.943.000</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>Dua <code>JOIN</code> berturut-turut — tidak berbeda dari satu JOIN, cuma ditulis dua kali. <code>WHERE t.tanggal LIKE '2025%'</code> menyaring hanya tahun 2025 (<code>LIKE</code> dengan <code>%</code> berarti "diawali dengan, apa pun setelahnya").</p>
+        <div class="catatan">
+          <strong>Perhatikan:</strong> Cappuccino nomor satu dalam laba, tapi Matcha Latte omzetnya lebih besar. Persis pola yang kamu temukan di Hari 9 dengan data kecil — sekarang terbukti lagi di data sungguhan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Coba sendiri: cabang mana paling untung</h3>
+        <span class="cek"><input type="checkbox" id="h12s4"><label for="h12s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Tulis query: omzet tiap cabang (pakai nama cabang dan kota, dari tabel <code>cabang</code>) sepanjang 2025, urut dari terbesar. Petunjuk: <code>JOIN</code> tabel <code>transaksi</code> dengan <code>cabang</code>, kunci gabungnya <code>cabang_id</code>.</p>
+        <details>
+          <summary>Buka jawaban</summary>
+          <div class="isi">
+            <div class="kode"><pre><code>SELECT c.nama_cabang, c.kota, ROUND(SUM(t.total)) AS omzet
+FROM transaksi t
+JOIN cabang c ON t.cabang_id = c.cabang_id
+WHERE t.tanggal LIKE '2025%'
+GROUP BY c.cabang_id
+ORDER BY omzet DESC;</code></pre></div>
+            <div class="tabel-bungkus">
+              <table>
+                <thead><tr><th>cabang</th><th>kota</th><th class="n">omzet</th></tr></thead>
+                <tbody>
+                  <tr><td>Senja Dago</td><td>Bandung</td><td class="n">1.067.901.600</td></tr>
+                  <tr><td>Senja Menteng</td><td>Jakarta</td><td class="n">940.762.100</td></tr>
+                  <tr><td>Senja Kemang</td><td>Jakarta</td><td class="n">800.909.700</td></tr>
+                  <tr><td>Senja Darmo</td><td>Surabaya</td><td class="n">772.784.500</td></tr>
+                  <tr><td>Senja Seturan</td><td>Yogyakarta</td><td class="n">356.886.900</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top:8px"><strong>Temuan menarik:</strong> Senja Dago di Bandung mengungguli <em>masing-masing</em> cabang Jakarta — Rp 1,07 miliar berbanding Menteng Rp 941 juta dan Kemang Rp 801 juta. (Digabung, kedua cabang Jakarta tetap lebih besar: Rp 1,74 miliar. Perhatikan bedanya "mengalahkan satu per satu" dan "mengalahkan gabungan" — dua klaim yang sangat berbeda, dan sering tertukar di laporan.) Ini pertanyaan lanjutan yang bagus untuk "pemilik kedai": kenapa satu cabang bisa jauh lebih unggul dari cabang lain?</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 12 selesai</h3>
+      <p>Kamu baru saja menjawab dua pertanyaan bisnis nyata dari 151.088 baris data, memakai JOIN tiga tabel. Ini persis jenis kerja yang dibayar di posisi data analyst junior.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 13 ================= -->
+  <section class="day" data-hari="13">
+    <div class="day-head">
+      <span class="n mono">HARI 13</span>
+      <h2>Proyek portofolio — bagian 1</h2>
+      <span class="waktu">± 90 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini:</strong> lima query yang menjawab pertanyaan bisnis nyata, tersimpan rapi di satu berkas — inti dari proyek portofolio pertamamu.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa ini penting</h3>
+        <span class="cek"><input type="checkbox" id="h13s1"><label for="h13s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sampai sekarang query-mu tersebar dan hilang begitu tab ditutup. Portofolio adalah <strong>bukti kerja yang tersimpan</strong> dan bisa ditunjukkan ke orang lain — inilah yang dilihat perekrut, bukan sertifikat.</p>
+        <p>Hari ini kita buat berkas teks berisi 5 query + jawabannya. Besok kita unggah ke GitHub.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buat berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="h13s2"><label for="h13s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buka aplikasi catatan biasa (Notepad, TextEdit, atau Notepad++). Buat berkas baru, simpan dengan nama <strong><code>analisis-kedai-senja.sql</code></strong>.</p>
+        <p>Untuk tiap query di bawah: jalankan dulu di sqliteonline, lihat hasilnya, lalu tulis di berkas dengan format ini:</p>
+        <div class="kode">
+          <pre><code>-- Pertanyaan 1: [tulis ulang pertanyaannya di sini]
+SELECT ...;
+-- Jawaban: [tulis angka hasilnya]</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Lima pertanyaan untuk proyekmu</h3>
+        <span class="cek"><input type="checkbox" id="h13s3"><label for="h13s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p><strong>1.</strong> Berapa total omzet dan jumlah transaksi sepanjang 2025?</p>
+        <p><strong>2.</strong> Cabang mana yang omzetnya terbesar di 2025? <em>(sudah kamu kerjakan Hari 12 — tinggal disalin)</em></p>
+        <p><strong>3.</strong> Tiga produk dengan laba terbesar sepanjang 2025. <em>(sudah kamu kerjakan Hari 12)</em></p>
+        <p><strong>4.</strong> Saluran apa (Dine-in/Takeaway/Delivery) yang rata-rata nilai transaksinya paling besar?</p>
+        <p><strong>5.</strong> <strong>Pertanyaanmu sendiri.</strong> Pikirkan satu hal yang menurutmu menarik untuk diketahui pemilik kedai, lalu jawab dengan query. Ini bagian terpenting — analis yang baik tahu <em>apa yang harus ditanyakan</em>, bukan cuma bisa menjawab.</p>
+        <details>
+          <summary>Contoh pertanyaan ke-5 kalau kamu buntu</summary>
+          <div class="isi">
+            <p>"Apakah ada perbedaan pola antara hari kerja dan akhir pekan?" atau "Metode bayar apa yang paling sering dipakai?" atau "Apakah member (yang punya pelanggan_id) belanja lebih banyak dari yang bukan member?"</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tulis satu paragraf temuan</h3>
+        <span class="cek"><input type="checkbox" id="h13s4"><label for="h13s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di paling bawah berkas, tulis 3–4 kalimat merangkum apa yang kamu temukan — dengan angka, seperti latihan Hari 6 minggu lalu. Ini yang akan dibaca perekrut duluan, sebelum membaca query-nya.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 13 selesai</h3>
+      <p>Simpan berkasnya baik-baik. Besok kita unggah ke GitHub supaya punya tautan yang bisa kamu taruh di CV.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 14 ================= -->
+  <section class="day" data-hari="14">
+    <div class="day-head">
+      <span class="n mono">HARI 14</span>
+      <h2>Naik ke GitHub</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini:</strong> proyek pertamamu punya tautan publik yang bisa dilihat siapa pun — dan bisa langsung kamu taruh di CV.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat akun GitHub</h3>
+        <span class="cek"><input type="checkbox" id="h14s1"><label for="h14s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau belum punya, buka <span class="mono">github.com</span> → Sign up. Gunakan nama pengguna yang profesional — ini akan muncul di CV-mu, jadi hindari nama alay atau angka acak.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buat repository</h3>
+        <span class="cek"><input type="checkbox" id="h14s2"><label for="h14s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Klik tombol <strong>+</strong> di kanan atas → <strong>New repository</strong>.</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li>Nama: <code>portofolio-data-analyst</code></li>
+          <li>Pilih <strong>Public</strong> (bukan Private — perekrut harus bisa melihatnya)</li>
+          <li>Centang <strong>Add a README file</strong></li>
+          <li>Klik <strong>Create repository</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Unggah berkasmu</h3>
+        <span class="cek"><input type="checkbox" id="h14s3"><label for="h14s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di halaman repository, klik <strong>Add file → Upload files</strong>. Seret berkas <code>analisis-kedai-senja.sql</code> dari Hari 13 ke kotak yang muncul. Scroll ke bawah, klik <strong>Commit changes</strong>.</p>
+        <div class="hasil">
+          <span class="tag">YANG HARUS TERJADI</span>
+          <p>Berkasmu sekarang muncul di daftar repository, dan bisa dibuka siapa pun lewat tautan <code>github.com/[usernamemu]/portofolio-data-analyst</code>.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tulis README</h3>
+        <span class="cek"><input type="checkbox" id="h14s4"><label for="h14s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Klik berkas <code>README.md</code> di repository, klik ikon pensil (Edit). Tulis:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code># Portofolio Data Analyst
+
+## Proyek 1 — Analisis Penjualan Kedai Kopi Senja
+
+Analisis data transaksi 151.088 baris (2024–2026) memakai SQL:
+JOIN tiga tabel (transaksi, item transaksi, produk), agregasi,
+dan penyaringan berdasarkan waktu.
+
+**Temuan utama:**
+[tempel 3-4 kalimat temuanmu dari Hari 13 di sini]
+
+**Berkas:** [analisis-kedai-senja.sql](analisis-kedai-senja.sql)</code></pre>
+        </div>
+        <p>Klik <strong>Commit changes</strong> lagi di bawah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Cek hasilnya</h3>
+        <span class="cek"><input type="checkbox" id="h14s5"><label for="h14s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buka tautan repositorymu dari perangkat lain (atau mode penyamaran browser) untuk memastikan orang lain bisa melihatnya. Salin tautannya — ini yang akan kamu taruh di CV nanti.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Dua minggu selesai — dan kamu punya bukti nyata</h3>
+      <p>Empat belas hari lalu kamu belum pernah menulis SQL. Sekarang kamu punya proyek publik di GitHub yang menjawab pertanyaan bisnis nyata dari 151.088 baris data.</p>
+      <p style="margin-top:10px"><strong>Berikutnya Python.</strong> Tapi ada persimpangan di sini, dan pilihanmu menentukan apakah kamu akan menabrak tembok di Hari 24.</p>
+      <div class="bahaya" style="margin-top:12px">
+        <strong>Belum pernah menulis kode selain SQL dua minggu ini?</strong> Kerjakan <strong>Bekal Python</strong> dulu — 8 hari, khusus bahasanya sendiri: sel Colab, variabel, cara membaca pesan error, list, dictionary, if/else, perulangan, fungsi.
+        <p style="margin-top:8px">Minggu Ketiga mengajarkan <em>pandas</em>, dan pandas menyembunyikan hampir semua Python di baliknya. Itu jalan mulus sampai Hari 24, di mana muncul <code>for</code>, <code>f"..."</code>, <code>[x for x in ...]</code>, dan <code>_</code> sekaligus — tanpa pernah dijelaskan. Bekal Python menutup lubang itu.</p>
+      </div>
+      <p style="margin-top:12px"><a class="lanjut" href="https://claude.ai/code/artifact/36da060f-fd96-4381-88b7-7500c6b6ecdf">Lanjut ke Bekal Python: dari benar-benar nol →</a></p>
+      <p style="margin-top:10px;font-size:0.88rem"><strong>Sudah pernah ngoding sebelumnya</strong> (Python, R, JavaScript, VBA — apa saja)? Lewati Bekal, <a href="https://claude.ai/code/artifact/e672ec75-7caf-45aa-b90c-726ce55d46b7">langsung ke Minggu Ketiga →</a></p>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Kalau berpindah perangkat, centangnya kembali kosong — tapi data dan proyekmu di GitHub tetap aman karena tersimpan di sana, bukan di sini.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu2-sql-v1";
+
+  function baca(){
+    try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); }
+    catch(e){ return {}; }
+  }
+  function tulis(o){
+    try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){}
+  }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) {
+      k.checked = true;
+      var l = k.closest('.langkah');
+      if (l) l.classList.add('selesai');
+    }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else {
+        cadangan(teks, sukses);
+      }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks;
+    ta.setAttribute('readonly','');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){
+        k.checked = false;
+        var l = k.closest('.langkah');
+        if (l) l.classList.remove('selesai');
+      });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

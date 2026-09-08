@@ -1,0 +1,1734 @@
+<title>Studi Kasus Nyata</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a">← Kembali ke Bekal Data Klien</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Studi Kasus</span>
+  <button type="button" data-hari="1" aria-selected="true">Kasus 1</button>
+  <button type="button" data-hari="2" aria-selected="false">Kasus 2</button>
+  <button type="button" data-hari="3" aria-selected="false">Kasus 3</button>
+  <button type="button" data-hari="4" aria-selected="false">Kasus 4</button>
+  <button type="button" data-hari="5" aria-selected="false">Kasus 5</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Studi Kasus Nyata · 5 berkas klien · ditulis ulang mengikuti pola Bekal Python</span>
+    <h1>Studi Kasus Nyata: lima berkas yang tidak satu pun memberi pesan error</h1>
+    <p class="lede">Lima berkas klien sungguhan — toko bangunan, klinik, kontraktor, sekolah, dan daftar piutang. Tidak satu pun dari delapan jebakan di dalamnya menghasilkan <em>error</em>. Semuanya jalan mulus dan memberi angka yang terlihat wajar.</p>
+    <p class="lede" style="margin-top:10px">Versi sebelumnya menaruh seluruh pembersihan dalam satu blok kode 100 baris. Versi ini memecahnya jadi <strong>64 langkah kecil</strong>, masing-masing satu gagasan, kode 1–4 baris, dan kotak <strong>HARUS MUNCUL</strong> di hampir setiap langkah — bentuk yang sama dengan Bekal Python.</p>
+    <p class="lede" style="margin-top:10px">Semua angka di halaman ini dihasilkan dengan menjalankan kodenya pada berkas yang kamu buat sendiri. Dua angka di versi lama ternyata salah dan sudah diperbaiki di sini.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Toko bangunan: kolom yang paling terlihat bersih justru yang sudah rusak</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> membaca ekspor aplikasi kasir yang headernya bukan di baris satu, menemukan satu kolom yang diam-diam kehilangan tiga angka nol, dan membuktikan hasil bersihmu dengan angka kontrol yang diberikan klien tanpa sadar.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat berkasnya — satu perintah</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-1"><label for="studi-kasus-nyata-v2-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka folder <code>data-dan-skrip/studi-kasus/</code> dari paket zip. Buka Terminal di folder itu, lalu ketik satu baris ini dan tekan Enter.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python gen_k1.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris transaksi asli : 167
+baris terakhir dipakai: 189</code></pre></div></div>
+<p><strong>Ingat angka 167.</strong> Sampai akhir hari ini kamu harus bisa membuktikan hasil bersihmu berisi tepat 167 baris — bukan 170, bukan 183.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Buka di Excel dulu, sebelum menyentuh Python</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-2"><label for="studi-kasus-nyata-v2-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Klik dua kali berkas <code>Laporan Penjualan Toko Sumber Rejeki.xlsx</code> yang baru muncul. Lihat saja. Jangan diapa-apakan.</div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          Lima baris pertama bukan tabel — itu kop laporan. Judul kolom yang sebenarnya ada di <strong>baris ke-6</strong>. Di tengah tabel ada baris <code>TOTAL BULAN 01</code> dan seterusnya. Di paling bawah ada tulisan <code>Dicetak oleh: Admin Kasir</code>.</div>
+        <div class="catatan"><strong>Ini kebiasaan, bukan basa-basi.</strong> Berkas klien selalu dibuka mata dulu. Tiga hal yang barusan kamu lihat semuanya akan menjebak Python nanti — dan kamu sudah tahu bentuknya sebelum ketemu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Baca dengan refleks pertama</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-3"><label for="studi-kasus-nyata-v2-1-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka Colab baru. Unggah berkas Excel tadi lewat ikon folder di kiri. Lalu:</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+df = pd.read_excel(&quot;Laporan Penjualan Toko Sumber Rejeki.xlsx&quot;)
+print(df.shape)
+print(df.columns.tolist()[:3])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>(188, 10)
+[&#x27;Unnamed: 0&#x27;, &#x27;TOKO BANGUNAN SUMBER REJEKI&#x27;, &#x27;Unnamed: 2&#x27;]</code></pre></div></div>
+<p><strong>Nama tokonya jadi nama kolom.</strong> pandas mengira baris pertama adalah judul kolom. Judul aslinya masih tersembunyi di baris ke-6.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Lompati lima baris kop</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-4"><label for="studi-kasus-nyata-v2-1-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>raw = pd.read_excel(&quot;Laporan Penjualan Toko Sumber Rejeki.xlsx&quot;, skiprows=5)
+print(raw.columns.tolist())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;Unnamed: 0&#x27;, &#x27;No&#x27;, &#x27;Tanggal&#x27;, &#x27;No. Nota&#x27;, &#x27;Kode Barang&#x27;,
+ &#x27;Nama Barang&#x27;, &#x27;Qty&#x27;, &#x27;Harga Satuan&#x27;, &#x27;Jumlah&#x27;, &#x27;Pelanggan&#x27;]</code></pre></div></div>
+<p>Judul kolomnya benar sekarang. Masih ada satu kolom sampah bernama <code>Unnamed: 0</code> — itu kolom kosong di kiri tabel.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Buang kolom Unnamed</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-5"><label for="studi-kasus-nyata-v2-1-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>raw = raw.drop(columns=[c for c in raw.columns if str(c).startswith(&quot;Unnamed&quot;)])
+print(raw.shape)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>(183, 9)</code></pre></div></div>
+<p>183 baris. Tapi tadi generator bilang transaksinya cuma <strong>167</strong>. Enam belas baris sisanya bukan transaksi — nanti kita hitung satu per satu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Sekarang lihat tipe tiap kolom — satu di antaranya sudah rusak</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-6"><label for="studi-kasus-nyata-v2-1-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(raw.dtypes.to_string())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>No               object
+Tanggal             str
+No. Nota            str
+Kode Barang         str
+Nama Barang         str
+Qty             float64
+Harga Satuan    float64
+Jumlah              str
+Pelanggan           str</code></pre></div></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Berhenti di sini. Satu kolom di daftar itu sudah rusak permanen — dan justru kolom yang tipenya terlihat <em>paling benar</em>. Yang mana? Tebak dulu, baru lanjut.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Buktinya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-7"><label for="studi-kasus-nyata-v2-1-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(raw[&quot;Harga Satuan&quot;].head(3).to_string(index=False))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>185.0
+320.0
+ 24.0</code></pre></div></div>
+        <div class="bahaya"><strong>Harga cat itu Rp 185.000, bukan 185.</strong> pandas membaca teks <code>"185.000"</code> sebagai bilangan desimal <em>185 koma nol nol nol</em> — karena di sebagian besar dunia, titik adalah pemisah desimal. <strong>Tiga angka nol hilang, tanpa satu pun pesan error</strong>, dan hasilnya <code>float64</code> yang terlihat sangat meyakinkan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Kenapa kolom Jumlah selamat — dan kenapa itu keberuntungan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-8"><label for="studi-kasus-nyata-v2-1-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(raw[&quot;Jumlah&quot;].head(3).to_string(index=False))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>  370.000
+3.200.000
+   96.000</code></pre></div></div>
+<p>Kolom <code>Jumlah</code> tetap teks. Alasannya bukan karena kamu pintar. Hitung sendiri:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>d = raw[raw[&quot;No&quot;].fillna(&quot;&quot;).str.fullmatch(r&quot;\d+&quot;)]
+print(&quot;bertitik dua :&quot;, d[&quot;Jumlah&quot;].str.count(r&quot;\.&quot;).eq(2).sum())
+print(&quot;bertitik satu:&quot;, d[&quot;Jumlah&quot;].str.count(r&quot;\.&quot;).eq(1).sum())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>bertitik dua : 32
+bertitik satu: 135</code></pre></div></div>
+        <div class="bahaya"><strong>32 transaksi kebetulan bernilai di atas satu juta</strong>, jadi angkanya bertitik dua — dan <code>"3.200.000"</code> tidak bisa jadi desimal. Satu nilai saja yang gagal membuat pandas menyerah dan menyimpan <em>seluruh</em> kolom sebagai teks. Kalau toko ini tidak pernah menjual di atas Rp 999.999, kolom <code>Jumlah</code> juga hancur diam-diam dan laporanmu meleset seribu kali lipat.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Aturannya, dan mulai sekarang tidak ada pengecualian</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-9"><label for="studi-kasus-nyata-v2-1-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan"><strong>Untuk berkas dari luar: baca semuanya sebagai teks dulu.</strong> Kamu yang memutuskan mana yang jadi angka, bukan pandas. Tebakan pandas benar 95% dan salahnya tidak bersuara — dan 5% itu yang masuk laporan klien.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>raw = pd.read_excel(&quot;Laporan Penjualan Toko Sumber Rejeki.xlsx&quot;,
+                    skiprows=5, dtype=str)
+raw = raw.drop(columns=[c for c in raw.columns if str(c).startswith(&quot;Unnamed&quot;)])
+print(raw[&quot;Harga Satuan&quot;].head(3).to_string(index=False))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>185.000
+320.000
+ 24.000</code></pre></div></div>
+<p>Tiga angka nolnya kembali.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Ambil angka kontrolnya — sebelum barisnya dibuang</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-10"><label for="studi-kasus-nyata-v2-1-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Baris <code>TOTAL BULAN</code> itu bukan sampah. Itu angka kontrol yang diberikan klien tanpa sadar. Ambil dulu, baru buang.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import re
+def ke_angka(s):
+    t = re.sub(r&quot;[^0-9\-]&quot;, &quot;&quot;, str(s))
+    return int(t) if t not in (&quot;&quot;, &quot;-&quot;) else 0</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>sub = raw[raw[&quot;Nama Barang&quot;].astype(str).str.startswith(&quot;TOTAL BULAN&quot;, na=False)]
+KONTROL = sub[&quot;Jumlah&quot;].map(ke_angka).sum()
+print(len(sub), &quot;baris subtotal&quot;)
+print(f&quot;KONTROL = {KONTROL:,}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>6 baris subtotal
+KONTROL = 140,581,000</code></pre></div></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Saring baris transaksi — dan kenapa dropna() salah</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-11"><label for="studi-kasus-nyata-v2-1-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>d = raw[raw[&quot;No&quot;].fillna(&quot;&quot;).str.fullmatch(r&quot;\d+&quot;)].copy()
+salah = raw.dropna(subset=[&quot;No&quot;])
+print(&quot;fullmatch:&quot;, len(d))
+print(&quot;dropna   :&quot;, len(salah))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>fullmatch: 167
+dropna   : 170</code></pre></div></div>
+<p>Selisih tiga. Lihat siapa yang lolos:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(salah[~salah.index.isin(d.index)][&quot;Nama Barang&quot;].tolist())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;Dicetak oleh: Admin Kasir&#x27;,
+ &#x27;Tanggal cetak: 05/07/2024&#x27;,
+ &#x27;Aplikasi Kasir Pro v2.1 - Lisensi: TOKO SUMBER REJEKI&#x27;]</code></pre></div></div>
+        <div class="bahaya"><code>dropna()</code> cuma membuang baris <em>kosong</em>. Tiga baris footer itu kolom <code>No</code>-nya <strong>terisi teks</strong>, jadi lolos — dan masuk laporanmu sebagai tiga transaksi hantu bertanggal kosong.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Ubah jadi angka, lalu buktikan bersihnya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-12"><label for="studi-kasus-nyata-v2-1-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>d[&quot;Jumlah&quot;] = d[&quot;Jumlah&quot;].map(ke_angka)
+total = d[&quot;Jumlah&quot;].sum()
+print(f&quot;baris   : {len(d)}&quot;)
+print(f&quot;total   : {total:,}&quot;)
+print(f&quot;selisih : {KONTROL - total:,}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris   : 167
+total   : 140,581,000
+selisih : 0</code></pre></div></div>
+        <div class="catatan"><strong>Selisih nol itu bukan hiasan.</strong> Tanpa baris terakhir itu kamu cuma <em>berharap</em> pembersihanmu benar. Dengan baris itu kamu <em>tahu</em>. Ini prosedur yang sama persis dengan menyandingkan buku besar ke neraca saldo.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">13</span>
+        <h3>Jebakan terakhir: lupa membuang baris subtotal</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-13"><label for="studi-kasus-nyata-v2-1-13">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>semua = raw[&quot;Jumlah&quot;].map(ke_angka).sum()
+print(f&quot;lupa buang subtotal : {semua:,}&quot;)
+print(f&quot;yang benar          : {total:,}&quot;)
+print(f&quot;kelebihan           : {semua - total:,}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>lupa buang subtotal : 281,162,000
+yang benar          : 140,581,000
+kelebihan           : 140,581,000</code></pre></div></div>
+        <div class="bahaya"><strong>Tepat dua kali lipat.</strong> Bukan kebetulan — enam baris subtotal menjumlahkan seluruh transaksi sekali lagi. Angka Rp 281 juta itu tidak terlihat aneh bagi siapa pun yang tidak tahu omzet toko ini, dan tidak ada satu pun error yang muncul.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">14</span>
+        <h3>Rapikan nama pelanggan — satu jebakan kecil yang klien langsung lihat</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-14"><label for="studi-kasus-nyata-v2-1-14">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>n = d[&quot;Pelanggan&quot;].str.strip().str.replace(r&quot;\s+&quot;, &quot; &quot;, regex=True).str.title()
+print([x for x in n.unique() if x[:2] in (&quot;Cv&quot;, &quot;Pt&quot;, &quot;Ud&quot;)][:2])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;Cv Karya Abadi&#x27;, &#x27;Pt Mitra Bangun&#x27;]</code></pre></div></div>
+<p><code>.str.title()</code> merusak singkatan badan usaha. Kembalikan:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>n = n.str.replace(r&quot;^(Cv|Pt|Ud)\s+&quot;, lambda m: m.group(1).upper()+&quot; &quot;, regex=True)
+print([x for x in n.unique() if x[:2] in (&quot;CV&quot;, &quot;PT&quot;, &quot;UD&quot;)][:2])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;CV Karya Abadi&#x27;, &#x27;PT Mitra Bangun&#x27;]</code></pre></div></div>
+        <div class="catatan">Klien akan langsung melihat ini di laporanmu, dan yang mereka simpulkan bukan "ada bug kecil" tapi "orang ini tidak memeriksa hasil kerjanya".</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">15</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-1-15"><label for="studi-kasus-nyata-v2-1-15">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">PENGULANGAN · TANPA MEMBUKA CATATAN</span>
+          Tutup halaman ini. Tanpa melihat, jawab empat hal — tulis, jangan cuma dipikir.</div>
+        <div class="kode"><pre><code>1. Kenapa berkas dari luar dibaca dengan dtype=str?
+2. Kenapa dropna() tidak cukup untuk menyaring baris transaksi?
+3. Dari mana angka kontrol 140.581.000 datang?
+4. Kalau lupa membuang baris subtotal, hasilnya jadi berapa kali lipat?</code></pre></div>
+<details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi"><p><strong>1.</strong> Karena tebakan pandas salah tanpa bersuara — <code>"185.000"</code> jadi 185,0 dan tiga angka nol hilang.</p><p><strong>2.</strong> Karena baris footer kolom <code>No</code>-nya terisi teks, bukan kosong. 170 baris, bukan 167.</p><p><strong>3.</strong> Dari enam baris <code>TOTAL BULAN</code> di dalam berkas klien sendiri, dijumlahkan sebelum dibuang.</p><p><strong>4.</strong> Tepat dua kali lipat — Rp 281.162.000.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Kasus 1 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> <code>dtype=str</code> untuk berkas dari luar · saring dengan <code>str.fullmatch(r"\d+")</code>, bukan <code>dropna()</code> · ambil angka kontrol sebelum barisnya dibuang · dan tutup dengan selisih nol.</p><p style="margin-top:10px">Besok: dua berkas, dan tiga cara menggabungkannya dengan salah.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>Klinik: dua berkas, dan tiga cara menggabungkannya dengan salah</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menggabungkan dua tabel tanpa kehilangan baris dan tanpa menggandakannya — dan tahu satu baris pemeriksaan yang menangkap keduanya.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat kedua berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-1"><label for="studi-kasus-nyata-v2-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dari folder yang sama, jalankan:</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python gen_k2.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>kunjungan       : 240
+tagihan (baris) : 233
+tagihan ganda   : 11
+kunjungan tanpa tagihan: 18</code></pre></div></div>
+<p><strong>Empat angka itu jawabannya.</strong> Hari ini kamu harus sampai ke sana sendiri, lewat tiga cara yang salah dulu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Dua berkas, dua format berbeda</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-2"><label for="studi-kasus-nyata-v2-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+k = pd.read_excel(&quot;Kunjungan Pasien 2024.xlsx&quot;)
+t = pd.read_csv(&quot;Tagihan Klinik 2024.csv&quot;, sep=&quot;;&quot;, decimal=&quot;,&quot;)
+print(len(k), len(t))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>240 233</code></pre></div></div>
+        <div class="catatan"><strong><code>sep=";"</code> itu wajib.</strong> CSV dari sistem Indonesia sering memakai titik koma, karena koma sudah dipakai sebagai pemisah desimal. Tanpa itu seluruh baris masuk ke satu kolom dan kamu akan menyangka berkasnya rusak.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Cara salah #1: gabungkan apa adanya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-3"><label for="studi-kasus-nyata-v2-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>a = k.merge(t, on=&quot;Kode Kunjungan&quot;)
+print(&quot;baris hasil:&quot;, len(a))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris hasil: 233</code></pre></div></div>
+<p>233 dari 240 kunjungan. Kelihatannya cuma tujuh yang hilang. <strong>Itu salah, dan salahnya jauh lebih besar.</strong></p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>233 baris itu bukan 233 kunjungan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-4"><label for="studi-kasus-nyata-v2-2-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;kunjungan berbeda:&quot;, a[&quot;Kode Kunjungan&quot;].nunique())
+print(&quot;baris kembar    :&quot;, len(a) - a[&quot;Kode Kunjungan&quot;].nunique())
+print(&quot;kunjungan hilang:&quot;, k[&quot;Kode Kunjungan&quot;].nunique() - a[&quot;Kode Kunjungan&quot;].nunique())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>kunjungan berbeda: 222
+baris kembar    : 11
+kunjungan hilang: 18</code></pre></div></div>
+        <div class="bahaya"><strong>Dua kesalahan sekaligus, dan sebagian saling menutupi:</strong><div class="kode" style="margin-top:8px"><pre><code>240 kunjungan − 18 hilang + 11 kembar = 233 baris</code></pre></div>Jumlah baris yang terlihat wajar itu justru yang membuatnya tidak ketahuan. Kalau kamu berhenti di <code>len(a)</code>, kamu tidak akan pernah tahu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Kenapa 18 kunjungan lenyap</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-5"><label for="studi-kasus-nyata-v2-2-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Karena <code>merge</code> bawaannya <em>inner</em> — hanya menyimpan baris yang cocok di kedua sisi. Kunjungan yang belum ditagih tidak punya pasangan, jadi dibuang tanpa peringatan.</p>
+        <div class="catatan"><strong>Ini kebiasaan yang harus dibalik.</strong> Bawaan pandas adalah <em>buang yang tidak cocok</em>. Bawaan seorang auditor seharusnya <em>hitung dulu yang tidak cocok, baru putuskan</em> — karena di situlah temuannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Cara salah #2: left join, tapi lupa tagihan gandanya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-6"><label for="studi-kasus-nyata-v2-2-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>b = k.merge(t, on=&quot;Kode Kunjungan&quot;, how=&quot;left&quot;)
+print(&quot;baris hasil:&quot;, len(b))
+print(&quot;total      :&quot;, f&#x27;{b[&quot;Total&quot;].sum():,.0f}&#x27;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris hasil: 251
+total      : 31,580,000</code></pre></div></div>
+        <div class="bahaya"><strong>251 baris dari 240 kunjungan.</strong> Hasil gabungan yang <em>lebih banyak</em> daripada tabel kirinya selalu berarti satu hal: kunci di tabel kanan tidak unik. Sebelas tagihan ganda menggandakan sebelas kunjungan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Cara yang benar: buang gandanya dulu</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-7"><label for="studi-kasus-nyata-v2-2-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>tb = t.drop_duplicates(&quot;Kode Kunjungan&quot;, keep=&quot;first&quot;)
+c = k.merge(tb, on=&quot;Kode Kunjungan&quot;, how=&quot;left&quot;, indicator=True)
+print(&quot;baris hasil:&quot;, len(c), &quot;| cocok?&quot;, len(c) == len(k))
+print(&quot;total      :&quot;, f&#x27;{c[&quot;Total&quot;].sum():,.0f}&#x27;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris hasil: 240 | cocok? True
+total      : 30,165,000</code></pre></div></div>
+        <div class="catatan"><strong><code>len(hasil) == len(kiri)</code> adalah pemeriksaan wajib</strong> setiap kali kamu <code>merge</code> dengan <code>how="left"</code>. Satu baris kode, dan ia menangkap kesalahan yang paling mahal di seluruh pekerjaan analis.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Berapa yang tercatat dua kali</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-8"><label for="studi-kasus-nyata-v2-2-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>ganda = t[t.duplicated(&quot;Kode Kunjungan&quot;, keep=&quot;first&quot;)]
+print(f&#x27;{ganda[&quot;Total&quot;].sum():,.0f}&#x27;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>1,415,000</code></pre></div></div>
+<p>Rp 31.580.000 − Rp 30.165.000 = <strong>Rp 1.415.000</strong> yang dilaporkan dua kali. Untuk klinik kecil, itu bukan angka yang bisa diabaikan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Dan yang belum ditagih sama sekali</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-9"><label for="studi-kasus-nyata-v2-2-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>belum = c[c[&quot;_merge&quot;] == &quot;left_only&quot;]
+print(&quot;kunjungan :&quot;, len(belum))
+print(&quot;nilainya  :&quot;, f&#x27;{belum[&quot;Tarif&quot;].sum():,.0f}&#x27;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>kunjungan : 18
+nilainya  : 2,745,000</code></pre></div></div>
+        <div class="catatan"><strong>Inilah temuan yang tidak diminta klien, dan yang paling dia butuhkan.</strong> Bu Ratih bertanya "berapa pendapatan kami". Jawaban yang berguna: pendapatan Rp 30,2 juta, <em>dan ada Rp 2,7 juta pekerjaan yang sudah dikerjakan tapi belum pernah ditagih</em>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Nama pasien: 20 ejaan untuk 15 orang</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-10"><label for="studi-kasus-nyata-v2-2-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;nama berbeda:&quot;, k[&quot;Nama Pasien&quot;].nunique())
+print(&quot;ID berbeda  :&quot;, k[&quot;ID Pasien&quot;].nunique())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>nama berbeda: 20
+ID berbeda  : 15</code></pre></div></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>per_id = k.groupby(&quot;ID Pasien&quot;)[&quot;Nama Pasien&quot;].unique()
+print(per_id[per_id.map(len) &gt; 1].to_string())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>1  [&#x27;SITI NURHALIZA&#x27; &#x27;Siti Nurhalizah&#x27; &#x27;siti nurhaliza&#x27;]
+4  [&#x27;BAMBANG WIJAYA&#x27; &#x27;Bambang Widjaja&#x27; &#x27;Bambang Wijaya&#x27;]
+9  [&#x27;Fitri Handayani&#x27; &#x27;Fitri Handayanti&#x27;]</code></pre></div></div>
+        <div class="bahaya">Kalau kamu mengelompokkan pasien berdasarkan <strong>nama</strong>, Siti dihitung sebagai tiga orang. Kelompokkan berdasarkan <strong>ID</strong> — dan pakai nama hanya untuk ditampilkan, tidak pernah untuk mengelompokkan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Penjamin: sembilan tulisan untuk tiga hal</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-11"><label for="studi-kasus-nyata-v2-2-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(sorted(k[&quot;Penjamin&quot;].dropna().unique()))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;Asuransi&#x27;, &#x27;B.P.J.S&#x27;, &#x27;BPJS&#x27;, &#x27;BPJS Kesehatan&#x27;, &#x27;UMUM&#x27;,
+ &#x27;Umum&#x27;, &#x27;asuransi swasta&#x27;, &#x27;bpjs&#x27;, &#x27;umum&#x27;]</code></pre></div></div>
+        <div class="catatan">Sembilan tulisan, tiga penjamin sesungguhnya. Merapikannya <strong>bukan pekerjaan teknis</strong> — kamu harus memutuskan apakah "asuransi swasta" sama dengan "Asuransi". Itu keputusan yang harus kamu tanyakan ke Bu Ratih, bukan kamu tebak sendiri.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-2-12"><label for="studi-kasus-nyata-v2-2-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">PENGULANGAN · TANPA MEMBUKA CATATAN</span>
+          Tutup halaman. Jawab empat hal, tertulis.</div>
+        <div class="kode"><pre><code>1. Sesudah merge how=&quot;left&quot;, satu baris pemeriksaan apa yang wajib kamu tulis?
+2. Kalau hasil merge LEBIH BANYAK dari tabel kiri, apa penyebabnya?
+3. Kenapa 233 baris hasil inner join itu menyesatkan?
+4. Kenapa pasien dikelompokkan pakai ID, bukan nama?</code></pre></div>
+<details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi"><p><strong>1.</strong> <code>len(hasil) == len(kiri)</code>.</p><p><strong>2.</strong> Kunci di tabel kanan tidak unik — ada baris kembar yang menggandakan.</p><p><strong>3.</strong> 240 − 18 hilang + 11 kembar = 233. Dua kesalahan saling menutupi.</p><p><strong>4.</strong> Karena satu orang bisa punya beberapa ejaan nama — Siti punya tiga.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Kasus 2 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> <code>merge</code> bawaannya membuang yang tidak cocok · hasil lebih banyak dari tabel kiri = kunci kanan tidak unik · <code>len(hasil)==len(kiri)</code> wajib · kelompokkan pakai ID, bukan nama.</p><p style="margin-top:10px">Besok: nama yang sama sekali tidak cocok, dan satu baris pemetaan yang menggeser margin 9 poin.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Kontraktor: tabel pemetaan adalah keputusan bisnis, bukan pekerjaan teknis</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menggabungkan dua tabel yang tidak punya satu pun kunci yang sama, dan menyadari bahwa satu baris di tabel pemetaan bisa menggeser margin 9 poin.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-1"><label for="studi-kasus-nyata-v2-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python gen_k3.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          Berkas <code>RAB vs Realisasi CV Karya Mandiri.xlsx</code> muncul, berisi dua sheet: <code>RAB</code> dan <code>Realisasi</code>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Lihat kedua sheet-nya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-2"><label for="studi-kasus-nyata-v2-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+B = &quot;RAB vs Realisasi CV Karya Mandiri.xlsx&quot;
+rab  = pd.read_excel(B, sheet_name=&quot;RAB&quot;, skiprows=2)
+real = pd.read_excel(B, sheet_name=&quot;Realisasi&quot;)
+print(rab.shape, real.shape)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>(7, 4) (86, 5)</code></pre></div></div>
+<p>Tujuh proyek, 86 baris biaya. <code>skiprows=2</code> lagi — sheet RAB juga berkop.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kolom Biaya: separuhnya bukan angka</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-3"><label for="studi-kasus-nyata-v2-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(real[&quot;Biaya&quot;].astype(str).head(6).tolist())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;26520000&#x27;, &#x27;87820000&#x27;, &#x27;29080000&#x27;, &#x27;35210000&#x27;,
+ &#x27;Rp 91.190.000&#x27;, &#x27;Rp 43.280.000&#x27;]</code></pre></div></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;sel bukan angka:&quot;, pd.to_numeric(real[&quot;Biaya&quot;], errors=&quot;coerce&quot;).isna().sum())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>sel bukan angka: 44</code></pre></div></div>
+        <div class="bahaya"><strong>44 dari 86 baris.</strong> Ada yang mengetik <code>Rp</code> dan titik, ada yang tidak. Kalau kamu <code>sum()</code> langsung, separuh biayanya hilang — dan laba proyekmu jadi terlihat dua kali lipat lebih baik.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Satu fungsi kecil, dipakai di semua kasus</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-4"><label for="studi-kasus-nyata-v2-3-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import re
+def ke_angka(s):
+    t = re.sub(r&quot;[^0-9\-]&quot;, &quot;&quot;, str(s))
+    return int(t) if t not in (&quot;&quot;, &quot;-&quot;) else 0</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>real[&quot;biaya&quot;] = real[&quot;Biaya&quot;].map(ke_angka)
+print(f&#x27;{real[&quot;biaya&quot;].sum():,}&#x27;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>3,282,000,000</code></pre></div></div>
+        <div class="catatan">Fungsi ini sudah kamu tulis di Kasus 1. <strong>Jangan salin-tempel lagi</strong> — taruh di berkas sendiri dan panggil. Cara melakukannya ada di modul Python Produksi.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Sekarang coba gabungkan kedua sheet</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-5"><label for="studi-kasus-nyata-v2-3-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>m = rab.merge(real, left_on=&quot;Nama Proyek&quot;, right_on=&quot;Proyek&quot;)
+print(&quot;baris hasil:&quot;, len(m))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris hasil: 0</code></pre></div></div>
+<p><strong>Nol.</strong> Bukan sedikit — <em>tidak ada satu pun</em> yang cocok.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Lihat kenapa</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-6"><label for="studi-kasus-nyata-v2-3-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(sorted(rab[&quot;Nama Proyek&quot;])[:3])
+print(sorted(real[&quot;Proyek&quot;].unique())[:3])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;Gudang Logistik Cibitung&#x27;, &#x27;Kios Pasar Modern Bekasi&#x27;,
+ &#x27;Masjid Al-Ikhlas Tahap 2&#x27;]
+[&#x27;GUDANG CIBITUNG&#x27;, &#x27;KIOS PASAR BEKASI&#x27;,
+ &#x27;MASJID AL IKHLAS TAHAP II&#x27;]</code></pre></div></div>
+<p>Proyek yang sama, ditulis dua orang berbeda, di dua waktu berbeda. Tidak ada aturan yang bisa menghubungkannya secara otomatis.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Tabel pemetaan dibuat manusia — dan itu memang seharusnya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-7"><label for="studi-kasus-nyata-v2-3-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>PETA = {
+ &quot;GUDANG CIBITUNG&quot;:               &quot;Gudang Logistik Cibitung&quot;,
+ &quot;KIOS PASAR BEKASI&quot;:             &quot;Kios Pasar Modern Bekasi&quot;,
+ &quot;MASJID AL IKHLAS TAHAP II&quot;:     &quot;Masjid Al-Ikhlas Tahap 2&quot;,
+ &quot;PAGAR TAMAN GRIYA&quot;:             &quot;Pagar &amp; Taman Perumahan Griya&quot;,
+ &quot;RUKO DEPOK - 2024&quot;:             &quot;Pembangunan Ruko Depok 2 Lantai&quot;,
+ &quot;PEK. TAMBAH KURANG RUKO DEPOK&quot;: &quot;Pembangunan Ruko Depok 2 Lantai&quot;,
+ &quot;Rmh Bpk Handoko&quot;:               &quot;Rumah Tinggal Bpk. Handoko&quot;,
+ &quot;renovasi kantor sinarmas&quot;:      &quot;Renovasi Kantor PT Sinar Mas&quot;,
+}</code></pre></div>
+        <div class="catatan"><strong>Jangan mencoba mencocokkan nama secara otomatis</strong> dengan kemiripan huruf. Ia akan benar untuk enam baris dan salah untuk dua — dan yang dua itu tidak akan memberi tahu kamu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Pasang penjaga supaya tidak ada yang lolos diam-diam</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-8"><label for="studi-kasus-nyata-v2-3-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>belum = set(real[&quot;Proyek&quot;].unique()) - set(PETA)
+assert not belum, f&quot;belum dipetakan: {belum}&quot;
+real[&quot;proyek_baku&quot;] = real[&quot;Proyek&quot;].map(PETA)
+print(&quot;semua terpetakan&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>semua terpetakan</code></pre></div></div>
+        <div class="bahaya"><strong>Tanpa baris <code>assert</code> itu</strong>, nama baru yang muncul bulan depan akan jadi <code>NaN</code>, biayanya lenyap dari rekap, dan laporanmu tetap terbit dengan angka yang salah tanpa satu pun peringatan.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Satu baris pemetaan yang menggeser margin 9 poin</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-9"><label for="studi-kasus-nyata-v2-3-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Baris <code>PEK. TAMBAH KURANG RUKO DEPOK</code> — pekerjaan tambah. Masuk ke proyek induk, atau dihitung terpisah? Coba keduanya:</p>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Keputusan</th>
+<th class="n">Realisasi Ruko</th>
+<th class="n">Laba</th>
+<th class="n">Margin</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Pekerjaan tambah <strong>ikut</strong></td><td class="n">688.590.000</td><td class="n">161.410.000</td><td class="n"><strong>19,0%</strong></td></tr>
+              <tr><td>Pekerjaan tambah <strong>tidak ikut</strong></td><td class="n">609.740.000</td><td class="n">240.260.000</td><td class="n"><strong>28,3%</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>9,3 poin margin, dari satu baris di tabel pemetaan.</strong> Tidak ada kode yang bisa memutuskan ini untukmu. Yang benar adalah bertanya ke pemilik: "pekerjaan tambah ini ditagihkan terpisah ke pelanggan, atau sudah masuk nilai kontrak?" Jawabannya menentukan angkanya — dan <strong>keputusan itu wajib ditulis di laporan.</strong></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Rekapnya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-10"><label for="studi-kasus-nyata-v2-3-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>rekap = (real.groupby(&quot;proyek_baku&quot;)[&quot;biaya&quot;].sum().rename(&quot;realisasi&quot;)
+         .reset_index()
+         .merge(rab, left_on=&quot;proyek_baku&quot;, right_on=&quot;Nama Proyek&quot;))
+rekap[&quot;laba&quot;] = rekap[&quot;Nilai Kontrak&quot;] - rekap[&quot;realisasi&quot;]</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(rekap[[&quot;proyek_baku&quot;,&quot;Total RAB&quot;,&quot;realisasi&quot;,&quot;laba&quot;]]
+      .sort_values(&quot;laba&quot;).to_string(index=False))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>       Masjid Al-Ikhlas Tahap 2  352000000  408020000    1980000
+       Gudang Logistik Cibitung  985000000 1154370000   85630000
+   Renovasi Kantor PT Sinar Mas  268000000  262860000   57140000
+Pembangunan Ruko Depok 2 Lantai  690000000  688590000  161410000
+  Pagar &amp; Taman Perumahan Griya  149000000  147800000   37200000
+     Rumah Tinggal Bpk. Handoko  448000000  421770000  118230000
+       Kios Pasar Modern Bekasi  221000000  198590000   76410000</code></pre></div></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Dua proyek yang RAB-nya jebol</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-11"><label for="studi-kasus-nyata-v2-3-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>jebol = rekap[rekap[&quot;realisasi&quot;] &gt; rekap[&quot;Total RAB&quot;]]
+print(jebol[[&quot;proyek_baku&quot;,&quot;Total RAB&quot;,&quot;realisasi&quot;]].to_string(index=False))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>Gudang Logistik Cibitung  985000000 1154370000
+Masjid Al-Ikhlas Tahap 2  352000000  408020000</code></pre></div></div>
+<p>Gudang Cibitung menghabiskan Rp 169 juta di atas RAB. Masjid Al-Ikhlas Rp 56 juta, dan labanya tinggal Rp 1,98 juta dari kontrak Rp 410 juta — <strong>margin 0,5%</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Tutup dengan tie-out</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-12"><label for="studi-kasus-nyata-v2-3-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(f&#x27;rekap  : {rekap[&quot;realisasi&quot;].sum():,}&#x27;)
+print(f&#x27;sumber : {real[&quot;biaya&quot;].sum():,}&#x27;)
+print(f&#x27;selisih: {real[&quot;biaya&quot;].sum() - rekap[&quot;realisasi&quot;].sum():,}&#x27;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>rekap  : 3,282,000,000
+sumber : 3,282,000,000
+selisih: 0</code></pre></div></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">13</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-3-13"><label for="studi-kasus-nyata-v2-3-13">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">PENGULANGAN · TANPA MEMBUKA CATATAN</span>
+          Tutup halaman. Tiga pertanyaan, tertulis.</div>
+        <div class="kode"><pre><code>1. Kenapa merge langsung memberi 0 baris, dan kenapa itu justru kabar baik?
+2. Apa gunanya baris assert sesudah membuat tabel pemetaan?
+3. Satu baris pemetaan menggeser margin berapa poin, dan siapa yang berhak memutuskannya?</code></pre></div>
+<details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi"><p><strong>1.</strong> Karena tidak ada nama yang sama persis. Kabar baik, karena 0 baris <em>terlihat</em> — kalau yang cocok cuma 3 dari 7, kamu mungkin tidak sadar.</p><p><strong>2.</strong> Menangkap nama baru yang belum dipetakan, sebelum biayanya diam-diam lenyap jadi <code>NaN</code>.</p><p><strong>3.</strong> 9,3 poin (19,0% lawan 28,3%). Yang berhak memutuskan pemilik proyek, bukan analisnya — dan keputusannya ditulis di laporan.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Kasus 3 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> nama proyek bukan kunci · tabel pemetaan dibuat manusia, bukan ditebak mesin · <code>assert</code> menangkap nama baru sebelum biayanya lenyap · keputusan pemetaan wajib ditulis di laporan.</p><p style="margin-top:10px">Besok: Rp 45 juta yang hilang karena orang mengetik "LUNAS" di kolom angka.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>Sekolah: Rp 45 juta yang hilang karena orang mengetik “LUNAS”</h2>
+      <span class="waktu">± 120 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengubah rekap Excel berbentuk melebar jadi data yang bisa diolah, dan menemukan uang yang sudah masuk kas tapi dilaporkan sebagai belum masuk.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-1"><label for="studi-kasus-nyata-v2-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python gen_k4.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>siswa pindah      : 5
+sel bertuliskan LUNAS : 95
+versi TU (=SUM Excel) : 305.897.000
+selisih yang disembunyikan LUNAS: 45.350.000</code></pre></div></div>
+<p>Angka <strong>Rp 305.897.000</strong> itu yang dilaporkan bagian TU ke yayasan. Hari ini kamu cari tahu kenapa angka itu salah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bentuknya melebar, bukan memanjang</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-2"><label for="studi-kasus-nyata-v2-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd
+B = &quot;Rekap SPP Yayasan Bina Cendekia.xlsx&quot;
+d = pd.read_excel(B, skiprows=2, dtype=str).dropna(how=&quot;all&quot;)
+print(d.columns.tolist())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;NIS&#x27;, &#x27;Nama Siswa&#x27;, &#x27;Kelas&#x27;, &#x27;SPP/Bulan&#x27;, &#x27;Jul&#x27;, &#x27;Agu&#x27;, &#x27;Sep&#x27;,
+ &#x27;Okt&#x27;, &#x27;Nov&#x27;, &#x27;Des&#x27;, &#x27;Jan&#x27;, &#x27;Feb&#x27;, &#x27;Mar&#x27;, &#x27;Apr&#x27;, &#x27;Mei&#x27;, &#x27;Jun&#x27;,
+ &#x27;Keterangan&#x27;]</code></pre></div></div>
+        <div class="catatan"><strong>Dua belas bulan jadi dua belas kolom.</strong> Manusia membaca bentuk ini dengan mudah; pandas tidak. Nanti kita ubah — tapi jangan dulu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Jebakan yang sama seperti Kasus 1</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-3"><label for="studi-kasus-nyata-v2-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(d[[&quot;NIS&quot;,&quot;Nama Siswa&quot;]].tail(2).to_string(index=False))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>2023072            Lukman Saputra
+    NaN TOTAL DITERIMA (versi TU)</code></pre></div></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s = d[d[&quot;NIS&quot;].fillna(&quot;&quot;).str.fullmatch(r&quot;[\d.]+&quot;)].copy()
+print(&quot;baris siswa:&quot;, len(s))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris siswa: 72</code></pre></div></div>
+        <div class="bahaya">Baris <code>TOTAL DITERIMA</code> lagi-lagi menggandakan seluruh angka kalau ikut dijumlahkan — <strong>persis jebakan Kasus 1.</strong> Ini bukan kebetulan: hampir setiap rekap buatan tangan punya baris total di dalam tabelnya sendiri.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Lihat isi sel bulan — bukan cuma angka</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-4"><label for="studi-kasus-nyata-v2-4-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import re
+BULAN = [&quot;Jul&quot;,&quot;Agu&quot;,&quot;Sep&quot;,&quot;Okt&quot;,&quot;Nov&quot;,&quot;Des&quot;,&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;Mei&quot;,&quot;Jun&quot;]
+teks = set()
+for b in BULAN:
+    for v in s[b].dropna().unique():
+        if not re.fullmatch(r&quot;[\d.]+&quot;, str(v)): teks.add(str(v))
+print(sorted(teks))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>[&#x27;-&#x27;, &#x27;BELUM&#x27;, &#x27;LUNAS&#x27;, &#x27;blm&#x27;, &#x27;nunggak&#x27;, &#x27;x&#x27;]</code></pre></div></div>
+<p>Enam tulisan. Satu di antaranya berarti <strong>sudah bayar</strong>. Lima sisanya berarti <strong>belum</strong>. Kalau kamu memperlakukan semuanya sama, kamu salah di kedua arah.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Hitung masing-masing</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-5"><label for="studi-kasus-nyata-v2-4-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for kata in [&quot;LUNAS&quot;,&quot;-&quot;,&quot;BELUM&quot;,&quot;blm&quot;,&quot;nunggak&quot;,&quot;x&quot;]:
+    n = sum((s[b] == kata).sum() for b in BULAN)
+    print(f&quot;{kata:9s}: {n}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>LUNAS    : 95
+-        : 25
+BELUM    : 9
+blm      : 8
+nunggak  : 7
+x        : 5</code></pre></div></div>
+        <div class="catatan"><strong>Lima cara mengetik "belum bayar".</strong> Itu tanda kolomnya diisi beberapa orang berbeda selama setahun, tanpa aturan. Bukan kesalahan mereka — tidak ada yang pernah memberi tahu formatnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Kenapa versi TU salah</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-6"><label for="studi-kasus-nyata-v2-4-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def ke_angka(x):
+    t = re.sub(r&quot;[^0-9]&quot;, &quot;&quot;, str(x)) if pd.notna(x) else &quot;&quot;
+    return int(t) if t else 0</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>tu = sum(s[b].map(ke_angka).sum() for b in BULAN)
+print(f&quot;versi TU: {tu:,}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>versi TU: 305,897,000</code></pre></div></div>
+        <div class="bahaya"><strong>Excel <code>SUM()</code> memperlakukan teks sebagai nol.</strong> Sembilan puluh lima sel bertuliskan LUNAS — pembayaran yang benar-benar diterima — dihitung sebagai <strong>nol rupiah</strong>. Tidak ada error, tidak ada peringatan. Angkanya masuk ke laporan yayasan begitu saja.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Berapa yang disembunyikan kata LUNAS</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-7"><label for="studi-kasus-nyata-v2-4-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>s[&quot;spp&quot;] = s[&quot;SPP/Bulan&quot;].map(ke_angka)
+lunas = sum(s.loc[s[b] == &quot;LUNAS&quot;, &quot;spp&quot;].sum() for b in BULAN)
+print(f&quot;nilai di balik LUNAS: {lunas:,}&quot;)
+print(f&quot;diterima sesungguhnya: {tu + lunas:,}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>nilai di balik LUNAS: 45,350,000
+diterima sesungguhnya: 351,247,000</code></pre></div></div>
+<p><strong>Rp 45.350.000</strong> uang yang sudah masuk kas, dilaporkan sebagai belum masuk. Yayasan mengira tunggakannya Rp 45 juta lebih besar daripada kenyataan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Ubah bentuknya: melebar jadi memanjang</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-8"><label for="studi-kasus-nyata-v2-4-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>p = s.melt(id_vars=[&quot;NIS&quot;,&quot;Nama Siswa&quot;,&quot;Kelas&quot;,&quot;spp&quot;],
+           value_vars=BULAN, var_name=&quot;bulan&quot;, value_name=&quot;isi&quot;)
+print(p.shape)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>(864, 6)</code></pre></div></div>
+<p>72 siswa × 12 bulan = 864 baris. Satu baris = satu siswa, satu bulan. Bentuk ini yang bisa dikelompokkan, disaring, dan dijumlahkan.</p>
+        <div class="catatan"><code>melt</code> adalah satu-satunya perkakas yang kamu butuhkan untuk mengubah rekap buatan tangan jadi data yang bisa diolah. Hampir semua berkas Excel dari klien berbentuk melebar.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Terjemahkan isi selnya jadi angka yang benar</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-9"><label for="studi-kasus-nyata-v2-4-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def bayar(baris):
+    v = str(baris[&quot;isi&quot;]).strip()
+    if v == &quot;LUNAS&quot;: return baris[&quot;spp&quot;]
+    return ke_angka(v)</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>p[&quot;dibayar&quot;] = p.apply(bayar, axis=1)
+print(f&#x27;{p[&quot;dibayar&quot;].sum():,}&#x27;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>351,247,000</code></pre></div></div>
+<p>Cocok dengan hitungan tadi. Dua jalan berbeda, satu jawaban — itu pemeriksaannya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Tunggakan per kelas</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-10"><label for="studi-kasus-nyata-v2-4-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kelas</th>
+<th class="n">Siswa</th>
+<th class="n">Tagihan</th>
+<th class="n">Diterima</th>
+<th class="n">Tunggakan</th>
+<th class="n">%</th>
+</tr></thead>
+            <tbody>
+              <tr><td>7A</td><td class="n">12</td><td class="n">60.300.000</td><td class="n">52.560.000</td><td class="n">7.740.000</td><td class="n">12,8</td></tr>
+              <tr><td>7B</td><td class="n">12</td><td class="n">59.850.000</td><td class="n">52.380.000</td><td class="n">7.470.000</td><td class="n">12,5</td></tr>
+              <tr><td>8A</td><td class="n">12</td><td class="n">68.400.000</td><td class="n">56.908.000</td><td class="n"><strong>11.492.000</strong></td><td class="n"><strong>16,8</strong></td></tr>
+              <tr><td>8B</td><td class="n">12</td><td class="n">66.500.000</td><td class="n">61.799.000</td><td class="n">4.701.000</td><td class="n">7,1</td></tr>
+              <tr><td>9A</td><td class="n">12</td><td class="n">72.000.000</td><td class="n">64.000.000</td><td class="n">8.000.000</td><td class="n">11,1</td></tr>
+              <tr><td>9B</td><td class="n">12</td><td class="n">72.000.000</td><td class="n">63.600.000</td><td class="n">8.400.000</td><td class="n">11,7</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(f&quot;tagihan  : 399,050,000&quot;)
+print(f&quot;diterima : 351,247,000&quot;)
+print(f&quot;tunggakan:  47,803,000&quot;)</code></pre></div>
+<p>Rp 399.050.000 − Rp 351.247.000 = Rp 47.803.000, yaitu <strong>12,0%</strong>. Kelas 8A paling berat: 16,8%.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Yang tidak diminta, tapi wajib disebut: lima siswa pindah</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-11"><label for="studi-kasus-nyata-v2-4-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>pindah = s[s[&quot;Keterangan&quot;].notna()]
+print(len(pindah), &quot;siswa&quot;)
+print(pindah[[&quot;Nama Siswa&quot;,&quot;Kelas&quot;,&quot;Keterangan&quot;]].head(3).to_string(index=False))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>5 siswa
+Bella Ramadhan    7B  pindah Jan
+Naufal Nugroho    7B  pindah Feb
+  Mira Maulana    7A  pindah Nov</code></pre></div></div>
+        <div class="bahaya"><strong>Menagih 12 bulan ke siswa yang pindah di bulan ke-4 adalah salah.</strong> Tunggakan mereka Rp 1.575.000 dari total Rp 47,8 juta — kecil, tapi kalau surat tagihan terkirim ke orang tua yang anaknya sudah pindah setengah tahun lalu, yang rusak bukan angkanya, tapi nama sekolahnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-4-12"><label for="studi-kasus-nyata-v2-4-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">PENGULANGAN · TANPA MEMBUKA CATATAN</span>
+          Tutup halaman. Empat pertanyaan, tertulis.</div>
+        <div class="kode"><pre><code>1. Kenapa SUM() di Excel memberi angka yang terlalu kecil di berkas ini?
+2. Berapa rupiah yang disembunyikan kata LUNAS, dan kenapa tidak ada error?
+3. Apa gunanya melt(), dan berapa baris hasilnya?
+4. Kenapa siswa pindah harus dipisahkan sebelum menagih?</code></pre></div>
+<details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi"><p><strong>1.</strong> Karena sel berisi teks dihitung sebagai nol — 95 sel LUNAS.</p><p><strong>2.</strong> Rp 45.350.000. Tidak ada error karena mengabaikan teks memang perilaku normal <code>SUM()</code>, bukan kerusakan.</p><p><strong>3.</strong> Mengubah 12 kolom bulan jadi baris. 72 × 12 = 864 baris.</p><p><strong>4.</strong> Karena bulan wajib mereka kurang dari 12 — menagih penuh berarti menagih bulan yang anaknya sudah tidak sekolah di situ.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Kasus 4 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> <code>SUM()</code> Excel menganggap teks = nol · satu kolom bisa punya enam cara penulisan · <code>melt</code> mengubah melebar jadi memanjang · hitung lewat dua jalan dan cocokkan · dan baris TOTAL di dalam tabel selalu menggandakan.</p><p style="margin-top:10px">Besok, kasus terakhir: Rp 424 juta uang masuk yang <em>bukan</em> pelunasan piutang.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>Piutang: Rp 424 juta uang masuk yang bukan pelunasan</h2>
+      <span class="waktu">± 130 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mencocokkan rekening koran ke daftar piutang, dan menolak asumsi yang paling mahal — bahwa setiap uang masuk berarti pelanggan membayar.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Buat kedua berkasnya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-1"><label for="studi-kasus-nyata-v2-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>python gen_k5.py</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>faktur           : 53 | nilai: 2.524.400.000
+baris rek koran  : 55
+pelunasan piutang: 1.544.500.000
+saldo piutang    : 979.900.000</code></pre></div></div>
+<p>Empat angka itu tujuanmu. Yang paling sulit bukan menghitungnya — tapi <strong>tidak tertipu oleh angka kelima</strong> yang belum muncul di situ.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Baca keduanya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-2"><label for="studi-kasus-nyata-v2-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import pandas as pd, re
+pi = pd.read_excel(&quot;Daftar Piutang PT Anugerah Jaya.xlsx&quot;, skiprows=2)
+rk = pd.read_csv(&quot;Rekening Koran Juni 2024.csv&quot;, sep=&quot;;&quot;, dtype=str)
+print(len(pi), len(rk))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>53 55</code></pre></div></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ambil yang uang masuk saja</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-3"><label for="studi-kasus-nyata-v2-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>def ke_angka(x):
+    t = re.sub(r&quot;[^0-9]&quot;, &quot;&quot;, str(x)) if pd.notna(x) else &quot;&quot;
+    return int(t) if t else 0</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>rk[&quot;kredit&quot;] = rk[&quot;Kredit&quot;].map(ke_angka)
+masuk = rk[rk[&quot;kredit&quot;] &gt; 0]
+print(&quot;baris:&quot;, len(masuk))
+print(f&quot;nilai: {masuk[&#x27;kredit&#x27;].sum():,}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>baris: 47
+nilai: 1,968,606,050</code></pre></div></div>
+<p>Rp 1,97 miliar masuk ke rekening selama enam bulan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Asumsi paling mahal di seluruh halaman ini</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-4"><label for="studi-kasus-nyata-v2-5-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya"><strong>Godaannya sekarang: anggap seluruh Rp 1,97 miliar itu pelunasan piutang.</strong> Kalau kamu melakukannya, saldo piutang yang kamu laporkan akan meleset <strong>ratusan juta</strong> — dan angkanya akan terlihat sangat masuk akal.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Berhenti. Sebelum menghitung apa pun, baca dulu kolom keterangannya. Semua 47 baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for _, r in masuk.sort_values(&quot;kredit&quot;, ascending=False).head(8).iterrows():
+    print(f&quot;{r[&#x27;kredit&#x27;]:&gt;13,}  {r[&#x27;Keterangan&#x27;]}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>  142,852,693  SETORAN MODAL DIREKTUR
+  112,841,806  SETORAN MODAL DIREKTUR
+   94,500,000  TRF TOKO BAHAGIA
+   88,600,000  TRF PT MITRA NIAGA UTAMA
+   88,100,000  KREDIT CV BERKAH JAYA
+   86,200,000  TRF CV BERKAH JAYA ABADI
+   82,700,000  SETORAN TUNAI TOKO BAHAGIA
+   81,600,000  PT SUMBERMAKMUR</code></pre></div></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Dua baris teratas bukan pelanggan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-5"><label for="studi-kasus-nyata-v2-5-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p><code>SETORAN MODAL DIREKTUR</code> adalah pemilik menyuntik uang ke perusahaan. Itu bukan pelanggan membayar utang. Cari semuanya:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>bukan = masuk[masuk[&quot;Keterangan&quot;].str.contains(
+    &quot;SETORAN MODAL DIREKTUR|BUNGA GIRO|TANPA KETERANGAN|MAJU BERSAMA&quot;, na=False)]
+print(bukan.groupby(&quot;Keterangan&quot;)[&quot;kredit&quot;].agg([&quot;size&quot;,&quot;sum&quot;]).to_string())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>                                size        sum
+BUNGA GIRO                         2      83599
+SETORAN MODAL DIREKTUR             4  398476419
+SETORAN TUNAI TANPA KETERANGAN     1   16789518
+TRF DR PT MAJU BERSAMA             1    8756514</code></pre></div></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Angka kelima yang tadi belum muncul</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-6"><label for="studi-kasus-nyata-v2-5-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(f&quot;bukan pelunasan : {bukan[&#x27;kredit&#x27;].sum():,}&quot;)
+print(f&quot;pelunasan       : {masuk[&#x27;kredit&#x27;].sum() - bukan[&#x27;kredit&#x27;].sum():,}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>bukan pelunasan : 424,106,050
+pelunasan       : 1,544,500,000</code></pre></div></div>
+        <div class="bahaya"><strong>Rp 424.106.050 — 21,5% dari seluruh uang masuk — bukan pelunasan piutang.</strong> Analis yang melewatkan ini melaporkan saldo piutang Rp 555 juta, padahal sebenarnya Rp 979 juta. Selisihnya Rp 424 juta, dan tidak ada satu pun error yang muncul.</div>
+        <div class="catatan"><strong>Ini bukan kemampuan pandas.</strong> Ini kemampuan membaca keterangan bank dan tahu bahwa setoran modal bukan pendapatan. Latar akuntansimu yang menangkap ini, bukan kodenya — dan itulah yang kamu jual.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Cocokkan keterangan bank ke pelanggan — manual lagi</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-7"><label for="studi-kasus-nyata-v2-5-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>PETA = {
+ &quot;SUMBERMAKMUR&quot;:      &quot;PT Sumber Makmur Sentosa&quot;,
+ &quot;SUMBER MAKMUR&quot;:     &quot;PT Sumber Makmur Sentosa&quot;,
+ &quot;BERKAH JAYA&quot;:       &quot;CV Berkah Jaya Abadi&quot;,
+ &quot;TOKO BAHAGIA&quot;:      &quot;Toko Bahagia&quot;,
+ &quot;SINARTERANG&quot;:       &quot;UD Sinar Terang&quot;,
+ &quot;MITRA NIAGA&quot;:       &quot;PT Mitra Niaga Utama&quot;,
+ &quot;SEJAHTERA&quot;:         &quot;Toko Sejahtera&quot;,
+ &quot;ANUGERAH PANGAN&quot;:   &quot;CV Anugerah Pangan&quot;,
+ &quot;GLOBAL DIST&quot;:       &quot;PT Global Distribusi&quot;,
+}</code></pre></div>
+        <div class="catatan">Sama seperti Kasus 3: <strong>mesin tidak boleh menebak ini.</strong> "PT SUMBERMAKMUR" dan "PT SUMBER MAKMUR SENTOSA" adalah pelanggan yang sama — tapi hanya manusia yang bisa memastikannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Saldo piutang per pelanggan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-8"><label for="studi-kasus-nyata-v2-5-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Pelanggan</th>
+<th class="n">Faktur</th>
+<th class="n">Nilai faktur</th>
+<th class="n">Dibayar</th>
+<th class="n">Saldo</th>
+<th class="n">Tertagih %</th>
+</tr></thead>
+            <tbody>
+              <tr><td>CV Berkah Jaya Abadi</td><td class="n">9</td><td class="n">524.900.000</td><td class="n">259.400.000</td><td class="n"><strong>265.500.000</strong></td><td class="n">49,4</td></tr>
+              <tr><td>PT Sumber Makmur Sentosa</td><td class="n">5</td><td class="n">286.400.000</td><td class="n">139.800.000</td><td class="n">146.600.000</td><td class="n">48,8</td></tr>
+              <tr><td>CV Anugerah Pangan</td><td class="n">7</td><td class="n">311.600.000</td><td class="n">169.900.000</td><td class="n">141.700.000</td><td class="n">54,5</td></tr>
+              <tr><td>Toko Sejahtera</td><td class="n">8</td><td class="n">337.500.000</td><td class="n">227.000.000</td><td class="n">110.500.000</td><td class="n">67,3</td></tr>
+              <tr><td>Toko Bahagia</td><td class="n">6</td><td class="n">313.900.000</td><td class="n">215.400.000</td><td class="n">98.500.000</td><td class="n">68,6</td></tr>
+              <tr><td>UD Sinar Terang</td><td class="n">6</td><td class="n">208.800.000</td><td class="n">119.100.000</td><td class="n">89.700.000</td><td class="n">57,0</td></tr>
+              <tr><td>PT Mitra Niaga Utama</td><td class="n">5</td><td class="n">259.400.000</td><td class="n">175.100.000</td><td class="n">84.300.000</td><td class="n">67,5</td></tr>
+              <tr><td>PT Global Distribusi</td><td class="n">7</td><td class="n">281.900.000</td><td class="n">238.800.000</td><td class="n">43.100.000</td><td class="n"><strong>84,7</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+<p>Total saldo piutang <strong>Rp 979.900.000</strong>. Dua pelanggan terbesar baru membayar separuh.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Susun umur piutangnya</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-9"><label for="studi-kasus-nyata-v2-5-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>TGL = pd.Timestamp(&quot;2024-06-30&quot;)
+pi[&quot;umur&quot;] = (TGL - pd.to_datetime(pi[&quot;Jatuh Tempo&quot;], format=&quot;%d/%m/%Y&quot;)).dt.days</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kelompok</th>
+<th class="n">Faktur</th>
+<th class="n">Nilai</th>
+<th class="n">%</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1. Belum jatuh tempo</td><td class="n">5</td><td class="n">245.700.000</td><td class="n">25,1</td></tr>
+              <tr><td>2. 1–30 hari</td><td class="n">11</td><td class="n">423.500.000</td><td class="n">43,2</td></tr>
+              <tr><td>3. 31–60 hari</td><td class="n">8</td><td class="n">258.700.000</td><td class="n">26,4</td></tr>
+              <tr><td>4. 61–90 hari</td><td class="n">1</td><td class="n">32.900.000</td><td class="n">3,4</td></tr>
+              <tr><td>5. &gt; 90 hari</td><td class="n">1</td><td class="n"><strong>19.100.000</strong></td><td class="n">1,9</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Tutup dengan tie-out</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-10"><label for="studi-kasus-nyata-v2-5-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;total aging :  979,900,000&quot;)
+print(&quot;saldo tabel :  979,900,000&quot;)
+print(&quot;selisih     :            0&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="kode"><pre><code>total aging :  979,900,000
+saldo tabel :  979,900,000
+selisih     :            0</code></pre></div></div>
+        <div class="catatan"><strong>Lima kasus, lima kali diakhiri dengan selisih nol.</strong> Itu bukan kebetulan — itu satu-satunya cara kamu tahu pekerjaanmu benar tanpa ada yang memberi tahu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Ulangi dari ingatan</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-11"><label for="studi-kasus-nyata-v2-5-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">PENGULANGAN · TANPA MEMBUKA CATATAN</span>
+          Tutup halaman. Empat pertanyaan, tertulis.</div>
+        <div class="kode"><pre><code>1. Berapa persen uang masuk yang ternyata bukan pelunasan piutang?
+2. Sebutkan empat jenis penerimaan yang bukan pelunasan piutang.
+3. Kalau kamu melewatkannya, saldo piutang yang kamu laporkan salah berapa?
+4. Kenapa pencocokan keterangan bank ke pelanggan tidak boleh otomatis?</code></pre></div>
+<details>
+          <summary>Cek jawabanmu</summary>
+          <div class="isi"><p><strong>1.</strong> Rp 424.106.050 dari Rp 1.968.606.050 = <strong>21,5%</strong>.</p><p><strong>2.</strong> Setoran modal direktur, bunga giro, setoran tunai tanpa keterangan, dan transfer dari pihak yang bukan pelanggan (PT Maju Bersama).</p><p><strong>3.</strong> Rp 424 juta terlalu kecil — Rp 555 juta, bukan Rp 979 juta.</p><p><strong>4.</strong> Karena "PT SUMBERMAKMUR" dan "PT SUMBER MAKMUR SENTOSA" hanya bisa dipastikan sama oleh orang yang tahu daftar pelanggannya.</p></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">12</span>
+        <h3>Lima kasus selesai — apa yang sebenarnya kamu latih</h3>
+        <span class="cek"><input type="checkbox" id="studi-kasus-nyata-v2-5-12"><label for="studi-kasus-nyata-v2-5-12">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="hasil"><span class="tag">DELAPAN JEBAKAN</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kasus</th>
+<th>Yang menjebak</th>
+<th>Kalau lolos, akibatnya</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1 · Toko bangunan</td><td>Titik dibaca sebagai desimal</td><td>Harga meleset 1.000×</td></tr>
+              <tr><td>1 · Toko bangunan</td><td>Baris subtotal ikut dijumlah</td><td>Omzet tepat 2× lipat</td></tr>
+              <tr><td>2 · Klinik</td><td>merge bawaannya membuang</td><td>18 kunjungan lenyap</td></tr>
+              <tr><td>2 · Klinik</td><td>Kunci kanan tidak unik</td><td>Rp 1,4 juta dihitung dua kali</td></tr>
+              <tr><td>3 · Kontraktor</td><td>Nama proyek tidak sama</td><td>Merge nol baris</td></tr>
+              <tr><td>3 · Kontraktor</td><td>Satu baris pemetaan</td><td>Margin bergeser 9,3 poin</td></tr>
+              <tr><td>4 · Sekolah</td><td>SUM() anggap teks = nol</td><td>Rp 45,3 juta hilang</td></tr>
+              <tr><td>5 · Piutang</td><td>Uang masuk ≠ pelunasan</td><td>Saldo salah Rp 424 juta</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="catatan"><strong>Tidak satu pun dari delapan itu menghasilkan pesan error.</strong> Semuanya jalan mulus dan memberi angka yang terlihat wajar. Yang menangkapnya bukan Python — tapi kebiasaan menutup setiap pekerjaan dengan angka kontrol dan selisih nol. Itu kebiasaan yang sudah kamu bawa dari kertas kerja, dan di sini ia jadi keunggulanmu.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Studi Kasus Nyata selesai</h3>
+      <p>Lima berkas klien, lima kali ditutup dengan selisih nol. Yang kamu latih di sini bukan pandas — tapi menolak percaya pada angka yang belum kamu buktikan.</p><p style="margin-top:10px">Berikutnya: <strong>Bekal Rahasia Klien</strong> — apa yang boleh dan tidak boleh naik ke internet begitu datanya milik orang lain.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/e653810a-9c48-4b3e-af6e-8d439618c677">Lanjut ke Bekal Rahasia Klien →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Kelima berkas dibuat oleh <code>gen_k1.py</code> sampai <code>gen_k5.py</code> di paket zip, dan setiap angka “HARUS MUNCUL” di halaman ini diperoleh dengan menjalankan kodenya pada berkas itu — pandas 3.0.5, Python 3.11.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "studi-kasus-nyata-v2";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

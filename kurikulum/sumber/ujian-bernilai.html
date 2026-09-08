@@ -1,0 +1,608 @@
+<title>Ujian Bernilai</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/9e8025f8-28cb-48cd-bee3-809b610567a6">← Kembali ke Jalur Pintu B: melamar ke tempat yang tepat</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Ujian Bernilai</span>
+  <button type="button" data-hari="1" aria-selected="true">Ujian</button>
+  <button type="button" data-hari="2" aria-selected="false">Penilaian</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Ujian Bernilai · 60 poin · berwaktu</span>
+    <h1>Ujian Bernilai: satu angka tentang kemampuanmu</h1>
+    <p class="lede">Sepanjang 49 modul sebelumnya, kamu menilai dirimu sendiri dengan mencentang kotak. <strong>801 centang, semuanya laporan diri sendiri.</strong> Tidak ada satu pun angka objektif yang bisa kamu tunjukkan — termasuk ke dirimu sendiri saat ragu.</p>
+    <p class="lede" style="margin-top:10px">Halaman ini memperbaiki itu. Dua puluh dua soal, 60 poin, 90 menit. Jawabannya <strong>angka atau satu kata</strong> — cocok atau tidak, tanpa ruang tawar. Dan kuncinya baru boleh kamu buka <strong>setelah</strong> seluruh jawabanmu tertulis.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ HARI 1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">UJIAN</span>
+      <h2>90 menit, 60 poin</h2>
+      <span class="waktu">± 90 menit</span>
+    </div>
+
+    <div class="bahaya">
+      <strong>Aturan, dan seluruh nilai halaman ini bergantung pada kamu mematuhinya.</strong>
+      <ul style="margin:8px 0 0; padding-left:20px">
+        <li>Pasang pengatur waktu <strong>90 menit</strong>. Berhenti saat berbunyi, meski belum selesai.</li>
+        <li>Boleh membuka <strong>dokumentasi</strong> dan mesin pencari. Tidak boleh membuka <strong>modul-modul lamamu</strong>.</li>
+        <li>Tulis tiap jawaban di kertas atau berkas terpisah <strong>beserta nomornya</strong>, sebelum melihat kunci.</li>
+        <li>Kunci ada di bagian Penilaian. <strong>Jangan dibuka sebelum 90 menit habis</strong> — kalau dibuka lebih dulu, angkamu tidak berarti apa-apa, dan satu-satunya yang kamu tipu adalah dirimu sendiri.</li>
+      </ul>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Siapkan datanya (tidak dihitung waktu)</h3>
+        <span class="cek"><input type="checkbox" id="x1s1"><label for="x1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import sqlite3, pandas as pd
+con = sqlite3.connect("senja.db")          # dari SQL Mahir L1
+def q(sql): return pd.read_sql(sql, con)
+
+# untuk Bagian B, siapkan juga transaksi.csv dari Python Produksi P4</code></pre>
+        </div>
+        <div class="aksi">Pastikan kedua berkas ada sebelum menyalakan pengatur waktu: <code>senja.db</code> (7 tabel) dan <code>transaksi.csv</code> (800.000 baris). Menyiapkan berkas tidak dihitung waktu ujian.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bagian A — SQL · 15 soal · 38 poin</h3>
+        <span class="cek"><input type="checkbox" id="x1s2"><label for="x1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Semua dijawab dari <code>senja.db</code>. Jawaban berupa satu angka atau satu kata.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th style="width:38px">No</th><th>Soal</th><th class="n" style="width:52px">Poin</th></tr></thead>
+            <tbody>
+              <tr><td>A1</td><td>Berapa baris di tabel <code>pesanan</code>?</td><td class="n">1</td></tr>
+              <tr><td>A2</td><td>Berapa pesanan berstatus <code>'batal'</code>?</td><td class="n">1</td></tr>
+              <tr><td>A3</td><td>Berapa pesanan yang <code>pelanggan_id</code>-nya kosong?</td><td class="n">1</td></tr>
+              <tr><td>A4</td><td>Berapa pelanggan yang <strong>belum pernah</strong> memesan sama sekali?</td><td class="n">2</td></tr>
+              <tr><td>A5</td><td>Total omzet seluruh pesanan berstatus <code>'selesai'</code></td><td class="n">2</td></tr>
+              <tr><td>A6</td><td>Omzet cabang tertinggi — angkanya saja</td><td class="n">2</td></tr>
+              <tr><td>A7</td><td>Berapa produk yang <code>harga_beli</code>-nya kosong?</td><td class="n">2</td></tr>
+              <tr><td>A8</td><td><strong>Median</strong> nilai satu pesanan selesai (bilangan bulat)</td><td class="n">3</td></tr>
+              <tr><td>A9</td><td>Nama produk dengan omzet tertinggi <strong>di cabang Seturan</strong></td><td class="n">3</td></tr>
+              <tr><td>A10</td><td>Berapa pesanan <code>'selesai'</code> yang tidak punya struk di <code>pesanan_kasir</code>?</td><td class="n">3</td></tr>
+              <tr><td>A11</td><td>Berapa struk kasir yang tidak punya pesanan?</td><td class="n">3</td></tr>
+              <tr><td>A12</td><td>Berapa pesanan yang <strong>nilainya beda</strong> antara sistem dan kasir?</td><td class="n">3</td></tr>
+              <tr><td>A13</td><td>Bulan (format <code>YYYY-MM</code>) dengan omzet tertinggi</td><td class="n">4</td></tr>
+              <tr><td>A14</td><td>Berapa <strong>persen omzet</strong> cabang Seturan yang berasal dari kanal Ojol? (1 desimal)</td><td class="n">4</td></tr>
+              <tr><td>A15</td><td>Berapa pasangan <code>(pesanan_id, produk_id)</code> yang muncul lebih dari sekali di tabel <code>item</code>?</td><td class="n">4</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Bagian B — Python · 5 soal · 12 poin</h3>
+        <span class="cek"><input type="checkbox" id="x1s3"><label for="x1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Semua dijawab dari <code>transaksi.csv</code> (800.000 baris).</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th style="width:38px">No</th><th>Soal</th><th class="n" style="width:52px">Poin</th></tr></thead>
+            <tbody>
+              <tr><td>B1</td><td>Berapa baris dan berapa kolom? (jawab dua angka)</td><td class="n">2</td></tr>
+              <tr><td>B2</td><td>Baca dengan <code>dtype</code> yang kamu pilih sendiri agar hemat. Berapa MB pemakaian memorinya? (1 desimal)</td><td class="n">2</td></tr>
+              <tr><td>B3</td><td>Berapa <code>pelanggan_id</code> yang unik?</td><td class="n">2</td></tr>
+              <tr><td>B4</td><td>Omzet cabang tertinggi — angkanya saja</td><td class="n">3</td></tr>
+              <tr><td>B5</td><td>Berapa transaksi yang nilainya di atas 100.000?</td><td class="n">3</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan" style="margin-top:12px">
+          <strong>B2 punya satu jawaban yang benar</strong> kalau kamu memilih tipe yang paling hemat namun masih aman untuk isinya. Kalau angkamu jauh lebih besar, kamu belum memilih tipe. Kalau jauh lebih kecil, periksa apakah ada kolom yang kamu buang.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Bagian C — Penilaian · 2 soal · 10 poin</h3>
+        <span class="cek"><input type="checkbox" id="x1s4"><label for="x1s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Dua soal ini yang paling menentukan, dan yang paling sedikit ada hubungannya dengan sintaks.</p>
+
+        <p style="margin-top:12px"><strong>C1 — 5 poin.</strong> Fungsi di bawah ini dipakai untuk membaca angka dari berkas Excel klien. Ia lulus semua uji yang ditulis untuknya. <strong>Ada satu bug yang seharusnya langsung terlihat oleh seorang auditor.</strong> Sebutkan bug-nya, dan sebutkan masukan yang membuktikannya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import re, pandas as pd
+
+def ke_angka(nilai):
+    """Ubah teks berformat Indonesia jadi bilangan bulat."""
+    if nilai is None or (isinstance(nilai, float) and pd.isna(nilai)):
+        return None
+    if isinstance(nilai, int):
+        return int(nilai)
+    teks = re.sub(r"[^0-9\-]", "", str(nilai))
+    return int(teks) if teks not in ("", "-") else None</code></pre>
+        </div>
+
+        <p style="margin-top:14px"><strong>C2 — 5 poin.</strong> Klien mengirim pesan: <em>“Tolong hitung berapa pelanggan aktif kami.”</em> Datanya ada. Tuliskan <strong>tiga pertanyaan berbeda</strong> yang harus kamu ajukan sebelum menjawab, dan untuk tiap pertanyaan sebutkan <strong>kenapa jawabannya mengubah angka akhir</strong>.</p>
+        <div class="catatan">
+          <strong>Cara C2 dinilai:</strong> 1 poin untuk tiap pertanyaan yang benar-benar mengubah angka, dan 1 poin tambahan untuk tiap alasan yang menyebut mekanismenya. Maksimal 5.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Waktu habis — tutup semuanya</h3>
+      <p>Sebelum membuka Penilaian, pastikan <strong>22 jawabanmu sudah tertulis</strong> dan tidak akan kamu ubah lagi. Mengoreksi jawaban sambil melihat kunci menghasilkan angka yang menyenangkan dan tidak berguna.</p>
+    </div>
+  </section>
+
+  <!-- ============ HARI 2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">PENILAIAN</span>
+      <h2>Kunci, skor, dan artinya</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kunci jawaban</h3>
+        <span class="cek"><input type="checkbox" id="x2s1"><label for="x2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">Jawabanmu sudah tertulis semua? Kalau belum, tutup halaman ini dan kembali ke bagian Ujian.</div>
+        <details>
+          <summary>Buka kunci — Bagian A</summary>
+          <div class="tabel-bungkus" style="margin-top:10px">
+            <table>
+              <thead><tr><th>No</th><th class="n">Jawaban</th><th class="n">Poin</th><th>Catatan</th></tr></thead>
+              <tbody>
+                <tr><td>A1</td><td class="n">400</td><td class="n">1</td><td></td></tr>
+                <tr><td>A2</td><td class="n">38</td><td class="n">1</td><td></td></tr>
+                <tr><td>A3</td><td class="n">12</td><td class="n">1</td><td></td></tr>
+                <tr><td>A4</td><td class="n">3</td><td class="n">2</td><td><strong>Jebakan <code>NOT IN</code>.</strong> Kalau jawabanmu 0, kamu memakai <code>NOT IN</code> dan tertipu 12 baris <code>NULL</code>. Yang benar: <code>NOT EXISTS</code>.</td></tr>
+                <tr><td>A5</td><td class="n">35.739.000</td><td class="n">2</td><td></td></tr>
+                <tr><td>A6</td><td class="n">12.665.000</td><td class="n">2</td><td>cabang Dago</td></tr>
+                <tr><td>A7</td><td class="n">2</td><td class="n">2</td><td>Cheesecake &amp; Matcha Latte</td></tr>
+                <tr><td>A8</td><td class="n">90.000</td><td class="n">3</td><td>Rata-ratanya 98.727 — kalau itu jawabanmu, kamu menjawab soal yang berbeda.</td></tr>
+                <tr><td>A9</td><td class="n">Cheesecake</td><td class="n">3</td><td>Matcha Latte menang di dua cabang lain, bukan di Seturan.</td></tr>
+                <tr><td>A10</td><td class="n">3</td><td class="n">3</td><td>id 7, 88, 251</td></tr>
+                <tr><td>A11</td><td class="n">2</td><td class="n">3</td><td>id 9001, 9002</td></tr>
+                <tr><td>A12</td><td class="n">2</td><td class="n">3</td><td>id 12 (+50.000) dan 199 (−25.000)</td></tr>
+                <tr><td>A13</td><td class="n">2024-02</td><td class="n">4</td><td></td></tr>
+                <tr><td>A14</td><td class="n">22,4</td><td class="n">4</td><td><strong>Jebakan.</strong> Kalau jawabanmu 25,0, kamu menghitung persen <em>jumlah pesanan</em>, bukan persen <em>omzet</em>. Soalnya menyebut omzet.</td></tr>
+                <tr><td>A15</td><td class="n">72</td><td class="n">4</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>Buka kunci — Bagian B</summary>
+          <div class="tabel-bungkus" style="margin-top:10px">
+            <table>
+              <thead><tr><th>No</th><th class="n">Jawaban</th><th class="n">Poin</th><th>Catatan</th></tr></thead>
+              <tbody>
+                <tr><td>B1</td><td class="n">800.000 baris, 7 kolom</td><td class="n">2</td><td>1 poin tiap angka</td></tr>
+                <tr><td>B2</td><td class="n">18,4 MB</td><td class="n">2</td><td>Beri diri 2 poin kalau hasilmu 17–20 MB. Kalau ~183 MB, kamu belum memilih <code>dtype</code> — 0 poin.</td></tr>
+                <tr><td>B3</td><td class="n">50.000</td><td class="n">2</td><td></td></tr>
+                <tr><td>B4</td><td class="n">8.373.050.000</td><td class="n">3</td><td>cabang Kemang</td></tr>
+                <tr><td>B5</td><td class="n">57.459</td><td class="n">3</td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>Buka kunci — Bagian C</summary>
+          <p style="margin-top:10px"><strong>C1 — bug tanda kurung akuntansi (5 poin)</strong></p>
+          <div class="kode" style="margin-top:8px"><pre><code>ke_angka("(1.500)")   ->  1500      # SALAH
+                                    # seharusnya -1500</code></pre></div>
+          <p style="margin-top:10px">Di laporan keuangan, angka dalam tanda kurung berarti <strong>negatif</strong>. Fungsi itu membuang semua karakter selain angka dan tanda minus — sehingga kurungnya hilang dan angka negatif berubah jadi positif. Nilai <code>1.500</code> yang seharusnya mengurangi justru menambah, dan <strong>selisihnya dua kali lipat nilai aslinya</strong>.</p>
+          <p style="margin-top:8px"><strong>Penilaian:</strong> 3 poin kalau kamu menyebut soal tanda kurung/negatif. 2 poin tambahan kalau kamu menuliskan masukan pembuktinya, misalnya <code>"(1.500)"</code> atau <code>"(Rp 250.000)"</code>. Nol kalau kamu menyebut bug lain yang bukan ini.</p>
+          <div class="catatan" style="margin-top:10px">
+            <strong>Kenapa soal ini yang paling berbobot per menitnya.</strong> Fungsi itu lulus <em>sebelas</em> uji di modul Python Produksi. Tidak ada yang gagal, tidak ada peringatan. Yang menangkapnya bukan alat, bukan uji — tapi orang yang tahu bahwa <code>(1.500)</code> di kolom rupiah berarti minus. <strong>Itu pengetahuan akuntansi, bukan pengetahuan Python</strong>, dan itulah yang kamu jual.
+          </div>
+          <p style="margin-top:14px"><strong>C2 — pertanyaan yang harus diajukan (5 poin)</strong></p>
+          <p style="margin-top:6px">Pertanyaan yang dihitung benar — 1 poin masing-masing, dan 1 poin tambahan kalau alasannya menyebut mekanismenya:</p>
+          <ul style="margin-top:8px; padding-left:20px; font-size:0.93rem">
+            <li><strong>Aktif dalam rentang waktu berapa?</strong> Di <code>besar.db</code>, “pernah bertransaksi” = 50.000 orang, “30 hari terakhir” = 24.768. Beda dua kali lipat.</li>
+            <li><strong>Transaksi yang dibatalkan ikut dihitung?</strong> Di <code>senja.db</code>, 38 dari 400 pesanan berstatus batal — hampir 10%.</li>
+            <li><strong>Baris tanpa <code>pelanggan_id</code> diapakan?</strong> Ada 12; dibuang atau dihitung sebagai satu pelanggan tak dikenal mengubah hasilnya.</li>
+            <li><strong>Berapa kali transaksi baru disebut aktif?</strong> Sekali, atau minimal dua kali? Di <code>besar.db</code> selisihnya 43.263 lawan 29.616.</li>
+          </ul>
+          <p style="margin-top:8px">Maksimal 5 poin. Jawaban yang cuma menyebut satu pertanyaan tanpa alasan: 1 poin.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Hitung skormu, lalu baca artinya</h3>
+        <span class="cek"><input type="checkbox" id="x2s2"><label for="x2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi">Jumlahkan: Bagian A (maks 38) + Bagian B (maks 12) + Bagian C (maks 10) = <strong>skormu dari 60</strong>. Tulis angkanya beserta tanggalnya. Itu angka objektif pertamamu di seluruh kurikulum ini.</div>
+        <div class="tabel-bungkus" style="margin-top:12px">
+          <table>
+            <thead><tr><th class="n">Skor</th><th>Artinya</th><th>Yang harus kamu lakukan</th></tr></thead>
+            <tbody>
+              <tr><td class="n"><strong>52–60</strong></td><td>Siap tes teknis. Kemampuanmu bukan lagi penghambat.</td><td>Berhenti menambah modul. Pindah ke Pintu B dan Proyek Buta, lalu kirim lamaran.</td></tr>
+              <tr><td class="n"><strong>42–51</strong></td><td>Kuat, dengan satu-dua lubang.</td><td>Lihat soal mana yang hilang poinnya. Ulangi <em>modul</em>-nya, bukan seluruh jalur. Lalu tetap lamar — 42 sudah cukup untuk lulus tes SQL kebanyakan.</td></tr>
+              <tr><td class="n"><strong>30–41</strong></td><td>Dasarnya ada, penerapannya belum lancar.</td><td>Yang paling mungkin hilang: A8–A15 dan Bagian C. Ulangi SQL Mahir L3 dan L5, lalu ujian ini lagi dua minggu kemudian.</td></tr>
+              <tr><td class="n"><strong>di bawah 30</strong></td><td>Belum siap diuji orang lain — dan itu <em>informasi</em>, bukan vonis.</td><td>Jangan melamar dulu ke peran teknis. Ulangi SQL Mahir L1–L3 dengan mengerjakan soalnya, bukan membacanya. Ujian ini lagi sebulan kemudian.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya" style="margin-top:14px">
+          <strong>Satu hal yang membuat angka ini berarti, dan satu hal yang menghancurkannya.</strong> Yang membuatnya berarti: kamu mengerjakannya dalam 90 menit tanpa membuka modul lama. Yang menghancurkannya: membuka kunci di tengah jalan, lalu mencatat angka yang tidak kamu peroleh. Tidak ada yang memeriksa selain kamu — dan itulah yang membuat kejujuranmu di sini jadi latihan tersendiri, latihan yang sama persis dengan menolak menandatangani kertas kerja yang belum benar-benar kamu telaah.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ulangi tiga bulan lagi, dan bandingkan</h3>
+        <span class="cek"><input type="checkbox" id="x2s3"><label for="x2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Simpan skormu beserta tanggalnya. Kerjakan ujian yang <strong>sama persis</strong> tiga bulan lagi.</p>
+        <div class="catatan">
+          <strong>Kenapa soal yang sama, bukan yang baru.</strong> Karena yang ingin kamu ukur bukan “apakah saya bisa mengerjakan soal ini” — tapi <strong>apakah kemampuan saya bertambah</strong>. Untuk itu alat ukurnya harus tetap. Naik dari 38 ke 51 adalah bukti; mengerjakan soal berbeda dan mendapat 51 tidak membuktikan apa-apa.
+          <p style="margin-top:8px">Ini prinsip yang sama dengan pengujian berulang di audit: prosedur yang berubah tiap periode tidak bisa dipakai membandingkan periode.</p>
+        </div>
+        <div class="aksi" style="margin-top:12px">Dan satu lagi yang tidak boleh dilewati: <strong>tulis skormu di CV atau tidak sama sekali — tapi sebutkan di wawancara.</strong> “Saya menguji diri sendiri dengan 22 soal berwaktu di data 800.000 baris, dan mencatat skornya supaya bisa saya bandingkan tiga bulan lagi” adalah jawaban yang tidak pernah didengar pewawancara dari kandidat pindah karier.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Ujian Bernilai selesai</h3>
+      <p>Sekarang ada satu angka. Bukan 801 centang yang kamu isi sendiri, tapi satu angka dari 60 yang diperoleh dalam 90 menit tanpa contekan — dan yang bisa kamu bandingkan lagi tiga bulan ke depan.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Berikutnya:</strong> Proyek Buta — tiga tugas dengan data nyata, <strong>tanpa kunci jawaban sama sekali</strong>, dengan tenggat. Di situ kamu belajar hal terakhir yang belum pernah dilatih kurikulum ini: bekerja tanpa tahu apakah kamu benar, dan membangun sendiri caramu memastikannya.
+      </div>
+          <a class="lanjut" href="https://claude.ai/code/artifact/61355282-6fe8-4f54-bd99-18ff4ae63d28">Lanjut ke Proyek Buta: tanpa kunci jawaban →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Kedua puluh dua jawaban di halaman ini dihitung dengan menjalankan query dan kodenya sungguhan pada <code>senja.db</code> dan <code>transaksi.csv</code> — bukan dari ingatan.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "ujian-bernilai-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

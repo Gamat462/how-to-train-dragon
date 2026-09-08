@@ -1,0 +1,10 @@
+BUDI WIJAYA
+Jakarta, Indonesia
+
+My Journey
+- Responsible for creating dashboards and reports using Tableau
+- Worked on data cleaning for the finance team
+- Helped with monthly reporting
+
+Skills
+SQL, Python, Tableau

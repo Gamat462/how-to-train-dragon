@@ -1,0 +1,958 @@
+<title>Minggu Kedelapan Visualisasi Lanjutan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/007d7e74-727a-40b9-a698-4835977d084a">← Kembali ke M7: Statistik Lanjutan</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Minggu 8</span>
+  <button type="button" data-hari="50" aria-selected="true">Hari 50</button>
+  <button type="button" data-hari="51" aria-selected="false">Hari 51</button>
+  <button type="button" data-hari="52" aria-selected="false">Hari 52</button>
+  <button type="button" data-hari="53" aria-selected="false">Hari 53</button>
+  <button type="button" data-hari="54" aria-selected="false">Hari 54</button>
+  <button type="button" data-hari="55" aria-selected="false">Hari 55</button>
+  <button type="button" data-hari="56" aria-selected="false">Hari 56</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Penuntun langkah demi langkah · Lanjutan dari Minggu Ketujuh</span>
+    <h1>Minggu Kedelapan: Visualisasi Lanjutan &amp; BI</h1>
+    <p class="lede">Minggu 5 mengajarimu prinsip grafik yang jujur. Minggu ini kamu naik level alatnya: matplotlib gaya presentasi, seaborn untuk grafik statistik, plotly yang interaktif, lalu Tableau dan Power BI — dua nama yang muncul di sebagian besar lowongan data analyst di Singapura dan Australia.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ================= HARI 50 ================= -->
+  <section class="day aktif" data-hari="50">
+    <div class="day-head">
+      <span class="n mono">HARI 50</span>
+      <h2>matplotlib gaya presentasi</h2>
+      <span class="waktu">± 55 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengubah grafik "keluaran mentah" jadi grafik yang siap dikirim ke atasan — kontrol penuh lewat <code>ax</code>, bukan cuma <code>.plot()</code> bawaan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Pola yang harus jadi kebiasaan</h3>
+        <span class="cek"><input type="checkbox" id="h50s1"><label for="h50s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Colab baru, muat data kedai kopi (20 baris, Hari 15). Sampai sekarang kamu memakai <code>df.plot()</code> langsung — cepat untuk eksplorasi sendiri, tapi cara itu langsung kerepotan begitu kamu butuh kontrol detail. Mulai sekarang, biasakan pola ini:</p>
+        <div class="kode"><pre><code>import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(7, 4))
+# semua perintah lewat ax, bukan plt langsung</code></pre></div>
+        <p><code>fig</code> = kanvasnya, <code>ax</code> = area gambarnya. Semua yang mau kamu atur (judul, label, warna, sumbu) dipanggil lewat <code>ax</code>. Ini pola yang sama dipakai untuk satu grafik maupun grid banyak grafik (ingat Hari 34) — jadi belajar sekali, dipakai selamanya.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Grafik batang yang layak dipresentasikan</h3>
+        <span class="cek"><input type="checkbox" id="h50s2"><label for="h50s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>porsi = df.groupby("produk")["jumlah"].sum().sort_values()
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.barh(porsi.index, porsi.values, color="#0F6E63")
+
+for i, v in enumerate(porsi.values):
+    ax.text(v + 2, i, str(v), va="center", fontsize=10)
+
+ax.set_title("Kopi Susu terjual hampir 2× lipat produk lain", fontsize=13, pad=12, loc="left")
+ax.set_xlabel("Porsi terjual")
+ax.spines[["top", "right", "bottom"]].set_visible(False)
+ax.tick_params(bottom=False)
+ax.set_xticks([])
+fig.tight_layout()
+plt.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Batang horizontal terurut menurun: Kopi Susu (87) jauh di atas Americano (46), Roti Bakar (44), Croissant (30) — dengan angka tertulis langsung di ujung tiap batang, bukan di sumbu.</p></div>
+        <p><strong>Enam baris terakhir</strong> itu yang membedakan grafik "keluaran mentah" dari "siap dikirim": angka langsung di batang (tidak perlu menerka dari sumbu), bingkai dibuang (<code>spines</code>), sumbu-x dihapus karena sudah tidak perlu. Batang <em>horizontal</em> (<code>barh</code>) dipakai karena nama produk cukup panjang — tidak perlu memiringkan label.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Menonjolkan satu batang (highlighting)</h3>
+        <span class="cek"><input type="checkbox" id="h50s3"><label for="h50s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>warna = ["#0F6E63" if p == "Kopi Susu" else "#C9C2AE" for p in porsi.index]
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.barh(porsi.index, porsi.values, color=warna)
+ax.set_title("Kopi Susu mendominasi", loc="left")
+plt.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Hanya batang Kopi Susu berwarna teal, tiga lainnya abu-abu netral.</p></div>
+        <div class="catatan">
+          <strong>Teknik ini disebut highlighting</strong>, dan hampir selalu membuat grafik presentasi lebih kuat daripada memberi warna berbeda ke semua batang. Mata langsung tahu ke mana harus melihat — bandingkan dengan grafik empat warna berbeda yang membuat pembaca harus menerka mana yang penting.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Grafik garis dengan anotasi, data sungguhan</h3>
+        <span class="cek"><input type="checkbox" id="h50s4"><label for="h50s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Muat <code>omzet_harian.csv</code> (Hari 30). Kali ini pakai data sungguhan, bukan yang 20 baris:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>oh["bulan"] = oh["tanggal"].dt.to_period("M").astype(str)
+bulanan = oh.groupby("bulan")["omzet"].sum()
+tiga_bulan = bulanan.iloc[:3]   # Jan-Mar 2024
+
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(tiga_bulan.index, tiga_bulan.values, marker="o", linewidth=2, color="#0F6E63")
+ax.set_ylim(0, tiga_bulan.max() * 1.15)
+ax.set_title("Omzet naik, Maret 53% di atas Januari", fontsize=13, pad=12, loc="left")
+ax.set_ylabel("Rupiah")
+ax.grid(axis="y", alpha=0.3)
+ax.spines[["top", "right"]].set_visible(False)
+
+ax.annotate(f"{tiga_bulan.iloc[-1]:,.0f}", xy=(2, tiga_bulan.iloc[-1]), xytext=(0, 10),
+            textcoords="offset points", ha="center", fontweight="bold")
+fig.tight_layout()
+plt.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Garis naik dari Rp43.563.600 (Jan) ke Rp66.647.150 (Mar) — kenaikan <strong>52,98% ≈ 53%</strong>, cocok dengan judul. Titik terakhir diberi label angka lewat <code>annotate</code>.</p></div>
+        <div class="bahaya">
+          <strong>Kenapa saya sengaja tekankan "data sungguhan" di sini:</strong> judul grafik yang menyebut angka spesifik (seperti "53% di atas") <strong>wajib</strong> dihitung dari data yang sedang ditampilkan, bukan ditulis dari ingatan atau perkiraan. Selalu jalankan perhitungannya dulu (seperti <code>(tiga_bulan.iloc[-1]-tiga_bulan.iloc[0])/tiga_bulan.iloc[0]*100</code>), baru tulis judulnya — jangan pernah sebaliknya.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 50 selesai. Berhenti di sini.</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>fig, ax = plt.subplots()</code> lalu semua lewat <code>ax</code>. Angka langsung di batang > sumbu-x. Highlighting (satu warna vs abu-abu) > banyak warna. Judul dengan angka spesifik wajib dihitung dari data yang ditampilkan.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 51 ================= -->
+  <section class="day" data-hari="51">
+    <div class="day-head">
+      <span class="n mono">HARI 51</span>
+      <h2>seaborn: grafik statistik dalam satu baris</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat box plot, scatter plot berwarna kelompok, dan histogram bertumpuk dengan seaborn — grafik yang sering muncul di wawancara data analyst.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>seaborn dibangun di atas matplotlib</h3>
+        <span class="cek"><input type="checkbox" id="h51s1"><label for="h51s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Muat ulang data kedai kopi. seaborn (<code>sns</code>) menggambar grafik statistik dalam satu baris kode, dan tetap bisa dirapikan pakai perintah matplotlib biasa karena di baliknya sama-sama matplotlib.</p>
+        <div class="kode"><pre><code>import seaborn as sns
+sns.set_theme(style="whitegrid")</code></pre></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Box plot: membandingkan sebaran</h3>
+        <span class="cek"><input type="checkbox" id="h51s2"><label for="h51s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>fig, ax = plt.subplots(figsize=(6, 4))
+sns.boxplot(data=df, x="kota", y="total", ax=ax, hue="kota", legend=False,
+            palette=["#0F6E63", "#9C6B25"], width=0.5)
+ax.set_title("Sebaran nilai transaksi per kota", loc="left")
+plt.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Dua kotak — garis tengah kotak = median, tinggi kotak = 50% data di tengah (kuartil 25%-75%), garis panjang di atas/bawah = jangkauan, titik terpisah (kalau ada) = outlier.</p></div>
+        <div class="catatan">
+          <strong>Dengan hanya 8-12 baris per kota, jangan buru-buru menyimpulkan "kota X lebih ekstrem".</strong> Ingat Hari 26: sampel sekecil ini punya ketidakpastian besar. Box plot ini baru berguna untuk membuat kesimpulan kuat kalau jumlah datanya jauh lebih besar (coba ganti data dengan <code>transaksi.csv</code> yang 151.088 baris untuk melihat bedanya).
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Scatter plot berwarna kelompok</h3>
+        <span class="cek"><input type="checkbox" id="h51s3"><label for="h51s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>fig, ax = plt.subplots(figsize=(6, 4))
+sns.scatterplot(data=df, x="jumlah", y="total", hue="kategori", s=80, ax=ax)
+ax.set_title("Jumlah porsi vs nilai transaksi, per kategori", loc="left")
+plt.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Titik-titik berwarna beda untuk Minuman vs Makanan, dengan legenda otomatis. <code>hue=</code> adalah cara tercepat mewarnai berdasarkan kategori — di matplotlib murni ini butuh loop manual seperti Hari 50 langkah 3.</p></div>
+        <p>Korelasinya tinggi (≈0,98) — masuk akal, karena <code>total = jumlah × harga</code> dan harga tidak beda jauh dalam satu kategori. Ingat Hari 32: korelasi mekanis seperti ini tidak terlalu menarik untuk dilaporkan sebagai "temuan".</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Histogram bertumpuk, data sungguhan</h3>
+        <span class="cek"><input type="checkbox" id="h51s4"><label for="h51s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Muat <code>abtest_checkout.csv</code> (Hari 27). Bandingkan sebaran nilai pesanan dua grup:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>fig, ax = plt.subplots(figsize=(7, 4))
+sns.histplot(data=ab[ab.konversi == 1], x="nilai_pesanan",
+             hue="grup", bins=25, element="step", ax=ax)
+ax.set_title("Sebaran nilai pesanan, kontrol vs perlakuan", loc="left")
+plt.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Dua garis tangga (bukan batang solid, karena <code>element="step"</code> — lebih mudah dibandingkan saat tumpang tindih) menunjukkan sebaran nilai pesanan tiap grup, dengan grup kontrol sedikit condong ke nilai lebih tinggi — konsisten dengan AOV kontrol (Rp83.410) yang lebih tinggi dari perlakuan (Rp80.194) yang sudah kamu hitung di Hari 27.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Menyimpan gambar dengan benar</h3>
+        <span class="cek"><input type="checkbox" id="h51s5"><label for="h51s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>fig.savefig("sebaran_nilai_pesanan.png", dpi=150, bbox_inches="tight")</code></pre></div>
+        <p><code>bbox_inches="tight"</code> mencegah label/judul terpotong — tanpa itu, judul panjang sering hilang separuh saat disimpan. <code>dpi=150</code> adalah minimum supaya tidak buram saat dipresentasikan di layar besar.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 51 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>sns.boxplot</code> = sebaran per kelompok. <code>sns.scatterplot(hue=...)</code> = titik berwarna otomatis per kategori. <code>sns.histplot(element="step")</code> = histogram bertumpuk yang mudah dibandingkan.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 52 ================= -->
+  <section class="day" data-hari="52">
+    <div class="day-head">
+      <span class="n mono">HARI 52</span>
+      <h2>plotly: grafik yang bisa disentuh</h2>
+      <span class="waktu">± 50 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat grafik interaktif (hover, zoom) dengan plotly, dan menyimpannya sebagai satu file HTML yang bisa dibuka siapa pun tanpa Python.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa interaktif penting</h3>
+        <span class="cek"><input type="checkbox" id="h52s1"><label for="h52s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>matplotlib dan seaborn menghasilkan gambar statis — bagus untuk laporan/slide. Tapi untuk dashboard yang dibuka orang lain di browser, mereka ingin bisa <strong>hover</strong> untuk lihat angka pasti dan <strong>zoom</strong> ke bagian tertentu. plotly menyediakan itu dengan sintaks yang mirip.</p>
+        <div class="kode"><pre><code>import plotly.express as px</code></pre></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bar chart interaktif</h3>
+        <span class="cek"><input type="checkbox" id="h52s2"><label for="h52s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>fig = px.bar(porsi.reset_index(), x="jumlah", y="produk", orientation="h",
+             title="Kopi Susu terjual hampir 2× lipat produk lain",
+             color_discrete_sequence=["#0F6E63"], text="jumlah")
+fig.update_layout(yaxis={"categoryorder": "total ascending"},
+                  plot_bgcolor="white", showlegend=False)
+fig.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Grafik batang yang sama seperti Hari 50, tapi sekarang <strong>arahkan kursor ke tiap batang</strong> — muncul kotak info (tooltip) otomatis. Coba juga klik-geser untuk zoom.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tooltip yang berguna, bukan angka mentah</h3>
+        <span class="cek"><input type="checkbox" id="h52s3"><label for="h52s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>fig = px.line(bulanan.reset_index(), x="bulan", y="omzet", markers=True,
+              title="Omzet bulanan")
+fig.update_traces(hovertemplate="%{x}<br>Rp %{y:,.0f}<extra></extra>")
+fig.update_yaxes(rangemode="tozero")
+fig.show()</code></pre>
+        </div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span><p>Arahkan kursor ke satu titik — muncul <code>"2024-01" / Rp 43,563,600"</code>, sudah diformat rapi. Tanpa <code>hovertemplate</code>, bawaan plotly menampilkan angka mentah tanpa pemisah ribuan — jauh lebih sulit dibaca cepat.</p></div>
+        <div class="catatan">
+          <strong><code>rangemode="tozero"</code></strong> adalah versi plotly dari aturan Hari 30 (bar/line chart mulai dari 0). Selalu tambahkan ini untuk grafik line chart bisnis di plotly — bawaannya <strong>tidak</strong> otomatis mulai dari 0 seperti matplotlib.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Menyimpan sebagai HTML yang bisa dibagikan</h3>
+        <span class="cek"><input type="checkbox" id="h52s4"><label for="h52s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>fig.write_html("omzet_bulanan.html", include_plotlyjs="cdn")</code></pre></div>
+        <p>Unduh berkas ini dari panel folder Colab (klik kanan → Download). File ini bisa dibuka <strong>siapa pun di browser mana pun</strong>, tetap interaktif (hover, zoom), tanpa perlu Python atau Colab sama sekali. Ini cara termurah membagikan hasil kerja — dan bisa diunggah ke repo GitHub-mu sebagai tautan portofolio (kamu akan lakukan ini di Hari 56).</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h52s5"><label for="h52s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat versi plotly dari box plot Hari 51 (<code>px.box(df, x="kota", y="total")</code>). Simpan sebagai HTML dengan nama <code>sebaran_kota.html</code>.</p>
+        <details>
+          <summary>Buka petunjuk</summary>
+          <div class="isi"><div class="kode"><pre><code>fig = px.box(df, x="kota", y="total", title="Sebaran nilai transaksi per kota")
+fig.write_html("sebaran_kota.html", include_plotlyjs="cdn")</code></pre></div></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 52 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> <code>px.bar/px.line/px.box(...)</code> = versi interaktif matplotlib/seaborn. <code>hovertemplate</code> = format tooltip. <code>rangemode="tozero"</code> = wajib untuk line chart bisnis. <code>fig.write_html(...)</code> = bagikan tanpa Python.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 53 ================= -->
+  <section class="day" data-hari="53">
+    <div class="day-head">
+      <span class="n mono">HARI 53</span>
+      <h2>Dashboard yang punya alur baca</h2>
+      <span class="waktu">± 45 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyusun dashboard dengan urutan baca yang benar (bukan sekadar menempel banyak grafik), dan memeriksa warnanya secara terukur untuk pembaca buta warna.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Dashboard bukan kumpulan grafik</h3>
+        <span class="cek"><input type="checkbox" id="h53s1"><label for="h53s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kesalahan paling umum: menempelkan delapan grafik di satu halaman dan menyebutnya dashboard (kamu membuat versi sederhana ini di Hari 34). Dashboard yang baik punya <strong>urutan baca</strong>, dari umum ke rinci — supaya siapa pun langsung tahu ke mana harus melihat dulu.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Urutan baca yang benar, dari atas ke bawah</h3>
+        <span class="cek"><input type="checkbox" id="h53s2"><label for="h53s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Posisi</th><th>Isi</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Baris atas</strong></td><td>3-5 angka utama (omzet, transaksi, rata-rata, laba), <strong>tiap angka dengan pembanding</strong> ("+27% vs bulan lalu"). Angka tanpa pembanding tidak bisa dinilai.</td></tr>
+              <tr><td><strong>Baris kedua</strong></td><td>Satu grafik garis besar — menjawab "sedang naik atau turun".</td></tr>
+              <tr><td><strong>Baris ketiga</strong></td><td>2-3 grafik yang memecah angka utama: per produk, per kota, per kategori.</td></tr>
+              <tr><td><strong>Paling bawah</strong></td><td>Tabel angka pasti — selalu sediakan, akan selalu ada yang bertanya.</td></tr>
+              <tr><td><strong>Filter</strong></td><td>Semua kontrol (rentang tanggal, kota) di satu baris di atas, bukan tersebar — pengguna harus tahu di mana mencarinya.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Bandingkan dengan dashboard subplots Hari 34.</strong> Empat grafikmu waktu itu sudah bagus secara teknis, tapi belum tertata dengan urutan baca ini — semuanya sejajar tanpa hierarki. Coba susun ulang: mana yang pantas jadi "angka besar di atas", mana yang jadi "rincian di bawah"?
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Memeriksa warna secara terukur</h3>
+        <span class="cek"><input type="checkbox" id="h53s3"><label for="h53s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Ingat Hari 34: kamu memakai palet teal/oranye-emas untuk aman-buta-warna. Tapi kamu tidak bisa menilai apakah dua warna benar-benar terbedakan hanya dengan melihat sendiri. Tiga cara memeriksanya:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Cepat:</strong> buka situs <em>Coblis</em> (color blindness simulator), unggah gambar grafikmu, lihat versi simulasi deuteranopia dan protanopia. Kalau dua seri warna jadi terlihat mirip, ganti.</li>
+          <li><strong>Dari Python:</strong> <code>sns.color_palette("colorblind")</code> di seaborn sudah dirancang dan diuji untuk ini — pakai ini sebagai default kalau ragu.</li>
+          <li><strong>Aturan cadangan yang selalu aman:</strong> jangan pernah menyampaikan informasi lewat warna saja. Tambahkan label langsung (seperti Hari 50 langkah 4), bentuk penanda berbeda, atau pola garis berbeda. Kalau grafikmu tetap terbaca saat dicetak hitam-putih, grafikmu aman untuk semua orang.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tiga pertanyaan sebelum mengirim dashboard</h3>
+        <span class="cek"><input type="checkbox" id="h53s4"><label for="h53s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Siapa yang membuka ini, dan keputusan apa yang mereka ambil?</strong> Dashboard tanpa jawaban untuk pertanyaan ini tidak akan dipakai.</li>
+          <li><strong>Apa yang mereka lihat dalam 5 detik pertama?</strong> Kalau jawabannya "tergantung", tata letaknya belum benar.</li>
+          <li><strong>Apa yang harus mereka lakukan kalau angkanya jelek?</strong> Dashboard yang baik mengarahkan ke tindakan, bukan hanya melaporkan.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Coba sendiri</h3>
+        <span class="cek"><input type="checkbox" id="h53s5"><label for="h53s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di kertas (atau catatan digital), rancang tata letak dashboard omzet Kedai Kopi Senja — kotak-kotak saja, tanpa data sungguhan dulu. Tentukan: angka utama apa yang di baris atas, dan kenapa. Jawab tiga pertanyaan langkah 4 untuk rancanganmu.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 53 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> urutan dashboard = angka utama → tren → rincian → tabel, dengan filter di satu tempat. Uji warna lewat simulator, bukan tebakan mata sendiri.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 54 ================= -->
+  <section class="day" data-hari="54">
+    <div class="day-head">
+      <span class="n mono">HARI 54</span>
+      <h2>Ulangan dari ingatan — Visualisasi Lanjutan</h2>
+      <span class="waktu">± 40 menit</span>
+    </div>
+    <p class="tujuan"><strong>Tidak ada materi baru.</strong> Tutup catatan. Kerjakan dari ingatan, baru buka kunci jawaban.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tujuh soal</h3>
+        <span class="cek"><input type="checkbox" id="h54s1"><label for="h54s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p style="margin-bottom:12px"><strong>1.</strong> Apa pola dasar yang harus jadi kebiasaan untuk grafik matplotlib yang bisa dikendalikan penuh?</p>
+        <p style="margin-bottom:12px"><strong>2.</strong> Teknik apa yang membuat satu batang menonjol tanpa memberi warna berbeda ke semua batang?</p>
+        <p style="margin-bottom:12px"><strong>3.</strong> Fungsi seaborn apa yang paling cocok untuk membandingkan sebaran (median, kuartil, outlier) beberapa kelompok sekaligus?</p>
+        <p style="margin-bottom:12px"><strong>4.</strong> Apa beda utama plotly dari matplotlib/seaborn, dan bagaimana cara membagikan hasilnya tanpa Python?</p>
+        <p style="margin-bottom:12px"><strong>5.</strong> Sebutkan urutan baca dashboard yang benar, dari atas ke bawah.</p>
+        <p style="margin-bottom:12px"><strong>6.</strong> (Ulangan Minggu 7) Apa yang diberitahukan confidence interval yang tidak diberitahukan p-value?</p>
+        <p style="margin-bottom:12px"><strong>7.</strong> (Ulangan Minggu 6) Kenapa CTE lebih mudah dibaca daripada subquery bersarang?</p>
+        <details>
+          <summary>Kunci jawaban — buka setelah semua dicoba</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <code>fig, ax = plt.subplots()</code>, lalu semua perintah lewat <code>ax</code>.</p>
+            <p><strong>2.</strong> Highlighting — satu warna untuk yang penting, abu-abu netral untuk sisanya.</p>
+            <p><strong>3.</strong> <code>sns.boxplot()</code>.</p>
+            <p><strong>4.</strong> Interaktif (hover, zoom) vs statis. Dibagikan lewat <code>fig.write_html(..., include_plotlyjs="cdn")</code> — bisa dibuka siapa pun di browser tanpa Python.</p>
+            <p><strong>5.</strong> Angka utama (dengan pembanding) → tren → rincian per dimensi → tabel angka pasti, dengan filter di satu tempat.</p>
+            <p><strong>6.</strong> Seberapa besar efeknya dan seberapa lebar ketidakpastiannya, bukan cuma ya/tidak.</p>
+            <p><strong>7.</strong> Dibaca atas ke bawah seperti resep, bukan dalam ke luar.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 54 selesai</h3>
+      <p>Kalau enam dari tujuh benar, lanjut ke Tableau dan Power BI. Kalau kurang, ulangi Hari 50-53 dulu.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 55 ================= -->
+  <section class="day" data-hari="55">
+    <div class="day-head">
+      <span class="n mono">HARI 55</span>
+      <h2>Tableau Public dalam satu hari</h2>
+      <span class="waktu">± 3-4 jam (bisa dicicil)</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membuat dan menerbitkan dashboard di Tableau Public — alat seret-lepas yang namanya muncul di sebagian besar lowongan data analyst di Singapura dan Australia.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa ini penting walau kamu memilih jalur SQL/Python</h3>
+        <span class="cek"><input type="checkbox" id="h55s1"><label for="h55s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kamu memilih jalur SQL dan Python, dan itu pilihan tepat untuk jangka panjang. Tapi kenyataan pasar kerja: sebagian besar iklan lowongan analis di SG/AU menyebut Tableau atau Power BI, dan banyak sistem penyaring otomatis (ATS) mencari kata itu di CV. Bagian ini bukan tentang menguasai — ini tentang <strong>cukup mahir untuk lolos saringan dan mengerjakan hari pertama</strong>.</p>
+        <div class="catatan">
+          <strong>Kabar baiknya:</strong> semua konsepnya sudah kamu kuasai. Tableau dan Power BI pada dasarnya adalah <code>groupby</code> dan <code>pivot_table</code> dengan antarmuka seret-lepas. Yang perlu dipelajari cuma nama tombolnya.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Padankan istilah yang sudah kamu tahu</h3>
+        <span class="cek"><input type="checkbox" id="h55s2"><label for="h55s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Yang sudah kamu tahu</th><th>Namanya di Tableau</th></tr></thead>
+            <tbody>
+              <tr><td>Kolom kategori (produk, kota)</td><td>Dimension</td></tr>
+              <tr><td>Kolom angka (total, jumlah)</td><td>Measure</td></tr>
+              <tr><td><code>groupby("produk")["total"].sum()</code></td><td>Seret Produk ke Rows, SUM(Total) ke Columns</td></tr>
+              <tr><td>Kolom baru <code>df["laba"] = ...</code></td><td>Calculated Field</td></tr>
+              <tr><td><code>merge</code> dua tabel</td><td>Relationship / Join di Data Source</td></tr>
+              <tr><td>Filter <code>df[df.kota=="X"]</code></td><td>Filter shelf</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Jalur tercepat, enam langkah</h3>
+        <span class="cek"><input type="checkbox" id="h55s3"><label for="h55s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di Colab, ekspor data kedai kopi: <code>df.to_csv("kedai.csv", index=False)</code>, unduh dari panel folder.</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li><strong>Pasang Tableau Public (gratis)</strong> di <span class="mono">public.tableau.com</span>. Connect → Text file → pilih <code>kedai.csv</code>.</li>
+          <li><strong>Buat 3 sheet dasar:</strong> batang omzet per produk, garis omzet per bulan, peta panas (heatmap) produk × kota. Tiap sheet: seret dimension ke Rows, measure ke Columns.</li>
+          <li><strong>Buat 1 calculated field:</strong> Analysis → Create Calculated Field. Isi <code>SUM([Total]) / SUM([Jumlah])</code> untuk harga rata-rata per porsi — setara membuat kolom turunan di pandas.</li>
+          <li><strong>Gabungkan jadi Dashboard:</strong> tab Dashboard baru, seret ketiga sheet. Ikuti urutan baca Hari 53: angka besar dulu, lalu tren, lalu rincian.</li>
+          <li><strong>Tambahkan filter yang berlaku ke semua:</strong> klik kanan filter → Apply to Worksheets → All Using This Data Source.</li>
+          <li><strong>Terbitkan:</strong> File → Save to Tableau Public. Salin tautannya — kamu akan pakai ini di Hari 56.</li>
+        </ol>
+        <div class="bahaya">
+          <strong>Kata "Public" di Tableau Public bukan kebetulan.</strong> Semua yang kamu unggah ke sana bisa dilihat siapa saja di internet, dan tidak ada pengaturan untuk membuatnya privat. Untuk hari ini aman — <code>kedai.csv</code> data latihan.
+          <p style="margin-top:8px">Tapi begitu kamu punya klien berbayar, kebiasaan ini berubah jadi kebocoran: mengunggah data penjualan klien ke sini sama dengan menerbitkannya. Sebelum klien pertama, kerjakan <a href="https://claude.ai/code/artifact/e653810a-9c48-4b3e-af6e-8d439618c677"><strong>Bekal Rahasia Klien</strong></a> — di sana ada cara memberi klien dashboard yang sama tanpa satu byte pun naik ke tempat publik.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 55 selesai</h3>
+      <p><strong>Tambahkan ke catatan:</strong> Dimension=kategori, Measure=angka, Calculated Field=kolom turunan. Simpan tautan Tableau Public-mu — dipakai di proyek portofolio besok.</p>
+    </div>
+  </section>
+
+  <!-- ================= HARI 56 ================= -->
+  <section class="day" data-hari="56">
+    <div class="day-head">
+      <span class="n mono">HARI 56</span>
+      <h2>Power BI &amp; proyek portofolio #7</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menjelaskan konsep dasar DAX (bahasa rumus Power BI), dan punya proyek portofolio ketujuh — dua dashboard, dua tautan, satu data.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Power BI: yang perlu ditambahkan</h3>
+        <span class="cek"><input type="checkbox" id="h56s1"><label for="h56s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Power BI Desktop gratis tapi hanya untuk Windows. Kalau kamu pakai Mac/Linux: pakai layanan Power BI di browser (fungsinya lebih terbatas tapi cukup untuk belajar konsep), atau fokuskan waktu ke Tableau dan cukup <em>pahami</em> konsep DAX untuk wawancara — banyak posisi hanya mensyaratkan salah satu, bukan keduanya.</p>
+        <p>Yang membedakan Power BI: bahasa rumusnya, <strong>DAX</strong>. Tiga pola ini menutup sebagian besar kebutuhan pemula:</p>
+        <div class="kode"><pre><code>-- total penjualan (measure dasar)
+Total Omzet = SUM(penjualan[total])
+
+-- agregat dengan syarat, setara df[df.kota=="Jakarta"]
+Omzet Jakarta = CALCULATE([Total Omzet], penjualan[kota] = "Jakarta")
+
+-- perbandingan dengan periode sebelumnya, setara LAG/.shift()
+Omzet Bulan Lalu = CALCULATE([Total Omzet], DATEADD(penjualan[tanggal], -1, MONTH))</code></pre></div>
+        <div class="catatan">
+          <strong>Untuk wawancara:</strong> yang paling sering ditanya bukan sintaks DAX persis, tapi <em>konsep konteks filter</em> — bahwa sebuah measure menghitung ulang dirinya tergantung filter yang aktif di halaman (mirip <code>WHERE</code> yang berubah-ubah). Kalau kamu bisa menjelaskan itu dengan analogi <code>groupby</code>/<code>CALCULATE</code> seperti di atas, kamu sudah di atas rata-rata pelamar junior.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Proyek: dua dashboard, dua tautan</h3>
+        <span class="cek"><input type="checkbox" id="h56s2"><label for="h56s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Buat dashboard yang <strong>sama</strong> dua kali: satu di plotly (Hari 52, disimpan HTML), satu di Tableau Public (Hari 55). Membuat hal yang sama di dua alat mempercepat pemahaman dan memberimu dua tautan untuk CV.</p>
+        <div class="catatan">
+          <strong>Naikkan tingkat kesulitan (opsional):</strong> ganti data kedai dengan data terbuka yang relevan untuk target kerjamu. Untuk Singapura, "Resale Flat Prices" di <span class="mono">data.gov.sg</span> (harga rumah HDB, ratusan ribu baris, ada dimensi waktu/lokasi/ukuran) langsung dikenali recruiter di sana. Untuk Australia, data ABS atau <span class="mono">data.gov.au</span>.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Unggah plotly HTML ke GitHub Pages</h3>
+        <span class="cek"><input type="checkbox" id="h56s3"><label for="h56s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di repo GitHub-mu: unggah <code>omzet_bulanan.html</code> (Hari 52). Buka <strong>Settings → Pages</strong>, pilih branch <code>main</code>, folder <code>/ (root)</code>, simpan. Setelah beberapa menit, dashboardmu bisa diakses di <code>https://[username].github.io/[nama-repo]/omzet_bulanan.html</code> — tautan hidup, interaktif, tanpa perlu siapa pun membuka Colab.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Perbarui README</h3>
+        <span class="cek"><input type="checkbox" id="h56s4"><label for="h56s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>## Proyek 7: Dashboard Interaktif (Plotly + Tableau Public)
+
+Dashboard omzet Kedai Kopi Senja dibuat dua kali dengan alat berbeda,
+untuk menunjukkan kemampuan lintas alat: Python (plotly, interaktif,
+di-hosting GitHub Pages) dan Tableau Public (drag-and-drop, calculated
+field, dashboard dengan filter global).
+
+**Tautan Plotly:** https://[username].github.io/[repo]/omzet_bulanan.html
+**Tautan Tableau:** [tautan Tableau Public-mu]</code></pre></div>
+        <p>Tambahkan checklist terakhir sebelum menganggap proyek ini selesai:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li>Baris atas berisi 3-5 angka utama, tiap satu dengan pembanding</li>
+          <li>Ada tren waktu, rincian per dimensi, dan tabel angka pasti</li>
+          <li>Semua sumbu batang/garis mulai dari nol</li>
+          <li>Sudah diuji lewat simulator buta warna atau palet aman (Hari 53)</li>
+          <li>Dua tautan hidup, keduanya ada di README</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Delapan minggu selesai — visualisasi dari matplotlib sampai BI tools</h3>
+      <p>Tujuh proyek publik di GitHub-mu, termasuk dua dashboard di dua alat berbeda. Kombinasi SQL + Python + statistik + visualisasi (termasuk BI tools) ini sudah menutup sebagian besar syarat teknis posisi <em>data analyst</em> di SG/AU.</p>
+      <p style="margin-top:14px">Minggu depan: Analytics Engineering — BigQuery untuk data besar, dbt, alur git yang benar, dan laporan yang berjalan sendiri tanpa kamu sentuh. Masih dituntun hari demi hari.</p>
+      <a class="lanjut" href="https://claude.ai/code/artifact/fea52a73-a3eb-400b-8630-d09ccc516fcf">Lanjut ke M9: SQL Data Besar →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "minggu8-viz-lanjut-v1";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

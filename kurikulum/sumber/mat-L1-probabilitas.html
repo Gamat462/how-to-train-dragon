@@ -1,0 +1,1012 @@
+<title>Probabilitas Formal</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/d70b6a53-5f3a-483d-83e4-79aba530fdb0">← Kembali ke Jalur S2 Luar Negeri: silabus, biaya, keputusan</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">MAT L1 · Probabilitas</span>
+  <button type="button" data-hari="1" aria-selected="true">P1</button>
+  <button type="button" data-hari="2" aria-selected="false">P2</button>
+  <button type="button" data-hari="3" aria-selected="false">P3</button>
+  <button type="button" data-hari="4" aria-selected="false">P4</button>
+  <button type="button" data-hari="5" aria-selected="false">P5</button>
+  <button type="button" data-hari="6" aria-selected="false">P6</button>
+  <button type="button" data-hari="7" aria-selected="false">P7</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal Matematika S2 · L1 dari 4 · 7 hari</span>
+    <h1>Probabilitas formal: fondasi yang dilewati 49 modul</h1>
+    <p class="lede">Pemindaian teks atas seluruh 49 modul sebelumnya menemukan probabilitas formal muncul di <strong>nol modul</strong>. Kamu sudah memakai p-value di M4 dan M7 — tapi memakainya tanpa pernah menurunkan dari mana ia datang.</p>
+    <p class="lede" style="margin-top:10px">Tujuh hari ini menutup itu, dan targetnya spesifik: <strong>DATASCI W203</strong> (Berkeley), <strong>MAST90139</strong> (Melbourne), <strong>ISYE 6739</strong> (Georgia Tech). Semuanya mata kuliah <em>wajib</em>, dan semuanya mengandaikan isi modul ini sudah kamu punya di hari pertama kuliah.</p>
+    <p class="lede" style="margin-top:10px">Setiap angka di halaman ini dihasilkan dengan menjalankan kodenya — termasuk yang paling mengganggu: <strong>uji yang 90% sensitif ternyata hanya 32,1% benar ketika ia berbunyi.</strong></p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Variabel acak: mengubah ketidakpastian jadi angka</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> berhenti memakai kata “rata-rata” secara longgar, dan mulai memakai dua angka yang dipakai setiap silabus S2: <strong>nilai harapan</strong> E[X] dan <strong>ragam</strong> Var[X] — lalu membuktikan sendiri bahwa rumusnya cocok dengan simulasi.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa ini yang pertama, dan di mana ia muncul di silabus</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-1-1"><label for="mat-L1-probabilitas-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka Colab baru. Ketik <code>import numpy as np</code> dan <code>from scipy import stats</code>. Itu dua alat yang dipakai sepanjang empat modul ini.</div>
+<p>Empat modul ini bukan tambahan yang manis. Ini yang membuat lamaran S2-mu bisa dibaca. Peta persisnya:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Modul ini</th>
+<th>Menutup mata kuliah wajib</th>
+<th>Di kampus</th>
+</tr></thead>
+            <tbody>
+              <tr><td>MAT L1 Probabilitas</td><td>DATASCI W203 <em>Statistics for Data Science</em> · ISYE 6739</td><td>Berkeley · Georgia Tech</td></tr>
+              <tr><td>MAT L2 Aljabar Linear</td><td>MAST90138 <em>Multivariate Statistics</em></td><td>Melbourne</td></tr>
+              <tr><td>MAT L3 Optimisasi</td><td>DSA5103 <em>Optimization Algorithms for Data Modelling</em></td><td>NUS</td></tr>
+              <tr><td>MAT L4 Deep Learning</td><td>DSA5106 <em>Deep Learning</em> · COMP90051 <em>Statistical ML</em></td><td>NUS · Melbourne</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Dan satu hal yang lebih mendesak daripada S2.</strong> Edinburgh mensyaratkan 60 kredit SCQF matematika sebagai syarat masuk. Modul ini bukan pengganti kredit itu — kursus daring tanpa transkrip tidak dihitung panitia penerimaan. Yang diberikannya: kamu bisa <em>mengikuti</em> kuliahnya, dan kamu tahu apakah kamu benar-benar menyukainya sebelum membayar Rp 1,4 miliar untuk mencari tahu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Nilai harapan: rumusnya, lalu buktinya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-1-2"><label for="mat-L1-probabilitas-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Variabel acak itu cuma pemetaan: kejadian → angka. Dadu memetakan enam sisi ke 1–6. Transaksi memetakan setiap struk ke rupiah.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(11)
+
+nilai = np.array([1,2,3,4,5,6])
+p     = np.full(6, 1/6)
+
+print(&quot;E[X]  =&quot;, np.sum(nilai * p))
+print(&quot;Var[X]=&quot;, np.sum((nilai - 3.5)**2 * p))
+
+lempar = np.random.randint(1, 7, size=1_000_000)
+print(&quot;rata-rata 1 juta lemparan =&quot;, lempar.mean())
+print(&quot;ragam    1 juta lemparan =&quot;, lempar.var())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>E[X]  = 3.5
+Var[X]= 2.9166666666666665
+rata-rata 1 juta lemparan = 3.5017
+ragam    1 juta lemparan = 2.9144...</code></pre></div></div>
+        <div class="catatan"><strong>Inilah seluruh gagasannya.</strong> <code>np.sum(nilai*p)</code> adalah rumus E[X] = Σ x·P(x) yang ditulis persis apa adanya. Simulasi satu juta lemparan mendarat di 3,5017 — bukan 3,5000. Selisih itu bukan kesalahan; itu <em>galat sampling</em>, dan seluruh statistik inferensial adalah ilmu tentang seberapa besar selisih itu boleh.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p>Kamu baru menulis dua rumus yang muncul di halaman pertama setiap silabus statistika S2 — dan membuktikan keduanya dengan sejuta lemparan, bukan mempercayainya.</p><p style="margin-top:10px">Besok: kenapa 30 sampel bisa menipumu, dengan angkanya.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>Hukum bilangan besar: berapa banyak data yang cukup</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menjawab satu pertanyaan yang selalu ditanyakan klien dan tidak pernah bisa kamu jawab dengan angka: <em>“sampelnya sudah cukup belum?”</em></div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ukur sendiri seberapa liar sampel kecil</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-2-1"><label for="mat-L1-probabilitas-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Untuk tiap ukuran sampel, ambil 200 sampel berbeda, hitung rata-ratanya, lalu lihat seberapa jauh yang tertinggi dari yang terendah.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(11)
+for n in (10, 100, 1_000, 10_000, 100_000):
+    r = np.random.randint(1, 7, size=(200, n)).mean(axis=1)
+    print(f&quot;n={n:&gt;7}  min {r.min():.3f}  max {r.max():.3f}  rentang {r.max()-r.min():.3f}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>n</th>
+<th class="n">rata-rata terendah</th>
+<th class="n">tertinggi</th>
+<th class="n">rentang</th>
+</tr></thead>
+            <tbody>
+              <tr><td>10</td><td class="n">2,200</td><td class="n">4,600</td><td class="n"><strong>2,400</strong></td></tr>
+              <tr><td>100</td><td class="n">3,070</td><td class="n">3,890</td><td class="n">0,820</td></tr>
+              <tr><td>1.000</td><td class="n">3,369</td><td class="n">3,650</td><td class="n">0,281</td></tr>
+              <tr><td>10.000</td><td class="n">3,452</td><td class="n">3,544</td><td class="n">0,091</td></tr>
+              <tr><td>100.000</td><td class="n">3,490</td><td class="n">3,516</td><td class="n"><strong>0,027</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>Baca baris pertama sekali lagi.</strong> Dengan n=10, dua orang yang mengambil sampel dari populasi yang <em>sama persis</em> bisa melaporkan 2,2 dan 4,6. Nilai sebenarnya 3,5. Keduanya jujur, keduanya salah, dan tidak satu pun tahu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Aturan akar-n, dan kenapa data mahal</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-2-2"><label for="mat-L1-probabilitas-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Perhatikan rentangnya: 2,400 → 0,820 → 0,281 → 0,091 → 0,027. Tiap kali n dikali 10, rentangnya menyusut sekitar 3,16 kali — yaitu √10.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>rentang = [2.400, 0.820, 0.281, 0.091, 0.027]
+for a, b in zip(rentang, rentang[1:]):
+    print(round(a/b, 3), &quot; (akar 10 =&quot;, round(10**0.5, 3), &quot;)&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>2.927  (akar 10 = 3.162 )
+2.918  (akar 10 = 3.162 )
+3.088  (akar 10 = 3.162 )
+3.370  (akar 10 = 3.162 )</code></pre></div></div>
+        <div class="catatan"><strong>Konsekuensi praktisnya keras.</strong> Untuk membuat perkiraanmu dua kali lebih tepat, kamu butuh <strong>empat kali</strong> data. Untuk sepuluh kali lebih tepat, seratus kali data. Ini alasan matematis kenapa sampling audit tidak pernah menjanjikan kepastian — dan kenapa menaikkan ukuran sampel dari 30 ke 40 hampir tidak mengubah apa pun.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Terapkan ke pertanyaan klien</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-2-3"><label for="mat-L1-probabilitas-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Klien bertanya: “omzet rata-rata harian kami berapa?” Kamu punya 30 hari data. Hitung standard error-nya: <code>data.std(ddof=1)/np.sqrt(len(data))</code>, lalu laporkan rata-rata ± 2×SE, bukan satu angka telanjang.</div>
+        <div class="bahaya"><strong>Melaporkan satu angka tanpa rentang adalah bentuk kesalahan yang tidak menghasilkan error.</strong> Angkanya kelihatan pasti, klien memperlakukannya sebagai pasti, dan tidak ada yang tahu bahwa 30 hari berikutnya bisa memberi angka yang berbeda 8%.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p>Sekarang kamu punya jawaban berangka untuk “sampelnya cukup belum?”. Besok: empat distribusi yang harus kamu kenali dari bentuknya.
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Empat distribusi yang wajib kamu kenal</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengenali empat bentuk sebaran yang muncul di hampir setiap soal ujian S2 dan setiap dataset kerja — dan tahu kapan memakai yang mana.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Keempatnya, dengan angka yang dihitung</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-3-1"><label for="mat-L1-probabilitas-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>from scipy import stats
+import numpy as np
+
+print(&quot;Binomial(100, 0.03)  E =&quot;, 100*0.03, &quot; Var =&quot;, 100*0.03*0.97,
+      &quot; P(X&gt;=8) =&quot;, 1 - stats.binom.cdf(7, 100, 0.03))
+print(&quot;Poisson(3)           P(X=0) =&quot;, stats.poisson.pmf(0, 3),
+      &quot; P(X&gt;=8) =&quot;, 1 - stats.poisson.cdf(7, 3))
+print(&quot;Normal(0,1)          P(|Z|&gt;1.96) =&quot;, 2*(1-stats.norm.cdf(1.96)),
+      &quot; z untuk 95% =&quot;, stats.norm.ppf(0.975))
+print(&quot;Eksponensial(1/5)    E = 5  P(X&gt;10) =&quot;, np.exp(-10/5))</code></pre></div>
+        <div class="hasil">        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Distribusi</th>
+<th>Dipakai untuk</th>
+<th>Angka yang harus muncul</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>Binomial</strong>(n, p)</td><td>Jumlah “berhasil” dari n percobaan ya/tidak</td><td>E = 3,0 · Var = 2,910 · P(X≥8) = <strong>0,010624</strong></td></tr>
+              <tr><td><strong>Poisson</strong>(λ)</td><td>Jumlah kejadian per satuan waktu (komplain/hari)</td><td>P(X=0) = 0,049787 · P(X≥8) = 0,011905</td></tr>
+              <tr><td><strong>Normal</strong>(μ, σ)</td><td>Rata-rata dari banyak hal yang dijumlahkan</td><td>P(|Z|&gt;1,96) = 0,049996 · z = <strong>1,9600</strong></td></tr>
+              <tr><td><strong>Eksponensial</strong>(λ)</td><td>Jarak waktu antar kejadian</td><td>E = 5 · P(X&gt;10) = 0,135335</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">PERHATIKAN</span>
+          Angka <strong>1,9600</strong> itu asal-usul “95% confidence interval = rata-rata ± 1,96 SE” yang kamu pakai di Modul M7. Sekarang kamu tahu ia datang dari mana: itu kuantil ke-97,5% distribusi normal baku, bukan angka keramat.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Binomial dan Poisson hampir kembar — buktikan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-3-2"><label for="mat-L1-probabilitas-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Lihat baris 1 dan 2 di tabel: Binomial(100; 0,03) memberi P(X≥8) = 0,010624, Poisson(3) memberi 0,011905. Dekat sekali, dan itu bukan kebetulan.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>from scipy import stats
+for n in (20, 100, 1000, 100000):
+    p = 3/n                       # jaga E[X] = 3
+    b = 1 - stats.binom.cdf(7, n, p)
+    print(f&quot;n={n:&gt;7}  p={p:&lt;10.6f}  Binomial P(X&gt;=8) = {b:.6f}&quot;)
+print(f&quot;{&#x27;Poisson(3)&#x27;:&gt;20}   P(X&gt;=8) = {1-stats.poisson.cdf(7,3):.6f}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>n=     20  p=0.150000    Binomial P(X&gt;=8) = 0.005921
+n=    100  p=0.030000    Binomial P(X&gt;=8) = 0.010624
+n=   1000  p=0.003000    Binomial P(X&gt;=8) = 0.011775
+n= 100000  p=0.000030    Binomial P(X&gt;=8) = 0.011903
+          Poisson(3)   P(X&gt;=8) = 0.011905</code></pre></div></div>
+        <div class="catatan"><strong>Poisson adalah Binomial ketika n sangat besar dan p sangat kecil.</strong> Itu sebabnya Poisson dipakai untuk “berapa transaksi janggal per bulan” — banyak sekali transaksi, peluang tiap satunya janggal kecil sekali.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Pilih distribusi untuk data kerjamu sendiri</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-3-3"><label for="mat-L1-probabilitas-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil <code>senja.db</code> dari SQL Mahir. Untuk tiga kolom — jumlah item per pesanan, nilai pesanan, jarak hari antar pesanan pelanggan — gambar histogramnya dan tulis distribusi mana yang paling cocok, beserta alasannya.</div>
+        <div class="bahaya"><strong>Jangan pernah mengasumsikan normal untuk data rupiah.</strong> Nilai transaksi hampir selalu miring ke kanan: banyak yang kecil, sedikit yang sangat besar. Memakai rumus yang mengandaikan normal pada data seperti itu menghasilkan interval keyakinan yang terlalu sempit — kamu akan terlalu percaya diri, dan itu jenis kesalahan yang paling mahal di laporan.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p>Besok hari terpenting di seluruh modul ini: teorema Bayes, dalam versi yang langsung menyerang cara kerja audit.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>Teorema Bayes — dan kenapa uji 90% akurat bisa salah 68% waktu</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menguasai satu rumus yang mengubah cara kamu membaca setiap hasil uji, setiap alarm, dan setiap model — termasuk yang kamu bangun sendiri.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Soalnya, sebelum kamu lihat jawabannya</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-4-1"><label for="mat-L1-probabilitas-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Bacalah pelan-pelan, lalu <strong>tebak jawabannya sebelum menjalankan kode</strong>. Tebakanmu penting.</p>
+        <div class="kode"><pre><code>Kamu membangun uji analitis untuk mendeteksi transaksi salah saji.
+
+  - 5%  dari seluruh transaksi memang salah saji          (prior)
+  - Uji menandai 90% transaksi yang benar-benar salah      (sensitivitas)
+  - Uji juga menandai 10% transaksi yang sebenarnya benar  (false positive)
+
+Satu transaksi ditandai oleh ujimu.
+Berapa peluang transaksi itu BENAR-BENAR salah saji?</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis tebakanmu di kertas sekarang. Angka, bukan perasaan. Baru buka langkah 2.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jawabannya, dihitung</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-4-2"><label for="mat-L1-probabilitas-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>prior = 0.05     # P(salah saji)
+sens  = 0.90     # P(ditandai | salah saji)
+fpr   = 0.10     # P(ditandai | benar)
+
+p_tanda = sens*prior + fpr*(1-prior)
+post    = sens*prior / p_tanda
+
+print(&quot;P(ditandai)                      =&quot;, round(p_tanda, 4))
+print(&quot;P(salah saji | ditandai)         =&quot;, round(post, 4))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>P(ditandai)                      = 0.14
+P(salah saji | ditandai)         = 0.3214</code></pre></div>
+          <p style="margin-top:8px">Ujimu 90% sensitif. Tapi ketika ia berbunyi, peluang temuannya nyata hanya <strong>32,1%</strong>. <strong>Hampir 68% alarmnya palsu.</strong></p></div>
+<p>Kalau angka itu terasa mustahil, hitung dengan 1.000 transaksi:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Dari 1.000 transaksi</th>
+<th class="n">Jumlah</th>
+<th class="n">Ditandai ujimu</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Benar-benar salah saji (5%)</td><td class="n">50</td><td class="n">45 (90% dari 50)</td></tr>
+              <tr><td>Sebenarnya benar (95%)</td><td class="n">950</td><td class="n">95 (10% dari 950)</td></tr>
+              <tr><td><strong>Total ditandai</strong></td><td class="n"></td><td class="n"><strong>140</strong></td></tr>
+              <tr><td><strong>Yang benar-benar salah</strong></td><td class="n"></td><td class="n"><strong>45 dari 140 = 32,1%</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Penyebabnya adalah kelompok yang benar jauh lebih besar.</strong> 10% dari 950 (yaitu 95) mengalahkan 90% dari 50 (yaitu 45). Ini disebut <em>base rate fallacy</em>, dan ia menjelaskan kenapa sistem peringatan kecurangan menghasilkan lautan alarm palsu — bukan karena modelnya buruk, tapi karena kecurangan itu langka.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kenapa memperbaiki prior lebih ampuh daripada memperbaiki model</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-4-3"><label for="mat-L1-probabilitas-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for prior in (0.01, 0.05, 0.20, 0.50):
+    pt = 0.90*prior + 0.10*(1-prior)
+    print(f&quot;prior {prior:&gt;5.2f}  -&gt;  posterior {0.90*prior/pt:.4f}&quot;)</code></pre></div>
+        <div class="hasil">        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Prior (seberapa umum salah saji)</th>
+<th class="n">Posterior (peluang alarm itu nyata)</th>
+</tr></thead>
+            <tbody>
+              <tr><td>1%</td><td class="n">8,3%</td></tr>
+              <tr><td>5%</td><td class="n">32,1%</td></tr>
+              <tr><td>20%</td><td class="n">69,2%</td></tr>
+              <tr><td>50%</td><td class="n">90,0%</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">INI PELAJARANNYA</span>
+          <strong>Ujinya tidak berubah sama sekali</strong> — tetap 90% sensitif, tetap 10% false positive. Yang berubah cuma populasi tempat ia dijalankan. Menjalankan uji yang sama pada kelompok berisiko tinggi (prior 20%) melompatkan ketepatannya dari 32% ke 69%.</div>
+        <div class="catatan"><strong>Dan ini persis yang sudah diajarkan standar audit kepadamu.</strong> Prosedur analitis diarahkan ke akun berisiko tinggi, bukan disebar rata. Selama ini kamu mengira itu soal efisiensi waktu. Ternyata ada teoremanya — dan sekarang kamu bisa menuliskan angkanya di kertas kerja.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai — dan ini hari yang paling layak diulang</h3>
+      <p>Kalau ada satu hari dari empat modul ini yang layak kamu baca dua kali, ini. Bayes adalah materi wajib di W203, ISYE 6739, dan setiap wawancara data scientist yang serius.</p><p style="margin-top:10px"><strong>Pertanyaan wawancara yang hampir pasti muncul:</strong> “Model kami 95% akurat mendeteksi kecurangan. Kecurangan terjadi pada 0,1% transaksi. Apa masalahnya?” Sekarang kamu bisa menjawab dengan angka, bukan intuisi.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>Independen vs bersyarat: jebakan menggabung kelompok</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> melihat sendiri bagaimana menggabungkan dua kelompok bisa menyembunyikan pola yang jelas — kesalahan analisis paling umum dan paling mahal.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Simulasi dua cabang</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-5-1"><label for="mat-L1-probabilitas-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+np.random.seed(11)
+n = 200_000
+cabang = np.random.choice([&#x27;Dago&#x27;,&#x27;Riau&#x27;], n, p=[.5,.5])
+besar  = np.where(cabang==&#x27;Dago&#x27;,
+                  np.random.rand(n) &lt; .30,     # Dago: 30% transaksi besar
+                  np.random.rand(n) &lt; .60)     # Riau: 60%
+
+print(&quot;P(besar)        =&quot;, besar.mean())
+print(&quot;P(besar | Dago) =&quot;, besar[cabang==&#x27;Dago&#x27;].mean())
+print(&quot;P(besar | Riau) =&quot;, besar[cabang==&#x27;Riau&#x27;].mean())
+print(&quot;P(besar)*P(Dago)     =&quot;, besar.mean()*0.5)
+print(&quot;P(besar DAN Dago)    =&quot;, (besar &amp; (cabang==&#x27;Dago&#x27;)).mean())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang dihitung</th>
+<th class="n">Nilai</th>
+</tr></thead>
+            <tbody>
+              <tr><td>P(besar) — gabungan</td><td class="n">0,4489</td></tr>
+              <tr><td>P(besar | Dago)</td><td class="n"><strong>0,2984</strong></td></tr>
+              <tr><td>P(besar | Riau)</td><td class="n"><strong>0,6005</strong></td></tr>
+              <tr><td>P(besar) × P(Dago)</td><td class="n">0,2244</td></tr>
+              <tr><td>P(besar <em>dan</em> Dago)</td><td class="n">0,1498</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">UJI INDEPENDENSI</span>
+          Dua baris terakhir <strong>tidak sama</strong> (0,2244 lawan 0,1498). Itulah definisi formal “tidak independen”. Kalau keduanya independen, keduanya akan sama.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kenapa angka gabungan 44,89% menyesatkan siapa pun</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-5-2"><label for="mat-L1-probabilitas-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="bahaya">Laporan yang menulis “<strong>44,9% transaksi kami bernilai besar</strong>” benar secara aritmetika dan salah secara keputusan. Tidak ada satu cabang pun yang angkanya 44,9%. Yang ada 29,8% dan 60,1%. Manajer yang membaca 44,9% akan menyusun kebijakan yang terlalu longgar untuk Riau dan terlalu ketat untuk Dago — sekaligus.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Aturan kerja yang bisa kamu pakai mulai besok: <strong>sebelum melaporkan rata-rata apa pun, pecah dulu menurut satu variabel pengelompok yang paling masuk akal</strong> (cabang, kanal, bulan, jenis pelanggan). Kalau pecahannya berbeda jauh, laporkan pecahannya, bukan gabungannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Paradoks Simpson: ketika pecahannya membalik kesimpulan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-5-3"><label for="mat-L1-probabilitas-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Kasus ekstremnya punya nama sendiri. Dua kelompok bisa masing-masing menunjukkan A lebih baik daripada B, tetapi gabungannya menunjukkan sebaliknya. Ini bukan teka-teki; ini terjadi tiap kali komposisi pekerjaan berbeda.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code># Keberhasilan penagihan dua staf, dipecah per tingkat kesulitan piutang
+data = {
+ &#x27;Andi&#x27;: {&#x27;mudah&#x27;: (81, 87),   &#x27;sulit&#x27;: (192, 263)},   # (berhasil, total)
+ &#x27;Budi&#x27;: {&#x27;mudah&#x27;: (234, 270), &#x27;sulit&#x27;: (55, 80)},
+}
+for nama, d in data.items():
+    b = sum(v[0] for v in d.values()); t = sum(v[1] for v in d.values())
+    print(f&quot;{nama}: mudah {d[&#x27;mudah&#x27;][0]/d[&#x27;mudah&#x27;][1]:&gt;6.1%}&quot;
+          f&quot;  sulit {d[&#x27;sulit&#x27;][0]/d[&#x27;sulit&#x27;][1]:&gt;6.1%}&quot;
+          f&quot;  GABUNGAN {b/t:&gt;6.1%}&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Staf</th>
+<th class="n">Piutang mudah</th>
+<th class="n">Piutang sulit</th>
+<th class="n">GABUNGAN</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Andi</td><td class="n">81/87 = <strong>93,1%</strong></td><td class="n">192/263 = <strong>73,0%</strong></td><td class="n">273/350 = 78,0%</td></tr>
+              <tr><td>Budi</td><td class="n">234/270 = 86,7%</td><td class="n">55/80 = 68,8%</td><td class="n">289/350 = <strong>82,6%</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>Andi lebih baik daripada Budi di kedua jenis piutang</strong> — 93,1% lawan 86,7%, dan 73,0% lawan 68,8%. Tapi di angka gabungan Andi kalah: 78,0% lawan 82,6%. Kalau kamu meranking mereka dengan satu angka, kamu memberi promosi kepada orang yang salah.</div>
+<p>Penyebabnya bukan misteri — hitung komposisi pekerjaannya:</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for nama, d in data.items():
+    t = sum(v[1] for v in d.values())
+    print(f&quot;{nama}: {d[&#x27;sulit&#x27;][1]/t:.1%} pekerjaannya kasus SULIT&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Andi: 75.1% pekerjaannya kasus SULIT
+Budi: 22.9% pekerjaannya kasus SULIT</code></pre></div>
+          <p style="margin-top:8px">Andi mengerjakan tiga perempat kasus sulit; Budi seperlima. Angka gabungan mereka mengukur <em>tugas siapa yang lebih berat</em>, bukan <em>siapa yang lebih baik bekerja</em>.</p></div>
+        <div class="catatan"><strong>Ingat Proyek Buta P3 — papan peringkat lima gerai dengan bulan yang tidak lengkap.</strong> Ini akar matematisnya, dan sekarang kamu punya namanya. Kalau kamu meranking apa pun dengan satu angka gabungan, pertanyaan pertamamu harus: <em>apakah komposisi yang dibandingkan sama?</em></div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 5 selesai</h3>
+      <p>Besok penutup: teorema limit pusat diuji pada data yang paling tidak normal yang bisa kubuat.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">HARI 6</span>
+      <h2>Teorema limit pusat, diuji pada data yang sangat miring</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> membuktikan sendiri kenapa rumus statistik boleh dipakai pada data rupiah yang sangat miring — dan pada n berapa ia mulai boleh dipercaya.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bikin populasi yang jelas-jelas tidak normal</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-6-1"><label for="mat-L1-probabilitas-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import numpy as np
+from scipy import stats
+np.random.seed(11)
+
+pop = np.random.exponential(scale=50_000, size=1_000_000)
+print(&quot;mean  &quot;, round(pop.mean()))
+print(&quot;median&quot;, round(np.median(pop)))
+print(&quot;skew  &quot;, round(stats.skew(pop), 3))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>mean   50037
+median 34653
+skew   2.006</code></pre></div>
+          <p style="margin-top:8px">Mean 50.037 tapi median cuma 34.653, dan kemencengan 2,006. Ini bentuk yang sama persis dengan data nilai transaksi sungguhan: banyak yang kecil, sedikit yang sangat besar.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ambil rata-rata, dan lihat kemencengannya runtuh</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-6-2"><label for="mat-L1-probabilitas-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for n in (2, 5, 30, 100):
+    idx  = np.random.randint(0, len(pop), size=(20_000, n))
+    rata = pop[idx].mean(axis=1)
+    print(f&quot;n={n:&gt;4}  mean {rata.mean():&gt;10,.0f}  sd {rata.std():&gt;9,.0f}&quot;
+          f&quot;  skew {stats.skew(rata):&gt;6.3f}  (sd teori {pop.std()/np.sqrt(n):&gt;9,.0f})&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>n</th>
+<th class="n">mean dari rata-rata</th>
+<th class="n">sd teramati</th>
+<th class="n">skew</th>
+<th class="n">sd teori σ/√n</th>
+</tr></thead>
+            <tbody>
+              <tr><td>2</td><td class="n">49.654</td><td class="n">35.280</td><td class="n">1,453</td><td class="n">35.412</td></tr>
+              <tr><td>5</td><td class="n">50.019</td><td class="n">22.370</td><td class="n">0,853</td><td class="n">22.396</td></tr>
+              <tr><td>30</td><td class="n">49.984</td><td class="n">9.136</td><td class="n"><strong>0,354</strong></td><td class="n">9.143</td></tr>
+              <tr><td>100</td><td class="n">50.012</td><td class="n">4.992</td><td class="n"><strong>0,173</strong></td><td class="n">5.008</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="hasil"><span class="tag">INI TEOREMA LIMIT PUSAT</span>
+          <p>Dua hal terjadi sekaligus, dan keduanya terukur:</p><p style="margin-top:6px"><strong>Satu.</strong> Kemencengan runtuh dari <strong>2,006 → 0,173</strong>. Populasinya tetap miring parah; rata-ratanya menjadi hampir normal.</p><p style="margin-top:6px"><strong>Dua.</strong> Kolom “sd teramati” dan “sd teori σ/√n” cocok sampai tiga angka — 9.136 lawan 9.143. Rumus itu bukan pendekatan kasar; ia tepat.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kapan n=30 cukup, dan kapan tidak</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-6-3"><label for="mat-L1-probabilitas-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan"><strong>“n=30 sudah cukup” adalah aturan jempol, bukan hukum.</strong> Di tabel di atas, n=30 menyisakan kemencengan 0,354 — masih terasa. Untuk data yang lebih miring lagi (nilai kontrak, klaim asuransi, sisa piutang), n=30 bisa jelas tidak cukup.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Cara memeriksanya tanpa teori: <strong>lakukan sendiri simulasi ini pada data klienmu.</strong> Ambil kolom rupiah yang nyata, resample rata-ratanya 20.000 kali pada n yang kamu rencanakan, lalu lihat kemencengannya. Kalau masih di atas ±0,5, tambah sampelnya atau laporkan median, bukan mean.</div>
+        <div class="bahaya"><strong>Jangan pakai CLT untuk membenarkan pelaporan mean pada data yang sangat miring.</strong> CLT membuat <em>rata-rata sampelmu</em> berperilaku baik. Ia tidak membuat mean menjadi ringkasan yang jujur bagi pembaca — untuk itu, median dan persentil sering lebih benar. Dua hal berbeda yang sering dicampur.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 6 selesai</h3>
+      <p>Kamu baru menurunkan sendiri fondasi seluruh statistik inferensial, dengan angka yang kamu hasilkan sendiri. Besok: ujian dan peta ke modul berikutnya.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">HARI 7</span>
+      <h2>Ujian mandiri & peta ke silabus</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengukur apakah enam hari ini benar-benar melekat, dengan soal yang jawabannya angka — bukan perasaan bahwa kamu sudah paham.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Delapan soal, kerjakan tanpa membuka catatan</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-7-1"><label for="mat-L1-probabilitas-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. X ~ Binomial(50, 0.04). Hitung E[X] dan Var[X] tanpa simulasi.
+2. Rata-rata sampelmu punya SE 1.000 pada n=100. Berapa n supaya SE jadi 250?
+3. Sebuah uji 95% sensitif, 5% false positive, prior 1%.
+   Berapa P(benar-benar positif | ditandai)?
+4. P(A)=0.3, P(B)=0.5, P(A dan B)=0.15. Apakah A dan B independen? Buktikan.
+5. Populasi kemencengan 3,0. Berapa kira-kira kemencengan rata-rata
+   sampel berukuran 25? (jawab dengan simulasi)
+6. Kapan Poisson boleh dipakai menggantikan Binomial?
+7. Komplain masuk rata-rata 3/hari. P(sehari tanpa komplain)?
+8. Kenapa melaporkan mean pada data transaksi bisa menyesatkan
+   meski CLT berlaku?</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tulis jawabanmu dulu — semuanya — sebelum membuka kuncinya. Kunci yang dibaca sebelum dicoba tidak mengajarkan apa pun; ini aturan yang sama seperti di Ujian Bernilai.</div>
+        <details>
+          <summary>Kunci jawaban — buka setelah kedelapan jawabanmu tertulis</summary>
+          <div class="isi">
+            <p><strong>1.</strong> E = np = 50×0,04 = <strong>2,0</strong>. Var = np(1−p) = 50×0,04×0,96 = <strong>1,92</strong>.</p>
+            <p><strong>2.</strong> SE ∝ 1/√n. Untuk membagi SE dengan 4, kalikan n dengan 16 → <strong>n = 1.600</strong>.</p>
+            <p><strong>3.</strong> p = 0,95×0,01 + 0,05×0,99 = 0,059. Posterior = 0,0095/0,059 = <strong>0,1610 (16,1%)</strong>. Uji yang <em>lebih baik</em> daripada contoh Hari 4, tapi hasilnya lebih buruk — karena priornya lebih kecil.</p>
+            <p><strong>4.</strong> P(A)×P(B) = 0,3×0,5 = 0,15 = P(A dan B). <strong>Independen.</strong></p>
+            <p><strong>5.</strong> Kemencengan rata-rata sampel ≈ skew populasi/√n = 3,0/5 = <strong>0,6</strong>. Masih terasa pada n=25.</p>
+            <p><strong>6.</strong> Ketika n besar dan p kecil, dengan np tetap sedang. Buktinya ada di Hari 3: n=100.000, p=0,00003 memberi 0,011903 lawan Poisson 0,011905.</p>
+            <p><strong>7.</strong> Poisson(3), P(X=0) = e⁻³ = <strong>0,049787</strong> — sekitar sekali per 20 hari.</p>
+            <p><strong>8.</strong> CLT menjamin <em>rata-rata sampel</em> berperilaku normal. Ia tidak menjamin mean adalah ringkasan yang jujur bagi pembaca: pada sebaran yang sangat miring, mean ditarik oleh segelintir nilai besar dan tidak mewakili transaksi tipikal. Median lebih jujur untuk itu.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rubrik: kamu boleh lanjut kalau…</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-7-2"><label for="mat-L1-probabilitas-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Skor</th>
+<th>Artinya</th>
+<th>Yang dilakukan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>8/8</td><td>Fondasi probabilitasmu kokoh</td><td>Lanjut ke MAT L2 sekarang</td></tr>
+              <tr><td>6–7</td><td>Cukup, ada satu-dua bolong</td><td>Ulangi hari yang salahnya, lalu lanjut</td></tr>
+              <tr><td>4–5</td><td>Belum melekat</td><td>Ulang Hari 2, 4, dan 6 — itu tiga yang paling banyak dipakai</td></tr>
+              <tr><td>≤3</td><td>Terlalu cepat</td><td>Ulang seluruh modul. Tidak apa-apa; ini materi tingkat S2.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Catat skormu dan tanggalnya</strong> di tempat yang sama dengan skor Ujian Bernilai. Tiga bulan lagi, kerjakan ulang keduanya. Selisihnya adalah satu-satunya bukti objektif bahwa kamu berkembang.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Apa yang baru saja kamu tutup</h3>
+        <span class="cek"><input type="checkbox" id="mat-L1-probabilitas-7-3"><label for="mat-L1-probabilitas-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Sebelum modul ini</th>
+<th>Sesudah</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Pemindaian 49 modul: “probabilitas formal — <strong>0 modul</strong>”</td><td>6 hari, semua angkanya kamu hasilkan sendiri</td></tr>
+              <tr><td>Tidak bisa mengikuti DATASCI W203</td><td>Bisa membaca silabusnya dan tahu setiap istilahnya</td></tr>
+              <tr><td>Bayes cuma nama teorema</td><td>Bisa menghitung posterior dan menjelaskan kenapa alarm palsu banyak</td></tr>
+              <tr><td>“n=30 sudah cukup”</td><td>Tahu kapan itu benar dan kapan tidak, dengan simulasi</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Yang TIDAK ditutup modul ini, dan aku tidak akan berpura-pura sebaliknya:</strong> ini bukan kredit akademik. Untuk kampus yang mensyaratkan 60 kredit SCQF matematika seperti Edinburgh, kamu tetap butuh mata kuliah bertranskrip. Modul ini membuatmu <em>mampu mengikuti</em>, bukan <em>memenuhi syarat administratif</em>. Dua hal berbeda, dan mencampurnya akan membuang waktumu setahun.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>MAT L1 selesai</h3>
+      <p>Satu dari empat lubang tertutup. Berikutnya aljabar linear — yang mengubah regresi dari “fungsi yang dipanggil” jadi “persamaan yang kamu selesaikan sendiri”, dan membuka PCA.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/f5079d99-9181-47a2-9ce4-7747feca52a3">Lanjut ke MAT L2: Aljabar linear terapan →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Seluruh angka di modul ini dihasilkan dengan menjalankan kodenya di Python 3.11 dengan numpy 2.4.6 dan scipy 1.17.1, memakai <code>np.random.seed(11)</code> — jadi hasilmu akan sama persis kalau seed-nya sama.</p>
+    <p style="margin-top:10px">Pemetaan mata kuliah merujuk halaman resmi UC Berkeley School of Information, University of Melbourne Handbook, dan Georgia Tech Professional Education per September 2026.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "mat-L1-probabilitas";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>

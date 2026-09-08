@@ -1,0 +1,754 @@
+<div class="kembali"><a href="https://claude.ai/code/artifact/e60e0d95-6d7b-4245-ac7a-f23e60237cfd">← Kembali ke indeks rute</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Bekal Kirim Hasil</span>
+  <button type="button" data-hari="1" aria-selected="true">K1</button>
+  <button type="button" data-hari="2" aria-selected="false">K2</button>
+  <button type="button" data-hari="3" aria-selected="false">K3</button>
+  <button type="button" data-hari="4" aria-selected="false">K4</button>
+  <button type="button" data-hari="5" aria-selected="false">K5</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal wajib · kerjakan setelah Modul M11</span>
+    <h1>Bekal Kirim Hasil: sampai ke tangan klien, dan tetap hidup</h1>
+    <p class="lede">Modul M11 mengajarimu membuat laporan yang berjalan sendiri tiap Senin. Tapi coba baca ulang skrip di Hari 73: hasil akhirnya adalah <code>print()</code> ke layar dan satu berkas PNG di server. <strong>Tidak ada yang sampai ke klien.</strong> Untuk portofolio itu cukup; untuk orang yang membayarmu, laporan yang tidak pernah dia lihat sama saja dengan tidak ada.</p>
+    <p class="lede" style="margin-top:10px">Lima hari ini menutup jarak terakhir: mengirimkannya lewat email, menulis isinya supaya dibaca, dan — bagian yang paling sering dilupakan — <strong>memastikan kamu tahu ketika ia rusak</strong>. Laporan otomatis yang mati diam-diam lebih berbahaya daripada laporan yang tidak pernah ada, karena klien sudah terlanjur memercayainya.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <!-- ============ K1 ============ -->
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n mono">KIRIM 1</span>
+      <h2>Mengirim email dari Python</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyusun sebuah email lengkap dari kode dan mengirimnya ke dirimu sendiri.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Susun pesannya dulu, kirim belakangan</h3>
+        <span class="cek"><input type="checkbox" id="r1s1"><label for="r1s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Mengirim email dari Python terbagi dua bagian yang benar-benar terpisah: <strong>menyusun</strong> pesan, dan <strong>mengirim</strong>nya. Kerjakan yang pertama dulu — ia tidak butuh kata sandi, tidak butuh internet, dan bisa kamu periksa hasilnya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>from email.message import EmailMessage
+
+pesan = EmailMessage()
+pesan["From"]    = "kamu@gmail.com"
+pesan["To"]      = "rina@kedaisenja.co.id"
+pesan["Subject"] = "Laporan Penjualan Mingguan - 2 Juni 2024"
+pesan.set_content("""Selamat pagi Bu Rina,
+
+Omzet minggu ini Rp 2.785.000.
+
+Salam,
+Tupper""")
+
+for k, v in pesan.items():
+    print(f"{k}: {v}")
+print()
+print("content type  :", pesan.get_content_type())
+print("punya lampiran:", pesan.is_multipart())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>From: kamu@gmail.com
+To: rina@kedaisenja.co.id
+Subject: Laporan Penjualan Mingguan - 2 Juni 2024
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+content type  : text/plain
+punya lampiran: False</code></pre>
+          </div>
+        </div>
+        <p>Tiga baris <code>pesan["..."] = ...</code> itu mengisi kepala surat. <code>set_content</code> mengisi badannya. Empat baris yang muncul sendiri (<code>Content-Type</code> dan kawan-kawan) ditambahkan Python — itu keterangan teknis yang dibutuhkan aplikasi email di ujung sana, dan kamu tidak perlu mengurusnya.</p>
+        <div class="catatan">
+          <strong><code>EmailMessage</code> sudah ada di dalam Python.</strong> Tidak perlu <code>pip install</code> apa pun. Sama seperti <code>datetime</code> yang sudah kamu pakai — ini bagian dari perkakas bawaan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Kata sandi aplikasi, bukan kata sandi emailmu</h3>
+        <span class="cek"><input type="checkbox" id="r1s2"><label for="r1s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Gmail tidak mengizinkan program masuk memakai kata sandi biasa. Kamu harus membuat <strong>kata sandi aplikasi</strong> — sandi 16 huruf khusus yang hanya berlaku untuk satu program, dan bisa kamu cabut kapan saja tanpa mengganggu akunmu.</p>
+        <div class="aksi">
+          <span class="tag">LAKUKAN SEKARANG</span>
+          <ol style="font-size:0.93rem;padding-left:20px;margin:0">
+            <li>Nyalakan <strong>verifikasi 2 langkah</strong> di akun Google-mu (wajib, kalau belum).</li>
+            <li>Buka pengaturan keamanan akun Google, cari <strong>"App passwords" / "Sandi aplikasi"</strong>.</li>
+            <li>Buat satu, beri nama <code>laporan-klien</code>. Salin 16 hurufnya.</li>
+            <li>Simpan di berkas <code>.env</code> — <strong>bukan</strong> di dalam kode.</li>
+          </ol>
+        </div>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code># isi berkas .env
+EMAIL_PENGIRIM=kamu@gmail.com
+EMAIL_SANDI=abcdefghijklmnop</code></pre>
+        </div>
+        <div class="bahaya">
+          <strong>Pastikan <code>.env</code> ada di dalam <code>.gitignore</code>.</strong> Ini persis yang kamu pelajari di Modul M11 Hari 72 — dan sekarang taruhannya bukan lagi latihan. Sandi yang ter-<em>push</em> ke GitHub publik akan ditemukan mesin pemindai dalam hitungan menit, dan akun emailmu dipakai orang lain mengirim spam. Cek dengan <code>git status</code> sebelum commit: kalau <code>.env</code> muncul di daftar, berhenti dan perbaiki <code>.gitignore</code> dulu.
+          <p style="margin-top:8px">Kalau sandinya terlanjur ter-push: cabut sandi aplikasi itu di akun Google <em>sekarang juga</em>, lalu buat yang baru. Menghapus berkasnya dari commit berikutnya tidak cukup — riwayat git menyimpannya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kirim — ke dirimu sendiri dulu</h3>
+        <span class="cek"><input type="checkbox" id="r1s3"><label for="r1s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import os, smtplib
+from email.message import EmailMessage
+from dotenv import load_dotenv
+
+load_dotenv()
+PENGIRIM = os.environ["EMAIL_PENGIRIM"]
+SANDI    = os.environ["EMAIL_SANDI"]
+
+def kirim(pesan):
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(PENGIRIM, SANDI)
+        server.send_message(pesan)
+
+pesan = EmailMessage()
+pesan["From"]    = PENGIRIM
+pesan["To"]      = PENGIRIM          # ke diri sendiri dulu
+pesan["Subject"] = "Uji coba pertama"
+pesan.set_content("Kalau kamu membaca ini, pengirimannya berhasil.")
+
+kirim(pesan)
+print("terkirim")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>terkirim</code></pre></div>
+          <p style="margin-top:8px">lalu emailnya masuk ke kotak masukmu sendiri dalam beberapa detik.</p>
+        </div>
+        <div class="catatan">
+          <strong>Langkah inilah satu-satunya di seluruh kurikulum yang tidak bisa aku buktikan hasilnya untukmu.</strong> Semua keluaran di halaman-halaman lain aku hasilkan dengan menjalankan kodenya sungguhan. Yang ini butuh akun email dan sandi milikmu, jadi kamulah yang harus mengujinya. Kirim ke diri sendiri, buka kotak masuk, pastikan benar-benar sampai — sebelum satu baris pun ditujukan ke alamat klien.
+        </div>
+        <div class="bahaya">
+          <strong>Dua kesalahan yang paling sering muncul di sini:</strong>
+          <p style="margin-top:8px"><code>SMTPAuthenticationError</code> — hampir selalu berarti kamu memakai sandi Google biasa, bukan sandi aplikasi 16 huruf. Atau verifikasi 2 langkah belum menyala.</p>
+          <p style="margin-top:8px"><code>KeyError: 'EMAIL_SANDI'</code> — berkas <code>.env</code> tidak ketemu. Ia harus berada di folder yang sama dengan tempat kamu menjalankan skrip. Ini pesan error yang sudah kamu kenal dari Bekal Python Hari 3: kunci yang dicari tidak ada di dictionary — dan <code>os.environ</code> memang sebuah dictionary.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Kirim 1 selesai</h3>
+      <p><strong>Catat:</strong> menyusun pesan (<code>EmailMessage</code>) terpisah dari mengirim (<code>smtplib</code>) — susun dan periksa dulu, kirim belakangan · Gmail butuh <strong>sandi aplikasi</strong> 16 huruf, bukan sandi akunmu · sandi hidup di <code>.env</code> yang masuk <code>.gitignore</code> · dan uji pertama selalu ke alamatmu sendiri.</p>
+    </div>
+  </section>
+
+  <!-- ============ K2 ============ -->
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n mono">KIRIM 2</span>
+      <h2>Isi email yang benar-benar dibaca</h2>
+      <span class="waktu">± 65 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menulis email laporan yang dimengerti dalam lima detik, dan melampirkan berkas Excel hasil kerjamu.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Klien membaca judul dan dua baris pertama. Itu saja.</h3>
+        <span class="cek"><input type="checkbox" id="r2s1"><label for="r2s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pemilik usaha membuka email di ponsel, di antara pesan lain. Kalau angka yang dia butuhkan tidak ada di judul dan dua baris pertama, laporanmu tidak dibaca — dan setelah beberapa minggu, tidak dibuka sama sekali.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th></th><th>Yang biasa ditulis orang</th><th>Yang dibaca klien</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Judul</strong></td><td class="mono">Laporan Mingguan</td><td class="mono">Laporan Juni — omzet turun 16,9%</td></tr>
+              <tr><td><strong>Baris 1</strong></td><td>"Terlampir laporan penjualan untuk periode…"</td><td>"Omzet Juni Rp 2.785.000, turun Rp 566.000 dari Mei."</td></tr>
+              <tr><td><strong>Isi</strong></td><td>Penjelasan cara membaca grafik</td><td>Satu penyebab, dengan angkanya</td></tr>
+              <tr><td><strong>Grafik</strong></td><td>Di badan email, tiga buah</td><td>Di lampiran, kalau dia mau lihat</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Judul yang memuat angka juga mengerjakan hal lain untukmu:</strong> ia membuat kotak masuk klien jadi arsip yang bisa ditelusuri. Enam bulan kemudian dia bisa mencari "omzet turun" dan menemukan bulan-bulan bermasalah tanpa membuka satu lampiran pun. "Laporan Mingguan" ×26 tidak bisa apa-apa.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Satu temuan, bukan daftar temuan</h3>
+        <span class="cek"><input type="checkbox" id="r2s2"><label for="r2s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Pakai data Kedai Senja yang sudah kamu bersihkan di <a href="https://claude.ai/code/artifact/88ce46d0-54b8-4c0b-924d-beb4c8389d7a"><strong>Bekal Data Klien</strong></a> — berkas <code>Hasil Bersih - Kedai Senja.xlsx</code> dan tabel <code>gabung</code> dari Hari 6 modul itu. Pendapatan per bulan begini:</p>
+        <div class="kode"><pre><code>2024-01    2.494.000
+2024-02    3.644.000
+2024-03    3.811.000
+2024-04    1.862.000
+2024-05    3.351.000
+2024-06    2.785.000</code></pre></div>
+        <p>Juni turun Rp 566.000 dari Mei. Pertanyaan yang berguna bukan "berapa turunnya", tapi <strong>"turunnya dari mana"</strong>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>p = gabung[gabung["Bulan"].isin(["2024-05","2024-06"])].pivot_table(
+        index="Cabang", columns="Bulan", values="Total", aggfunc="sum")
+p["selisih"] = p["2024-06"] - p["2024-05"]
+print(p.sort_values("selisih"))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>Bulan      2024-05    2024-06   selisih
+Cabang                                 
+Kemang   1159000.0   701000.0 -458000.0
+Seturan  1211000.0  1137000.0  -74000.0
+Dago      981000.0   947000.0  -34000.0</code></pre>
+          </div>
+        </div>
+        <p>Ini yang mengubah laporan jadi berguna. Penurunannya bukan merata — <strong>Kemang sendirian menyumbang Rp 458.000 dari Rp 566.000, yaitu 81%</strong>. Dua cabang lain hampir tidak bergerak.</p>
+        <p>Kalimat "omzet turun 16,9%" membuat pemilik cemas tanpa tahu harus berbuat apa. Kalimat "Kemang turun 458 ribu, dua cabang lain normal" mengirim dia ke Kemang besok pagi. Itu bedanya laporan yang dibayar terus dan laporan yang dihentikan setelah tiga bulan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Lampirkan berkas Excel-nya</h3>
+        <span class="cek"><input type="checkbox" id="r2s3"><label for="r2s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>from pathlib import Path
+
+pesan = EmailMessage()
+pesan["From"]    = PENGIRIM
+pesan["To"]      = PENGIRIM
+pesan["Subject"] = "Laporan Penjualan Juni - omzet turun 16,9%"
+pesan.set_content("""Selamat pagi Bu Rina,
+
+Omzet Juni Rp 2.785.000, turun Rp 566.000 (-16,9%) dari Mei.
+
+Penyebabnya hampir seluruhnya satu cabang: Kemang turun
+Rp 458.000, yaitu 81% dari total penurunan. Dago dan Seturan
+hampir tidak berubah.
+
+Rincian per cabang dan per produk ada di lampiran.
+
+Salam,
+Tupper""")
+
+berkas = Path("Hasil Bersih - Kedai Senja.xlsx")
+pesan.add_attachment(
+    berkas.read_bytes(),
+    maintype="application",
+    subtype="vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    filename=berkas.name,
+)
+
+print("punya lampiran:", pesan.is_multipart())
+for bagian in pesan.walk():
+    nama = bagian.get_filename()
+    print("-", bagian.get_content_type(), f"({nama})" if nama else "")
+print("ukuran pesan:", f"{len(bytes(pesan)):,} byte")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>punya lampiran: True
+- multipart/mixed 
+- text/plain 
+- application/vnd.openxmlformats-officedocument.spreadsheetml.sheet (Hasil Bersih - Kedai Senja.xlsx)
+ukuran pesan: 25,529 byte</code></pre>
+          </div>
+        </div>
+        <p>Pesannya berubah dari <code>text/plain</code> jadi <code>multipart/mixed</code>: sebuah wadah berisi dua bagian — tulisan dan berkas. <code>pesan.walk()</code> menelusuri isinya, berguna untuk memastikan lampirannya benar-benar ikut sebelum terkirim.</p>
+        <div class="catatan">
+          <strong>Deretan panjang <code>vnd.openxmlformats-…</code> itu tidak perlu dihafal.</strong> Itu kode resmi untuk "berkas Excel modern". Untuk jenis lain: PDF pakai <code>maintype="application", subtype="pdf"</code>; PNG pakai <code>maintype="image", subtype="png"</code>; CSV pakai <code>maintype="text", subtype="csv"</code>.
+        </div>
+        <div class="bahaya">
+          <strong>Batas ukuran lampiran Gmail sekitar 25 MB</strong>, dan berkas Excel berisi ratusan ribu baris gampang melewatinya. Kalau hasilmu besar: kirim ringkasannya saja sebagai lampiran, dan taruh berkas lengkapnya di Google Drive lalu tautkan. Jangan menunggu tahu batasnya dari email yang gagal terkirim pada Senin pagi.
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Kirim 2 selesai</h3>
+      <p><strong>Catat:</strong> angka masuk ke <strong>judul</strong>, bukan cuma badan email · dua baris pertama memuat jawabannya, sisanya boleh tidak dibaca · <strong>satu</strong> temuan dengan angkanya mengalahkan lima temuan tanpa angka · <code>add_attachment</code> untuk berkas, dan periksa dengan <code>walk()</code> sebelum kirim.</p>
+    </div>
+  </section>
+
+  <!-- ============ K3 ============ -->
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n mono">KIRIM 3</span>
+      <h2>try / except: kode yang tidak berbohong saat gagal</h2>
+      <span class="waktu">± 75 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menangkap kesalahan yang kamu perkirakan, membiarkan yang tidak kamu perkirakan tetap berhenti, dan tahu kenapa perbedaan itu menentukan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bentuk dasarnya</h3>
+        <span class="cek"><input type="checkbox" id="r3s1"><label for="r3s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Di Bekal Python Hari 3 kamu belajar <em>membaca</em> tulisan merah. Sekarang kamu belajar <em>menanganinya</em> — karena skrip yang berjalan sendiri tiap Senin tidak ada yang menungguinya.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+df = pd.DataFrame({"Cabang": ["Kemang","Dago"], "Total": [701000, 947000]})
+
+try:
+    print(df["Pendapatan"].sum())
+except KeyError as e:
+    print("  KeyError:", e)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>  KeyError: 'Pendapatan'</code></pre></div>
+        </div>
+        <p>Bacanya: <em>coba</em> jalankan yang di dalam <code>try</code>; kalau muncul <code>KeyError</code>, lompat ke <code>except</code> dan jalankan itu. Skripnya tidak mati. <code>as e</code> menyimpan kesalahannya ke variabel <code>e</code> supaya bisa ditampilkan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Cara memakainya yang justru berbahaya</h3>
+        <span class="cek"><input type="checkbox" id="r3s2"><label for="r3s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Begitu orang tahu <code>try/except</code> menghentikan tulisan merah, godaannya adalah memakainya untuk membungkam semuanya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>def hitung_buruk(d):
+    try:
+        return d["Pendapatan"].sum()
+    except:
+        return 0
+
+print("hasil:", hitung_buruk(df))</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>hasil: 0</code></pre></div>
+        </div>
+        <div class="bahaya">
+          <strong>Skripnya "berhasil". Laporannya terkirim. Isinya nol rupiah. Klien tidak diberi tahu apa pun.</strong>
+          <p style="margin-top:8px"><code>except:</code> telanjang menangkap <em>segalanya</em> — salah ketik nama kolom, koneksi database putus, kehabisan memori, semuanya sama-sama berubah jadi angka <code>0</code> yang terlihat sah. Kamu bukan menangani kesalahan, kamu menyembunyikannya. Dan yang menemukan penyembunyian itu adalah klien, tiga bulan kemudian, waktu dia menyadari laporannya tidak masuk akal sejak lama.</p>
+          <p style="margin-top:8px">Aturannya sederhana dan tidak ada pengecualian: <strong>jangan pernah menulis <code>except:</code> telanjang.</strong> Sebutkan kesalahan apa yang kamu perkirakan.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Tangkap yang spesifik, lalu jelaskan</h3>
+        <span class="cek"><input type="checkbox" id="r3s3"><label for="r3s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Yang berguna bukan menelan kesalahan, tapi <strong>menggantinya dengan kesalahan yang lebih jelas</strong> — supaya kalau nanti gagal jam 6 pagi, kamu tahu penyebabnya dari satu baris tanpa membuka apa pun.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>def hitung_baik(d):
+    try:
+        return d["Pendapatan"].sum()
+    except KeyError:
+        raise ValueError(
+            "Kolom 'Pendapatan' tidak ada. Kolom yang tersedia: "
+            + ", ".join(d.columns)
+        )
+
+try:
+    hitung_baik(df)
+except ValueError as e:
+    print("ValueError:", e)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>ValueError: Kolom 'Pendapatan' tidak ada. Kolom yang tersedia: Cabang, Total</code></pre>
+          </div>
+        </div>
+        <p><code>raise</code> artinya "lemparkan kesalahan ini". Bandingkan dengan <code>KeyError: 'Pendapatan'</code> yang polos: versi ini langsung memberitahumu kolom apa saja yang sebenarnya ada — biasanya cukup untuk tahu bahwa klien mengganti nama kolom di berkas sumbernya.</p>
+        <div class="catatan">
+          <strong>Ini kebiasaan yang sudah kamu punya, dipindah ke kode.</strong> Temuan yang berbunyi "ada selisih" tidak berguna; yang berbunyi "selisih Rp 4,2 juta antara buku besar dan konfirmasi bank, di 3 transaksi tanggal 28–30 Desember" bisa langsung ditindaklanjuti. Pesan kesalahan bekerja dengan cara yang sama persis.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Pembagian nol, dan kenapa jawabannya bukan nol</h3>
+        <span class="cek"><input type="checkbox" id="r3s4"><label for="r3s4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Skrip laporan M11 menghitung perubahan mingguan: <code>(minggu_ini - minggu_lalu) / minggu_lalu</code>. Kalau minggu lalu kedai tutup total, penyebutnya nol.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>a, b = 2785000, 0
+
+try:
+    print((a-b)/b)
+except ZeroDivisionError:
+    print("ZeroDivisionError tertangkap")
+
+delta = (a-b)/b*100 if b else None
+print("pakai penjaga ->", delta)</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>ZeroDivisionError tertangkap
+pakai penjaga -> None</code></pre>
+          </div>
+        </div>
+        <p>Perhatikan bahwa penjaganya menghasilkan <code>None</code>, <strong>bukan 0</strong>. Ini bukan soal selera. Menulis <code>delta = 0</code> berarti laporanmu berbunyi "tidak ada perubahan dibanding minggu lalu" — padahal yang benar adalah "minggu lalu tidak ada penjualan sama sekali, jadi perbandingannya tidak punya arti". Yang pertama bohong; yang kedua justru temuan penting.</p>
+        <div class="catatan">
+          <strong>Skrip M11 Hari 73 sudah memakai penjaga ini</strong> (<code>delta = ... if b else 0</code>), tapi memilih <code>0</code>. Ganti jadi <code>None</code>, lalu di badan email tulis "tidak dapat dibandingkan (minggu lalu tanpa penjualan)" ketika nilainya <code>None</code>.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Kegagalan yang paling berbahaya tidak melempar error sama sekali</h3>
+        <span class="cek"><input type="checkbox" id="r3s5"><label for="r3s5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Semua yang di atas masih tergolong mudah, karena Python berteriak. Yang berikut ini tidak berteriak sama sekali.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>kosong = df.iloc[0:0]          # tabel dengan nol baris
+print("jumlah baris :", len(kosong))
+print("sum()        :", kosong["Total"].sum())
+print("mean()       :", kosong["Total"].mean())</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>jumlah baris : 0
+sum()        : 0
+mean()       : nan</code></pre>
+          </div>
+        </div>
+        <div class="bahaya">
+          <strong>Menjumlahkan tabel kosong menghasilkan <code>0</code>, bukan error.</strong>
+          <p style="margin-top:8px">Bayangkan Senin pagi: klien mengganti nama berkas sumbernya, kuerimu tidak mengembalikan baris apa pun, dan laporan otomatismu mengirim email berbunyi <em>"Omzet minggu ini: Rp 0"</em>. Tidak ada tulisan merah. Tidak ada peringatan. GitHub Actions melaporkan sukses dengan centang hijau. Semua sistem bilang semuanya baik-baik saja, dan angka yang dikirim ke klien salah total.</p>
+          <p style="margin-top:8px">Tidak ada <code>try/except</code> yang bisa menangkap ini, karena tidak ada yang gagal. Yang dibutuhkan jenis penjagaan lain — itu isi besok.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Kirim 3 selesai</h3>
+      <p><strong>Catat:</strong> <code>try/except</code> menangkap kesalahan yang <em>kamu perkirakan</em> · <code>except:</code> telanjang mengubah kerusakan jadi angka palsu yang terlihat sah — jangan pernah · ganti kesalahan polos dengan pesan yang menyebut isinya, pakai <code>raise</code> · pembagian nol dijawab <code>None</code>, bukan <code>0</code> · dan kegagalan terburuk (tabel kosong) tidak melempar error sama sekali.</p>
+    </div>
+  </section>
+
+  <!-- ============ K4 ============ -->
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n mono">KIRIM 4</span>
+      <h2>Laporan yang berhenti diam-diam</h2>
+      <span class="waktu">± 70 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menahan laporan yang datanya tidak wajar sebelum terkirim, dan membuat dirimu tahu ketika laporan berhenti berjalan.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Periksa kewajaran sebelum mengirim</h3>
+        <span class="cek"><input type="checkbox" id="r4s1"><label for="r4s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Kalau kesalahannya tidak melempar error, satu-satunya cara menangkapnya adalah <strong>menyatakan lebih dulu seperti apa data yang wajar</strong>, lalu menolak mengirim kalau tidak terpenuhi.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>import pandas as pd
+
+def periksa_kewajaran(df, minimal_baris=20, maksimal_umur_hari=8):
+    """Kembalikan daftar keluhan. Daftar kosong berarti data layak dikirim."""
+    keluhan = []
+    if df.empty:
+        keluhan.append("tabel kosong sama sekali")
+        return keluhan
+    if len(df) &lt; minimal_baris:
+        keluhan.append(f"cuma {len(df)} baris (biasanya minimal {minimal_baris})")
+    umur = (pd.Timestamp.today().normalize() - df["Tanggal"].max().normalize()).days
+    if umur &gt; maksimal_umur_hari:
+        keluhan.append(f"data terbaru sudah {umur} hari yang lalu")
+    if df["Total"].sum() &lt;= 0:
+        keluhan.append("total penjualan nol atau negatif")
+    return keluhan
+
+hari_ini = pd.Timestamp.today().normalize()
+sehat  = pd.DataFrame({"Tanggal": pd.date_range(end=hari_ini, periods=30, freq="6h"),
+                       "Total": [50000]*30})
+kosong = sehat.iloc[0:0]
+basi   = sehat.assign(Tanggal=sehat["Tanggal"] - pd.Timedelta(days=30))
+tipis  = sehat.tail(3)
+
+for nama, d in [("sehat", sehat), ("kosong", kosong), ("basi", basi), ("tipis", tipis)]:
+    k = periksa_kewajaran(d)
+    print(f"{nama:&lt;7}{len(d):&gt;3} baris -&gt; {'KIRIM' if not k else 'TAHAN':&lt;6}{'; '.join(k)}")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>sehat   30 baris -> KIRIM 
+kosong   0 baris -> TAHAN tabel kosong sama sekali
+basi    30 baris -> TAHAN data terbaru sudah 30 hari yang lalu
+tipis    3 baris -> TAHAN cuma 3 baris (biasanya minimal 20)</code></pre>
+          </div>
+        </div>
+        <p>Tiga jenis kerusakan yang berbeda, dan tidak satu pun dari ketiganya melempar error:</p>
+        <ul>
+          <li><strong>kosong</strong> — sumber data putus. Tanpa penjagaan, klien menerima "Rp 0".</li>
+          <li><strong>basi</strong> — kuerinya jalan, tapi mengambil data lama. Klien menerima angka yang <em>terlihat wajar</em> dan sama sekali tidak terbarui. Ini yang paling sulit ketahuan.</li>
+          <li><strong>tipis</strong> — sebagian data masuk, sebagian tidak. Angkanya masuk akal tapi terlalu kecil.</li>
+        </ul>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>print("kalau pemeriksaan ini tidak ada, yang terkirim ke klien:")
+for nama, d in [("kosong", kosong), ("tipis", tipis)]:
+    print(f"  {nama:&lt;7} \"Omzet minggu ini: Rp {d['Total'].sum():,.0f}\"")</code></pre>
+        </div>
+        <div class="hasil">
+          <span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>kalau pemeriksaan ini tidak ada, yang terkirim ke klien:
+  kosong  "Omzet minggu ini: Rp 0"
+  tipis   "Omzet minggu ini: Rp 150,000"</code></pre>
+          </div>
+        </div>
+        <div class="catatan">
+          <strong>Angka <code>20</code> dan <code>8</code> itu bukan angka ajaib.</strong> Keduanya datang dari mengenal usahanya: kedai ini punya sekitar 55 transaksi seminggu, jadi di bawah 20 pasti ada yang salah; datanya diekspor tiap akhir pekan, jadi lebih dari 8 hari berarti ekspornya macet. Untuk klien lain, angkanya lain — <strong>tanyakan, jangan tebak.</strong> Pertanyaannya: "kira-kira paling sepi seminggu ada berapa transaksi?"
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Rangkai jadi satu alur yang aman</h3>
+        <span class="cek"><input type="checkbox" id="r4s2"><label for="r4s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Sekarang gabungkan semuanya. Perhatikan bahwa kegagalan <strong>tidak pernah membuat email terkirim ke klien</strong> — yang gagal dikirim ke <em>kamu</em>.</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>def jalankan_laporan():
+    df = ambil_data()
+
+    keluhan = periksa_kewajaran(df)
+    if keluhan:
+        lapor_ke_diri_sendiri(
+            "Laporan Kedai Senja DITAHAN",
+            "Data tidak wajar, email ke klien tidak dikirim:\n- "
+            + "\n- ".join(keluhan)
+        )
+        return "ditahan"
+
+    kirim_ke_klien(susun_email(df))
+    return "terkirim"
+
+try:
+    hasil = jalankan_laporan()
+    print(hasil)
+except Exception as e:
+    lapor_ke_diri_sendiri(
+        "Laporan Kedai Senja GAGAL",
+        f"{type(e).__name__}: {e}"
+    )
+    raise</code></pre>
+        </div>
+        <p>Tiga hal yang membuat susunan ini benar:</p>
+        <ul>
+          <li><strong><code>except Exception</code>, bukan <code>except:</code> telanjang.</strong> Ia menangkap kesalahan program, tapi tetap membiarkan penghentian manual (Ctrl-C) bekerja.</li>
+          <li><strong><code>raise</code> di baris terakhir.</strong> Setelah memberitahumu, kesalahannya dilempar lagi supaya GitHub Actions menandai jalannya <em>merah</em>. Tanpa itu, riwayat Actions-mu penuh centang hijau padahal tidak ada laporan yang terkirim.</li>
+          <li><strong>Klien tidak pernah menerima kabar buruk.</strong> Dia hanya menerima laporan yang lolos pemeriksaan, atau tidak menerima apa-apa. Kamu yang menerima keluhannya.</li>
+        </ul>
+        <div class="catatan">
+          <code>type(e).__name__</code> memberi nama jenis kesalahannya (<code>KeyError</code>, <code>ValueError</code>, …) dan <code>e</code> memberi keterangannya. Judul email yang berbunyi <code>OperationalError: could not connect to server</code> membuatmu tahu penyebabnya sebelum membuka laptop.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kegagalan yang bahkan tidak sempat berjalan</h3>
+        <span class="cek"><input type="checkbox" id="r4s3"><label for="r4s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Masih ada satu lubang di alur tadi, dan ini yang paling sering menjatuhkan orang. <strong>Semua penjagaan di atas hanya bekerja kalau skripnya berjalan.</strong> Kalau ia tidak berjalan sama sekali, tidak ada yang bersuara — termasuk email kegagalan.</p>
+        <p>Cara sebuah laporan otomatis berhenti tanpa suara:</p>
+        <ul>
+          <li>Di repositori <strong>publik</strong>, GitHub menonaktifkan sendiri jadwal otomatis kalau tidak ada kegiatan selama 60 hari. Ini kebijakan resmi mereka, bukan kerusakan — dan yang dihitung "kegiatan" cuma commit baru; membuka issue atau memberi rilis tidak menyelamatkannya.</li>
+          <li>Sandi aplikasi dicabut atau kedaluwarsa.</li>
+          <li>Kuota gratis habis, atau repositorinya dipindahkan.</li>
+        </ul>
+        <div class="catatan">
+          <strong>Kabar baiknya, yang pertama tidak berlaku untukmu — asal repositorinya benar.</strong> Aturan 60 hari itu hanya untuk repositori publik. Pekerjaan klien memang seharusnya di repositori <strong>privat</strong>, dan bukan karena alasan ini: data penjualan, nama pelanggan, dan angka pendapatan orang lain tidak boleh ada di tempat yang bisa dibaca siapa saja. Kamu sudah terbiasa memperlakukan angka klien sebagai rahasia; kebiasaan itu berlaku sama persis di GitHub.
+          <p style="margin-top:8px">Jadi: repositori privat untuk pekerjaan klien, repositori publik hanya untuk portofolio yang datanya sudah kamu buat sendiri atau data terbuka.</p>
+        </div>
+        <div class="bahaya">
+          <strong>Tapi dua kemungkinan lainnya tetap berlaku, dan yang terjadi sama: tidak terjadi apa-apa.</strong> Tidak ada email ke klien, tidak ada email kegagalan ke kamu, tidak ada tanda merah. Klien mengira laporannya masih jalan. Kamu mengira begitu juga. Baru ketahuan berminggu-minggu kemudian, biasanya dari kalimat klien: <em>"Eh, laporan mingguan itu masih ada, kan?"</em>
+        </div>
+        <p>Obatnya sederhana dan tidak berupa kode: <strong>beri tahu klien seperti apa jadwalnya, supaya dia ikut menjaga.</strong> Sekali, di pesan pertama:</p>
+        <div class="kode"><pre><code>Laporan ini terkirim otomatis tiap Senin pagi, paling lambat jam 9.
+
+Kalau sampai Senin siang belum masuk, berarti ada yang rusak —
+tolong kabari saya, jangan ditunggu. Sistem yang berhenti biasanya
+tidak memberi tahu siapa pun.</code></pre></div>
+        <div class="catatan">
+          <strong>Dua kalimat ini mengubah klien jadi pemeriksa yang paling dapat diandalkan</strong>, dan tidak butuh perkakas apa pun. Ia juga mengerjakan sesuatu untuk hubungan kerjamu: kamu terdengar seperti orang yang tahu sistem bisa rusak dan sudah menyiapkannya — bukan orang yang berjanji semuanya akan selalu lancar.
+          <p style="margin-top:8px">Kalau kamu mau langkah tambahan: jalankan laporan tiap Senin <em>dan</em> kirimkan ke dirimu sendiri satu pesan singkat tiap Kamis yang isinya cuma "masih hidup". Kamis yang sunyi berarti ada yang perlu diperiksa.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Kirim 4 selesai</h3>
+      <p><strong>Catat:</strong> nyatakan lebih dulu seperti apa data yang wajar (jumlah baris, umur data, total), lalu <strong>tahan pengiriman</strong> kalau tidak terpenuhi · kegagalan dikirim ke kamu, tidak pernah ke klien · <code>raise</code> setelah melapor supaya jalannya ditandai merah · dan beri tahu klien jadwalnya supaya diamnya sistem ikut terdeteksi olehnya.</p>
+    </div>
+  </section>
+
+  <!-- ============ K5 ============ -->
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n mono">KIRIM 5</span>
+      <h2>Serah terima: apa yang klien pegang kalau kamu hilang</h2>
+      <span class="waktu">± 60 menit</span>
+    </div>
+    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menyerahkan laporan otomatis dengan cara yang membuat klien tidak tersandera — dan tahu kenapa itu justru membuatmu lebih sering dibayar lagi.</p>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Ketergantungan yang tidak disengaja</h3>
+        <span class="cek"><input type="checkbox" id="r5s1"><label for="r5s1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Laporan otomatis yang baru kamu bangun punya sifat yang tidak dimiliki pekerjaan sekali jadi: <strong>ia terus berjalan di akunmu, dengan sandimu, di repositorimu.</strong> Kalau kamu berhenti membalas pesan, laporan klien mati dan dia tidak bisa berbuat apa-apa.</p>
+        <p>Sebagian freelancer menganggap itu keuntungan — klien jadi tidak bisa pergi. Itu keliru dalam hitungan, bukan cuma dalam etika:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th></th><th>Klien tersandera</th><th>Klien bisa pergi kapan saja</th></tr></thead>
+            <tbody>
+              <tr><td>Rujukan ke temannya</td><td>Tidak, karena dia sendiri tidak tenang</td><td>Ya — ini sumber klien termurahmu</td></tr>
+              <tr><td>Kalau kamu naikkan tarif</td><td>Dia curiga, karena merasa terjepit</td><td>Dia menimbang wajar tidaknya</td></tr>
+              <tr><td>Proyek berikutnya</td><td>Dicari orang lain, diam-diam</td><td>Ditawarkan ke kamu duluan</td></tr>
+              <tr><td>Kalau kamu sakit seminggu</td><td>Krisis, dan kamu yang disalahkan</td><td>Merepotkan, tapi bisa ditunggu</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan">
+          <strong>Ini hitungan yang sama seperti di Freelance 10.</strong> Menawarkan perawatan bulanan <em>berikut</em> pilihan mengerjakan sendiri justru lebih sering diterima daripada menawarkan perawatan sebagai satu-satunya jalan. Orang membeli kemudahan dengan senang hati; mereka melawan jebakan.
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Empat hal yang diserahkan</h3>
+        <span class="cek"><input type="checkbox" id="r5s2"><label for="r5s2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr><th>Diserahkan</th><th>Isinya</th><th>Kenapa</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Akses repositori</strong></td><td>Akun GitHub klien (atau orang ITnya) diundang sebagai kolaborator repositori privat</td><td>Tanpa ini, semua yang lain tidak ada artinya</td></tr>
+              <tr><td><strong>Satu halaman README</strong></td><td>Laporan ini apa, jalan tiap kapan, ambil data dari mana, dikirim ke siapa, cara mematikannya</td><td>Dibaca orang yang tidak mengenalmu, mungkin setahun lagi</td></tr>
+              <tr><td><strong>Daftar kredensial</strong></td><td>Sandi apa saja yang dipakai, disimpan di mana, atas nama siapa, cara menggantinya</td><td>Sandi atas namamu adalah bom waktu</td></tr>
+              <tr><td><strong>Catatan batasan</strong></td><td>Apa yang <em>tidak</em> diperiksa laporan ini</td><td>Yang paling sering dilewati, paling sering jadi masalah</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya">
+          <strong>Baris ketiga yang paling mendesak.</strong> Kalau laporan berjalan pakai sandi aplikasi <em>akun Gmail pribadimu</em>, maka setahun lagi email ke klien masih terkirim atas namamu — untuk pekerjaan yang sudah lama selesai dan tidak lagi kamu awasi. Kalau akunmu bermasalah, laporan klien ikut mati.
+          <p style="margin-top:8px">Yang benar: minta klien membuat akun email khusus (<code>laporan@usahanya.co.id</code> atau Gmail baru atas nama usahanya), lalu jalankan dari situ. Butuh sepuluh menit saat serah terima, dan menyelesaikan masalah untuk selamanya.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Catatan batasan — dan kenapa ini menaikkan kepercayaan</h3>
+        <span class="cek"><input type="checkbox" id="r5s3"><label for="r5s3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <p>Bagian terakhir README, dan yang paling sedikit ditulis orang. Contoh untuk laporan Kedai Senja:</p>
+        <div class="kode"><pre><code>## Yang TIDAK diperiksa laporan ini
+
+- Angka diambil apa adanya dari ekspor kasir. Kalau kasir salah
+  input, laporan ikut salah — tidak ada pengecekan silang ke
+  sumber lain.
+
+- Laporan menahan diri kalau data kosong, terlalu sedikit
+  (< 20 baris), atau lebih tua dari 8 hari. Di luar itu tidak
+  ada pemeriksaan kewajaran.
+
+- 5 baris transaksi yang identik persis (Rp 216.000, 2,2% dari
+  total) DIHITUNG sebagai penjualan sah, sesuai kesepakatan
+  2 Juni. Kalau nanti sistem kasir punya nomor struk, angka ini
+  perlu ditinjau ulang.
+
+- Laporan berjalan tiap Senin 07.00 WIB. Kalau sampai Senin
+  siang belum masuk, berarti rusak — tidak ada pemberitahuan
+  otomatis untuk kasus ini.</code></pre></div>
+        <div class="catatan">
+          <strong>Orang mengira menulis batasan membuat dirinya terlihat kurang mampu. Yang terjadi kebalikannya.</strong> Klien yang pernah dikecewakan vendor mengenali dokumen ini — hanya orang yang benar-benar tahu cara kerjanya yang bisa menyebutkan batasnya sesempit itu. Yang menjanjikan semuanya beres justru terdengar seperti orang yang belum pernah mengurus sistem yang rusak.
+          <p style="margin-top:8px">Dan kalau suatu saat ada yang salah, dokumen ini menentukan siapa yang menanggung. "Kasir salah input" sudah tertulis sejak awal sebagai di luar cakupan — bukan alasan yang kamu cari-cari belakangan.</p>
+        </div>
+        <div class="aksi">
+          <span class="tag">TULIS SEKARANG, 20 MENIT</span>
+          <p>Buat berkas <code>README.md</code> untuk laporan otomatis apa pun yang sudah kamu bangun (termasuk proyek portofolio Modul M11 Hari 76). Empat bagian: <strong>apa ini</strong> · <strong>jalan kapan &amp; ambil data dari mana</strong> · <strong>kredensial apa, atas nama siapa</strong> · <strong>yang tidak diperiksa</strong>.</p>
+          <p style="margin-top:6px">Kerjakan sekarang, saat kamu masih ingat semuanya. Menulisnya enam bulan lagi butuh dua jam dan hasilnya lebih buruk.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal Kirim Hasil selesai</h3>
+      <p>Modul M11 mengajarimu membuat laporan yang berjalan sendiri. Lima hari ini membuatnya <strong>sampai</strong> — ke kotak masuk klien, dengan angka di judulnya, satu temuan yang bisa ditindaklanjuti, penjagaan yang menahan pengiriman saat datanya tidak wajar, kabar kegagalan yang datang ke kamu dan bukan ke klien, dan serah terima yang membuat klien tidak tersandera.</p>
+      <p style="margin-top:14px"><strong>Sekarang jasa ketiga di daftar Freelance 1 utuh</strong> — "laporan otomatis, masuk email tiap Senin pagi" bukan lagi janji yang belum ada isinya.</p>
+      <div class="catatan" style="margin-top:14px">
+        <strong>Satu kalimat yang layak dibawa dari lima hari ini:</strong> laporan otomatis yang berhenti diam-diam merugikan klien lebih besar daripada laporan yang tidak pernah dibuat — karena selama berminggu-minggu dia mengambil keputusan sambil mengira sedang diberi tahu. Yang kamu jual bukan skripnya. Yang kamu jual adalah <em>kepastian bahwa angkanya masih benar minggu ini.</em>
+      </div>
+      <a class="lanjut" href="https://claude.ai/code/artifact/c1664d77-5877-4da8-ade7-764018718b5c">Lanjut ke Jalur Freelance →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua keluaran di halaman ini dihasilkan dengan menjalankan kodenya sungguhan — kecuali langkah pengiriman email di Hari 1, yang butuh akun dan sandimu sendiri, dan memang harus kamu uji sendiri.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>

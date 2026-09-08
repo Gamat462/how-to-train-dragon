@@ -1,0 +1,938 @@
+<title>Bekal Alat Kantor</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
+      --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
+    --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.65;
+    padding:16px 16px 80px;
+  }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; margin:0; color:var(--ink); }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  p{ margin:0; }
+  a{ color:var(--teal); }
+  code{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:0.87em;
+        background:var(--code-bg); padding:2px 6px; border-radius:5px; }
+
+  .nav{
+    position:sticky; top:0; z-index:20; max-width:820px; margin:0 auto 20px;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); padding:8px; display:flex; gap:4px; flex-wrap:wrap;
+    align-items:center;
+  }
+  .nav .lbl{ font-family:"Fraunces",serif; font-weight:600; font-size:0.9rem; padding:4px 8px; margin-right:auto; }
+  .nav button{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.82rem; font-weight:600;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--ink-soft);
+    padding:7px 13px; border-radius:999px; cursor:pointer;
+  }
+  .nav button:hover{ color:var(--ink); }
+  .nav button[aria-selected="true"]{ background:var(--teal); color:#fff; border-color:var(--teal); }
+  .nav button:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .nav button.done::after{ content:" ✓"; }
+
+  .kembali{ max-width:820px; margin:0 auto 14px; font-size:0.85rem; }
+  .kembali a{ display:inline-flex; align-items:center; gap:5px; text-decoration:none; color:var(--ink-soft); }
+  .kembali a:hover{ color:var(--teal); }
+
+  .page{
+    max-width:820px; margin:0 auto; background:var(--surface);
+    border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow);
+    padding:34px 38px 42px;
+  }
+  @media (max-width:600px){ .page{ padding:24px 18px 30px; } }
+
+  header{ margin-bottom:26px; }
+  .eyebrow{ font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--teal); display:block; margin-bottom:8px; }
+  h1{ font-size:clamp(1.7rem,4.5vw,2.3rem); font-weight:600; }
+  .lede{ margin-top:10px; color:var(--ink-soft); font-size:0.98rem; max-width:60ch; }
+
+  .day{ display:none; }
+  .day.aktif{ display:block; }
+  .day-head{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    padding-bottom:12px; border-bottom:2px solid var(--line); margin-bottom:8px;
+  }
+  .day-head .n{ font-family:"IBM Plex Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold); }
+  .day-head h2{ font-size:1.45rem; font-weight:600; }
+  .day-head .waktu{ font-size:0.84rem; color:var(--ink-soft); margin-left:auto; }
+  .tujuan{
+    background:var(--teal-soft); border-radius:12px; padding:13px 17px;
+    font-size:0.93rem; margin:16px 0 24px;
+  }
+  .tujuan strong{ color:var(--teal); }
+
+  .langkah{
+    border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+    background:var(--surface-2); overflow:hidden;
+  }
+  .langkah-head{
+    display:grid; grid-template-columns:auto 1fr auto; gap:12px; align-items:center;
+    padding:14px 16px 10px;
+  }
+  .langkah-head .num{
+    font-family:"IBM Plex Mono",monospace; font-size:0.78rem; font-weight:600;
+    background:var(--teal); color:#fff; width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .langkah-head h3{ font-size:1.02rem; font-weight:600; }
+  .langkah-body{ padding:0 16px 16px; }
+  .langkah-body > p{ font-size:0.93rem; margin-bottom:10px; }
+  .langkah-body > p:last-child{ margin-bottom:0; }
+
+  .cek{ display:flex; align-items:center; gap:7px; flex:none; }
+  .cek input{ width:17px; height:17px; accent-color:var(--teal); cursor:pointer; }
+  .cek label{ font-size:0.76rem; color:var(--ink-soft); cursor:pointer; user-select:none; }
+  .langkah.selesai{ opacity:0.62; }
+  .langkah.selesai .langkah-head .num{ background:var(--ink-soft); }
+
+  .aksi{ border-left:3px solid var(--teal); background:var(--surface); border-radius:0 10px 10px 0;
+         padding:12px 14px; margin:12px 0; }
+  .aksi .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+              color:var(--teal); display:block; margin-bottom:7px; }
+  .hasil{ border-left:3px solid var(--gold); background:var(--surface); border-radius:0 10px 10px 0;
+          padding:12px 14px; margin:12px 0; }
+  .hasil .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
+               color:var(--gold); display:block; margin-bottom:7px; }
+
+  .kode{ position:relative; margin:8px 0; }
+  pre{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:0.79rem; line-height:1.55;
+    background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+    padding:13px 15px; overflow-x:auto; margin:0;
+  }
+  pre code{ background:none; padding:0; font-size:inherit; }
+  .salin{
+    position:absolute; top:7px; right:7px;
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.7rem; font-weight:600;
+    background:var(--surface); color:var(--ink-soft);
+    border:1px solid var(--line); border-radius:7px; padding:4px 10px; cursor:pointer;
+  }
+  .salin:hover{ color:var(--ink); border-color:var(--teal); }
+  .salin:focus-visible{ outline:2px solid var(--teal); outline-offset:2px; }
+  .salin.ok{ color:var(--teal); border-color:var(--teal); }
+
+  table{ width:100%; border-collapse:collapse; font-size:0.8rem; margin:8px 0; }
+  .tabel-bungkus{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+  th,td{ text-align:left; padding:6px 11px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  thead th{ background:var(--surface-2); font-family:"IBM Plex Mono",monospace;
+            font-size:0.64rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
+  th.n{ text-align:right; }
+  td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+
+  details{ margin-top:11px; }
+  summary{
+    cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--gold);
+    padding:7px 11px; background:var(--gold-soft); border-radius:9px; list-style:none;
+  }
+  summary::-webkit-details-marker{ display:none; }
+  summary::before{ content:"▸ "; }
+  details[open] summary::before{ content:"▾ "; }
+  summary:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  details .isi{ padding:11px 13px; font-size:0.88rem; color:var(--ink-soft); }
+  details .isi p{ margin-bottom:8px; }
+  details .isi p:last-child{ margin-bottom:0; }
+
+  .catatan{ background:var(--gold-soft); border-radius:11px; padding:12px 15px;
+            font-size:0.89rem; margin:14px 0; }
+  .catatan strong{ color:var(--gold); }
+  .bahaya{ background:var(--alert-soft); border-radius:11px; padding:12px 15px;
+           font-size:0.89rem; margin:14px 0; }
+  .bahaya strong{ color:var(--alert); }
+
+  .selesai-hari{
+    border:2px dashed var(--teal); border-radius:14px; padding:18px 20px;
+    margin-top:26px; background:var(--teal-soft);
+  }
+  .selesai-hari h3{ font-size:1.05rem; margin-bottom:8px; }
+  .selesai-hari p{ font-size:0.91rem; }
+  .selesai-hari ul{ margin:8px 0 0; padding-left:20px; font-size:0.91rem; }
+  .selesai-hari li{ margin-bottom:5px; }
+
+  .kemajuan{
+    display:flex; align-items:center; gap:12px; margin:18px 0 4px;
+    font-size:0.82rem; color:var(--ink-soft);
+  }
+  .bar{ flex:1; height:7px; background:var(--surface-2); border-radius:99px; overflow:hidden;
+        border:1px solid var(--line); }
+  .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
+
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
+
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
+          font-size:0.85rem; color:var(--ink-soft); }
+  .tombol-reset{
+    font-family:"IBM Plex Sans",sans-serif; font-size:0.76rem;
+    background:none; border:1px solid var(--line); color:var(--ink-soft);
+    padding:5px 12px; border-radius:8px; cursor:pointer; margin-top:10px;
+  }
+  .tombol-reset:hover{ border-color:var(--alert); color:var(--alert); }
+  .lanjut{
+    display:block; text-align:center; margin-top:14px; text-decoration:none;
+    background:var(--teal); color:#fff; font-family:"Fraunces",serif; font-weight:600;
+    font-size:1rem; padding:14px 20px; border-radius:12px;
+  }
+  .lanjut:hover{ opacity:0.92; }
+</style>
+
+
+<div class="kembali"><a href="https://claude.ai/code/artifact/ffcc437e-1901-484c-a73b-128865461cd1">← Kembali ke Bekal Excel Kantor</a></div>
+
+<nav class="nav" aria-label="Pilih hari">
+  <span class="lbl">Bekal Alat Kantor</span>
+  <button type="button" data-hari="1" aria-selected="true">A1</button>
+  <button type="button" data-hari="2" aria-selected="false">A2</button>
+  <button type="button" data-hari="3" aria-selected="false">A3</button>
+  <button type="button" data-hari="4" aria-selected="false">A4</button>
+  <button type="button" data-hari="5" aria-selected="false">A5</button>
+</nav>
+
+<div class="page">
+
+  <header>
+    <span class="eyebrow mono">Bekal Alat Kantor · 5 hari · Sheets, Looker, Metabase, Airflow, Apps Script</span>
+    <h1>Alat yang disebut lowongan, dan tidak ada di kurikulum ini</h1>
+    <p class="lede">Satu lowongan Moladin menyebut lima alat namanya. Pindaian atas 41 modul pengajaranmu menemukan <strong>Metabase 0, Looker Studio 0, Airflow 0</strong>, Apps Script 2 sebutan lewat.</p>
+    <p class="lede" style="margin-top:10px">Sementara itu kurikulum ini mengajarkan Streamlit dan matplotlib — alat yang bagus, dan yang <strong>tidak disebut satu pun</strong> dari lima lowongan yang saya buka.</p>
+    <p class="lede" style="margin-top:10px">Lima hari ini menutupnya. Kabar baiknya: tidak ada yang benar-benar baru. Metabase dan Looker Studio adalah antarmuka untuk SQL yang sudah kamu kuasai, <code>QUERY()</code> di Sheets memakai SQL secara harfiah, dan DAG Airflow adalah berkas Python yang bisa kamu bedah dengan <code>ast</code> — tanpa memasang Airflow sama sekali.</p>
+
+    <div class="kemajuan">
+      <span id="teks-kemajuan">0 dari 0 langkah</span>
+      <span class="bar"><span id="isi-bar"></span></span>
+    </div>
+  </header>
+
+  <section class="day aktif" data-hari="1">
+    <div class="day-head">
+      <span class="n">HARI 1</span>
+      <h2>Google Sheets sebagai alat kerja, bukan Excel gratisan</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menguasai tiga fungsi Sheets yang tidak ada di Excel dan sering disebut lowongan — lalu membuktikan hasilnya sama dengan SQL dan pandas yang sudah kamu kuasai.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Kenapa modul ini ada</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-1-1"><label for="bekal-alat-kantor-1-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Lowongan Moladin (Data Analyst, 3–5 tahun) menyebut lima alat namanya. Ini hasil pindaian 41 modul pengajaranmu terhadap kelima nama itu:</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang diminta Moladin</th>
+<th class="n">Sebutan di 41 modulmu</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Metabase</td><td class="n"><strong>0</strong></td></tr>
+              <tr><td>Looker Studio</td><td class="n"><strong>0</strong></td></tr>
+              <tr><td>Spreadsheet / Google Sheets</td><td class="n">3 modul, 8 sebutan</td></tr>
+              <tr><td>Apps Script / JavaScript</td><td class="n">2 sebutan</td></tr>
+              <tr><td>Airflow DAG</td><td class="n"><strong>0</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Tiga dari lima bernilai nol.</strong> Kurikulum ini mengajarkan Streamlit dan matplotlib — alat yang bagus dan yang <em>tidak disebut satu pun lowongan yang saya buka</em>. Lima hari ini menutup selisihnya.</div>
+        <div class="catatan"><strong>Kabar baiknya:</strong> tidak satu pun dari kelima alat ini sulit setelah kamu bisa SQL. Metabase dan Looker Studio adalah antarmuka untuk kueri yang sudah kamu tulis. Sheets punya fungsi <code>QUERY</code> yang secara harfiah memakai SQL. DAG Airflow adalah berkas Python. Yang kamu butuhkan cuma peta istilah — dan itu isi modul ini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>QUERY() — SQL di dalam spreadsheet</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-1-2"><label for="bekal-alat-kantor-1-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Fungsi ini tidak ada di Excel, dan ini alasan terkuat memakai Sheets. Isinya benar-benar SQL.</p>
+        <div class="kode"><pre><code>=QUERY(A:D; &quot;select B, sum(D) where C = &#x27;Ojol&#x27; group by B order by sum(D) desc&quot;; 1)
+
+Bacanya:
+  A:D   -&gt; rentang datanya
+  B, D  -&gt; HURUF KOLOM, bukan nama. B = cabang, D = nilai
+  1     -&gt; jumlah baris judul yang harus dilewati</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>cabang</th>
+<th class="n">Hasil QUERY / SQL</th>
+<th class="n">pandas</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Dago</td><td class="n">10.037.691</td><td class="n">10.037.691</td></tr>
+              <tr><td>Riau</td><td class="n">9.587.593</td><td class="n">9.587.593</td></tr>
+              <tr><td>Buah Batu</td><td class="n">6.574.101</td><td class="n">6.574.101</td></tr>
+              <tr><td><strong>TOTAL</strong></td><td class="n"><strong>26.199.385</strong></td><td class="n"></td></tr>
+            </tbody>
+          </table>
+        </div>
+          <p style="margin-top:8px">Diuji atas 500 baris penjualan Juni 2026. SQL, pandas, dan QUERY memberi angka yang sama persis.</p></div>
+        <div class="bahaya"><strong>Jebakan terbesar QUERY: ia memakai HURUF KOLOM, bukan nama kolom.</strong> Kalau seseorang menyisipkan satu kolom di tengah, seluruh rumusmu diam-diam menghitung kolom yang salah — tanpa error. Ini kerabat dekat jebakan VLOOKUP yang sudah kamu pelajari.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sebelum menyerahkan sheet berisi <code>QUERY</code>, kunci kolomnya: Data → Protect sheets and ranges. Atau taruh sel pemeriksa: total hasil QUERY harus sama dengan <code>=SUM()</code> kolom sumbernya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>ARRAYFORMULA & IMPORTRANGE</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-1-3"><label for="bekal-alat-kantor-1-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>=ARRAYFORMULA(IF(D2:D=&quot;&quot;; &quot;&quot;; D2:D*0.11))
+   satu rumus untuk SELURUH kolom -&gt; tidak perlu diseret ke bawah
+   tidak rusak saat baris baru ditambah
+   padanan pandas: df[&quot;ppn&quot;] = df[&quot;nilai&quot;] * 0.11
+
+=IMPORTRANGE(&quot;url_sheet_lain&quot;; &quot;Sheet1!A:D&quot;)
+   menarik data dari berkas lain -&gt; padanan pd.read_csv dari sumber lain</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>total nilai : 66.893.691
+total PPN   : 7.358.306
+cek 11%     : 0.110000</code></pre></div></div>
+        <div class="catatan"><strong>ARRAYFORMULA memecahkan masalah nyata:</strong> rumus yang diseret ke bawah berhenti di baris terakhir yang ada saat itu. Ketika data bertambah, baris baru tidak punya rumus — dan totalmu diam-diam kurang. Ini penyebab yang sama dengan “rentang pivot tidak ikut baris baru” di modul Excel.</div>
+        <div class="bahaya"><strong><code>IMPORTRANGE</code> menarik data klien ke berkas lain.</strong> Sebelum memakainya untuk data klien, baca ulang Bekal Rahasia Klien: siapa saja yang punya akses ke sheet tujuan otomatis bisa melihat data sumbernya.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 1 selesai</h3>
+      <p>Besok: dashboard yang dibuka orang lain — dan satu kesalahan yang membuat angkanya 19 kali terlalu tinggi.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="2">
+    <div class="day-head">
+      <span class="n">HARI 2</span>
+      <h2>Looker Studio & Metabase: dashboard yang dibuka orang lain</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> memahami dua alat yang paling sering disebut lowongan Indonesia, dan menghindari kesalahan agregasi yang paling sering muncul di dashboard.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Apa keduanya, dan bedanya dengan yang sudah kamu pakai</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-2-1"><label for="bekal-alat-kantor-2-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Alat</th>
+<th>Apa itu</th>
+<th>Bedanya dengan Streamlit/matplotlib-mu</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>Looker Studio</strong></td><td>Gratis dari Google. Menyambung ke Sheets, BigQuery, CSV. Seret-lepas.</td><td>Tidak perlu server, tinggal bagi tautan. Klien bisa menyaring sendiri.</td></tr>
+              <tr><td><strong>Metabase</strong></td><td>Dipasang perusahaan, menyambung ke basis data mereka. Ada mode “Question” (seret-lepas) dan mode SQL.</td><td>Kamu menulis SQL yang sudah kamu kuasai, lalu ia jadi grafik dan bisa dijadwalkan.</td></tr>
+              <tr><td><strong>Streamlit</strong> <em>(yang kamu pelajari di M11)</em></td><td>Aplikasi Python yang kamu tulis dan jalankan sendiri.</td><td>Paling luwes, paling sedikit dipakai kantor, dan butuh kamu merawatnya.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">INTINYA</span>
+          <strong>Kamu tidak perlu belajar alat baru — kamu perlu tahu bahwa SQL-mu adalah isinya.</strong> Di Metabase, “Question” yang dibuat dengan seret-lepas bisa kamu buka sebagai SQL dan sunting langsung. Yang kamu bangun di SQL Mahir L1–L5 adalah bahan bakarnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Satu kueri, dan seperti apa ia jadi kartu dashboard</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-2-2"><label for="bekal-alat-kantor-2-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>SELECT cabang,
+       COUNT(*)          AS transaksi,
+       SUM(nilai)        AS omzet,
+       ROUND(AVG(nilai)) AS rata_rata
+FROM penjualan
+GROUP BY cabang
+ORDER BY omzet DESC</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>cabang</th>
+<th class="n">transaksi</th>
+<th class="n">omzet</th>
+<th class="n">rata-rata</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Dago</td><td class="n">205</td><td class="n">27.066.019</td><td class="n">132.029</td></tr>
+              <tr><td>Riau</td><td class="n">178</td><td class="n">24.465.021</td><td class="n">137.444</td></tr>
+              <tr><td>Buah Batu</td><td class="n">117</td><td class="n">15.362.651</td><td class="n">131.305</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="catatan"><strong>Perhatikan kolom transaksi.</strong> Dashboard yang hanya menampilkan omzet akan membuat Dago terlihat terbaik. Tapi rata-rata per transaksinya <em>paling rendah kedua</em>. Selalu sertakan jumlah baris di samping tiap agregat — kalau tidak, pembacanya tidak bisa tahu apakah angka itu berasal dari 205 transaksi atau 3.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Kesalahan dashboard yang paling sering: rata-rata dari rata-rata</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-2-3"><label for="bekal-alat-kantor-2-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Ini terjadi setiap kali seseorang menghitung rata-rata per kelompok, lalu merata-ratakan kolom itu.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>per_cabang = df.groupby(&quot;cabang&quot;)[&quot;nilai&quot;].mean()
+print(&quot;rata-rata DARI rata-rata:&quot;, per_cabang.mean())
+print(&quot;rata-rata SEBENARNYA   :&quot;, df[&quot;nilai&quot;].mean())</code></pre></div>
+        <div class="hasil"><span class="tag">KASUS RINGAN</span>
+          <p><strong>Pada data seimbang</strong> (500 baris, 3 cabang), selisihnya kecil: 133.593 lawan 133.787 — meleset Rp 195, sekitar 0,15%. Mudah tidak terlihat.</p></div>
+<p style="margin-top:12px">Sekarang kasus yang timpang — 20 transaksi butik bernilai besar, 980 transaksi grosir bernilai kecil:</p>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Yang dihitung</th>
+<th class="n">Nilai</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Rata-rata cabang Butik (20 transaksi)</td><td class="n">Rp 5.118.661</td></tr>
+              <tr><td>Rata-rata cabang Grosir (980 transaksi)</td><td class="n">Rp 29.866</td></tr>
+              <tr><td><strong>Rata-rata DARI rata-rata</strong></td><td class="n"><strong>Rp 2.574.263</strong></td></tr>
+              <tr><td><strong>Rata-rata SEBENARNYA</strong></td><td class="n"><strong>Rp 131.642</strong></td></tr>
+              <tr><td>Selisih</td><td class="n">Rp 2.442.622 — <strong>19,56 kali terlalu tinggi</strong></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>Dashboard itu akan melaporkan rata-rata transaksi Rp 2,57 juta padahal sebenarnya Rp 131.642.</strong> Tidak ada error, grafiknya cantik, dan keputusan yang diambil dari situ akan salah total. Penyebabnya satu: 20 dan 980 diperlakukan sama beratnya.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          <strong>Obatnya, dan hafalkan:</strong> jangan pernah merata-ratakan kolom rata-rata. Hitung ulang dari data mentah, atau pakai rata-rata tertimbang: <code>sum(rata2_i × n_i) / sum(n_i)</code>. Saya sudah mengujinya — rumus itu memberi <strong>Rp 131.642</strong>, sama persis dengan rata-rata sebenarnya.</div>
+        <div class="catatan"><strong>Ini kerabat langsung paradoks Simpson</strong> yang kamu pelajari di MAT L1 Hari 5. Akar masalahnya sama: menggabungkan kelompok yang ukurannya berbeda tanpa menimbang.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 2 selesai</h3>
+      <p>Besok: membaca DAG Airflow — yang diminta lowongan, dan ternyata cuma membaca berkas Python.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="3">
+    <div class="day-head">
+      <span class="n">HARI 3</span>
+      <h2>Membaca DAG Airflow tanpa memasang Airflow</h2>
+      <span class="waktu">± 3 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> bisa menjawab pertanyaan “kenapa laporan pagi ini kosong?” dengan membaca berkas DAG — persis yang diminta lowongan Moladin.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Apa yang sebenarnya diminta</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-3-1"><label for="bekal-alat-kantor-3-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan">Kutipan apa adanya dari lowongan Moladin: <em>“<strong>Basic comfort reading or modifying Airflow DAGs</strong> to check data dependencies and pipeline execution health.”</em><p style="margin-top:8px">Perhatikan kata <strong>reading</strong>. Mereka tidak meminta kamu membangun platform data. Mereka meminta kamu bisa membuka satu berkas dan menjawab: kenapa laporannya belum ada.</p></div>
+        <div class="hasil"><span class="tag">KABAR BAIKNYA</span>
+          <strong>DAG adalah berkas Python biasa.</strong> Kamu sudah bisa membaca Python sejak Bekal Python. Yang perlu ditambahkan cuma lima istilah dan satu operator.</div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Istilah</th>
+<th>Artinya</th>
+<th>Yang sudah kamu kenal</th>
+</tr></thead>
+            <tbody>
+              <tr><td><strong>DAG</strong></td><td>Satu alur pekerjaan terjadwal</td><td>Satu skrip yang jalan tiap hari</td></tr>
+              <tr><td><strong>Task</strong></td><td>Satu langkah di dalamnya</td><td>Satu fungsi</td></tr>
+              <tr><td><strong>Operator</strong></td><td>Jenis langkahnya (Python, SQL, Bash)</td><td>Jenis pekerjaannya</td></tr>
+              <tr><td><strong>schedule</strong></td><td>Kapan jalan, dalam format cron</td><td><code>cron</code> di M11</td></tr>
+              <tr><td><strong>&gt;&gt;</strong></td><td>“dijalankan sebelum”</td><td>panah urutan</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Berkas DAG sungguhan</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-3-2"><label for="bekal-alat-kantor-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>with DAG(
+    dag_id=&quot;laporan_harian_penjualan&quot;,
+    default_args={&quot;owner&quot;:&quot;tim-data&quot;, &quot;retries&quot;:2,
+                  &quot;retry_delay&quot;:timedelta(minutes=5), &quot;email_on_failure&quot;:True},
+    start_date=datetime(2026, 1, 1),
+    schedule=&quot;0 6 * * *&quot;,
+    catchup=False,
+) as dag:
+
+    tarik_pos       = PythonOperator(task_id=&quot;tarik_data_pos&quot;, ...)
+    tarik_ecommerce = PythonOperator(task_id=&quot;tarik_data_ecommerce&quot;, ...)
+    gabung          = PythonOperator(task_id=&quot;gabungkan_sumber&quot;, ...)
+    uji_mutu        = PythonOperator(task_id=&quot;uji_mutu_data&quot;, ...)
+    muat_gudang     = PostgresOperator(task_id=&quot;muat_ke_gudang&quot;, sql=&quot;sql/muat_harian.sql&quot;)
+    kirim_email     = PythonOperator(task_id=&quot;kirim_ringkasan&quot;, ...)
+
+    [tarik_pos, tarik_ecommerce] &gt;&gt; gabung &gt;&gt; uji_mutu &gt;&gt; muat_gudang &gt;&gt; kirim_email</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Baca baris terakhir dulu, selalu. Baris itu <strong>seluruh alurnya</strong>. Tanda kurung siku berarti dua tugas jalan <em>bersamaan</em>; tanda <code>&gt;&gt;</code> berarti yang kiri harus selesai dulu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Bedah dengan Python — tanpa memasang Airflow</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-3-3"><label for="bekal-alat-kantor-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Karena DAG itu berkas Python, kamu bisa membedahnya dengan pustaka <code>ast</code> bawaan Python. Ini berguna nyata: kamu bisa memeriksa DAG di laptopmu tanpa akses ke server Airflow perusahaan.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import ast
+pohon = ast.parse(open(&quot;laporan_harian_dag.py&quot;).read())
+
+# semua task_id
+for n in ast.walk(pohon):
+    if isinstance(n, ast.Call):
+        for kw in n.keywords:
+            if kw.arg == &quot;task_id&quot;:
+                op = n.func.id if isinstance(n.func, ast.Name) else n.func.attr
+                print(f&quot;{kw.value.value:&lt;22} &lt;- {op}&quot;)
+
+# urutan ketergantungan
+for n in ast.walk(pohon):
+    if isinstance(n, ast.Expr) and isinstance(n.value, ast.BinOp):
+        print(ast.unparse(n.value).replace(&quot; &gt;&gt; &quot;, &quot;  -&gt;  &quot;))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <div class="kode"><pre><code>tarik_data_pos         &lt;- PythonOperator
+tarik_data_ecommerce   &lt;- PythonOperator
+gabungkan_sumber       &lt;- PythonOperator
+uji_mutu_data          &lt;- PythonOperator
+muat_ke_gudang         &lt;- PostgresOperator
+kirim_ringkasan        &lt;- PythonOperator
+jumlah tugas: 6
+
+[tarik_pos, tarik_ecommerce]  -&gt;  gabung  -&gt;  uji_mutu  -&gt;  muat_gudang  -&gt;  kirim_email</code></pre></div></div>
+        <div class="bahaya"><strong>Peringatan jujur:</strong> Airflow <em>tidak</em> terpasang di lingkungan tempat modul ini disusun — saya sudah mencoba dan gagal membangunnya. Jadi tidak ada satu pun kode Airflow yang saya jalankan. Yang saya jalankan adalah pembedahan <code>ast</code> di atas, dan itu berjalan tanpa Airflow karena DAG memang berkas Python. Untuk melihat Airflow bekerja sungguhan, kamu butuh aksesnya di tempat kerja.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Lima pertanyaan yang sekarang bisa kamu jawab</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-3-4"><label for="bekal-alat-kantor-3-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Pertanyaan dari rekan kerja</th>
+<th>Jawaban, dan dari baris mana</th>
+</tr></thead>
+            <tbody>
+              <tr><td>“Jam berapa laporan ini jalan?”</td><td>06.00 tiap hari — <code>schedule="0 6 * * *"</code></td></tr>
+              <tr><td>“Kalau gagal, dia coba lagi?”</td><td>Ya, 2 kali, jeda 5 menit — <code>retries</code> &amp; <code>retry_delay</code></td></tr>
+              <tr><td>“Kenapa e-commerce belum masuk?”</td><td>Dua penarikan jalan paralel; salah satunya bisa gagal sendiri</td></tr>
+              <tr><td>“Kalau uji mutu gagal, datanya tetap masuk?”</td><td><strong>Tidak.</strong> <code>muat_ke_gudang</code> ada di belakang <code>uji_mutu_data</code></td></tr>
+              <tr><td>“Siapa yang harus dihubungi?”</td><td><code>owner="tim-data"</code>, dan mereka dapat email otomatis</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">INI YANG DINILAI</span>
+          <strong>Kelima jawaban itu ada di satu berkas, dan kamu membacanya dalam dua menit.</strong> Itu persis “basic comfort reading Airflow DAGs” yang diminta lowongan. Kamu tidak perlu bisa membangun pipeline untuk menjawabnya.</div>
+        <div class="catatan"><strong>Kaitannya dengan yang sudah kamu punya:</strong> <code>uji_mutu_data</code> yang menghentikan alur sebelum data masuk gudang adalah gagasan yang sama persis dengan berkas uji mutu berambang di SQL Mahir L4, dan dengan penahanan pengiriman di Bekal Kirim Hasil. Alatnya baru; caranya berpikir sudah kamu punya.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 3 selesai</h3>
+      <p>Besok: Apps Script — otomasi kecil yang membuat spreadsheet berhenti dikerjakan tangan.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="4">
+    <div class="day-head">
+      <span class="n">HARI 4</span>
+      <h2>Apps Script: otomasi kecil di dalam spreadsheet</h2>
+      <span class="waktu">± 2,5 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengenal cukup JavaScript untuk membaca dan mengubah skrip otomasi Google Sheets — yang disebut lowongan sebagai “build script integrations”.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Peta Python ke JavaScript</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-4-1"><label for="bekal-alat-kantor-4-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Apps Script adalah JavaScript. Kalau kamu sudah bisa Python, yang berbeda hanya tanda baca.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Python</th>
+<th>JavaScript / Apps Script</th>
+</tr></thead>
+            <tbody>
+              <tr><td><code>x = 5</code></td><td><code>let x = 5;</code> — titik koma, dan <code>let</code></td></tr>
+              <tr><td><code>def f(a):</code></td><td><code>function f(a) {</code> … <code>}</code> — kurung kurawal, bukan indentasi</td></tr>
+              <tr><td><code>for x in daftar:</code></td><td><code>for (const x of daftar) {</code></td></tr>
+              <tr><td><code>if a and b:</code></td><td><code>if (a &amp;&amp; b) {</code></td></tr>
+              <tr><td><code>len(a)</code></td><td><code>a.length</code></td></tr>
+              <tr><td><code>print()</code></td><td><code>Logger.log()</code></td></tr>
+              <tr><td><code>None</code> / <code>True</code></td><td><code>null</code> / <code>true</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Perbedaan yang paling sering menjebak pendatang dari Python:</strong> di JavaScript, <code>{}</code> menentukan blok, dan indentasi tidak berarti apa-apa. Kode yang rapi tapi kurang satu kurung kurawal akan berjalan salah tanpa terlihat salah.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Skrip yang benar-benar berguna</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-4-2"><label for="bekal-alat-kantor-4-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>function kirimPeringatanStokMenipis() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(&quot;Stok&quot;);
+  const data  = sheet.getDataRange().getValues();   // baris 0 = judul
+  const menipis = [];
+
+  for (let i = 1; i &lt; data.length; i++) {
+    const nama = data[i][0];
+    const sisa = data[i][2];
+    const min  = data[i][3];
+    if (sisa &lt; min) {
+      menipis.push(nama + &quot;: sisa &quot; + sisa + &quot;, minimum &quot; + min);
+    }
+  }
+
+  if (menipis.length &gt; 0) {
+    MailApp.sendEmail(
+      &quot;gudang@perusahaan.co.id&quot;,
+      &quot;Peringatan stok: &quot; + menipis.length + &quot; barang di bawah minimum&quot;,
+      menipis.join(&quot;\n&quot;)
+    );
+  }
+}</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka Google Sheets → Extensions → Apps Script, tempel, ganti alamat email, lalu Run. Izinkan aksesnya sekali. Setelah itu: Triggers → Add Trigger → Time-driven → Day timer. Sekarang ia jalan sendiri tiap hari.</div>
+        <div class="catatan"><strong>Perhatikan <code>if (menipis.length &gt; 0)</code>.</strong> Tanpa baris itu, skrip mengirim email kosong setiap hari, dan dalam seminggu tidak ada yang membacanya lagi. Ini pelajaran yang sama dengan Bekal Kirim Hasil: <em>kirim hanya kalau ada yang perlu dikirim</em>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Batas yang harus kamu tahu sebelum menjanjikan sesuatu</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-4-3"><label for="bekal-alat-kantor-4-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Batas</th>
+<th>Akun gratis</th>
+<th>Kenapa penting</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Waktu jalan satu skrip</td><td>6 menit</td><td>Skrip yang mengolah puluhan ribu baris akan terpotong di tengah</td></tr>
+              <tr><td>Email per hari</td><td>100</td><td>Peringatan per baris akan menabraknya; kirim satu ringkasan</td></tr>
+              <tr><td>Pemicu waktu</td><td>20 per skrip</td><td>Cukup untuk hampir semua kebutuhan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Batas 6 menit adalah yang paling sering menggigit.</strong> Skrip berhenti di tengah, sebagian pekerjaan selesai dan sebagian tidak, dan <em>tidak ada pesan error yang dikirim ke siapa pun</em>. Kalau pekerjaannya lebih besar dari itu, pindahkan ke Python.</div>
+        <div class="hasil"><span class="tag">KAPAN PAKAI YANG MANA</span>
+          <strong>Aturan pembagian tugas:</strong> Apps Script untuk pemicu dan pemberitahuan kecil yang harus hidup <em>di dalam</em> spreadsheet; Python untuk pengolahan sesungguhnya. Jangan memakai Apps Script menggantikan pandas — itu memakai obeng untuk memaku.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 4 selesai</h3>
+      <p>Besok penutup: memilih alat, dan menuliskannya di CV tanpa melebih-lebihkan.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="5">
+    <div class="day-head">
+      <span class="n">HARI 5</span>
+      <h2>Memilih alat, dan menulisnya di CV secara jujur</h2>
+      <span class="waktu">± 2 jam</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> punya aturan memilih di antara tujuh alat yang kini kamu kenal, dan kalimat CV yang benar — bukan yang menggelembung.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Tabel keputusan</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-5-1"><label for="bekal-alat-kantor-5-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Kalau…</th>
+<th>Pakai</th>
+<th>Alasan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Klien perlu mengutak-atik angkanya sendiri</td><td>Excel / Sheets</td><td>Mereka bisa membukanya</td></tr>
+              <tr><td>Beberapa orang perlu melihat angka yang sama, diperbarui</td><td>Looker Studio</td><td>Gratis, tinggal bagi tautan</td></tr>
+              <tr><td>Perusahaan sudah punya basis data</td><td>Metabase</td><td>SQL-mu langsung jadi dashboard terjadwal</td></tr>
+              <tr><td>Pengolahan berat, berulang, harus bisa diuji</td><td>Python</td><td>Bisa dites, bisa dilacak riwayatnya</td></tr>
+              <tr><td>Alur banyak langkah, terjadwal, ada ketergantungan</td><td>Airflow <em>(dijalankan tim data)</em></td><td>Kamu membacanya, belum tentu membangunnya</td></tr>
+              <tr><td>Pemicu kecil di dalam spreadsheet</td><td>Apps Script</td><td>Hidup bersama datanya</td></tr>
+              <tr><td>Analisis sekali pakai untuk dirimu sendiri</td><td>Notebook</td><td>Tidak perlu dirapikan</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Kesalahan paling mahal bukan memilih alat yang salah — tapi membangun sesuatu yang tidak akan dibuka siapa pun.</strong> Dashboard Streamlit yang cantik dan butuh kamu menjalankannya kalah oleh sheet sederhana yang bisa dibuka klien kapan saja. Tanyakan lebih dulu: <em>siapa yang akan membukanya, dan lewat apa?</em></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Tulis CV-mu, tanpa melebihkan</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-5-2"><label for="bekal-alat-kantor-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Jangan tulis</th>
+<th>Tulis</th>
+</tr></thead>
+            <tbody>
+              <tr><td>“Menguasai Airflow”</td><td>“Membaca dan memodifikasi DAG Airflow untuk menelusuri ketergantungan data”</td></tr>
+              <tr><td>“Ahli Looker Studio &amp; Metabase”</td><td>“Membangun dashboard di Looker Studio; menulis pertanyaan SQL di Metabase”</td></tr>
+              <tr><td>“Menguasai Excel”</td><td>“Excel: pivot, XLOOKUP, SUMIFS, Power Query; memilih Excel atau Python berdasar ukuran data”</td></tr>
+              <tr><td>“Full-stack data”</td><td>sebut alatnya satu per satu, dan sejauh mana</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="hasil"><span class="tag">KENAPA VERSI JUJUR LEBIH KUAT</span>
+          <strong>Kalimat di kolom kanan lebih pendek untuk dibantah dan lebih sulit dijatuhkan di wawancara.</strong> Kalau kamu menulis “menguasai Airflow” dan pewawancara bertanya cara menangani <em>backfill</em>, kamu selesai. Kalau kamu menulis “membaca DAG untuk menelusuri ketergantungan”, kamu bisa menunjukkan persis yang kamu bisa — dan itu yang mereka minta.</div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Perbarui CV-mu sekarang dengan baris-baris versi kanan. Untuk tiap baris, siapkan satu contoh nyata dari modul ini yang bisa kamu ceritakan dalam 30 detik.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Ujian: enam soal</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-5-3"><label for="bekal-alat-kantor-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>1. QUERY() di Sheets memakai apa untuk menunjuk kolom, dan
+   kenapa itu berbahaya?
+2. Dashboard melaporkan rata-rata transaksi Rp 2,57 juta.
+   Data mentahnya Rp 131.642. Apa yang terjadi?
+3. Tulis rumus rata-rata tertimbang yang benar.
+4. Di DAG: [a, b] &gt;&gt; c &gt;&gt; d. Kalau b gagal, apa yang jalan?
+5. Skrip Apps Script berhenti di menit ke-6, separuh pekerjaan
+   selesai. Apa yang harus kamu lakukan?
+6. Klien minta laporan bulanan yang bisa dia saring sendiri
+   per cabang. Alat apa, dan kenapa bukan Streamlit?</code></pre></div>
+        <details>
+          <summary>Kunci jawaban</summary>
+          <div class="isi">
+            <p><strong>1.</strong> <strong>Huruf kolom</strong> (A, B, C), bukan nama kolom. Kalau ada yang menyisipkan kolom, rumusnya menghitung kolom yang salah tanpa error. Lindungi rentangnya, dan pasang sel pemeriksa total.</p>
+            <p><strong>2.</strong> <strong>Rata-rata dari rata-rata.</strong> Cabang dengan 20 transaksi diperlakukan seberat cabang dengan 980. Terukur: 19,56 kali terlalu tinggi.</p>
+            <p><strong>3.</strong> <code>sum(rata2_i × n_i) / sum(n_i)</code>. Diuji memberi Rp 131.642 — sama persis dengan rata-rata data mentah.</p>
+            <p><strong>4.</strong> <code>a</code> tetap jalan (paralel dengan b). <code>c</code> dan <code>d</code> <strong>tidak jalan</strong>, karena c menunggu <em>keduanya</em> selesai.</p>
+            <p><strong>5.</strong> Jangan menambal skripnya — pindahkan pekerjaannya ke Python. Batas 6 menit itu keras, dan skrip yang terpotong tidak memberi tahu siapa pun. Sementara itu, periksa data mana yang sudah terlanjur diproses.</p>
+            <p><strong>6.</strong> <strong>Looker Studio</strong> (atau Metabase kalau perusahaannya punya). Bukan Streamlit, karena Streamlit butuh server yang kamu jalankan dan rawat; klien tidak bisa sekadar membuka tautan setahun kemudian.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Yang tertutup, dan yang jujur belum</h3>
+        <span class="cek"><input type="checkbox" id="bekal-alat-kantor-5-4"><label for="bekal-alat-kantor-5-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>Sebelum modul ini</th>
+<th>Sesudah</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Metabase: <strong>0 sebutan</strong> di 41 modul</td><td>Tahu ia antarmuka untuk SQL yang sudah kamu kuasai</td></tr>
+              <tr><td>Looker Studio: <strong>0</strong></td><td>Tahu kapan memakainya alih-alih Streamlit</td></tr>
+              <tr><td>Airflow: <strong>0</strong></td><td>Bisa membaca DAG dan menjawab lima pertanyaan operasional</td></tr>
+              <tr><td>Apps Script: 2 sebutan lewat</td><td>Bisa menulis pemicu otomatis, dan tahu batas 6 menitnya</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bahaya"><strong>Yang tidak bisa saya berikan di sini:</strong> saya tidak bisa menjalankan Looker Studio, Metabase, maupun Apps Script dari lingkungan penyusunan modul ini, dan Airflow gagal saya pasang. Yang saya jalankan dan verifikasi: kueri SQL, padanan pandas, aritmetika rata-rata tertimbang, dan pembedahan <code>ast</code> atas berkas DAG. Sisanya adalah pemetaan konsep yang harus kamu buktikan sendiri di alatnya — dan tiap hari di modul ini memberi tahu persis apa yang harus muncul kalau kamu melakukannya dengan benar.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Bekal Alat Kantor selesai</h3>
+      <p>Tiga alat yang tadinya bernilai nol sekarang punya isi. Berikutnya: bahasa yang dipakai menulis semua lowongan itu.</p>
+          <a class="lanjut" href="https://claude.ai/code/artifact/746fbb14-8c40-41a3-9882-5af02e150b66">Lanjut ke Bekal Bahasa Inggris Kerja →</a>
+</div>
+  </section>
+
+  <footer>
+    <p>Kemajuanmu tersimpan otomatis di browser ini.</p>
+    <p style="margin-top:10px"><strong>Apa yang saya jalankan dan apa yang tidak.</strong> Dijalankan dan diverifikasi: seluruh kueri SQL dan padanan pandas-nya, aritmetika rata-rata tertimbang, dan pembedahan <code>ast</code> atas berkas DAG. <strong>Tidak dijalankan:</strong> Looker Studio, Metabase, Google Sheets, dan Apps Script — keempatnya tidak bisa diakses dari lingkungan penyusunan modul ini, dan Airflow gagal dipasang. Bagian-bagian itu adalah pemetaan konsep, dan tiap langkah menyebutkan apa yang harus muncul supaya kamu bisa memeriksanya sendiri.</p>
+    <p style="margin-top:10px">Kutipan syarat lowongan: Moladin, Indeed Indonesia, 31 Agustus 2026.</p>
+    <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var KUNCI = "bekal-alat-kantor";
+  function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
+  function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
+
+  var kotak = Array.prototype.slice.call(document.querySelectorAll('.cek input[type=checkbox]'));
+  var tombolHari = Array.prototype.slice.call(document.querySelectorAll('.nav button[data-hari]'));
+  var bagian = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+  function perbaruiKemajuan(){
+    var n = kotak.filter(function(k){ return k.checked; }).length;
+    var t = kotak.length;
+    var el = document.getElementById('teks-kemajuan');
+    var bar = document.getElementById('isi-bar');
+    if (el) el.textContent = n + " dari " + t + " langkah";
+    if (bar) bar.style.width = (t ? (n/t*100) : 0) + "%";
+    tombolHari.forEach(function(b){
+      var h = b.getAttribute('data-hari');
+      var sec = bagian.filter(function(s){ return s.getAttribute('data-hari') === h; })[0];
+      if (!sec) return;
+      var kk = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox]'));
+      var semua = kk.length > 0 && kk.every(function(k){ return k.checked; });
+      b.classList.toggle('done', semua);
+    });
+  }
+
+  var simpan = baca();
+  kotak.forEach(function(k){
+    if (simpan[k.id]) { k.checked = true; var l = k.closest('.langkah'); if (l) l.classList.add('selesai'); }
+    k.addEventListener('change', function(){
+      var s = baca();
+      if (k.checked) { s[k.id] = 1; } else { delete s[k.id]; }
+      tulis(s);
+      var l = k.closest('.langkah');
+      if (l) l.classList.toggle('selesai', k.checked);
+      perbaruiKemajuan();
+    });
+  });
+
+  tombolHari.forEach(function(b){
+    b.addEventListener('click', function(){
+      var h = b.getAttribute('data-hari');
+      tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+      bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === h); });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { localStorage.setItem(KUNCI + "-hari", h); } catch(e){}
+    });
+  });
+
+  try {
+    var hariTersimpan = localStorage.getItem(KUNCI + "-hari");
+    if (hariTersimpan) {
+      var tb = tombolHari.filter(function(b){ return b.getAttribute('data-hari') === hariTersimpan; })[0];
+      if (tb) {
+        tombolHari.forEach(function(x){ x.setAttribute('aria-selected', x === tb ? 'true' : 'false'); });
+        bagian.forEach(function(s){ s.classList.toggle('aktif', s.getAttribute('data-hari') === hariTersimpan); });
+      }
+    }
+  } catch(e){}
+
+  Array.prototype.slice.call(document.querySelectorAll('.salin')).forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentElement.querySelector('pre');
+      if (!pre) return;
+      var teks = pre.innerText;
+      function sukses(){
+        var lama = b.textContent;
+        b.textContent = "Tersalin ✓";
+        b.classList.add('ok');
+        setTimeout(function(){ b.textContent = lama; b.classList.remove('ok'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(teks).then(sukses).catch(function(){ cadangan(teks, sukses); });
+      } else { cadangan(teks, sukses); }
+    });
+  });
+
+  function cadangan(teks, cb){
+    var ta = document.createElement('textarea');
+    ta.value = teks; ta.setAttribute('readonly',''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); cb(); } catch(e){}
+    document.body.removeChild(ta);
+  }
+
+  var reset = document.getElementById('reset');
+  if (reset) {
+    reset.addEventListener('click', function(){
+      kotak.forEach(function(k){ k.checked = false; var l = k.closest('.langkah'); if (l) l.classList.remove('selesai'); });
+      tulis({});
+      perbaruiKemajuan();
+    });
+  }
+
+  perbaruiKemajuan();
+})();
+</script>
