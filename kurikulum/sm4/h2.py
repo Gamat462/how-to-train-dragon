@@ -28,8 +28,9 @@ print(f"{ms:.1f} ms   hasil = {h[0][0]}")
 rencana(A)"""),
     blok("hasil", "<pre><code>52.6 ms   hasil = 33993\n"
                   "    SCAN transaksi USING COVERING INDEX idx_tgl</code></pre>", "HARUS MUNCUL"),
-    "<p>Index-nya <em>disebut</em> di rencana, tapi kata di depannya <strong>SCAN</strong>. "
-    "Index-nya ada; index-nya tidak menolong.</p>")
+    "<p>Index yang baru kamu buat <em>disebut</em> di rencana — tapi kata di depannya "
+    "<strong>SCAN</strong>. Index-mu ada; index-mu tidak menolong. Kalau kamu berhenti membaca "
+    "di nama index-nya saja, kamu akan menyimpulkan sebaliknya.</p>")
 
 langkah("Tanyakan hal yang sama, bentuk lain",
     blok("aksi", "Jangan ubah pertanyaannya. Ubah cara menuliskannya.", "LAKUKAN"),
@@ -40,8 +41,9 @@ rencana(B)"""),
     blok("hasil", "<pre><code>1.1 ms   hasil = 33993\n"
                   "    SEARCH transaksi USING COVERING INDEX idx_tgl (tanggal&gt;? AND tanggal&lt;?)</code></pre>",
          "HARUS MUNCUL"),
-    "<p><strong>33993 dan 33993.</strong> Jawaban dua query itu identik. Yang satu 52,6 ms, "
-    "yang satu 1,1 ms — <strong>sekitar 47 kali</strong>, hanya karena cara menulisnya.</p>")
+    "<p><strong>33993 dan 33993.</strong> Dua query yang kamu jalankan menjawab hal yang sama "
+    "persis. Yang satu 52,6 ms, yang satu 1,1 ms — <strong>sekitar 47 kali</strong>, hanya "
+    "karena cara kamu menuliskannya.</p>")
 
 langkah("Kenapa bentuk pertama membunuh index-nya",
     blok("aksi", "Tidak ada yang dijalankan di langkah ini. Baca dua kalimat, lalu lanjut.", "LAKUKAN"),
@@ -72,6 +74,19 @@ WHERE tanggal >= '2024-01-01' AND tanggal <= '2024-01-31'""", salin=False),
                    "Pakai <em>lebih-kecil-dari hari pertama bulan berikutnya</em> sebagai "
                    "kebiasaan, dan ini tidak akan terjadi padamu."))
 
+langkah("Salah ketik nama kolom, dan bedanya dengan salah ketik nama tabel",
+    blok("aksi", "Sekarang salah ketik <em>kolomnya</em>, bukan tabelnya.", "LAKUKAN"),
+    kode('rencana("SELECT COUNT(*) FROM transaksi WHERE pelangan_id = 1")'),
+    blok("bahaya", "<pre><code>OperationalError: no such column: pelangan_id</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    "<p><em>no such <strong>column</strong></em>, bukan <em>table</em>. Satu kata di pesan itu "
+    "memberitahumu harus mencari di mana: nama tabelnya benar, nama kolomnya yang salah.</p>",
+    blok("catatan", "Perhatikan juga apa yang gagal: <code>rencana()</code>. "
+                    "<strong><code>EXPLAIN QUERY PLAN</code> tidak menyelamatkanmu dari salah "
+                    "ketik</strong> — ia menolak query yang salah, sama seperti menjalankannya. "
+                    "Yang ia periksa cara mencarinya, bukan benar-tidaknya angkamu."),
+    "<p>Betulkan, lalu lanjut.</p>")
+
 langkah("Bentuk kedua: mulai dari yang berhasil",
     blok("aksi", "Bikin index untuk <code>cabang</code>, lalu ukur cara yang paling lugas.", "LAKUKAN"),
     kode("""con.execute("CREATE INDEX idx_cab ON transaksi(cabang)"); con.commit()
@@ -81,8 +96,9 @@ rencana(s)"""),
     blok("hasil", "<pre><code>5.3 ms   hasil = 160457\n"
                   "    SEARCH transaksi USING COVERING INDEX idx_cab (cabang=?)</code></pre>",
          "HARUS MUNCUL"),
-    "<p><code>SEARCH</code>. Ingat angka <strong>160457</strong> — tiga langkah berikutnya "
-    "harus mengeluarkan angka yang sama.</p>")
+    "<p><code>SEARCH</code>. Ingat angka <strong>160457</strong> — tiga langkah berikutnya harus "
+    "mengeluarkan angka yang sama di layarmu. Kalau salah satu berbeda, berhenti dan cari "
+    "salah ketiknya sebelum kamu lanjut.</p>")
 
 langkah("Sekarang tanya hal yang sama pakai LIKE",
     blok("aksi", "Awalan katanya jelas: <code>'Kem%'</code>. Menurutmu index-nya terpakai?", "LAKUKAN"),
@@ -91,9 +107,10 @@ ms, h = ukur(s); print(f"{ms:.1f} ms   hasil = {h[0][0]}")
 rencana(s)"""),
     blok("hasil", "<pre><code>37.5 ms   hasil = 160457\n"
                   "    SCAN transaksi USING COVERING INDEX idx_cab</code></pre>", "HARUS MUNCUL"),
-    "<p>Jawabannya sama, waktunya <strong>tujuh kali lebih lama</strong>, dan rencananya "
-    "<code>SCAN</code>. Secara teori awalannya jelas dan index-nya bisa dipakai. "
-    "Hasil pengukurannya bilang tidak.</p>")
+    "<p>Jawabanmu sama, waktunya <strong>tujuh kali lebih lama</strong>, dan rencananya "
+    "<code>SCAN</code>. Secara teori awalannya jelas dan index-nya bisa dipakai — "
+    "dan kalau kamu cuma bernalar tanpa mengukur, kamu akan yakin begitu. "
+    "Hasil pengukuranmu bilang tidak.</p>")
 
 langkah("Kenapa 'Kem%' pun ditolak",
     blok("aksi", "Baca ini sekali, lalu lanjut ke langkah berikutnya.", "LAKUKAN"),
@@ -121,7 +138,7 @@ rencana(s)"""),
     blok("hasil", "<pre><code>42.0 ms   hasil = 160457\n"
                   "    SCAN transaksi USING COVERING INDEX idx_cab</code></pre>", "HARUS MUNCUL"),
     "<p>Yang ini <strong>tidak ada obatnya</strong>, dan bukan salah SQLite. Kalau awal katanya "
-    "tidak diketahui, tidak ada daftar terurut yang bisa menolong — sama seperti mencari "
+    "tidak kamu ketahui, tidak ada daftar terurut yang bisa menolong — coba saja kamu cari "
     "semua nama yang <em>berakhiran</em> “anto” di buku telepon.</p>")
 
 langkah("Penyelamatnya: tulis “diawali Kem” sebagai rentang",
@@ -137,8 +154,9 @@ rencana(s)"""),
            ["<code>LIKE 'Kem%'</code>", "37,5 ms", "SCAN"],
            ["<code>LIKE '%mang'</code>", "42,0 ms", "SCAN"],
            ["<code>&gt;= 'Kem' AND &lt; 'Ken'</code>", "5,3 ms", "SEARCH"]]),
-    "<p>Empat cara menanyakan hal yang sama, empat kali jawaban <strong>160457</strong>, "
-    "dan delapan kali selisih waktu.</p>")
+    "<p>Kamu baru saja menanyakan satu hal dengan empat cara, dapat jawaban "
+    "<strong>160457</strong> empat kali, dan selisih waktu delapan kali lipat. "
+    "Tidak satu pun dari itu bisa kamu tebak dari membaca query-nya saja.</p>")
 
 langkah("Ulangi dari ingatan",
     blok("aksi", "Tutup halaman ini. Tulis di kertas, tanpa melihat.", "LAKUKAN"),

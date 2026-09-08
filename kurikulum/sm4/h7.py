@@ -33,8 +33,8 @@ langkah("Ukur berapa lama membacanya",
 mv, rv = ukur("SELECT * FROM ringkas WHERE cabang='Kemang' ORDER BY bulan")
 print(f"VIEW  : {mv:8.1f} ms   {len(rv)} baris")"""),
     blok("hasil", "<pre><code>VIEW  :    319.8 ms   24 baris</code></pre>", "HARUS MUNCUL"),
-    "<p>24 baris hasil, 320 milidetik. Ia harus meringkas ulang 800.000 baris "
-    "<strong>tiap kali dipanggil</strong>.</p>")
+    "<p>24 baris hasil, 320 milidetik. View yang baru kamu bikin harus meringkas ulang 800.000 "
+    "baris <strong>tiap kali kamu memanggilnya</strong>.</p>")
 
 langkah("Bikin tabel ringkasan dari view yang sama",
     blok("aksi", "Satu perintah, dan catat berapa lama sekali-buatnya.", "LAKUKAN"),
@@ -51,8 +51,9 @@ print(f"TABEL : {mt:8.3f} ms   {len(rt)} baris")
 print("isi sama?", rv == rt)"""),
     blok("hasil", "<pre><code>TABEL :    0.033 ms   24 baris\nisi sama? True</code></pre>",
          "HARUS MUNCUL"),
-    "<p>319,8 ms lawan 0,033 ms — sekitar <strong>sepuluh ribu kali</strong>, isi identik. "
-    "Masuk akal: yang satu meringkas 800.000 baris, yang satu membaca 24 baris yang sudah jadi.</p>")
+    "<p>319,8 ms lawan 0,033 ms — sekitar <strong>sepuluh ribu kali</strong>, dan "
+    "<code>isi sama? True</code> membuktikan kamu tidak kehilangan apa pun. Masuk akal: yang satu "
+    "meringkas 800.000 baris tiap kali, yang satu membaca 24 baris yang sudah jadi.</p>")
 
 langkah("Sekarang harganya",
     blok("aksi", "Masukkan satu transaksi baru senilai Rp 22.000, lalu tanya kedua-duanya.", "LAKUKAN"),
@@ -111,6 +112,23 @@ langkah("Jalankan berkas uji mutu",
                   "5 lolos, 3 gagal</code></pre>", "HARUS MUNCUL"),
     "<p>Isinya <strong>sekumpulan query yang seharusnya tidak mengembalikan baris apa pun</strong>. "
     "Kalau salah satu mengembalikan baris, ada yang rusak.</p>")
+
+langkah("Jalankan dari folder yang salah, dengan sengaja",
+    blok("aksi", "Buat satu folder kosong, masuk ke dalamnya, lalu panggil skripnya "
+                 "dari sana.", "LAKUKAN"),
+    kode("mkdir coba\ncd coba\npython ../uji_mutu.py"),
+    blok("bahaya", "<pre><code>sqlite3.OperationalError: no such table: pesanan</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    "<p>Perhatikan pesannya: bukan “berkas tidak ditemukan”. SQLite justru <strong>membuat "
+    "<code>senja.db</code> baru yang kosong</strong> di folder itu, lalu bingung karena "
+    "tabelnya tidak ada.</p>",
+    blok("bahaya", "<strong>Ini jebakan yang mahal.</strong> Skrip yang dijalankan dari folder "
+                   "salah tidak pernah berteriak “salah folder” — ia diam-diam bekerja di basis "
+                   "data kosong. Kalau yang kamu jalankan skrip <em>penulis</em>, bukan pemeriksa, "
+                   "hasilnya masuk ke berkas yang salah dan tidak ada yang tahu."),
+    blok("catatan", "<strong>Kalau punyamu justru berhasil</strong>, kamu masih di folder yang "
+                    "benar. Bereskan: <code>cd ..</code> lalu hapus folder <code>coba</code> "
+                    "beserta <code>senja.db</code> kosong di dalamnya."))
 
 langkah("Periksa kode keluarnya",
     blok("aksi", "Langsung setelah perintah tadi, di terminal yang sama.", "LAKUKAN"),

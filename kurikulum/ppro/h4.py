@@ -17,8 +17,10 @@ con = sqlite3.connect("besar.db")
 pd.read_sql("SELECT * FROM transaksi", con).to_csv("transaksi.csv", index=False)
 print(f"{os.path.getsize('transaksi.csv')/1e6:.1f} MB")'''),
     blok("hasil", "<pre><code>39.6 MB</code></pre>", "HARUS MUNCUL"),
-    "<p>39,6 MB <strong>di disk</strong>. Ingat angka itu — langkah berikutnya menunjukkan berapa "
-    "besar ia jadi di dalam memori.</p>")
+    blok("catatan", "<strong>Baris ini butuh 5–20 detik dan tidak mencetak apa pun selama itu.</strong> "
+                    "Itu normal — kamu sedang menulis 800.000 baris ke disk. Jangan kamu hentikan."),
+    "<p>39,6 MB <strong>di disk</strong>. Ingat angka itu, atau tulis di kertas — langkah "
+    "berikutnya akan menunjukkan padamu berapa besar ia jadi begitu masuk ke memori.</p>")
 
 langkah("Baca apa adanya, lalu ukur",
     blok("aksi", "Jangan beri petunjuk apa pun ke pandas. Biarkan ia menebak sendiri.", "LAKUKAN"),
@@ -63,6 +65,57 @@ langkah("Pastikan tidak ada angka yang berubah",
     "<p>Menghemat memori <strong>tidak boleh mengubah jawabannya</strong> — sama seperti menulis "
     "ulang query demi kecepatan di SQL Mahir L4. Cara memastikannya juga sama: bandingkan.</p>")
 
+langkah("Salah pilih tipe, dan uang yang menguap tanpa error",
+    blok("aksi", "Sekarang pilih tipe yang <strong>terlalu kecil</strong> — dengan sengaja. "
+                 "<code>int8</code> untuk kolom rupiah.", "LAKUKAN"),
+    kode('''salah = pd.read_csv("transaksi.csv", usecols=["nilai"], dtype={"nilai":"int8"})
+print("5 nilai pertama:", list(salah["nilai"].head()))
+print(f"total: {salah['nilai'].sum():,}")'''),
+    blok("bahaya", "<pre><code>5 nilai pertama: [32, -88, 16, 48, -88]\n"
+                   "total: -6,330,000</code></pre>",
+         "HARUS MUNCUL — DAN TIDAK ADA TULISAN MERAH SAMA SEKALI"),
+    "<p>Bandingkan dengan angka yang benar: <strong>41.721.414.000</strong>. "
+    "Omzet Rp 41,7 miliar terbaca sebagai <strong>minus Rp 6,3 juta</strong>. "
+    "Nilai 20.000 jadi 32; 25.000 jadi −88.</p>",
+    blok("bahaya", "<strong>Tidak ada error. Tidak ada peringatan. Tidak ada apa pun.</strong> "
+                   "pandas menuruti perintahmu, dan angkanya berputar diam-diam. Kalau kamu "
+                   "menyalin baris <code>dtype=</code> dari internet tanpa memeriksa isi kolommu, "
+                   "inilah yang terjadi — dan laporannya tetap terlihat rapi."),
+    blok("catatan", "<strong>Inilah alasan langkah berikutnya ada.</strong> Sebelum kamu memilih "
+                    "tipe, kamu harus tahu isi kolommu — dan itu satu baris perintah."))
+
+langkah("Periksa dulu isinya, baru pilih tipenya",
+    blok("aksi", "Ini yang harus kamu lakukan sebelum menulis <code>dtype=</code> apa pun.", "LAKUKAN"),
+    kode('''print(d1[["jumlah","nilai","pelanggan_id","id"]].agg(["min","max"]).to_string())'''),
+    blok("hasil", "<pre><code>     jumlah   nilai  pelanggan_id      id\n"
+                  "min       1   10000             1       1\n"
+                  "max       4  120000         50000  800000</code></pre>",
+         "HARUS MUNCUL"),
+    "<p>Sekarang kamu bisa memilih dengan alasan, bukan dengan tebakan: <code>jumlah</code> "
+    "maksimum 4 → <code>int8</code> aman. <code>nilai</code> maksimum 120.000 → "
+    "<code>int32</code> aman, <code>int8</code> jelas tidak.</p>",
+    blok("catatan", "<strong>Kalau angkamu berbeda</strong> dari kotak di atas, "
+                    "<code>besar.db</code>-mu bukan yang dibuat <code>besar.py</code> dengan "
+                    "<code>Random(7)</code>. Bikin ulang dulu — sisa hari ini bergantung pada "
+                    "angka-angka itu."))
+
+langkah("Dua salah tipe yang justru berteriak",
+    blok("aksi", "Tidak semua salah tipe diam. Coba dua ini.", "LAKUKAN"),
+    kode('pd.read_csv("transaksi.csv", dtype={"cabang":"int32"})'),
+    blok("bahaya", "<pre><code>ValueError: invalid literal for int() with base 10: 'Renon'</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    kode('pd.read_csv("transaksi.csv", usecols=["cabang","nilaii"])'),
+    blok("bahaya", "<pre><code>ValueError: Usecols do not match columns, columns expected "
+                   "but not found: ['nilaii']</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    "<p>Dua-duanya <strong>menyebut nilai yang bikin gagal</strong>: <code>'Renon'</code> dan "
+    "<code>'nilaii'</code>. Kamu tidak perlu menebak apa pun.</p>",
+    blok("catatan", "<strong>Yang harus kamu ingat dari tiga langkah terakhir:</strong> "
+                    "salah tipe <em>teks jadi angka</em> berteriak; salah tipe "
+                    "<em>angka jadi angka yang terlalu kecil</em> diam. Yang diam itu yang "
+                    "harus kamu curigai sendiri, karena tidak ada yang akan mencurigainya "
+                    "untukmu."))
+
 langkah("Kenapa tiap penggantian itu aman",
     blok("aksi", "Baca tabel ini sambil melihat baris <code>dtype=</code> yang kamu tulis.", "LAKUKAN"),
     tabel(["Bawaan", "Diganti jadi", "Kenapa aman"],
@@ -96,6 +149,10 @@ print(np.iinfo("int32").max)
 print(np.int32(2147483647) + np.int32(1))'''),
     blok("hasil", "<pre><code>2147483647\n-2147483648</code></pre>",
          "HARUS MUNCUL (mungkin dengan peringatan overflow)"),
+    blok("catatan", "<strong>Kalau punyamu memunculkan <code>RuntimeWarning: overflow encountered</code></strong>, "
+                    "itu wajar dan justru bagus — numpy memberitahumu. Yang berbahaya adalah "
+                    "kasus di langkah sebelumnya, waktu pandas <em>tidak</em> memberitahumu "
+                    "apa-apa."),
     blok("bahaya", "<strong>Angkanya berputar jadi negatif, tanpa error.</strong> "
                    "<code>int32</code> cukup untuk nilai <em>per transaksi</em>, tapi "
                    "<strong>tidak</strong> untuk total kumulatif atau nilai kontrak besar. "

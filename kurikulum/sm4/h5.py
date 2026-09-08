@@ -18,7 +18,8 @@ c.execute("CREATE TABLE kecil AS SELECT * FROM b.transaksi WHERE id <= 10000")
 c.commit(); c.execute("DETACH b")
 print("baris:", c.execute("SELECT COUNT(*) FROM kecil").fetchone()[0])"""),
     blok("hasil", "<pre><code>baris: 10000</code></pre>", "HARUS MUNCUL"),
-    "<p>Sepuluh ribu, bukan 800.000. Kamu akan tahu alasannya begitu melihat angka di langkah 3.</p>")
+    "<p>Sepuluh ribu, bukan 800.000. Kamu akan tahu sendiri alasannya begitu kamu melihat angka "
+    "di langkah 3 — dan kamu akan bersyukur saya tidak menyuruhmu memakai 800.000.</p>")
 
 langkah("Tulis dua versi dari satu pertanyaan yang sama",
     blok("aksi", "Pertanyaannya: <em>di tiap cabang, berapa transaksi yang nilainya di atas "
@@ -79,9 +80,10 @@ langkah("Lihat rencananya juga",
                   "    USE TEMP B-TREE FOR GROUP BY\n    SCAN t\n"
                   "    SEARCH rata USING AUTOMATIC COVERING INDEX (cabang=?)\n"
                   "    USE TEMP B-TREE FOR GROUP BY</code></pre>", "HARUS MUNCUL"),
-    "<p>Rencananya <em>lebih panjang</em>, dan seribu kali lebih cepat. "
-    "<strong>Panjang rencana bukan ukuran biaya.</strong> Yang mahal adalah "
-    "<code>CORRELATED</code> — pekerjaan yang diulang, bukan pekerjaan yang banyak.</p>")
+    "<p>Rencana yang baru kamu baca <em>lebih panjang</em>, dan seribu kali lebih cepat. "
+    "<strong>Panjang rencana bukan ukuran biaya</strong> — jadi jangan kamu pakai jumlah barisnya "
+    "untuk menebak. Yang mahal adalah <code>CORRELATED</code>: pekerjaan yang diulang, bukan "
+    "pekerjaan yang banyak.</p>")
 
 langkah("Buktikan polanya di lima ukuran tabel",
     blok("aksi", "Skrip ini butuh sekitar <strong>3 menit</strong>. Jalankan, lalu tinggalkan.", "LAKUKAN"),

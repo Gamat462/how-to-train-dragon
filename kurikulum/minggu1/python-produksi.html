@@ -293,7 +293,8 @@ __version__ = &quot;0.1.0&quot;</code></pre></div>
         <pre><code>python -c &quot;import laporan; print(laporan.__version__)&quot;</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>0.1.0</code></pre></div>
-<p><strong>Keberadaan <code>__init__.py</code> itulah</strong> yang memberi tahu Python “folder ini paket, isinya boleh di-<code>import</code>”. Tanpa berkas itu, langkah 7 gagal.</p>
+        <div class="catatan"><strong>Kalau punyamu justru <code>ModuleNotFoundError</code></strong>, kamu berada di folder yang salah — bukan salah ketik. Itu wajar, dan langkah 9 membahasnya khusus. Untuk sekarang pastikan kamu di <code>proyek/</code>, bukan di dalam <code>laporan/</code>.</div>
+<p><strong>Keberadaan <code>__init__.py</code> itulah</strong> yang memberi tahu Python “folder ini paket, isinya boleh di-<code>import</code>”. Tanpa berkas itu, apa pun yang kamu tulis di langkah 7 akan gagal — dan pesan errornya tidak akan menyebut berkas ini sama sekali.</p>
       </div>
     </div>
 
@@ -400,7 +401,7 @@ def ke_angka(nilai: object) -&gt; int | None:
     return df[df[kolom_no].fillna(&quot;&quot;).astype(str).str.fullmatch(r&quot;\d+&quot;)].copy()</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <p>Belum ada keluaran. Langkah berikutnya baru menjalankannya.</p></div>
-<p>Ini yang membuang baris <code>"Dicetak oleh: Admin"</code> dan baris kosong yang selalu menempel di ekspor Excel klien.</p>
+<p>Ini yang membuang baris <code>"Dicetak oleh: Admin"</code> dan baris kosong yang selalu menempel di tiap ekspor Excel yang kamu terima dari klien — yang selama ini kamu hapus manual satu per satu.</p>
       </div>
     </div>
 
@@ -426,7 +427,7 @@ print(list(rapikan_nama(pd.Series([&quot; budi santoso &quot;, &quot;BUDI SANTOS
 3200000
 None
 ['Budi Santoso', 'Budi Santoso', 'CV Karya Abadi']</code></pre></div>
-<p>Sekarang ada <strong>satu</strong> <code>ke_angka</code> di seluruh pekerjaanmu. Perbaiki di sini, dan semua yang memakainya ikut terperbaiki — termasuk skrip klien yang sudah berjalan tiga bulan.</p>
+<p>Sekarang ada <strong>satu</strong> <code>ke_angka</code> di seluruh pekerjaanmu. Kamu perbaiki di sini, dan semua yang memakainya ikut terperbaiki — termasuk skrip klien yang sudah kamu pasang tiga bulan lalu dan sudah kamu lupakan.</p>
       </div>
     </div>
 
@@ -542,6 +543,7 @@ print(ke_angka(&quot;-96.000&quot;))</code></pre></div>
         <pre><code>pip install pytest</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL (nomor versinya boleh beda)</span>
           <pre><code>Successfully installed ... pytest-9.1.1</code></pre></div>
+        <div class="catatan"><strong>Yang normal tapi bikin panik.</strong> Kalau muncul tulisan kuning panjang berisi <em>WARNING: Running pip as the root user</em>, atau <em>Requirement already satisfied</em>, dua-duanya wajar — yang pertama cuma saran, yang kedua berarti pytest sudah terpasang. Kamu boleh lanjut.</div>
 <p>Sejauh ini caramu memastikan kode benar adalah <strong>melihat hasilnya</strong> — cocokkan dengan kotak HARUS MUNCUL. Itu bekerja saat kamu sedang menatap layar. Yang tidak bekerja: memastikan perubahan hari ini tidak merusak sesuatu yang kamu tulis bulan lalu.</p>
       </div>
     </div>
@@ -570,7 +572,7 @@ def test_ke_angka_teks_biasa():
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>.                                     [100%]
 1 passed in 0.31s</code></pre></div>
-<p>Titik itu satu uji yang lulus. Waktunya akan beda; <code>1 passed</code> tidak.</p>
+<p>Titik itu satu uji yang lulus. Waktu di layarmu akan beda dari punyaku; <code>1 passed</code> tidak boleh beda.</p>
       </div>
     </div>
 
@@ -596,7 +598,7 @@ def test_ke_angka_teks_biasa():
             </tbody>
           </table>
         </div>
-<p>Tidak ada kerangka kerja yang harus dipelajari. Kalau kamu bisa menulis <code>assert</code>, kamu sudah bisa memakai pytest.</p>
+<p>Tidak ada kerangka kerja yang harus kamu pelajari. Kalau kamu bisa menulis satu <code>assert</code>, kamu sudah bisa memakai pytest — sisanya cuma penamaan.</p>
       </div>
     </div>
 
@@ -658,7 +660,7 @@ def test_rapikan_nama_tidak_merusak_cv():
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>..........                            [100%]
 10 passed in 0.30s</code></pre></div>
-<p>Sepuluh uji, sepertiga detik. Bandingkan dengan memeriksa sepuluh hal dengan mata <em>setiap kali</em> kamu mengubah satu baris.</p>
+<p>Sepuluh uji, sepertiga detik. Bandingkan dengan kamu memeriksa sepuluh hal dengan mata <em>setiap kali</em> kamu mengubah satu baris — dan kamu tahu sendiri kamu tidak akan melakukannya sampai sepuluh kali.</p>
       </div>
     </div>
 
@@ -687,8 +689,32 @@ tests/test_bersih.py::test_ke_angka[Rp 91.190.000-91190000] PASSED
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">7</span>
-        <h3>Apa yang layak diuji</h3>
+        <h3>Jalankan pytest dari folder yang salah, dengan sengaja</h3>
         <span class="cek"><input type="checkbox" id="python-produksi-v2-2-7"><label for="python-produksi-v2-2-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat folder kosong, masuk ke dalamnya, lalu jalankan ujimu dari sana.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>mkdir coba
+cd coba
+python -m pytest ../tests -q</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>E   ModuleNotFoundError: No module named 'laporan'
+ERROR ../tests/test_bersih.py
+!!!! Interrupted: 1 error during collection !!!!
+1 error in 0.39s</code></pre></div>
+<p>Perhatikan katanya: <strong>error</strong>, bukan <strong>failed</strong>. Ujimu tidak gagal — ujimu <em>tidak sempat dijalankan sama sekali</em>. pytest berhenti di tahap mengumpulkan (<em>collection</em>) karena tidak bisa meng-<code>import</code> paketmu.</p>
+        <div class="catatan"><strong>Bedakan dua kata ini seumur hidup:</strong> <code>failed</code> berarti kodemu salah. <code>error</code> saat <em>collection</em> berarti ujinya sendiri tidak bisa dibuka — hampir selalu karena kamu berada di folder yang salah atau salah menulis nama import.</div>
+<p>Bereskan: <code>cd ..</code> lalu hapus folder <code>coba</code>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Apa yang layak diuji</h3>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-2-8"><label for="python-produksi-v2-2-8">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -713,9 +739,9 @@ tests/test_bersih.py::test_ke_angka[Rp 91.190.000-91190000] PASSED
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">8</span>
+        <span class="num">9</span>
         <h3>Nama uji adalah kalimat, bukan label</h3>
-        <span class="cek"><input type="checkbox" id="python-produksi-v2-2-8"><label for="python-produksi-v2-2-8">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-2-9"><label for="python-produksi-v2-2-9">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -730,9 +756,9 @@ def test_rapikan_nama_menyatukan_empat_ejaan(): # bagus</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">9</span>
+        <span class="num">10</span>
         <h3>Satu perintah yang akan kamu pakai tiap hari</h3>
-        <span class="cek"><input type="checkbox" id="python-produksi-v2-2-9"><label for="python-produksi-v2-2-9">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-2-10"><label for="python-produksi-v2-2-10">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -750,9 +776,9 @@ python -m pytest -q -k kurung             # hanya uji yang namanya mengandung &q
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">10</span>
+        <span class="num">11</span>
         <h3>Ulangi dari ingatan</h3>
-        <span class="cek"><input type="checkbox" id="python-produksi-v2-2-10"><label for="python-produksi-v2-2-10">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-2-11"><label for="python-produksi-v2-2-11">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -795,7 +821,7 @@ Diskon          (96.000)</code></pre></div>
           <pre><code>total kalau kurung diabaikan : 94.486.000
 total yang benar             : 87.894.000
 selisih                      :  6.592.000</code></pre></div>
-<p>Rp 6,6 juta, dari tiga baris. Kalikan dengan buku besar yang berisi ribuan baris.</p>
+<p>Rp 6,6 juta, dari tiga baris. Kalikan sendiri dengan buku besar klienmu yang berisi ribuan baris.</p>
         <div class="bahaya"><strong>Dan tidak ada error apa pun.</strong> Angkanya cuma salah. Ini persis jenis salah saji yang dulu kamu cari dengan mata.</div>
       </div>
     </div>
@@ -887,7 +913,7 @@ E    +  where 1000 = ke_angka('(1.000)')
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>..............                        [100%]
 14 passed in 0.32s</code></pre></div>
-<p>Hijau. Dan yang penting: <strong>sepuluh uji lama ikut dijalankan</strong> dan tetap lulus — jadi kamu tahu tambalanmu tidak merusak apa pun.</p>
+<p>Hijau. Dan yang paling penting buatmu: <strong>sepuluh uji lama ikut dijalankan</strong> dan tetap lulus — jadi kamu tahu tambalanmu tidak diam-diam merusak sesuatu yang tadinya sudah benar. Itu yang tidak bisa kamu pastikan dengan mata.</p>
       </div>
     </div>
 
@@ -1066,7 +1092,8 @@ pd.read_sql(&quot;SELECT * FROM transaksi&quot;, con).to_csv(&quot;transaksi.csv
 print(f&quot;{os.path.getsize(&#x27;transaksi.csv&#x27;)/1e6:.1f} MB&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>39.6 MB</code></pre></div>
-<p>39,6 MB <strong>di disk</strong>. Ingat angka itu — langkah berikutnya menunjukkan berapa besar ia jadi di dalam memori.</p>
+        <div class="catatan"><strong>Baris ini butuh 5–20 detik dan tidak mencetak apa pun selama itu.</strong> Itu normal — kamu sedang menulis 800.000 baris ke disk. Jangan kamu hentikan.</div>
+<p>39,6 MB <strong>di disk</strong>. Ingat angka itu, atau tulis di kertas — langkah berikutnya akan menunjukkan padamu berapa besar ia jadi begitu masuk ke memori.</p>
       </div>
     </div>
 
@@ -1155,8 +1182,72 @@ print(f&quot;dipilih    : {m2:8.1f} MB   -&gt; {m1/m2:.1f}x lebih kecil, hemat {
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">6</span>
-        <h3>Kenapa tiap penggantian itu aman</h3>
+        <h3>Salah pilih tipe, dan uang yang menguap tanpa error</h3>
         <span class="cek"><input type="checkbox" id="python-produksi-v2-4-6"><label for="python-produksi-v2-4-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sekarang pilih tipe yang <strong>terlalu kecil</strong> — dengan sengaja. <code>int8</code> untuk kolom rupiah.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>salah = pd.read_csv(&quot;transaksi.csv&quot;, usecols=[&quot;nilai&quot;], dtype={&quot;nilai&quot;:&quot;int8&quot;})
+print(&quot;5 nilai pertama:&quot;, list(salah[&quot;nilai&quot;].head()))
+print(f&quot;total: {salah[&#x27;nilai&#x27;].sum():,}&quot;)</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — DAN TIDAK ADA TULISAN MERAH SAMA SEKALI</span>
+          <pre><code>5 nilai pertama: [32, -88, 16, 48, -88]
+total: -6,330,000</code></pre></div>
+<p>Bandingkan dengan angka yang benar: <strong>41.721.414.000</strong>. Omzet Rp 41,7 miliar terbaca sebagai <strong>minus Rp 6,3 juta</strong>. Nilai 20.000 jadi 32; 25.000 jadi −88.</p>
+        <div class="bahaya"><strong>Tidak ada error. Tidak ada peringatan. Tidak ada apa pun.</strong> pandas menuruti perintahmu, dan angkanya berputar diam-diam. Kalau kamu menyalin baris <code>dtype=</code> dari internet tanpa memeriksa isi kolommu, inilah yang terjadi — dan laporannya tetap terlihat rapi.</div>
+        <div class="catatan"><strong>Inilah alasan langkah berikutnya ada.</strong> Sebelum kamu memilih tipe, kamu harus tahu isi kolommu — dan itu satu baris perintah.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Periksa dulu isinya, baru pilih tipenya</h3>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-7"><label for="python-produksi-v2-4-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ini yang harus kamu lakukan sebelum menulis <code>dtype=</code> apa pun.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(d1[[&quot;jumlah&quot;,&quot;nilai&quot;,&quot;pelanggan_id&quot;,&quot;id&quot;]].agg([&quot;min&quot;,&quot;max&quot;]).to_string())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <pre><code>     jumlah   nilai  pelanggan_id      id
+min       1   10000             1       1
+max       4  120000         50000  800000</code></pre></div>
+<p>Sekarang kamu bisa memilih dengan alasan, bukan dengan tebakan: <code>jumlah</code> maksimum 4 → <code>int8</code> aman. <code>nilai</code> maksimum 120.000 → <code>int32</code> aman, <code>int8</code> jelas tidak.</p>
+        <div class="catatan"><strong>Kalau angkamu berbeda</strong> dari kotak di atas, <code>besar.db</code>-mu bukan yang dibuat <code>besar.py</code> dengan <code>Random(7)</code>. Bikin ulang dulu — sisa hari ini bergantung pada angka-angka itu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Dua salah tipe yang justru berteriak</h3>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-8"><label for="python-produksi-v2-4-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tidak semua salah tipe diam. Coba dua ini.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>pd.read_csv(&quot;transaksi.csv&quot;, dtype={&quot;cabang&quot;:&quot;int32&quot;})</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>ValueError: invalid literal for int() with base 10: 'Renon'</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>pd.read_csv(&quot;transaksi.csv&quot;, usecols=[&quot;cabang&quot;,&quot;nilaii&quot;])</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>ValueError: Usecols do not match columns, columns expected but not found: ['nilaii']</code></pre></div>
+<p>Dua-duanya <strong>menyebut nilai yang bikin gagal</strong>: <code>'Renon'</code> dan <code>'nilaii'</code>. Kamu tidak perlu menebak apa pun.</p>
+        <div class="catatan"><strong>Yang harus kamu ingat dari tiga langkah terakhir:</strong> salah tipe <em>teks jadi angka</em> berteriak; salah tipe <em>angka jadi angka yang terlalu kecil</em> diam. Yang diam itu yang harus kamu curigai sendiri, karena tidak ada yang akan mencurigainya untukmu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Kenapa tiap penggantian itu aman</h3>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-9"><label for="python-produksi-v2-4-9">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1181,9 +1272,9 @@ print(f&quot;dipilih    : {m2:8.1f} MB   -&gt; {m1/m2:.1f}x lebih kecil, hemat {
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">7</span>
+        <span class="num">10</span>
         <h3>Buktikan sendiri kenapa category yang paling hemat</h3>
-        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-7"><label for="python-produksi-v2-4-7">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-10"><label for="python-produksi-v2-4-10">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1201,9 +1292,9 @@ produk : 7 nilai unik</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">8</span>
+        <span class="num">11</span>
         <h3>Batas yang harus kamu tahu sebelum memakai int32 untuk uang</h3>
-        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-8"><label for="python-produksi-v2-4-8">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-11"><label for="python-produksi-v2-4-11">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1215,6 +1306,7 @@ print(np.int32(2147483647) + np.int32(1))</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL (mungkin dengan peringatan overflow)</span>
           <pre><code>2147483647
 -2147483648</code></pre></div>
+        <div class="catatan"><strong>Kalau punyamu memunculkan <code>RuntimeWarning: overflow encountered</code></strong>, itu wajar dan justru bagus — numpy memberitahumu. Yang berbahaya adalah kasus di langkah sebelumnya, waktu pandas <em>tidak</em> memberitahumu apa-apa.</div>
         <div class="bahaya"><strong>Angkanya berputar jadi negatif, tanpa error.</strong> <code>int32</code> cukup untuk nilai <em>per transaksi</em>, tapi <strong>tidak</strong> untuk total kumulatif atau nilai kontrak besar. Untuk kolom yang mungkin melewati 2 miliar, tetap <code>int64</code>.</div>
 <p>Ini persis jenis kesalahan diam-diam yang kamu latih untuk dicurigai sejak Level 1: angkanya salah, dan tidak ada yang berteriak.</p>
       </div>
@@ -1222,9 +1314,9 @@ print(np.int32(2147483647) + np.int32(1))</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">9</span>
+        <span class="num">12</span>
         <h3>Kapan ini benar-benar menyelamatkanmu</h3>
-        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-9"><label for="python-produksi-v2-4-9">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-12"><label for="python-produksi-v2-4-12">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1237,9 +1329,9 @@ print(np.int32(2147483647) + np.int32(1))</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">10</span>
+        <span class="num">13</span>
         <h3>Ulangi dari ingatan</h3>
-        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-10"><label for="python-produksi-v2-4-10">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="python-produksi-v2-4-13"><label for="python-produksi-v2-4-13">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1306,7 +1398,7 @@ print(len(kecil), &quot;baris siap&quot;)</code></pre></div>
 print(f&quot;  list comprehension : {t1*1000:8.1f} ms&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>  list comprehension :      4.5 ms</code></pre></div>
-<p>4,5 milidetik. Ini pembandingnya — tulis angkanya, kita pakai lagi empat kali.</p>
+<p>4,5 milidetik. Ini pembandingmu — tulis angka yang kamu dapat, bukan angkaku, karena empat langkah berikutnya membandingkan ke situ.</p>
       </div>
     </div>
 
@@ -1324,7 +1416,7 @@ print(f&quot;  list comprehension : {t1*1000:8.1f} ms&quot;)</code></pre></div>
 print(f&quot;  itertuples         : {t2*1000:8.1f} ms&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>  itertuples         :     57.2 ms</code></pre></div>
-<p><strong>57,2 ms — dua belas kali lebih lambat</strong> daripada perulangan Python biasa. Yang sering diajarkan sebagai “cara benar mengulang DataFrame” justru yang paling mahal, karena tiap baris dibungkus jadi objek dulu.</p>
+<p><strong>57,2 ms — dua belas kali lebih lambat</strong> daripada perulangan Python biasa yang baru kamu ukur. Yang sering kamu temui diajarkan sebagai “cara benar mengulang DataFrame” justru yang paling mahal, karena tiap baris dibungkus jadi objek dulu.</p>
       </div>
     </div>
 
@@ -1342,7 +1434,7 @@ print(f&quot;  itertuples         : {t2*1000:8.1f} ms&quot;)</code></pre></div>
 print(f&quot;  .apply(lambda)     : {t3*1000:8.1f} ms&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>  .apply(lambda)     :     12.6 ms</code></pre></div>
-<p>12,6 ms. Lebih cepat daripada <code>itertuples</code>, lebih lambat daripada perulangan biasa. Belum ada yang mengesankan.</p>
+<p>12,6 ms. Lebih cepat daripada <code>itertuples</code>, lebih lambat daripada perulangan biasa. Belum ada yang mengesankan — dan kalau kamu berhenti di sini, kamu akan menyimpulkan bahwa keempat caranya sama saja.</p>
       </div>
     </div>
 
@@ -1362,7 +1454,7 @@ print(&quot;  hasil sama?&quot;, int(sum(h1)) == int(h4.sum()))</code></pre></di
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>  vektorisasi        :      0.1 ms   <- 88x lebih cepat dari .apply
   hasil sama? True</code></pre></div>
-<p>Empat cara, satu jawaban, dan rentangnya <strong>0,1 ms sampai 57,2 ms</strong>.</p>
+<p>Empat cara, satu jawaban, dan rentangnya <strong>0,1 ms sampai 57,2 ms</strong>. Kamu menulis keempatnya dalam sepuluh menit; bedanya lima ratus kali lipat.</p>
       </div>
     </div>
 
@@ -1543,7 +1635,7 @@ def puncak(f):
     return dt, puncak_b/1e6, hasil</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <p>Tidak ada yang tercetak.</p></div>
-<p>Sampai kemarin kamu mengukur <strong>waktu</strong>. Hari ini yang menentukan adalah <strong>memori tertinggi yang sempat dipakai</strong> — karena itu yang membunuh sesimu.</p>
+<p>Sampai kemarin kamu mengukur <strong>waktu</strong>. Hari ini yang menentukan nasibmu adalah <strong>memori tertinggi yang sempat dipakai</strong> — karena itulah yang membunuh sesi Colab-mu, bukan lambatnya.</p>
       </div>
     </div>
 
@@ -1564,7 +1656,7 @@ t1, m1, h1 = puncak(sekaligus)
 print(f&quot;muat sekaligus   : {t1:5.2f} detik | puncak memori {m1:7.1f} MB&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>muat sekaligus   :  0.86 detik | puncak memori    78.9 MB</code></pre></div>
-<p>78,9 MB untuk menjawab pertanyaan yang hasilnya <strong>lima angka</strong>. Seluruh tujuh kolom dimuat, padahal yang dipakai cuma dua.</p>
+<p>78,9 MB untuk menjawab pertanyaan yang hasilnya <strong>lima angka</strong>. Kamu memuat ketujuh kolomnya, padahal yang kamu pakai cuma dua.</p>
       </div>
     </div>
 
@@ -1691,6 +1783,7 @@ print(f&quot;  transaksi &gt; 100.000: {h3[0]:,} baris, nilai {h3[1]:,}&quot;)</
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>generator :  7.05 detik | puncak memori     0.0 MB
   transaksi &gt; 100,000: 57,459 baris, nilai 6,433,560,000</code></pre></div>
+        <div class="catatan"><strong>Layarmu akan diam sekitar tujuh detik.</strong> Itu memang benar — bukan komputermu yang menggantung. Kalau kamu tergoda menekan Ctrl-C, tahan dulu; menunggunya adalah setengah dari pelajaran hari ini.</div>
 <p><strong>Puncak memori 0,0 MB — dan 7,05 detik, delapan kali lebih lambat</strong> daripada muat sekaligus. Itu harganya, dan halaman ini tidak menyembunyikannya.</p>
       </div>
     </div>
@@ -1719,7 +1812,7 @@ print(f&quot;  transaksi &gt; 100.000: {h3[0]:,} baris, nilai {h3[1]:,}&quot;)</
             </tbody>
           </table>
         </div>
-<p>Baris pertama yang paling sering benar. <strong>Jangan pakai chunk untuk berkas 5 MB.</strong></p>
+<p>Baris pertama yang paling sering benar untukmu. <strong>Jangan kamu pakai chunk untuk berkas 5 MB</strong> — kamu cuma menambah kerumitan yang harus kamu baca lagi enam bulan lagi.</p>
       </div>
     </div>
 
@@ -1823,7 +1916,8 @@ if __name__ == &quot;__main__&quot;:
         <pre><code>python -m laporan.cli --berkas transaksi.csv</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>Namespace(berkas=PosixPath('transaksi.csv'))</code></pre></div>
-<p>Di Windows tertulis <code>WindowsPath</code>. Isinya sama.</p>
+        <div class="catatan"><strong>Kalau punyamu tertulis <code>WindowsPath</code></strong>, itu normal — kamu di Windows, dan isinya sama saja. Yang penting nama berkasnya muncul di dalam kurung.</div>
+<p>Belum ada yang dihitung — kamu baru membuktikan bahwa argumenmu sampai ke dalam program.</p>
       </div>
     </div>
 
@@ -1846,7 +1940,7 @@ Ringkas omzet per cabang dari berkas CSV.
 options:
   -h, --help       show this help message and exit
   --berkas BERKAS  CSV sumber</code></pre></div>
-<p>argparse menyusunnya dari <code>description=</code> dan <code>help=</code> yang kamu tulis. <strong>Enam bulan lagi, ketika kamu lupa cara memakai skripmu sendiri, ini yang menyelamatkanmu</strong> — begitu juga klien yang kamu serahi skripnya.</p>
+<p>argparse menyusunnya sendiri dari <code>description=</code> dan <code>help=</code> yang kamu tulis. <strong>Enam bulan lagi, waktu kamu lupa cara memakai skripmu sendiri, ini yang menyelamatkanmu</strong> — dan ini juga yang kamu berikan ke klien, supaya kamu tidak ditelepon tiap kali dia bingung.</p>
       </div>
     </div>
 
@@ -1864,7 +1958,7 @@ options:
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>usage: cli.py [-h] --berkas BERKAS
 cli.py: error: the following arguments are required: --berkas</code></pre></div>
-<p><code>required=True</code> yang melakukannya. Skrip notebook akan jalan setengah jalan lalu gagal dengan pesan yang membingungkan; ini <strong>menolak sebelum mengerjakan apa pun</strong>.</p>
+<p><code>required=True</code> yang melakukannya untukmu. Skrip notebook yang biasa kamu tulis akan jalan setengah jalan lalu gagal dengan pesan yang membingungkan; yang ini <strong>menolak sebelum mengerjakan apa pun</strong>.</p>
       </div>
     </div>
 
@@ -1890,7 +1984,7 @@ cli.py: error: the following arguments are required: --berkas</code></pre></div>
   --keluar KELUAR  CSV hasil (kalau kosong: cetak ke layar)
   --cabang CABANG  saring satu cabang saja
   --rinci          tampilkan log tingkat DEBUG</code></pre></div>
-<p>Kurung siku di <code>usage</code> berarti pilihan. <code>action="store_true"</code> membuat <code>--rinci</code> jadi saklar tanpa nilai.</p>
+<p>Kurung siku di <code>usage</code> berarti pilihan — kamu boleh tidak menyebutnya. <code>action="store_true"</code> membuat <code>--rinci</code> jadi saklar: kamu cukup menyebut namanya, tanpa nilai apa pun di belakangnya.</p>
       </div>
     </div>
 
@@ -2129,7 +2223,7 @@ Seturan2,160087,8360182000
 Dago,160428,8346883000
 Seturan,159650,8323688000
 Renon,159378,8317611000</code></pre></div>
-<p>Perhatikan: begitu ada <code>--keluar</code>, tabelnya <strong>tidak lagi dicetak ke layar</strong> — cuma satu baris catatan. Itu yang kamu mau dari skrip terjadwal.</p>
+<p>Perhatikan: begitu kamu memberi <code>--keluar</code>, tabelnya <strong>tidak lagi dicetak ke layar</strong> — cuma satu baris catatan. Itu persis yang kamu mau dari skrip yang jalan jam 6 pagi tanpa kamu tonton.</p>
       </div>
     </div>
 

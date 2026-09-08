@@ -14,6 +14,13 @@ Modul diterbitkan sebagai Claude artifact dan juga dipaket sebagai zip offline.
 4. **Bentuk pengajaran mengikuti `kurikulum/_pola.md`.** Baca berkas itu
    sebelum menulis atau menulis ulang modul mana pun. Isinya standar terukur,
    bukan selera.
+5. **Modul yang tidak pernah membuat pembacanya melihat layar merah belum
+   selesai.** `_pola.md` Bagian B mengukurnya. Tiap error yang ditulis di modul
+   harus benar-benar dijalankan dulu — pesan errornya disalin apa adanya,
+   sama seperti keluaran biasa.
+6. **Tulis kepada orang, bukan tentang materi.** Diukur sebagai `sapa`.
+   Kalimat seperti "Index-nya ada tapi tidak menolong" ditulis ulang jadi
+   "Index-mu ada; index-mu tidak menolong."
 
 ## Alur kerja menulis ulang satu modul
 
@@ -42,8 +49,8 @@ python3 _mulai.py                # menulis MULAI-DI-SINI.html + URUTAN-BELAJAR.m
 
 | Berkas | Isi |
 |---|---|
-| `_pola.md` | standar penulisan, diturunkan dengan mengukur |
-| `ukur.py` | mengukur tiap modul terhadap standar itu |
+| `_pola.md` | standar penulisan, diturunkan dengan mengukur `bekal-python.html` |
+| `ukur.py` | mengukur tiap modul terhadap standar itu — 10 ukuran, dua bagian |
 | `_gen.py` | generator HTML (`bangun`, `kode`, `tabel`, `blok`) |
 | `_peta.py` | artifact-id → berkas, judul, jumlah hari |
 | `_urutan.py` | urutan 44 modul + fase |
@@ -55,8 +62,16 @@ python3 _mulai.py                # menulis MULAI-DI-SINI.html + URUTAN-BELAJAR.m
 
 ## Yang sudah memenuhi standar (jarak 0,00)
 
-Bekal Python (acuan) · Studi Kasus Nyata · Minggu 11 · Minggu 14 · Jalur S2.
-Sisanya menunggu, urut terburuk dulu — jalankan `ukur.py` untuk daftar terkini.
+Bekal Python (acuan) · SQL Mahir L4 · Python Produksi.
+
+Studi Kasus Nyata, Minggu 11, Minggu 14, dan Jalur S2 dulu berjarak 0,00 —
+tapi terhadap standar yang **belum punya Bagian B**. Setelah Bagian B
+ditambahkan, keempatnya kembali berjarak (1,4–2,8), hampir seluruhnya karena
+`salah` mendekati nol: modulnya tidak pernah membuat pembaca melihat layar
+merah. Keempatnya perlu satu putaran lagi, dan itu lebih murah daripada
+menulis ulang dari awal.
+
+Jalankan `ukur.py` untuk daftar terkini, urut terburuk dulu.
 
 ## Biaya sesi
 

@@ -31,8 +31,14 @@ __version__ = "0.1.0"'''),
     blok("aksi", "Lalu dari <code>proyek/</code>, jalankan:", "LAKUKAN"),
     kode('python -c "import laporan; print(laporan.__version__)"'),
     blok("hasil", "<pre><code>0.1.0</code></pre>", "HARUS MUNCUL"),
+    blok("catatan", "<strong>Kalau punyamu justru <code>ModuleNotFoundError</code></strong>, kamu "
+                    "berada di folder yang salah — bukan salah ketik. Itu wajar, dan langkah 9 "
+                    "membahasnya khusus. Untuk sekarang pastikan kamu di <code>proyek/</code>, "
+                    "bukan di dalam <code>laporan/</code>."),
     "<p><strong>Keberadaan <code>__init__.py</code> itulah</strong> yang memberi tahu Python "
-    "“folder ini paket, isinya boleh di-<code>import</code>”. Tanpa berkas itu, langkah 7 gagal.</p>")
+    "“folder ini paket, isinya boleh di-<code>import</code>”. Tanpa berkas itu, apa pun yang kamu "
+    "tulis di langkah 7 akan gagal — dan pesan errornya tidak akan menyebut berkas ini sama "
+    "sekali.</p>")
 
 langkah("Fungsi pertama: pindahkan ke_angka ke berkasnya sendiri",
     blok("aksi", "Simpan ini sebagai <code>laporan/bersih.py</code>. Fungsinya sama dengan yang "
@@ -96,7 +102,8 @@ langkah("Fungsi ketiga: buang_baris_bukan_data",
     blok("hasil", "<p>Belum ada keluaran. Langkah berikutnya baru menjalankannya.</p>",
          "HARUS MUNCUL"),
     "<p>Ini yang membuang baris <code>\"Dicetak oleh: Admin\"</code> dan baris kosong yang selalu "
-    "menempel di ekspor Excel klien.</p>")
+    "menempel di tiap ekspor Excel yang kamu terima dari klien — yang selama ini kamu hapus "
+    "manual satu per satu.</p>")
 
 langkah("Sekarang pakai dari mana saja",
     blok("aksi", "Dari <code>proyek/</code>, buka Python atau notebook.", "LAKUKAN"),
@@ -110,8 +117,8 @@ print(list(rapikan_nama(pd.Series([" budi santoso ", "BUDI SANTOSO", "cv karya a
     blok("hasil", "<pre><code>91190000\n3200000\nNone\n"
                   "['Budi Santoso', 'Budi Santoso', 'CV Karya Abadi']</code></pre>", "HARUS MUNCUL"),
     "<p>Sekarang ada <strong>satu</strong> <code>ke_angka</code> di seluruh pekerjaanmu. "
-    "Perbaiki di sini, dan semua yang memakainya ikut terperbaiki — termasuk skrip klien yang "
-    "sudah berjalan tiga bulan.</p>")
+    "Kamu perbaiki di sini, dan semua yang memakainya ikut terperbaiki — termasuk skrip klien "
+    "yang sudah kamu pasang tiga bulan lalu dan sudah kamu lupakan.</p>")
 
 langkah("Tiga hal yang layak kamu tiru di tiap fungsi mulai sekarang",
     blok("aksi", "Baca tabel ini sambil melihat berkas yang barusan kamu tulis.", "LAKUKAN"),

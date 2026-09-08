@@ -17,7 +17,8 @@ Diskon          (96.000)""", salin=False),
     blok("hasil", "<pre><code>total kalau kurung diabaikan : 94.486.000\n"
                   "total yang benar             : 87.894.000\n"
                   "selisih                      :  6.592.000</code></pre>", "HARUS MUNCUL"),
-    "<p>Rp 6,6 juta, dari tiga baris. Kalikan dengan buku besar yang berisi ribuan baris.</p>",
+    "<p>Rp 6,6 juta, dari tiga baris. Kalikan sendiri dengan buku besar klienmu yang berisi "
+    "ribuan baris.</p>",
     blok("bahaya", "<strong>Dan tidak ada error apa pun.</strong> Angkanya cuma salah. "
                    "Ini persis jenis salah saji yang dulu kamu cari dengan mata."))
 
@@ -76,8 +77,9 @@ langkah("Sekarang perbaiki — di satu tempat",
     kode("python -m pytest -q"),
     blok("hasil", "<pre><code>..............                        [100%]\n14 passed in 0.32s</code></pre>",
          "HARUS MUNCUL"),
-    "<p>Hijau. Dan yang penting: <strong>sepuluh uji lama ikut dijalankan</strong> dan tetap "
-    "lulus — jadi kamu tahu tambalanmu tidak merusak apa pun.</p>")
+    "<p>Hijau. Dan yang paling penting buatmu: <strong>sepuluh uji lama ikut dijalankan</strong> "
+    "dan tetap lulus — jadi kamu tahu tambalanmu tidak diam-diam merusak sesuatu yang tadinya "
+    "sudah benar. Itu yang tidak bisa kamu pastikan dengan mata.</p>")
 
 langkah("Lihat arti “satu tempat” itu",
     blok("aksi", "Kamu tidak menyentuh kode apa pun selain <code>ke_angka</code>. "

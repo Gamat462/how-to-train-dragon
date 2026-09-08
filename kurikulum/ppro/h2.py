@@ -13,6 +13,10 @@ langkah("Pasang pytest",
     kode("pip install pytest"),
     blok("hasil", "<pre><code>Successfully installed ... pytest-9.1.1</code></pre>",
          "HARUS MUNCUL (nomor versinya boleh beda)"),
+    blok("catatan", "<strong>Yang normal tapi bikin panik.</strong> Kalau muncul tulisan kuning "
+                    "panjang berisi <em>WARNING: Running pip as the root user</em>, atau "
+                    "<em>Requirement already satisfied</em>, dua-duanya wajar — yang pertama "
+                    "cuma saran, yang kedua berarti pytest sudah terpasang. Kamu boleh lanjut."),
     "<p>Sejauh ini caramu memastikan kode benar adalah <strong>melihat hasilnya</strong> — "
     "cocokkan dengan kotak HARUS MUNCUL. Itu bekerja saat kamu sedang menatap layar. Yang tidak "
     "bekerja: memastikan perubahan hari ini tidak merusak sesuatu yang kamu tulis bulan lalu.</p>")
@@ -30,7 +34,8 @@ def test_ke_angka_teks_biasa():
     kode("python -m pytest -q"),
     blok("hasil", "<pre><code>.                                     [100%]\n1 passed in 0.31s</code></pre>",
          "HARUS MUNCUL"),
-    "<p>Titik itu satu uji yang lulus. Waktunya akan beda; <code>1 passed</code> tidak.</p>")
+    "<p>Titik itu satu uji yang lulus. Waktu di layarmu akan beda dari punyaku; "
+    "<code>1 passed</code> tidak boleh beda.</p>")
 
 langkah("Tiga aturan penamaan, dan itu saja",
     blok("aksi", "Baca sekali. Ini seluruh yang harus kamu hafal soal pytest.", "LAKUKAN"),
@@ -38,8 +43,8 @@ langkah("Tiga aturan penamaan, dan itu saja",
           [["berkasnya diawali <code>test_</code>", "<code>tests/test_bersih.py</code>"],
            ["fungsinya diawali <code>test_</code>", "<code>def test_ke_angka_teks_biasa():</code>"],
            ["pemeriksaannya pakai <code>assert</code> biasa", "<code>assert ke_angka(…) == …</code>"]]),
-    "<p>Tidak ada kerangka kerja yang harus dipelajari. Kalau kamu bisa menulis "
-    "<code>assert</code>, kamu sudah bisa memakai pytest.</p>")
+    "<p>Tidak ada kerangka kerja yang harus kamu pelajari. Kalau kamu bisa menulis satu "
+    "<code>assert</code>, kamu sudah bisa memakai pytest — sisanya cuma penamaan.</p>")
 
 langkah("Tujuh kasus sekaligus, satu fungsi uji",
     blok("aksi", "Ganti fungsi uji tadi dengan bentuk ini.", "LAKUKAN"),
@@ -79,8 +84,9 @@ def test_rapikan_nama_tidak_merusak_cv():
     kode("python -m pytest -q"),
     blok("hasil", "<pre><code>..........                            [100%]\n10 passed in 0.30s</code></pre>",
          "HARUS MUNCUL"),
-    "<p>Sepuluh uji, sepertiga detik. Bandingkan dengan memeriksa sepuluh hal dengan mata "
-    "<em>setiap kali</em> kamu mengubah satu baris.</p>")
+    "<p>Sepuluh uji, sepertiga detik. Bandingkan dengan kamu memeriksa sepuluh hal dengan mata "
+    "<em>setiap kali</em> kamu mengubah satu baris — dan kamu tahu sendiri kamu tidak akan "
+    "melakukannya sampai sepuluh kali.</p>")
 
 langkah("Lihat apa yang sebenarnya dijalankan",
     blok("aksi", "Sekali saja, jalankan dengan <code>-v</code>.", "LAKUKAN"),
@@ -93,6 +99,24 @@ langkah("Lihat apa yang sebenarnya dijalankan",
     "kurung siku. Itu yang akan muncul kalau salah satunya gagal — dan itulah gunanya.</p>",
     blok("catatan", "Sehari-hari pakai <code>-q</code> saja. <code>-v</code> untuk saat kamu "
                     "sedang mencari tahu uji mana yang bermasalah."))
+
+langkah("Jalankan pytest dari folder yang salah, dengan sengaja",
+    blok("aksi", "Buat folder kosong, masuk ke dalamnya, lalu jalankan ujimu dari sana.", "LAKUKAN"),
+    kode("mkdir coba\ncd coba\npython -m pytest ../tests -q"),
+    blok("bahaya", "<pre><code>E   ModuleNotFoundError: No module named 'laporan'\n"
+                   "ERROR ../tests/test_bersih.py\n"
+                   "!!!! Interrupted: 1 error during collection !!!!\n"
+                   "1 error in 0.39s</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    "<p>Perhatikan katanya: <strong>error</strong>, bukan <strong>failed</strong>. "
+    "Ujimu tidak gagal — ujimu <em>tidak sempat dijalankan sama sekali</em>. pytest berhenti di "
+    "tahap mengumpulkan (<em>collection</em>) karena tidak bisa meng-<code>import</code> "
+    "paketmu.</p>",
+    blok("catatan", "<strong>Bedakan dua kata ini seumur hidup:</strong> <code>failed</code> "
+                    "berarti kodemu salah. <code>error</code> saat <em>collection</em> berarti "
+                    "ujinya sendiri tidak bisa dibuka — hampir selalu karena kamu berada di folder "
+                    "yang salah atau salah menulis nama import."),
+    "<p>Bereskan: <code>cd ..</code> lalu hapus folder <code>coba</code>.</p>")
 
 langkah("Apa yang layak diuji",
     blok("aksi", "Baca kolom kiri. Empat baris pertama sudah kamu kerjakan hari ini.", "LAKUKAN"),

@@ -15,8 +15,8 @@ langkah("Bersihkan dulu, supaya yang diukur cuma satu hal",
 con.commit()
 print(con.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='index'").fetchone()[0])"""),
     blok("hasil", "<pre><code>0</code></pre>", "HARUS MUNCUL"),
-    "<p>Nol index. Kalau punyamu bukan nol, ada yang belum terhapus — dan seluruh pengukuran "
-    "hari ini akan salah baca.</p>")
+    "<p>Nol index. Kalau punyamu bukan nol, ada yang belum terhapus — dan seluruh pengukuranmu "
+    "hari ini akan salah baca. Jangan lanjut sebelum kamu melihat angka nol itu.</p>")
 
 langkah("Bikin satu index atas dua kolom",
     blok("aksi", "Perhatikan urutannya: <code>cabang</code> dulu, <code>tanggal</code> kedua.", "LAKUKAN"),
@@ -26,6 +26,22 @@ con.commit()"""),
     "<p>Tiga langkah berikutnya menanyakan tiga hal berbeda ke <strong>satu index yang sama ini</strong>. "
     "Nasibnya akan berbeda-beda.</p>")
 
+langkah("Dua error yang akan sering kamu temui saat mengurus index",
+    blok("aksi", "Jalankan dua baris ini satu per satu. Dua-duanya akan merah, "
+                 "dan dua-duanya berguna.", "LAKUKAN"),
+    kode('con.execute("CREATE INDEX idx_ct ON transaksi(cabang, tanggal)")'),
+    blok("bahaya", "<pre><code>OperationalError: index idx_ct already exists</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    kode('con.execute("DROP INDEX idx_yang_tidak_ada")'),
+    blok("bahaya", "<pre><code>OperationalError: no such index: idx_yang_tidak_ada</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    "<p>Itu sebabnya langkah 1 menulis <code>DROP INDEX <strong>IF EXISTS</strong></code>. "
+    "Tanpa itu, skrip yang kamu jadwalkan berhenti di tengah jalan hanya karena membersihkan "
+    "sesuatu yang memang sudah bersih.</p>",
+    blok("catatan", "<strong>Kalau punyamu tidak merah</strong> di baris pertama, berarti "
+                    "<code>idx_ct</code> belum sempat dibuat — ulangi langkah 2 dulu, lalu "
+                    "kembali ke sini."))
+
 langkah("Tanya pakai kolom pertama saja",
     blok("aksi", "Jalankan.", "LAKUKAN"),
     kode("""s = "SELECT COUNT(*) FROM transaksi WHERE cabang = 'Kemang'"
@@ -34,8 +50,8 @@ rencana(s)"""),
     blok("hasil", "<pre><code>5.7 ms   hasil = 160457\n"
                   "    SEARCH transaksi USING COVERING INDEX idx_ct (cabang=?)</code></pre>",
          "HARUS MUNCUL"),
-    "<p><code>SEARCH</code>. Index <code>(cabang, tanggal)</code> melayani pertanyaan yang cuma "
-    "menyebut <code>cabang</code>.</p>")
+    "<p><code>SEARCH</code>. Satu index yang kamu buat tadi melayani pertanyaan yang cuma "
+    "menyebut <code>cabang</code> — kolom pertamanya.</p>")
 
 langkah("Tanya pakai kedua kolomnya",
     blok("aksi", "Tambah satu syarat.", "LAKUKAN"),
@@ -55,8 +71,8 @@ ms, h = ukur(s); print(f"{ms:.1f} ms   hasil = {h[0][0]}")
 rencana(s)"""),
     blok("hasil", "<pre><code>35.6 ms   hasil = 400090\n"
                   "    SCAN transaksi USING COVERING INDEX idx_ct</code></pre>", "HARUS MUNCUL"),
-    "<p><strong>SCAN.</strong> Index-nya ada, kolomnya ada di dalamnya, dan tetap tidak menolong "
-    "sama sekali.</p>")
+    "<p><strong>SCAN.</strong> Index-mu ada, kolomnya ada di dalamnya, dan tetap tidak menolong "
+    "sama sekali. Inilah yang tidak akan pernah kamu duga tanpa membaca rencananya.</p>")
 
 langkah("Aturannya, dan gambarannya",
     blok("aksi", "Baca sekali. Ini satu-satunya hal yang harus kamu hafal hari ini.", "LAKUKAN"),

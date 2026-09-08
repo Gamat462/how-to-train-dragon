@@ -30,16 +30,17 @@ langkah("Cara pertama: perulangan Python biasa",
     kode('''t1, h1 = ukur(lambda: [round(v*0.11) for v in kecil["nilai"].tolist()])
 print(f"  list comprehension : {t1*1000:8.1f} ms")'''),
     blok("hasil", "<pre><code>  list comprehension :      4.5 ms</code></pre>", "HARUS MUNCUL"),
-    "<p>4,5 milidetik. Ini pembandingnya — tulis angkanya, kita pakai lagi empat kali.</p>")
+    "<p>4,5 milidetik. Ini pembandingmu — tulis angka yang kamu dapat, bukan angkaku, karena "
+    "empat langkah berikutnya membandingkan ke situ.</p>")
 
 langkah("Cara kedua: itertuples, yang katanya “cara benar”",
     blok("aksi", "Ini yang paling sering diajarkan untuk mengulang DataFrame.", "LAKUKAN"),
     kode('''t2, _ = ukur(lambda: [round(r.nilai*0.11) for r in kecil.itertuples()])
 print(f"  itertuples         : {t2*1000:8.1f} ms")'''),
     blok("hasil", "<pre><code>  itertuples         :     57.2 ms</code></pre>", "HARUS MUNCUL"),
-    "<p><strong>57,2 ms — dua belas kali lebih lambat</strong> daripada perulangan Python biasa. "
-    "Yang sering diajarkan sebagai “cara benar mengulang DataFrame” justru yang paling mahal, "
-    "karena tiap baris dibungkus jadi objek dulu.</p>")
+    "<p><strong>57,2 ms — dua belas kali lebih lambat</strong> daripada perulangan Python biasa "
+    "yang baru kamu ukur. Yang sering kamu temui diajarkan sebagai “cara benar mengulang "
+    "DataFrame” justru yang paling mahal, karena tiap baris dibungkus jadi objek dulu.</p>")
 
 langkah("Cara ketiga: .apply",
     blok("aksi", "Yang paling sering kamu tulis sendiri.", "LAKUKAN"),
@@ -47,7 +48,8 @@ langkah("Cara ketiga: .apply",
 print(f"  .apply(lambda)     : {t3*1000:8.1f} ms")'''),
     blok("hasil", "<pre><code>  .apply(lambda)     :     12.6 ms</code></pre>", "HARUS MUNCUL"),
     "<p>12,6 ms. Lebih cepat daripada <code>itertuples</code>, lebih lambat daripada perulangan "
-    "biasa. Belum ada yang mengesankan.</p>")
+    "biasa. Belum ada yang mengesankan — dan kalau kamu berhenti di sini, kamu akan menyimpulkan "
+    "bahwa keempat caranya sama saja.</p>")
 
 langkah("Cara keempat: hapus perulangannya",
     blok("aksi", "Perhatikan: tidak ada <code>for</code>, tidak ada <code>lambda</code>.", "LAKUKAN"),
@@ -56,7 +58,8 @@ print(f"  vektorisasi        : {t4*1000:8.1f} ms   <- {t3/t4:.0f}x lebih cepat d
 print("  hasil sama?", int(sum(h1)) == int(h4.sum()))'''),
     blok("hasil", "<pre><code>  vektorisasi        :      0.1 ms   <- 88x lebih cepat dari .apply\n"
                   "  hasil sama? True</code></pre>", "HARUS MUNCUL"),
-    "<p>Empat cara, satu jawaban, dan rentangnya <strong>0,1 ms sampai 57,2 ms</strong>.</p>")
+    "<p>Empat cara, satu jawaban, dan rentangnya <strong>0,1 ms sampai 57,2 ms</strong>. "
+    "Kamu menulis keempatnya dalam sepuluh menit; bedanya lima ratus kali lipat.</p>")
 
 langkah("Di 800.000 baris, jaraknya melebar",
     blok("aksi", "Sekarang di data penuh. Yang pertama butuh sepersekian detik — sabar.", "LAKUKAN"),

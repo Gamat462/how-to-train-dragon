@@ -45,7 +45,11 @@ if __name__ == "__main__":
     kode("python -m laporan.cli --berkas transaksi.csv"),
     blok("hasil", "<pre><code>Namespace(berkas=PosixPath('transaksi.csv'))</code></pre>",
          "HARUS MUNCUL"),
-    "<p>Di Windows tertulis <code>WindowsPath</code>. Isinya sama.</p>")
+    blok("catatan", "<strong>Kalau punyamu tertulis <code>WindowsPath</code></strong>, itu normal "
+                    "— kamu di Windows, dan isinya sama saja. Yang penting nama berkasnya "
+                    "muncul di dalam kurung."),
+    "<p>Belum ada yang dihitung — kamu baru membuktikan bahwa argumenmu sampai ke dalam "
+    "program.</p>")
 
 langkah("Halaman bantuan yang kamu dapat gratis",
     blok("aksi", "Kamu tidak menulis satu baris pun untuk ini.", "LAKUKAN"),
@@ -54,9 +58,10 @@ langkah("Halaman bantuan yang kamu dapat gratis",
                   "Ringkas omzet per cabang dari berkas CSV.\n\n"
                   "options:\n  -h, --help       show this help message and exit\n"
                   "  --berkas BERKAS  CSV sumber</code></pre>", "HARUS MUNCUL"),
-    "<p>argparse menyusunnya dari <code>description=</code> dan <code>help=</code> yang kamu "
-    "tulis. <strong>Enam bulan lagi, ketika kamu lupa cara memakai skripmu sendiri, ini yang "
-    "menyelamatkanmu</strong> — begitu juga klien yang kamu serahi skripnya.</p>")
+    "<p>argparse menyusunnya sendiri dari <code>description=</code> dan <code>help=</code> yang "
+    "kamu tulis. <strong>Enam bulan lagi, waktu kamu lupa cara memakai skripmu sendiri, ini "
+    "yang menyelamatkanmu</strong> — dan ini juga yang kamu berikan ke klien, supaya kamu tidak "
+    "ditelepon tiap kali dia bingung.</p>")
 
 langkah("Dan penolakan yang kamu dapat gratis juga",
     blok("aksi", "Lupakan argumen wajibnya dengan sengaja.", "LAKUKAN"),
@@ -64,9 +69,9 @@ langkah("Dan penolakan yang kamu dapat gratis juga",
     blok("hasil", "<pre><code>usage: cli.py [-h] --berkas BERKAS\n"
                   "cli.py: error: the following arguments are required: --berkas</code></pre>",
          "HARUS MUNCUL"),
-    "<p><code>required=True</code> yang melakukannya. Skrip notebook akan jalan setengah jalan "
-    "lalu gagal dengan pesan yang membingungkan; ini <strong>menolak sebelum mengerjakan "
-    "apa pun</strong>.</p>")
+    "<p><code>required=True</code> yang melakukannya untukmu. Skrip notebook yang biasa kamu "
+    "tulis akan jalan setengah jalan lalu gagal dengan pesan yang membingungkan; yang ini "
+    "<strong>menolak sebelum mengerjakan apa pun</strong>.</p>")
 
 langkah("Tiga argumen lagi",
     blok("aksi", "Sisipkan tepat sebelum <code>return p.parse_args(argv)</code>.", "LAKUKAN"),
@@ -79,8 +84,9 @@ langkah("Tiga argumen lagi",
                   "  --keluar KELUAR  CSV hasil (kalau kosong: cetak ke layar)\n"
                   "  --cabang CABANG  saring satu cabang saja\n"
                   "  --rinci          tampilkan log tingkat DEBUG</code></pre>", "HARUS MUNCUL"),
-    "<p>Kurung siku di <code>usage</code> berarti pilihan. <code>action=\"store_true\"</code> "
-    "membuat <code>--rinci</code> jadi saklar tanpa nilai.</p>")
+    "<p>Kurung siku di <code>usage</code> berarti pilihan — kamu boleh tidak menyebutnya. "
+    "<code>action=\"store_true\"</code> membuat <code>--rinci</code> jadi saklar: kamu cukup "
+    "menyebut namanya, tanpa nilai apa pun di belakangnya.</p>")
 
 langkah("Kenapa print() tidak cukup",
     blok("aksi", "Baca sekali, lalu pasang penggantinya.", "LAKUKAN"),
@@ -229,8 +235,9 @@ cat hasil.csv'''),
                   "cabang,transaksi,omzet\nKemang,160457,8373050000\nSeturan2,160087,8360182000\n"
                   "Dago,160428,8346883000\nSeturan,159650,8323688000\n"
                   "Renon,159378,8317611000</code></pre>", "HARUS MUNCUL"),
-    "<p>Perhatikan: begitu ada <code>--keluar</code>, tabelnya <strong>tidak lagi dicetak ke "
-    "layar</strong> — cuma satu baris catatan. Itu yang kamu mau dari skrip terjadwal.</p>")
+    "<p>Perhatikan: begitu kamu memberi <code>--keluar</code>, tabelnya <strong>tidak lagi "
+    "dicetak ke layar</strong> — cuma satu baris catatan. Itu persis yang kamu mau dari skrip "
+    "yang jalan jam 6 pagi tanpa kamu tonton.</p>")
 
 langkah("Kunci lingkungannya",
     blok("aksi", "Satu perintah terakhir.", "LAKUKAN"),

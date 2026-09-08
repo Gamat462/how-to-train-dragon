@@ -21,8 +21,9 @@ def puncak(f):
     _, puncak_b = tracemalloc.get_traced_memory(); tracemalloc.stop()
     return dt, puncak_b/1e6, hasil'''),
     blok("hasil", "<p>Tidak ada yang tercetak.</p>", "HARUS MUNCUL"),
-    "<p>Sampai kemarin kamu mengukur <strong>waktu</strong>. Hari ini yang menentukan adalah "
-    "<strong>memori tertinggi yang sempat dipakai</strong> — karena itu yang membunuh sesimu.</p>")
+    "<p>Sampai kemarin kamu mengukur <strong>waktu</strong>. Hari ini yang menentukan nasibmu "
+    "adalah <strong>memori tertinggi yang sempat dipakai</strong> — karena itulah yang membunuh "
+    "sesi Colab-mu, bukan lambatnya.</p>")
 
 langkah("Cara pertama: muat semuanya",
     blok("aksi", "Tugasnya: omzet per cabang. Cara yang selama ini kamu pakai.", "LAKUKAN"),
@@ -34,7 +35,7 @@ print(f"muat sekaligus   : {t1:5.2f} detik | puncak memori {m1:7.1f} MB")'''),
     blok("hasil", "<pre><code>muat sekaligus   :  0.86 detik | puncak memori    78.9 MB</code></pre>",
          "HARUS MUNCUL"),
     "<p>78,9 MB untuk menjawab pertanyaan yang hasilnya <strong>lima angka</strong>. "
-    "Seluruh tujuh kolom dimuat, padahal yang dipakai cuma dua.</p>")
+    "Kamu memuat ketujuh kolomnya, padahal yang kamu pakai cuma dua.</p>")
 
 langkah("Cara kedua: baca sepotong-sepotong",
     blok("aksi", "Perhatikan tiga hal baru: <code>usecols</code>, <code>dtype</code>, dan "
@@ -113,6 +114,9 @@ print(f"  transaksi > 100.000: {h3[0]:,} baris, nilai {h3[1]:,}")'''),
     blok("hasil", "<pre><code>generator :  7.05 detik | puncak memori     0.0 MB\n"
                   "  transaksi &gt; 100,000: 57,459 baris, nilai 6,433,560,000</code></pre>",
          "HARUS MUNCUL"),
+    blok("catatan", "<strong>Layarmu akan diam sekitar tujuh detik.</strong> Itu memang benar — "
+                    "bukan komputermu yang menggantung. Kalau kamu tergoda menekan Ctrl-C, "
+                    "tahan dulu; menunggunya adalah setengah dari pelajaran hari ini."),
     "<p><strong>Puncak memori 0,0 MB — dan 7,05 detik, delapan kali lebih lambat</strong> "
     "daripada muat sekaligus. Itu harganya, dan halaman ini tidak menyembunyikannya.</p>")
 
@@ -126,7 +130,9 @@ langkah("Tiga cara, satu tabel",
             "mentok.</strong>"],
            ["Generator", "7,05 dtk", "~0 MB",
             "Sangat besar, dan tugasnya sebaris-sebaris: menyaring, mengubah bentuk, menulis ulang."]]),
-    "<p>Baris pertama yang paling sering benar. <strong>Jangan pakai chunk untuk berkas 5 MB.</strong></p>")
+    "<p>Baris pertama yang paling sering benar untukmu. <strong>Jangan kamu pakai chunk untuk "
+    "berkas 5 MB</strong> — kamu cuma menambah kerumitan yang harus kamu baca lagi enam bulan "
+    "lagi.</p>")
 
 langkah("Kenapa generator tetap layak dipelajari meski paling lambat",
     blok("aksi", "Baca sekali.", "LAKUKAN"),

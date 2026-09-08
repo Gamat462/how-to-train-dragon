@@ -33,8 +33,8 @@ print("saldo:", saldo())
 print("total:", sum(saldo().values()))"""),
     blok("hasil", "<pre><code>saldo: {'Kas Besar': 5000000, 'Kas Kecil': 300000}\n"
                   "total: 5300000</code></pre>", "HARUS MUNCUL"),
-    "<p><strong>5.300.000.</strong> Ingat angka ini. Empat langkah lagi ia akan berubah tanpa "
-    "ada yang mencuri apa pun.</p>")
+    "<p><strong>5.300.000.</strong> Ingat angka ini, atau tulis di kertas. Empat langkah lagi kamu "
+    "akan melihatnya berubah tanpa ada yang mencuri apa pun.</p>")
 
 langkah("Perintah pertama: keluarkan Rp 400.000 dari Kas Besar",
     blok("aksi", "Jalankan.", "LAKUKAN"),
@@ -42,7 +42,8 @@ langkah("Perintah pertama: keluarkan Rp 400.000 dari Kas Besar",
 print("saldo:", saldo())"""),
     blok("hasil", "<pre><code>saldo: {'Kas Besar': 4600000, 'Kas Kecil': 300000}</code></pre>",
          "HARUS MUNCUL"),
-    "<p>Berhasil. Uangnya sudah keluar dari Kas Besar dan <strong>belum masuk ke mana pun</strong>.</p>")
+    "<p>Berhasil. Uangnya sudah keluar dari Kas Besar dan <strong>belum masuk ke mana pun</strong> "
+    "— persis keadaan yang tidak boleh kamu tinggalkan di jurnal mana pun.</p>")
 
 langkah("Perintah kedua: keluarkan Rp 900.000 dari Kas Kecil",
     blok("aksi", "Kas Kecil cuma punya 300.000, jadi ini akan ditolak. Jalankan.", "LAKUKAN"),
@@ -95,6 +96,22 @@ print("total:", sum(saldo().values()))"""),
     "<p><strong>Error yang sama persis. Totalnya tetap 5.300.000.</strong> "
     "<code>ROLLBACK</code> membatalkan juga <code>UPDATE</code> pertama yang sudah terlanjur "
     "berhasil, seolah-olah tidak pernah terjadi.</p>")
+
+langkah("Dua error transaksi yang akan kamu temui",
+    blok("aksi", "Jalankan berurutan. Dua-duanya akan merah.", "LAKUKAN"),
+    kode('con.execute("BEGIN")\ncon.execute("BEGIN")     # <-- yang kedua ditolak'),
+    blok("bahaya", "<pre><code>OperationalError: cannot start a transaction "
+                   "within a transaction</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    kode('con.execute("COMMIT")\ncon.execute("COMMIT")    # <-- tidak ada lagi yang bisa ditutup'),
+    blok("bahaya", "<pre><code>OperationalError: cannot commit - no transaction is active</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    "<p>Dua pesan itu mengatakan hal yang sama dengan dua cara: <strong>SQLite melacak apakah "
+    "kamu sedang di dalam transaksi atau tidak.</strong> Kamu tidak bisa memulai dua, dan tidak "
+    "bisa menutup yang tidak pernah dibuka.</p>",
+    blok("catatan", "<strong>Kalau punyamu tidak merah</strong> di baris kedua, koneksimu tidak "
+                    "dibuka dengan <code>isolation_level=None</code> — artinya Python yang "
+                    "mengurus transaksinya, bukan kamu. Ulangi langkah 1."))
 
 langkah("Tiga kata, satu janji",
     blok("aksi", "Baca sekali. Ini yang harus keluar dari mulutmu di wawancara.", "LAKUKAN"),

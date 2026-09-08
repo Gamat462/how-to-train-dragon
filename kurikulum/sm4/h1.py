@@ -32,6 +32,21 @@ print(con.execute("SELECT COUNT(*) FROM transaksi").fetchone()[0])"""),
     "<p>Kamu tidak percaya keluaran <code>besar.py</code> begitu saja — kamu menghitung ulang "
     "dari sisi lain. Kebiasaan ini yang membedakan orang yang datanya bisa dipercaya.</p>")
 
+langkah("Salah ketik dulu, sebelum salah ketik tanpa sengaja",
+    blok("aksi", "Ketik nama tabelnya salah — <strong>dengan sengaja</strong>. "
+                 "Hilangkan satu huruf.", "LAKUKAN"),
+    kode('print(con.execute("SELECT COUNT(*) FROM transaki").fetchall())'),
+    blok("bahaya", "<pre><code>OperationalError: no such table: transaki</code></pre>",
+         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    "<p>Baca pesannya pelan-pelan: <em>no such table</em> — tidak ada tabel bernama itu. "
+    "SQLite menyebut <strong>nama yang kamu ketik</strong>, jadi kamu tinggal membandingkannya "
+    "dengan yang benar.</p>",
+    blok("catatan", "<strong>Merah itu pesan, bukan bencana.</strong> Kamu akan melihat warna "
+                    "ini ratusan kali, dan hampir selalu isinya sesederhana ini. Lebih baik kamu "
+                    "melihatnya sekarang, ditemani, daripada pertama kali sendirian jam sebelas "
+                    "malam."),
+    "<p>Betulkan ejaannya, jalankan lagi, lalu lanjut.</p>")
+
 langkah("Ukur satu query, pakai jam",
     blok("aksi", "Tempel dan jalankan. <code>perf_counter</code> itu stopwatch bawaan Python.", "LAKUKAN"),
     kode("""Q = "SELECT COUNT(*) FROM transaksi WHERE pelanggan_id = 12345"
@@ -67,8 +82,8 @@ langkah("Minta SQLite menjelaskan rencananya",
 
 rencana(Q)"""),
     blok("hasil", "<pre><code>    SCAN transaksi</code></pre>", "HARUS MUNCUL"),
-    "<p><strong>SCAN</strong> = SQLite membaca <em>semua</em> 800.000 baris satu per satu, "
-    "lalu membuang yang tidak cocok. Itu sebabnya 39 milidetik.</p>")
+    "<p><strong>SCAN</strong> artinya SQLite membaca <em>semua</em> 800.000 baris satu per satu, "
+    "lalu membuang yang tidak cocok. Itulah 39 milidetik yang baru kamu ukur.</p>")
 
 langkah("Kata ketiga yang akan sering kamu lihat",
     blok("aksi", "Jalankan rencana untuk satu query pengelompokan.", "LAKUKAN"),
@@ -105,7 +120,8 @@ langkah("Ukur lagi query yang sama persis",
 print(f"{ms2:.3f} ms   hasil = {h[0][0]}")"""),
     blok("hasil", "<pre><code>0.006 ms   hasil = 15</code></pre>", "HARUS MUNCUL"),
     "<p>39,0 ms → 0,006 ms. Di mesinku <strong>6.513 kali lebih cepat</strong>, dan jawabannya "
-    "sama persis: 15. Modalnya satu baris perintah dan 0,35 detik, sekali seumur hidup tabel itu.</p>",
+    "sama persis: 15. Yang kamu keluarkan untuk itu: satu baris perintah dan 0,35 detik, "
+    "sekali seumur hidup tabel itu.</p>",
     blok("catatan", "Kelipatanmu tidak akan 6.513. Yang penting: <strong>ribuan kali</strong>, "
                     "bukan puluhan persen."))
 
@@ -126,9 +142,10 @@ rencana(Q2)"""),
     blok("hasil", "<pre><code>0.009 ms   hasil = 745000\n"
                   "    SEARCH transaksi USING INDEX idx_pel (pelanggan_id=?)</code></pre>",
          "HARUS MUNCUL"),
-    "<p>Kata <strong>COVERING</strong> hilang. Artinya: tadi semua yang dibutuhkan query sudah "
-    "ada di dalam index; sekarang <code>nilai</code> tidak ada di sana, jadi SQLite bolak-balik "
-    "ke tabelnya. Masih <code>SEARCH</code>, masih cepat — sedikit lebih mahal.</p>")
+    "<p>Kata <strong>COVERING</strong> hilang. Artinya: tadi semua yang query-mu butuhkan sudah "
+    "ada di dalam index; sekarang kamu minta <code>nilai</code>, dan itu tidak ada di sana, jadi "
+    "SQLite bolak-balik ke tabelnya. Masih <code>SEARCH</code>, masih cepat — sedikit lebih "
+    "mahal. Kamu tidak perlu menghafal ini; cukup tahu kenapa katanya bisa hilang.</p>")
 
 langkah("Ulangi dari ingatan",
     blok("aksi", "Tutup halaman ini. Di kertas, tulis jawaban tiga pertanyaan ini "

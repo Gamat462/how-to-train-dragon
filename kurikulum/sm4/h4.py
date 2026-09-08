@@ -18,8 +18,8 @@ c.execute("DROP INDEX IF EXISTS idx_ct")
 c.execute("VACUUM")
 print(f"tanpa index apa pun : {os.path.getsize('coba.db')/1e6:.1f} MB")"""),
     blok("hasil", "<pre><code>tanpa index apa pun : 36.7 MB</code></pre>", "HARUS MUNCUL"),
-    "<p><code>VACUUM</code> merapikan berkasnya supaya ukurannya jujur — tanpa itu, ruang bekas "
-    "index yang dihapus masih terhitung.</p>",
+    "<p><code>VACUUM</code> merapikan berkasnya supaya ukuran yang kamu baca jujur — tanpa itu, "
+    "ruang bekas index yang barusan kamu hapus masih ikut terhitung.</p>",
     blok("bahaya", "<code>VACUUM</code> menulis ulang seluruh berkas. Lambat 1–5 detik itu wajar, "
                    "dan tidak ada yang tercetak selama itu."))
 
@@ -62,8 +62,8 @@ langkah("Sekarang lihat harganya di berkas",
     kode("""c.execute("VACUUM")
 print(f"dengan 3 index      : {os.path.getsize('coba.db')/1e6:.1f} MB")"""),
     blok("hasil", "<pre><code>dengan 3 index      : 81.7 MB</code></pre>", "HARUS MUNCUL"),
-    "<p><strong>36,7 MB → 81,7 MB.</strong> Index-nya sendiri makan <strong>45 MB</strong> — "
-    "lebih besar daripada datanya.</p>",
+    "<p><strong>36,7 MB → 81,7 MB.</strong> Tiga index yang kamu buat memakan <strong>45 MB</strong> "
+    "— lebih besar daripada datanya sendiri.</p>",
     blok("catatan", "Angka waktu di mesinmu akan beda. <strong>36.7 dan 81.7 tidak boleh beda</strong> "
                     "— itu ukuran berkas, bukan kecepatan."))
 

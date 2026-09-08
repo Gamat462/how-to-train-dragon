@@ -294,8 +294,27 @@ print(con.execute(&quot;SELECT COUNT(*) FROM transaksi&quot;).fetchone()[0])</co
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">3</span>
-        <h3>Ukur satu query, pakai jam</h3>
+        <h3>Salah ketik dulu, sebelum salah ketik tanpa sengaja</h3>
         <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-3"><label for="sql-mahir-l4-v2-1-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ketik nama tabelnya salah — <strong>dengan sengaja</strong>. Hilangkan satu huruf.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(con.execute(&quot;SELECT COUNT(*) FROM transaki&quot;).fetchall())</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>OperationalError: no such table: transaki</code></pre></div>
+<p>Baca pesannya pelan-pelan: <em>no such table</em> — tidak ada tabel bernama itu. SQLite menyebut <strong>nama yang kamu ketik</strong>, jadi kamu tinggal membandingkannya dengan yang benar.</p>
+        <div class="catatan"><strong>Merah itu pesan, bukan bencana.</strong> Kamu akan melihat warna ini ratusan kali, dan hampir selalu isinya sesederhana ini. Lebih baik kamu melihatnya sekarang, ditemani, daripada pertama kali sendirian jam sebelas malam.</div>
+<p>Betulkan ejaannya, jalankan lagi, lalu lanjut.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Ukur satu query, pakai jam</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-4"><label for="sql-mahir-l4-v2-1-4">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -313,9 +332,9 @@ print(f&quot;{(time.perf_counter()-t)*1000:.1f} ms   hasil = {h[0][0]}&quot;)</c
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">4</span>
+        <span class="num">5</span>
         <h3>Jangan percaya satu kali ukur — ambil yang tercepat dari tujuh</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-4"><label for="sql-mahir-l4-v2-1-4">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-5"><label for="sql-mahir-l4-v2-1-5">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -339,9 +358,9 @@ print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">5</span>
+        <span class="num">6</span>
         <h3>Minta SQLite menjelaskan rencananya</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-5"><label for="sql-mahir-l4-v2-1-5">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-6"><label for="sql-mahir-l4-v2-1-6">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -354,15 +373,15 @@ print(f&quot;{ms:.1f} ms   hasil = {h[0][0]}&quot;)</code></pre></div>
 rencana(Q)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>    SCAN transaksi</code></pre></div>
-<p><strong>SCAN</strong> = SQLite membaca <em>semua</em> 800.000 baris satu per satu, lalu membuang yang tidak cocok. Itu sebabnya 39 milidetik.</p>
+<p><strong>SCAN</strong> artinya SQLite membaca <em>semua</em> 800.000 baris satu per satu, lalu membuang yang tidak cocok. Itulah 39 milidetik yang baru kamu ukur.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">6</span>
+        <span class="num">7</span>
         <h3>Kata ketiga yang akan sering kamu lihat</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-6"><label for="sql-mahir-l4-v2-1-6">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-7"><label for="sql-mahir-l4-v2-1-7">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -393,9 +412,9 @@ rencana(Q)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">7</span>
+        <span class="num">8</span>
         <h3>Satu baris perintah</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-7"><label for="sql-mahir-l4-v2-1-7">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-8"><label for="sql-mahir-l4-v2-1-8">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -413,9 +432,9 @@ print(f&quot;membuat index: {time.perf_counter()-t:.2f} detik&quot;)</code></pre
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">8</span>
+        <span class="num">9</span>
         <h3>Ukur lagi query yang sama persis</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-8"><label for="sql-mahir-l4-v2-1-8">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-9"><label for="sql-mahir-l4-v2-1-9">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -425,16 +444,16 @@ print(f&quot;membuat index: {time.perf_counter()-t:.2f} detik&quot;)</code></pre
 print(f&quot;{ms2:.3f} ms   hasil = {h[0][0]}&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>0.006 ms   hasil = 15</code></pre></div>
-<p>39,0 ms → 0,006 ms. Di mesinku <strong>6.513 kali lebih cepat</strong>, dan jawabannya sama persis: 15. Modalnya satu baris perintah dan 0,35 detik, sekali seumur hidup tabel itu.</p>
+<p>39,0 ms → 0,006 ms. Di mesinku <strong>6.513 kali lebih cepat</strong>, dan jawabannya sama persis: 15. Yang kamu keluarkan untuk itu: satu baris perintah dan 0,35 detik, sekali seumur hidup tabel itu.</p>
         <div class="catatan">Kelipatanmu tidak akan 6.513. Yang penting: <strong>ribuan kali</strong>, bukan puluhan persen.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">9</span>
+        <span class="num">10</span>
         <h3>Lihat kenapa jadi cepat</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-9"><label for="sql-mahir-l4-v2-1-9">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-10"><label for="sql-mahir-l4-v2-1-10">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -449,9 +468,9 @@ print(f&quot;{ms2:.3f} ms   hasil = {h[0][0]}&quot;)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">10</span>
+        <span class="num">11</span>
         <h3>Satu kata yang bisa hilang: COVERING</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-10"><label for="sql-mahir-l4-v2-1-10">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-11"><label for="sql-mahir-l4-v2-1-11">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -464,15 +483,15 @@ rencana(Q2)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>0.009 ms   hasil = 745000
     SEARCH transaksi USING INDEX idx_pel (pelanggan_id=?)</code></pre></div>
-<p>Kata <strong>COVERING</strong> hilang. Artinya: tadi semua yang dibutuhkan query sudah ada di dalam index; sekarang <code>nilai</code> tidak ada di sana, jadi SQLite bolak-balik ke tabelnya. Masih <code>SEARCH</code>, masih cepat — sedikit lebih mahal.</p>
+<p>Kata <strong>COVERING</strong> hilang. Artinya: tadi semua yang query-mu butuhkan sudah ada di dalam index; sekarang kamu minta <code>nilai</code>, dan itu tidak ada di sana, jadi SQLite bolak-balik ke tabelnya. Masih <code>SEARCH</code>, masih cepat — sedikit lebih mahal. Kamu tidak perlu menghafal ini; cukup tahu kenapa katanya bisa hilang.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">11</span>
+        <span class="num">12</span>
         <h3>Ulangi dari ingatan</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-11"><label for="sql-mahir-l4-v2-1-11">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-1-12"><label for="sql-mahir-l4-v2-1-12">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -536,7 +555,7 @@ rencana(A)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>52.6 ms   hasil = 33993
     SCAN transaksi USING COVERING INDEX idx_tgl</code></pre></div>
-<p>Index-nya <em>disebut</em> di rencana, tapi kata di depannya <strong>SCAN</strong>. Index-nya ada; index-nya tidak menolong.</p>
+<p>Index yang baru kamu buat <em>disebut</em> di rencana — tapi kata di depannya <strong>SCAN</strong>. Index-mu ada; index-mu tidak menolong. Kalau kamu berhenti membaca di nama index-nya saja, kamu akan menyimpulkan sebaliknya.</p>
       </div>
     </div>
 
@@ -557,7 +576,7 @@ rencana(B)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>1.1 ms   hasil = 33993
     SEARCH transaksi USING COVERING INDEX idx_tgl (tanggal&gt;? AND tanggal&lt;?)</code></pre></div>
-<p><strong>33993 dan 33993.</strong> Jawaban dua query itu identik. Yang satu 52,6 ms, yang satu 1,1 ms — <strong>sekitar 47 kali</strong>, hanya karena cara menulisnya.</p>
+<p><strong>33993 dan 33993.</strong> Dua query yang kamu jalankan menjawab hal yang sama persis. Yang satu 52,6 ms, yang satu 1,1 ms — <strong>sekitar 47 kali</strong>, hanya karena cara kamu menuliskannya.</p>
       </div>
     </div>
 
@@ -596,8 +615,27 @@ WHERE tanggal &gt;= &#x27;2024-01-01&#x27; AND tanggal &lt;= &#x27;2024-01-31&#x
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">6</span>
-        <h3>Bentuk kedua: mulai dari yang berhasil</h3>
+        <h3>Salah ketik nama kolom, dan bedanya dengan salah ketik nama tabel</h3>
         <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-6"><label for="sql-mahir-l4-v2-2-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Sekarang salah ketik <em>kolomnya</em>, bukan tabelnya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>rencana(&quot;SELECT COUNT(*) FROM transaksi WHERE pelangan_id = 1&quot;)</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>OperationalError: no such column: pelangan_id</code></pre></div>
+<p><em>no such <strong>column</strong></em>, bukan <em>table</em>. Satu kata di pesan itu memberitahumu harus mencari di mana: nama tabelnya benar, nama kolomnya yang salah.</p>
+        <div class="catatan">Perhatikan juga apa yang gagal: <code>rencana()</code>. <strong><code>EXPLAIN QUERY PLAN</code> tidak menyelamatkanmu dari salah ketik</strong> — ia menolak query yang salah, sama seperti menjalankannya. Yang ia periksa cara mencarinya, bukan benar-tidaknya angkamu.</div>
+<p>Betulkan, lalu lanjut.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Bentuk kedua: mulai dari yang berhasil</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-7"><label for="sql-mahir-l4-v2-2-7">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -610,15 +648,15 @@ rencana(s)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>5.3 ms   hasil = 160457
     SEARCH transaksi USING COVERING INDEX idx_cab (cabang=?)</code></pre></div>
-<p><code>SEARCH</code>. Ingat angka <strong>160457</strong> — tiga langkah berikutnya harus mengeluarkan angka yang sama.</p>
+<p><code>SEARCH</code>. Ingat angka <strong>160457</strong> — tiga langkah berikutnya harus mengeluarkan angka yang sama di layarmu. Kalau salah satu berbeda, berhenti dan cari salah ketiknya sebelum kamu lanjut.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">7</span>
+        <span class="num">8</span>
         <h3>Sekarang tanya hal yang sama pakai LIKE</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-7"><label for="sql-mahir-l4-v2-2-7">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-8"><label for="sql-mahir-l4-v2-2-8">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -630,15 +668,15 @@ rencana(s)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>37.5 ms   hasil = 160457
     SCAN transaksi USING COVERING INDEX idx_cab</code></pre></div>
-<p>Jawabannya sama, waktunya <strong>tujuh kali lebih lama</strong>, dan rencananya <code>SCAN</code>. Secara teori awalannya jelas dan index-nya bisa dipakai. Hasil pengukurannya bilang tidak.</p>
+<p>Jawabanmu sama, waktunya <strong>tujuh kali lebih lama</strong>, dan rencananya <code>SCAN</code>. Secara teori awalannya jelas dan index-nya bisa dipakai — dan kalau kamu cuma bernalar tanpa mengukur, kamu akan yakin begitu. Hasil pengukuranmu bilang tidak.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">8</span>
+        <span class="num">9</span>
         <h3>Kenapa 'Kem%' pun ditolak</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-8"><label for="sql-mahir-l4-v2-2-8">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-9"><label for="sql-mahir-l4-v2-2-9">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -651,9 +689,9 @@ rencana(s)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">9</span>
+        <span class="num">10</span>
         <h3>Yang memang mustahil dipercepat</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-9"><label for="sql-mahir-l4-v2-2-9">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-10"><label for="sql-mahir-l4-v2-2-10">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -665,15 +703,15 @@ rencana(s)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>42.0 ms   hasil = 160457
     SCAN transaksi USING COVERING INDEX idx_cab</code></pre></div>
-<p>Yang ini <strong>tidak ada obatnya</strong>, dan bukan salah SQLite. Kalau awal katanya tidak diketahui, tidak ada daftar terurut yang bisa menolong — sama seperti mencari semua nama yang <em>berakhiran</em> “anto” di buku telepon.</p>
+<p>Yang ini <strong>tidak ada obatnya</strong>, dan bukan salah SQLite. Kalau awal katanya tidak kamu ketahui, tidak ada daftar terurut yang bisa menolong — coba saja kamu cari semua nama yang <em>berakhiran</em> “anto” di buku telepon.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">10</span>
+        <span class="num">11</span>
         <h3>Penyelamatnya: tulis “diawali Kem” sebagai rentang</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-10"><label for="sql-mahir-l4-v2-2-10">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-11"><label for="sql-mahir-l4-v2-2-11">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -700,15 +738,15 @@ rencana(s)</code></pre></div>
             </tbody>
           </table>
         </div>
-<p>Empat cara menanyakan hal yang sama, empat kali jawaban <strong>160457</strong>, dan delapan kali selisih waktu.</p>
+<p>Kamu baru saja menanyakan satu hal dengan empat cara, dapat jawaban <strong>160457</strong> empat kali, dan selisih waktu delapan kali lipat. Tidak satu pun dari itu bisa kamu tebak dari membaca query-nya saja.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">11</span>
+        <span class="num">12</span>
         <h3>Ulangi dari ingatan</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-11"><label for="sql-mahir-l4-v2-2-11">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-2-12"><label for="sql-mahir-l4-v2-2-12">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -752,7 +790,7 @@ con.commit()
 print(con.execute(&quot;SELECT COUNT(*) FROM sqlite_master WHERE type=&#x27;index&#x27;&quot;).fetchone()[0])</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>0</code></pre></div>
-<p>Nol index. Kalau punyamu bukan nol, ada yang belum terhapus — dan seluruh pengukuran hari ini akan salah baca.</p>
+<p>Nol index. Kalau punyamu bukan nol, ada yang belum terhapus — dan seluruh pengukuranmu hari ini akan salah baca. Jangan lanjut sebelum kamu melihat angka nol itu.</p>
       </div>
     </div>
 
@@ -777,8 +815,30 @@ con.commit()</code></pre></div>
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">3</span>
-        <h3>Tanya pakai kolom pertama saja</h3>
+        <h3>Dua error yang akan sering kamu temui saat mengurus index</h3>
         <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-3"><label for="sql-mahir-l4-v2-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan dua baris ini satu per satu. Dua-duanya akan merah, dan dua-duanya berguna.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;CREATE INDEX idx_ct ON transaksi(cabang, tanggal)&quot;)</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>OperationalError: index idx_ct already exists</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;DROP INDEX idx_yang_tidak_ada&quot;)</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>OperationalError: no such index: idx_yang_tidak_ada</code></pre></div>
+<p>Itu sebabnya langkah 1 menulis <code>DROP INDEX <strong>IF EXISTS</strong></code>. Tanpa itu, skrip yang kamu jadwalkan berhenti di tengah jalan hanya karena membersihkan sesuatu yang memang sudah bersih.</p>
+        <div class="catatan"><strong>Kalau punyamu tidak merah</strong> di baris pertama, berarti <code>idx_ct</code> belum sempat dibuat — ulangi langkah 2 dulu, lalu kembali ke sini.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Tanya pakai kolom pertama saja</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-4"><label for="sql-mahir-l4-v2-3-4">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -790,15 +850,15 @@ rencana(s)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>5.7 ms   hasil = 160457
     SEARCH transaksi USING COVERING INDEX idx_ct (cabang=?)</code></pre></div>
-<p><code>SEARCH</code>. Index <code>(cabang, tanggal)</code> melayani pertanyaan yang cuma menyebut <code>cabang</code>.</p>
+<p><code>SEARCH</code>. Satu index yang kamu buat tadi melayani pertanyaan yang cuma menyebut <code>cabang</code> — kolom pertamanya.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">4</span>
+        <span class="num">5</span>
         <h3>Tanya pakai kedua kolomnya</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-4"><label for="sql-mahir-l4-v2-3-4">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-5"><label for="sql-mahir-l4-v2-3-5">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -816,9 +876,9 @@ rencana(s)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">5</span>
+        <span class="num">6</span>
         <h3>Sekarang kolom kedua saja, tanpa yang pertama</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-5"><label for="sql-mahir-l4-v2-3-5">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-6"><label for="sql-mahir-l4-v2-3-6">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -830,15 +890,15 @@ rencana(s)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>35.6 ms   hasil = 400090
     SCAN transaksi USING COVERING INDEX idx_ct</code></pre></div>
-<p><strong>SCAN.</strong> Index-nya ada, kolomnya ada di dalamnya, dan tetap tidak menolong sama sekali.</p>
+<p><strong>SCAN.</strong> Index-mu ada, kolomnya ada di dalamnya, dan tetap tidak menolong sama sekali. Inilah yang tidak akan pernah kamu duga tanpa membaca rencananya.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">6</span>
+        <span class="num">7</span>
         <h3>Aturannya, dan gambarannya</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-6"><label for="sql-mahir-l4-v2-3-6">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-7"><label for="sql-mahir-l4-v2-3-7">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -851,9 +911,9 @@ rencana(s)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">7</span>
+        <span class="num">8</span>
         <h3>Latihan: rancang index untuk tiga query nyata</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-7"><label for="sql-mahir-l4-v2-3-7">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-8"><label for="sql-mahir-l4-v2-3-8">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -874,9 +934,9 @@ SELECT * FROM transaksi WHERE pelanggan_id = ? ORDER BY tanggal DESC</code></pre
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">8</span>
+        <span class="num">9</span>
         <h3>Ukur Q2 dengan index yang salah urutan</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-8"><label for="sql-mahir-l4-v2-3-8">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-9"><label for="sql-mahir-l4-v2-3-9">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -895,9 +955,9 @@ rencana(Q2)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">9</span>
+        <span class="num">10</span>
         <h3>Tambahkan index dengan urutan yang benar</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-9"><label for="sql-mahir-l4-v2-3-9">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-10"><label for="sql-mahir-l4-v2-3-10">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -917,9 +977,9 @@ rencana(Q2)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">10</span>
+        <span class="num">11</span>
         <h3>Q3: lihat biaya pengurutan yang tersembunyi</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-10"><label for="sql-mahir-l4-v2-3-10">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-11"><label for="sql-mahir-l4-v2-3-11">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -938,9 +998,9 @@ rencana(Q3)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">11</span>
+        <span class="num">12</span>
         <h3>Hapus biaya itu dengan menambah satu kolom ke index</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-11"><label for="sql-mahir-l4-v2-3-11">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-12"><label for="sql-mahir-l4-v2-3-12">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -957,9 +1017,9 @@ rencana(Q3)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">12</span>
+        <span class="num">13</span>
         <h3>Bereskan, lalu ulangi dari ingatan</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-12"><label for="sql-mahir-l4-v2-3-12">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-3-13"><label for="sql-mahir-l4-v2-3-13">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1006,7 +1066,7 @@ c.execute(&quot;VACUUM&quot;)
 print(f&quot;tanpa index apa pun : {os.path.getsize(&#x27;coba.db&#x27;)/1e6:.1f} MB&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>tanpa index apa pun : 36.7 MB</code></pre></div>
-<p><code>VACUUM</code> merapikan berkasnya supaya ukurannya jujur — tanpa itu, ruang bekas index yang dihapus masih terhitung.</p>
+<p><code>VACUUM</code> merapikan berkasnya supaya ukuran yang kamu baca jujur — tanpa itu, ruang bekas index yang barusan kamu hapus masih ikut terhitung.</p>
         <div class="bahaya"><code>VACUUM</code> menulis ulang seluruh berkas. Lambat 1–5 detik itu wajar, dan tidak ada yang tercetak selama itu.</div>
       </div>
     </div>
@@ -1092,7 +1152,7 @@ waktu buat idx_prd : 0.36 detik</code></pre></div>
 print(f&quot;dengan 3 index      : {os.path.getsize(&#x27;coba.db&#x27;)/1e6:.1f} MB&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>dengan 3 index      : 81.7 MB</code></pre></div>
-<p><strong>36,7 MB → 81,7 MB.</strong> Index-nya sendiri makan <strong>45 MB</strong> — lebih besar daripada datanya.</p>
+<p><strong>36,7 MB → 81,7 MB.</strong> Tiga index yang kamu buat memakan <strong>45 MB</strong> — lebih besar daripada datanya sendiri.</p>
         <div class="catatan">Angka waktu di mesinmu akan beda. <strong>36.7 dan 81.7 tidak boleh beda</strong> — itu ukuran berkas, bukan kecepatan.</div>
       </div>
     </div>
@@ -1230,7 +1290,7 @@ c.commit(); c.execute(&quot;DETACH b&quot;)
 print(&quot;baris:&quot;, c.execute(&quot;SELECT COUNT(*) FROM kecil&quot;).fetchone()[0])</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>baris: 10000</code></pre></div>
-<p>Sepuluh ribu, bukan 800.000. Kamu akan tahu alasannya begitu melihat angka di langkah 3.</p>
+<p>Sepuluh ribu, bukan 800.000. Kamu akan tahu sendiri alasannya begitu kamu melihat angka di langkah 3 — dan kamu akan bersyukur saya tidak menyuruhmu memakai 800.000.</p>
       </div>
     </div>
 
@@ -1344,7 +1404,7 @@ sama? True</code></pre></div>
     SCAN t
     SEARCH rata USING AUTOMATIC COVERING INDEX (cabang=?)
     USE TEMP B-TREE FOR GROUP BY</code></pre></div>
-<p>Rencananya <em>lebih panjang</em>, dan seribu kali lebih cepat. <strong>Panjang rencana bukan ukuran biaya.</strong> Yang mahal adalah <code>CORRELATED</code> — pekerjaan yang diulang, bukan pekerjaan yang banyak.</p>
+<p>Rencana yang baru kamu baca <em>lebih panjang</em>, dan seribu kali lebih cepat. <strong>Panjang rencana bukan ukuran biaya</strong> — jadi jangan kamu pakai jumlah barisnya untuk menebak. Yang mahal adalah <code>CORRELATED</code>: pekerjaan yang diulang, bukan pekerjaan yang banyak.</p>
       </div>
     </div>
 
@@ -1574,7 +1634,7 @@ print(&quot;total:&quot;, sum(saldo().values()))</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>saldo: {'Kas Besar': 5000000, 'Kas Kecil': 300000}
 total: 5300000</code></pre></div>
-<p><strong>5.300.000.</strong> Ingat angka ini. Empat langkah lagi ia akan berubah tanpa ada yang mencuri apa pun.</p>
+<p><strong>5.300.000.</strong> Ingat angka ini, atau tulis di kertas. Empat langkah lagi kamu akan melihatnya berubah tanpa ada yang mencuri apa pun.</p>
       </div>
     </div>
 
@@ -1592,7 +1652,7 @@ total: 5300000</code></pre></div>
 print(&quot;saldo:&quot;, saldo())</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>saldo: {'Kas Besar': 4600000, 'Kas Kecil': 300000}</code></pre></div>
-<p>Berhasil. Uangnya sudah keluar dari Kas Besar dan <strong>belum masuk ke mana pun</strong>.</p>
+<p>Berhasil. Uangnya sudah keluar dari Kas Besar dan <strong>belum masuk ke mana pun</strong> — persis keadaan yang tidak boleh kamu tinggalkan di jurnal mana pun.</p>
       </div>
     </div>
 
@@ -1681,8 +1741,32 @@ total: 5300000</code></pre></div>
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">8</span>
-        <h3>Tiga kata, satu janji</h3>
+        <h3>Dua error transaksi yang akan kamu temui</h3>
         <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-8"><label for="sql-mahir-l4-v2-6-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan berurutan. Dua-duanya akan merah.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;BEGIN&quot;)
+con.execute(&quot;BEGIN&quot;)     # &lt;-- yang kedua ditolak</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>OperationalError: cannot start a transaction within a transaction</code></pre></div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>con.execute(&quot;COMMIT&quot;)
+con.execute(&quot;COMMIT&quot;)    # &lt;-- tidak ada lagi yang bisa ditutup</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>OperationalError: cannot commit - no transaction is active</code></pre></div>
+<p>Dua pesan itu mengatakan hal yang sama dengan dua cara: <strong>SQLite melacak apakah kamu sedang di dalam transaksi atau tidak.</strong> Kamu tidak bisa memulai dua, dan tidak bisa menutup yang tidak pernah dibuka.</p>
+        <div class="catatan"><strong>Kalau punyamu tidak merah</strong> di baris kedua, koneksimu tidak dibuka dengan <code>isolation_level=None</code> — artinya Python yang mengurus transaksinya, bukan kamu. Ulangi langkah 1.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Tiga kata, satu janji</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-9"><label for="sql-mahir-l4-v2-6-9">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1706,9 +1790,9 @@ total: 5300000</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">9</span>
+        <span class="num">10</span>
         <h3>Pola yang benar, dan satu baris yang sering dilupakan</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-9"><label for="sql-mahir-l4-v2-6-9">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-10"><label for="sql-mahir-l4-v2-6-10">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1727,9 +1811,9 @@ except Exception:
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">10</span>
+        <span class="num">11</span>
         <h3>Sekarang bagian yang membuat orang terkejut</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-10"><label for="sql-mahir-l4-v2-6-10">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-11"><label for="sql-mahir-l4-v2-6-11">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1746,9 +1830,9 @@ print(&quot;foreign_keys bawaan:&quot;, c.execute(&quot;PRAGMA foreign_keys&quot
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">11</span>
+        <span class="num">12</span>
         <h3>Bikin dua tabel yang jelas-jelas bertaut</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-11"><label for="sql-mahir-l4-v2-6-11">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-12"><label for="sql-mahir-l4-v2-6-12">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1770,9 +1854,9 @@ print(&quot;induk:&quot;, c.execute(&quot;SELECT * FROM induk&quot;).fetchall())
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">12</span>
+        <span class="num">13</span>
         <h3>Coba masukkan baris yatim</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-12"><label for="sql-mahir-l4-v2-6-12">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-13"><label for="sql-mahir-l4-v2-6-13">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1789,9 +1873,9 @@ print(&quot;tersimpan:&quot;, c.execute(&quot;SELECT * FROM anak&quot;).fetchall
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">13</span>
+        <span class="num">14</span>
         <h3>Nyalakan, lalu coba lagi</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-13"><label for="sql-mahir-l4-v2-6-13">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-14"><label for="sql-mahir-l4-v2-6-14">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1812,9 +1896,9 @@ ditolak: FOREIGN KEY constraint failed</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">14</span>
+        <span class="num">15</span>
         <h3>Periksa yang sudah terlanjur masuk</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-14"><label for="sql-mahir-l4-v2-6-14">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-15"><label for="sql-mahir-l4-v2-6-15">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1830,9 +1914,9 @@ ditolak: FOREIGN KEY constraint failed</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">15</span>
+        <span class="num">16</span>
         <h3>Ulangi dari ingatan</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-15"><label for="sql-mahir-l4-v2-6-15">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-6-16"><label for="sql-mahir-l4-v2-6-16">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -1903,7 +1987,7 @@ mv, rv = ukur(&quot;SELECT * FROM ringkas WHERE cabang=&#x27;Kemang&#x27; ORDER 
 print(f&quot;VIEW  : {mv:8.1f} ms   {len(rv)} baris&quot;)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>VIEW  :    319.8 ms   24 baris</code></pre></div>
-<p>24 baris hasil, 320 milidetik. Ia harus meringkas ulang 800.000 baris <strong>tiap kali dipanggil</strong>.</p>
+<p>24 baris hasil, 320 milidetik. View yang baru kamu bikin harus meringkas ulang 800.000 baris <strong>tiap kali kamu memanggilnya</strong>.</p>
       </div>
     </div>
 
@@ -1942,7 +2026,7 @@ print(&quot;isi sama?&quot;, rv == rt)</code></pre></div>
         <div class="hasil"><span class="tag">HARUS MUNCUL</span>
           <pre><code>TABEL :    0.033 ms   24 baris
 isi sama? True</code></pre></div>
-<p>319,8 ms lawan 0,033 ms — sekitar <strong>sepuluh ribu kali</strong>, isi identik. Masuk akal: yang satu meringkas 800.000 baris, yang satu membaca 24 baris yang sudah jadi.</p>
+<p>319,8 ms lawan 0,033 ms — sekitar <strong>sepuluh ribu kali</strong>, dan <code>isi sama? True</code> membuktikan kamu tidak kehilangan apa pun. Masuk akal: yang satu meringkas 800.000 baris tiap kali, yang satu membaca 24 baris yang sudah jadi.</p>
       </div>
     </div>
 
@@ -2047,8 +2131,29 @@ GAGAL  Nilai pesanan beda antara sistem dan kasir: 2 baris (batas 0)
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">9</span>
-        <h3>Periksa kode keluarnya</h3>
+        <h3>Jalankan dari folder yang salah, dengan sengaja</h3>
         <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-9"><label for="sql-mahir-l4-v2-7-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buat satu folder kosong, masuk ke dalamnya, lalu panggil skripnya dari sana.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>mkdir coba
+cd coba
+python ../uji_mutu.py</code></pre></div>
+        <div class="bahaya"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <pre><code>sqlite3.OperationalError: no such table: pesanan</code></pre></div>
+<p>Perhatikan pesannya: bukan “berkas tidak ditemukan”. SQLite justru <strong>membuat <code>senja.db</code> baru yang kosong</strong> di folder itu, lalu bingung karena tabelnya tidak ada.</p>
+        <div class="bahaya"><strong>Ini jebakan yang mahal.</strong> Skrip yang dijalankan dari folder salah tidak pernah berteriak “salah folder” — ia diam-diam bekerja di basis data kosong. Kalau yang kamu jalankan skrip <em>penulis</em>, bukan pemeriksa, hasilnya masuk ke berkas yang salah dan tidak ada yang tahu.</div>
+        <div class="catatan"><strong>Kalau punyamu justru berhasil</strong>, kamu masih di folder yang benar. Bereskan: <code>cd ..</code> lalu hapus folder <code>coba</code> beserta <code>senja.db</code> kosong di dalamnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Periksa kode keluarnya</h3>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-10"><label for="sql-mahir-l4-v2-7-10">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -2064,9 +2169,9 @@ echo %ERRORLEVEL%   # Windows</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">10</span>
+        <span class="num">11</span>
         <h3>Baca tiga kelompok keluarannya</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-10"><label for="sql-mahir-l4-v2-7-10">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-11"><label for="sql-mahir-l4-v2-7-11">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -2091,9 +2196,9 @@ echo %ERRORLEVEL%   # Windows</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">11</span>
+        <span class="num">12</span>
         <h3>Kenapa ada kolom “batas”</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-11"><label for="sql-mahir-l4-v2-7-11">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-12"><label for="sql-mahir-l4-v2-7-12">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -2107,9 +2212,9 @@ echo %ERRORLEVEL%   # Windows</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">12</span>
+        <span class="num">13</span>
         <h3>Kesalahan yang hampir kubuat — jalankan versi pertamaku</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-12"><label for="sql-mahir-l4-v2-7-12">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-13"><label for="sql-mahir-l4-v2-7-13">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -2130,9 +2235,9 @@ print(len(r), &quot;baris bermasalah&quot;)</code></pre></div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">13</span>
+        <span class="num">14</span>
         <h3>Pecah menurut statusnya</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-13"><label for="sql-mahir-l4-v2-7-13">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-14"><label for="sql-mahir-l4-v2-7-14">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -2149,9 +2254,9 @@ WHERE id NOT IN (SELECT id FROM pesanan_kasir) GROUP BY status&quot;&quot;&quot;
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">14</span>
+        <span class="num">15</span>
         <h3>Dari mana syarat itu datang</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-14"><label for="sql-mahir-l4-v2-7-14">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-15"><label for="sql-mahir-l4-v2-7-15">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
@@ -2164,9 +2269,9 @@ WHERE id NOT IN (SELECT id FROM pesanan_kasir) GROUP BY status&quot;&quot;&quot;
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">15</span>
+        <span class="num">16</span>
         <h3>Ulangi dari ingatan</h3>
-        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-15"><label for="sql-mahir-l4-v2-7-15">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="sql-mahir-l4-v2-7-16"><label for="sql-mahir-l4-v2-7-16">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="aksi"><span class="tag">LAKUKAN</span>
