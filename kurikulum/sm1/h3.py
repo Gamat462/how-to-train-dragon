@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Hari 3 — jebakan NOT IN: query yang menjawab nol padahal jawabannya tiga."""
+"""Hari 3 — jebakan NOT IN (PostgreSQL)."""
 import sys, pathlib
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "mat"))
 from _gen import kode, tabel, blok
+from _sql import muat, keluaran
+H = muat(pathlib.Path(__file__).parent / "hasil.json")
 
 L = []
 def langkah(judul, *isi):
@@ -12,17 +14,15 @@ langkah("Tulis jawabanmu dulu, di kertas",
     blok("aksi", "Pertanyaan bisnisnya wajar: <strong>pelanggan mana yang belum pernah memesan "
                  "sama sekali?</strong> Daftar itu dipakai untuk kirim promo. Tulis query-mu di "
                  "kertas sebelum menjalankan apa pun.", "KERJAKAN, ± 3 MENIT"),
-    kode('''-- tulis jawabanmu di sini dulu, jangan dijalankan
-SELECT ... FROM pelanggan WHERE ...''', salin=False),
+    kode("-- tulis jawabanmu di sini dulu, jangan dijalankan\nSELECT ... FROM pelanggan WHERE ...",
+         salin=False),
     blok("bahaya", "<strong>Jangan lanjut sebelum kamu menulis sesuatu.</strong> Kalau kamu "
                    "membaca jawabannya dulu, kamu sedang membaca — bukan berlatih."))
 
 langkah("Jalankan versi yang paling wajar ditulis orang",
-    blok("aksi", "Sel baru.", "LAKUKAN"),
-    kode('''q("""SELECT nama FROM pelanggan
-     WHERE id NOT IN (SELECT pelanggan_id FROM pesanan)""")'''),
-    blok("hasil", "<pre><code>Empty DataFrame\nColumns: [nama]\nIndex: []</code></pre>",
-         "HARUS MUNCUL"),
+    blok("aksi", "Berkas <code>senja/hari-3.sql</code>. Jalankan.", "LAKUKAN"),
+    kode("SELECT nama FROM pelanggan\nWHERE id NOT IN (SELECT pelanggan_id FROM pesanan);"),
+    keluaran(H, "h3_not_in"),
     "<p>Kosong. Query-mu jalan, layarmu bersih, hasilnya masuk akal: “semua pelanggan sudah "
     "pernah memesan, tidak ada yang perlu dikirimi promo.”</p>")
 
@@ -36,60 +36,55 @@ langkah("Berhenti sebentar sebelum menggulir",
                     "termasuk yang sudah dua tahun bekerja. Bedanya sekarang kamu akan tahu."))
 
 langkah("Tanya hal yang sama dengan cara kedua",
-    blok("aksi", "Sel baru. Query berbeda, pertanyaan identik.", "LAKUKAN"),
-    kode('''q("""SELECT nama FROM pelanggan p
-     WHERE NOT EXISTS (SELECT 1 FROM pesanan o WHERE o.pelanggan_id = p.id)
-     ORDER BY nama""")'''),
-    blok("hasil", "<pre><code>    nama\n0   Andi\n1  Bagus\n2   Vira</code></pre>",
-         "HARUS MUNCUL"),
+    blok("aksi", "Query berbeda, pertanyaan identik.", "LAKUKAN"),
+    kode('''SELECT nama FROM pelanggan p
+WHERE NOT EXISTS (SELECT 1 FROM pesanan o WHERE o.pelanggan_id = p.id)
+ORDER BY nama;'''),
+    keluaran(H, "h3_not_exists"),
     "<p>Andi, Bagus, dan Vira nyata-nyata belum pernah memesan. Query pertama tidak menemukan "
     "mereka — <strong>dan tidak memberitahu siapa pun</strong>.</p>")
 
 langkah("Cara ketiga, supaya kamu tidak percaya padaku begitu saja",
-    blok("aksi", "Sel baru.", "LAKUKAN"),
-    kode('''q("""SELECT COUNT(*) AS jumlah FROM pelanggan p
-     LEFT JOIN pesanan o ON o.pelanggan_id = p.id
-     WHERE o.id IS NULL""")'''),
-    blok("hasil", "<pre><code>   jumlah\n0       3</code></pre>", "HARUS MUNCUL"),
+    blok("aksi", "Jalankan.", "LAKUKAN"),
+    kode('''SELECT count(*) AS jumlah FROM pelanggan p
+LEFT JOIN pesanan o ON o.pelanggan_id = p.id
+WHERE o.id IS NULL;'''),
+    keluaran(H, "h3_left_join"),
     "<p>Tiga lagi. Kamu memakai dua cara berbeda dan sampai ke satu angka — itu cara kamu tahu "
     "angkanya benar, bukan karena aku yang bilang.</p>")
 
 langkah("Cara keempat: NOT IN yang disaring dulu",
-    blok("aksi", "Sel baru. <code>NOT IN</code> yang sama, ditambah satu penyaring.", "LAKUKAN"),
-    kode('''q("""SELECT COUNT(*) AS jumlah FROM pelanggan
-     WHERE id NOT IN (SELECT pelanggan_id FROM pesanan
-                      WHERE pelanggan_id IS NOT NULL)""")'''),
-    blok("hasil", "<pre><code>   jumlah\n0       3</code></pre>", "HARUS MUNCUL"),
-    "<p>Tiga. Jadi yang bermasalah bukan <code>NOT IN</code> itu sendiri — yang bermasalah ada di "
-    "<strong>apa yang masuk ke dalam daftarnya</strong>.</p>")
+    blok("aksi", "<code>NOT IN</code> yang sama, ditambah satu penyaring.", "LAKUKAN"),
+    kode('''SELECT count(*) AS jumlah FROM pelanggan
+WHERE id NOT IN (SELECT pelanggan_id FROM pesanan
+                 WHERE pelanggan_id IS NOT NULL);'''),
+    keluaran(H, "h3_not_in_saring"),
+    "<p>Tiga. Jadi yang bermasalah bukan <code>NOT IN</code> itu sendiri — yang bermasalah ada "
+    "di <strong>apa yang masuk ke dalam daftarnya</strong>.</p>")
 
 langkah("Empat cara berdampingan",
-    blok("aksi", "Sel baru. Satu tabel, empat jawaban.", "LAKUKAN"),
-    kode('''q("""
-SELECT 'NOT IN' AS cara,
-       (SELECT COUNT(*) FROM pelanggan
+    blok("aksi", "Satu query, empat jawaban.", "LAKUKAN"),
+    kode('''SELECT 'NOT IN' AS cara,
+       (SELECT count(*) FROM pelanggan
         WHERE id NOT IN (SELECT pelanggan_id FROM pesanan)) AS hasil
 UNION ALL SELECT 'NOT EXISTS',
-       (SELECT COUNT(*) FROM pelanggan p
+       (SELECT count(*) FROM pelanggan p
         WHERE NOT EXISTS (SELECT 1 FROM pesanan o WHERE o.pelanggan_id = p.id))
 UNION ALL SELECT 'LEFT JOIN IS NULL',
-       (SELECT COUNT(*) FROM pelanggan p
+       (SELECT count(*) FROM pelanggan p
         LEFT JOIN pesanan o ON o.pelanggan_id = p.id WHERE o.id IS NULL)
 UNION ALL SELECT 'NOT IN + saring NULL',
-       (SELECT COUNT(*) FROM pelanggan
-        WHERE id NOT IN (SELECT pelanggan_id FROM pesanan WHERE pelanggan_id IS NOT NULL))
-""")'''),
-    blok("hasil", "<pre><code>                   cara  hasil\n0                NOT IN      0\n"
-                  "1            NOT EXISTS      3\n2     LEFT JOIN IS NULL      3\n"
-                  "3  NOT IN + saring NULL      3</code></pre>", "HARUS MUNCUL"),
-    "<p>Tiga cara menjawab 3. Satu cara menjawab 0. Padahal kamu menanyakan hal yang sama "
-    "kepada keempatnya.</p>")
+       (SELECT count(*) FROM pelanggan
+        WHERE id NOT IN (SELECT pelanggan_id FROM pesanan
+                         WHERE pelanggan_id IS NOT NULL));'''),
+    keluaran(H, "h3_empat_cara"),
+    "<p>Tiga cara menjawab 3. Satu cara menjawab 0. Padahal kamu menanyakan hal yang sama kepada "
+    "keempatnya.</p>")
 
 langkah("Cari penyebabnya sendiri",
-    blok("aksi", "Sel baru. Tebak angkanya dulu sebelum menjalankan.", "LAKUKAN"),
-    kode('q("SELECT COUNT(*) AS tanpa_pelanggan_id FROM pesanan WHERE pelanggan_id IS NULL")'),
-    blok("hasil", "<pre><code>   tanpa_pelanggan_id\n0                  12</code></pre>",
-         "HARUS MUNCUL"),
+    blok("aksi", "Tebak angkanya dulu sebelum menjalankan.", "LAKUKAN"),
+    kode("SELECT count(*) AS tanpa_pelanggan_id FROM pesanan WHERE pelanggan_id IS NULL;"),
+    keluaran(H, "h3_tanpa_pid"),
     "<p>Dua belas pesanan datang dari tamu yang tidak punya akun, jadi "
     "<code>pelanggan_id</code>-nya <code>NULL</code>. Itulah seluruh sebabnya — dan kamu "
     "menemukannya sendiri, bukan dari penjelasanku.</p>")
@@ -108,33 +103,28 @@ id <> 3  AND  id <> 7  AND  id <> NULL''', salin=False),
     "<code>WHERE</code> membuang semuanya.</p>")
 
 langkah("Buktikan di ukuran sekecil mungkin",
-    blok("aksi", "Sel baru. Tanpa tabel, tanpa data — cuma angka.", "LAKUKAN"),
-    kode('''q("""SELECT 5 NOT IN (1,2,3)    AS "5 NOT IN (1,2,3)",
-       5 NOT IN (1,2,NULL) AS "5 NOT IN (1,2,NULL)" """)'''),
-    blok("hasil", "<pre><code>   5 NOT IN (1,2,3) 5 NOT IN (1,2,NULL)\n"
-                  "0                 1                None</code></pre>", "HARUS MUNCUL"),
+    blok("aksi", "Tanpa tabel, tanpa data — cuma angka.", "LAKUKAN"),
+    kode('''SELECT 5 NOT IN (1,2,3)    AS "5 NOT IN (1,2,3)",
+       5 NOT IN (1,2,NULL) AS "5 NOT IN (1,2,NULL)";'''),
+    keluaran(H, "h3_kecil"),
     "<p>Lima jelas bukan 1 dan bukan 2. Tapi begitu kamu menyelipkan satu <code>NULL</code> ke "
-    "daftarnya, jawabannya berubah dari <strong>benar</strong> jadi <strong>tidak "
+    "daftarnya, jawabannya berubah dari <strong>true</strong> jadi <strong>tidak "
     "diketahui</strong>.</p>")
 
 langkah("Bentuk positifnya tidak rusak",
-    blok("aksi", "Sel baru. Sekarang tanpa <code>NOT</code>.", "LAKUKAN"),
-    kode('''q("""SELECT 5 IN (1,2,NULL) AS "5 IN (1,2,NULL)",
-       1 IN (1,2,NULL) AS "1 IN (1,2,NULL)" """)'''),
-    blok("hasil", "<pre><code>  5 IN (1,2,NULL)  1 IN (1,2,NULL)\n"
-                  "0            None                1</code></pre>", "HARUS MUNCUL"),
-    "<p><code>1 IN (1,2,NULL)</code> tetap <strong>benar</strong>: cukup satu bagian bernilai "
+    blok("aksi", "Sekarang tanpa <code>NOT</code>.", "LAKUKAN"),
+    kode('''SELECT 5 IN (1,2,NULL) AS "5 IN (1,2,NULL)",
+       1 IN (1,2,NULL) AS "1 IN (1,2,NULL)";'''),
+    keluaran(H, "h3_positif"),
+    "<p><code>1 IN (1,2,NULL)</code> tetap <strong>true</strong>: cukup satu bagian bernilai "
     "benar, karena <code>OR</code> tidak menuntut semuanya. Yang rusak hanya bentuk negatifnya, "
     "karena <code>AND</code> menuntut <em>semua</em> bagian bernilai benar.</p>")
 
 langkah("Satu layar merah supaya kamu kenal bentuknya",
-    blok("aksi", "Sel baru. Kesalahan ini sering terjadi saat kamu buru-buru menyalin subquery.",
+    blok("aksi", "Kesalahan ini sering terjadi saat kamu buru-buru menyalin subquery.",
          "LAKUKAN"),
-    kode('''q("""SELECT nama FROM pelanggan
-     WHERE id NOT IN (SELECT pelanggan_id, id FROM pesanan)""")'''),
-    blok("hasil", "<pre><code>DatabaseError: Execution failed on sql '...': sub-select returns "
-                  "2 columns - expected 1</code></pre>",
-         "HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA"),
+    kode("SELECT nama FROM pelanggan\nWHERE id NOT IN (SELECT pelanggan_id, id FROM pesanan);"),
+    keluaran(H, "h3_merah_dua_kolom"),
     blok("catatan", "<strong>Layar merah ini justru menolongmu.</strong> Bandingkan dengan "
                     "langkah 2: di sana SQL diam saja dan memberimu jawaban salah. Di sini ia "
                     "berteriak dan kamu memperbaikinya dalam sepuluh detik. Yang berbahaya "
@@ -152,7 +142,7 @@ langkah("Aturan yang kamu pakai seterusnya",
            ["<code>NOT IN (SELECT ...)</code>", "Berbahaya",
             "Jangan, kecuali kolomnya dijamin <code>NOT NULL</code> di skema"]]),
     "<p>Jadikan <code>NOT EXISTS</code> refleks. Ia sedikit lebih panjang ditulis, tidak pernah "
-    "salah, dan di sebagian besar mesin kecepatannya sama atau lebih baik.</p>")
+    "salah, dan di PostgreSQL perencananya menghasilkan rencana yang sama baiknya.</p>")
 
 langkah("Kenapa ini ditanyakan di hampir setiap wawancara",
     blok("aksi", "Baca sekali, lalu ucapkan jawabannya dengan suara keras.", "LAKUKAN"),
@@ -173,14 +163,15 @@ langkah("Kerjakan sendiri",
                  "<code>NOT IN</code>-nya dan jelaskan kenapa kali ini hasilnya sama.",
          "KERJAKAN, ± 10 MENIT"),
     "<details><summary>Kunci jawaban</summary>"
-    "<div class=\"kode\"><pre><code>q(\"\"\"SELECT nama FROM produk pr\n"
-    "     WHERE NOT EXISTS (SELECT 1 FROM item i WHERE i.produk_id = pr.id)\"\"\")"
-    "</code></pre></div>"
-    "<pre><code>Empty DataFrame\nColumns: [nama]\nIndex: []</code></pre>"
+    "<div class=\"kode\"><pre><code>SELECT nama FROM produk pr\n"
+    "WHERE NOT EXISTS (SELECT 1 FROM item i WHERE i.produk_id = pr.id);</code></pre></div>"
+    + keluaran(H, "h3_kunci", tag="HASILNYA") +
     "<p>Kosong — dan <strong>kali ini kosongnya benar</strong>: ketujuh produk memang pernah "
     "terjual. Versi <code>NOT IN</code>-nya memberi jawaban yang sama karena "
-    "<code>item.produk_id</code> tidak pernah <code>NULL</code> (buktikan sendiri: "
-    "<code>SELECT COUNT(*) FROM item WHERE produk_id IS NULL</code> memberi <strong>0</strong>).</p>"
+    "<code>item.produk_id</code> tidak pernah <code>NULL</code>. Buktikan sendiri:</p>"
+    "<div class=\"kode\"><pre><code>SELECT count(*) AS item_tanpa_produk FROM item\n"
+    "WHERE produk_id IS NULL;</code></pre></div>"
+    + keluaran(H, "h3_kunci_cek", tag="HASILNYA") +
     "<p>Di sinilah letak jebakannya: <code>NOT IN</code> berfungsi normal sampai suatu hari ada "
     "<code>NULL</code> yang masuk. Query yang kelihatan benar hari ini bisa berubah jadi salah "
     "tanpa kamu menyentuhnya.</p></details>")

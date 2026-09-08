@@ -4,6 +4,37 @@ Kurikulum belajar mandiri untuk satu pembaca: mantan auditor KAP Indonesia,
 pemula murni pemrograman, yang sedang pindah karier jadi data analyst.
 Modul diterbitkan sebagai Claude artifact dan juga dipaket sebagai zip offline.
 
+## Lingkungan kerja pembaca (per September 2026)
+
+**VS Code + PostgreSQL 16 di Windows**, dengan ekstensi SQLTools + SQLTools
+PostgreSQL/Cockroach Driver. Bukan lagi Colab + SQLite.
+
+- Query ditulis sebagai berkas `.sql` dan dijalankan lewat ekstensi; hasilnya
+  tampil sebagai grid, jadi kotak "HARUS MUNCUL" digambar sebagai **tabel**,
+  bukan `<pre>`. Yang dicocokkan pembaca: angkanya dan jumlah barisnya.
+- Basis data latihan jalur SQL: `sql/senja.sql` (dibuat oleh
+  `sql/buat_senja_sql.py` dari `sql/gen_final.py`, datanya identik dengan versi
+  SQLite lama supaya angka di L1–L5 tetap cocok).
+- Modul yang sudah dipindah: **SQL Mahir L1**. Sisanya masih SQLite/Colab.
+
+### Cara menghasilkan keluaran modul
+
+Jangan salin keluaran dari terminal ke berkas pembangun. Pakai `mat/_sql.py`:
+
+```
+<slug>/kueri.py       # dict slug -> SQL
+python3 <slug>/jalankan.py   # menjalankan semua ke PostgreSQL -> hasil.json
+python3 <slug>/bangun.py     # keluaran(H, "slug") merender hasil.json jadi tabel
+```
+
+Pesan error ikut tersimpan apa adanya — itu isi kotak
+"HARUS MUNCUL — TULISAN MERAH". Menjalankan server PostgreSQL lokal:
+
+```
+su postgres -c "PATH=/usr/lib/postgresql/16/bin:$PATH; pg_ctl -D /var/lib/postgresql/senja \
+  -l /var/lib/postgresql/senja/log.txt -o '-p 5433 -k /tmp/pgs -c listen_addresses=127.0.0.1' -w start"
+```
+
 ## Aturan yang tidak bisa ditawar
 
 1. **Setiap angka yang ditulis di modul harus dihasilkan dengan menjalankan kodenya.**

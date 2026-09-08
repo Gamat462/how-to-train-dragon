@@ -1,0 +1,1562 @@
+{
+ "h1_versi": {
+  "kolom": [
+   "version"
+  ],
+  "baris": [
+   [
+    "PostgreSQL 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit"
+   ]
+  ]
+ },
+ "h1_hitung_tabel": {
+  "kolom": [
+   "tabel",
+   "count"
+  ],
+  "baris": [
+   [
+    "pelanggan",
+    "20"
+   ],
+   [
+    "produk",
+    "7"
+   ],
+   [
+    "pegawai",
+    "10"
+   ],
+   [
+    "pesanan",
+    "400"
+   ],
+   [
+    "item",
+    "788"
+   ],
+   [
+    "kunjungan",
+    "158"
+   ],
+   [
+    "pesanan_kasir",
+    "361"
+   ]
+  ]
+ },
+ "h1_produk": {
+  "kolom": [
+   "id",
+   "nama",
+   "kategori",
+   "harga",
+   "harga_beli"
+  ],
+  "baris": [
+   [
+    "1",
+    "Kopi Susu",
+    "Minuman",
+    "22000",
+    "7000"
+   ],
+   [
+    "2",
+    "Americano",
+    "Minuman",
+    "18000",
+    "5000"
+   ],
+   [
+    "3",
+    "Teh Manis",
+    "Minuman",
+    "10000",
+    "2000"
+   ],
+   [
+    "4",
+    "Roti Bakar",
+    "Makanan",
+    "15000",
+    "6000"
+   ],
+   [
+    "5",
+    "Croissant",
+    "Makanan",
+    "25000",
+    "11000"
+   ],
+   [
+    "6",
+    "Cheesecake",
+    "Makanan",
+    "30000",
+    null
+   ],
+   [
+    "7",
+    "Matcha Latte",
+    "Minuman",
+    "26000",
+    null
+   ]
+  ]
+ },
+ "h1_merah_kolom": {
+  "galat": "column \"kotta\" does not exist\nLINE 1: SELECT nama FROM pelanggan WHERE kotta IS NULL\n                                         ^\nHINT:  Perhaps you meant to reference the column \"pelanggan.kota\"."
+ },
+ "h1_tiga_nilai": {
+  "kolom": [
+   "NULL=NULL",
+   "NULL<>NULL",
+   "NULL IS NULL",
+   "benar",
+   "salah"
+  ],
+  "baris": [
+   [
+    null,
+    null,
+    "true",
+    "true",
+    "false"
+   ]
+  ]
+ },
+ "h1_tipe_kolom": {
+  "kolom": [
+   "kolom",
+   "tipe",
+   "boleh_null"
+  ],
+  "baris": [
+   [
+    "id",
+    "integer",
+    "NO"
+   ],
+   [
+    "nama",
+    "text",
+    "YES"
+   ],
+   [
+    "kategori",
+    "text",
+    "YES"
+   ],
+   [
+    "harga",
+    "integer",
+    "YES"
+   ],
+   [
+    "harga_beli",
+    "integer",
+    "YES"
+   ]
+  ]
+ },
+ "h2_sama_null": {
+  "kolom": [
+   "nama",
+   "kota"
+  ],
+  "baris": []
+ },
+ "h2_is_null": {
+  "kolom": [
+   "nama",
+   "kota"
+  ],
+  "baris": [
+   [
+    "Rina",
+    null
+   ],
+   [
+    "Bayu",
+    null
+   ],
+   [
+    "Sari",
+    null
+   ],
+   [
+    "Dimas",
+    null
+   ],
+   [
+    "Wawan",
+    null
+   ],
+   [
+    "Bagus",
+    null
+   ]
+  ]
+ },
+ "h2_bukan_jkt": {
+  "kolom": [
+   "bukan_jakarta"
+  ],
+  "baris": [
+   [
+    "8"
+   ]
+  ]
+ },
+ "h2_bukan_jkt_lengkap": {
+  "kolom": [
+   "bukan_jakarta_lengkap"
+  ],
+  "baris": [
+   [
+    "14"
+   ]
+  ]
+ },
+ "h2_count": {
+  "kolom": [
+   "semua",
+   "kota_terisi",
+   "kota_unik"
+  ],
+  "baris": [
+   [
+    "20",
+    "14",
+    "3"
+   ]
+  ]
+ },
+ "h2_avg": {
+  "kolom": [
+   "produk",
+   "ada_harga_beli",
+   "avg_abaikan_null",
+   "avg_anggap_nol"
+  ],
+  "baris": [
+   [
+    "7",
+    "5",
+    "6200.0",
+    "4428.6"
+   ]
+  ]
+ },
+ "h2_margin": {
+  "kolom": [
+   "nama",
+   "margin"
+  ],
+  "baris": [
+   [
+    "Kopi Susu",
+    "15000"
+   ],
+   [
+    "Americano",
+    "13000"
+   ],
+   [
+    "Teh Manis",
+    "8000"
+   ],
+   [
+    "Roti Bakar",
+    "9000"
+   ],
+   [
+    "Croissant",
+    "14000"
+   ],
+   [
+    "Cheesecake",
+    null
+   ],
+   [
+    "Matcha Latte",
+    null
+   ]
+  ]
+ },
+ "h2_coalesce": {
+  "kolom": [
+   "nama",
+   "kota_tampil"
+  ],
+  "baris": [
+   [
+    "Rina",
+    "BELUM TERCATAT"
+   ],
+   [
+    "Bayu",
+    "BELUM TERCATAT"
+   ],
+   [
+    "Sari",
+    "BELUM TERCATAT"
+   ],
+   [
+    "Dimas",
+    "BELUM TERCATAT"
+   ],
+   [
+    "Wawan",
+    "BELUM TERCATAT"
+   ],
+   [
+    "Bagus",
+    "BELUM TERCATAT"
+   ]
+  ]
+ },
+ "h2_urut_null": {
+  "kolom": [
+   "nama",
+   "harga_beli"
+  ],
+  "baris": [
+   [
+    "Teh Manis",
+    "2000"
+   ],
+   [
+    "Americano",
+    "5000"
+   ],
+   [
+    "Roti Bakar",
+    "6000"
+   ],
+   [
+    "Kopi Susu",
+    "7000"
+   ]
+  ]
+ },
+ "h2_urut_null_first": {
+  "kolom": [
+   "nama",
+   "harga_beli"
+  ],
+  "baris": [
+   [
+    "Cheesecake",
+    null
+   ],
+   [
+    "Matcha Latte",
+    null
+   ],
+   [
+    "Teh Manis",
+    "2000"
+   ],
+   [
+    "Americano",
+    "5000"
+   ]
+  ]
+ },
+ "h2_kunci": {
+  "kolom": [
+   "nama",
+   "harga",
+   "harga_beli"
+  ],
+  "baris": [
+   [
+    "Cheesecake",
+    "30000",
+    null
+   ],
+   [
+    "Matcha Latte",
+    "26000",
+    null
+   ]
+  ]
+ },
+ "h3_not_in": {
+  "kolom": [
+   "nama"
+  ],
+  "baris": []
+ },
+ "h3_not_exists": {
+  "kolom": [
+   "nama"
+  ],
+  "baris": [
+   [
+    "Andi"
+   ],
+   [
+    "Bagus"
+   ],
+   [
+    "Vira"
+   ]
+  ]
+ },
+ "h3_left_join": {
+  "kolom": [
+   "jumlah"
+  ],
+  "baris": [
+   [
+    "3"
+   ]
+  ]
+ },
+ "h3_not_in_saring": {
+  "kolom": [
+   "jumlah"
+  ],
+  "baris": [
+   [
+    "3"
+   ]
+  ]
+ },
+ "h3_empat_cara": {
+  "kolom": [
+   "cara",
+   "hasil"
+  ],
+  "baris": [
+   [
+    "NOT IN",
+    "0"
+   ],
+   [
+    "NOT EXISTS",
+    "3"
+   ],
+   [
+    "LEFT JOIN IS NULL",
+    "3"
+   ],
+   [
+    "NOT IN + saring NULL",
+    "3"
+   ]
+  ]
+ },
+ "h3_tanpa_pid": {
+  "kolom": [
+   "tanpa_pelanggan_id"
+  ],
+  "baris": [
+   [
+    "12"
+   ]
+  ]
+ },
+ "h3_kecil": {
+  "kolom": [
+   "5 NOT IN (1,2,3)",
+   "5 NOT IN (1,2,NULL)"
+  ],
+  "baris": [
+   [
+    "true",
+    null
+   ]
+  ]
+ },
+ "h3_positif": {
+  "kolom": [
+   "5 IN (1,2,NULL)",
+   "1 IN (1,2,NULL)"
+  ],
+  "baris": [
+   [
+    null,
+    "true"
+   ]
+  ]
+ },
+ "h3_merah_dua_kolom": {
+  "galat": "subquery has too many columns\nLINE 2: SELECT nama FROM pelanggan WHERE id NOT IN (SELECT pelanggan...\n                                            ^"
+ },
+ "h3_kunci": {
+  "kolom": [
+   "nama"
+  ],
+  "baris": []
+ },
+ "h3_kunci_cek": {
+  "kolom": [
+   "item_tanpa_produk"
+  ],
+  "baris": [
+   [
+    "0"
+   ]
+  ]
+ },
+ "h4_merah_ambigu": {
+  "galat": "column reference \"id\" is ambiguous\nLINE 1: SELECT id FROM pelanggan p JOIN pesanan o ON o.pelanggan_id ...\n               ^"
+ },
+ "h4_inner": {
+  "kolom": [
+   "baris"
+  ],
+  "baris": [
+   [
+    "388"
+   ]
+  ]
+ },
+ "h4_left": {
+  "kolom": [
+   "baris"
+  ],
+  "baris": [
+   [
+    "391"
+   ]
+  ]
+ },
+ "h4_right": {
+  "kolom": [
+   "baris"
+  ],
+  "baris": [
+   [
+    "400"
+   ]
+  ]
+ },
+ "h4_full": {
+  "kolom": [
+   "baris"
+  ],
+  "baris": [
+   [
+    "403"
+   ]
+  ]
+ },
+ "h4_cross": {
+  "kolom": [
+   "baris"
+  ],
+  "baris": [
+   [
+    "140"
+   ]
+  ]
+ },
+ "h4_omzet": {
+  "kolom": [
+   "omzet"
+  ],
+  "baris": [
+   [
+    "35739000"
+   ]
+  ]
+ },
+ "h4_omzet_lipat": {
+  "kolom": [
+   "omzet"
+  ],
+  "baris": [
+   [
+    "274456000"
+   ]
+  ]
+ },
+ "h4_baris_lipat": {
+  "kolom": [
+   "baris"
+  ],
+  "baris": [
+   [
+    "5532"
+   ]
+  ]
+ },
+ "h4_tanpa_kerangka": {
+  "kolom": [
+   "baris"
+  ],
+  "baris": [
+   [
+    "20"
+   ]
+  ]
+ },
+ "h4_kerangka_nol": {
+  "kolom": [
+   "cabang",
+   "nama",
+   "terjual"
+  ],
+  "baris": [
+   [
+    "Seturan",
+    "Cheesecake",
+    "0"
+   ]
+  ]
+ },
+ "h5_kolom": {
+  "kolom": [
+   "id",
+   "nama",
+   "id_perujuk"
+  ],
+  "baris": [
+   [
+    "1",
+    "Rina",
+    null
+   ],
+   [
+    "2",
+    "Bayu",
+    null
+   ],
+   [
+    "3",
+    "Sari",
+    null
+   ],
+   [
+    "4",
+    "Dimas",
+    null
+   ],
+   [
+    "5",
+    "Putri",
+    null
+   ]
+  ]
+ },
+ "h5_merah_alias": {
+  "galat": "table name \"pelanggan\" specified more than once"
+ },
+ "h5_perujuk": {
+  "kolom": [
+   "pelanggan",
+   "perujuk"
+  ],
+  "baris": [
+   [
+    "Agus",
+    "Rina"
+   ],
+   [
+    "Hendra",
+    "Bayu"
+   ],
+   [
+    "Intan",
+    "Dimas"
+   ],
+   [
+    "Lita",
+    "Dimas"
+   ],
+   [
+    "Vira",
+    "Maya"
+   ],
+   [
+    "Wawan",
+    "Rina"
+   ]
+  ]
+ },
+ "h5_penyebut": {
+  "kolom": [
+   "semua_pelanggan",
+   "punya_perujuk"
+  ],
+  "baris": [
+   [
+    "20",
+    "6"
+   ]
+  ]
+ },
+ "h5_hierarki": {
+  "kolom": [
+   "nama",
+   "jabatan",
+   "atasan"
+  ],
+  "baris": [
+   [
+    "Pak Hardi",
+    "Pemilik",
+    null
+   ],
+   [
+    "Bu Rina",
+    "Manajer Area",
+    "Pak Hardi"
+   ],
+   [
+    "Sinta",
+    "Kepala Cabang",
+    "Bu Rina"
+   ],
+   [
+    "Bagus",
+    "Kepala Cabang",
+    "Bu Rina"
+   ],
+   [
+    "Vira",
+    "Kepala Cabang",
+    "Bu Rina"
+   ],
+   [
+    "Andi",
+    "Barista",
+    "Sinta"
+   ],
+   [
+    "Tari",
+    "Barista",
+    "Sinta"
+   ],
+   [
+    "Wawan",
+    "Barista",
+    "Bagus"
+   ],
+   [
+    "Yoga",
+    "Kasir",
+    "Vira"
+   ],
+   [
+    "Lita",
+    "Kasir",
+    "Sinta"
+   ]
+  ]
+ },
+ "h5_inner": {
+  "kolom": [
+   "baris"
+  ],
+  "baris": [
+   [
+    "9"
+   ]
+  ]
+ },
+ "h5_nama_bukan_kunci": {
+  "kolom": [
+   "nama",
+   "jabatan"
+  ],
+  "baris": [
+   [
+    "Yoga",
+    "Kasir"
+   ],
+   [
+    "Lita",
+    "Kasir"
+   ],
+   [
+    "Tari",
+    "Barista"
+   ],
+   [
+    "Wawan",
+    "Barista"
+   ],
+   [
+    "Sinta",
+    "Kepala Cabang"
+   ],
+   [
+    "Bagus",
+    "Kepala Cabang"
+   ],
+   [
+    "Vira",
+    "Kepala Cabang"
+   ],
+   [
+    "Andi",
+    "Barista"
+   ]
+  ]
+ },
+ "h5_antar_bulan": {
+  "kolom": [
+   "bulan",
+   "pesanan",
+   "bulan_lalu",
+   "selisih"
+  ],
+  "baris": [
+   [
+    "2024-01",
+    "14",
+    null,
+    null
+   ],
+   [
+    "2024-02",
+    "20",
+    "14",
+    "6"
+   ],
+   [
+    "2024-03",
+    "24",
+    "20",
+    "4"
+   ],
+   [
+    "2024-04",
+    "16",
+    "24",
+    "-8"
+   ],
+   [
+    "2024-05",
+    "28",
+    "16",
+    "12"
+   ],
+   [
+    "2024-06",
+    "18",
+    "28",
+    "-10"
+   ]
+  ]
+ },
+ "h5_kunci": {
+  "kolom": [
+   "perujuk",
+   "jumlah_dirujuk"
+  ],
+  "baris": [
+   [
+    "Dimas",
+    "2"
+   ],
+   [
+    "Rina",
+    "2"
+   ],
+   [
+    "Bayu",
+    "1"
+   ],
+   [
+    "Maya",
+    "1"
+   ]
+  ]
+ },
+ "h6_where_having": {
+  "kolom": [
+   "cabang",
+   "pesanan"
+  ],
+  "baris": [
+   [
+    "Dago",
+    "122"
+   ],
+   [
+    "Kemang",
+    "120"
+   ],
+   [
+    "Seturan",
+    "120"
+   ]
+  ]
+ },
+ "h6_merah_count_where": {
+  "galat": "aggregate functions are not allowed in WHERE\nLINE 1: SELECT cabang FROM pesanan WHERE count(*) > 100 GROUP BY cab...\n                                         ^"
+ },
+ "h6_alias_order_by": {
+  "kolom": [
+   "cabang",
+   "pesanan"
+  ],
+  "baris": [
+   [
+    "Seturan",
+    "138"
+   ],
+   [
+    "Kemang",
+    "132"
+   ],
+   [
+    "Dago",
+    "130"
+   ]
+  ]
+ },
+ "h6_merah_alias_where": {
+  "galat": "column \"dobel\" does not exist\nLINE 1: SELECT harga*2 AS dobel FROM produk WHERE dobel > 30000\n                                                  ^"
+ },
+ "h6_tulis_ulang": {
+  "kolom": [
+   "nama",
+   "dobel"
+  ],
+  "baris": [
+   [
+    "Americano",
+    "36000"
+   ],
+   [
+    "Kopi Susu",
+    "44000"
+   ],
+   [
+    "Croissant",
+    "50000"
+   ],
+   [
+    "Matcha Latte",
+    "52000"
+   ],
+   [
+    "Cheesecake",
+    "60000"
+   ]
+  ]
+ },
+ "h6_cte": {
+  "kolom": [
+   "nama",
+   "dobel"
+  ],
+  "baris": [
+   [
+    "Americano",
+    "36000"
+   ],
+   [
+    "Kopi Susu",
+    "44000"
+   ],
+   [
+    "Croissant",
+    "50000"
+   ],
+   [
+    "Matcha Latte",
+    "52000"
+   ],
+   [
+    "Cheesecake",
+    "60000"
+   ]
+  ]
+ },
+ "h6_merah_order_union": {
+  "galat": "column \"status\" does not exist\nLINE 4: ORDER BY status\n                 ^"
+ },
+ "h6_filter": {
+  "kolom": [
+   "cabang",
+   "semua_pesanan",
+   "selesai",
+   "batal"
+  ],
+  "baris": [
+   [
+    "Dago",
+    "130",
+    "122",
+    "8"
+   ],
+   [
+    "Kemang",
+    "132",
+    "120",
+    "12"
+   ],
+   [
+    "Seturan",
+    "138",
+    "120",
+    "18"
+   ]
+  ]
+ },
+ "h6_persen_batal": {
+  "kolom": [
+   "cabang",
+   "persen_batal"
+  ],
+  "baris": [
+   [
+    "Seturan",
+    "13.0"
+   ],
+   [
+    "Kemang",
+    "9.1"
+   ],
+   [
+    "Dago",
+    "6.2"
+   ]
+  ]
+ },
+ "h6_case_when": {
+  "kolom": [
+   "cabang",
+   "selesai"
+  ],
+  "baris": [
+   [
+    "Dago",
+    "122"
+   ],
+   [
+    "Kemang",
+    "120"
+   ],
+   [
+    "Seturan",
+    "120"
+   ]
+  ]
+ },
+ "h6_kunci": {
+  "kolom": [
+   "kanal",
+   "semua",
+   "batal"
+  ],
+  "baris": [
+   [
+    "Ojol",
+    "133",
+    "17"
+   ],
+   [
+    "Take-away",
+    "150",
+    "14"
+   ]
+  ]
+ },
+ "h7_union_buang": {
+  "kolom": [
+   "x",
+   "n"
+  ],
+  "baris": [
+   [
+    "B",
+    "20000"
+   ],
+   [
+    "A",
+    "10000"
+   ]
+  ]
+ },
+ "h7_union_all": {
+  "kolom": [
+   "x",
+   "n"
+  ],
+  "baris": [
+   [
+    "A",
+    "10000"
+   ],
+   [
+    "A",
+    "10000"
+   ],
+   [
+    "B",
+    "20000"
+   ]
+  ]
+ },
+ "h7_merah_kolom": {
+  "galat": "each UNION query must have the same number of columns\nLINE 1: SELECT id, nama FROM produk UNION ALL SELECT id FROM pelangg...\n                                                     ^"
+ },
+ "h7_hitung_cocok": {
+  "kolom": [
+   "keterangan",
+   "jumlah"
+  ],
+  "baris": [
+   [
+    "selesai di pembukuan",
+    "362"
+   ],
+   [
+    "baris di ekspor kasir",
+    "361"
+   ],
+   [
+    "id cocok",
+    "359"
+   ],
+   [
+    "hanya di pembukuan",
+    "3"
+   ],
+   [
+    "hanya di kasir",
+    "2"
+   ]
+  ]
+ },
+ "h7_intersect": {
+  "kolom": [
+   "id_di_dua_sisi"
+  ],
+  "baris": [
+   [
+    "359"
+   ]
+  ]
+ },
+ "h7_except": {
+  "kolom": [
+   "sisi",
+   "id"
+  ],
+  "baris": [
+   [
+    "hanya pembukuan",
+    "7"
+   ],
+   [
+    "hanya pembukuan",
+    "88"
+   ],
+   [
+    "hanya pembukuan",
+    "251"
+   ],
+   [
+    "hanya kasir",
+    "9001"
+   ],
+   [
+    "hanya kasir",
+    "9002"
+   ]
+  ]
+ },
+ "h7_nilai_beda": {
+  "kolom": [
+   "id",
+   "pembukuan",
+   "kasir",
+   "selisih"
+  ],
+  "baris": [
+   [
+    "12",
+    "54000",
+    "104000",
+    "50000"
+   ],
+   [
+    "199",
+    "80000",
+    "55000",
+    "-25000"
+   ]
+  ]
+ },
+ "h7_tieout": {
+  "kolom": [
+   "keterangan",
+   "rupiah"
+  ],
+  "baris": [
+   [
+    "Total pembukuan",
+    "35739000"
+   ],
+   [
+    "(-) hanya di pembukuan",
+    "-222000"
+   ],
+   [
+    "(+) hanya di kasir",
+    "195000"
+   ],
+   [
+    "(+/-) selisih nilai id sama",
+    "25000"
+   ],
+   [
+    "= Total kasir",
+    "35737000"
+   ]
+  ]
+ },
+ "h7_terapan_salah": {
+  "kolom": [
+   "cabang",
+   "pesanan_selesai",
+   "pesanan_batal",
+   "pelanggan_unik",
+   "nilai_selesai"
+  ],
+  "baris": [
+   [
+    "Dago",
+    "238",
+    "15",
+    "17",
+    "12665000"
+   ],
+   [
+    "Kemang",
+    "242",
+    "19",
+    "17",
+    "11669000"
+   ],
+   [
+    "Seturan",
+    "239",
+    "35",
+    "17",
+    "11405000"
+   ]
+  ]
+ },
+ "h7_terapan_benar": {
+  "kolom": [
+   "cabang",
+   "pesanan_selesai",
+   "pesanan_batal",
+   "pelanggan_unik",
+   "nilai_selesai"
+  ],
+  "baris": [
+   [
+    "Dago",
+    "122",
+    "8",
+    "17",
+    "12665000"
+   ],
+   [
+    "Kemang",
+    "120",
+    "12",
+    "17",
+    "11669000"
+   ],
+   [
+    "Seturan",
+    "120",
+    "18",
+    "17",
+    "11405000"
+   ]
+  ]
+ },
+ "h5_distinct_on": {
+  "kolom": [
+   "pelanggan_id",
+   "pesanan_terakhir",
+   "tanggal",
+   "cabang"
+  ],
+  "baris": [
+   [
+    "1",
+    "120",
+    "2024-06-24",
+    "Dago"
+   ],
+   [
+    "2",
+    "168",
+    "2024-06-28",
+    "Kemang"
+   ],
+   [
+    "3",
+    "347",
+    "2024-06-27",
+    "Seturan"
+   ],
+   [
+    "4",
+    "400",
+    "2024-06-29",
+    "Kemang"
+   ],
+   [
+    "5",
+    "285",
+    "2024-06-24",
+    "Seturan"
+   ],
+   [
+    "6",
+    "299",
+    "2024-06-25",
+    "Dago"
+   ]
+  ]
+ },
+ "h5_distinct_on_tanpa_pemecah": {
+  "kolom": [
+   "pesanan_pada_tanggal_kembar"
+  ],
+  "baris": [
+   [
+    "19"
+   ]
+  ]
+ },
+ "h6_rollup": {
+  "kolom": [
+   "cabang",
+   "kanal",
+   "pesanan"
+  ],
+  "baris": [
+   [
+    "Dago",
+    "Dine-in",
+    "35"
+   ],
+   [
+    "Dago",
+    "Ojol",
+    "43"
+   ],
+   [
+    "Dago",
+    "Take-away",
+    "44"
+   ],
+   [
+    "Dago",
+    "semua kanal",
+    "122"
+   ],
+   [
+    "Kemang",
+    "Dine-in",
+    "32"
+   ],
+   [
+    "Kemang",
+    "Ojol",
+    "43"
+   ],
+   [
+    "Kemang",
+    "Take-away",
+    "45"
+   ],
+   [
+    "Kemang",
+    "semua kanal",
+    "120"
+   ],
+   [
+    "Seturan",
+    "Dine-in",
+    "43"
+   ],
+   [
+    "Seturan",
+    "Ojol",
+    "30"
+   ],
+   [
+    "Seturan",
+    "Take-away",
+    "47"
+   ],
+   [
+    "Seturan",
+    "semua kanal",
+    "120"
+   ],
+   [
+    "SEMUA CABANG",
+    "semua kanal",
+    "362"
+   ]
+  ]
+ },
+ "h6_grouping_sets": {
+  "kolom": [
+   "cabang",
+   "kanal",
+   "pesanan"
+  ],
+  "baris": [
+   [
+    "Dago",
+    "(total)",
+    "122"
+   ],
+   [
+    "Kemang",
+    "(total)",
+    "120"
+   ],
+   [
+    "Seturan",
+    "(total)",
+    "120"
+   ],
+   [
+    "(total)",
+    "Dine-in",
+    "110"
+   ],
+   [
+    "(total)",
+    "Ojol",
+    "116"
+   ],
+   [
+    "(total)",
+    "Take-away",
+    "136"
+   ],
+   [
+    "(total)",
+    "(total)",
+    "362"
+   ]
+  ]
+ },
+ "h7_gen_series": {
+  "kolom": [
+   "tanggal",
+   "nilai"
+  ],
+  "baris": [
+   [
+    "2024-01-01",
+    "112000"
+   ],
+   [
+    "2024-01-02",
+    "0"
+   ],
+   [
+    "2024-01-03",
+    "443000"
+   ],
+   [
+    "2024-01-04",
+    "558000"
+   ],
+   [
+    "2024-01-05",
+    "150000"
+   ],
+   [
+    "2024-01-06",
+    "422000"
+   ],
+   [
+    "2024-01-07",
+    "0"
+   ]
+  ]
+ },
+ "h7_gen_series_rusak": {
+  "kolom": [
+   "tanggal",
+   "nilai"
+  ],
+  "baris": [
+   [
+    "2024-01-01",
+    "112000"
+   ],
+   [
+    "2024-01-03",
+    "443000"
+   ],
+   [
+    "2024-01-04",
+    "558000"
+   ],
+   [
+    "2024-01-05",
+    "150000"
+   ],
+   [
+    "2024-01-06",
+    "422000"
+   ]
+  ]
+ },
+ "h7_tanpa_kerangka_harian": {
+  "kolom": [
+   "tanggal",
+   "nilai"
+  ],
+  "baris": [
+   [
+    "2024-01-01",
+    "112000"
+   ],
+   [
+    "2024-01-03",
+    "443000"
+   ],
+   [
+    "2024-01-04",
+    "558000"
+   ],
+   [
+    "2024-01-05",
+    "150000"
+   ],
+   [
+    "2024-01-06",
+    "422000"
+   ]
+  ]
+ },
+ "h7_rata2_dua_cara": {
+  "kolom": [
+   "rata2_7_hari_kalender",
+   "rata2_hari_ada_transaksi"
+  ],
+  "baris": [
+   [
+    "240714",
+    "337000"
+   ]
+  ]
+ }
+}
