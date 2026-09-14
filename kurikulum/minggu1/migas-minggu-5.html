@@ -1,33 +1,33 @@
-<title>Migas Minggu 5 Cadangan &amp; Keputusan</title>
+<title>Migas L5 — Cadangan & Keputusan</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
   :root{
-    --bg:#F1EFE7; --surface:#FCFAF4; --surface-2:#E7E2D2;
-    --ink:#1B2129; --ink-soft:#57606C; --line:#D7D0BC;
-    --teal:#0B5F55; --teal-soft:#DFEBE7;
-    --gold:#8F5F1E; --gold-soft:#F0E2C6;
-    --alert:#9C3427; --alert-soft:#F5E0DB;
-    --code-bg:#EDE8D8;
-    --shadow: 0 24px 48px -28px rgba(27,33,41,0.28);
+    --bg:#F3EFE4; --surface:#FDFBF5; --surface-2:#EAE2CC;
+    --ink:#1C2430; --ink-soft:#5B6472; --line:#DCD3B9;
+    --teal:#0F6E63; --teal-soft:#E1EEEA;
+    --gold:#9C6B25; --gold-soft:#F1E4C8;
+    --alert:#A33A2A; --alert-soft:#F6E2DD;
+    --code-bg:#EFEAD9;
+    --shadow: 0 24px 48px -28px rgba(28,36,48,0.28);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#10151B; --surface:#181E26; --surface-2:#1F2733;
-      --ink:#ECE8DC; --ink-soft:#95A0AD; --line:#2E3846;
-      --teal:#4FC4AF; --teal-soft:rgba(79,196,175,0.14);
-      --gold:#DFAC5D; --gold-soft:rgba(223,172,93,0.14);
-      --alert:#E68B76; --alert-soft:rgba(230,139,118,0.14);
-      --code-bg:#0D1217;
+      --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+      --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+      --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+      --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+      --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+      --code-bg:#0F1319;
       --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
     }
   }
   :root[data-theme="dark"]{
-    --bg:#10151B; --surface:#181E26; --surface-2:#1F2733;
-    --ink:#ECE8DC; --ink-soft:#95A0AD; --line:#2E3846;
-    --teal:#4FC4AF; --teal-soft:rgba(79,196,175,0.14);
-    --gold:#DFAC5D; --gold-soft:rgba(223,172,93,0.14);
-    --alert:#E68B76; --alert-soft:rgba(230,139,118,0.14);
-    --code-bg:#0D1217;
+    --bg:#12161D; --surface:#1A2029; --surface-2:#212939;
+    --ink:#EDE9DD; --ink-soft:#98A2B3; --line:#303A4B;
+    --teal:#5BCBB7; --teal-soft:rgba(91,203,183,0.14);
+    --gold:#E0AE5F; --gold-soft:rgba(224,174,95,0.14);
+    --alert:#E88A76; --alert-soft:rgba(232,138,118,0.14);
+    --code-bg:#0F1319;
     --shadow: 0 24px 48px -28px rgba(0,0,0,0.6);
   }
 
@@ -153,6 +153,9 @@
   td.n{ font-family:"IBM Plex Mono",monospace; text-align:right; font-variant-numeric:tabular-nums; }
   th.n{ text-align:right; }
   td.idx, th.idx{ color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; }
+  .nihil{ color:var(--ink-soft); font-style:italic; opacity:0.75; }
+  .cacah{ font-family:"IBM Plex Mono",monospace; font-size:0.7rem; color:var(--ink-soft);
+          margin-top:6px !important; }
 
   details{ margin-top:11px; }
   summary{
@@ -191,10 +194,13 @@
         border:1px solid var(--line); }
   .bar span{ display:block; height:100%; width:0%; background:var(--teal); transition:width .25s ease; }
 
-  .ulang{ background:var(--surface); border:1px dashed var(--gold); border-radius:12px;
-          padding:12px 15px; margin:14px 0; font-size:0.89rem; }
-  .ulang .tag{ font-family:"IBM Plex Mono",monospace; font-size:0.64rem; letter-spacing:0.09em;
-               color:var(--gold); display:block; margin-bottom:7px; font-weight:600; }
+  .diagram{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:14px 0; font-size:0.85rem; }
+  .diagram .kotak{
+    border:1px solid var(--line); border-radius:10px; padding:10px 14px;
+    background:var(--surface); flex:1 1 auto; min-width:110px; text-align:center;
+  }
+  .diagram .kotak strong{ display:block; font-family:"IBM Plex Mono",monospace; font-size:0.68rem; color:var(--teal); }
+  .diagram .panah{ color:var(--ink-soft); font-size:1.1rem; flex:none; }
 
   footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:32px;
           font-size:0.85rem; color:var(--ink-soft); }
@@ -212,25 +218,28 @@
   .lanjut:hover{ opacity:0.92; }
 </style>
 
+
 <div class="kembali"><a href="https://claude.ai/code/artifact/35f58664-afca-4799-8bb3-0e39d0025823">← Kembali ke Migas L4: Rekonsiliasi PSC</a></div>
 
 <nav class="nav" aria-label="Pilih hari">
-  <span class="lbl">Migas · Minggu 5</span>
-  <button type="button" data-hari="29" aria-selected="true">Hari 29</button>
-  <button type="button" data-hari="30" aria-selected="false">Hari 30</button>
-  <button type="button" data-hari="31" aria-selected="false">Hari 31</button>
-  <button type="button" data-hari="32" aria-selected="false">Hari 32</button>
-  <button type="button" data-hari="33" aria-selected="false">Hari 33</button>
-  <button type="button" data-hari="34" aria-selected="false">Hari 34</button>
-  <button type="button" data-hari="35" aria-selected="false">Hari 35</button>
+  <span class="lbl">Migas L5</span>
+  <button type="button" data-hari="1" aria-selected="true">29</button>
+  <button type="button" data-hari="2" aria-selected="false">30</button>
+  <button type="button" data-hari="3" aria-selected="false">31</button>
+  <button type="button" data-hari="4" aria-selected="false">32</button>
+  <button type="button" data-hari="5" aria-selected="false">33</button>
+  <button type="button" data-hari="6" aria-selected="false">34</button>
+  <button type="button" data-hari="7" aria-selected="false">35</button>
 </nav>
 
 <div class="page">
 
   <header>
-    <span class="eyebrow mono">Jalur spesialisasi migas · Level 5 · minggu terakhir</span>
-    <h1>Migas Minggu 5: Cadangan, Sensitivitas &amp; Keputusan</h1>
-    <p class="lede">Minggu ini kamu akan membangun satu analisis lima tahap yang <strong>gagal empat kali sebelum berhasil</strong> — dan itu memang rancangannya. Setiap kegagalan mengajarkan satu hal yang tidak bisa diajarkan oleh analisis yang langsung benar. Di hari terakhir kamu menulis memo satu halaman yang merekomendasikan — atau menolak — belanja modal $3 juta.</p>
+    <span class="eyebrow mono">Migas L5 · 7 hari · ditulis ulang mengikuti pola Bekal Python</span>
+    <h1>Migas L5: cadangan, batas ekonomis, dan satu memo $3 juta</h1>
+    <p class="lede">Tujuh hari, satu database (<code>migas.db</code>, sama sejak Migas L1), dan satu pertanyaan yang tampaknya teknis tapi sebenarnya soal kehati-hatian: berapa banyak minyak yang tersisa, dan ke mana uang intervensi sebaiknya dibelanjakan.</p>
+    <p class="lede" style="margin-top:10px">Analisis pertamamu akan berjalan tanpa satu pun eror dan memberi jawaban yang 50,5 juta barel — dan salah. Bukan karena kodenya rusak; karena kode yang berjalan mulus tidak pernah memberitahumu apakah hasilnya benar. Lima hari berikutnya adalah proses menemukan itu sendiri, memperbaikinya sendiri, dan berakhir pada angka yang 65% lebih kecil — dan jauh lebih bisa dipertanggungjawabkan.</p>
+    <p class="lede" style="margin-top:10px">Setiap angka di halaman ini keluar dari menjalankan kodenya sungguhan (Python 3.11, scipy 1.17) terhadap <code>migas.db</code>. Kalau angkamu beda, itu petunjuk untuk diperiksa, bukan alasan untuk diabaikan.</p>
 
     <div class="kemajuan">
       <span id="teks-kemajuan">0 dari 0 langkah</span>
@@ -238,178 +247,265 @@
     </div>
   </header>
 
-  <!-- ================= HARI 29 ================= -->
-  <section class="day aktif" data-hari="29">
+  <section class="day aktif" data-hari="1">
     <div class="day-head">
-      <span class="n mono">MIGAS HARI 29</span>
+      <span class="n">MIGAS HARI 29</span>
       <h2>Tahap A: fit yang jalan mulus dan salah total</h2>
       <span class="waktu">± 90 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> memasang kurva Arps pada data produksi, dan — lebih penting — mengenali kapan sebuah fit yang "berhasil" sebenarnya tidak boleh dipercaya.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> memasang kurva Arps pada data produksi, dan mengenali kapan sebuah fit yang “berhasil” sebenarnya tidak boleh dipercaya.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
-        <h3>Apa itu decline curve analysis, dan kenapa ini pekerjaan bernilai tinggi</h3>
-        <span class="cek"><input type="checkbox" id="m5h29s1"><label for="m5h29s1">selesai</label></span>
+        <h3>Rumus yang menggerakkan seluruh minggu ini</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-1"><label for="migas-minggu5-v2-1-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Sumur minyak berproduksi makin lama makin sedikit. Pola penurunannya cukup teratur sehingga bisa dirumuskan. Rumus yang dipakai seluruh industri sejak 1945 namanya <strong>persamaan Arps</strong>:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>q(t) = qi / (1 + b · D · t)^(1/b)</code></pre>
-        </div>
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li><code>q(t)</code> — laju produksi pada waktu t (bopd)</li>
-          <li><code>qi</code> — laju awal</li>
-          <li><code>D</code> — laju penurunan tahunan</li>
-          <li><code>b</code> — bentuk lengkungan. b = 0 berarti penurunan eksponensial (garis lurus di skala log). b = 1 disebut harmonik. Di antaranya disebut hiperbolik.</li>
-        </ul>
-        <p>Kalau kamu tahu qi, D, dan b sebuah sumur, kamu bisa memproyeksikan produksinya bertahun-tahun ke depan, menjumlahkannya, dan mendapat angka <strong>cadangan</strong> — berapa barel lagi yang bisa diambil. Angka itu masuk ke laporan keuangan perusahaan, ke penilaian aset saat akuisisi, dan ke keputusan investasi. Ini salah satu keluaran analitik paling mahal di industri migas.</p>
-        <div class="catatan">
-          <strong>Karena itu juga paling berbahaya.</strong> Angka cadangan yang salah tidak menampakkan diri sebagai eror. Ia muncul sebagai angka rapi di sebuah slide, dan baru ketahuan salah bertahun-tahun kemudian. Hari ini kamu akan membuat satu yang salah, dengan sengaja, supaya kamu tahu rasanya.
-        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Buka Google Colab (seperti minggu-minggu sebelumnya), unggah <code>migas.db</code>, siapkan sel kosong.</div>
+        <div class="kode"><pre><code>q(t) = qi / (1 + b·D·t)^(1/b)</code></pre></div>
+<p>Sumur minyak makin lama makin sedikit produksinya, dan pola turunnya cukup teratur untuk dirumuskan. Rumus ini namanya <strong>persamaan Arps</strong>, dipakai industri sejak 1945. <code>qi</code> laju awal, <code>D</code> laju penurunan tahunan, <code>b</code> bentuk lengkungan (0 = eksponensial, 1 = harmonik).</p>
+        <div class="catatan">Kalau kamu tahu qi, D, b sebuah sumur, kamu bisa memproyeksikan produksinya bertahun-tahun dan mendapat angka <strong>cadangan</strong> — barel yang masih bisa diambil. Angka itu masuk ke laporan keuangan dan penilaian aset saat akuisisi. Kamu pernah menandatangani opini atas angka seperti ini tanpa pernah menelusuri sendiri caranya dihitung — hari ini kamu yang menghitungnya.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">2</span>
-        <h3>L5.1 tahap A — pasang fit pada semua sumur, apa adanya</h3>
-        <span class="cek"><input type="checkbox" id="m5h29s2"><label for="m5h29s2">selesai</label></span>
+        <h3>Muat datanya, dan tulis fungsi Arps-nya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-2"><label for="migas-minggu5-v2-1-2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Buka Google Colab (seperti minggu-minggu Python sebelumnya), unggah <code>migas.db</code>, lalu jalankan ini. Baca dulu sebelum menjalankan — tiap baris ada maksudnya.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import sqlite3, pandas as pd, numpy as np
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jalankan ini dulu — cuma memuat, belum menghitung apa pun.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import sqlite3, pandas as pd, numpy as np
 from scipy.optimize import curve_fit
 
-con  = sqlite3.connect("migas.db")
-prod = pd.read_sql("SELECT * FROM produksi_harian", con, parse_dates=["tanggal"])
-sumur= pd.read_sql("SELECT * FROM sumur", con)
-con.close()
-
-def arps(t, qi, D, b):
-    return qi / np.power(1 + b*D*t, 1/b)
-
-hasil = []
-for w, g in prod[prod.berproduksi == 1].groupby("sumur_id"):
-    g = g.sort_values("tanggal")
-    if len(g) &lt; 400:                      # sumur terlalu baru, lewati
-        continue
-    # rata-ratakan ke bulanan supaya derau harian tidak menyetir fit
-    m = g.set_index("tanggal").oil_bopd.resample("MS").mean().dropna()
-    if len(m) &lt; 18:
-        continue
-    t = np.arange(len(m)) / 12.0          # waktu dalam TAHUN
-    q = m.values
-    try:
-        popt, _ = curve_fit(arps, t, q, p0=[q[0], 0.3, 0.5],
-                            bounds=([q[0]*0.4, 0.01, 0.0],
-                                    [q[0]*2.5, 2.0,  1.5]), maxfev=8000)
-    except Exception:
-        continue
-    qi, D, b = popt
-    pred = arps(t, *popt)
-    r2 = 1 - ((q-pred)**2).sum() / ((q-q.mean())**2).sum()
-
-    # proyeksikan 30 tahun ke depan, berhenti di batas ekonomis 15 bopd
-    t_fut = np.arange(len(m), len(m)+360) / 12.0
-    q_fut = arps(t_fut, *popt)
-    q_fut = q_fut[q_fut &gt; 15]
-    sisa  = q_fut.sum() * 30.44           # bopd bulanan -> barel
-    kum   = g.oil_bopd.sum()
-    hasil.append((w, round(qi,1), round(D,3), round(b,3), round(r2,3),
-                  round(kum,0), round(sisa,0), len(q_fut)))
-
-dca = pd.DataFrame(hasil, columns=["sumur_id","qi_fit","D_fit","b_fit","r2",
-                   "kumulatif_bbl","sisa_cadangan_bbl","umur_sisa_bulan"])
-dca = dca.merge(sumur[["sumur_id","lapangan_id"]], on="sumur_id")
-dca["eur_bbl"] = dca.kumulatif_bbl + dca.sisa_cadangan_bbl
-
-print(f"berhasil fit  : {len(dca)} sumur")
-print(f"R2 rata-rata  : {dca.r2.mean():.3f}")
-print(f"R2 minimum    : {dca.r2.min():.3f}")
-print(f"\nSisa cadangan : {dca.sisa_cadangan_bbl.sum():,.0f} bbl")
-print(f"EUR total     : {dca.eur_bbl.sum():,.0f} bbl")
-print(f"Pengurasan    : {dca.kumulatif_bbl.sum()/dca.eur_bbl.sum()*100:.1f}%")
-print("\n5 sisa cadangan terbesar:")
-print(dca.nlargest(5,"sisa_cadangan_bbl")[
-    ["sumur_id","lapangan_id","qi_fit","D_fit","b_fit","r2",
-     "kumulatif_bbl","sisa_cadangan_bbl"]].to_string(index=False))</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p><strong>berhasil fit: 59 sumur · R2 rata-rata 0,701 · R2 minimum −0,047</strong></p>
-          <p style="margin-top:8px">Sisa cadangan <strong>50.544.537 bbl</strong> · EUR total <strong>70.623.671 bbl</strong> · Pengurasan <strong>28,4%</strong></p>
-          <p style="margin-top:8px">Lima terbesar: CDN-060 (4.910.439 bbl, R² 0,002) · CDN-063 (3.590.578, R² 0,144) · CDN-028 (3.042.763, R² <strong>−0,047</strong>) · CDN-061 (2.917.057, R² 0,077) · CDN-064 (1.930.071, R² 0,928).</p>
-        </div>
+con = sqlite3.connect(&quot;migas.db&quot;)
+prod = pd.read_sql(&quot;SELECT * FROM produksi_harian&quot;, con, parse_dates=[&quot;tanggal&quot;])
+sumur = pd.read_sql(&quot;SELECT * FROM sumur&quot;, con)</code></pre></div>
+        <div class="kode"><pre><code>def arps(t, qi, D, b):
+    return qi / np.power(1 + b*D*t, 1/b)</code></pre></div>
+<p>Fungsi ini persis rumus di atas, ditulis ulang jadi Python. <code>t</code> waktu dalam tahun; ketiga parameter lainnya nanti dicari oleh <code>curve_fit</code>, bukan kamu tebak sendiri.</p>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Uji dulu fungsinya sebelum dipakai — di t=0, hasilnya harus persis qi, tidak kurang tidak lebih.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>arps(np.array([0.0]), 500.0, 0.3, 0.5)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><code>array([500.])</code></p></div>
+        <div class="catatan"><strong>Itu normal kamu lakukan tiap kali menulis fungsi baru,</strong> dan tidak berlebihan — satu baris, beberapa detik, dan kamu langsung tahu fondasinya benar sebelum membangun 60 baris di atasnya.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">3</span>
-        <h3>Berhenti. Lihat baik-baik apa yang barusan terjadi.</h3>
-        <span class="cek"><input type="checkbox" id="m5h29s3"><label for="m5h29s3">selesai</label></span>
+        <h3>Coba dulu pada SATU sumur, sebelum jadi satu batch</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-3"><label for="migas-minggu5-v2-1-3">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Kode berjalan tanpa eror. Tidak ada peringatan. Keluarannya rapi. Angka 50,5 juta barel siap ditempel ke slide.</p>
-        <p>Sekarang perhatikan kolom <code>r2</code> pada lima sumur dengan cadangan terbesar.</p>
-        <div class="bahaya">
-          <strong>Empat dari lima sumur penyumbang cadangan terbesar punya R² di bawah 0,15.</strong> Satu di antaranya, CDN-028, punya R² <strong>negatif</strong> — artinya menebak dengan garis datar sederajat rata-rata saja akan lebih akurat daripada kurva yang barusan kita pasang. Dan justru sumur-sumur inilah yang menyumbang mayoritas angka cadangannya.
-        </div>
-        <p>R² negatif bukan sekadar "fit-nya kurang bagus". R² membandingkan model terhadap satu patokan: menebak rata-rata. R² = 0 berarti modelmu sama saja dengan menebak rata-rata. R² &lt; 0 berarti <strong>modelmu lebih buruk dari menebak rata-rata.</strong> Kamu menambah kerumitan dan mengurangi ketepatan.</p>
-        <div class="catatan">
-          <strong>Kenapa fit yang buruk justru menghasilkan cadangan yang besar?</strong> Jalankan <code>dca.r2.corr(dca.sisa_cadangan_bbl)</code> — hasilnya <strong>−0,424</strong>. Korelasinya negatif: makin buruk fit-nya, makin besar cadangan yang dijanjikannya. Empat belas sumur ber-R² di bawah 0,5 menyumbang <strong>21.002.225 bbl, yaitu 41,6% dari seluruh angka cadangan.</strong> Kalau kurva tidak bisa mengikuti data, <code>curve_fit</code> akan mencari jalan tengah — biasanya dengan menekan <code>D</code> ke batas bawah (0,01, hampir tidak menurun) atau menaikkan <code>b</code> ke batas atas (1,5). Keduanya menghasilkan kurva yang nyaris mendatar, dan kurva mendatar diproyeksikan 30 tahun menghasilkan angka cadangan yang sangat besar. Lihat CDN-060: <code>D_fit = 0,010</code> — persis menempel di batas bawah yang kita pasang sendiri. Periksa berapa banyak yang begitu: <code>(dca.D_fit&lt;=0.0101).sum()</code> memberi <strong>4 sumur</strong>, dan <code>(dca.b_fit&gt;=1.499).sum()</code> plus <code>(dca.b_fit&lt;=0.001).sum()</code> memberi <strong>17 dan 22</strong> — total <strong>39 dari 59 sumur punya parameter b yang berhenti persis di dinding batas.</strong> Ditambah lagi, 30 dari 59 sumur mencapai pagu proyeksi 360 bulan, artinya modelnya belum juga sampai batas ekonomis setelah 30 tahun.
-        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Jangan langsung loop ke 64 sumur. Pilih satu dulu, biar kamu lihat sendiri apa yang terjadi di setiap baris.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>W = &quot;CDN-020&quot;
+g = prod[(prod.sumur_id == W) &amp; (prod.berproduksi == 1)].sort_values(&quot;tanggal&quot;)
+m = g.set_index(&quot;tanggal&quot;).oil_bopd.resample(&quot;MS&quot;).mean().dropna()
+t, q = np.arange(len(m)) / 12.0, m.values
+
+popt, _ = curve_fit(arps, t, q, p0=[q[0], 0.3, 0.5],
+                    bounds=([q[0]*0.4, 0.01, 0.0], [q[0]*2.5, 2.0, 1.5]), maxfev=8000)
+print(&quot;qi, D, b =&quot;, popt.round(3))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><code>qi, D, b = [52.389  0.17   0.426]</code></p></div>
+<p><code>resample("MS")</code> merata-ratakan data harian ke bulanan supaya derau harian tidak menyetir fit. <code>bounds</code> memagari pencarian: qi masuk akal secara fisik, D antara 1%–200%/tahun, b antara 0 dan 1,5.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">4</span>
-        <h3>Aturan yang perlu kamu bawa seumur karier</h3>
-        <span class="cek"><input type="checkbox" id="m5h29s4"><label for="m5h29s4">selesai</label></span>
+        <h3>Coba sumur berikutnya — dan lihat layar merahmu yang pertama</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-4"><label for="migas-minggu5-v2-1-4">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="catatan">
-          <p style="margin:0"><strong>Kode yang berjalan tanpa eror tidak memberitahumu apa pun tentang benar atau salahnya.</strong></p>
-        </div>
-        <p style="margin-top:12px">Ini berlaku jauh di luar DCA. Regresi yang tidak konvergen, join yang menggandakan baris, rata-rata yang menyembunyikan sebaran — semuanya berjalan mulus. Satu-satunya yang berdiri di antara keluaran mulus dan kesimpulan yang salah adalah kamu, memeriksa.</p>
-        <p>Tiga pertanyaan yang harus kamu ajukan pada setiap model, tanpa kecuali:</p>
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li><strong>Seberapa cocok?</strong> Bukan rata-ratanya saja — lihat yang terburuk. Rata-rata R² 0,701 terdengar layak sampai kamu tahu minimumnya negatif.</li>
-          <li><strong>Apakah parameternya menempel di batas?</strong> Parameter yang berhenti persis di batas yang kamu tetapkan artinya optimizer ingin pergi lebih jauh tapi kamu menghalanginya. Itu bukan hasil, itu gejala.</li>
-          <li><strong>Apakah hasilnya masuk akal secara fisik?</strong> Sumur yang sudah 3 tahun berproduksi dan modelnya bilang penurunannya 1% per tahun — apakah ada penjelasan fisiknya?</li>
-        </ul>
-        <p>Besok kita cari tahu <em>kenapa</em> fit-nya gagal. Jangan perbaiki dulu sebelum tahu penyebabnya — memperbaiki tanpa diagnosis adalah menebak.</p>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ganti <code>W</code> jadi sumur berikutnya secara urutan ID, tanpa berpikir dulu. Ini yang biasanya orang lakukan.</div>
+        <div class="kode"><pre><code>W = &quot;CDN-002&quot;</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <div class="kode"><pre><code>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+IndexError: index 0 is out of bounds for axis 0 with size 0</code></pre></div></div>
+        <div class="catatan"><strong>Itu wajar, dan bukan salahmu.</strong> Baris <code>q[0]</code> di <code>p0</code> mengandaikan sumurnya punya produksi. CDN-002 ternyata sumur <strong>injeksi</strong> (Injector) — dipakai memompa air ke reservoir, bukan mengangkat minyak. Baris <code>berproduksi==1</code> benar menyaringnya jadi kosong; masalahnya kode belum tahu harus berhenti sebelum memanggil <code>q[0]</code> pada larik kosong.</div>
       </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Perbaiki dengan satu baris, sebelum loop ke semuanya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-5"><label for="migas-minggu5-v2-1-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Perbaikannya bukan “tangkap errornya lalu lupakan” — itu menyembunyikan masalah, bukan menyelesaikannya. Perbaikannya: jangan pernah ikutkan sumur non-Producer sejak awal.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>prod2 = prod.merge(sumur[[&quot;sumur_id&quot;,&quot;tipe_sumur&quot;]], on=&quot;sumur_id&quot;)
+prod2 = prod2[prod2.tipe_sumur == &quot;Producer&quot;]</code></pre></div>
+        <div class="bahaya"><strong>Camkan urutan kejadiannya.</strong> Kode yang salah tadi juga tidak error untuk 58 dari 59 sumur producer — ia hanya meledak pada satu sumur spesifik. Kalau kamu memulai loop langsung dari semua 64 sumur tanpa mencoba satu-satu dulu, error ini akan muncul di tengah loop dan menghentikan semuanya. Mencoba satu sumur dulu bukan buang waktu; itu yang membuatmu menemukan bug ini di baris ke-2, bukan di baris ke-200.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Sekarang jalankan ke seluruh sumur producer — bagian pertama</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-6"><label for="migas-minggu5-v2-1-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Bungkus langkah 3 jadi loop, dengan dua penjagaan tambahan: sumur dengan riwayat kurang dari 400 hari dilewati (terlalu baru untuk dipercaya), dan segmen bulanan kurang dari 18 bulan juga dilewati.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>hasil = []
+for w, g in prod2.groupby(&quot;sumur_id&quot;):
+    g = g[g.berproduksi == 1].sort_values(&quot;tanggal&quot;)
+    if len(g) &lt; 400: continue
+    m = g.set_index(&quot;tanggal&quot;).oil_bopd.resample(&quot;MS&quot;).mean().dropna()
+    if len(m) &lt; 18: continue
+    t, q = np.arange(len(m)) / 12.0, m.values
+    try:
+        popt, _ = curve_fit(arps, t, q, p0=[q[0], 0.3, 0.5],
+                            bounds=([q[0]*0.4,0.01,0.0], [q[0]*2.5,2.0,1.5]), maxfev=8000)
+    except Exception:
+        continue</code></pre></div>
+<p>Sampai sini baru penyaringan dan pemasangan kurva. Kalau fit-nya gagal konvergen, sumurnya dilewati — bukan dipaksakan.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Bagian kedua: rekam hasilnya, lalu proyeksikan 30 tahun ke depan</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-7"><label for="migas-minggu5-v2-1-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>    qi, D, b = popt
+    pred = arps(t, *popt)
+    r2 = 1 - ((q-pred)**2).sum() / ((q-q.mean())**2).sum()
+    tf = np.arange(len(m), len(m)+360) / 12.0          # 360 bln = 30 thn pagu sementara
+    qf = arps(tf, *popt); qf = qf[qf &gt; 15]              # 15 bopd batas ekonomis sementara
+    hasil.append((w, round(qi,1), round(D,3), round(b,3), round(r2,3),
+                  round(g.oil_bopd.sum(),0), round(qf.sum()*30.44,0)))</code></pre></div>
+<p>Pagu 30 tahun dan batas 15 bopd itu dua angka sementara yang akan kamu pertanyakan sendiri di Hari 32 dan 33.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Kumpulkan hasilnya jadi satu tabel, dan lihat ringkasannya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-8"><label for="migas-minggu5-v2-1-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>dca = pd.DataFrame(hasil, columns=[&quot;sumur_id&quot;,&quot;qi_fit&quot;,&quot;D_fit&quot;,&quot;b_fit&quot;,&quot;r2&quot;,
+                   &quot;kumulatif_bbl&quot;,&quot;sisa_cadangan_bbl&quot;])
+dca[&quot;eur_bbl&quot;] = dca.kumulatif_bbl + dca.sisa_cadangan_bbl
+print(f&quot;berhasil fit: {len(dca)} sumur | R2 rata-rata {dca.r2.mean():.3f} | R2 min {dca.r2.min():.3f}&quot;)
+print(f&quot;Sisa cadangan: {dca.sisa_cadangan_bbl.sum():,.0f} bbl | EUR: {dca.eur_bbl.sum():,.0f} bbl&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><strong>berhasil fit: 59 sumur · R² rata-rata 0,701 · R² minimum −0,047</strong></p><p style="margin-top:8px">Sisa cadangan <strong>50.544.537 bbl</strong> · EUR total <strong>70.623.671 bbl</strong> · Pengurasan <strong>28,4%</strong></p></div>
+<p>Tidak ada error. Tidak ada peringatan. Angka 50,5 juta barel siap ditempel ke slide. <strong>Kalau angkamu persis sama sampai digit terakhir,</strong> itu memang seharusnya begitu — datanya deterministik, dari <code>migas.db</code> yang sama.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Lihat lima sumur cadangan terbesarnya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-9"><label for="migas-minggu5-v2-1-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(dca.nlargest(5,&quot;sisa_cadangan_bbl&quot;)[[&quot;sumur_id&quot;,&quot;qi_fit&quot;,&quot;D_fit&quot;,&quot;b_fit&quot;,&quot;r2&quot;,&quot;sisa_cadangan_bbl&quot;]])</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>sumur</th>
+<th>qi_fit</th>
+<th>D_fit</th>
+<th>b_fit</th>
+<th>r2</th>
+<th>sisa cadangan (bbl)</th>
+</tr></thead>
+            <tbody>
+              <tr><td>CDN-060</td><td>536,9</td><td>0,010</td><td>0,0</td><td>0,002</td><td>4.910.439</td></tr>
+              <tr><td>CDN-063</td><td>898,0</td><td>0,062</td><td>0,0</td><td>0,144</td><td>3.590.578</td></tr>
+              <tr><td>CDN-028</td><td>321,9</td><td>0,010</td><td>1,5</td><td><strong>−0,047</strong></td><td>3.042.763</td></tr>
+              <tr><td>CDN-061</td><td>475,6</td><td>0,034</td><td>0,0</td><td>0,077</td><td>2.917.057</td></tr>
+              <tr><td>CDN-064</td><td>703,7</td><td>0,314</td><td>1,5</td><td>0,928</td><td>1.930.071</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="bahaya"><strong>Empat dari lima sumur penyumbang cadangan terbesar punya R² di bawah 0,15.</strong> CDN-028 malah <strong>negatif</strong> — menebak garis datar rata-rata saja lebih akurat daripada kurva yang barusan kamu pasang. Dan justru sumur-sumur inilah yang menyumbang mayoritas angka cadangannya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Kenapa fit yang buruk justru menghasilkan cadangan besar?</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-10"><label for="migas-minggu5-v2-1-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&#x27;korelasi R2 vs cadangan:&#x27;, dca.r2.corr(dca.sisa_cadangan_bbl).round(3))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><code>korelasi R2 vs cadangan: −0.424</code></p></div>
+<p>Korelasinya negatif: makin buruk fit-nya, makin besar cadangan yang dijanjikannya. Empat belas sumur ber-R² di bawah 0,5 menyumbang <strong>21.002.225 bbl — 41,6% dari seluruh angka cadangan.</strong></p>
+        <div class="catatan">Kalau kurva tidak bisa mengikuti data, <code>curve_fit</code> mencari jalan tengah — biasanya menekan D ke batas bawah atau menaikkan b ke batas atas. Keduanya menghasilkan kurva nyaris datar, dan kurva datar diproyeksikan 30 tahun menghasilkan cadangan sangat besar. Cek sendiri: <code>(dca.D_fit<=0.0101).sum()</code> memberi <strong>4</strong>, dan parameter b menempel batas pada <strong>39 dari 59 sumur</strong>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Aturan yang perlu kamu bawa seumur karier</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-1-11"><label for="migas-minggu5-v2-1-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan"><strong>Kode yang berjalan tanpa eror tidak memberitahumu apa pun tentang benar atau salahnya.</strong></div>
+<p>Ini berlaku jauh di luar DCA — regresi yang tidak konvergen, join yang menggandakan baris, rata-rata yang menyembunyikan sebaran. Tiga pertanyaan wajib untuk setiap model: seberapa cocok <em>yang terburuk</em> (bukan rata-rata saja)? Apakah parameternya menempel di batas? Apakah hasilnya masuk akal secara fisik?</p>
+<p>Besok kamu cari tahu <em>kenapa</em> fit-nya gagal — dengan melihat datanya, bukan mengganti-ganti modelnya.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 29 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> satu fungsi Arps, satu error nyata yang kamu perbaiki sendiri (IndexError pada sumur injeksi), dan satu angka cadangan yang kelihatan rapi tapi separuhnya ditopang fit yang buruk.</p><p style="margin-top:8px">Besok: berhenti menebak model, dan mulai melihat data mentahnya.</p>
     </div>
   </section>
 
-  <!-- ================= HARI 30 ================= -->
-  <section class="day" data-hari="30">
+  <section class="day" data-hari="2">
     <div class="day-head">
-      <span class="n mono">MIGAS HARI 30</span>
+      <span class="n">MIGAS HARI 30</span>
       <h2>Tahap B: diagnosis — lihat datanya sebelum menyalahkan modelnya</h2>
       <span class="waktu">± 75 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menemukan penyebab kegagalan model dengan memandang data mentahnya, bukan dengan mengganti-ganti model sampai ada yang kelihatan bagus.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menemukan penyebab kegagalan model dengan memandang data mentahnya, bukan dengan kamu mengganti-ganti model sampai ada yang kelihatan bagus.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
         <h3>Godaan yang harus kamu tolak hari ini</h3>
-        <span class="cek"><input type="checkbox" id="m5h30s1"><label for="m5h30s1">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-2-1"><label for="migas-minggu5-v2-2-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Setelah melihat R² 0,701 dengan minimum negatif, refleks paling umum adalah: coba model lain. Coba polinomial. Coba longgarkan batasnya. Coba buang sumur yang aneh.</p>
-        <div class="bahaya">
-          <strong>Semua itu menebak.</strong> Mengganti model sampai R² naik namanya bukan analisis, namanya <em>mencari angka yang enak dilihat</em>. Kalau kamu tidak tahu kenapa model yang sekarang gagal, kamu tidak punya alasan untuk percaya model berikutnya berhasil — kamu cuma tahu angkanya lebih besar.
-        </div>
-        <p>Urutan yang benar: <strong>lihat datanya dulu.</strong> Ambil sumur terburuk, gambar produksinya, dan cari tahu bentuk apa yang sebenarnya ada di sana.</p>
+<p>Setelah melihat R² 0,701 dengan minimum negatif, refleks paling umum adalah: coba model lain, coba polinomial, coba longgarkan batasnya, coba buang sumur yang aneh.</p>
+        <div class="bahaya"><strong>Semua itu menebak.</strong> Mengganti model sampai R² naik namanya bukan analisis, namanya mencari angka yang enak dilihat. Kalau kamu tidak tahu kenapa model sekarang gagal, kamu tidak punya alasan percaya model berikutnya berhasil — kamu cuma tahu angkanya lebih besar.</div>
+<p>Urutan yang benar: <strong>lihat datanya dulu.</strong> Ambil sumur terburuk, gambar produksinya, cari tahu bentuk apa yang sebenarnya ada di sana.</p>
       </div>
     </div>
 
@@ -417,192 +513,200 @@ print(dca.nlargest(5,"sisa_cadangan_bbl")[
       <div class="langkah-head">
         <span class="num">2</span>
         <h3>Gambar sumur terburuk: CDN-028 (R² −0,047)</h3>
-        <span class="cek"><input type="checkbox" id="m5h30s2"><label for="m5h30s2">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-2-2"><label for="migas-minggu5-v2-2-2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>import matplotlib.pyplot as plt
-
-con = sqlite3.connect("migas.db")
-wo  = pd.read_sql("SELECT * FROM workover", con, parse_dates=["tanggal_mulai"])
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Muat tabel workover, lalu plot produksi bulanan CDN-028 dengan garis vertikal di tiap tanggal workover-nya.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>import matplotlib.pyplot as plt
+con = sqlite3.connect(&quot;migas.db&quot;)
+wo = pd.read_sql(&quot;SELECT * FROM workover&quot;, con, parse_dates=[&quot;tanggal_mulai&quot;])
 con.close()
 
-W = "CDN-028"
-g = prod[(prod.sumur_id == W) &amp; (prod.berproduksi == 1)]
-m = g.set_index("tanggal").oil_bopd.resample("MS").mean()
+W = &quot;CDN-028&quot;
+g = prod[(prod.sumur_id==W) &amp; (prod.berproduksi==1)]
+m = g.set_index(&quot;tanggal&quot;).oil_bopd.resample(&quot;MS&quot;).mean()
 
-fig, ax = plt.subplots(figsize=(11, 4.5))
-ax.plot(m.index, m.values, marker="o", markersize=4, color="#2b5d4f", label="produksi bulanan")
-
-for _, r in wo[wo.sumur_id == W].iterrows():
-    ax.axvline(r.tanggal_mulai, color="#c0392b", linestyle="--", linewidth=1.4)
-    ax.text(r.tanggal_mulai, m.max()*1.02, r.jenis_pekerjaan,
-            rotation=90, fontsize=8, color="#c0392b", va="bottom")
-
-ax.set_title(f"{W} — produksi bulanan dan tanggal workover")
-ax.set_ylabel("bopd"); ax.legend(); ax.set_ylim(bottom=0)
-plt.tight_layout(); plt.show()</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Grafik <strong>gigi gergaji</strong>: turun landai, lalu melonjak tajam, turun lagi, melonjak lagi. Setiap lonjakan jatuh persis pada satu garis putus-putus merah.</p>
-          <p style="margin-top:8px">CDN-028 punya <strong>empat workover</strong>: Acidizing (2024-10-31), Reperforation (2025-03-02), Scale Removal (2025-11-01), Zone Change (2026-04-15). Angka bulanannya: turun dari 305,7 ke 262,4 bopd sepanjang Mar–Okt 2024, lalu <strong>melompat ke 344,3</strong> di November. Turun lagi ke 295,9 pada Februari 2025, lalu <strong>melompat ke 402,9</strong> di Maret. Pola yang sama terulang di November 2025 (276,3 → 385,1) dan Mei 2026 (300,4 → 367,7).</p>
-        </div>
+fig, ax = plt.subplots(figsize=(11,4.5))
+ax.plot(m.index, m.values, marker=&quot;o&quot;, markersize=4, color=&quot;#2b5d4f&quot;)
+for _, r in wo[wo.sumur_id==W].iterrows():
+    ax.axvline(r.tanggal_mulai, color=&quot;#c0392b&quot;, linestyle=&quot;--&quot;)
+plt.show()</code></pre></div>
+        <div class="hasil"><span class="tag">YANG HARUS TERLIHAT</span>
+          <p>Grafik <strong>gigi gergaji</strong>: turun landai, melonjak tajam, turun lagi, melonjak lagi. Tiap lonjakan jatuh persis pada satu garis merah putus-putus.</p></div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">3</span>
-        <h3>Sekarang kamu tahu kenapa fit-nya gagal</h3>
-        <span class="cek"><input type="checkbox" id="m5h30s3"><label for="m5h30s3">selesai</label></span>
+        <h3>Angka di balik gambarnya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-2-3"><label for="migas-minggu5-v2-2-3">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Persamaan Arps memodelkan <strong>satu</strong> penurunan alami yang tidak diganggu. CDN-028 bukan satu penurunan — ia <strong>empat penurunan</strong> yang disambung oleh intervensi manusia.</p>
-        <p>Ketika kamu memaksa satu kurva menurun melewati data yang naik-turun empat kali, satu-satunya kurva yang "muat" adalah kurva yang nyaris datar melewati tengah-tengahnya. Kurva nyaris datar itulah yang lalu diproyeksikan 30 tahun ke depan dan menghasilkan 3.042.763 barel.</p>
-        <div class="catatan">
-          <strong>Masalahnya tidak pernah ada di modelnya.</strong> Persamaan Arps bekerja persis sebagaimana mestinya. Masalahnya ada di data yang kita berikan padanya: data itu melanggar asumsi dasar model, dan model tidak punya cara memberitahu kita. Ini pola yang akan kamu temui berulang kali di luar migas juga — model yang "gagal" hampir selalu model yang diberi makan data yang tidak sesuai asumsinya.
+<p>CDN-028 punya <strong>empat workover</strong>: Acidizing (Okt 2024), Reperforation (Mar 2025), Scale Removal (Nov 2025), Zone Change (Apr 2026).</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>periode</th>
+<th>bopd sebelum</th>
+<th>bopd sesudah lompat</th>
+</tr></thead>
+            <tbody>
+              <tr><td>Mar → Nov 2024</td><td>305,7 → 262,4</td><td>→ <strong>344,3</strong></td></tr>
+              <tr><td>Des 2024 → Mar 2025</td><td>295,9 (Feb)</td><td>→ <strong>402,9</strong></td></tr>
+              <tr><td>2025 → Nov 2025</td><td>276,3 (Okt)</td><td>→ <strong>385,1</strong></td></tr>
+              <tr><td>2026 → Mei 2026</td><td>300,4</td><td>→ <strong>367,7</strong></td></tr>
+            </tbody>
+          </table>
         </div>
+<p>Setiap lompatan besar berbaris rapi di belakang satu tanggal workover. Itu bukan kebetulan — itu jawabannya.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">4</span>
-        <h3>Seberapa luas masalahnya?</h3>
-        <span class="cek"><input type="checkbox" id="m5h30s4"><label for="m5h30s4">selesai</label></span>
+        <h3>Sekarang kamu tahu kenapa fit-nya gagal</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-2-4"><label for="migas-minggu5-v2-2-4">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Satu sumur bermasalah bisa dibuang. Kalau separuh blok bermasalah, itu menuntut perubahan metode. Ukur dulu.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>print("sumur producer          :", (sumur.tipe_sumur=="Producer").sum())
-print("sumur yang pernah workover:", wo.sumur_id.nunique())
-print("\njumlah workover per sumur:")
-print(wo.groupby("sumur_id").size().value_counts().sort_index())</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>59 producer, <strong>41 di antaranya pernah di-workover</strong>. Sebarannya: 14 sumur satu kali, 19 sumur dua kali, 5 sumur tiga kali, 3 sumur empat kali.</p>
-        </div>
-        <p>Jadi <strong>69% sumur</strong> punya riwayat yang melanggar asumsi model. Ini bukan pencilan yang bisa dibuang; ini sifat datanya. Metodenya yang harus berubah.</p>
+<p>Persamaan Arps memodelkan <strong>satu</strong> penurunan alami yang tidak diganggu. CDN-028 bukan satu penurunan — ia <strong>empat penurunan</strong> yang disambung oleh intervensi manusia. Memaksa satu kurva menurun melewati data yang naik-turun empat kali, satu-satunya kurva yang “muat” adalah kurva nyaris datar di tengah-tengahnya.</p>
+        <div class="catatan"><strong>Masalahnya tidak pernah ada di modelnya.</strong> Persamaan Arps bekerja persis sebagaimana mestinya; masalahnya ada di data yang kita berikan — data itu melanggar asumsi dasar model, dan model tidak punya cara memberitahu kita. Model yang “gagal” hampir selalu model yang diberi makan data yang tidak sesuai asumsinya.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">5</span>
-        <h3>Rancang perbaikannya — di kertas, sebelum menulis kode</h3>
-        <span class="cek"><input type="checkbox" id="m5h30s5"><label for="m5h30s5">selesai</label></span>
+        <h3>Seberapa luas masalahnya? Jangan menebak, hitung</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-2-5"><label for="migas-minggu5-v2-2-5">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Sebelum melihat jawabannya, tulis dulu jawabanmu sendiri: <em>kalau model butuh satu penurunan tak terganggu, potongan data mana dari CDN-028 yang memenuhi syarat itu?</em></p>
-        <details>
-          <summary>Setelah kamu menulis jawabanmu, buka ini</summary>
-          <div class="isi">
-            <p>Potongan yang sah adalah bagian <strong>setelah workover terakhir</strong> — karena itu satu-satunya rentang yang dijamin tidak terpotong intervensi berikutnya.</p>
-            <p>Tapi ada satu detail yang mudah terlewat: <strong>tepat setelah workover, produksinya belum stabil.</strong> Lihat lagi angka CDN-028 setelah Maret 2025: 402,9 → 385,7 → 363,1 → 342,9 → 320,0. Penurunan awal itu jauh lebih curam daripada penurunan alaminya; itu efek workover yang sedang meluruh, bukan sifat reservoirnya. Kalau kamu memasang kurva di situ, kamu akan mengukur peluruhan efek workover dan menyebutnya laju penurunan sumur.</p>
-            <p>Jadi butuh <strong>dua</strong> aturan, bukan satu:</p>
-            <ul style="padding-left:20px">
-              <li>Mulai dari workover terakhir, <strong>ditambah masa tunggu</strong> supaya efeknya sudah habis meluruh. Kita pakai <strong>270 hari</strong>.</li>
-              <li>Sisa potongannya harus <strong>cukup panjang</strong> untuk memberi bentuk kurva yang bermakna. Kita pakai minimal <strong>14 bulan</strong>.</li>
-            </ul>
-            <p>Kedua angka itu adalah <em>pilihan</em>, bukan kebenaran. Karena itu keduanya wajib ditulis di laporan, dan besok kamu akan menguji apa yang terjadi kalau diubah.</p>
-          </div>
-        </details>
+<p>Satu sumur bermasalah bisa dibuang. Kalau separuh blok bermasalah, itu menuntut perubahan metode. Ukur dulu.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;producer               :&quot;, (sumur.tipe_sumur==&quot;Producer&quot;).sum())
+print(&quot;pernah workover        :&quot;, wo.sumur_id.nunique())
+print(wo.groupby(&quot;sumur_id&quot;).size().value_counts().sort_index())</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>59 producer, <strong>41 pernah di-workover</strong> — 14 sumur satu kali, 19 dua kali, 5 tiga kali, 3 empat kali.</p></div>
+<p><strong>69% sumur</strong> punya riwayat yang melanggar asumsi model. Ini bukan pencilan yang bisa dibuang; ini sifat datanya. Metodenya yang harus berubah.</p>
       </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Rancang perbaikannya di kertas dulu, sebelum menulis kode</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-2-6"><label for="migas-minggu5-v2-2-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Sebelum melihat jawabannya, tulis jawabanmu sendiri: kalau model butuh satu penurunan tak terganggu, potongan data mana dari CDN-028 yang memenuhi syarat itu?</p>
+<details><summary>Setelah kamu menulis jawabanmu, buka ini</summary><div class="isi"><p>Potongan yang sah: bagian <strong>setelah workover terakhir</strong> — satu-satunya rentang yang dijamin tak terpotong intervensi berikutnya.</p><p>Tapi ada jebakan: tepat setelah workover, produksinya belum stabil. Lihat CDN-028 setelah Maret 2025: 402,9 → 385,7 → 363,1 → 342,9 → 320,0 — penurunan curam itu efek workover yang meluruh, bukan sifat reservoirnya.</p><p>Jadi butuh <strong>dua</strong> aturan: mulai dari workover terakhir + <strong>270 hari</strong> masa tunggu (supaya efeknya sudah meluruh), dan sisa potongannya minimal <strong>14 bulan</strong> panjangnya. Kedua angka itu pilihan, bukan kebenaran — besok kamu uji apa yang terjadi kalau diubah.</p></div></details>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 30 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> CDN-028 bukan sumur “rusak” — ia sumur normal yang datanya melanggar asumsi Arps karena empat workover. Dan kamu sudah tahu persis dua angka apa yang perlu dipilih untuk memperbaikinya.</p>
     </div>
   </section>
 
-  <!-- ================= HARI 31 ================= -->
-  <section class="day" data-hari="31">
+  <section class="day" data-hari="3">
     <div class="day-head">
-      <span class="n mono">MIGAS HARI 31</span>
+      <span class="n">MIGAS HARI 31</span>
       <h2>Tahap C: segmen bersih — dan keberanian membuang 33 dari 59 sumur</h2>
       <span class="waktu">± 90 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menerapkan kendali mutu pada sebuah model, melaporkan apa yang kamu buang dengan jujur, dan menguji seberapa banyak kesimpulanmu bergantung pada pilihan yang kamu buat sendiri.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menerapkan kendali mutu pada sebuah model, melaporkan apa yang kamu buang dengan jujur, dan menguji seberapa banyak kesimpulanmu bergantung pada pilihan yang kamu buat sendiri.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
-        <h3>L5.1 tahap C — fit hanya pada segmen bersih</h3>
-        <span class="cek"><input type="checkbox" id="m5h31s1"><label for="m5h31s1">selesai</label></span>
+        <h3>Terjemahkan rancangan kemarin jadi kode: potong segmennya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-3-1"><label for="migas-minggu5-v2-3-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Rancangan kemarin diterjemahkan ke kode. Tiga perubahan dari tahap A: potong data ke segmen bersih, tolak segmen yang terlalu pendek, dan <strong>tolak fit yang R²-nya di bawah 0,5</strong>.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>BUFFER  = 270   # hari sesudah workover yang dibuang (efeknya masih meluruh)
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Tiga perubahan dari tahap A: potong data ke segmen bersih, tolak segmen terlalu pendek, dan tolak fit yang R²-nya rendah.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>BUFFER  = 270   # hari sesudah workover terakhir yang dibuang
 MIN_BLN = 14    # panjang minimum segmen bersih
 
 hasil, ditolak = [], []
-for w, g in prod[prod.berproduksi == 1].groupby("sumur_id"):
-    g  = g.sort_values("tanggal")
+for w, g in prod2.groupby(&quot;sumur_id&quot;):
+    g  = g[g.berproduksi==1].sort_values(&quot;tanggal&quot;)
     wl = wo[wo.sumur_id == w].tanggal_mulai
-
     mulai_bersih = g.tanggal.min()
-    if len(wl):                                    # ada workover: mulai SESUDAH yang terakhir
+    if len(wl):
         mulai_bersih = max(mulai_bersih, wl.max() + pd.Timedelta(days=BUFFER))
-
     seg = g[g.tanggal &gt;= mulai_bersih]
-    m   = seg.set_index("tanggal").oil_bopd.resample("MS").mean().dropna()
-
+    m = seg.set_index(&quot;tanggal&quot;).oil_bopd.resample(&quot;MS&quot;).mean().dropna()
     if len(m) &lt; MIN_BLN:
-        ditolak.append((w, len(m), "segmen bersih terlalu pendek")); continue
-
-    t, q = np.arange(len(m))/12.0, m.values
-    try:
-        popt, _ = curve_fit(arps, t, q, p0=[q[0], 0.3, 0.5],
-                            bounds=([q[0]*0.5, 0.05, 0.05],
-                                    [q[0]*1.8, 1.5,  1.2]), maxfev=20000)
-    except Exception:
-        ditolak.append((w, len(m), "fit gagal")); continue
-
-    qi, D, b = popt
-    r2 = 1 - ((q-arps(t,*popt))**2).sum() / max(((q-q.mean())**2).sum(), 1e-9)
-
-    if r2 &lt; 0.5:                                   # KENDALI MUTU
-        ditolak.append((w, len(m), f"R2 rendah {r2:.2f}")); continue
-
-    tf = np.arange(len(m), len(m)+480)/12.0
-    qf = arps(tf, *popt); qf = qf[qf &gt; 15]
-    hasil.append((w, round(qi,1), round(D,3), round(b,3), round(r2,3), len(m),
-                  round(g.oil_bopd.sum(),0), round(qf.sum()*30.44,0), len(qf)))
-
-dca = pd.DataFrame(hasil, columns=["sumur_id","qi_fit","D_fit","b_fit","r2","bulan_dipakai",
-                   "kumulatif_bbl","sisa_cadangan_bbl","umur_sisa_bulan"])
-dca = dca.merge(sumur[["sumur_id","lapangan_id"]], on="sumur_id")
-dca["eur_bbl"] = dca.kumulatif_bbl + dca.sisa_cadangan_bbl
-
-print(f"lolos kendali mutu : {len(dca)} sumur")
-print(f"ditolak            : {len(ditolak)} sumur")
-print(f"R2 rata-rata       : {dca.r2.mean():.3f} | minimum {dca.r2.min():.3f}")
-print(f"umur sisa mentok 480 bln : {(dca.umur_sisa_bulan &gt;= 480).sum()} sumur")
-print(f"\nSisa cadangan : {dca.sisa_cadangan_bbl.sum():,.0f} bbl")
-print(f"EUR total     : {dca.eur_bbl.sum():,.0f} bbl")
-print(f"Pengurasan    : {dca.kumulatif_bbl.sum()/dca.eur_bbl.sum()*100:.1f}%")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p><strong>lolos 26 sumur · ditolak 33 sumur · R² rata-rata 0,995 (minimum 0,976)</strong></p>
-          <p style="margin-top:8px">Sisa cadangan <strong>21.562.234 bbl</strong> · EUR total <strong>31.347.381 bbl</strong> · Pengurasan <strong>31,2%</strong></p>
-          <p style="margin-top:8px">Per lapangan: F01 7 sumur / 1.890.847 bbl · F02 8 / 2.521.163 · F03 7 / 8.818.815 · F04 4 / 8.331.409.</p>
-        </div>
+        ditolak.append((w, len(m), &quot;segmen bersih terlalu pendek&quot;)); continue</code></pre></div>
+<p>Sampai sini baru penyaringan panjang segmen. Fit dan kendali mutu R² menyusul di langkah berikutnya — dipisah supaya kamu bisa membaca tiap bagian sendiri.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">2</span>
-        <h3>Bandingkan tahap A dan tahap C — lalu pikirkan apa artinya</h3>
-        <span class="cek"><input type="checkbox" id="m5h31s2"><label for="m5h31s2">selesai</label></span>
+        <h3>Lanjutkan: fit, lalu tolak yang cocoknya buruk</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-3-2"><label for="migas-minggu5-v2-3-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>    t, q = np.arange(len(m))/12.0, m.values
+    try:
+        popt, _ = curve_fit(arps, t, q, p0=[q[0],0.3,0.5],
+                            bounds=([q[0]*0.5,0.05,0.05],[q[0]*1.8,1.5,1.2]), maxfev=20000)
+    except Exception:
+        ditolak.append((w, len(m), &quot;fit gagal&quot;)); continue
+    qi, D, b = popt
+    r2 = 1 - ((q-arps(t,*popt))**2).sum() / max(((q-q.mean())**2).sum(), 1e-9)
+    if r2 &lt; 0.5:                                       # KENDALI MUTU
+        ditolak.append((w, len(m), f&quot;R2 rendah {r2:.2f}&quot;)); continue
+    tf = np.arange(len(m), len(m)+480)/12.0
+    qf = arps(tf, *popt); qf = qf[qf &gt; 15]
+    hasil.append((w, round(qi,1), round(D,3), round(b,3), round(r2,3), len(m),
+                  round(g.oil_bopd.sum(),0), round(qf.sum()*30.44,0), len(qf)))</code></pre></div>
+        <div class="catatan"><strong>R² &lt; 0,5 ditolak, bukan diterima dengan catatan.</strong> Ambang ini kamu pilih sendiri, sama seperti BUFFER dan MIN_BLN — dan kamu akan mengujinya juga.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Rangkum, lalu lihat hasilnya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-3-3"><label for="migas-minggu5-v2-3-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>dca = pd.DataFrame(hasil, columns=[&quot;sumur_id&quot;,&quot;qi_fit&quot;,&quot;D_fit&quot;,&quot;b_fit&quot;,&quot;r2&quot;,
+                   &quot;bulan_dipakai&quot;,&quot;kumulatif_bbl&quot;,&quot;sisa_cadangan_bbl&quot;,&quot;umur_sisa_bulan&quot;])
+dca[&quot;eur_bbl&quot;] = dca.kumulatif_bbl + dca.sisa_cadangan_bbl
+print(f&quot;lolos {len(dca)} | ditolak {len(ditolak)} | R2 rata-rata {dca.r2.mean():.3f} (min {dca.r2.min():.3f})&quot;)
+print(f&quot;Sisa cadangan: {dca.sisa_cadangan_bbl.sum():,.0f} bbl | EUR: {dca.eur_bbl.sum():,.0f} bbl&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><strong>lolos 26 sumur · ditolak 33 · R² rata-rata 0,995 (minimum 0,976)</strong></p><p style="margin-top:8px">Sisa cadangan <strong>21.562.234 bbl</strong> · EUR total <strong>31.347.381 bbl</strong> · Pengurasan <strong>31,2%</strong></p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Bandingkan tahap A dan tahap C</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-3-4"><label for="migas-minggu5-v2-3-4">selesai</label></span>
       </div>
       <div class="langkah-body">
         <div class="tabel-bungkus">
           <table>
-            <thead><tr><th></th><th>Tahap A (naif)</th><th>Tahap C (segmen bersih)</th></tr></thead>
+            <thead><tr>
+<th></th>
+<th>Tahap A (naif)</th>
+<th>Tahap C (segmen bersih)</th>
+</tr></thead>
             <tbody>
               <tr><td>Sumur dipakai</td><td>59</td><td>26</td></tr>
               <tr><td>R² rata-rata</td><td>0,701</td><td><strong>0,995</strong></td></tr>
@@ -611,201 +715,208 @@ print(f"Pengurasan    : {dca.kumulatif_bbl.sum()/dca.eur_bbl.sum()*100:.1f}%")</
             </tbody>
           </table>
         </div>
-        <p>Angka cadangannya <strong>turun 57%</strong>. Kalau angka tahap A sudah terlanjur masuk ke sebuah keputusan investasi, selisih 29 juta barel itu — pada netback kontraktor sekitar $19,79/bbl — setara lebih dari <strong>$570 juta</strong> nilai yang tidak pernah ada.</p>
-        <div class="catatan">
-          <strong>Perhatikan arah perbaikannya.</strong> Analisis yang lebih benar menghasilkan angka yang <em>lebih kecil</em>. Ini hampir selalu terjadi, dan ini alasan analis sering mendapat tekanan halus untuk tidak terlalu teliti: versi yang teliti selalu terdengar lebih mengecewakan di ruang rapat. Kemampuan bertahan pada angka yang benar ketika angka yang salah lebih disukai — itu yang membedakan analis yang dipercaya dari analis yang cuma dipakai.
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">3</span>
-        <h3>Cara melaporkan bahwa kamu membuang 56% sampelmu</h3>
-        <span class="cek"><input type="checkbox" id="m5h31s3"><label for="m5h31s3">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Membuang 33 dari 59 sumur adalah keputusan besar. Menyembunyikannya adalah pelanggaran serius; melaporkannya dengan benar justru menaikkan kredibilitasmu.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>from collections import Counter
-print(Counter(x[2].split(" R2")[0] for x in ditolak))</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p><code>{'segmen bersih terlalu pendek': 33}</code> — seluruh penolakan berasal dari satu sebab yang sama, dan tak satu pun karena R² rendah. Artinya: begitu segmennya cukup panjang, model Arps selalu cocok.</p>
-        </div>
-        <div class="compare" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0">
-          <div class="bahaya" style="margin:0">
-            <strong>Salah:</strong> "Cadangan blok Cendana diperkirakan 21,6 juta barel." — Pembaca menyangka angka ini mencakup seluruh blok. Padahal 33 sumur tidak dihitung sama sekali.
-          </div>
-          <div class="catatan" style="margin:0">
-            <strong>Benar:</strong> "Sisa cadangan 26 sumur yang memenuhi syarat: 21,6 juta barel. 33 sumur tidak dapat dinilai karena segmen produksi tak-terganggu setelah workover terakhirnya lebih pendek dari 14 bulan. Angka ini karenanya bersifat <em>batas bawah</em> untuk blok, bukan total blok."
-          </div>
-        </div>
-        <p><strong>Kata "batas bawah" itu penting.</strong> Karena semua yang dibuang adalah sumur yang <em>ada</em> dan <em>masih berproduksi</em>, cadangan blok sesungguhnya pasti lebih besar dari 21,6 juta — kita cuma belum bisa mengukurnya. Menyebutkan arah ketidakpastian adalah bagian dari pelaporan yang jujur; menyebut angka telanjang tanpa arah adalah menyesatkan meski angkanya benar.</p>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">4</span>
-        <h3>Uji sensitivitas: seberapa banyak jawabanmu bergantung pada pilihanmu?</h3>
-        <span class="cek"><input type="checkbox" id="m5h31s4"><label for="m5h31s4">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Angka 270 hari dan 14 bulan kita pilih sendiri. Tidak ada hukum fisika di baliknya. Pertanyaan yang wajib dijawab sebelum melaporkan apa pun: <strong>kalau pilihan itu diubah, seberapa jauh jawabannya bergerak?</strong></p>
-        <p>Bungkus kode tahap C jadi fungsi <code>run(BUFFER, MIN_BLN)</code> yang mengembalikan jumlah lolos dan total sisa cadangan, lalu panggil untuk enam kombinasi berikut.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>for buf, mb in [(180,14), (270,14), (365,14), (270,12), (270,18), (270,24)]:
-    print(buf, mb, run(buf, mb))</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="tabel-bungkus">
-            <table>
-              <thead><tr><th>buffer (hari)</th><th>min bulan</th><th>lolos</th><th>ditolak</th><th>sisa cadangan (bbl)</th><th>R² rata2</th></tr></thead>
-              <tbody>
-                <tr><td>180</td><td>14</td><td>28</td><td>31</td><td>22.941.752</td><td>0,994</td></tr>
-                <tr><td><strong>270</strong></td><td><strong>14</strong></td><td><strong>26</strong></td><td><strong>33</strong></td><td><strong>21.562.232</strong></td><td>0,995</td></tr>
-                <tr><td>365</td><td>14</td><td>26</td><td>33</td><td>20.101.273</td><td>0,994</td></tr>
-                <tr><td>270</td><td>12</td><td>27</td><td>32</td><td>22.236.946</td><td>0,995</td></tr>
-                <tr><td>270</td><td>18</td><td>25</td><td>34</td><td>21.246.379</td><td>0,996</td></tr>
-                <tr><td>270</td><td>24</td><td>21</td><td>38</td><td>15.489.111</td><td>0,996</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <p>Rentangnya <strong>15,5 juta sampai 22,9 juta barel</strong> — selisih 48% dari angka terendah, hanya karena dua angka yang kita pilih sendiri.</p>
-        <div class="catatan">
-          <strong>Ini bukan kabar buruk; ini hasil.</strong> Perhatikan juga bahwa R² tetap di kisaran 0,994–0,996 di semua kombinasi. Artinya kualitas fit <em>tidak</em> bisa dipakai memilih di antara keenamnya — semuanya sama-sama cocok, tapi memberi jawaban berbeda. Model yang cocok tidak sama dengan model yang benar.
-          <p style="margin-top:8px">Yang harus kamu tuliskan: <em>"Estimasi dasar 21,6 juta bbl. Uji sensitivitas terhadap dua parameter kendali mutu memberi rentang 15,5–22,9 juta bbl. Angka ini sebaiknya diperlakukan sebagai rentang, bukan sebagai satu titik."</em></p>
-        </div>
+<p>Cadangannya <strong>turun 57%</strong>. Pada netback kontraktor sekitar $19,79/bbl, selisih 29 juta barel itu setara lebih dari <strong>$570 juta</strong> nilai yang tidak pernah ada.</p>
+        <div class="catatan"><strong>Perhatikan arahnya:</strong> analisis yang lebih benar menghasilkan angka yang lebih kecil. Ini hampir selalu terjadi, dan analis sering dapat tekanan halus untuk tidak terlalu teliti — versi teliti selalu terdengar lebih mengecewakan di ruang rapat. Bertahan pada angka yang benar ketika angka yang salah lebih disukai: itu yang membedakan analis yang dipercaya.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">5</span>
-        <h3>Satu masalah yang belum selesai</h3>
-        <span class="cek"><input type="checkbox" id="m5h31s5"><label for="m5h31s5">selesai</label></span>
+        <h3>Cara melaporkan bahwa kamu membuang 56% sampelmu</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-3-5"><label for="migas-minggu5-v2-3-5">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Lihat lagi keluaran tahap C: <strong>umur sisa mentok 480 bulan: 12 sumur.</strong></p>
-        <p>Empat ratus delapan puluh bulan adalah 40 tahun — pagu proyeksi yang kita pasang sendiri. Dua belas dari 26 sumur mencapainya, artinya modelnya <em>belum juga</em> mencapai batas ekonomis 15 bopd setelah 40 tahun, dan kita memotongnya di situ hanya karena kita berhenti menghitung.</p>
-        <div class="bahaya">
-          <strong>Cadangan yang dilaporkan untuk 12 sumur itu bukan hasil model — ia hasil dari di mana kita kebetulan berhenti.</strong> Kalau pagunya kita naikkan jadi 1.200 bulan, angkanya akan naik. Kalau diturunkan jadi 240, akan turun. Angka yang berubah mengikuti pilihan sewenang-wenang bukan estimasi, melainkan artefak.
-        </div>
-        <p>Besok kita cari tahu kenapa kurvanya tidak pernah berakhir — dan kenapa itu bukan cacat kode, melainkan sifat matematis persamaan Arps yang sudah diketahui sejak lama.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(Counter(x[2].split(&quot; R2&quot;)[0] for x in ditolak))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><code>{'segmen bersih terlalu pendek': 33}</code> — seluruh penolakan dari satu sebab yang sama, tak satu pun karena R² rendah.</p></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0"><div class="bahaya" style="margin:0"><strong>Salah:</strong> “Cadangan blok diperkirakan 21,6 juta barel.” — pembaca menyangka ini seluruh blok.</div><div class="catatan" style="margin:0"><strong>Benar:</strong> “Sisa cadangan 26 sumur yang memenuhi syarat: 21,6 juta barel. 33 sumur tak dapat dinilai karena segmen bersihnya lebih pendek dari 14 bulan — angka ini bersifat <em>batas bawah</em>.”</div></div>
       </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Uji sensitivitas: seberapa jauh jawabanmu bergantung pada pilihanmu?</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-3-6"><label for="migas-minggu5-v2-3-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>270 hari dan 14 bulan kamu pilih sendiri, tidak ada hukum fisika di baliknya. Bungkus kode di atas jadi fungsi <code>run(BUFFER, MIN_BLN)</code>, lalu panggil untuk enam kombinasi.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for buf, mb in [(180,14),(270,14),(365,14),(270,12),(270,18),(270,24)]:
+    print(buf, mb, run(buf, mb))</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>buffer</th>
+<th>min bulan</th>
+<th>lolos</th>
+<th>sisa cadangan (bbl)</th>
+<th>R² rata2</th>
+</tr></thead>
+            <tbody>
+              <tr><td>180</td><td>14</td><td>28</td><td>22.941.752</td><td>0,994</td></tr>
+              <tr><td><strong>270</strong></td><td><strong>14</strong></td><td><strong>26</strong></td><td><strong>21.562.232</strong></td><td>0,995</td></tr>
+              <tr><td>365</td><td>14</td><td>26</td><td>20.101.273</td><td>0,994</td></tr>
+              <tr><td>270</td><td>12</td><td>27</td><td>22.236.946</td><td>0,995</td></tr>
+              <tr><td>270</td><td>18</td><td>25</td><td>21.246.379</td><td>0,996</td></tr>
+              <tr><td>270</td><td>24</td><td>21</td><td>15.489.111</td><td>0,996</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Rentangnya <strong>15,5 sampai 22,9 juta barel</strong> — selisih 48% dari angka terendah, hanya karena dua angka yang kamu pilih sendiri.</p>
+        <div class="catatan"><strong>Ini bukan kabar buruk; ini hasil.</strong> R² tetap di 0,994–0,996 di semua kombinasi — kualitas fit tidak bisa dipakai memilih di antaranya, semuanya sama-sama cocok tapi jawabannya berbeda. Model yang cocok tidak sama dengan model yang benar. <strong>Kalau angkamu sedikit beda dari tabel ini,</strong> cek urutan kombinasi <code>run()</code>-mu — hasilnya sensitif terhadap urutan pemrosesan kalau ada bug penyaringan yang tidak stabil.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Satu masalah yang belum selesai</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-3-7"><label for="migas-minggu5-v2-3-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Lihat lagi keluaran tahap C: <strong>umur sisa mentok 480 bulan: 12 sumur.</strong> Empat ratus delapan puluh bulan = 40 tahun, pagu yang kita pasang sendiri. Dua belas dari 26 sumur mencapainya — modelnya <em>belum juga</em> sampai batas ekonomis 15 bopd setelah 40 tahun.</p>
+        <div class="bahaya"><strong>Cadangan 12 sumur itu bukan hasil model — ia hasil dari di mana kita kebetulan berhenti.</strong> Naikkan pagunya, angkanya naik. Turunkan, angkanya turun. Angka yang mengikuti pilihan sewenang-wenang bukan estimasi, melainkan artefak.</div>
+<p>Besok kamu cari tahu kenapa kurvanya tidak pernah berakhir — dan kenapa itu bukan cacat kode, melainkan sifat matematis Arps yang sudah diketahui sejak lama.</p>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 31 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> angka cadangan turun 57% begitu kamu membuang data terkontaminasi, dan kamu tahu persis rentang ketidakpastiannya (15,5–22,9 juta bbl) karena kamu mengujinya sendiri.</p>
     </div>
   </section>
 
-  <!-- ================= HARI 32 ================= -->
-  <section class="day" data-hari="32">
+  <section class="day" data-hari="4">
     <div class="day-head">
-      <span class="n mono">MIGAS HARI 32</span>
-      <h2>Tahap D dan E: kurva yang tidak pernah berakhir, dan cara industri mengakhirinya</h2>
+      <span class="n">MIGAS HARI 32</span>
+      <h2>Tahap D & E: kurva yang tidak pernah berakhir, dan cara industri mengakhirinya</h2>
       <span class="waktu">± 90 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> mengenali kapan sebuah model matematis menghasilkan hasil yang tak berhingga, dan menerapkan koreksi standar industri untuk membuatnya kembali masuk akal secara fisik.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> mengenali kapan sebuah model matematis menghasilkan hasil tak berhingga, dan menerapkan koreksi standar industri untuk mengembalikannya masuk akal secara fisik.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
         <h3>Tahap D — buktikan sendiri bahwa proyeksinya tidak konvergen</h3>
-        <span class="cek"><input type="checkbox" id="m5h32s1"><label for="m5h32s1">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-4-1"><label for="migas-minggu5-v2-4-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Ambil CDN-062, penyumbang cadangan terbesar di tahap C (3.188.119 bbl, <code>D</code> 0,253, <code>b</code> 1,200, R² 0,996). Proyeksikan dengan pagu yang digandakan terus.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>r = dca[dca.sumur_id == "CDN-062"].iloc[0]
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ambil CDN-062, penyumbang cadangan terbesar di tahap C (3.188.119 bbl, D 0,253, b 1,200, R² 0,996). Proyeksikan dengan pagu yang digandakan terus.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>r = dca[dca.sumur_id == &quot;CDN-062&quot;].iloc[0]
 for pagu in [240, 480, 960, 1920, 3840]:
     tf = np.arange(24, 24+pagu) / 12.0
     qf = arps(tf, r.qi_fit, r.D_fit, r.b_fit)
     qf = qf[qf &gt; 15]
-    print(f"pagu {pagu:&gt;5} bln -&gt; {qf.sum()*30.44:&gt;12,.0f} bbl  (umur terpakai {len(qf)} bln)")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="tabel-bungkus">
-            <table>
-              <thead><tr><th>pagu</th><th>cadangan</th><th>umur terpakai</th></tr></thead>
-              <tbody>
-                <tr><td>240 bln (20 thn)</td><td>2.208.713 bbl</td><td>240 — mentok</td></tr>
-                <tr><td>480 bln (40 thn)</td><td>3.188.119 bbl</td><td>480 — mentok</td></tr>
-                <tr><td>960 bln (80 thn)</td><td>4.365.075 bbl</td><td>960 — mentok</td></tr>
-                <tr><td>1.920 bln (160 thn)</td><td>5.735.222 bbl</td><td>1.920 — mentok</td></tr>
-                <tr><td>3.840 bln (320 thn)</td><td>7.302.488 bbl</td><td>3.840 — mentok</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <p>Setiap kali pagunya digandakan, cadangannya bertambah lagi, dan lajunya <strong>tidak pernah</strong> jatuh di bawah 15 bopd. Sumur ini, menurut modelmu, berproduksi selamanya.</p>
+    print(f&quot;pagu {pagu:&gt;5} bln -&gt; {qf.sum()*30.44:&gt;12,.0f} bbl&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+                  <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>pagu</th>
+<th>cadangan</th>
+</tr></thead>
+            <tbody>
+              <tr><td>240 bln (20 thn)</td><td>2.208.713 bbl</td></tr>
+              <tr><td>480 bln (40 thn)</td><td>3.188.119 bbl</td></tr>
+              <tr><td>960 bln (80 thn)</td><td>4.365.075 bbl</td></tr>
+              <tr><td>1.920 bln (160 thn)</td><td>5.735.222 bbl</td></tr>
+              <tr><td>3.840 bln (320 thn)</td><td>7.302.488 bbl</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+<p>Setiap kali pagunya digandakan, cadangannya bertambah lagi, dan lajunya tidak pernah jatuh di bawah 15 bopd. Sumur ini, menurut modelmu, berproduksi selamanya.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">2</span>
-        <h3>Kenapa — dan ini matematika, bukan bug</h3>
-        <span class="cek"><input type="checkbox" id="m5h32s2"><label for="m5h32s2">selesai</label></span>
+        <h3>Sebelum lanjut: pastikan dulu fungsi arps()-mu aman untuk b = 0</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-4-2"><label for="migas-minggu5-v2-4-2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Untuk t yang besar, suku 1 di dalam <code>(1 + b·D·t)</code> jadi tak berarti, sehingga:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>q(t) ≈ qi · (b·D·t)^(−1/b)     untuk t besar</code></pre>
-        </div>
-        <p>Produksi kumulatif adalah luas di bawah kurva itu. Integral dari <code>t^(−1/b)</code> hanya konvergen (punya nilai berhingga) kalau pangkatnya lebih curam dari −1, yaitu kalau <strong>1/b &gt; 1</strong>, yaitu kalau <strong>b &lt; 1</strong>.</p>
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li><strong>b &lt; 1</strong> — kurvanya cukup curam, luasnya berhingga. Cadangan konvergen.</li>
-          <li><strong>b = 1</strong> (harmonik) — tepat di ambang. Luasnya tumbuh seperti logaritma: pelan sekali, tapi tak pernah berhenti.</li>
-          <li><strong>b &gt; 1</strong> — kurvanya terlalu landai. <strong>Cadangannya tak berhingga.</strong></li>
-        </ul>
-        <p>Periksa berapa banyak yang kena:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>print("b &gt;= 1.0                 :", (dca.b_fit &gt;= 1.0).sum())
-print("b menempel di batas 1.2  :", (dca.b_fit &gt;= 1.199).sum())
-print("mentok pagu 480 bulan    :", (dca.umur_sisa_bulan &gt;= 480).sum())
-print(pd.crosstab(dca.b_fit &gt;= 1.0, dca.umur_sisa_bulan &gt;= 480))</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Dari 26 sumur: <strong>8 punya b ≥ 1,0</strong>, dan <strong>6</strong> di antaranya berhenti persis di dinding batas 1,2 yang kita pasang. Dua belas sumur mentok di pagu 480 bulan.</p>
-          <p style="margin-top:8px">Tabel silangnya menunjukkan 6 sumur mentok <em>karena</em> b ≥ 1 (divergen), dan 6 lagi mentok meski b &lt; 1 — yang ini konvergen secara matematis, tapi <code>D</code>-nya sangat kecil (CDN-044 <code>D</code> 0,153, CDN-056 0,172) sehingga butuh ratusan tahun untuk turun ke 15 bopd.</p>
-        </div>
-        <div class="catatan">
-          <strong>Dua penyakit berbeda, satu gejala yang sama.</strong> Kalau kamu cuma melihat "12 sumur mentok" tanpa memeriksa <code>b</code>-nya, kamu akan menyangka itu satu masalah. Padahal separuhnya divergen (tidak akan pernah selesai berapa pun pagunya) dan separuhnya cuma lambat (akan selesai, tapi jauh melewati umur fasilitas mana pun). Untungnya obatnya sama.
-        </div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Ingat CDN-060 dari Hari 29 tahap A? Fit-nya mendarat di <code>D_fit = 0,010</code> <strong>dan <code>b_fit = 0,0</code> persis</strong>. Coba proyeksikan sumur itu dengan <code>arps()</code> yang sudah kamu tulis.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>arps(np.array([0.0, 1.0, 2.0]), 536.9, 0.010, 0.0)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <div class="kode"><pre><code>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 2, in arps
+ZeroDivisionError: float division by zero</code></pre></div></div>
+        <div class="catatan"><strong>Bukan bug acak — ini titik lemah rumusnya sendiri.</strong> Pangkat <code>1/b</code> di rumus Arps tidak terdefinisi kalau <code>b</code> tepat nol, padahal b = 0 (penurunan eksponensial) adalah kasus yang <em>paling umum</em> secara fisik. Untung batasnya sudah kamu pasang di <code>curve_fit</code>, jadi b tidak pernah persis 0 di tahap C — tapi kamu baru saja lihat sendiri apa yang terjadi kalau pagarnya lepas.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">3</span>
-        <h3>Tahap E — dua koreksi standar industri</h3>
-        <span class="cek"><input type="checkbox" id="m5h32s3"><label for="m5h32s3">selesai</label></span>
+        <h3>Kenapa kurvanya divergen — dan ini matematika, bukan bug</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-4-3"><label for="migas-minggu5-v2-4-3">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Insinyur reservoir sudah menghadapi masalah ini sejak lama. Ada dua koreksi yang dipakai berdampingan:</p>
-        <p><strong>Koreksi 1 — batasi b ≤ 1,0.</strong> Nilai b di atas 1 memang muncul dari fit, tapi tidak punya penjelasan fisik untuk reservoir minyak konvensional. Membatasinya adalah pilihan <em>fisika</em>, bukan pilihan statistik.</p>
-        <p><strong>Koreksi 2 — terminal exponential decline.</strong> Ini yang lebih penting. Laju penurunan sesaat pada kurva Arps adalah:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>D_sesaat(t) = D / (1 + b·D·t)</code></pre>
+<p>Untuk t besar, suku 1 di dalam <code>(1 + b·D·t)</code> jadi tak berarti, sehingga <code>q(t) ≈ qi · (b·D·t)^(−1/b)</code>. Produksi kumulatif adalah luas di bawah kurva itu, dan integralnya cuma konvergen kalau <strong>b &lt; 1</strong>.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>kondisi</th>
+<th>artinya</th>
+</tr></thead>
+            <tbody>
+              <tr><td>b &lt; 1</td><td>kurva cukup curam, luasnya berhingga — cadangan konvergen</td></tr>
+              <tr><td>b = 1 (harmonik)</td><td>tepat di ambang; luasnya tumbuh seperti logaritma, pelan tapi tak pernah berhenti</td></tr>
+              <tr><td>b &gt; 1</td><td>kurva terlalu landai — <strong>cadangan tak berhingga</strong></td></tr>
+            </tbody>
+          </table>
         </div>
-        <p>Perhatikan: <strong>D_sesaat terus mengecil seiring waktu.</strong> Itulah biang keladinya — modelnya beranggapan sumur makin lama makin enggan menurun, sampai akhirnya nyaris berhenti menurun sama sekali. Secara fisik itu tidak terjadi; sumur tua menurun pada laju yang kurang lebih tetap sampai mati.</p>
-        <p>Koreksinya: begitu D_sesaat jatuh di bawah ambang tertentu — kita pakai <strong>8% per tahun</strong> — <strong>ganti</strong> kurvanya jadi eksponensial murni pada laju itu. Eksponensial selalu konvergen, jadi masalahnya selesai untuk kedua jenis penyakit sekaligus.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>D_TERMINAL, Q_LIMIT = 0.08, 15.0
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Periksa berapa banyak sumurmu yang kena</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-4-4"><label for="migas-minggu5-v2-4-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(&quot;b &gt;= 1.0            :&quot;, (dca.b_fit &gt;= 1.0).sum())
+print(&quot;b menempel batas 1.2:&quot;, (dca.b_fit &gt;= 1.199).sum())
+print(&quot;mentok pagu 480 bln :&quot;, (dca.umur_sisa_bulan &gt;= 480).sum())
+print(pd.crosstab(dca.b_fit &gt;= 1.0, dca.umur_sisa_bulan &gt;= 480))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Dari 26 sumur: <strong>8 punya b ≥ 1,0</strong>, <strong>6</strong> di antaranya menempel persis di dinding batas 1,2. Dua belas sumur mentok di pagu 480 bulan.</p><p style="margin-top:8px">Tabel silangnya: 6 sumur mentok <em>karena</em> b ≥ 1 (divergen), dan 6 lagi mentok meski b &lt; 1 — cuma sangat lambat (D kecil, butuh ratusan tahun turun ke 15 bopd).</p></div>
+        <div class="catatan"><strong>Dua penyakit berbeda, satu gejala sama.</strong> Kalau kamu cuma lihat “12 sumur mentok” tanpa memeriksa b-nya, kamu akan menyangka satu masalah. Untungnya obatnya sama.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Dua koreksi standar industri</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-4-5"><label for="migas-minggu5-v2-4-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p><strong>Koreksi 1 — batasi b ≤ 1,0.</strong> Nilai b di atas 1 muncul dari fit, tapi tidak punya penjelasan fisik untuk reservoir minyak konvensional. Ini pilihan <em>fisika</em>, bukan pilihan statistik.</p>
+<p><strong>Koreksi 2 — terminal exponential decline,</strong> yang lebih penting. Laju penurunan sesaat pada kurva Arps adalah <code>D_sesaat(t) = D / (1 + b·D·t)</code> — <strong>terus mengecil</strong> seiring waktu. Secara fisik itu tidak terjadi; sumur tua menurun pada laju yang kurang lebih tetap sampai mati.</p>
+<p>Koreksinya: begitu D_sesaat jatuh di bawah <strong>8% per tahun</strong>, <strong>ganti</strong> kurvanya jadi eksponensial murni pada laju itu. Eksponensial selalu konvergen.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Tulis fungsi koreksinya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-4-6"><label for="migas-minggu5-v2-4-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>D_TERMINAL, Q_LIMIT = 0.08, 15.0
 
 def proyeksi(qi, D, b, n=1200):
-    """Hiperbolik, lalu BERALIH ke eksponensial saat laju decline sesaat &lt; D_TERMINAL."""
     t = np.arange(n) / 12.0
     D_sesaat = D / (1 + b*D*t)
     sw = np.argmax(D_sesaat &lt; D_TERMINAL) if (D_sesaat &lt; D_TERMINAL).any() else None
@@ -813,692 +924,200 @@ def proyeksi(qi, D, b, n=1200):
     if sw is not None and sw &gt; 0:
         q_sw, t_sw = q[sw], t[sw]
         q[sw:] = q_sw * np.exp(-D_TERMINAL * (t[sw:] - t_sw))   # sambung mulus
-    return q[q &gt; Q_LIMIT], (sw if sw is not None else -1)</code></pre>
-        </div>
-        <div class="catatan">
-          <strong>Perhatikan baris <code>q[sw:] = q_sw * np.exp(...)</code>.</strong> Kurva baru dimulai dari nilai <code>q_sw</code> yang sama persis di titik peralihan, sehingga tidak ada lompatan. Menyambung dua model tanpa memastikan keduanya bertemu di titik sambungan adalah salah satu kesalahan paling sering dan paling sulit terlihat — hasilnya kelihatan wajar di tabel, tapi ada patahan di grafiknya.
-        </div>
+    return q[q &gt; Q_LIMIT], (sw if sw is not None else -1)</code></pre></div>
+        <div class="catatan">Perhatikan baris <code>q[sw:] = q_sw * np.exp(...)</code>. Kurva baru dimulai dari nilai <code>q_sw</code> yang sama persis di titik peralihan, jadi tidak ada lompatan. Menyambung dua model tanpa memastikan keduanya bertemu di titik sambungan adalah salah satu kesalahan paling sering dan paling sulit terlihat — hasilnya kelihatan wajar di tabel, tapi ada patahan di grafiknya.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">4</span>
-        <h3>Jalankan tahap E dan bandingkan seluruh lima tahap</h3>
-        <span class="cek"><input type="checkbox" id="m5h32s4"><label for="m5h32s4">selesai</label></span>
+        <span class="num">7</span>
+        <h3>Jalankan tahap E, dan bandingkan seluruh lima tahap</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-4-7"><label for="migas-minggu5-v2-4-7">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Ulangi kode tahap C dengan dua perubahan: batas atas <code>b</code> jadi <code>1.0</code> pada <code>curve_fit</code>, dan ganti proyeksinya dengan fungsi <code>proyeksi()</code> di atas. Jangan lupa: proyeksi masa depan adalah bagian <em>setelah</em> periode yang sudah teramati, jadi potong <code>qf = qf[len(m):]</code>.</p>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p><strong>26 sumur lolos · R² rata-rata 0,995 (min 0,973) · mentok pagu: 0 sumur</strong></p>
-          <p style="margin-top:8px">Umur sisa: median <strong>285 bulan</strong> (23,8 tahun), maksimum 532 bulan. Delapan sumur ber-<code>b</code> menempel di 1,0.</p>
-          <p style="margin-top:8px">EUR total <strong>27.412.621 bbl</strong> · Sisa cadangan <strong>17.627.474 bbl</strong> · Pengurasan <strong>35,7%</strong></p>
-          <p style="margin-top:8px">Selisih terhadap tahap C: <strong>3.934.760 bbl lebih rendah (−18,2%)</strong>.</p>
-        </div>
+<p>Ulangi kode tahap C dengan dua perubahan: batas atas b jadi <code>1.0</code> pada <code>curve_fit</code>, dan ganti proyeksinya dengan <code>proyeksi()</code> di atas.</p>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><strong>26 sumur lolos · R² rata-rata 0,995 (min 0,973) · mentok pagu: 0 sumur</strong></p><p style="margin-top:8px">Umur sisa: median <strong>285 bulan</strong> (23,8 tahun), maksimum 532 bulan. Delapan sumur ber-b menempel di 1,0.</p><p style="margin-top:8px">EUR total <strong>27.412.621 bbl</strong> · Sisa cadangan <strong>17.627.474 bbl</strong> · Pengurasan <strong>35,7%</strong></p></div>
         <div class="tabel-bungkus">
           <table>
-            <thead><tr><th>Tahap</th><th>Yang diperbaiki</th><th>Sumur</th><th>R² min</th><th>Sisa cadangan</th></tr></thead>
+            <thead><tr>
+<th>Tahap</th>
+<th>Yang diperbaiki</th>
+<th>Sumur</th>
+<th>R² min</th>
+<th>Sisa cadangan</th>
+</tr></thead>
             <tbody>
               <tr><td>A — naif</td><td>—</td><td>59</td><td>−0,047</td><td>50.544.537 bbl</td></tr>
-              <tr><td>B — diagnosis</td><td>menemukan kontaminasi workover</td><td colspan="3"><em>tidak menghasilkan angka; menghasilkan pemahaman</em></td></tr>
-              <tr><td>C — segmen bersih</td><td>buang data terkontaminasi + kendali mutu R²</td><td>26</td><td>0,976</td><td>21.562.234 bbl</td></tr>
-              <tr><td>D — diagnosis lagi</td><td>menemukan divergensi b ≥ 1</td><td colspan="3"><em>12 sumur mentok pagu; angkanya artefak</em></td></tr>
+              <tr><td>C — segmen bersih</td><td>buang data terkontaminasi + QC R²</td><td>26</td><td>0,976</td><td>21.562.234 bbl</td></tr>
               <tr><td><strong>E — final</strong></td><td>b ≤ 1,0 + terminal decline 8%/thn</td><td><strong>26</strong></td><td><strong>0,973</strong></td><td><strong>17.627.474 bbl</strong></td></tr>
             </tbody>
           </table>
         </div>
-        <p>Dari 50,5 juta barel ke 17,6 juta barel — <strong>angka akhirnya 65% lebih kecil</strong> daripada yang dihasilkan analisis pertama yang berjalan tanpa eror sedikit pun.</p>
+<p>Dari 50,5 juta barel ke 17,6 juta barel — <strong>angka akhirnya 65% lebih kecil</strong> daripada yang dihasilkan analisis pertama yang berjalan tanpa eror sedikit pun.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">5</span>
-        <h3>Apa yang sebenarnya kamu pelajari minggu ini</h3>
-        <span class="cek"><input type="checkbox" id="m5h32s5"><label for="m5h32s5">selesai</label></span>
+        <span class="num">8</span>
+        <h3>Lima kalimat untuk catatanmu — ini bahan wawancaramu nanti</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-4-8"><label for="migas-minggu5-v2-4-8">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Tulis lima kalimat berikut di catatanmu. Ini yang akan kamu ceritakan di wawancara ketika ditanya "ceritakan satu analisis yang kamu banggakan".</p>
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li><strong>Tahap A:</strong> kode berjalan mulus tidak berarti hasilnya benar. Periksa yang terburuk, bukan rata-ratanya.</li>
-          <li><strong>Tahap B:</strong> ketika model gagal, lihat datanya — jangan ganti modelnya. Modelnya biasanya benar; datanya yang melanggar asumsi.</li>
-          <li><strong>Tahap C:</strong> membuang data yang tidak memenuhi syarat adalah kendali mutu, bukan kecurangan — asalkan kamu melaporkan apa yang dibuang dan mengapa.</li>
-          <li><strong>Tahap D:</strong> hasil yang berubah mengikuti pilihan sewenang-wenang (pagu, jendela, ambang) bukan estimasi melainkan artefak. Uji dengan menggandakan pilihan itu.</li>
-          <li><strong>Tahap E:</strong> ketika matematika dan fisika bertentangan, fisika yang menang. Batas b ≤ 1 dan terminal decline bukan trik statistik; keduanya pengetahuan domain yang dipasang ke dalam model.</li>
-        </ul>
-        <div class="catatan">
-          <strong>Ini cerita yang jauh lebih kuat daripada "aku bikin model dan R²-nya 0,995".</strong> Siapa pun bisa menempelkan <code>curve_fit</code> ke data. Yang jarang adalah orang yang bisa menceritakan kenapa jawaban pertamanya salah, bagaimana ia mengetahuinya, dan apa yang ia ubah. Pewawancara teknis mendengarkan justru bagian itu.
-        </div>
+<ul style="font-size:0.93rem;padding-left:20px"><li><strong>Tahap A:</strong> kode berjalan mulus bukan berarti hasilnya benar. Periksa yang terburuk, bukan rata-ratanya.</li><li><strong>Tahap B:</strong> ketika model gagal, lihat datanya — jangan ganti modelnya. Modelnya biasanya benar; datanya yang melanggar asumsi.</li><li><strong>Tahap C:</strong> membuang data tak memenuhi syarat adalah kendali mutu, bukan kecurangan — asal kamu laporkan apa yang dibuang dan mengapa.</li><li><strong>Tahap D:</strong> hasil yang berubah mengikuti pilihan sewenang-wenang bukan estimasi, melainkan artefak.</li><li><strong>Tahap E:</strong> ketika matematika dan fisika bertentangan, fisika yang menang.</li></ul>
+        <div class="catatan"><strong>Ini cerita jauh lebih kuat daripada “aku bikin model dan R²-nya 0,995”.</strong> Siapa pun bisa menempelkan <code>curve_fit</code> ke data. Yang jarang: orang yang bisa menceritakan kenapa jawaban pertamanya salah, bagaimana ia mengetahuinya, dan apa yang ia ubah.</div>
       </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 32 selesai — jalur DCA selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> dari 50,5 juta barel (naif, tanpa eror) ke 17,6 juta barel (diperiksa, dengan dua koreksi fisika) — dan kamu bisa menjelaskan tepat kenapa selisihnya sebesar itu. Ini kebiasaan yang sama seperti audit: angka pertama yang rapi belum tentu angka yang benar.</p><p style="margin-top:8px">Besok: dua tempat lain angka bisa dibuat jadi apa saja tanpa satu pun kode yang salah — batas ekonomis dan alokasi biaya. Itu wajar terasa mirip pekerjaan lamamu, karena memang begitu.</p>
     </div>
   </section>
 
-  <!-- ================= HARI 33 ================= -->
-  <section class="day" data-hari="33">
+  <section class="day" data-hari="5">
     <div class="day-head">
-      <span class="n mono">MIGAS HARI 33</span>
+      <span class="n">MIGAS HARI 33</span>
       <h2>Batas ekonomis dan alokasi biaya: dua tempat angka bisa dibuat jadi apa saja</h2>
       <span class="waktu">± 85 menit</span>
     </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> menghitung kapan sebuah sumur berhenti layak diproduksi, dan menunjukkan bagaimana metode alokasi biaya yang berbeda menghasilkan jawaban yang berbeda tanpa satu pun yang salah.</p>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> menghitung kapan sebuah sumur berhenti layak diproduksi, dan menunjukkan bagaimana metode alokasi biaya yang berbeda menghasilkan jawaban berbeda tanpa satu pun yang salah.</div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">1</span>
-        <h3>L5.2 — batas ekonomis (economic limit rate)</h3>
-        <span class="cek"><input type="checkbox" id="m5h33s1"><label for="m5h33s1">selesai</label></span>
+        <h3>Batas ekonomis: kapan sumur berhenti layak diproduksi</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-5-1"><label for="migas-minggu5-v2-5-1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Sebuah sumur ditutup bukan ketika minyaknya habis, melainkan ketika <strong>hasil jualnya tidak lagi menutup biaya menjalankannya</strong>. Titik itu namanya batas ekonomis. Rumusnya sederhana:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>batas_ekonomis (bopd) = biaya_per_sumur_per_bulan / (30,44 × harga_per_bbl)</code></pre>
-        </div>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>opex25 = biaya[(biaya.jenis == "OPEX") &amp; (biaya.periode.str.startswith("2025"))]
-opex_lap = opex25.groupby("lapangan_id").nilai_usd.sum()
-n_sumur  = sumur[sumur.tipe_sumur == "Producer"].groupby("lapangan_id").size()
+<p>Sebuah sumur ditutup bukan ketika minyaknya habis, melainkan ketika hasil jualnya tidak lagi menutup biaya menjalankannya.</p>
+        <div class="kode"><pre><code>batas_ekonomis (bopd) = biaya_per_sumur_per_bulan / (30,44 × harga_per_bbl)</code></pre></div>
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Muat biaya operasi 2025, tapi hati-hati mengetik nama kolomnya.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Ketik ulang cepat, dan lihat layar merahmu</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-5-2"><label for="migas-minggu5-v2-5-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Kolom tanggal periodenya bernama <code>periode</code>. Kalau tanganmu lebih cepat dari matamu (sangat mudah terjadi kalau kamu terbiasa <code>periods</code> dari Excel/BI lain):</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>opex25 = biaya[(biaya.jenis==&quot;OPEX&quot;) &amp; (biaya.periods.str.startswith(&quot;2025&quot;))]</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL — TULISAN MERAH, DAN ITU DISENGAJA</span>
+          <div class="kode"><pre><code>Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+AttributeError: 'DataFrame' object has no attribute 'periods'</code></pre></div></div>
+        <div class="catatan"><strong>Itu wajar — pandas mengizinkan <code>biaya.periode</code> (titik) sebagai jalan pintas dari <code>biaya["periode"]</code>, tapi jalan pintas itu cuma bekerja untuk nama kolom yang benar.</strong> Salah eja satu huruf, dan Python membacanya sebagai mencari atribut Python biasa yang tidak ada — bukan mencari kolom. Perbaikannya: <code>biaya.periode</code>, atau lebih aman lagi <code>biaya["periode"]</code>, yang akan memberi <code>KeyError</code> yang lebih jelas kalau salah.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Sekarang jalankan yang benar</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-5-3"><label for="migas-minggu5-v2-5-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>opex25 = biaya[(biaya.jenis==&quot;OPEX&quot;) &amp; (biaya.periode.str.startswith(&quot;2025&quot;))]
+opex_lap = opex25.groupby(&quot;lapangan_id&quot;).nilai_usd.sum()
+n_sumur  = sumur[sumur.tipe_sumur==&quot;Producer&quot;].groupby(&quot;lapangan_id&quot;).size()
 opex_bln = (opex_lap / 12 / n_sumur).round(0)
 print(opex_bln)
-
 for harga in [50, 65, 80]:
     el = (opex_bln / (30.44*harga)).round(1)
-    print(f"@ ${harga}/bbl :", ", ".join(f"{k}={v}" for k, v in el.items()))</code></pre>
+    print(f&quot;@ ${harga}/bbl :&quot;, &quot;, &quot;.join(f&quot;{k}={v}&quot; for k,v in el.items()))</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>OPEX per sumur per bulan: F01 $55.227 · F02 $51.791 · F03 $145.551 · F04 $328.570</p></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>harga</th>
+<th>F01</th>
+<th>F02</th>
+<th>F03</th>
+<th>F04</th>
+</tr></thead>
+            <tbody>
+              <tr><td>$50/bbl</td><td>36,3 bopd</td><td>34,0</td><td>95,6</td><td>215,9</td></tr>
+              <tr><td>$65/bbl</td><td>27,9 bopd</td><td>26,2</td><td>73,6</td><td>166,1</td></tr>
+              <tr><td>$80/bbl</td><td>22,7 bopd</td><td>21,3</td><td>59,8</td><td>134,9</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>OPEX per sumur per bulan: F01 $55.227 · F02 $51.791 · F03 $145.551 · F04 $328.570</p>
-          <div class="tabel-bungkus">
-            <table>
-              <thead><tr><th>harga</th><th>F01</th><th>F02</th><th>F03</th><th>F04</th></tr></thead>
-              <tbody>
-                <tr><td>$50/bbl</td><td>36,3 bopd</td><td>34,0</td><td>95,6</td><td>215,9</td></tr>
-                <tr><td>$65/bbl</td><td>27,9 bopd</td><td>26,2</td><td>73,6</td><td>166,1</td></tr>
-                <tr><td>$80/bbl</td><td>22,7 bopd</td><td>21,3</td><td>59,8</td><td>134,9</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <p>Bandingkan dengan produksi aktual kuartal terakhir (April–Juni 2026):</p>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Pada $65/bbl, <strong>1 sumur dari 59</strong> berada di bawah batasnya: <strong>CDN-011</strong> (F01), 27,3 bopd terhadap batas 27,9 bopd.</p>
-        </div>
+<p>Bandingkan dengan produksi aktual kuartal terakhir: pada $65/bbl, <strong>1 sumur dari 59</strong> di bawah batasnya — <strong>CDN-011</strong> (F01), 27,3 bopd terhadap batas 27,9 bopd.</p>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">2</span>
+        <span class="num">4</span>
         <h3>Jebakan pertama: harga yang mana?</h3>
-        <span class="cek"><input type="checkbox" id="m5h33s2"><label for="m5h33s2">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-5-4"><label for="migas-minggu5-v2-5-4">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Kita baru saja memakai harga ICP penuh, $65/bbl. Tapi kontraktor tidak menerima $65 per barel — dari Minggu 4 kamu tahu government take sekitar 70,5%, dan bagian bersih kontraktor hanya <strong>$19,79/bbl</strong>. Kalau angka itu yang dipakai:</p>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Batas ekonomis melonjak jadi F01 91,7 · F02 86,0 · F03 241,6 · F04 545,4 bopd — dan yang berada di bawah batas bukan 1 sumur lagi, melainkan <strong>26 dari 59</strong> (F01 8, F02 8, F03 6, F04 4).</p>
-        </div>
-        <p><strong>Satu sumur atau dua puluh enam sumur.</strong> Selisihnya bukan soal data — datanya identik. Selisihnya soal harga mana yang dipakai, dan itu keputusan analis.</p>
-        <details>
-          <summary>Mana yang benar? Pikirkan dulu, baru buka.</summary>
-          <div class="isi">
-            <p>Yang benar adalah versi <strong>harga penuh ($65)</strong>, dan alasannya ada di mekanika PSC yang kamu pelajari Minggu 1 dan 4.</p>
-            <p>Di PSC cost recovery, OPEX <em>dikembalikan lebih dulu dari gross revenue</em> sebelum sisanya dibagi. Jadi pertanyaan "apakah sumur ini layak diproduksi" dijawab pada tingkat gross: selama satu barel menghasilkan lebih dari biaya mengangkatnya, barel itu menambah nilai ke dalam pool yang dibagi. Netback $19,79 adalah <em>hasil</em> dari pembagian setelah biaya dipulihkan — memakainya berarti menghitung biaya dua kali.</p>
-            <p>Kalau kamu memakai netback, kamu akan merekomendasikan penutupan 26 sumur yang sebetulnya masih menguntungkan — kesalahan yang mahal sekali.</p>
-            <p><strong>Yang tetap wajib kamu tulis:</strong> "Batas ekonomis dihitung terhadap harga gross ICP karena OPEX bersifat cost-recoverable di dalam PSC ini." Satu kalimat itu memberi tahu pembaca bahwa kamu memikirkannya, bukan kebetulan memilih yang benar.</p>
-          </div>
-        </details>
+<p>Kita baru pakai harga ICP penuh, $65/bbl. Tapi kontraktor tidak menerima $65 per barel — dari Migas L1 kamu tahu government take sekitar 70,5%, bagian bersih kontraktor cuma <strong>$19,79/bbl</strong>. Kalau angka itu dipakai:</p>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Batas ekonomis melonjak jadi F01 91,7 · F02 86,0 · F03 241,6 · F04 545,4 bopd — dan yang di bawah batas bukan 1 sumur lagi, melainkan <strong>26 dari 59.</strong></p></div>
+<p><strong>Satu sumur atau dua puluh enam sumur.</strong> Datanya identik. Selisihnya cuma soal harga mana yang dipakai — dan itu keputusan analis.</p>
+<details><summary>Mana yang benar? Pikirkan dulu, baru buka.</summary><div class="isi"><p>Yang benar: <strong>harga penuh ($65)</strong>. Di PSC cost recovery, OPEX <em>dikembalikan lebih dulu dari gross revenue</em> sebelum sisanya dibagi — jadi “apakah sumur ini layak” dijawab di tingkat gross. Netback $19,79 adalah <em>hasil</em> dari pembagian setelah biaya dipulihkan; memakainya berarti menghitung biaya dua kali.</p><p><strong>Yang wajib kamu tulis:</strong> “Batas ekonomis dihitung terhadap harga gross ICP karena OPEX bersifat cost-recoverable di dalam PSC ini.”</p></div></details>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
-        <span class="num">3</span>
+        <span class="num">5</span>
         <h3>Jebakan kedua: biaya rata-rata bukan biaya marjinal</h3>
-        <span class="cek"><input type="checkbox" id="m5h33s3"><label for="m5h33s3">selesai</label></span>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-5-5"><label for="migas-minggu5-v2-5-5">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Kita membagi seluruh OPEX lapangan rata ke semua sumurnya. Untuk F04 itu $328.570 per sumur per bulan.</p>
-        <div class="bahaya">
-          <strong>Kalau satu sumur F04 ditutup, apakah perusahaan menghemat $328.570 sebulan?</strong> Tidak. Sebagian besar OPEX lapangan adalah biaya fasilitas: pompa induk, pemisah, tenaga kerja lapangan, pemeliharaan pipa. Semua itu tetap berjalan apakah ada 9 atau 8 sumur. Yang benar-benar hemat kalau satu sumur berhenti hanyalah biaya yang melekat pada sumur itu — bagian kecilnya saja.
-        </div>
-        <p>Artinya batas ekonomis versi biaya rata-rata <strong>terlalu tinggi</strong>. Sumur yang kelihatannya rugi menurut alokasi rata-rata bisa jadi masih menyumbang positif terhadap biaya tetap yang tetap harus dibayar.</p>
-        <div class="catatan">
-          <strong>Cara menuliskannya tanpa data biaya per sumur yang sebenarnya:</strong> "Batas ekonomis dihitung dari OPEX lapangan yang dialokasikan rata per sumur. Karena sebagian OPEX bersifat tetap di tingkat fasilitas, batas ini merupakan <em>batas atas</em>; keputusan penutupan sumur tertentu memerlukan pemisahan biaya tetap dan biaya variabel yang tidak tersedia dalam data ini."
-          <p style="margin-top:8px">Kalimat itu melakukan tiga hal: menyatakan metodenya, menyatakan arah biasnya, dan menyatakan data apa yang dibutuhkan untuk memperbaikinya. Analis yang bisa menulis kalimat seperti itu tidak lagi dianggap junior.</p>
-        </div>
-        <p>Sanity check yang layak dilakukan: OPEX per barel 2025 per lapangan adalah F01 $14,29 · F02 $14,18 · F03 $14,69 · F04 $14,65 — konsisten dengan lifting cost blok $14,35/bbl yang kamu hitung di Minggu 1. Alokasi per sumur boleh timpang, tapi biaya per barelnya seragam; itu tanda alokasinya tidak merusak apa pun di tingkat lapangan.</p>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">4</span>
-        <h3>L5.3 — alokasi G&amp;A: tiga metode, tiga jawaban, nol yang salah</h3>
-        <span class="cek"><input type="checkbox" id="m5h33s4"><label for="m5h33s4">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Biaya G&amp;A (kantor pusat, keuangan, hukum, SDM) tidak melekat pada lapangan mana pun. Tapi laporan per lapangan tetap harus memuatnya. Jadi harus dialokasikan — dan tidak ada satu cara yang benar.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>vol25 = prod[prod.tanggal.dt.year == 2025].merge(sumur[["sumur_id","lapangan_id"]], on="sumur_id")
-v   = vol25.groupby("lapangan_id").oil_bopd.sum()              # basis: volume
-n   = n_sumur                                                   # basis: jumlah sumur
-akt = vol25[vol25.berproduksi == 1].groupby("lapangan_id").size()  # basis: hari-sumur aktif
-
-ga = biaya[(biaya.kategori_biaya == "G&amp;A Allocation") &amp;
-           (biaya.periode.str.startswith("2025"))].nilai_usd.sum()
-
-alok = pd.DataFrame({
-    "per_volume":      ga * v   / v.sum(),
-    "per_sumur":       ga * n   / n.sum(),
-    "per_hari_aktif":  ga * akt / akt.sum()}).round(0)
-alok["selisih_maks"] = (alok.max(axis=1) - alok.min(axis=1)).round(0)
-print(f"total G&amp;A 2025: ${ga:,.0f}"); print(alok)</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Total G&amp;A 2025 yang dialokasikan: <strong>$8.128.457</strong></p>
-          <div class="tabel-bungkus">
-            <table>
-              <thead><tr><th>lapangan</th><th>per volume</th><th>per sumur</th><th>per hari aktif</th><th>selisih maks</th></tr></thead>
-              <tbody>
-                <tr><td>F01</td><td>1.336.455</td><td>2.755.409</td><td>2.745.716</td><td>1.418.954</td></tr>
-                <tr><td>F02</td><td>1.073.328</td><td>2.342.098</td><td>2.334.761</td><td>1.268.770</td></tr>
-                <tr><td>F03</td><td>2.227.649</td><td>1.791.016</td><td>1.803.593</td><td>436.633</td></tr>
-                <tr><td>F04</td><td><strong>3.491.025</strong></td><td><strong>1.239.934</strong></td><td>1.244.387</td><td><strong>2.251.091</strong></td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p>Selisih terbesar: <strong>$2.251.091 pada F04</strong> — 27,7% dari seluruh G&amp;A.</p>
-        </div>
-        <p>F04 menanggung $3,49 juta atau $1,24 juta, bergantung sepenuhnya pada metode yang dipilih. Selisih $2,25 juta itu cukup untuk mengubah F04 dari lapangan paling untung jadi lapangan biasa saja di laporan profitabilitas per lapangan.</p>
-        <div class="catatan">
-          <strong>Ketiganya bisa dibela.</strong> Per volume: yang menghasilkan paling banyak, paling banyak memakai jasa kantor pusat. Per sumur: G&amp;A didorong oleh jumlah aset yang dikelola, bukan besar produksinya. Per hari-sumur aktif: mirip per sumur, tapi memperhitungkan sumur yang lama tidak jalan. Tidak ada data yang bisa memutuskan di antaranya, karena pertanyaannya bukan pertanyaan empiris.
-          <p style="margin-top:8px"><strong>Yang salah adalah menyajikan satu angka tanpa menyebut metodenya.</strong> Kalau kamu menyerahkan tabel profitabilitas per lapangan dan F04 tampak terbaik, pembaca berhak tahu bahwa dengan metode alokasi lain kesimpulan itu bisa berbeda.</p>
-        </div>
-        <div class="bahaya">
-          <strong>Ini juga tempat tekanan datang.</strong> Manajer lapangan F04 punya alasan kuat untuk menyukai alokasi per sumur. Manajer F01 punya alasan kuat menyukai per volume. Keduanya akan menyampaikannya sebagai argumen teknis. Perlindunganmu adalah menyajikan <strong>ketiganya sekaligus</strong> di lampiran, dan memilih satu sebagai dasar dengan alasan yang ditulis eksplisit — supaya yang bisa didebat adalah alasannya, bukan integritasmu.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= HARI 34 ================= -->
-  <section class="day" data-hari="34">
-    <div class="day-head">
-      <span class="n mono">MIGAS HARI 34</span>
-      <h2>L5.4 — sensitivitas PSC terhadap harga, dan angka 88,8%</h2>
-      <span class="waktu">± 80 menit</span>
-    </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu bisa:</strong> membangun model sensitivitas PSC dari nol, dan menjelaskan kepada orang non-teknis kenapa porsi pemerintah justru naik ketika harga minyak naik.</p>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">1</span>
-        <h3>Bangun modelnya</h3>
-        <span class="cek"><input type="checkbox" id="m5h34s1"><label for="m5h34s1">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Alur PSC yang kamu pelajari di Minggu 1 sekarang jadi kode. Urutannya tidak boleh diubah: FTP dipotong lebih dulu, baru cost recovery, sisanya ETS.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>psc = pd.read_sql("SELECT * FROM psc_bulanan", con)
-
-def hitung(faktor_harga):
-    d   = psc.copy()
-    g   = d.volume_bbl * d.icp_usd_bbl * faktor_harga     # gross revenue
-    ftp = g * 0.20                                        # first tranche petroleum
-    tersedia = g - ftp
-    cr  = np.minimum(np.minimum(d.biaya_recoverable_usd, tersedia), g*0.80)  # cost recovery, ada pagu
-    ets = np.maximum(tersedia - cr, 0)                    # equity to be split
-    gov_pra   = ftp*0.60 + ets*0.85
-    kon_pra   = ftp*0.40 + ets*0.15
-    pajak     = np.maximum(kon_pra, 0) * 0.44
-    return pd.Series({"gross": g.sum(), "cost_recovery": cr.sum(),
-                      "gov_take": (gov_pra + pajak).sum(),
-                      "kontraktor": (kon_pra - pajak + cr).sum()})
-
-for f, lbl in [(0.70,"-30%"), (0.85,"-15%"), (1.00,"dasar"), (1.15,"+15%"), (1.30,"+30%")]:
-    r = hitung(f)
-    print(f"{lbl:&gt;6} gross {r.gross:&gt;16,.0f} | cost_rec {r.cost_recovery:&gt;14,.0f} | "
-          f"gov {r.gov_take:&gt;16,.0f} ({r.gov_take/r.gross*100:5.1f}%) | "
-          f"kontraktor {r.kontraktor:&gt;15,.0f}")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <div class="tabel-bungkus">
-            <table>
-              <thead><tr><th>skenario</th><th>gross</th><th>cost recovery</th><th>gov take</th><th>gov %</th><th>kontraktor</th><th>kon %</th></tr></thead>
-              <tbody>
-                <tr><td>−30%</td><td>926.080.723</td><td>289.729.877</td><td>556.967.115</td><td><strong>60,1%</strong></td><td>369.113.609</td><td>39,9%</td></tr>
-                <tr><td>−15%</td><td>1.124.526.593</td><td>289.729.877</td><td>733.187.047</td><td>65,2%</td><td>391.339.546</td><td>34,8%</td></tr>
-                <tr><td>dasar</td><td>1.322.972.462</td><td>289.729.877</td><td>909.406.979</td><td>68,7%</td><td>413.565.483</td><td>31,3%</td></tr>
-                <tr><td>+15%</td><td>1.521.418.331</td><td>289.729.877</td><td>1.085.626.911</td><td>71,4%</td><td>435.791.421</td><td>28,6%</td></tr>
-                <tr><td>+30%</td><td>1.719.864.201</td><td>289.729.877</td><td>1.261.846.843</td><td><strong>73,4%</strong></td><td>458.017.358</td><td>26,6%</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">2</span>
-        <h3>Perhatikan tiga hal sekaligus</h3>
-        <span class="cek"><input type="checkbox" id="m5h34s2"><label for="m5h34s2">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li><strong>Kolom cost recovery tidak bergerak sama sekali</strong> — $289.729.877 di kelima skenario. Biaya sudah terjadi; harga minyak tidak mengubahnya.</li>
-          <li><strong>Porsi pemerintah naik dari 60,1% ke 73,4%</strong> saat harga naik. Kontrak yang sama, pembagian yang sama, tapi persentasenya bergerak 13 poin.</li>
-          <li><strong>Nilai absolut kontraktor tetap naik</strong>, dari $369 juta ke $458 juta. Persentasenya turun, dolarnya naik.</li>
-        </ul>
-        <div class="bahaya">
-          <strong>Poin ketiga itu yang paling sering salah dibaca.</strong> "Porsi kontraktor turun dari 39,9% ke 26,6%" terdengar seperti kabar buruk untuk kontraktor. Padahal kontraktor menerima $89 juta lebih banyak. Kalau kamu melaporkan persentase tanpa menyertakan dolarnya, kamu memberi kesan yang persis terbalik dari kenyataannya.
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">3</span>
-        <h3>Hitung porsi marjinal — inilah angka yang sebenarnya penting</h3>
-        <span class="cek"><input type="checkbox" id="m5h34s3"><label for="m5h34s3">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Persentase rata-rata (68,7%) menjawab "dari seluruh pendapatan, berapa yang ke pemerintah". Pertanyaan yang jauh lebih berguna untuk keputusan investasi adalah: <strong>dari setiap dolar TAMBAHAN, berapa yang ke pemerintah?</strong></p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>a, b = hitung(1.00), hitung(1.15)
-print(f"tambahan gross : {b.gross - a.gross:,.0f}")
-print(f"tambahan gov   : {b.gov_take - a.gov_take:,.0f}")
-print(f"porsi marjinal : {(b.gov_take-a.gov_take)/(b.gross-a.gross)*100:.1f}%")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Tambahan gross $198.445.869 · tambahan gov $176.219.932 · <strong>porsi marjinal 88,8%</strong></p>
-          <p style="margin-top:8px">Dan kalau kamu ulangi untuk setiap pasang skenario yang berdampingan, hasilnya <strong>88,8% persis, setiap kali</strong>.</p>
-        </div>
-        <p>Angka itu konstan karena bisa diturunkan langsung dari ketentuan kontraknya. Selama cost recovery sudah tetap, setiap dolar tambahan mengalir begini:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>FTP ke pemerintah      : 20%  × 60%  = 12,0%
-ETS ke pemerintah      : 80%  × 85%  = 68,0%
-                                       -------
-sebelum pajak                          80,0%
-kontraktor sebelum pajak: 20%×40% + 80%×15% = 8% + 12% = 20,0%
-pajak                  : 20,0% × 44%       =  8,8%
-                                       -------
-TOTAL ke pemerintah                    88,8%</code></pre>
-        </div>
-        <div class="catatan">
-          <strong>Inilah kenapa persentase rata-rata bergerak.</strong> Setiap dolar tambahan dibagi 88,8% : 11,2%, jauh lebih berat ke pemerintah daripada rata-rata 68,7%. Jadi begitu harga naik dan dolar tambahan itu makin banyak porsinya dalam total, rata-ratanya tertarik naik mendekati 88,8%. Rata-rata bergerak bukan karena aturannya berubah, tapi karena bauran antara "dolar yang menutup biaya" dan "dolar tambahan" berubah.
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">4</span>
-        <h3>Terjemahkan ke satu kalimat untuk manajemen</h3>
-        <span class="cek"><input type="checkbox" id="m5h34s4"><label for="m5h34s4">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Tulis versimu sendiri dulu, dalam bahasa yang dimengerti orang keuangan yang tidak pernah membaca kontrak PSC. Baru buka.</p>
-        <details>
-          <summary>Contoh jawaban</summary>
-          <div class="isi">
-            <p>"Dari setiap dolar pendapatan tambahan di atas biaya yang sudah dipulihkan, kontraktor menerima 11,2 sen. Karena itu kenaikan harga minyak menguntungkan kita dalam nilai absolut tapi menurunkan porsi persentase kita — dan sebaliknya, <strong>penghematan biaya jauh lebih berharga daripada kenaikan harga.</strong> Menghemat $1 juta biaya operasi menambah sekitar $1 juta ke posisi kontraktor karena biaya itu dipulihkan penuh; menaikkan pendapatan $1 juta hanya menambah $112 ribu."</p>
-            <p>Kalimat terakhir itu adalah temuan yang bisa mengubah prioritas perusahaan, dan seluruhnya berasal dari satu tabel sensitivitas.</p>
-          </div>
-        </details>
-        <div class="catatan">
-          <strong>Simpan temuan ini.</strong> Besok, saat menilai proyek intervensi $3 juta, kamu akan memakainya: proyek yang menaikkan produksi dinilai pada 11,2 sen per dolar, sementara proyek yang menurunkan biaya dinilai mendekati 100 sen per dolar. Itu mengubah peringkat kandidat secara mendasar.
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">5</span>
-        <h3>Batas model ini — yang wajib kamu sebutkan</h3>
-        <span class="cek"><input type="checkbox" id="m5h34s5"><label for="m5h34s5">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Model tadi mengubah harga tapi menahan segalanya yang lain tetap. Di dunia nyata itu tidak berlaku:</p>
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li>Harga turun 30% → sebagian sumur jatuh di bawah batas ekonomis → volume turun. Model kita menahan volume tetap.</li>
-          <li>Harga naik 30% → workover yang tadinya tidak layak jadi layak → belanja naik → cost recovery naik. Model kita menahan biaya tetap.</li>
-          <li>DMO (kewajiban pasokan domestik) dan carry-forward biaya yang belum terpulihkan disederhanakan.</li>
-        </ul>
-        <div class="catatan">
-          <strong>Menyebutkan batasan bukan kelemahan laporan; itu yang membuatnya bisa dipakai.</strong> Pembaca yang tahu model ini menahan volume tetap bisa menilai sendiri seberapa jauh hasilnya bisa dipercaya di skenario −30%. Pembaca yang tidak diberi tahu akan memperlakukan angkanya sebagai ramalan — dan ketika ternyata meleset, yang disalahkan analisnya.
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= HARI 35 ================= -->
-  <section class="day" data-hari="35">
-    <div class="day-head">
-      <span class="n mono">MIGAS HARI 35 · PROYEK AKHIR</span>
-      <h2>L5.5 — memo $3 juta</h2>
-      <span class="waktu">± 150 menit</span>
-    </div>
-    <p class="tujuan"><strong>Akhir hari ini kamu punya:</strong> satu memo satu halaman yang merekomendasikan keputusan belanja modal $3 juta, lengkap dengan asumsi, sensitivitas, dan batasan — dokumen yang bisa kamu bawa ke wawancara.</p>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">1</span>
-        <h3>Briefingnya</h3>
-        <span class="cek"><input type="checkbox" id="m5h35s1"><label for="m5h35s1">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <div class="catatan" style="border-left-width:5px">
-          <p style="margin:0"><strong>Dari: VP Operations · Kepada: Analis Data · Perihal: Alokasi anggaran intervensi 2027</strong></p>
-          <p style="margin-top:10px">Kita punya <strong>$3.000.000</strong> untuk program intervensi sumur tahun depan di Blok Cendana. Biaya rata-rata satu workover sekitar $900.000, jadi realistis kita bisa mengerjakan tiga sumur.</p>
-          <p style="margin-top:10px">Saya butuh satu halaman: sumur mana, kenapa sumur itu, berapa perkiraan hasilnya, dan seberapa yakin kamu. Kalau menurutmu uangnya sebaiknya tidak dibelanjakan, katakan itu — tapi tunjukkan angkanya.</p>
-        </div>
-        <p style="margin-top:14px">Perhatikan kalimat terakhirnya. Itu bukan basa-basi. Analis pemula menganggap tugas seperti ini adalah "pilih tiga sumur"; analis yang dipercaya menganggapnya "jawab apakah ini belanja yang benar, dan kalau ya, yang mana".</p>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">2</span>
-        <h3>Bangun daftar kandidat dari bukti, bukan dari firasat</h3>
-        <span class="cek"><input type="checkbox" id="m5h35s2"><label for="m5h35s2">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Dasar kandidat yang paling bisa dipertahankan adalah <strong>uptime</strong>: sumur yang sering berhenti kehilangan produksi yang bisa dikembalikan, dan besarnya bisa dihitung langsung dari data — tidak perlu mengandaikan apa pun tentang reservoir.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>h1 = prod[prod.tanggal &gt;= "2026-01-01"]
-a  = h1.groupby("sumur_id").agg(bopd=("oil_bopd","mean"),
-                                wc=("watercut","mean"),
-                                uptime=("berproduksi","mean"))
-a = a.join(sumur.set_index("sumur_id")[["lapangan_id","tipe_sumur","metode_angkat"]])
-a = a[a.tipe_sumur == "Producer"]
-
-TARGET = 0.989                        # uptime median blok
-a["gain_bopd"] = (a.bopd * (TARGET/a.uptime - 1)).round(1)
-a.loc[a.uptime &gt;= TARGET, "gain_bopd"] = 0
-
-print(a.nsmallest(6, "uptime")[["lapangan_id","bopd","wc","uptime","gain_bopd","metode_angkat"]])</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Median uptime blok <strong>0,989</strong>; median produksi 141,9 bopd. Enam uptime terendah semester I 2026:</p>
-          <div class="tabel-bungkus">
-            <table>
-              <thead><tr><th>sumur</th><th>lap.</th><th>bopd</th><th>watercut</th><th>uptime</th><th>gain bopd</th><th>metode angkat</th></tr></thead>
-              <tbody>
-                <tr><td><strong>CDN-028</strong></td><td>F02</td><td>274,6</td><td>0,386</td><td>0,834</td><td><strong>51,0</strong></td><td>ESP</td></tr>
-                <tr><td>CDN-003</td><td>F01</td><td>257,6</td><td>0,758</td><td>0,878</td><td>32,6</td><td>ESP</td></tr>
-                <tr><td><strong>CDN-052</strong></td><td>F03</td><td>304,9</td><td>0,696</td><td>0,884</td><td><strong>36,2</strong></td><td>Sucker Rod</td></tr>
-                <tr><td>CDN-046</td><td>F03</td><td>169,0</td><td>0,660</td><td>0,912</td><td>14,3</td><td>ESP</td></tr>
-                <tr><td>CDN-025</td><td>F02</td><td>149,1</td><td>0,960</td><td>0,917</td><td>11,7</td><td>Sucker Rod</td></tr>
-                <tr><td><strong>CDN-049</strong></td><td>F03</td><td>468,2</td><td>0,592</td><td>0,928</td><td><strong>30,8</strong></td><td>Gas Lift</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <p>Peringkat berdasarkan nilai per dolar (memakai biaya median per jenis pekerjaan dari tabel <code>workover</code>) memberi tiga teratas: <strong>CDN-028, CDN-052, CDN-049</strong> — total biaya <strong>$2.633.941</strong>, total gain <strong>118,0 bopd</strong>, dan masih tersisa $366.059 dari anggaran.</p>
-        <div class="catatan">
-          <strong>Perhatikan CDN-049.</strong> Uptime-nya bukan yang terburuk (0,928, peringkat enam), tapi produksinya paling besar (468,2 bopd), jadi persentase kecil dari angka besar tetap menang atas persentase besar dari angka kecil. Mengurutkan berdasarkan uptime saja akan melewatkannya. <strong>Urutkan berdasarkan yang kamu pedulikan (barel), bukan berdasarkan gejalanya (uptime).</strong>
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">3</span>
-        <h3>Nilai dalam dolar — dan pilih tingkat yang benar</h3>
-        <span class="cek"><input type="checkbox" id="m5h35s3"><label for="m5h35s3">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Kemarin kamu menemukan bahwa kontraktor hanya menerima 11,2 sen dari tiap dolar tambahan. Godaannya sekarang: menilai proyek ini pada 11,2 sen dan menyimpulkan proyeknya jelek. <strong>Jangan.</strong></p>
-        <p>Periksa dulu apakah biaya proyek ini bisa dipulihkan:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>print("biaya recoverable total : ${:,.0f}".format(psc.biaya_recoverable_usd.sum()))
-print("cost recovery   total  : ${:,.0f}".format(psc.cost_recovery_usd.sum()))
-print("carry belum terpulihkan: ${:,.0f}".format(
-      psc.sort_values('periode').unrecovered_carry_usd.iloc[-1]))
-print("bulan yang kena pagu   :", (psc.cost_recovery_usd &lt; psc.biaya_recoverable_usd - 0.01).sum(), "dari 42")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Recoverable $289.729.877, dipulihkan $289.729.877, carry akhir <strong>$0</strong>, bulan yang kena pagu <strong>0 dari 42</strong>. Pagu 80% gross rata-rata $25,2 juta per bulan sementara biaya recoverable rata-rata cuma $6,9 juta — pagu itu tidak pernah mendekati mengikat.</p>
-        </div>
-        <p>Artinya biaya workover <strong>dipulihkan penuh</strong>. Jadi keputusannya diambil di tingkat PSC: sebuah barel tambahan menciptakan nilai kalau harganya melebihi biaya mengangkatnya.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>ICP    = 69.93     # rata-rata 2026
-LIFT   = 14.35     # lifting cost blok, dari Minggu 1
-MARGIN = ICP - LIFT
-print(f"margin per barel inkremental: ${MARGIN:.2f}")
-
-biaya = {"CDN-028": 991670, "CDN-052": 826193, "CDN-049": 816078}
-gain  = {"CDN-028": 51.0,   "CDN-052": 36.2,   "CDN-049": 30.8}
-for w in biaya:
-    print(f"{w}: impas pada {biaya[w]/MARGIN/gain[w]:.0f} hari "
-          f"({biaya[w]/MARGIN/gain[w]/365:.2f} tahun) gain bertahan")</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Margin per barel inkremental <strong>$55,58</strong>. Nilai tahun pertama portofolio $2.393.831 terhadap biaya $2.633.941 — <strong>rasio 0,91</strong>, belum balik modal dalam setahun.</p>
-          <p style="margin-top:8px">Dengan diskonto 10%/tahun, gain harus bertahan: CDN-028 <strong>13 bulan</strong>, CDN-052 <strong>15 bulan</strong>, CDN-049 <strong>17 bulan</strong> agar NPV-nya nol.</p>
-        </div>
-        <div class="tabel-bungkus">
-          <table>
-            <thead><tr><th>skenario ketahanan gain</th><th>nilai (NPV 10%)</th><th>NPV proyek</th></tr></thead>
-            <tbody>
-              <tr><td>6 bulan, datar</td><td>$1.174.392</td><td style="color:#c0392b"><strong>−$1.459.549</strong></td></tr>
-              <tr><td>1 tahun, datar</td><td>$2.294.130</td><td style="color:#c0392b"><strong>−$339.811</strong></td></tr>
-              <tr><td>2 tahun, datar</td><td>$4.379.703</td><td><strong>+$1.745.762</strong></td></tr>
-              <tr><td>5 tahun, meluruh 25%/thn</td><td>$5.785.980</td><td><strong>+$3.152.039</strong></td></tr>
-              <tr><td>5 tahun, meluruh 50%/thn</td><td>$3.914.640</td><td><strong>+$1.280.699</strong></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="bahaya">
-          <strong>Seluruh keputusan $3 juta ini bergantung pada satu angka yang belum pernah kita ukur: berapa lama kenaikannya bertahan.</strong> Di bawah kira-kira 13–17 bulan, proyeknya merugi. Di atas itu, menguntungkan — dan lumayan. Tidak ada angka lain dalam analisis ini yang punya daya ungkit sebesar itu.
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">4</span>
-        <h3>Ukur ketahanan gain dari data historis — dan hati-hati, ada jebakan terakhir</h3>
-        <span class="cek"><input type="checkbox" id="m5h35s4"><label for="m5h35s4">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Kita punya 79 workover historis. Sebagian di antaranya sudah cukup lama untuk diamati setahun penuh tanpa terganggu workover berikutnya. Saring dulu:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>AKHIR = prod.tanggal.max()          # 2026-06-30
-layak = []
-for _, r in wo.iterrows():
-    selesai = r.tanggal_mulai + pd.Timedelta(days=int(r.durasi_hari))
-    if selesai + pd.Timedelta(days=510) &gt; AKHIR:            # data tidak cukup panjang
-        continue
-    lanjut = wo[(wo.sumur_id == r.sumur_id) &amp; (wo.tanggal_mulai &gt; selesai)].tanggal_mulai
-    if len(lanjut) and lanjut.min() &lt; selesai + pd.Timedelta(days=510):
-        continue                                            # keburu di-workover lagi
-    layak.append(r)
-print(len(layak), "dari", len(wo))</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p><strong>19 dari 79</strong> workover memenuhi syarat. Per jenis pekerjaan: Acidizing 8, ESP Replacement 5, Reperforation 3, Scale Removal 3, dan <strong>Zone Change 0</strong>.</p>
-        </div>
-        <p>Sekarang bandingkan produksi pada bulan ke-12 setelah pekerjaan selesai (rata-rata hari ke-330 sampai 390) terhadap baseline 90 hari sebelum pekerjaan dimulai.</p>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p>Median gain bulan ke-3: <strong>+36,6 bopd</strong>. Median gain bulan ke-12: <strong>−29,1 bopd</strong>. Dari 19 sumur, yang produksinya di bulan ke-12 masih di atas baseline: <strong>nol</strong>.</p>
-        </div>
-        <div class="bahaya">
-          <strong>Berhenti. Jangan tulis "seluruh workover gagal dalam setahun".</strong> Kamu baru saja melakukan persis kesalahan yang kamu pelajari di Minggu 2, cuma dari arah sebaliknya: membandingkan sesudah terhadap sebelum <em>tanpa memperhitungkan bahwa sumur memang menurun dengan sendirinya.</em> Sumur yang menurun 22% per tahun akan berada di bawah baseline-nya 12 bulan kemudian meskipun workovernya berhasil sempurna.
-        </div>
-        <p>Pembanding yang benar bukan baseline, melainkan <strong>kontrafaktual</strong>: berapa produksinya seandainya workover tidak dilakukan. Dan alat untuk membuat kontrafaktual itu adalah yang kamu bangun empat hari terakhir — kurva decline.</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code># laju decline alami diukur dari 180 hari SEBELUM workover (regresi log-linear)
-pre = window(sumur_id, mulai - 180 hari, mulai)
-D   = -np.polyfit((pre.tanggal - pre.tanggal.min()).dt.days/365.0,
-                  np.log(pre.oil_bopd.clip(lower=1)), 1)[0]
-
-base   = pre.oil_bopd.tail(90).mean()
-dt     = ((selesai + pd.Timedelta(days=360)) - mulai).days / 365.0
-kontra = base * np.exp(-D * dt)               # produksi SEANDAINYA tanpa workover
-gain   = aktual_bulan12 - kontra
-
-# buang kasus yang jendela "sebelum"-nya sendiri terkontaminasi workover lain
-if workover_sebelumnya and (mulai - workover_sebelumnya).days &lt; 270: lewati</code></pre>
-        </div>
-        <div class="hasil">
-          <span class="tag">HARUS MUNCUL</span>
-          <p><strong>12 sumur</strong> lolos saringan tambahan (7 dibuang karena jendela pra-workovernya sendiri terkontaminasi). Median laju decline alami <strong>0,216/tahun</strong>.</p>
-          <div class="tabel-bungkus">
-            <table>
-              <thead><tr><th>sumur</th><th>baseline</th><th>D alami</th><th>kontrafaktual bln-12</th><th>aktual bln-12</th><th>gain</th></tr></thead>
-              <tbody>
-                <tr><td>CDN-057</td><td>1658,2</td><td>0,394</td><td>1112,2</td><td>1369,6</td><td><strong>+257,4</strong></td></tr>
-                <tr><td>CDN-049</td><td>821,8</td><td>0,283</td><td>616,6</td><td>675,1</td><td>+58,5</td></tr>
-                <tr><td>CDN-062</td><td>1130,1</td><td>0,279</td><td>854,6</td><td>900,6</td><td>+46,0</td></tr>
-                <tr><td>CDN-045</td><td>671,6</td><td>0,359</td><td>468,5</td><td>496,7</td><td>+28,2</td></tr>
-                <tr><td>CDN-003</td><td>263,8</td><td>0,228</td><td>208,8</td><td>234,7</td><td>+25,9</td></tr>
-                <tr><td>CDN-018</td><td>197,2</td><td>0,185</td><td>163,5</td><td>182,4</td><td>+19,0</td></tr>
-                <tr><td>CDN-053</td><td>209,0</td><td>0,204</td><td>169,5</td><td>187,1</td><td>+17,5</td></tr>
-                <tr><td>CDN-025</td><td>205,4</td><td>0,155</td><td>175,7</td><td>181,9</td><td>+6,2</td></tr>
-                <tr><td>CDN-019</td><td>80,4</td><td>0,179</td><td>67,3</td><td>70,1</td><td>+2,8</td></tr>
-                <tr><td>CDN-046</td><td>188,7</td><td>0,134</td><td>165,1</td><td>167,9</td><td>+2,8</td></tr>
-                <tr><td>CDN-033</td><td>103,2</td><td>0,122</td><td>91,3</td><td>91,5</td><td>+0,2</td></tr>
-                <tr><td>CDN-015</td><td>263,3</td><td>0,231</td><td>208,8</td><td>206,8</td><td>−2,0</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p><strong>Median gain bulan ke-12 terhadap kontrafaktual: +18,2 bopd. Positif pada 11 dari 12 sumur.</strong></p>
-        </div>
-        <div class="catatan">
-          <strong>Tandanya berbalik.</strong> Perbandingan naif memberi median <strong>−26,3 bopd</strong> dan kesimpulan "semua gagal". Perbandingan terhadap kontrafaktual memberi <strong>+18,2 bopd</strong> dan kesimpulan "efeknya bertahan". Data yang sama, dua belas sumur yang sama — yang berbeda hanya <em>terhadap apa</em> kamu membandingkannya.
-          <p style="margin-top:8px">Inilah kegunaan sesungguhnya dari kurva decline yang kamu bangun Hari 29–32. Bukan untuk mengisi angka cadangan di sebuah slide, melainkan untuk menjawab pertanyaan yang tidak bisa dijawab tanpa pembanding: <strong>apa yang akan terjadi seandainya kita tidak melakukan apa-apa.</strong></p>
-        </div>
-        <p>Besarannya: +18,2 bopd pada sumur yang median baseline-nya 236,2 bopd, yaitu <strong>uplift 7,7% yang masih bertahan di bulan ke-12</strong>. Dibandingkan median gain bulan ke-3 sebesar +36,6 bopd, ketahanannya kira-kira <strong>50%</strong>.</p>
-        <div class="bahaya">
-          <strong>Batas dari temuan ini, yang wajib ikut dilaporkan:</strong> n = 12, sebarannya sangat lebar (+257,4 sampai −2,0), dan 12 sumur ini bukan sampel acak — mereka adalah sumur yang <em>tidak</em> perlu di-workover lagi selama 17 bulan berikutnya, yang kemungkinan besar berarti workovernya berhasil. Bias seleksi lapis kedua. Jadi 50% adalah <strong>perkiraan optimistis</strong>, bukan angka tengah yang netral.
-        </div>
-      </div>
-    </div>
-
-    <div class="langkah">
-      <div class="langkah-head">
-        <span class="num">5</span>
-        <h3>Rekomendasi: bertahap, bukan semua atau tidak sama sekali</h3>
-        <span class="cek"><input type="checkbox" id="m5h35s5"><label for="m5h35s5">selesai</label></span>
-      </div>
-      <div class="langkah-body">
-        <p>Sekarang bawa temuan ketahanan 50% itu ke dalam angkanya. Potong perkiraan gain portofolio jadi separuhnya dan hitung ulang:</p>
-        <div class="tabel-bungkus">
-          <table>
-            <thead><tr><th>ketahanan gain</th><th>gain efektif</th><th>impas</th><th>NPV 2 tahun</th><th>NPV 3 tahun</th><th>NPV 5 tahun</th></tr></thead>
-            <tbody>
-              <tr><td>100% (tanpa potongan)</td><td>118,0 bopd</td><td>1,10 thn</td><td>+$1.745.762</td><td>+$3.641.737</td><td>+$6.932.272</td></tr>
-              <tr><td><strong>50% (sesuai historis)</strong></td><td><strong>59,0 bopd</strong></td><td><strong>2,20 thn</strong></td><td style="color:#c0392b">−$444.090</td><td>+$503.898</td><td>+$2.149.166</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Dengan potongan 50%, proyeknya baru positif kalau kenaikannya bertahan <strong>lebih dari sekitar 3 tahun</strong> — dan bukti yang kita punya cuma sampai bulan ke-12, dari 12 sumur yang bias seleksinya optimistis. Itu bukan dasar yang cukup untuk melepas $2,63 juta sekaligus.</p>
-        <p>Kamu punya tiga pilihan, dan yang ketiga hampir selalu yang benar ketika satu asumsi menguasai seluruh keputusan:</p>
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li><strong>Belanjakan ketiganya sekarang.</strong> Mempertaruhkan $2,63 juta pada ketahanan gain yang buktinya n = 12 dan bias seleksinya belum tertangani.</li>
-          <li><strong>Jangan belanjakan sama sekali.</strong> Membuang peluang yang tetap positif di skenario 3 dan 5 tahun, hanya karena tidak nyaman dengan ketidakpastian.</li>
-          <li><strong>Belanjakan tahap pertama, ukur dengan pembanding yang benar, baru putuskan sisanya.</strong></li>
-        </ul>
-        <div class="catatan">
-          <strong>Rekomendasi:</strong> kerjakan <strong>CDN-028 saja</strong> sekarang ($991.670). Ia punya gain terbesar (51,0 bopd), impas tercepat (13 bulan), dan watercut terendah di antara kandidat (0,386) sehingga kenaikannya paling kecil kemungkinan tergerus air. Tahan sisa $2,01 juta.
-          <p style="margin-top:8px"><strong>Yang harus disepakati SEBELUM pekerjaan dimulai</strong> — bukan sesudah, supaya tidak bisa disesuaikan mengikuti hasil:</p>
-          <ul style="padding-left:20px;margin-top:6px">
-            <li>Baseline: rata-rata bopd 90 hari sebelum tanggal mulai.</li>
-            <li>Pengukuran: rata-rata bopd pada bulan ke-3, ke-6, ke-9, dan ke-12 setelah pekerjaan selesai.</li>
-            <li><strong>Kontrafaktual, bukan baseline:</strong> pasang kurva decline pada 180 hari sebelum pekerjaan, proyeksikan ke bulan ke-12, dan ukur gain terhadap proyeksi itu. Membandingkan terhadap baseline mentah akan memberi jawaban yang salah tandanya.</li>
-            <li>Ambang keputusan: lanjutkan CDN-052 dan CDN-049 kalau gain bulan-12 terhadap kontrafaktual ≥ 50% gain bulan-3 — yaitu setara median historis. Di bawah itu, hentikan program.</li>
-            <li>Pembanding tambahan: catat juga bopd 3 sumur F02 lain yang tidak diintervensi pada periode yang sama, sebagai kontrol terhadap perubahan yang mengenai seluruh lapangan.</li>
-          </ul>
-        </div>
-        <p>Biaya menunggu setahun kira-kira $1,1 juta nilai yang tertunda dari dua sumur sisanya. Nilai yang dibeli: satu pengukuran ketahanan gain yang bersih — n = 1, tapi tanpa bias seleksi, dengan pembanding dan ambang yang disepakati di muka. Itu mengubah program ini dari taruhan jadi keputusan, dan angkanya akan dipakai lagi untuk setiap anggaran intervensi tahun-tahun berikutnya.</p>
+<p>Kita membagi seluruh OPEX lapangan rata ke semua sumurnya — untuk F04 itu $328.570 per sumur per bulan.</p>
+        <div class="bahaya"><strong>Kalau satu sumur F04 ditutup, apakah perusahaan menghemat $328.570 sebulan? Tidak.</strong> Sebagian besar OPEX lapangan adalah biaya fasilitas — pompa induk, pemisah, tenaga kerja, pemeliharaan pipa — yang tetap berjalan apakah ada 9 atau 8 sumur. Batas ekonomis versi biaya rata-rata karenanya <strong>terlalu tinggi.</strong></div>
+        <div class="catatan"><strong>Cara menuliskannya tanpa data biaya per sumur yang sebenarnya:</strong> “Batas ini merupakan <em>batas atas</em>; keputusan penutupan sumur tertentu memerlukan pemisahan biaya tetap dan variabel yang tidak tersedia dalam data ini.” Kalimat itu menyatakan metode, arah biasnya, dan data yang dibutuhkan untuk memperbaikinya sekaligus.</div>
       </div>
     </div>
 
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">6</span>
-        <h3>Tulis memonya — satu halaman, tidak lebih</h3>
-        <span class="cek"><input type="checkbox" id="m5h35s6"><label for="m5h35s6">selesai</label></span>
+        <h3>L5.3 — alokasi G&A: tiga metode, tiga jawaban, nol yang salah</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-5-6"><label for="migas-minggu5-v2-5-6">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Sekarang bagian yang paling menentukan apakah seluruh kerja lima minggu ini terbaca oleh orang lain. Pakai kerangka ini, isi dengan angkamu sendiri. <strong>Jangan lebih dari satu halaman.</strong></p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>MEMO — Program Intervensi Sumur 2027, Blok Cendana
-Kepada: VP Operations     Dari: [namamu]     Tanggal: [tanggal]
+<p>Biaya G&A (kantor pusat, keuangan, hukum, SDM) tidak melekat pada lapangan mana pun, tapi laporan per lapangan tetap harus memuatnya. Ini kertas kerja yang sudah kamu kenal dari KAP — alokasi biaya bersama ke unit-unit yang berbagi biayanya.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>vol25 = prod[prod.tanggal.dt.year==2025].merge(sumur[[&quot;sumur_id&quot;,&quot;lapangan_id&quot;]], on=&quot;sumur_id&quot;)
+v   = vol25.groupby(&quot;lapangan_id&quot;).oil_bopd.sum()                   # basis: volume
+n   = n_sumur                                                        # basis: jumlah sumur
+akt = vol25[vol25.berproduksi==1].groupby(&quot;lapangan_id&quot;).size()      # basis: hari-sumur aktif
+ga  = biaya[(biaya.kategori_biaya==&quot;G&amp;A Allocation&quot;) &amp; (biaya.periode.str.startswith(&quot;2025&quot;))].nilai_usd.sum()
 
-REKOMENDASI
-Setujui tahap pertama $991.670 (CDN-028). Tahan $2.008.330 sampai hasil
-12 bulan terukur. Keputusan penuh $3 juta belum bisa dipertanggungjawabkan
-dengan data yang ada saat ini.
-
-TEMUAN
-1. Tiga sumur berpeluang paling besar: CDN-028 (F02), CDN-052 (F03),
-   CDN-049 (F03). Total potensi pemulihan 118,0 bopd, biaya $2.633.941.
-2. Pada margin inkremental $55,58/bbl, portofolio ini balik modal dalam
-   13-17 bulan bila kenaikannya bertahan. NPV +$1,75 juta pada asumsi
-   gain bertahan 2 tahun; -$0,34 juta bila hanya bertahan 1 tahun.
-3. Ketahanan gain adalah variabel yang menentukan arah keputusan.
-   Pengukuran atas 12 workover historis (terhadap kontrafaktual decline,
-   bukan terhadap baseline) memberi median +18,2 bopd pada bulan ke-12,
-   yaitu sekitar 50% dari gain bulan ke-3. Dengan potongan 50% itu,
-   NPV portofolio -$0,44 juta pada 2 tahun dan +$0,50 juta pada 3 tahun.
-
-ASUMSI
-- ICP $69,93/bbl (rata-rata 2026); lifting cost $14,35/bbl (aktual blok).
-- Biaya workover memakai median historis per jenis pekerjaan.
-- Biaya bersifat cost-recoverable dan pagu 80% tidak mengikat
-  (diverifikasi: 0 dari 42 bulan kena pagu, carry akhir $0).
-- Potensi pemulihan dihitung dari selisih uptime terhadap median blok
-  0,989, bukan dari kenaikan workover historis.
-
-BATASAN
-- Kenaikan workover historis (+63 s/d +113 bopd, jendela 90 hari) tidak
-  dipakai sebagai dasar karena terkontaminasi bias seleksi: sumur dipilih
-  justru ketika sedang berkinerja rendah, sehingga sebagian kenaikan adalah
-  regresi ke rata-rata, bukan efek pekerjaan.
-- Ketahanan 50% berasal dari n = 12 dengan sebaran sangat lebar (+257 s/d
-  -2 bopd). Kedua belas sumur itu bukan sampel acak: mereka yang tidak
-  perlu di-workover ulang selama 17 bulan, sehingga angka 50% bersifat
-  optimistis.
-- Estimasi berbasis uptime mengasumsikan penyebab downtime dapat
-  dihilangkan oleh intervensi. Ini belum diverifikasi per sumur dan
-  memerlukan konfirmasi teknik reservoir.
-- Analisis ini menahan harga, biaya, dan decline alami tetap.
-
-LANGKAH BERIKUTNYA
-1. Sepakati metrik keberhasilan sebelum pekerjaan dimulai (terlampir).
-2. Kerjakan CDN-028, ukur pada bulan 3/6/9/12.
-3. Ukur gain terhadap kontrafaktual decline, bukan terhadap baseline
-   mentah -- perbandingan terhadap baseline memberi jawaban yang salah
-   tandanya (median -26,3 bopd vs +18,2 bopd pada data yang sama).
-4. Lanjutkan bila gain bulan-12 >= 50% gain bulan-3; hentikan bila tidak.</code></pre>
-        </div>
-        <div class="catatan">
-          <strong>Baca ulang memo itu dan hitung: berapa banyak yang berupa angka, dan berapa banyak yang berupa batasan?</strong> Kira-kira seimbang. Itu bukan kebetulan. Memo yang seluruhnya angka terbaca seperti jualan; memo yang seluruhnya peringatan terbaca seperti orang yang tidak berani memutuskan. Yang dipercaya adalah yang <strong>memberi rekomendasi jelas di kalimat pertama</strong> lalu menunjukkan persis di titik mana ia bisa salah.
+alok = pd.DataFrame({&quot;per_volume&quot;: ga*v/v.sum(), &quot;per_sumur&quot;: ga*n/n.sum(),
+                     &quot;per_hari_aktif&quot;: ga*akt/akt.sum()}).round(0)
+print(f&quot;total G&amp;A 2025: ${ga:,.0f}&quot;); print(alok)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Total G&A 2025 yang dialokasikan: <strong>$8.128.457</strong></p></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>lapangan</th>
+<th>per volume</th>
+<th>per sumur</th>
+<th>per hari aktif</th>
+</tr></thead>
+            <tbody>
+              <tr><td>F01</td><td>1.336.455</td><td>2.755.409</td><td>2.745.716</td></tr>
+              <tr><td>F02</td><td>1.073.328</td><td>2.342.098</td><td>2.334.761</td></tr>
+              <tr><td>F03</td><td>2.227.649</td><td>1.791.016</td><td>1.803.593</td></tr>
+              <tr><td>F04</td><td><strong>3.491.025</strong></td><td><strong>1.239.934</strong></td><td>1.244.387</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -1506,43 +1125,442 @@ LANGKAH BERIKUTNYA
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">7</span>
-        <h3>Latih menceritakannya — 3 menit, tanpa slide</h3>
-        <span class="cek"><input type="checkbox" id="m5h35s7"><label for="m5h35s7">selesai</label></span>
+        <h3>F04 untung besar, atau untung biasa saja — bergantung metodenya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-5-7"><label for="migas-minggu5-v2-5-7">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Pertanyaan wawancara yang hampir pasti muncul: <em>"Ceritakan sebuah analisis yang kamu kerjakan dari awal sampai akhir."</em> Ini jawabanmu. Rekam dirimu, sekitar tiga menit, urutan ini:</p>
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li><strong>(15 detik)</strong> Pertanyaannya: ke mana $3 juta anggaran intervensi sebaiknya dialokasikan.</li>
-          <li><strong>(40 detik)</strong> Jawaban pertamaku salah — aku memasang kurva decline ke semua sumur, dapat 50 juta barel, dan R² minimumnya negatif. Ternyata 41 dari 59 sumur pernah di-workover, jadi datanya bukan satu decline melainkan beberapa yang disambung.</li>
-          <li><strong>(40 detik)</strong> Setelah dibatasi ke segmen bersih dan ditambah terminal decline, angkanya turun ke 17,6 juta barel — 65% lebih kecil. Aku uji sensitivitas dua parameter kendali mutunya; rentangnya 15,5 sampai 22,9 juta, jadi aku melaporkannya sebagai rentang.</li>
-          <li><strong>(35 detik)</strong> Untuk keputusan anggarannya, aku tidak memakai kenaikan workover historis sebagai dasar karena terkontaminasi bias seleksi. Aku pakai selisih uptime, yang terukur langsung. Tiga sumur teratas balik modal dalam 13-17 bulan kalau kenaikannya bertahan penuh.</li>
-          <li><strong>(40 detik)</strong> Lalu aku uji berapa lama kenaikan workover bertahan. Dibandingkan baseline mentah, semuanya kelihatan gagal — median −26 bopd di bulan ke-12. Tapi itu perbandingan yang salah; sumur memang menurun sendiri. Dibandingkan kontrafaktual dari kurva decline yang sudah kubangun, mediannya <em>positif</em> +18 bopd, ketahanan sekitar 50%.</li>
-          <li><strong>(30 detik)</strong> Rekomendasiku: jangan belanjakan ketiganya. Dengan potongan 50% itu, NPV masih negatif di 2 tahun. Kerjakan satu sumur, ukur setahun terhadap kontrafaktual dengan ambang yang disepakati di muka, baru putuskan sisanya. Bukti yang kupunya n = 12 dan bias seleksinya optimistis — $1 juta murah untuk menggantinya dengan pengukuran yang bersih.</li>
-        </ul>
-        <div class="catatan">
-          <strong>Yang dinilai pewawancara bukan angka akhirnya.</strong> Mereka mendengar: kamu memeriksa hasilmu sendiri, kamu menemukan kesalahanmu sendiri, kamu tahu bedanya model yang cocok dan model yang benar, dan kamu berani merekomendasikan "tunggu dulu" kepada orang yang punya anggaran. Empat hal itu jauh lebih sulit dicari daripada orang yang bisa menulis <code>curve_fit</code>.
-        </div>
+<p>F04 menanggung $3,49 juta atau $1,24 juta — selisih $2,25 juta, cukup untuk mengubah F04 dari lapangan paling untung jadi lapangan biasa saja di laporan profitabilitas per lapangan.</p>
+        <div class="catatan"><strong>Ketiganya bisa dibela.</strong> Per volume: yang paling banyak menghasilkan, paling banyak memakai jasa kantor pusat. Per sumur: G&A didorong jumlah aset yang dikelola. Per hari-sumur aktif: mirip per sumur, tapi memperhitungkan sumur yang lama tidak jalan. <strong>Yang salah adalah menyajikan satu angka tanpa menyebut metodenya</strong> — sama seperti kamu tidak akan meloloskan kertas kerja klien yang mengalokasikan biaya bersama tanpa mendokumentasikan dasarnya.</div>
+        <div class="bahaya"><strong>Ini juga tempat tekanan datang.</strong> Manajer F04 punya alasan kuat menyukai alokasi per sumur; manajer F01 menyukai per volume. Perlindunganmu: sajikan <strong>ketiganya sekaligus</strong> di lampiran, dan pilih satu sebagai dasar dengan alasan tertulis eksplisit — supaya yang bisa didebat adalah alasannya, bukan integritasmu.</div>
       </div>
     </div>
 
     <div class="selesai-hari">
-      <h3>Jalur spesialisasi migas selesai — Hari 1 sampai 35, Level 1 sampai 5</h3>
-      <p>Lima minggu lalu kamu membuka <code>migas.db</code> tanpa tahu apa itu watercut. Sekarang kamu bisa merekonsiliasi laporan PSC 42 bulan, mengenali bias seleksi dalam evaluasi intervensi, memasang dan <em>membantah</em> kurva decline-mu sendiri, serta menulis rekomendasi belanja modal yang menyebutkan dengan tepat di titik mana ia bisa salah.</p>
-      <p style="margin-top:14px">Yang kamu bawa keluar dari sini bukan kumpulan query. Ini yang kamu bawa: <strong>kebiasaan memeriksa angkamu sendiri sebelum orang lain memeriksanya.</strong> Setiap angka di lima minggu ini kamu hasilkan dengan menjalankan kode, bukan mengingat. Pertahankan itu, dan latar belakang auditmu berhenti jadi sesuatu yang perlu dijelaskan — ia jadi alasan kamu dipilih.</p>
-      <p style="margin-top:14px">Langkah berikutnya: bawa memo Hari 35 dan grafik lima tahap DCA ke portofoliomu (Minggu 14 di jalur utama), lalu pakai keduanya sebagai bahan cerita di Minggu 15.</p>
+      <h3>Hari 33 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> satu error nyata (kolom salah eja), dan dua kalimat siap pakai untuk laporan mana pun — “dihitung terhadap harga gross karena cost-recoverable” dan “angka ini batas atas karena sebagian biaya bersifat tetap”.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="6">
+    <div class="day-head">
+      <span class="n">MIGAS HARI 34</span>
+      <h2>L5.4 — sensitivitas PSC terhadap harga, dan angka 88,8%</h2>
+      <span class="waktu">± 80 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> membangun sendiri model sensitivitas PSC dari nol, dan kamu bisa menjelaskan ke orang non-teknis kenapa porsi pemerintah justru naik ketika harga minyak naik.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Bangun modelnya — urutan tidak boleh diubah</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-6-1"><label for="migas-minggu5-v2-6-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Alur PSC dari Migas L1 sekarang jadi kode: FTP dipotong lebih dulu, baru cost recovery, sisanya ETS.</div>
+        <div class="kode"><pre><code>psc = pd.read_sql(&quot;SELECT * FROM psc_bulanan&quot;, con)
+
+def hitung(faktor_harga):
+    d   = psc.copy()
+    g   = d.volume_bbl * d.icp_usd_bbl * faktor_harga
+    ftp = g * 0.20
+    tersedia = g - ftp
+    cr  = np.minimum(np.minimum(d.biaya_recoverable_usd, tersedia), g*0.80)
+    ets = np.maximum(tersedia - cr, 0)
+    gov_pra = ftp*0.60 + ets*0.85
+    kon_pra = ftp*0.40 + ets*0.15
+    pajak   = np.maximum(kon_pra, 0) * 0.44
+    return pd.Series({&quot;gross&quot;: g.sum(), &quot;cost_recovery&quot;: cr.sum(),
+                      &quot;gov_take&quot;: (gov_pra+pajak).sum(), &quot;kontraktor&quot;: (kon_pra-pajak+cr).sum()})</code></pre></div>
+<p>Simpan fungsi ini — kamu akan panggil berkali-kali di sisa hari ini.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Jalankan untuk lima skenario harga</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-6-2"><label for="migas-minggu5-v2-6-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>for f, lbl in [(0.70,&quot;-30%&quot;),(0.85,&quot;-15%&quot;),(1.00,&quot;dasar&quot;),(1.15,&quot;+15%&quot;),(1.30,&quot;+30%&quot;)]:
+    r = hitung(f)
+    print(lbl, r.gross, r.cost_recovery, r.gov_take, r.kontraktor)</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>skenario</th>
+<th>gross</th>
+<th>cost recovery</th>
+<th>gov take</th>
+<th>gov %</th>
+<th>kontraktor</th>
+</tr></thead>
+            <tbody>
+              <tr><td>−30%</td><td>926.080.723</td><td>289.729.877</td><td>556.967.115</td><td><strong>60,1%</strong></td><td>369.113.609</td></tr>
+              <tr><td>−15%</td><td>1.124.526.593</td><td>289.729.877</td><td>733.187.047</td><td>65,2%</td><td>391.339.546</td></tr>
+              <tr><td>dasar</td><td>1.322.972.462</td><td>289.729.877</td><td>909.406.979</td><td>68,7%</td><td>413.565.483</td></tr>
+              <tr><td>+15%</td><td>1.521.418.331</td><td>289.729.877</td><td>1.085.626.911</td><td>71,4%</td><td>435.791.421</td></tr>
+              <tr><td>+30%</td><td>1.719.864.201</td><td>289.729.877</td><td>1.261.846.843</td><td><strong>73,4%</strong></td><td>458.017.358</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Perhatikan tiga hal sekaligus</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-6-3"><label for="migas-minggu5-v2-6-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<ul style="font-size:0.93rem;padding-left:20px"><li><strong>Cost recovery tidak bergerak sama sekali</strong> — $289.729.877 di kelima skenario. Biaya sudah terjadi; harga tidak mengubahnya.</li><li><strong>Porsi pemerintah naik dari 60,1% ke 73,4%</strong> saat harga naik. Kontrak sama, pembagian sama, tapi persentasenya bergerak 13 poin.</li><li><strong>Nilai absolut kontraktor tetap naik</strong>, dari $369 juta ke $458 juta. Persentasenya turun, dolarnya naik.</li></ul>
+        <div class="bahaya"><strong>Poin ketiga yang paling sering salah dibaca.</strong> “Porsi kontraktor turun dari 39,9% ke 26,6%” terdengar seperti kabar buruk. Padahal kontraktor menerima $89 juta lebih banyak. Melaporkan persentase tanpa dolarnya memberi kesan yang persis terbalik.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Hitung porsi marjinal — inilah angka yang sebenarnya penting</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-6-4"><label for="migas-minggu5-v2-6-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Persentase rata-rata (68,7%) menjawab “dari seluruh pendapatan, berapa ke pemerintah”. Pertanyaan yang jauh lebih berguna untuk keputusan investasi: dari setiap dolar <strong>tambahan</strong>, berapa yang ke pemerintah?</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>a, b = hitung(1.00), hitung(1.15)
+print(&quot;porsi marjinal:&quot;, (b.gov_take-a.gov_take)/(b.gross-a.gross)*100)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Tambahan gross $198.445.869 · tambahan gov $176.219.932 · <strong>porsi marjinal 88,8%</strong> — dan kalau kamu ulangi untuk pasangan skenario lain, hasilnya <strong>88,8% persis, setiap kali.</strong></p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Angka 88,8% bisa diturunkan langsung dari kontraknya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-6-5"><label for="migas-minggu5-v2-6-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><pre><code>FTP ke pemerintah       : 20% x 60%       = 12,0%
+ETS ke pemerintah       : 80% x 85%       = 68,0%
+                                            -------
+sebelum pajak                              80,0%
+kontraktor sebelum pajak: 20%x40%+80%x15% = 20,0%
+pajak                   : 20,0% x 44%     =  8,8%
+                                            -------
+TOTAL ke pemerintah                        88,8%</code></pre></div>
+        <div class="catatan"><strong>Inilah kenapa persentase rata-rata bergerak.</strong> Setiap dolar tambahan dibagi 88,8% : 11,2%, jauh lebih berat ke pemerintah daripada rata-rata 68,7%. Begitu harga naik dan dolar tambahan itu makin banyak porsinya dalam total, rata-ratanya tertarik naik mendekati 88,8%.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Terjemahkan ke satu kalimat untuk manajemen</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-6-6"><label for="migas-minggu5-v2-6-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Tulis versimu sendiri dulu, dalam bahasa yang dimengerti orang keuangan yang belum pernah membaca kontrak PSC. Baru buka.</p>
+<details><summary>Contoh jawaban</summary><div class="isi"><p>“Dari setiap dolar pendapatan tambahan, kontraktor menerima 11,2 sen. Karena itu <strong>penghematan biaya jauh lebih berharga daripada kenaikan harga</strong>: menghemat $1 juta biaya operasi menambah sekitar $1 juta ke posisi kontraktor (biaya itu dipulihkan penuh), sementara menaikkan pendapatan $1 juta hanya menambah $112 ribu.”</p></div></details>
+        <div class="catatan"><strong>Simpan temuan ini.</strong> Besok, saat menilai proyek intervensi $3 juta, kamu akan memakainya — proyek yang menaikkan produksi dinilai pada 11,2 sen per dolar, proyek yang menurunkan biaya dinilai mendekati 100 sen per dolar. Itu mengubah peringkat kandidat secara mendasar.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Batas model ini — yang wajib kamu sebutkan</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-6-7"><label for="migas-minggu5-v2-6-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Model tadi mengubah harga tapi menahan segalanya yang lain tetap. Di dunia nyata itu tidak berlaku: harga turun 30% seharusnya menjatuhkan sebagian sumur di bawah batas ekonomis (volume ikut turun); harga naik 30% membuat workover yang tadinya tidak layak jadi layak (biaya ikut naik). Model kita menahan keduanya tetap.</p>
+        <div class="catatan"><strong>Menyebutkan batasan bukan kelemahan laporan; itu yang membuatnya bisa dipakai.</strong> Pembaca yang tahu model ini menahan volume tetap bisa menilai sendiri seberapa jauh hasilnya bisa dipercaya di skenario ekstrem. Pembaca yang tidak diberi tahu akan memperlakukan angkanya sebagai ramalan.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Hari 34 selesai</h3>
+      <p><strong>Yang kamu bawa:</strong> satu angka konstan (88,8%) yang bisa kamu turunkan langsung dari klausul kontrak, dan satu kalimat siap pakai untuk manajemen tentang kenapa penghematan biaya lebih berharga daripada kenaikan harga.</p>
+    </div>
+  </section>
+
+  <section class="day" data-hari="7">
+    <div class="day-head">
+      <span class="n">MIGAS HARI 35 · PROYEK AKHIR</span>
+      <h2>L5.5 — memo $3 juta</h2>
+      <span class="waktu">± 150 menit</span>
+    </div>
+    <div class="tujuan"><strong>Tujuan hari ini:</strong> punya satu memo satu halaman yang merekomendasikan keputusan belanja modal $3 juta, lengkap dengan asumsi, sensitivitas, dan batasan — dokumen yang bisa kamu bawa ke wawancara.</div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">1</span>
+        <h3>Briefingnya</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-1"><label for="migas-minggu5-v2-7-1">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="catatan"><p style="margin:0"><strong>Dari: VP Operations · Kepada: Analis Data · Perihal: Alokasi anggaran intervensi 2027</strong></p><p style="margin-top:10px">Kita punya <strong>$3.000.000</strong> untuk program intervensi sumur tahun depan. Biaya median satu workover sekitar $857.000, jadi realistis kita bisa mengerjakan tiga sumur.</p><p style="margin-top:10px">Saya butuh satu halaman: sumur mana, kenapa, berapa perkiraan hasilnya, dan seberapa yakin kamu. Kalau menurutmu uangnya sebaiknya tidak dibelanjakan, katakan itu — tapi tunjukkan angkanya.</p></div>
+<p>Perhatikan kalimat terakhirnya — itu bukan basa-basi. Analis pemula menganggap tugas ini “pilih tiga sumur”; analis yang dipercaya menganggapnya “jawab apakah ini belanja yang benar, dan kalau ya, yang mana”.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">2</span>
+        <h3>Bangun daftar kandidat dari bukti, bukan dari firasat</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-2"><label for="migas-minggu5-v2-7-2">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Dasar yang paling bisa dipertahankan: uptime. Sumur yang sering berhenti kehilangan produksi yang bisa dikembalikan, dan besarnya bisa dihitung langsung dari data.</div>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>h1 = prod[prod.tanggal &gt;= &quot;2026-01-01&quot;]
+a = h1.groupby(&quot;sumur_id&quot;).agg(bopd=(&quot;oil_bopd&quot;,&quot;mean&quot;), uptime=(&quot;berproduksi&quot;,&quot;mean&quot;))
+a = a.join(sumur.set_index(&quot;sumur_id&quot;)[[&quot;lapangan_id&quot;,&quot;tipe_sumur&quot;,&quot;metode_angkat&quot;]])
+a = a[a.tipe_sumur == &quot;Producer&quot;]
+
+TARGET = 0.989                                 # uptime median blok
+a[&quot;gain_bopd&quot;] = (a.bopd * (TARGET/a.uptime - 1)).round(1)
+a.loc[a.uptime &gt;= TARGET, &quot;gain_bopd&quot;] = 0
+print(a.nsmallest(6, &quot;uptime&quot;)[[&quot;lapangan_id&quot;,&quot;bopd&quot;,&quot;uptime&quot;,&quot;gain_bopd&quot;]])</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>sumur</th>
+<th>lap.</th>
+<th>bopd</th>
+<th>uptime</th>
+<th>gain bopd</th>
+</tr></thead>
+            <tbody>
+              <tr><td>CDN-028</td><td>F02</td><td>274,6</td><td>0,834</td><td><strong>50,9</strong></td></tr>
+              <tr><td>CDN-003</td><td>F01</td><td>257,6</td><td>0,878</td><td>32,4</td></tr>
+              <tr><td>CDN-052</td><td>F03</td><td>304,9</td><td>0,884</td><td><strong>36,2</strong></td></tr>
+              <tr><td>CDN-046</td><td>F03</td><td>169,0</td><td>0,912</td><td>14,3</td></tr>
+              <tr><td>CDN-025</td><td>F02</td><td>149,1</td><td>0,917</td><td>11,7</td></tr>
+              <tr><td>CDN-011</td><td>F01</td><td>25,2</td><td>0,928</td><td>1,7</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="catatan"><strong>Kalau baris terakhirmu beda,</strong> cek CDN-049 — ia tepat seri dengan CDN-011 di uptime 0,928 (sampai tiga desimal), dan pandas memutus serinya lewat urutan sumur_id. Ini bukan bug-mu.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">3</span>
+        <h3>Uptime terendah belum tentu sumur paling berharga</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-3"><label for="migas-minggu5-v2-7-3">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>CDN-011 punya uptime rendah tapi produksinya cuma 25 bopd — kehilangannya kecil dalam barel apa pun uptime-nya. <strong>Urutkan berdasarkan yang kamu pedulikan (barel yang bisa kembali), bukan berdasarkan gejalanya (uptime).</strong></p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>print(a.nlargest(4,&quot;gain_bopd&quot;)[[&quot;bopd&quot;,&quot;uptime&quot;,&quot;gain_bopd&quot;]])</code></pre></div>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>sumur</th>
+<th>bopd</th>
+<th>uptime</th>
+<th>gain bopd</th>
+</tr></thead>
+            <tbody>
+              <tr><td>CDN-028</td><td>274,6</td><td>0,834</td><td><strong>50,9</strong></td></tr>
+              <tr><td>CDN-052</td><td>304,9</td><td>0,884</td><td>36,2</td></tr>
+              <tr><td>CDN-003</td><td>257,6</td><td>0,878</td><td>32,4</td></tr>
+              <tr><td>CDN-049</td><td>468,2</td><td>0,928</td><td>30,7</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Peringkat berubah total begitu diurutkan berbasis barel. Tiga teratas: <strong>CDN-028, CDN-052, CDN-003</strong> — total gain <strong>119,6 bopd</strong>.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">4</span>
+        <h3>Nilai dalam dolar — dengan biaya yang bisa kamu pertanggungjawabkan</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-4"><label for="migas-minggu5-v2-7-4">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Kita belum tahu berapa biaya intervensi tiap sumur secara spesifik. Daripada menebak jenis pekerjaannya, pakai <strong>biaya median seluruh riwayat workover blok</strong> sebagai estimasi tunggal yang transparan — asumsi yang bisa kamu tunjukkan sumbernya ke siapa pun yang bertanya.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>BIAYA_EST = wo.biaya_usd.median()
+print(f&quot;${BIAYA_EST:,.0f} per workover&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><code>$857.414 per workover</code></p></div>
+<p>Tiga sumur × $857.414 = <strong>$2.572.242</strong>, tersisa <strong>$427.758</strong> dari anggaran $3 juta.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">5</span>
+        <h3>Margin per barel, dan berapa lama tiap sumur impas</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-5"><label for="migas-minggu5-v2-7-5">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>ICP, LIFT = 69.93, 14.35             # dari Minggu 1 &amp; 4
+MARGIN = ICP - LIFT
+for w, gain in [(&quot;CDN-028&quot;,50.9), (&quot;CDN-052&quot;,36.2), (&quot;CDN-003&quot;,32.4)]:
+    hari = BIAYA_EST / MARGIN / gain
+    print(f&quot;{w}: impas {hari:.0f} hari ({hari/365:.2f} tahun)&quot;)</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p>Margin per barel inkremental <strong>$55,58</strong>.</p><p style="margin-top:8px">CDN-028 impas <strong>303 hari (0,83 tahun)</strong> · CDN-052 <strong>426 hari (1,17 tahun)</strong> · CDN-003 <strong>476 hari (1,30 tahun)</strong>, dengan asumsi kenaikannya bertahan penuh.</p></div>
+        <div class="bahaya"><strong>Seluruh keputusan ini bergantung pada satu angka yang belum pernah kita ukur: berapa lama kenaikannya bertahan.</strong> Kalau ternyata cuma bertahan setengah dari asumsi ini, semua angka impas di atas berlipat dua.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">6</span>
+        <h3>Ukur ketahanan gain dari 79 workover historis — hati-hati, jebakan menanti</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-6"><label for="migas-minggu5-v2-7-6">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Sebagian workover historis sudah cukup lama untuk diamati setahun penuh tanpa terganggu workover berikutnya. Saring dulu segmen yang bersih (logika sama seperti Hari 30–31), lalu bandingkan produksi bulan ke-12 terhadap baseline 90 hari sebelum pekerjaan dimulai.</p>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><strong>19 dari 79</strong> workover cukup lama diamati. Median gain bulan ke-3: <strong>+28,3 bopd</strong>. Median gain bulan ke-12 (naif, terhadap baseline mentah): <strong>−26,3 bopd</strong>. Dari 19 sumur, yang masih di atas baseline di bulan ke-12: <strong>nol</strong>.</p></div>
+        <div class="bahaya"><strong>Berhenti. Jangan tulis “seluruh workover gagal dalam setahun”.</strong> Kamu baru saja mengulangi kesalahan Minggu 2 dari arah sebaliknya: membandingkan sesudah terhadap sebelum <em>tanpa memperhitungkan bahwa sumur memang menurun dengan sendirinya.</em> Sumur yang menurun 21% per tahun akan berada di bawah baseline-nya 12 bulan kemudian meski workovernya berhasil sempurna.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">7</span>
+        <h3>Bandingkan terhadap kontrafaktual — bukan terhadap baseline</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-7"><label for="migas-minggu5-v2-7-7">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Pembanding yang benar: <strong>berapa produksinya seandainya workover tidak dilakukan.</strong> Alat untuk membuat kontrafaktual itu adalah kurva decline yang kamu bangun Hari 29–32 — ukur laju penurunan alami dari 180 hari <em>sebelum</em> workover (regresi log-linear), lalu proyeksikan. Buang juga workover yang jendela “sebelum”-nya sendiri terkontaminasi workover lain dalam 270 hari terakhir.</p>
+        <div class="kode"><button class="salin" type="button">Salin</button>
+        <pre><code>D_alami = -np.polyfit((pre.tanggal-pre.tanggal.min()).dt.days/365.0,
+                       np.log(pre.oil_bopd.clip(lower=1)), 1)[0]
+kontra = baseline * np.exp(-D_alami * dt)          # produksi SEANDAINYA tanpa workover
+gain_vs_kontra = aktual_bulan12 - kontra</code></pre></div>
+        <div class="hasil"><span class="tag">HARUS MUNCUL</span>
+          <p><strong>14 sumur</strong> lolos saringan kontaminasi (5 dibuang). Median D alami <strong>0,21/tahun</strong>. Median gain bulan-12 <strong>terhadap kontrafaktual: +15,8 bopd</strong>, positif pada <strong>12 dari 14 sumur</strong> — tiga terbesar CDN-057 (+257,4), CDN-049 (+58,5), CDN-062 (+46,0).</p></div>
+        <div class="catatan"><strong>Tandanya berbalik.</strong> Perbandingan naif: <strong>−26,3 bopd</strong>, kesimpulan “semua gagal”. Perbandingan kontrafaktual: <strong>+15,8 bopd</strong>, kesimpulan “efeknya bertahan pada mayoritas kasus”. Data historis yang sama — yang beda cuma <em>terhadap apa</em> kamu membandingkannya. Rasio ketahanan (gain bulan-12 ÷ gain bulan-3): <strong>≈ 56%</strong>.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">8</span>
+        <h3>Masukkan angka ketahanan itu ke keputusan $2,57 juta</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-8"><label for="migas-minggu5-v2-7-8">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Pakai rasio 56% pada gain portofolio (119,6 → <strong>66,8 bopd efektif</strong>) dan hitung ulang NPV pada diskonto 10%/tahun.</p>
+        <div class="tabel-bungkus">
+          <table>
+            <thead><tr>
+<th>skenario</th>
+<th>NPV proyek</th>
+</tr></thead>
+            <tbody>
+              <tr><td>100% (tanpa potongan), 2 tahun</td><td>+$1.812.766</td></tr>
+              <tr><td><strong>56% (sesuai historis)</strong>, 2 tahun</td><td><strong>−$124.075</strong></td></tr>
+              <tr><td>56%, 3 tahun</td><td>+$928.853</td></tr>
+              <tr><td>56%, 5 tahun</td><td>+$2.744.756</td></tr>
+            </tbody>
+          </table>
+        </div>
+<p>Dengan rasio ketahanan yang realistis, proyeknya baru positif kalau kenaikannya bertahan <strong>lebih dari sekitar 2–3 tahun</strong> — dan bukti yang kita punya baru sampai bulan ke-12, dari 14 sumur.</p>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">9</span>
+        <h3>Rekomendasi: bertahap, bukan semua atau tidak sama sekali</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-9"><label for="migas-minggu5-v2-7-9">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Tiga pilihan, dan yang ketiga hampir selalu benar ketika satu asumsi menguasai seluruh keputusan: belanjakan ketiganya sekarang (mempertaruhkan $2,57 juta pada ketahanan yang buktinya n = 14); jangan belanjakan sama sekali (membuang peluang yang tetap positif di skenario 3–5 tahun); atau <strong>belanjakan tahap pertama, ukur dengan pembanding yang benar, baru putuskan sisanya.</strong></p>
+        <div class="catatan"><strong>Rekomendasi:</strong> kerjakan <strong>CDN-028 saja</strong> sekarang (~$857.414). Gainnya terbesar (50,9 bopd) dan impasnya tercepat (0,83 tahun) di antara kandidat. Tahan sisa ~$1,71 juta. <p style="margin-top:8px"><strong>Sepakati SEBELUM pekerjaan dimulai:</strong> baseline 90 hari pra-kerja, ukur bulan 3/6/9/12, bandingkan terhadap <strong>kontrafaktual kurva decline</strong> (bukan baseline mentah), dan lanjutkan sumur berikutnya hanya kalau gain bulan-12 ≥ 56% gain bulan-3.</p></div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">10</span>
+        <h3>Tulis memonya — satu halaman, tidak lebih</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-10"><label for="migas-minggu5-v2-7-10">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+        <div class="aksi"><span class="tag">LAKUKAN</span>
+          Pakai kerangka ini, isi dengan angkamu sendiri. Jangan lebih dari satu halaman.</div>
+        <div class="kode"><pre><code>MEMO — Program Intervensi Sumur 2027, Blok Cendana
+Kepada: VP Operations     Dari: [namamu]     Tanggal: [tanggal]
+
+REKOMENDASI
+Setujui tahap pertama ~$857.414 (CDN-028). Tahan sisa ~$1,71 juta sampai hasil
+12 bulan terukur terhadap kontrafaktual. Keputusan penuh $3 juta belum bisa
+dipertanggungjawabkan dengan data yang ada saat ini.
+
+TEMUAN
+1. Tiga sumur berpeluang terbesar: CDN-028, CDN-052, CDN-003. Total potensi
+   119,6 bopd, biaya estimasi $2.572.242 (median historis per workover).
+2. Pada margin inkremental $55,58/bbl, portofolio balik modal 0,83-1,3 tahun
+   BILA kenaikannya bertahan penuh.
+3. Ketahanan gain adalah variabel penentu. Pengukuran 14 workover historis
+   terhadap kontrafaktual decline (bukan baseline mentah) memberi median
+   +15,8 bopd di bulan-12, ~56% dari gain bulan-3. Dengan rasio itu, NPV
+   2 tahun -$0,12 juta; 3 tahun +$0,93 juta.
+
+BATASAN
+- Kenaikan naif (vs baseline mentah) TIDAK dipakai: seluruhnya negatif median
+  -26,3 bopd, karena tidak memperhitungkan decline alami -- perbandingan yang
+  salah tandanya.
+- Rasio ketahanan 56% berasal dari n=14, sebaran lebar (+257 s/d -2 bopd).
+  Ke-14 sumur itu bukan sampel acak: mereka yang tidak perlu di-workover
+  ulang, sehingga angkanya bisa jadi optimistis.
+- Biaya estimasi memakai median historis seluruh jenis pekerjaan, bukan
+  estimasi spesifik per sumur -- akan direvisi begitu survei teknik selesai.
+
+LANGKAH BERIKUTNYA
+1. Sepakati metrik &amp; ambang keberhasilan sebelum pekerjaan dimulai.
+2. Kerjakan CDN-028, ukur bulan 3/6/9/12 terhadap kontrafaktual decline.
+3. Lanjutkan CDN-052 &amp; CDN-003 bila gain bulan-12 &gt;= 56% gain bulan-3.</code></pre></div>
+        <div class="catatan"><strong>Hitung ulang memo itu: berapa banyak angka, berapa banyak batasan?</strong> Kira-kira seimbang — bukan kebetulan. Memo yang seluruhnya angka terbaca seperti jualan; yang seluruhnya peringatan terbaca seperti orang yang tidak berani memutuskan. Yang dipercaya: <strong>rekomendasi jelas di kalimat pertama</strong>, lalu titik persis di mana ia bisa salah.</div>
+      </div>
+    </div>
+
+    <div class="langkah">
+      <div class="langkah-head">
+        <span class="num">11</span>
+        <h3>Latih menceritakannya — 3 menit, tanpa slide</h3>
+        <span class="cek"><input type="checkbox" id="migas-minggu5-v2-7-11"><label for="migas-minggu5-v2-7-11">selesai</label></span>
+      </div>
+      <div class="langkah-body">
+<p>Pertanyaan wawancara yang hampir pasti muncul: <em>“Ceritakan sebuah analisis yang kamu kerjakan dari awal sampai akhir.”</em> Rekam dirimu, sekitar tiga menit, urutan ini:</p>
+<ul style="font-size:0.93rem;padding-left:20px"><li><strong>(15 dtk)</strong> Pertanyaannya: ke mana $3 juta anggaran intervensi sebaiknya dialokasikan.</li><li><strong>(40 dtk)</strong> Jawaban pertamaku salah — kupasang kurva decline ke semua sumur, dapat 50 juta barel, R² minimumnya negatif. Ternyata 41 dari 59 sumur pernah di-workover; datanya bukan satu decline, melainkan beberapa yang disambung.</li><li><strong>(40 dtk)</strong> Setelah dibatasi ke segmen bersih dan ditambah terminal decline, angkanya turun ke 17,6 juta barel — 65% lebih kecil. Aku uji sensitivitas dua parameter kendali mutunya; rentangnya 15,5–22,9 juta, jadi kulaporkan sebagai rentang.</li><li><strong>(35 dtk)</strong> Untuk anggaran intervensi, aku pakai selisih uptime — bukan kenaikan workover historis mentah, karena itu bias seleksi. Tiga sumur teratas balik modal 0,83–1,3 tahun kalau kenaikannya bertahan penuh.</li><li><strong>(40 dtk)</strong> Lalu kuuji berapa lama kenaikan bertahan. Dibandingkan baseline mentah, semua kelihatan gagal — median −26 bopd. Tapi itu perbandingan salah; sumur memang menurun sendiri. Dibandingkan kontrafaktual kurva decline, mediannya <em>positif</em> +16 bopd, ketahanan sekitar 56%.</li><li><strong>(30 dtk)</strong> Rekomendasiku: jangan belanjakan ketiganya sekaligus. Kerjakan satu sumur, ukur setahun terhadap kontrafaktual dengan ambang disepakati di muka, baru putuskan sisanya.</li></ul>
+        <div class="catatan"><strong>Yang dinilai pewawancara bukan angka akhirnya.</strong> Mereka mendengar: kamu memeriksa hasilmu sendiri, kamu menemukan kesalahanmu sendiri, kamu tahu bedanya model yang cocok dan model yang benar, dan kamu berani merekomendasikan “tunggu dulu” kepada orang yang punya anggaran.</div>
+      </div>
+    </div>
+
+    <div class="selesai-hari">
+      <h3>Jalur spesialisasi migas selesai — Hari 29 sampai 35</h3>
+      <p>Lima hari lalu kamu memasang fungsi Arps yang meledak pada sumur pertama yang salah kamu pilih. Sekarang kamu bisa memasang dan <em>membantah</em> kurva decline-mu sendiri, mendiagnosis kenapa 69% sumurmu melanggar asumsi model, dan menulis rekomendasi belanja modal yang menyebutkan dengan tepat di titik mana ia bisa salah.</p><p style="margin-top:14px">Yang kamu bawa keluar bukan kumpulan query. Ini yang kamu bawa: <strong>kebiasaan memeriksa angkamu sendiri sebelum orang lain memeriksanya.</strong> Setiap angka di lima hari ini kamu hasilkan dengan menjalankan kode, bukan mengingat. Pertahankan itu, dan latar belakang auditmu berhenti jadi sesuatu yang perlu dijelaskan — ia jadi alasan kamu dipilih.</p><p style="margin-top:14px">Langkah berikutnya: bawa memo hari ini dan grafik lima tahap DCA ke portofoliomu (M14), lalu pakai keduanya sebagai bahan cerita di M15.</p>
           <a class="lanjut" href="https://claude.ai/code/artifact/595c379b-9f99-4c29-9c03-ab4450b5414c">Lanjut ke M14: Portofolio & CV →</a>
 </div>
   </section>
 
   <footer>
-    <p>Kemajuanmu tersimpan otomatis di browser ini. Semua angka di halaman ini dihasilkan dengan menjalankan query/kode pada <code>migas.db</code> yang kamu punya — kalau hasilmu berbeda, ada langkah yang perlu diperiksa.</p>
+    <p>Kemajuanmu tersimpan otomatis di browser ini. <code>migas.db</code> dan seluruh skrip yang dipakai modul ini ada di <code>data-dan-skrip/bootcamp-jalur-utama/migas/</code> di paket zip.</p>
+    <p style="margin-top:10px">Semua angka di halaman ini dihasilkan dengan menjalankan kode pada <code>migas.db</code> yang kamu punya — kalau hasilmu berbeda, ada langkah yang perlu diperiksa.</p>
     <button class="tombol-reset" type="button" id="reset">Kosongkan semua centang</button>
   </footer>
 </div>
 
 <script>
 (function(){
-  var KUNCI = "migas-minggu5-v1";
+  var KUNCI = "migas-minggu5-v2";
   function baca(){ try { return JSON.parse(localStorage.getItem(KUNCI) || "{}"); } catch(e){ return {}; } }
   function tulis(o){ try { localStorage.setItem(KUNCI, JSON.stringify(o)); } catch(e){} }
 

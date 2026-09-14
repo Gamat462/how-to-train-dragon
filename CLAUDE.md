@@ -96,7 +96,7 @@ python3 _mulai.py                # menulis MULAI-DI-SINI.html + URUTAN-BELAJAR.m
 ## Yang sudah memenuhi standar (jarak 0,00)
 
 Bekal Python (acuan) · SQL Mahir L1 · SQL Mahir L2 · SQL Mahir L4 · SQL Mahir L5 · Python Produksi ·
-Bekal Pajak & ERP.
+Bekal Pajak & ERP · Migas L5 — Cadangan & Keputusan.
 
 Studi Kasus Nyata, Minggu 11, Minggu 14, dan Jalur S2 dulu berjarak 0,00 —
 tapi terhadap standar yang **belum punya Bagian B**. Setelah Bagian B
