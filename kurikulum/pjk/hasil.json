@@ -1,0 +1,406 @@
+{
+ "h0_lihat_wp": {
+  "kolom": [
+   "id",
+   "nama",
+   "jenis",
+   "penghasilan_tahunan",
+   "omzet_tahunan"
+  ],
+  "baris": [
+   [
+    "1",
+    "Rina",
+    "perorangan",
+    "45000000",
+    null
+   ],
+   [
+    "2",
+    "Bayu",
+    "perorangan",
+    "180000000",
+    null
+   ],
+   [
+    "3",
+    "Sari",
+    "perorangan",
+    "620000000",
+    null
+   ],
+   [
+    "4",
+    "Dimas",
+    "umkm",
+    "150000000",
+    "900000000"
+   ],
+   [
+    "5",
+    "Putri",
+    "umkm",
+    "410000000",
+    "3200000000"
+   ],
+   [
+    "6",
+    "Agus",
+    "umkm",
+    "980000000",
+    "5100000000"
+   ],
+   [
+    "7",
+    "Maya",
+    "perorangan",
+    "7200000000",
+    null
+   ]
+  ]
+ },
+ "h0_lihat_lapisan": {
+  "kolom": [
+   "urutan",
+   "batas_bawah",
+   "batas_atas",
+   "tarif"
+  ],
+  "baris": [
+   [
+    "1",
+    "0",
+    "60000000",
+    "0.05"
+   ],
+   [
+    "2",
+    "60000000",
+    "250000000",
+    "0.15"
+   ],
+   [
+    "3",
+    "250000000",
+    "500000000",
+    "0.25"
+   ],
+   [
+    "4",
+    "500000000",
+    "5000000000",
+    "0.30"
+   ],
+   [
+    "5",
+    "5000000000",
+    null,
+    "0.35"
+   ]
+  ]
+ },
+ "h2_naif": {
+  "kolom": [
+   "nama",
+   "penghasilan_tahunan",
+   "tarif",
+   "pajak_naif"
+  ],
+  "baris": [
+   [
+    "Rina",
+    "45000000",
+    "0.05",
+    "2250000"
+   ],
+   [
+    "Bayu",
+    "180000000",
+    "0.15",
+    "27000000"
+   ],
+   [
+    "Sari",
+    "620000000",
+    "0.30",
+    "186000000"
+   ],
+   [
+    "Maya",
+    "7200000000",
+    "0.35",
+    "2520000000"
+   ]
+  ]
+ },
+ "h2_rincian_sari": {
+  "kolom": [
+   "urutan",
+   "batas_bawah",
+   "batas_atas",
+   "tarif",
+   "bagian",
+   "pajak_lapisan"
+  ],
+  "baris": [
+   [
+    "1",
+    "0",
+    "60000000",
+    "0.05",
+    "60000000",
+    "3000000"
+   ],
+   [
+    "2",
+    "60000000",
+    "250000000",
+    "0.15",
+    "190000000",
+    "28500000"
+   ],
+   [
+    "3",
+    "250000000",
+    "500000000",
+    "0.25",
+    "250000000",
+    "62500000"
+   ],
+   [
+    "4",
+    "500000000",
+    "5000000000",
+    "0.30",
+    "120000000",
+    "36000000"
+   ]
+  ]
+ },
+ "h2_benar": {
+  "kolom": [
+   "id",
+   "nama",
+   "pajak_benar"
+  ],
+  "baris": [
+   [
+    "1",
+    "Rina",
+    "2250000"
+   ],
+   [
+    "2",
+    "Bayu",
+    "21000000"
+   ],
+   [
+    "3",
+    "Sari",
+    "130000000"
+   ],
+   [
+    "7",
+    "Maya",
+    "2214000000"
+   ]
+  ]
+ },
+ "h2_selisih": {
+  "kolom": [
+   "nama",
+   "pajak_naif",
+   "pajak_benar",
+   "kelebihan_tagih",
+   "persen_lebih"
+  ],
+  "baris": [
+   [
+    "Rina",
+    "2250000",
+    "2250000",
+    "0",
+    "0.0"
+   ],
+   [
+    "Bayu",
+    "27000000",
+    "21000000",
+    "6000000",
+    "28.6"
+   ],
+   [
+    "Sari",
+    "186000000",
+    "130000000",
+    "56000000",
+    "43.1"
+   ],
+   [
+    "Maya",
+    "2520000000",
+    "2214000000",
+    "306000000",
+    "13.8"
+   ]
+  ]
+ },
+ "h2_diam_lapisan_teratas": {
+  "kolom": [
+   "nama",
+   "penghasilan_tahunan",
+   "tarif"
+  ],
+  "baris": []
+ },
+ "h3_umkm_naif": {
+  "kolom": [
+   "nama",
+   "omzet_tahunan",
+   "pajak_umkm_naif"
+  ],
+  "baris": [
+   [
+    "Dimas",
+    "900000000",
+    "4500000"
+   ],
+   [
+    "Putri",
+    "3200000000",
+    "16000000"
+   ],
+   [
+    "Agus",
+    "5100000000",
+    "25500000"
+   ]
+  ]
+ },
+ "h3_agus_progresif": {
+  "kolom": [
+   "nama",
+   "pajak_benar"
+  ],
+  "baris": [
+   [
+    "Agus",
+    "238000000"
+   ]
+  ]
+ },
+ "h3_cek_lewat_batas": {
+  "kolom": [
+   "nama",
+   "omzet_tahunan",
+   "lewat_batas_umkm"
+  ],
+  "baris": [
+   [
+    "Dimas",
+    "900000000",
+    "false"
+   ],
+   [
+    "Putri",
+    "3200000000",
+    "false"
+   ],
+   [
+    "Agus",
+    "5100000000",
+    "true"
+   ]
+  ]
+ },
+ "h3_final": {
+  "kolom": [
+   "nama",
+   "jenis",
+   "pajak_final",
+   "aturan_dipakai"
+  ],
+  "baris": [
+   [
+    "Rina",
+    "perorangan",
+    "2250000",
+    "progresif normal"
+   ],
+   [
+    "Bayu",
+    "perorangan",
+    "21000000",
+    "progresif normal"
+   ],
+   [
+    "Sari",
+    "perorangan",
+    "130000000",
+    "progresif normal"
+   ],
+   [
+    "Dimas",
+    "umkm",
+    "4500000",
+    "umkm final 0,5% omzet"
+   ],
+   [
+    "Putri",
+    "umkm",
+    "16000000",
+    "umkm final 0,5% omzet"
+   ],
+   [
+    "Agus",
+    "umkm",
+    "238000000",
+    "progresif normal"
+   ],
+   [
+    "Maya",
+    "perorangan",
+    "2214000000",
+    "progresif normal"
+   ]
+  ]
+ },
+ "h3_diam_tanpa_cek_batas": {
+  "kolom": [
+   "nama",
+   "jenis",
+   "omzet_tahunan",
+   "pajak_umkm_tanpa_cek_batas"
+  ],
+  "baris": [
+   [
+    "Agus",
+    "umkm",
+    "5100000000",
+    "25500000"
+   ]
+  ]
+ },
+ "h1_merah_duplikat": {
+  "galat": "duplicate key value violates unique constraint \"pjk_wp_pkey\"\nDETAIL:  Key (id)=(1) already exists."
+ },
+ "h1_merah_format_erp": {
+  "galat": "invalid input syntax for type bigint: \"1.250.000.000\"\nLINE 3: VALUES ('Tono', 'perorangan', '1.250.000.000')\n                                      ^"
+ },
+ "h1_hitung_jenis": {
+  "kolom": [
+   "jenis",
+   "count"
+  ],
+  "baris": [
+   [
+    "perorangan",
+    "4"
+   ],
+   [
+    "umkm",
+    "3"
+   ]
+  ]
+ }
+}

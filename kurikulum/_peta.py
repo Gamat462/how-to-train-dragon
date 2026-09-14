@@ -45,6 +45,7 @@ PETA = {
  "15ba1f07-96fd-4636-b694-f2cf31f020cd": ("minggu1/sql-produksi.html",       75, "SQL Produksi — kosakata database kantor", "7 hari"),
  "e5ebbbde-69c2-4a12-a118-9eaa29210949": ("minggu1/python-produksi.html",    76, "Python Produksi — dari notebook jadi alat", "7 hari"),
  "9e8025f8-28cb-48cd-bee3-809b610567a6": ("minggu1/jalur-pintu-b.html",     77, "Jalur Pintu B — melamar ke tempat yang tepat", "3 hari"),
+ "8d0c1524-3afc-469f-8a76-057e52ba544a": ("minggu1/bekal-pajak-erp.html",   77.5, "Bekal Pajak & ERP — satu lowongan sungguhan", "5 hari"),
  "b20c546a-92f3-480f-81ae-4ba51728dc69": ("minggu1/ujian-bernilai.html",    78, "Ujian Bernilai — 60 poin, berwaktu", "2 hari"),
  "61355282-6fe8-4f54-bd99-18ff4ae63d28": ("minggu1/proyek-buta.html",       79, "Proyek Buta — tanpa kunci jawaban", "5 hari"),
  "d70b6a53-5f3a-483d-83e4-79aba530fdb0": ("minggu1/jalur-s2-luar-negeri.html", 85, "Jalur S2 Luar Negeri — silabus, biaya, keputusan", "7 hari"),

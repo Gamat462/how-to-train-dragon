@@ -75,6 +75,10 @@ for f in ["periksa_readme.py", "periksa_cv.py", "cv-lemah.txt", "cv-kuat.txt",
 for f in ["hitung_s2.py", "hitung_tenggat.py", "pindai_topik.py", "skor_rubrik.py"]:
     shutil.copy(BASE / "s2-berkas" / f, D / "jalur-s2" / f)
 
+(D / "bekal-pajak").mkdir()
+for f in ["pjk_data.sql", "hitung_pajak.py", "test_pajak.py"]:
+    shutil.copy(BASE / "pjk" / f, D / "bekal-pajak" / f)
+
 if (BASE / "bootcamp").exists():
     shutil.copytree(BASE / "bootcamp", D / "bootcamp-jalur-utama")
 

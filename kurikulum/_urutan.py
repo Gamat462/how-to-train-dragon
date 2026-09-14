@@ -37,6 +37,7 @@ URUTAN = [
  ("064-bekal-bahasa-inggris","Bekal Bahasa Inggris Kerja",5,6,"Lima sebutan lewat di 41 modul. Disusun dari 639 kata lowongan sungguhan jadi 44 kata inti, plus empat jawaban wawancara."),
  ("065-menulis-untuk-manajemen","Menulis untuk Manajemen",3,6,"Executive summary: 3 sebutan di 41 modul. 40 baris tabel diringkas jadi 3 kalimat, tiap angkanya bisa ditelusuri."),
  ("077-jalur-pintu-b","Jalur Pintu B — melamar ke tempat yang tepat",3,6,"Nol dari 46 modul menyebut audit analytics. Ini menutupnya: lowongan nyata, CV, wawancara."),
+ ("081-bekal-pajak-erp","Bekal Pajak & ERP — satu lowongan sungguhan",5,6,"Dipicu oleh lowongan nyata (Tax Data Automation). Pola membaca syarat -> menutup celah berlaku untuk lowongan lain juga."),
  ("078-ujian-bernilai","Ujian Bernilai — 60 poin, berwaktu",2,6,"Angka objektif pertama tentang kemampuanmu. Ulangi tiga bulan lagi dan bandingkan."),
  ("079-proyek-buta","Proyek Buta — tanpa kunci jawaban",5,6,"Tiga berkas klien, tenggat nyata, nol kunci. Ditutup dengan ditinjau manusia."),
  ("085-jalur-s2-luar-negeri","Jalur S2 Luar Negeri — silabus, biaya, keputusan",7,6,"Penutup. Tujuh hari menimbang kuliah S2 di luar negeri dengan angka, bukan perasaan: silabus tujuh kampus, biaya dalam rupiah, syarat impas, dan tenggat beasiswa."),

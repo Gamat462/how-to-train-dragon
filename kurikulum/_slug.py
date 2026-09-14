@@ -34,6 +34,7 @@ SLUG = {
  "15ba1f07-96fd-4636-b694-f2cf31f020cd": "075-sql-produksi",
  "e5ebbbde-69c2-4a12-a118-9eaa29210949": "076-python-produksi",
  "9e8025f8-28cb-48cd-bee3-809b610567a6": "077-jalur-pintu-b",
+ "8d0c1524-3afc-469f-8a76-057e52ba544a": "081-bekal-pajak-erp",
  "b20c546a-92f3-480f-81ae-4ba51728dc69": "078-ujian-bernilai",
  "61355282-6fe8-4f54-bd99-18ff4ae63d28": "079-proyek-buta",
  "d70b6a53-5f3a-483d-83e4-79aba530fdb0": "085-jalur-s2-luar-negeri",
