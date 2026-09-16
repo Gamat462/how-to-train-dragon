@@ -280,7 +280,7 @@
         <span class="cek"><input type="checkbox" id="h8s2"><label for="h8s2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Buka <span class="mono">sqliteonline.com</span>. Tempel <strong>tabel <code>penjualan</code> dari Hari 1</strong> dulu (buka Minggu 1 kalau perlu menyalinnya), Run. Lalu tempel tabel baru ini <strong>di bawahnya</strong>, di editor yang sama, dan Run lagi:</p>
+        <p>Di VS Code, buka file <code>.sql</code> yang sama tempat tabel <code>penjualan</code>-mu dari Hari 1 berada (pastikan status bar SQLTools di bawah menunjukkan koneksi &amp; database yang sama). Kalau tabel <code>penjualan</code> belum ada di situ, buka Minggu 1 Hari 1 dulu dan jalankan ulang <code>CREATE TABLE</code>-nya. Setelah itu, tulis tabel baru ini <strong>di bawahnya</strong>, di file yang sama, lalu jalankan (▶ Run Query):</p>
         <div class="kode">
           <button class="salin" type="button">Salin</button>
           <pre><code>CREATE TABLE produk (
@@ -296,7 +296,7 @@ INSERT INTO produk VALUES
         </div>
         <div class="hasil">
           <span class="tag">YANG HARUS TERJADI</span>
-          <p>Panel kiri sekarang menunjukkan <strong>dua tabel</strong>: <code>penjualan</code> dan <code>produk</code>. Coba lihat isi <code>produk</code>: <code>SELECT * FROM produk;</code> → 5 baris.</p>
+          <p>Panel Database Explorer SQLTools (yang kamu pakai untuk menjelajah tabel) sekarang menunjukkan <strong>dua tabel</strong>: <code>penjualan</code> dan <code>produk</code>. Coba lihat isi <code>produk</code>: jalankan <code>SELECT * FROM produk;</code> → 5 baris muncul di tab Results.</p>
         </div>
         <div class="catatan">
           <strong>Perhatikan:</strong> <code>Matcha Latte</code> ada di tabel <code>produk</code> tapi <strong>tidak pernah muncul</strong> di tabel <code>penjualan</code>. Itu disengaja — produk baru yang belum laku. Ingat ini, kita pakai di Hari 9.
@@ -646,11 +646,11 @@ GROUP BY pr.nama_produk;</code></pre>→ 5 baris, Matcha Latte omzetnya 0</p>
         <span class="cek"><input type="checkbox" id="h11s1"><label for="h11s1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Buka berkas <code>bootcamp-data-analyst.zip</code> yang sudah kamu terima sebelumnya. Ekstrak (klik kanan → Extract / Ekstrak Semua). Kamu akan melihat folder <code>bootcamp/</code>.</p>
-        <p>Yang kita pakai hari ini hanya folder <code>bootcamp/data/</code>. Abaikan dulu semua folder lain (<code>tugas/</code>, <code>migas/</code>, <code>sql/</code>) — belum saatnya.</p>
+        <p>Buka paket <code>Rute-Data-Analyst.zip</code> yang sudah kamu terima sebelumnya. Ekstrak (klik kanan → Extract / Ekstrak Semua). Di dalamnya ada folder <code>data-dan-skrip\bootcamp-jalur-utama\</code>.</p>
+        <p>Yang kita pakai hari ini hanya folder <code>data-dan-skrip\bootcamp-jalur-utama\data\</code>. Abaikan dulu folder lain di dalam paket itu — belum saatnya.</p>
         <div class="hasil">
           <span class="tag">YANG HARUS ADA</span>
-          <p>Di dalam <code>bootcamp/data/</code>: berkas bernama <code>transaksi.csv</code> (ukurannya sekitar 9 MB — jauh lebih besar dari yang kamu ketik manual selama ini) dan <code>transaksi_item.csv</code>.</p>
+          <p>Di dalam folder itu: berkas bernama <code>transaksi.csv</code> (ukurannya sekitar 9 MB — jauh lebih besar dari yang kamu ketik manual selama ini), <code>transaksi_item.csv</code>, <code>produk.csv</code>, dan <code>cabang.csv</code>.</p>
         </div>
       </div>
     </div>
@@ -658,11 +658,19 @@ GROUP BY pr.nama_produk;</code></pre>→ 5 baris, Matcha Latte omzetnya 0</p>
     <div class="langkah">
       <div class="langkah-head">
         <span class="num">2</span>
-        <h3>Buka halaman baru, kosong</h3>
+        <h3>Bersihkan tabel kecil — datanya akan digantikan</h3>
         <span class="cek"><input type="checkbox" id="h11s2"><label for="h11s2">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Buka <span class="mono">sqliteonline.com</span> di tab <strong>baru</strong> (bukan menimpa yang lama, supaya data Minggu 1–2 tidak tercampur). Editornya harus kosong.</p>
+        <p>Beda dari sqliteonline (yang melupakan semua tabelmu begitu tab ditutup), PostgreSQL <strong>menyimpan tabelmu permanen</strong> — jadi <code>produk</code> versi 5-baris yang kamu ketik manual di Hari 8 masih ada. Karena hari ini <code>produk</code> yang sungguhan (dari CSV, ratusan baris) akan memakai nama yang sama, buang dulu versi kecilnya:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>DROP TABLE IF EXISTS penjualan;
+DROP TABLE IF EXISTS produk;</code></pre>
+        </div>
+        <div class="catatan">
+          Tidak apa keduanya hilang — semua yang kamu pelajari dari mereka (cara menulis <code>JOIN</code>, <code>GROUP BY</code>) tetap ada di catatanmu, dan sebentar lagi kamu pakai versi aslinya yang jauh lebih besar.
+        </div>
       </div>
     </div>
 
@@ -673,19 +681,42 @@ GROUP BY pr.nama_produk;</code></pre>→ 5 baris, Matcha Latte omzetnya 0</p>
         <span class="cek"><input type="checkbox" id="h11s3"><label for="h11s3">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Di panel kiri sqliteonline, cari tombol <strong>Import</strong> (biasanya ikon panah masuk, atau menu titik tiga di sebelah nama database). Klik, lalu pilih <strong>Import from CSV</strong>.</p>
-        <ol style="font-size:0.93rem;padding-left:20px">
-          <li>Pilih berkas <code>transaksi.csv</code> dari folder <code>bootcamp/data/</code></li>
-          <li>Nama tabel: ketik <code>transaksi</code></li>
-          <li>Centang opsi <strong>"first row is header"</strong> / "baris pertama adalah judul kolom" — ini penting, kalau tidak dicentang, judul kolomnya ikut masuk sebagai data</li>
-          <li>Klik Import / OK</li>
-        </ol>
+        <p>PostgreSQL tidak bisa menebak struktur tabel dari CSV seperti sqliteonline — kamu buat dulu strukturnya, baru isinya dimuat. Jalankan ini di SQLTools:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>CREATE TABLE transaksi (
+  transaksi_id  text PRIMARY KEY,
+  tanggal       text,
+  jam           int,
+  cabang_id     text,
+  pelanggan_id  text,
+  saluran       text,
+  metode_bayar  text,
+  subtotal      int,
+  diskon        int,
+  total         int
+);</code></pre>
+        </div>
+        <div class="catatan">
+          <strong>Kenapa <code>tanggal text</code>, bukan <code>date</code>?</strong> Supaya query <code>WHERE tanggal LIKE '2025%'</code> yang kamu pakai mulai Hari 12 tetap jalan persis seperti yang tertulis di modul ini. Ini pilihan yang disengaja, bukan yang paling "benar" secara teknis.
+        </div>
+        <p>Sekarang isi tabelnya. Klik kanan <code>transaksi.csv</code> di File Explorer Windows → <strong>Copy as path</strong> (supaya path-nya pasti benar, tidak salah ketik). Berkasnya ada di paket <code>Rute-Data-Analyst.zip</code>, folder <code>data-dan-skrip\bootcamp-jalur-utama\data\</code>.</p>
+        <p>Buka <strong>Terminal baru</strong> di VS Code (menu Terminal → New Terminal — beda dari tab Results SQLTools), lalu masuk ke <code>psql</code>:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>psql -U postgres -d nama_database_kamu</code></pre>
+        </div>
+        <p>Setelah masuk (prompt berubah jadi <code>nama_database_kamu=#</code>), jalankan — ganti path di bawah dengan hasil "Copy as path" tadi:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>\copy transaksi FROM 'C:\path\ke\transaksi.csv' WITH (FORMAT csv, HEADER true)</code></pre>
+        </div>
         <div class="hasil">
           <span class="tag">YANG HARUS TERJADI</span>
-          <p>Proses mungkin makan waktu 10–30 detik — jangan tutup halamannya. Setelah selesai, tabel <code>transaksi</code> muncul di panel kiri.</p>
+          <p>Setelah beberapa detik, muncul <code>COPY 151088</code>. Itu tandanya berhasil — 151.088 baris masuk. Ketik <code>\q</code> untuk keluar dari <code>psql</code> dan kembali ke Terminal biasa.</p>
         </div>
         <div class="bahaya">
-          <strong>Kalau gagal atau sangat lambat:</strong> beberapa versi sqliteonline membatasi ukuran impor. Kalau macet lebih dari 2 menit, buka halaman baru dan coba lagi. Kalau tetap gagal, alternatifnya: pasang <a href="https://sqlitebrowser.org" target="_blank" rel="noopener">DB Browser for SQLite</a> di komputermu (gratis) — dia lebih kuat untuk data besar dan langkahnya mirip.
+          <strong>Kalau <code>psql</code> tidak dikenali</strong> ("command not found" / "bukan perintah internal"): folder <code>bin</code> PostgreSQL belum masuk PATH Windows-mu. <strong>Kalau muncul "permission denied"</strong>: pastikan kamu memakai <code>\copy</code> (dengan backslash, dijalankan di <code>psql</code>) — bukan <code>COPY</code> tanpa backslash di SQLTools, yang butuh izin file di sisi server dan sering gagal di Windows.
         </div>
       </div>
     </div>
@@ -771,13 +802,44 @@ ORDER BY rata2 DESC;</code></pre>
         <span class="cek"><input type="checkbox" id="h12s1"><label for="h12s1">selesai</label></span>
       </div>
       <div class="langkah-body">
-        <p>Di halaman sqliteonline yang sama dengan Hari 11 (tabel <code>transaksi</code> masih ada), ulangi cara Import untuk dua berkas ini dari folder <code>bootcamp/data/</code>:</p>
-        <ul style="font-size:0.93rem;padding-left:20px">
-          <li><code>transaksi_item.csv</code> → nama tabel <code>transaksi_item</code></li>
-          <li><code>produk.csv</code> → nama tabel <code>produk</code></li>
-          <li><code>cabang.csv</code> → nama tabel <code>cabang</code></li>
-        </ul>
-        <p>Verifikasi:</p>
+        <p>Database yang sama dengan Hari 11 (tabel <code>transaksi</code> masih ada di situ). Buat dulu tiga strukturnya di SQLTools:</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>CREATE TABLE transaksi_item (
+  transaksi_id  text,
+  produk_id     text,
+  jumlah        int,
+  harga_satuan  int,
+  nilai         int
+);
+
+CREATE TABLE produk (
+  produk_id      text PRIMARY KEY,
+  nama_produk    text,
+  kategori       text,
+  harga          int,
+  biaya_modal    int,
+  tanggal_rilis  text
+);
+
+CREATE TABLE cabang (
+  cabang_id       text PRIMARY KEY,
+  nama_cabang     text,
+  kota            text,
+  provinsi        text,
+  tanggal_buka    text,
+  manajer         text,
+  kapasitas_kursi int
+);</code></pre>
+        </div>
+        <p>Lalu di Terminal, masuk lagi ke <code>psql -U postgres -d nama_database_kamu</code> dan jalankan ketiganya (ganti path sesuai punyamu, semua ada di folder yang sama dengan <code>transaksi.csv</code>):</p>
+        <div class="kode">
+          <button class="salin" type="button">Salin</button>
+          <pre><code>\copy transaksi_item FROM 'C:\path\ke\transaksi_item.csv' WITH (FORMAT csv, HEADER true)
+\copy produk FROM 'C:\path\ke\produk.csv' WITH (FORMAT csv, HEADER true)
+\copy cabang FROM 'C:\path\ke\cabang.csv' WITH (FORMAT csv, HEADER true)</code></pre>
+        </div>
+        <p>Verifikasi (kembali ke SQLTools):</p>
         <div class="kode"><pre><code>SELECT COUNT(*) FROM transaksi_item;</code></pre></div>
         <div class="hasil"><span class="tag">HARUS</span><p><strong>278303</strong></p></div>
       </div>
@@ -912,7 +974,7 @@ ORDER BY omzet DESC;</code></pre></div>
       </div>
       <div class="langkah-body">
         <p>Buka aplikasi catatan biasa (Notepad, TextEdit, atau Notepad++). Buat berkas baru, simpan dengan nama <strong><code>analisis-kedai-senja.sql</code></strong>.</p>
-        <p>Untuk tiap query di bawah: jalankan dulu di sqliteonline, lihat hasilnya, lalu tulis di berkas dengan format ini:</p>
+        <p>Untuk tiap query di bawah: jalankan dulu di SQLTools (▶ Run Query), lihat hasilnya di tab Results, lalu tulis di berkas dengan format ini:</p>
         <div class="kode">
           <pre><code>-- Pertanyaan 1: [tulis ulang pertanyaannya di sini]
 SELECT ...;
