@@ -700,23 +700,22 @@ DROP TABLE IF EXISTS produk;</code></pre>
         <div class="catatan">
           <strong>Kenapa <code>tanggal text</code>, bukan <code>date</code>?</strong> Supaya query <code>WHERE tanggal LIKE '2025%'</code> yang kamu pakai mulai Hari 12 tetap jalan persis seperti yang tertulis di modul ini. Ini pilihan yang disengaja, bukan yang paling "benar" secara teknis.
         </div>
-        <p>Sekarang isi tabelnya. Klik kanan <code>transaksi.csv</code> di File Explorer Windows → <strong>Copy as path</strong> (supaya path-nya pasti benar, tidak salah ketik). Berkasnya ada di paket <code>Rute-Data-Analyst.zip</code>, folder <code>data-dan-skrip\bootcamp-jalur-utama\data\</code>.</p>
-        <p>Buka <strong>Terminal baru</strong> di VS Code (menu Terminal → New Terminal — beda dari tab Results SQLTools), lalu masuk ke <code>psql</code>:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>psql -U postgres -d nama_database_kamu</code></pre>
-        </div>
-        <p>Setelah masuk (prompt berubah jadi <code>nama_database_kamu=#</code>), jalankan — ganti path di bawah dengan hasil "Copy as path" tadi:</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>\copy transaksi FROM 'C:\path\ke\transaksi.csv' WITH (FORMAT csv, HEADER true)</code></pre>
-        </div>
+        <p>Sekarang isi tabelnya — pakai <strong>pgAdmin</strong>, bukan VS Code. pgAdmin adalah aplikasi terpisah yang ikut terpasang otomatis saat kamu memasang PostgreSQL, khusus untuk klik-klik seperti ini (mirip sqliteonline, tapi berupa aplikasi, bukan situs web).</p>
+        <ol style="font-size:0.93rem;padding-left:20px">
+          <li>Buka menu Start Windows, ketik <strong>pgAdmin</strong>, buka aplikasinya. (Belum pernah dibuka? Ia akan minta <em>master password</em> — buat satu, ini beda dari password PostgreSQL-mu, cuma dipakai pgAdmin sendiri.)</li>
+          <li>Di panel kiri, klik tanda <code>&gt;</code> di depan <strong>Servers</strong>, lalu server PostgreSQL-mu, lalu <strong>Databases</strong>, lalu database yang sama dengan yang kamu pakai di SQLTools, lalu <strong>Schemas → public → Tables</strong>.</li>
+          <li>Kamu akan lihat <code>transaksi</code> di daftar (dari <code>CREATE TABLE</code> barusan). <strong>Klik kanan</strong> di atasnya → <strong>Import/Export Data...</strong></li>
+          <li>Di jendela yang muncul, pastikan tombol di kiri atas menyala di posisi <strong>Import</strong> (bukan Export).</li>
+          <li><strong>Filename:</strong> klik ikon folder di sampingnya, cari <code>transaksi.csv</code> — ada di paket <code>Rute-Data-Analyst.zip</code>, folder <code>data-dan-skrip\bootcamp-jalur-utama\data\</code>.</li>
+          <li><strong>Format:</strong> pilih <code>csv</code>. <strong>Header:</strong> nyalakan toggle-nya (ini pengganti "first row is header" di sqliteonline).</li>
+          <li>Klik <strong>OK</strong> di kanan bawah. Tunggu progress bar-nya selesai (bisa beberapa puluh detik untuk 151 ribu baris).</li>
+        </ol>
         <div class="hasil">
           <span class="tag">YANG HARUS TERJADI</span>
-          <p>Setelah beberapa detik, muncul <code>COPY 151088</code>. Itu tandanya berhasil — 151.088 baris masuk. Ketik <code>\q</code> untuk keluar dari <code>psql</code> dan kembali ke Terminal biasa.</p>
+          <p>Muncul kotak hijau bertuliskan <strong>"Process completed"</strong> (kadang disertai jumlah baris). Kalau muncul kotak <strong>merah</strong> alih-alih, baca pesannya — paling sering karena tabel <code>transaksi</code> belum ada (ulangi langkah sebelumnya) atau Header lupa dinyalakan.</p>
         </div>
-        <div class="bahaya">
-          <strong>Kalau <code>psql</code> tidak dikenali</strong> ("command not found" / "bukan perintah internal"): folder <code>bin</code> PostgreSQL belum masuk PATH Windows-mu. <strong>Kalau muncul "permission denied"</strong>: pastikan kamu memakai <code>\copy</code> (dengan backslash, dijalankan di <code>psql</code>) — bukan <code>COPY</code> tanpa backslash di SQLTools, yang butuh izin file di sisi server dan sering gagal di Windows.
+        <div class="catatan">
+          Setelah ini, <strong>kembali ke VS Code</strong> untuk lanjut mengetik query — pgAdmin cuma dipakai untuk momen "impor data dari file", persis seperti tombol Import di sqliteonline dulu.
         </div>
       </div>
     </div>
@@ -832,14 +831,16 @@ CREATE TABLE cabang (
   kapasitas_kursi int
 );</code></pre>
         </div>
-        <p>Lalu di Terminal, masuk lagi ke <code>psql -U postgres -d nama_database_kamu</code> dan jalankan ketiganya (ganti path sesuai punyamu, semua ada di folder yang sama dengan <code>transaksi.csv</code>):</p>
-        <div class="kode">
-          <button class="salin" type="button">Salin</button>
-          <pre><code>\copy transaksi_item FROM 'C:\path\ke\transaksi_item.csv' WITH (FORMAT csv, HEADER true)
-\copy produk FROM 'C:\path\ke\produk.csv' WITH (FORMAT csv, HEADER true)
-\copy cabang FROM 'C:\path\ke\cabang.csv' WITH (FORMAT csv, HEADER true)</code></pre>
+        <p>Lalu buka <strong>pgAdmin</strong> lagi (sama seperti Hari 11) dan ulangi <strong>klik kanan tabel → Import/Export Data... → Import</strong> tiga kali, satu per tabel — semua CSV-nya ada di folder yang sama dengan <code>transaksi.csv</code>:</p>
+        <ul style="font-size:0.93rem;padding-left:20px">
+          <li><code>transaksi_item.csv</code> → tabel <code>transaksi_item</code></li>
+          <li><code>produk.csv</code> → tabel <code>produk</code></li>
+          <li><code>cabang.csv</code> → tabel <code>cabang</code></li>
+        </ul>
+        <div class="catatan">
+          Jangan lupa nyalakan toggle <strong>Header</strong> tiap kali — itu langkah yang paling sering kelewatan karena harus diulang untuk setiap tabel.
         </div>
-        <p>Verifikasi (kembali ke SQLTools):</p>
+        <p>Verifikasi (kembali ke VS Code / SQLTools):</p>
         <div class="kode"><pre><code>SELECT COUNT(*) FROM transaksi_item;</code></pre></div>
         <div class="hasil"><span class="tag">HARUS</span><p><strong>278303</strong></p></div>
       </div>
