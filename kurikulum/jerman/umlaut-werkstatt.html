@@ -2129,11 +2129,21 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
      itu dua huruf, jadi "öffnen" tidak pernah dianggap sama dengan "öffnen"
      dan kata itu tidak pernah terhitung selesai — persis di kata berumlaut,
      yang justru jadi inti halaman ini. Disatukan dulu sebelum dibandingkan. */
-  function rapikan(){
+  function rapikan(sedangMenyusun){
     var v = field.value;
-    if(!v || !v.normalize) return v || "";
-    var n = v.normalize("NFC");
-    if(n !== v){
+    if(!v) return v || "";
+    var n = v.normalize ? v.normalize("NFC") : v;
+    /* Spasi tak-putus (U+00A0) dan sanak-saudaranya datang dari menempel teks
+       dan dari sebagian papan ketik ponsel. Di layar bentuknya sama persis
+       dengan spasi biasa, tapi bukan huruf yang sama — kata jadi tidak pernah
+       terhitung selesai. */
+    n = n.replace(/[\u00a0\u2000-\u200a\u202f\u205f\u3000]/g, " ");
+    /* Tidak ada satu pun kata di sini yang diawali spasi, jadi spasi di depan
+       selalu salah tekan. Dulu ia membuat seluruh kata tidak pernah cocok. */
+    n = n.replace(/^\s+/, "");
+    /* Jangan utak-atik kolom selagi papan ketik ponsel masih menyusun kata;
+       biar dirapikan sesudah susunannya selesai. */
+    if(n !== v && !sedangMenyusun){
       var diUjung = (field.selectionStart === v.length);
       field.value = n;
       if(diUjung){ try{ field.setSelectionRange(n.length, n.length); }catch(_){} }
@@ -2147,7 +2157,10 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
      kata itu tetap tidak terhitung. */
   function cekSelesai(v){
     if(st.mode !== "latih" || st.lock || !pool.length) return false;
-    if(v !== target()) return false;
+    /* Spasi di belakang diabaikan — menekan spasi sesudah satu kata itu
+       kebiasaan mengetik, bukan kesalahan. Hanya di belakang: "darüber hinaus"
+       memang berisi spasi di tengah, jadi spasinya tidak boleh dibuang semua. */
+    if(v.replace(/\s+$/, "") !== target()) return false;
     st.lock = true; st.selesaiPada = v.length; st.sela = "";
     st.done++;
     var w = cur();
@@ -2206,8 +2219,8 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
     loadWord(); field.focus();
   }
 
-  field.addEventListener("input", function(){
-    var v = rapikan();
+  field.addEventListener("input", function(e){
+    var v = rapikan(e && e.isComposing);
     /* Kata sebelumnya sudah selesai dan kata berikutnya sedang disiapkan.
        Huruf yang kamu ketik di sela itu dulu DIBUANG dan dihitung salah —
        pengetik cepat kehilangan huruf sekaligus kena potong akurasi.
