@@ -1,0 +1,2252 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Umlaut-Werkstatt</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif:wght@400&display=swap">
+
+<style>
+:root{
+  --ground:#E7EBF0; --surface:#FFFFFF; --keycap:#FCFDFE; --keycap-edge:#C5CFDA;
+  --ink:#141A21; --muted:#5A6676; --faint:#8B96A4; --line:#D2D9E2;
+  --accent:#0E7C86; --accent-soft:#D6EDEF;
+  --umlaut:#A85B0B; --umlaut-soft:#FAEAD5; --umlaut-edge:#E2C69C;
+  --esz:#3F5573; --esz-soft:#E4EAF3; --esz-edge:#BCC8DA;
+  --wrong:#AD2419; --wrong-soft:#F6DCD9;
+  --flame:#C0531F;
+  --shadow:rgba(20,26,33,.10);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1218; --surface:#161B22; --keycap:#212832; --keycap-edge:#39424F;
+    --ink:#E7ECF3; --muted:#96A2B1; --faint:#6D7988; --line:#2A323C;
+    --accent:#3FB6C0; --accent-soft:#103539;
+    --umlaut:#E8A55C; --umlaut-soft:#33260F; --umlaut-edge:#5C4520;
+    --esz:#9FB4D2; --esz-soft:#1C2534; --esz-edge:#39455C;
+    --wrong:#E88175; --wrong-soft:#3A1E1B;
+    --flame:#E8834E;
+    --shadow:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1218; --surface:#161B22; --keycap:#212832; --keycap-edge:#39424F;
+  --ink:#E7ECF3; --muted:#96A2B1; --faint:#6D7988; --line:#2A323C;
+  --accent:#3FB6C0; --accent-soft:#103539;
+  --umlaut:#E8A55C; --umlaut-soft:#33260F; --umlaut-edge:#5C4520;
+  --esz:#9FB4D2; --esz-soft:#1C2534; --esz-edge:#39455C;
+  --wrong:#E88175; --wrong-soft:#3A1E1B;
+  --flame:#E8834E;
+  --shadow:rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;font-size:15px;line-height:1.5;
+}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px;padding-block:26px 40px;display:flex;flex-direction:column;gap:16px}
+
+header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 20px}
+h1{font-family:Archivo,system-ui,sans-serif;font-weight:700;font-size:clamp(23px,4.4vw,31px);letter-spacing:-.02em;margin:0;text-wrap:balance}
+.sub{margin:2px 0 0;color:var(--muted);max-width:54ch;font-size:14px}
+.modes{display:flex;gap:6px;margin-left:auto}
+.mode{font-family:Archivo,sans-serif;font-weight:600;font-size:13px;padding:7px 14px;border-radius:7px;cursor:pointer;background:transparent;color:var(--muted);border:1px solid var(--line)}
+.mode[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.mode:focus-visible,.kbd:focus-visible,.util:focus-visible,#field:focus-visible,.chip:focus-visible,select:focus-visible,.spk:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* daily */
+.daily{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+}
+.daily .lead{font-family:Archivo,sans-serif;font-weight:600;font-size:13px;white-space:nowrap}
+.daily .lead b{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;color:var(--accent)}
+.bar{flex:1 1 180px;height:8px;border-radius:5px;background:var(--ground);overflow:hidden;min-width:140px}
+.bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:5px;transition:width .35s ease}
+.streak{font-family:Archivo,sans-serif;font-weight:700;font-size:13px;color:var(--flame);white-space:nowrap}
+.daily label{font-size:12px;color:var(--faint);display:flex;align-items:center;gap:6px;white-space:nowrap}
+select{
+  font-family:"Source Sans 3",sans-serif;font-size:13px;padding:5px 8px;border-radius:6px;
+  background:var(--ground);color:var(--ink);border:1px solid var(--line);
+}
+
+.stats{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+.stat{flex:1 1 86px;padding:9px 14px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat span{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--faint)}
+
+.filters{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.03em;
+  padding:6px 13px;border-radius:20px;cursor:pointer;
+  background:var(--surface);color:var(--muted);border:1px solid var(--line);
+}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip .n{font-family:"JetBrains Mono",monospace;font-weight:400;opacity:.6;margin-left:5px}
+
+.pad{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;box-shadow:0 1px 2px var(--shadow);display:flex;flex-direction:column;gap:11px}
+.meaning{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint)}
+.meaning em{font-style:normal;color:var(--muted)}
+.meaning .pos{font-family:"JetBrains Mono",monospace;text-transform:none;letter-spacing:0;float:right;color:var(--faint)}
+.meaning .lv{
+  font-family:Archivo,sans-serif;font-weight:700;font-size:10px;letter-spacing:.06em;
+  background:var(--accent-soft);color:var(--accent);padding:2px 7px;border-radius:4px;margin-right:6px;
+}
+.meaning .wa{
+  font-family:Archivo,sans-serif;font-weight:700;font-size:10px;letter-spacing:.06em;
+  background:var(--umlaut-soft);color:var(--umlaut);padding:2px 7px;border-radius:4px;margin-right:8px;
+}
+.meaning .box{
+  font-family:"JetBrains Mono",monospace;text-transform:none;letter-spacing:0;
+  color:var(--faint);margin-left:8px;
+}
+.sync{
+  font-size:11px;color:var(--faint);white-space:nowrap;
+  display:flex;align-items:center;gap:5px;
+}
+.sync i{width:7px;height:7px;border-radius:50%;background:var(--faint);display:block}
+.sync.ok i{background:var(--accent)}
+.sync.local i{background:var(--umlaut)}
+#word{font-family:"JetBrains Mono",monospace;font-weight:500;font-size:clamp(19px,4.6vw,30px);letter-spacing:.01em;word-break:break-all;min-height:1.4em}
+.ch{border-radius:2px}
+.ch.ok{color:var(--accent)}
+.ch.bad{color:var(--wrong);background:var(--wrong-soft)}
+.ch.cur{box-shadow:inset 0 -3px 0 var(--accent)}
+.ch.pend{color:var(--faint)}
+
+.pron{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:9px 12px;border-radius:8px;background:var(--ground);border-left:3px solid var(--umlaut)}
+.pron .col{display:flex;flex-direction:column;gap:1px;min-width:0}
+.ipa{font-family:"Noto Serif",Georgia,serif;font-size:16px;color:var(--ink);word-break:break-word}
+.resp{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--umlaut);word-break:break-word}
+.pron .lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.11em;color:var(--faint)}
+.spkwrap{display:flex;gap:6px;margin-left:auto}
+.spk{
+  font-family:Archivo,sans-serif;font-weight:600;font-size:12.5px;
+  padding:8px 13px;border-radius:7px;cursor:pointer;
+  background:var(--accent);color:#fff;border:1px solid var(--accent);white-space:nowrap;
+}
+.spk.ghost{background:transparent;color:var(--accent)}
+.spk[disabled]{opacity:.4;cursor:not-allowed}
+
+#field{width:100%;font-family:"JetBrains Mono",monospace;font-size:17px;padding:11px 13px;border-radius:8px;border:1px solid var(--keycap-edge);background:var(--ground);color:var(--ink)}
+.row-end{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.hintline{font-size:13px;color:var(--muted);flex:1 1 180px}
+.hintline code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--umlaut-soft);color:var(--umlaut);padding:1px 5px;border-radius:4px}
+.util{font-family:Archivo,sans-serif;font-weight:600;font-size:12.5px;padding:7px 13px;border-radius:7px;cursor:pointer;background:var(--ground);color:var(--muted);border:1px solid var(--line)}
+.util:hover{color:var(--ink)}
+.util[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+
+.warn{
+  font-size:13px;padding:10px 13px;border-radius:8px;
+  background:var(--umlaut-soft);color:var(--umlaut);border:1px solid var(--umlaut-edge);
+}
+.done{
+  font-size:13.5px;font-family:Archivo,sans-serif;font-weight:600;
+  padding:11px 14px;border-radius:8px;
+  background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);
+}
+.warn code{font-family:"JetBrains Mono",monospace;font-size:12px}
+
+.board{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;box-shadow:0 1px 2px var(--shadow);display:flex;flex-direction:column;gap:14px}
+.group{display:flex;flex-direction:column;gap:6px}
+.cap{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--faint)}
+.cap b{color:var(--muted);font-weight:600}
+.bank{display:flex;flex-wrap:wrap;gap:8px}
+.kbd{
+  position:relative;flex:1 1 120px;min-width:94px;min-height:80px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font-family:"JetBrains Mono",monospace;font-weight:500;font-size:32px;color:var(--ink);
+  background:var(--keycap);border:1px solid var(--keycap-edge);border-bottom-width:3px;
+  border-radius:9px;cursor:pointer;padding:6px 4px;transition:transform .06s ease,background .12s ease;
+}
+.kbd:hover{background:var(--accent-soft)}
+.kbd:active,.kbd.hit{transform:translateY(1px);background:var(--accent-soft);border-color:var(--accent)}
+.kbd .tag{position:absolute;top:5px;left:8px;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:400;color:var(--faint)}
+.kbd .alt{font-family:Archivo,sans-serif;font-size:10px;font-weight:600;letter-spacing:.03em}
+.g-umlaut .kbd{background:var(--umlaut-soft);border-color:var(--umlaut-edge);color:var(--umlaut)}
+.g-umlaut .kbd .tag,.g-umlaut .kbd .alt{color:var(--umlaut)}
+.g-umlaut .kbd:hover,.g-umlaut .kbd.hit{background:var(--accent-soft);border-color:var(--accent)}
+.g-esz .kbd{background:var(--esz-soft);border-color:var(--esz-edge);color:var(--esz)}
+.g-esz .kbd .tag,.g-esz .kbd .alt{color:var(--esz)}
+.g-esz .kbd:hover,.g-esz .kbd.hit{background:var(--accent-soft);border-color:var(--accent)}
+.util-row .kbd{font-family:Archivo,sans-serif;font-size:13px;font-weight:600;min-height:44px;flex:1 1 140px;min-width:118px;background:var(--ground);color:var(--muted);border-bottom-width:2px}
+.util-row .kbd:hover{color:var(--ink);background:var(--accent-soft)}
+
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:9px}
+footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var(--ground);padding:1px 5px;border-radius:4px;color:var(--ink)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:460px){.kbd{flex:1 1 88px;min-width:80px;min-height:72px;font-size:27px}}
+</style>
+
+<div class="wrap">
+
+  <header>
+    <div>
+      <h1>Umlaut-Werkstatt</h1>
+      <p class="sub"><b id="wc">0</b> kata Jerman — nomen, verben, adjektive, adverbien, zahlen — dari A1 sampai C1, dengan istilah akuntansi, Ausbildung, dokter dan sewa rumah yang tidak ada di kursus umum. Kata yang sudah kamu kuasai keluar dari antrian, jadi sisa kerjamu menyusut.</p>
+    </div>
+    <div class="modes">
+      <button class="mode" id="m-latih" aria-pressed="true">Latihan</button>
+      <button class="mode" id="m-bebas" aria-pressed="false">Bebas</button>
+    </div>
+  </header>
+
+  <div class="daily">
+    <span class="lead">Hari ini <b id="d-count">0</b> / <b id="d-goal">25</b></span>
+    <span class="bar"><i id="d-bar"></i></span>
+    <span class="streak" id="d-streak">Mulai hari ini</span>
+    <label>Target harian
+      <select id="goalsel">
+        <option value="10">10</option>
+        <option value="25" selected>25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </label>
+    <span class="sync" id="sync"><i></i><span id="synctext">Menyambung…</span></span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="s-mastered">0</b><span>Dikuasai</span></div>
+    <div class="stat"><b id="s-left">0</b><span>Sisa</span></div>
+    <div class="stat"><b id="s-done">0</b><span>Sesi ini</span></div>
+    <div class="stat"><b id="s-acc">100%</b><span>Akurasi</span></div>
+    <div class="stat"><b id="s-uml">0</b><span>Umlaut / ß</span></div>
+    <div class="stat"><b id="s-total">0</b><span>Total sepanjang masa</span></div>
+  </div>
+
+  <div class="filters">
+    <div class="chips" id="levels"></div>
+    <label style="font-size:12px;color:var(--faint);display:flex;align-items:center;gap:6px">Tema
+      <select id="themesel"></select>
+    </label>
+    <label style="font-size:12px;color:var(--faint);display:flex;align-items:center;gap:6px">Jenis kata
+      <select id="wasel"></select>
+    </label>
+    <button class="util" id="umlonly" aria-pressed="false">Hanya yang berumlaut</button>
+    <button class="util" id="hide" aria-pressed="true">Sembunyikan yang dikuasai</button>
+  </div>
+
+  <div class="done" id="banner" role="status" hidden></div>
+  <div class="warn" id="filternote" role="status" hidden></div>
+  <div class="warn" id="voicewarn" hidden></div>
+
+  <div class="pad">
+    <div class="meaning" id="meaning" role="status" aria-live="polite"></div>
+    <div id="word"></div>
+    <div class="pron" id="pron">
+      <span class="col"><span class="lbl">IPA</span><span class="ipa" id="ipa"></span></span>
+      <span class="col"><span class="lbl">Baca</span><span class="resp" id="resp"></span></span>
+      <span class="spkwrap">
+        <button class="spk" id="spk" type="button">🔊 Dengar</button>
+        <button class="spk ghost" id="spkslow" type="button">Pelan</button>
+      </span>
+    </div>
+    <input id="field" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ketik kata di sini">
+    <div class="row-end">
+      <div class="hintline" id="hintline"><code>AltGr + Q</code> ä · <code>AltGr + P</code> ö · <code>AltGr + Y</code> ü · <code>AltGr + S</code> ß</div>
+      <button class="util" id="auto" aria-pressed="false">Suara otomatis</button>
+      <button class="util" id="skip">Lewati</button>
+      <button class="util" id="copy" hidden>Salin teks</button>
+      <button class="util" id="reset">Reset sesi</button>
+    </div>
+  </div>
+
+  <div class="board" id="board">
+    <div class="group g-umlaut">
+      <div class="cap"><b>Umlaut kecil</b> — di dalam kata</div>
+      <div class="bank" id="bank-lo"></div>
+    </div>
+    <div class="group g-umlaut">
+      <div class="cap"><b>Umlaut besar</b> — awal kata benda, atau tulisan kapital</div>
+      <div class="bank" id="bank-up"></div>
+    </div>
+    <div class="group g-esz">
+      <div class="cap"><b>Eszett</b> — bukan umlaut, huruf tersendiri</div>
+      <div class="bank" id="bank-sz"></div>
+    </div>
+    <div class="bank util-row" id="bank-x"></div>
+  </div>
+
+  <footer>
+    <div><b>Jalur levelnya:</b> A1–A2 kata sehari-hari dan kantor dasar · B1 ambang visa Ausbildung, berisi istilah Behörde dan kontrak kerja · B2 akuntansi profesional: Bilanz, Abschreibung, Rückstellung · C1 istilah teknis dan hukum: Periodenabgrenzung, Wesentlichkeit, Ordnungsmäßigkeit.</div>
+    <div><b>Tujuh tema, dan dua di antaranya baru:</b> <b>Gesundheit &amp; Arzt</b> berisi yang kamu butuhkan sebelum bisa sakit di sana — Krankmeldung, Facharzt, Nebenwirkung, Arbeitsunfähigkeitsbescheinigung. <b>Wohnung &amp; Umzug</b> berisi yang menghalangimu punya alamat — Kaltmiete, Kaution, Nebenkosten, Wohnungsgeberbestätigung. Keduanya dipakai di bulan pertamamu, jauh sebelum Bilanz.</div>
+    <div><b>Cara membaca kolom "Baca":</b> suku kata berhuruf besar adalah yang ditekan. <code>ü</code> = bunyi "i" dengan bibir dibulatkan seperti "u". <code>ö</code> = "e" dengan bibir dibulatkan. <code>kh</code> seperti pada "akhir". <code>ts</code> = bunyi huruf z Jerman. <code>ː</code> di IPA menandai vokal panjang.</div>
+    <div><b>Cara antriannya bekerja:</b> tiap kata punya kotak penguasaan (○○○). Selesai tanpa salah ketik → naik satu kotak. <b>1–2 typo tidak menurunkan apa pun</b> — kotaknya cuma tertahan, karena typo yang langsung kamu perbaiki bukan tanda belum bisa. Baru turun kalau 3 typo atau lebih. Tiga kotak penuh = <b>dikuasai</b>, dan kata itu langsung keluar dari antrian selama tombol "Sembunyikan yang dikuasai" menyala. Angka <b>Sisa</b> di atas menunjukkan berapa kata lagi yang tertinggal.</div>
+    <div><b>Tombol "Hanya yang berumlaut"</b> menyisakan kata yang benar-benar memuat ä ö ü ß saja. Dari seluruh kata di sini, sekitar seperempatnya punya huruf itu; kalau yang kamu latih memang jarinya, saring dulu supaya tiap kata melatih sesuatu.</div>
+    <div><b>Tanpa melepas tangan dari papan ketik:</b> <code>Enter</code> melompati kata yang sedang tampil, <code>Esc</code> mengosongkan yang sudah terlanjur kamu ketik tanpa dihitung selesai.</div>
+    <div><b>Nomen kapital, verben dan adjektive tidak.</b> Perhatikan bedanya saat mengetik: <code>die Prüfung</code> tapi <code>prüfen</code>; <code>die Möglichkeit</code> tapi <code>möglich</code>. Mengetik verba dengan huruf besar adalah kesalahan yang dihitung salah di sini, sama seperti di ujian.</div>
+    <div>Progres tersimpan di akunmu dan ikut berpindah antar perangkat. Indikator di kanan atas menunjukkan statusnya; kalau tertulis "Tersimpan di browser ini", progres hanya ada di browser ini.</div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* [kata, arti, IPA, ejaan-baca, level, tema, jenis kata]
+     Jenis kata boleh dikosongkan; yang kosong dianggap Nomen. */
+  var WORDS = [
+    ["Haus","rumah","haʊ̯s","HAUS","A1","alltag"],
+    ["Tür","pintu","tyːɐ̯","TÜHR","A1","alltag"],
+    ["Küche","dapur","ˈkʏçə","KÜ-khe","A1","alltag"],
+    ["Tisch","meja","tɪʃ","TISH","A1","alltag"],
+    ["Stuhl","kursi","ʃtuːl","SHTOOL","A1","alltag"],
+    ["Buch","buku","buːx","BOOKH","A1","alltag"],
+    ["Zimmer","kamar","ˈtsɪmɐ","TSI-mer","A1","alltag"],
+    ["Wohnung","apartemen","ˈvoːnʊŋ","VOH-nung","A1","wohnen"],
+    ["Möbel","perabot","ˈmøːbl̩","MÖ-bel","A1","alltag"],
+    ["Schlüssel","kunci","ˈʃlʏsl̩","SHLÜ-sel","A1","alltag"],
+    ["Wasser","air","ˈvasɐ","VA-ser","A1","alltag"],
+    ["Brot","roti","bʁoːt","BROHT","A1","alltag"],
+    ["Käse","keju","ˈkɛːzə","KEH-ze","A1","alltag"],
+    ["Gemüse","sayuran","ɡəˈmyːzə","ge-MÜ-ze","A1","alltag"],
+    ["Frühstück","sarapan","ˈfʁyːˌʃtʏk","FRÜ-shtük","A1","alltag"],
+    ["Getränk","minuman","ɡəˈtʁɛŋk","ge-TRENK","A1","alltag"],
+    ["Bäcker","tukang roti","ˈbɛkɐ","BE-ker","A1","alltag"],
+    ["Straße","jalan","ˈʃtʁaːsə","SHTRAH-se","A1","alltag"],
+    ["Stadt","kota","ʃtat","SHTAT","A1","alltag"],
+    ["Land","negara","lant","LANT","A1","alltag"],
+    ["Jahr","tahun","jaːɐ̯","YAHR","A1","alltag"],
+    ["Monat","bulan","ˈmoːnat","MOH-nat","A1","alltag"],
+    ["Woche","minggu","ˈvɔxə","VO-khe","A1","alltag"],
+    ["Stunde","jam","ˈʃtʊndə","SHTUN-de","A1","alltag"],
+    ["Größe","ukuran","ˈɡʁøːsə","GRÖ-se","A1","alltag"],
+    ["Freund","teman","fʁɔʏ̯nt","FROYNT","A1","alltag"],
+    ["Bahnhof","stasiun","ˈbaːnˌhoːf","BAHN-hohf","A1","alltag"],
+    ["Flughafen","bandara","ˈfluːkˌhaːfn̩","FLOOK-hah-fen","A1","alltag"],
+    ["Geld","uang","ɡɛlt","GELT","A1","buch"],
+    ["Zahl","angka","tsaːl","TSAHL","A1","buch"],
+    ["Preis","harga","pʁaɪ̯s","PRAIS","A1","buch"],
+    ["Büro","kantor","byˈʁoː","bü-ROH","A1","buero"],
+    ["Papier","kertas","paˈpiːɐ̯","pa-PEER","A1","buero"],
+    ["Telefon","telepon","teləˈfoːn","te-le-FOHN","A1","buero"],
+    ["Arbeit","pekerjaan","ˈaʁbaɪ̯t","AR-bait","A1","beruf"],
+    ["Schule","sekolah","ˈʃuːlə","SHOO-le","A1","beruf"],
+    ["Lehrer","guru","ˈleːʁɐ","LEH-rer","A1","beruf"],
+    ["Schüler","murid","ˈʃyːlɐ","SHÜ-ler","A1","beruf"],
+    ["Name","nama","ˈnaːmə","NAH-me","A1","amt"],
+    ["Adresse","alamat","aˈdʁɛsə","a-DRE-se","A1","amt"],
+
+    ["Rechnung","faktur / tagihan","ˈʁɛçnʊŋ","REKH-nung","A2","buch"],
+    ["Quittung","kuitansi","ˈkvɪtʊŋ","KVI-tung","A2","buch"],
+    ["Konto","rekening","ˈkɔnto","KON-to","A2","buch"],
+    ["Bank","bank","baŋk","BANK","A2","buch"],
+    ["Bargeld","uang tunai","ˈbaːɐ̯ɡɛlt","BAHR-gelt","A2","buch"],
+    ["Betrag","jumlah uang","bəˈtʁaːk","be-TRAHK","A2","buch"],
+    ["Kasse","kas / kasir","ˈkasə","KA-se","A2","buch"],
+    ["Zahlung","pembayaran","ˈtsaːlʊŋ","TSAH-lung","A2","buch"],
+    ["Verkauf","penjualan","fɛɐ̯ˈkaʊ̯f","fer-KAUF","A2","buch"],
+    ["Einkauf","pembelian","ˈaɪ̯nˌkaʊ̯f","AIN-kauf","A2","buch"],
+    ["Gewinn","laba","ɡəˈvɪn","ge-VIN","A2","buch"],
+    ["Verlust","rugi","fɛɐ̯ˈlʊst","fer-LUST","A2","buch"],
+    ["Beleg","bukti transaksi","bəˈleːk","be-LEHK","A2","buch"],
+    ["Gehalt","gaji bulanan","ɡəˈhalt","ge-HALT","A2","beruf"],
+    ["Kunde","pelanggan","ˈkʊndə","KUN-de","A2","buero"],
+    ["Kollege","rekan kerja","kɔˈleːɡə","ko-LEH-ge","A2","buero"],
+    ["Abteilung","departemen","ˈaptaɪ̯lʊŋ","AP-tai-lung","A2","buero"],
+    ["Besprechung","rapat","bəˈʃpʁɛçʊŋ","be-SHPRE-khung","A2","buero"],
+    ["Ordner","map arsip","ˈɔʁdnɐ","ORD-ner","A2","buero"],
+    ["Unterlagen","berkas","ˈʊntɐˌlaːɡn̩","UN-ter-lah-gen","A2","buero"],
+    ["Datum","tanggal","ˈdaːtʊm","DAH-tum","A2","buero"],
+    ["Termin","janji temu resmi","tɛɐ̯ˈmiːn","ter-MEEN","A2","amt"],
+    ["Antrag","permohonan","ˈantʁaːk","AN-trahk","A2","amt"],
+    ["Ausweis","kartu identitas","ˈaʊ̯svaɪ̯s","AUS-vais","A2","amt"],
+    ["Formular","formulir","fɔʁmuˈlaːɐ̯","for-mu-LAHR","A2","amt"],
+    ["Unterschrift","tanda tangan","ˈʊntɐˌʃʁɪft","UN-ter-shrift","A2","amt"],
+    ["Gebühr","biaya resmi","ɡəˈbyːɐ̯","ge-BÜHR","A2","amt"],
+    ["Anmeldung","registrasi tempat tinggal","ˈanˌmɛldʊŋ","AN-mel-dung","A2","amt"],
+    ["Wohnsitz","domisili resmi","ˈvoːnzɪts","VOHN-zits","A2","amt"],
+    ["Versicherung","asuransi","fɛɐ̯ˈzɪçəʁʊŋ","fer-ZI-khe-rung","A2","amt"],
+    ["Miete","sewa","ˈmiːtə","MEE-te","A2","wohnen"],
+    ["Vermieter","pemilik sewa","fɛɐ̯ˈmiːtɐ","fer-MEE-ter","A2","wohnen"],
+    ["Verspätung","keterlambatan","fɛɐ̯ˈʃpɛːtʊŋ","fer-SHPEH-tung","A2","alltag"],
+    ["Gesundheit","kesehatan","ɡəˈzʊnthaɪ̯t","ge-ZUNT-hait","A2","gesund"],
+    ["Wärme","kehangatan","ˈvɛʁmə","VER-me","A2","alltag"],
+    ["Grüße","salam","ˈɡʁyːsə","GRÜ-se","A2","alltag"],
+    ["Begrüßung","sapaan pembuka","bəˈɡʁyːsʊŋ","be-GRÜ-sung","A2","alltag"],
+    ["natürlich","tentu saja","naˈtyːɐ̯lɪç","na-TÜHR-likh","A2","alltag","Adv"],
+    ["Bahnhöfe","stasiun-stasiun","ˈbaːnˌhøːfə","BAHN-hö-fe","A2","alltag"],
+    ["Übung","latihan","ˈyːbʊŋ","Ü-bung","A2","beruf"],
+    ["Prüfung","ujian / pemeriksaan","ˈpʁyːfʊŋ","PRÜ-fung","A2","beruf"],
+    ["Erklärung","penjelasan","ɛɐ̯ˈklɛːʁʊŋ","er-KLEH-rung","A2","beruf"],
+    ["Wörterbuch","kamus","ˈvœʁtɐˌbuːx","VÖR-ter-bookh","A2","beruf"],
+    ["Möglichkeit","kemungkinan","ˈmøːklɪçkaɪ̯t","MÖK-likh-kait","A2","beruf"],
+    ["pünktlich","tepat waktu","ˈpʏŋktlɪç","PÜNKT-likh","A2","beruf","Adj"],
+    ["persönlich","pribadi","pɛʁˈzøːnlɪç","per-ZÖN-likh","A2","beruf","Adj"],
+
+    ["Ausbildung","pelatihan vokasi","ˈaʊ̯sbɪldʊŋ","AUS-bil-dung","B1","beruf"],
+    ["Bewerbung","lamaran kerja","bəˈvɛʁbʊŋ","be-VER-bung","B1","beruf"],
+    ["Lebenslauf","daftar riwayat hidup","ˈleːbm̩sˌlaʊ̯f","LEH-bens-lauf","B1","beruf"],
+    ["Berufsschule","sekolah kejuruan","bəˈʁuːfsˌʃuːlə","be-ROOFS-shoo-le","B1","beruf"],
+    ["Arbeitgeber","pemberi kerja","ˈaʁbaɪ̯tˌɡeːbɐ","AR-bait-geh-ber","B1","beruf"],
+    ["Arbeitnehmer","pekerja","ˈaʁbaɪ̯tˌneːmɐ","AR-bait-neh-mer","B1","beruf"],
+    ["Vertrag","kontrak","fɛɐ̯ˈtʁaːk","fer-TRAHK","B1","beruf"],
+    ["Kündigung","pemutusan kontrak","ˈkʏndɪɡʊŋ","KÜN-di-gung","B1","beruf"],
+    ["Kündigungsfrist","masa pemberitahuan","ˈkʏndɪɡʊŋsˌfʁɪst","KÜN-di-gungs-frist","B1","beruf"],
+    ["Vorstellungsgespräch","wawancara kerja","ˈfoːɐ̯ʃtɛlʊŋsɡəˌʃpʁɛːç","FOHR-shte-lungs-ge-shprehkh","B1","beruf"],
+    ["Zwischenprüfung","ujian tengah","ˈtsvɪʃn̩ˌpʁyːfʊŋ","TSVI-shen-prü-fung","B1","beruf"],
+    ["Abschlussprüfung","ujian akhir","ˈapʃlʊsˌpʁyːfʊŋ","AP-shlus-prü-fung","B1","beruf"],
+    ["Vergütung","imbalan / upah","fɛɐ̯ˈɡyːtʊŋ","fer-GÜ-tung","B1","beruf"],
+    ["Erfahrung","pengalaman","ɛɐ̯ˈfaːʁʊŋ","er-FAH-rung","B1","beruf"],
+    ["Fähigkeit","kemampuan","ˈfɛːɪçkaɪ̯t","FEH-ikh-kait","B1","beruf"],
+    ["Schwierigkeit","kesulitan","ˈʃviːʁɪçkaɪ̯t","SHVEE-rikh-kait","B1","beruf"],
+    ["zuverlässig","dapat diandalkan","ˈtsuːfɛɐ̯ˌlɛsɪç","TSOO-fer-le-sikh","B1","beruf","Adj"],
+    ["selbstständig","mandiri","ˈzɛlpstˌʃtɛndɪç","ZELPST-shten-dikh","B1","beruf","Adj"],
+    ["Zukunft","masa depan","ˈtsuːkʊnft","TSOO-kunft","B1","beruf"],
+    ["Behörde","instansi pemerintah","bəˈhøːɐ̯də","be-HÖR-de","B1","amt"],
+    ["Ausländerbehörde","kantor urusan orang asing","ˈaʊ̯slɛndɐbəˌhøːɐ̯də","AUS-len-der-be-hör-de","B1","amt"],
+    ["Bescheinigung","surat keterangan","bəˈʃaɪ̯nɪɡʊŋ","be-SHAI-ni-gung","B1","amt"],
+    ["Aufenthaltserlaubnis","izin tinggal","ˈaʊ̯fʔɛnthaltsʔɛɐ̯ˌlaʊ̯pnɪs","AUF-ent-halts-er-laup-nis","B1","amt"],
+    ["Führungszeugnis","surat catatan kepolisian","ˈfyːʁʊŋsˌtsɔʏ̯knɪs","FÜ-rungs-tsoyk-nis","B1","amt"],
+    ["Krankenversicherung","asuransi kesehatan","ˈkʁaŋkn̩fɛɐ̯ˌzɪçəʁʊŋ","KRANG-ken-fer-zi-khe-rung","B1","gesund"],
+    ["Sozialversicherung","jaminan sosial","zoˈtsi̯aːlfɛɐ̯ˌzɪçəʁʊŋ","zo-TSYAHL-fer-zi-khe-rung","B1","amt"],
+    ["Sperrkonto","rekening terblokir","ˈʃpɛʁˌkɔnto","SHPER-kon-to","B1","amt"],
+    ["Verlängerung","perpanjangan","fɛɐ̯ˈlɛŋəʁʊŋ","fer-LENG-e-rung","B1","amt"],
+    ["Nachweis","bukti / dokumen pendukung","ˈnaːxvaɪ̯s","NAHKH-vais","B1","amt"],
+    ["Zulassung","izin / penerimaan","ˈtsuːlasʊŋ","TSOO-la-sung","B1","amt"],
+    ["Fördermittel","dana bantuan","ˈfœʁdɐˌmɪtl̩","FÖR-der-mi-tel","B1","amt"],
+    ["Überweisung","transfer bank","ˌyːbɐˈvaɪ̯zʊŋ","ü-ber-VAI-zung","B1","buch"],
+    ["Buchhaltung","pembukuan","ˈbuːxˌhaltʊŋ","BOOKH-hal-tung","B1","buch"],
+    ["Rechnungswesen","akuntansi","ˈʁɛçnʊŋsˌveːzn̩","REKH-nungs-veh-zen","B1","buch"],
+    ["Umsatz","omzet","ˈʊmzats","UM-zats","B1","buch"],
+    ["Steuer","pajak","ˈʃtɔʏ̯ɐ","SHTOY-er","B1","buch"],
+    ["Umsatzsteuer","pajak pertambahan nilai","ˈʊmzatsˌʃtɔʏ̯ɐ","UM-zats-shtoy-er","B1","buch"],
+    ["Mahnung","surat peringatan tagihan","ˈmaːnʊŋ","MAH-nung","B1","buch"],
+    ["Fälligkeit","jatuh tempo","ˈfɛlɪçkaɪ̯t","FEL-likh-kait","B1","buch"],
+    ["Kassenbuch","buku kas","ˈkasn̩ˌbuːx","KA-sen-bookh","B1","buch"],
+    ["Geschäftsjahr","tahun buku","ɡəˈʃɛftsˌjaːɐ̯","ge-SHEFTS-yahr","B1","buch"],
+    ["Geschäftsführer","direktur pelaksana","ɡəˈʃɛftsˌfyːʁɐ","ge-SHEFTS-fü-rer","B1","buero"],
+    ["Ausgabe","pengeluaran","ˈaʊ̯sˌɡaːbə","AUS-gah-be","B1","buch"],
+    ["Einnahme","pemasukan","ˈaɪ̯nˌnaːmə","AIN-nah-me","B1","buch"],
+    ["Haushalt","anggaran","ˈhaʊ̯shalt","HAUS-halt","B1","buch"],
+    ["Zinssatz","suku bunga","ˈtsɪnsˌzats","TSINS-zats","B1","buch"],
+    ["Rücklage","dana cadangan","ˈʁʏkˌlaːɡə","RÜK-lah-ge","B1","buch"],
+    ["Rückzahlung","pelunasan","ˈʁʏkˌtsaːlʊŋ","RÜK-tsah-lung","B1","buch"],
+    ["Gläubiger","kreditur","ˈɡlɔʏ̯bɪɡɐ","GLOY-bi-ger","B1","buch"],
+    ["Schuldner","debitur","ˈʃʊltnɐ","SHULT-ner","B1","buch"],
+
+    ["Jahresabschluss","laporan keuangan tahunan","ˈjaːʁəsˌʔapʃlʊs","YAH-res-ap-shlus","B2","buch"],
+    ["Bilanz","neraca","biˈlants","bi-LANTS","B2","buch"],
+    ["Buchführung","pembukuan formal","ˈbuːxˌfyːʁʊŋ","BOOKH-fü-rung","B2","buch"],
+    ["Abschreibung","penyusutan","ˈapˌʃʁaɪ̯bʊŋ","AP-shrai-bung","B2","buch"],
+    ["Rückstellung","pencadangan","ˈʁʏkˌʃtɛlʊŋ","RÜK-shte-lung","B2","buch"],
+    ["Verbindlichkeiten","utang / liabilitas","fɛɐ̯ˈbɪntlɪçkaɪ̯tn̩","fer-BINT-likh-kai-ten","B2","buch"],
+    ["Forderung","piutang / tuntutan","ˈfɔʁdəʁʊŋ","FOR-de-rung","B2","buch"],
+    ["Jahresüberschuss","laba bersih tahunan","ˈjaːʁəsˌʔyːbɐʃʊs","YAH-res-ü-ber-shus","B2","buch"],
+    ["Überschuss","surplus","ˈyːbɐˌʃʊs","Ü-ber-shus","B2","buch"],
+    ["Steuererklärung","surat pemberitahuan pajak","ˈʃtɔʏ̯ɐʔɛɐ̯ˌklɛːʁʊŋ","SHTOY-er-er-kleh-rung","B2","buch"],
+    ["Betriebsprüfung","pemeriksaan pajak","bəˈtʁiːpsˌpʁyːfʊŋ","be-TREEPS-prü-fung","B2","buch"],
+    ["Wirtschaftsprüfer","akuntan publik","ˈvɪʁtʃaftsˌpʁyːfɐ","VIRT-shafts-prü-fer","B2","buch"],
+    ["Prüfbericht","laporan audit","ˈpʁyːfbəˌʁɪçt","PRÜF-be-rikht","B2","buch"],
+    ["Anlagevermögen","aset tetap","ˈanlaːɡəfɛɐ̯ˌmøːɡn̩","AN-lah-ge-fer-mö-gen","B2","buch"],
+    ["Umlaufvermögen","aset lancar","ˈʊmlaʊ̯ffɛɐ̯ˌmøːɡn̩","UM-lauf-fer-mö-gen","B2","buch"],
+    ["Eigenkapital","ekuitas","ˈaɪ̯ɡn̩kapiˌtaːl","AI-gen-ka-pi-tahl","B2","buch"],
+    ["Fremdkapital","modal pinjaman","ˈfʁɛmtkapiˌtaːl","FREMT-ka-pi-tahl","B2","buch"],
+    ["Rechnungslegung","pelaporan keuangan","ˈʁɛçnʊŋsˌleːɡʊŋ","REKH-nungs-leh-gung","B2","buch"],
+    ["Gewinnermittlung","penentuan laba","ɡəˈvɪnʔɛɐ̯ˌmɪtlʊŋ","ge-VIN-er-mit-lung","B2","buch"],
+    ["Wertberichtigung","penyesuaian nilai","ˈveːɐ̯tbəˌʁɪçtɪɡʊŋ","VEHRT-be-rikh-ti-gung","B2","buch"],
+    ["Wertpapier","surat berharga","ˈveːɐ̯tpaˌpiːɐ̯","VEHRT-pa-peer","B2","buch"],
+    ["Schätzung","estimasi","ˈʃɛtsʊŋ","SHET-sung","B2","buch"],
+    ["Kostenrechnung","akuntansi biaya","ˈkɔstn̩ˌʁɛçnʊŋ","KOS-ten-rekh-nung","B2","buch"],
+    ["Deckungsbeitrag","margin kontribusi","ˈdɛkʊŋsˌbaɪ̯tʁaːk","DE-kungs-bai-trahk","B2","buch"],
+    ["Liquidität","likuiditas","likvidiˈtɛːt","lik-vi-di-TEHT","B2","buch"],
+    ["Rentabilität","profitabilitas","ʁɛntabiliˈtɛːt","ren-ta-bi-li-TEHT","B2","buch"],
+    ["Abschlussbuchung","jurnal penutup","ˈapʃlʊsˌbuːxʊŋ","AP-shlus-boo-khung","B2","buch"],
+    ["Kontenrahmen","bagan akun","ˈkɔntn̩ˌʁaːmən","KON-ten-rah-men","B2","buch"],
+    ["Inventur","stok opname","ɪnvɛnˈtuːɐ̯","in-ven-TOOR","B2","buch"],
+    ["Lohnbuchhaltung","akuntansi penggajian","ˈloːnbuːxˌhaltʊŋ","LOHN-bookh-hal-tung","B2","buch"],
+    ["Vorsteuer","pajak masukan","ˈfoːɐ̯ˌʃtɔʏ̯ɐ","FOHR-shtoy-er","B2","buch"],
+    ["Körperschaftsteuer","pajak penghasilan badan","ˈkœʁpɐʃaftsˌʃtɔʏ̯ɐ","KÖR-per-shafts-shtoy-er","B2","buch"],
+    ["Gewerbesteuer","pajak usaha daerah","ɡəˈvɛʁbəˌʃtɔʏ̯ɐ","ge-VER-be-shtoy-er","B2","buch"],
+    ["Zahlungsfähigkeit","kemampuan membayar","ˈtsaːlʊŋsˌfɛːɪçkaɪ̯t","TSAH-lungs-feh-ikh-kait","B2","buch"],
+    ["Geschäftsvorfall","transaksi usaha","ɡəˈʃɛftsˌfoːɐ̯fal","ge-SHEFTS-fohr-fal","B2","buch"],
+    ["Aufwendungen","beban","ˈaʊ̯fvɛndʊŋən","AUF-ven-dung-en","B2","buch"],
+    ["Erträge","pendapatan","ɛɐ̯ˈtʁɛːɡə","er-TREH-ge","B2","buch"],
+    ["Rückgang","penurunan","ˈʁʏkˌɡaŋ","RÜK-gang","B2","buch"],
+    ["Zuwachs","pertumbuhan","ˈtsuːvaks","TSOO-vaks","B2","buch"],
+    ["Verpflichtung","kewajiban","fɛɐ̯ˈpflɪçtʊŋ","fer-PFLIKH-tung","B2","buch"],
+    ["Grundsätze","prinsip-prinsip","ˈɡʁʊntˌzɛtsə","GRUNT-zet-se","B2","buch"],
+    ["Verordnung","peraturan","fɛɐ̯ˈʔɔʁdnʊŋ","fer-ORD-nung","B2","amt"],
+    ["Genehmigung","persetujuan resmi","ɡəˈneːmɪɡʊŋ","ge-NEH-mi-gung","B2","amt"],
+    ["Zuständigkeit","kewenangan","ˈtsuːʃtɛndɪçkaɪ̯t","TSOO-shten-dikh-kait","B2","amt"],
+
+    ["Ordnungsmäßigkeit","kepatuhan formal pembukuan","ˈɔʁdnʊŋsˌmɛːsɪçkaɪ̯t","ORD-nungs-meh-sikh-kait","C1","buch"],
+    ["Periodenabgrenzung","pemisahan periode akrual","peˈʁi̯oːdn̩ʔapˌɡʁɛntsʊŋ","pe-RYOH-den-ap-gren-tsung","C1","buch"],
+    ["Wesentlichkeit","materialitas","ˈveːzn̩tlɪçkaɪ̯t","VEH-zent-likh-kait","C1","buch"],
+    ["Wirtschaftsprüfung","audit laporan keuangan","ˈvɪʁtʃaftsˌpʁyːfʊŋ","VIRT-shafts-prü-fung","C1","buch"],
+    ["Vermögensgegenstand","aset / pos harta","fɛɐ̯ˈmøːɡn̩sˌɡeːɡn̩ʃtant","fer-MÖ-gens-geh-gen-shtant","C1","buch"],
+    ["Gewinnverwendung","distribusi laba","ɡəˈvɪnfɛɐ̯ˌvɛndʊŋ","ge-VIN-fer-ven-dung","C1","buch"],
+    ["Bewertungsmaßstab","dasar penilaian","bəˈveːɐ̯tʊŋsˌmaːsʃtaːp","be-VEHR-tungs-mahs-shtahp","C1","buch"],
+    ["Bilanzierungspflicht","kewajiban menyusun neraca","bilanˈtsiːʁʊŋsˌpflɪçt","bi-lan-TSEE-rungs-pflikht","C1","buch"],
+    ["Konzernabschluss","laporan konsolidasi","kɔnˈtsɛʁnˌʔapʃlʊs","kon-TSERN-ap-shlus","C1","buch"],
+    ["Anhangangaben","catatan atas laporan keuangan","ˈanhaŋˌʔanɡaːbn̩","AN-hang-an-gah-ben","C1","buch"],
+    ["Lagebericht","laporan manajemen","ˈlaːɡəbəˌʁɪçt","LAH-ge-be-rikht","C1","buch"],
+    ["Offenlegungspflicht","kewajiban publikasi","ˈɔfn̩leːɡʊŋsˌpflɪçt","O-fen-leh-gungs-pflikht","C1","buch"],
+    ["Steuerhinterziehung","penggelapan pajak","ˈʃtɔʏ̯ɐhɪntɐˌtsiːʊŋ","SHTOY-er-hin-ter-tsee-ung","C1","buch"],
+    ["Zuverlässigkeit","keandalan informasi","ˈtsuːfɛɐ̯ˌlɛsɪçkaɪ̯t","TSOO-fer-le-sikh-kait","C1","buch"],
+    ["Nachvollziehbarkeit","keterlacakan","ˈnaːxfɔlˌtsiːbaːɐ̯kaɪ̯t","NAHKH-fol-tsee-bahr-kait","C1","buch"],
+    ["Abschlussprüfer","auditor laporan keuangan","ˈapʃlʊsˌpʁyːfɐ","AP-shlus-prü-fer","C1","buch"],
+    ["Unabhängigkeit","independensi auditor","ˈʊnʔapˌhɛŋɪçkaɪ̯t","UN-ap-heng-ikh-kait","C1","buch"],
+    ["Sorgfaltspflicht","kewajiban kehati-hatian","ˈzɔʁkfaltsˌpflɪçt","ZORK-falts-pflikht","C1","buch"],
+    ["Gewährleistung","jaminan / garansi","ɡəˈvɛːɐ̯ˌlaɪ̯stʊŋ","ge-VEHR-lais-tung","C1","buch"],
+    ["Zahlungsunfähigkeit","insolvensi","ˈtsaːlʊŋsʔʊnˌfɛːɪçkaɪ̯t","TSAH-lungs-un-feh-ikh-kait","C1","buch"],
+    ["Insolvenzverfahren","proses kepailitan","ɪnzɔlˈvɛntsfɛɐ̯ˌfaːʁən","in-zol-VENTS-fer-fah-ren","C1","buch"],
+    ["Vermögenslage","posisi keuangan","fɛɐ̯ˈmøːɡn̩sˌlaːɡə","fer-MÖ-gens-lah-ge","C1","buch"],
+    ["Ertragslage","kinerja laba","ɛɐ̯ˈtʁaːksˌlaːɡə","er-TRAHKS-lah-ge","C1","buch"],
+    ["Geschäftstätigkeit","kegiatan usaha","ɡəˈʃɛftsˌtɛːtɪçkaɪ̯t","ge-SHEFTS-teh-tikh-kait","C1","buch"],
+    ["Rückstellungsbildung","pembentukan cadangan","ˈʁʏkʃtɛlʊŋsˌbɪldʊŋ","RÜK-shte-lungs-bil-dung","C1","buch"],
+    ["Wertaufholung","pemulihan nilai aset","ˈveːɐ̯tʔaʊ̯fˌhoːlʊŋ","VEHRT-auf-hoh-lung","C1","buch"],
+    ["Außenprüfung","pemeriksaan lapangan pajak","ˈaʊ̯sn̩ˌpʁyːfʊŋ","AU-sen-prü-fung","C1","buch"],
+    ["Gewinnrücklage","cadangan laba ditahan","ɡəˈvɪnˌʁʏklaːɡə","ge-VIN-rük-lah-ge","C1","buch"],
+    ["Geschäftsbericht","laporan tahunan perusahaan","ɡəˈʃɛftsbəˌʁɪçt","ge-SHEFTS-be-rikht","C1","buch"],
+    ["Erlösschmälerung","potongan penjualan","ɛɐ̯ˈløːsʃmɛːləʁʊŋ","er-LÖS-shmeh-le-rung","C1","buch"],
+    ["Vollständigkeit","kelengkapan pencatatan","ˈfɔlʃtɛndɪçkaɪ̯t","FOL-shten-dikh-kait","C1","buch"],
+    ["Rechtsvorschrift","ketentuan hukum","ˈʁɛçtsˌfoːɐ̯ʃʁɪft","REKHTS-fohr-shrift","C1","amt"],
+    ["Verhältnismäßigkeit","asas proporsionalitas","fɛɐ̯ˈhɛltnɪsˌmɛːsɪçkaɪ̯t","fer-HELT-nis-meh-sikh-kait","C1","amt"],
+
+    ["Vater","ayah","ˈfaːtɐ","FAH-ter","A1","alltag"],
+    ["Mutter","ibu","ˈmʊtɐ","MU-ter","A1","alltag"],
+    ["Bruder","saudara laki-laki","ˈbʁuːdɐ","BROO-der","A1","alltag"],
+    ["Schwester","saudara perempuan","ˈʃvɛstɐ","SHVES-ter","A1","alltag"],
+    ["Kind","anak","kɪnt","KINT","A1","alltag"],
+    ["Mädchen","anak perempuan","ˈmɛːtçən","MEHT-khen","A1","alltag"],
+    ["Junge","anak laki-laki","ˈjʊŋə","YUNG-e","A1","alltag"],
+    ["Frau","perempuan / nyonya","fʁaʊ̯","FRAU","A1","alltag"],
+    ["Mann","laki-laki","man","MAN","A1","alltag"],
+    ["Wetter","cuaca","ˈvɛtɐ","VE-ter","A1","alltag"],
+    ["Sonne","matahari","ˈzɔnə","ZO-ne","A1","alltag"],
+    ["Regen","hujan","ˈʁeːɡn̩","REH-gen","A1","alltag"],
+    ["Winter","musim dingin","ˈvɪntɐ","VIN-ter","A1","alltag"],
+    ["Sommer","musim panas","ˈzɔmɐ","ZO-mer","A1","alltag"],
+    ["Herbst","musim gugur","hɛʁpst","HERPST","A1","alltag"],
+    ["Frühling","musim semi","ˈfʁyːlɪŋ","FRÜ-ling","A1","alltag"],
+    ["Morgen","pagi","ˈmɔʁɡn̩","MOR-gen","A1","alltag"],
+    ["Abend","sore / petang","ˈaːbm̩t","AH-bent","A1","alltag"],
+    ["Nacht","malam","naxt","NAKHT","A1","alltag"],
+    ["Tag","hari","taːk","TAHK","A1","alltag"],
+    ["Uhr","jam (alat)","uːɐ̯","OOR","A1","alltag"],
+    ["Zeit","waktu","tsaɪ̯t","TSAIT","A1","alltag"],
+    ["Essen","makanan","ˈɛsn̩","E-sen","A1","alltag"],
+    ["Milch","susu","mɪlç","MILKH","A1","alltag"],
+    ["Zucker","gula","ˈtsʊkɐ","TSU-ker","A1","alltag"],
+    ["Salz","garam","zalts","ZALTS","A1","alltag"],
+    ["Öl","minyak","øːl","ÖL","A1","alltag"],
+    ["Apfel","apel","ˈapfl̩","AP-fel","A1","alltag"],
+    ["Fleisch","daging","flaɪ̯ʃ","FLAISH","A1","alltag"],
+    ["Suppe","sup","ˈzʊpə","ZU-pe","A1","alltag"],
+    ["Teller","piring","ˈtɛlɐ","TE-ler","A1","alltag"],
+    ["Löffel","sendok","ˈlœfl̩","LÖ-fel","A1","alltag"],
+    ["Gabel","garpu","ˈɡaːbl̩","GAH-bel","A1","alltag"],
+    ["Messer","pisau","ˈmɛsɐ","ME-ser","A1","alltag"],
+    ["Fenster","jendela","ˈfɛnstɐ","FENS-ter","A1","alltag"],
+    ["Bett","tempat tidur","bɛt","BET","A1","alltag"],
+    ["Schrank","lemari","ʃʁaŋk","SHRANK","A1","alltag"],
+    ["Kleidung","pakaian","ˈklaɪ̯dʊŋ","KLAI-dung","A1","alltag"],
+    ["Schuhe","sepatu","ˈʃuːə","SHOO-e","A1","alltag"],
+    ["Hemd","kemeja","hɛmt","HEMT","A1","alltag"],
+    ["Hose","celana","ˈhoːzə","HOH-ze","A1","alltag"],
+    ["Tasche","tas","ˈtaʃə","TA-she","A1","alltag"],
+    ["Auto","mobil","ˈaʊ̯to","AU-to","A1","alltag"],
+    ["Zug","kereta","tsuːk","TSOOK","A1","alltag"],
+    ["Fahrrad","sepeda","ˈfaːɐ̯ˌʁaːt","FAHR-raht","A1","alltag"],
+    ["Arzt","dokter","aːɐ̯tst","AHRTST","A1","gesund"],
+    ["Apotheke","apotek","apoˈteːkə","a-po-TEH-ke","A1","gesund"],
+    ["Krankenhaus","rumah sakit","ˈkʁaŋkn̩ˌhaʊ̯s","KRANG-ken-haus","A1","gesund"],
+    ["Nachbar","tetangga","ˈnaːxbaːɐ̯","NAHKH-bahr","A1","wohnen"],
+    ["Hilfe","bantuan","ˈhɪlfə","HIL-fe","A1","alltag"],
+
+    ["Rechner","kalkulator / komputer","ˈʁɛçnɐ","REKH-ner","A2","buero"],
+    ["Drucker","printer","ˈdʁʊkɐ","DRU-ker","A2","buero"],
+    ["Schreibtisch","meja kerja","ˈʃʁaɪ̯pˌtɪʃ","SHRAIP-tish","A2","buero"],
+    ["Bericht","laporan","bəˈʁɪçt","be-RIKHT","A2","buero"],
+    ["Notiz","catatan","noˈtiːts","no-TEETS","A2","buero"],
+    ["Nachricht","pesan / berita","ˈnaːxˌʁɪçt","NAHKH-rikht","A2","buero"],
+    ["Anruf","panggilan telepon","ˈanˌʁuːf","AN-roof","A2","buero"],
+    ["Auftrag","pesanan / penugasan","ˈaʊ̯fˌtʁaːk","AUF-trahk","A2","buero"],
+    ["Lieferung","pengiriman","ˈliːfəʁʊŋ","LEE-fe-rung","A2","buch"],
+    ["Lieferant","pemasok","lifəˈʁant","li-fe-RANT","A2","buch"],
+    ["Lager","gudang / persediaan","ˈlaːɡɐ","LAH-ger","A2","buch"],
+    ["Bestellung","pemesanan","bəˈʃtɛlʊŋ","be-SHTE-lung","A2","buch"],
+    ["Angebot","penawaran","ˈanɡəˌboːt","AN-ge-boht","A2","buch"],
+    ["Rabatt","diskon","ʁaˈbat","ra-BAT","A2","buch"],
+    ["Skonto","potongan tunai","ˈskɔnto","SKON-to","A2","buch"],
+    ["Währung","mata uang","ˈvɛːʁʊŋ","VEH-rung","A2","buch"],
+    ["Guthaben","saldo positif","ˈɡuːtˌhaːbm̩","GOOT-hah-ben","A2","buch"],
+    ["Schulden","utang","ˈʃʊldn̩","SHUL-den","A2","buch"],
+    ["Kredit","kredit","kʁeˈdiːt","kre-DEET","A2","buch"],
+    ["Darlehen","pinjaman","ˈdaːɐ̯ˌleːən","DAHR-leh-en","A2","buch"],
+    ["Zinsen","bunga","ˈtsɪnzn̩","TSIN-zen","A2","buch"],
+    ["Steuerberater","konsultan pajak","ˈʃtɔʏ̯ɐbəˌʁaːtɐ","SHTOY-er-be-rah-ter","A2","buch"],
+    ["Finanzamt","kantor pajak","fiˈnantsʔamt","fi-NANTS-amt","A2","amt"],
+    ["Rathaus","balai kota","ˈʁaːtˌhaʊ̯s","RAHT-haus","A2","amt"],
+    ["Öffnungszeiten","jam buka","ˈœfnʊŋsˌtsaɪ̯tn̩","ÖF-nungs-tsai-ten","A2","amt"],
+    ["Antwort","jawaban","ˈantvɔʁt","ANT-vort","A2","alltag"],
+    ["Frage","pertanyaan","ˈfʁaːɡə","FRAH-ge","A2","alltag"],
+    ["Entschuldigung","permohonan maaf","ɛntˈʃʊldɪɡʊŋ","ent-SHUL-di-gung","A2","alltag"],
+    ["Vertrauen","kepercayaan","fɛɐ̯ˈtʁaʊ̯ən","fer-TRAU-en","A2","beruf"],
+    ["Ziel","tujuan","tsiːl","TSEEL","A2","beruf"],
+    ["Aufgabe","tugas","ˈaʊ̯fˌɡaːbə","AUF-gah-be","A2","beruf"],
+    ["Lösung","solusi","ˈløːzʊŋ","LÖ-zung","A2","beruf"],
+    ["Änderung","perubahan","ˈɛndəʁʊŋ","EN-de-rung","A2","beruf"],
+    ["Verbesserung","perbaikan","fɛɐ̯ˈbɛsəʁʊŋ","fer-BE-se-rung","A2","beruf"],
+    ["Ausnahme","pengecualian","ˈaʊ̯sˌnaːmə","AUS-nah-me","A2","beruf"],
+    ["Überstunden","lembur","ˈyːbɐˌʃtʊndn̩","Ü-ber-shtun-den","A2","beruf"],
+    ["Urlaub","cuti","ˈuːɐ̯laʊ̯p","OOR-laup","A2","beruf"],
+    ["Arbeitszeit","jam kerja","ˈaʁbaɪ̯tsˌtsaɪ̯t","AR-baits-tsait","A2","beruf"],
+    ["Wechsel","pergantian / wesel","ˈvɛksl̩","VEK-sel","A2","buch"],
+
+    ["Praktikum","magang","ˈpʁaktikʊm","PRAK-ti-kum","B1","beruf"],
+    ["Zeugnis","ijazah / surat keterangan","ˈtsɔʏ̯knɪs","TSOYK-nis","B1","beruf"],
+    ["Abschluss","kelulusan / penutupan","ˈapʃlʊs","AP-shlus","B1","beruf"],
+    ["Anschreiben","surat pengantar lamaran","ˈanˌʃʁaɪ̯bm̩","AN-shrai-ben","B1","beruf"],
+    ["Fachkraft","tenaga ahli","ˈfaxˌkʁaft","FAKH-kraft","B1","beruf"],
+    ["Betrieb","perusahaan tempat pelatihan","bəˈtʁiːp","be-TREEP","B1","beruf"],
+    ["Ausbilder","pembimbing pelatihan","ˈaʊ̯sˌbɪldɐ","AUS-bil-der","B1","beruf"],
+    ["Tätigkeit","aktivitas kerja","ˈtɛːtɪçkaɪ̯t","TEH-tikh-kait","B1","beruf"],
+    ["Verantwortung","tanggung jawab","fɛɐ̯ˈʔantvɔʁtʊŋ","fer-ANT-vor-tung","B1","beruf"],
+    ["Anforderung","persyaratan","ˈanfɔʁdəʁʊŋ","AN-for-de-rung","B1","beruf"],
+    ["Voraussetzung","prasyarat","foˈʁaʊ̯sˌzɛtsʊŋ","fo-RAUS-zet-sung","B1","beruf"],
+    ["Bedingung","syarat","bəˈdɪŋʊŋ","be-DING-ung","B1","beruf"],
+    ["Weiterbildung","pendidikan lanjutan","ˈvaɪ̯tɐˌbɪldʊŋ","VAI-ter-bil-dung","B1","beruf"],
+    ["Probezeit","masa percobaan","ˈpʁoːbəˌtsaɪ̯t","PROH-be-tsait","B1","beruf"],
+    ["Gehaltsabrechnung","slip gaji","ɡəˈhaltsʔapˌʁɛçnʊŋ","ge-HALTS-ap-rekh-nung","B1","buch"],
+    ["Lohnsteuer","pajak penghasilan gaji","ˈloːnˌʃtɔʏ̯ɐ","LOHN-shtoy-er","B1","buch"],
+    ["Beitrag","iuran / kontribusi","ˈbaɪ̯ˌtʁaːk","BAI-trahk","B1","buch"],
+    ["Rentenversicherung","asuransi pensiun","ˈʁɛntn̩fɛɐ̯ˌzɪçəʁʊŋ","REN-ten-fer-zi-khe-rung","B1","amt"],
+    ["Arbeitslosigkeit","pengangguran","ˈaʁbaɪ̯tsˌloːzɪçkaɪ̯t","AR-baits-loh-zikh-kait","B1","amt"],
+    ["Aufenthaltstitel","dokumen izin tinggal","ˈaʊ̯fʔɛnthaltsˌtiːtl̩","AUF-ent-halts-tee-tel","B1","amt"],
+    ["Niederlassungserlaubnis","izin tinggal permanen","ˈniːdɐlasʊŋsʔɛɐ̯ˌlaʊ̯pnɪs","NEE-der-la-sungs-er-laup-nis","B1","amt"],
+    ["Einbürgerung","naturalisasi","ˈaɪ̯nˌbʏʁɡəʁʊŋ","AIN-bür-ge-rung","B1","amt"],
+    ["Staatsangehörigkeit","kewarganegaraan","ˈʃtaːtsʔanɡəˌhøːʁɪçkaɪ̯t","SHTAHTS-an-ge-hö-rikh-kait","B1","amt"],
+    ["Antragsteller","pemohon","ˈantʁaːkˌʃtɛlɐ","AN-trahk-shte-ler","B1","amt"],
+    ["Vollmacht","surat kuasa","ˈfɔlˌmaxt","FOL-makht","B1","amt"],
+    ["Beglaubigung","legalisasi dokumen","bəˈɡlaʊ̯bɪɡʊŋ","be-GLAU-bi-gung","B1","amt"],
+    ["Übersetzung","terjemahan","ˌyːbɐˈzɛtsʊŋ","ü-ber-ZET-sung","B1","amt"],
+    ["Anerkennung","pengakuan kualifikasi","ˈanʔɛɐ̯ˌkɛnʊŋ","AN-er-ke-nung","B1","amt"],
+    ["Gleichwertigkeit","kesetaraan kualifikasi","ˈɡlaɪ̯çˌveːɐ̯tɪçkaɪ̯t","GLAIKH-vehr-tikh-kait","B1","amt"],
+    ["Einwohnermeldeamt","kantor catatan penduduk","ˈaɪ̯nvoːnɐˌmɛldəʔamt","AIN-voh-ner-mel-de-amt","B1","amt"],
+    ["Buchungssatz","ayat jurnal","ˈbuːxʊŋsˌzats","BOO-khungs-zats","B1","buch"],
+    ["Soll","debit","zɔl","ZOL","B1","buch"],
+    ["Haben","kredit","ˈhaːbm̩","HAH-ben","B1","buch"],
+    ["Saldo","saldo","ˈzaldo","ZAL-do","B1","buch"],
+    ["Abstimmung","rekonsiliasi","ˈapˌʃtɪmʊŋ","AP-shti-mung","B1","buch"],
+    ["Nachbuchung","jurnal koreksi","ˈnaːxˌbuːxʊŋ","NAHKH-boo-khung","B1","buch"],
+    ["Storno","pembatalan jurnal","ˈʃtɔʁno","SHTOR-no","B1","buch"],
+    ["Zahlungsziel","tenggat pembayaran","ˈtsaːlʊŋsˌtsiːl","TSAH-lungs-tseel","B1","buch"],
+    ["Aufbewahrungsfrist","masa penyimpanan dokumen","ˈaʊ̯fbəvaːʁʊŋsˌfʁɪst","AUF-be-vah-rungs-frist","B1","buch"],
+    ["Bußgeld","denda administratif","ˈbuːsˌɡɛlt","BOOS-gelt","B1","amt"],
+
+    ["Gewinnverteilung","pembagian laba","ɡəˈvɪnfɛɐ̯ˌtaɪ̯lʊŋ","ge-VIN-fer-tai-lung","B2","buch"],
+    ["Handelsbilanz","neraca komersial","ˈhandl̩sbiˌlants","HAN-dels-bi-lants","B2","buch"],
+    ["Steuerbilanz","neraca fiskal","ˈʃtɔʏ̯ɐbiˌlants","SHTOY-er-bi-lants","B2","buch"],
+    ["Anschaffungskosten","harga perolehan","ˈanʃafʊŋsˌkɔstn̩","AN-sha-fungs-kos-ten","B2","buch"],
+    ["Herstellungskosten","biaya produksi","ˈheːɐ̯ʃtɛlʊŋsˌkɔstn̩","HEHR-shte-lungs-kos-ten","B2","buch"],
+    ["Nutzungsdauer","masa manfaat aset","ˈnʊtsʊŋsˌdaʊ̯ɐ","NUT-sungs-dau-er","B2","buch"],
+    ["Restbuchwert","nilai buku sisa","ˈʁɛstbuːxˌveːɐ̯t","REST-bookh-vehrt","B2","buch"],
+    ["Zeitwert","nilai wajar","ˈtsaɪ̯tˌveːɐ̯t","TSAIT-vehrt","B2","buch"],
+    ["Niederstwertprinzip","prinsip nilai terendah","ˈniːdɐstveːɐ̯tpʁɪnˌtsiːp","NEE-derst-vehrt-prin-tseep","B2","buch"],
+    ["Vorsichtsprinzip","prinsip kehati-hatian","ˈfoːɐ̯zɪçtspʁɪnˌtsiːp","FOHR-zikhts-prin-tseep","B2","buch"],
+    ["Bewertung","penilaian","bəˈveːɐ̯tʊŋ","be-VEHR-tung","B2","buch"],
+    ["Gliederung","struktur penyajian","ˈɡliːdəʁʊŋ","GLEE-de-rung","B2","buch"],
+    ["Kontierung","pengkodean akun","kɔnˈtiːʁʊŋ","kon-TEE-rung","B2","buch"],
+    ["Belegprüfung","pemeriksaan bukti","ˈbeːleːkˌpʁyːfʊŋ","BEH-lehk-prü-fung","B2","buch"],
+    ["Stichprobe","sampel uji","ˈʃtɪçˌpʁoːbə","SHTIKH-proh-be","B2","buch"],
+    ["Prüfungshandlung","prosedur audit","ˈpʁyːfʊŋsˌhandlʊŋ","PRÜ-fungs-hand-lung","B2","buch"],
+    ["Feststellung","temuan","ˈfɛstˌʃtɛlʊŋ","FEST-shte-lung","B2","buch"],
+    ["Beanstandung","keberatan / teguran","bəˈʔanˌʃtandʊŋ","be-AN-shtan-dung","B2","buch"],
+    ["Nachweispflicht","kewajiban pembuktian","ˈnaːxvaɪ̯sˌpflɪçt","NAHKH-vais-pflikht","B2","buch"],
+    ["Kapitalgesellschaft","perseroan modal","kapiˈtaːlɡəˌzɛlʃaft","ka-pi-TAHL-ge-zel-shaft","B2","buch"],
+    ["Personengesellschaft","persekutuan","pɛʁˈzoːnənɡəˌzɛlʃaft","per-ZOH-nen-ge-zel-shaft","B2","buch"],
+    ["Gesellschafter","pemegang saham / sekutu","ɡəˈzɛlʃaftɐ","ge-ZEL-shaf-ter","B2","buch"],
+    ["Einlage","setoran modal","ˈaɪ̯nˌlaːɡə","AIN-lah-ge","B2","buch"],
+    ["Entnahme","penarikan modal","ɛntˈnaːmə","ent-NAH-me","B2","buch"],
+    ["Ausschüttung","pembagian dividen","ˈaʊ̯sˌʃʏtʊŋ","AUS-shü-tung","B2","buch"],
+    ["Verlustvortrag","kerugian dibawa ke depan","fɛɐ̯ˈlʊstˌfoːɐ̯tʁaːk","fer-LUST-fohr-trahk","B2","buch"],
+    ["Abgrenzung","pemisahan periode","ˈapˌɡʁɛntsʊŋ","AP-gren-tsung","B2","buch"],
+    ["Zuführung","penambahan cadangan","ˈtsuːˌfyːʁʊŋ","TSOO-fü-rung","B2","buch"],
+    ["Auflösung","pembubaran / pelepasan","ˈaʊ̯fˌløːzʊŋ","AUF-lö-zung","B2","buch"],
+    ["Kennzahl","rasio / indikator","ˈkɛnˌtsaːl","KEN-tsahl","B2","buch"],
+    ["Auswertung","analisis hasil","ˈaʊ̯sˌveːɐ̯tʊŋ","AUS-vehr-tung","B2","buch"],
+    ["Hochrechnung","ekstrapolasi","ˈhoːxˌʁɛçnʊŋ","HOHKH-rekh-nung","B2","buch"],
+    ["Zahlungsverkehr","lalu lintas pembayaran","ˈtsaːlʊŋsfɛɐ̯ˌkeːɐ̯","TSAH-lungs-fer-kehr","B2","buch"],
+    ["Mahnverfahren","proses penagihan resmi","ˈmaːnfɛɐ̯ˌfaːʁən","MAHN-fer-fah-ren","B2","buch"],
+    ["Verjährung","kedaluwarsa","fɛɐ̯ˈjɛːʁʊŋ","fer-YEH-rung","B2","buch"],
+    ["Bürgschaft","jaminan penanggungan","ˈbʏʁkʃaft","BÜRK-shaft","B2","buch"],
+    ["Pfändung","penyitaan","ˈpfɛndʊŋ","PFEN-dung","B2","buch"],
+    ["Steuerpflicht","kewajiban pajak","ˈʃtɔʏ̯ɐˌpflɪçt","SHTOY-er-pflikht","B2","buch"],
+    ["Widerspruch","keberatan resmi","ˈviːdɐˌʃpʁʊx","VEE-der-shprukh","B2","amt"],
+    ["Bekanntmachung","pengumuman resmi","bəˈkantˌmaxʊŋ","be-KANT-ma-khung","B2","amt"],
+
+    ["Grundsatzentscheidung","keputusan prinsip","ˈɡʁʊntzatsʔɛntˌʃaɪ̯dʊŋ","GRUNT-zats-ent-shai-dung","C1","buch"],
+    ["Bilanzstichtag","tanggal neraca","biˈlantsˌʃtɪçtaːk","bi-LANTS-shtikh-tahk","C1","buch"],
+    ["Fortführungsprinzip","asas kelangsungan usaha","ˈfɔʁtfyːʁʊŋspʁɪnˌtsiːp","FORT-fü-rungs-prin-tseep","C1","buch"],
+    ["Einzelbewertung","penilaian individual","ˈaɪ̯ntsl̩bəˌveːɐ̯tʊŋ","AIN-tsel-be-vehr-tung","C1","buch"],
+    ["Stetigkeitsgrundsatz","asas konsistensi","ˈʃteːtɪçkaɪ̯tsˌɡʁʊntzats","SHTEH-tikh-kaits-grunt-zats","C1","buch"],
+    ["Saldierungsverbot","larangan saling hapus","zalˈdiːʁʊŋsfɛɐ̯ˌboːt","zal-DEE-rungs-fer-boht","C1","buch"],
+    ["Verlustabzug","pengurangan kerugian fiskal","fɛɐ̯ˈlʊstˌʔaptsuːk","fer-LUST-ap-tsook","C1","buch"],
+    ["Steuervergünstigung","insentif pajak","ˈʃtɔʏ̯ɐfɛɐ̯ˌɡʏnstɪɡʊŋ","SHTOY-er-fer-güns-ti-gung","C1","buch"],
+    ["Betriebsvermögen","harta perusahaan","bəˈtʁiːpsfɛɐ̯ˌmøːɡn̩","be-TREEPS-fer-mö-gen","C1","buch"],
+    ["Gewinnabführung","penyerahan laba ke induk","ɡəˈvɪnʔapˌfyːʁʊŋ","ge-VIN-ap-fü-rung","C1","buch"],
+    ["Rückwirkung","keberlakuan surut","ˈʁʏkˌvɪʁkʊŋ","RÜK-vir-kung","C1","buch"],
+    ["Rechnungsabgrenzungsposten","pos akrual / tangguhan","ˈʁɛçnʊŋsʔapɡʁɛntsʊŋsˌpɔstn̩","REKH-nungs-ap-gren-tsungs-pos-ten","C1","buch"],
+    ["Wirtschaftlichkeit","efisiensi ekonomis","ˈvɪʁtʃaftlɪçkaɪ̯t","VIRT-shaft-likh-kait","C1","buch"],
+    ["Verhältniszahl","angka rasio","fɛɐ̯ˈhɛltnɪsˌtsaːl","fer-HELT-nis-tsahl","C1","buch"],
+    ["Risikovorsorge","mitigasi risiko","ˈʁiːzikofoːɐ̯ˌzɔʁɡə","REE-zi-ko-fohr-zor-ge","C1","buch"],
+    ["Interessenkonflikt","konflik kepentingan","ɪntəˈʁɛsn̩kɔnˌflɪkt","in-te-RE-sen-kon-flikt","C1","buch"],
+    ["Berufsgeheimnis","kerahasiaan profesi","bəˈʁuːfsɡəˌhaɪ̯mnɪs","be-ROOFS-ge-haim-nis","C1","buch"],
+    ["Rechenschaftspflicht","kewajiban akuntabilitas","ˈʁɛçn̩ʃaftsˌpflɪçt","RE-khen-shafts-pflikht","C1","buch"],
+    ["Gegenüberstellung","perbandingan berdampingan","ˌɡeːɡn̩ˈyːbɐˌʃtɛlʊŋ","geh-gen-Ü-ber-shte-lung","C1","buch"],
+    ["Schlussfolgerung","kesimpulan","ˈʃlʊsˌfɔlɡəʁʊŋ","SHLUS-fol-ge-rung","C1","buch"],
+    ["Verständlichkeit","keterpahaman","fɛɐ̯ˈʃtɛntlɪçkaɪ̯t","fer-SHTENT-likh-kait","C1","buch"],
+    ["Übersichtlichkeit","kejelasan penyajian","ˌyːbɐˈzɪçtlɪçkaɪ̯t","ü-ber-ZIKHT-likh-kait","C1","buch"],
+    ["Glaubwürdigkeit","kredibilitas","ˈɡlaʊ̯pˌvʏʁdɪçkaɪ̯t","GLAUP-vür-dikh-kait","C1","buch"],
+    ["Gesetzmäßigkeit","kesesuaian dengan hukum","ɡəˈzɛtsˌmɛːsɪçkaɪ̯t","ge-ZETS-meh-sikh-kait","C1","amt"],
+    ["Ermessensspielraum","ruang pertimbangan pejabat","ɛɐ̯ˈmɛsn̩sˌʃpiːlʁaʊ̯m","er-ME-sens-shpeel-raum","C1","amt"],
+    ["Zuwiderhandlung","pelanggaran","tsuˈviːdɐˌhandlʊŋ","tsu-VEE-der-hand-lung","C1","amt"],
+    ["Vollstreckung","eksekusi / penegakan","fɔlˈʃtʁɛkʊŋ","fol-SHTRE-kung","C1","amt"],
+    ["Verwaltungsakt","keputusan administratif","fɛɐ̯ˈvaltʊŋsˌʔakt","fer-VAL-tungs-akt","C1","amt"],
+    ["Rechtsbehelf","upaya hukum","ˈʁɛçtsbəˌhɛlf","REKHTS-be-helf","C1","amt"],
+    ["Mitwirkungspflicht","kewajiban turut serta","ˈmɪtvɪʁkʊŋsˌpflɪçt","MIT-vir-kungs-pflikht","C1","amt"],
+
+    ["hören","mendengar","ˈhøːʁən","HÖ-ren","A1","alltag","V"],
+    ["können","bisa / mampu","ˈkœnən","KÖ-nen","A1","alltag","V"],
+    ["müssen","harus","ˈmʏsn̩","MÜ-sen","A1","alltag","V"],
+    ["dürfen","boleh","ˈdʏʁfn̩","DÜR-fen","A1","alltag","V"],
+    ["mögen","suka","ˈmøːɡn̩","MÖ-gen","A1","alltag","V"],
+    ["fahren","berkendara","ˈfaːʁən","FAH-ren","A1","alltag","V"],
+    ["öffnen","membuka","ˈœfnən","ÖF-nen","A1","alltag","V"],
+    ["verstehen","memahami","fɛɐ̯ˈʃteːən","fer-SHTEH-en","A1","alltag","V"],
+    ["kaufen","membeli","ˈkaʊ̯fn̩","KAU-fen","A1","buch","V"],
+    ["zahlen","membayar","ˈtsaːlən","TSAH-len","A1","buch","V"],
+    ["zählen","menghitung (mencacah)","ˈtsɛːlən","TSEH-len","A1","buch","V"],
+    ["wählen","memilih","ˈvɛːlən","VEH-len","A2","alltag","V"],
+    ["schließen","menutup","ˈʃliːsn̩","SHLEE-sen","A2","alltag","V"],
+    ["gehören","menjadi milik","ɡəˈhøːʁən","ge-HÖ-ren","A2","alltag","V"],
+    ["gefallen","menyenangkan / disukai","ɡəˈfalən","ge-FA-len","A2","alltag","V"],
+    ["erklären","menjelaskan","ɛɐ̯ˈklɛːʁən","er-KLEH-ren","A2","beruf","V"],
+    ["führen","memimpin","ˈfyːʁən","FÜ-ren","A2","beruf","V"],
+    ["prüfen","memeriksa","ˈpʁyːfn̩","PRÜ-fen","A2","buch","V"],
+    ["rechnen","berhitung","ˈʁɛçnən","REKH-nen","A2","buch","V"],
+    ["verdienen","menghasilkan uang","fɛɐ̯ˈdiːnən","fer-DEE-nen","A2","beruf","V"],
+    ["ausfüllen","mengisi formulir","ˈaʊ̯sˌfʏlən","AUS-fü-len","A2","amt","V"],
+    ["unterschreiben","menandatangani","ˌʊntɐˈʃʁaɪ̯bm̩","un-ter-SHRAI-ben","A2","amt","V"],
+    ["anmelden","mendaftarkan","ˈanˌmɛldn̩","AN-mel-den","A2","amt","V"],
+    ["wiederholen","mengulang","ˌviːdɐˈhoːlən","vee-der-HOH-len","A2","beruf","V"],
+    ["überweisen","mentransfer uang","ˌyːbɐˈvaɪ̯zn̩","ü-ber-VAI-zen","B1","buch","V"],
+    ["überprüfen","memverifikasi","ˌyːbɐˈpʁyːfn̩","ü-ber-PRÜ-fen","B1","buch","V"],
+    ["buchen","membukukan / memesan","ˈbuːxn̩","BOO-khen","B1","buch","V"],
+    ["schätzen","memperkirakan","ˈʃɛtsn̩","SHET-sen","B1","buch","V"],
+    ["erhöhen","menaikkan","ɛɐ̯ˈhøːən","er-HÖ-en","B1","buch","V"],
+    ["erstellen","menyusun","ɛɐ̯ˈʃtɛlən","er-SHTE-len","B1","buch","V"],
+    ["abschließen","menutup / menyelesaikan","ˈapˌʃliːsn̩","AP-shlee-sen","B1","buch","V"],
+    ["zurückzahlen","melunasi","tsuˈʁʏkˌtsaːlən","tsu-RÜK-tsah-len","B1","buch","V"],
+    ["ergänzen","melengkapi","ɛɐ̯ˈɡɛntsn̩","er-GEN-tsen","B1","beruf","V"],
+    ["beantragen","mengajukan permohonan","bəˈʔantʁaːɡn̩","be-AN-trah-gen","B1","amt","V"],
+    ["bestätigen","mengonfirmasi","bəˈʃtɛːtɪɡn̩","be-SHTEH-ti-gen","B1","amt","V"],
+    ["verlängern","memperpanjang","fɛɐ̯ˈlɛŋɐn","fer-LENG-ern","B1","amt","V"],
+    ["erhalten","menerima","ɛɐ̯ˈhaltn̩","er-HAL-ten","B1","amt","V"],
+    ["einreichen","menyerahkan berkas","ˈaɪ̯nˌʁaɪ̯çn̩","AIN-rai-khen","B1","amt","V"],
+    ["abmelden","mencabut pendaftaran","ˈapˌmɛldn̩","AP-mel-den","B1","amt","V"],
+    ["übersetzen","menerjemahkan","ˌyːbɐˈzɛtsn̩","ü-ber-ZET-sen","B1","amt","V"],
+    ["ablehnen","menolak","ˈapˌleːnən","AP-leh-nen","B1","amt","V"],
+    ["bewerben","melamar","bəˈvɛʁbm̩","be-VER-ben","B1","beruf","V"],
+    ["kündigen","mengundurkan diri / memutus","ˈkʏndɪɡn̩","KÜN-di-gen","B1","beruf","V"],
+    ["ausbilden","melatih","ˈaʊ̯sˌbɪldn̩","AUS-bil-den","B1","beruf","V"],
+    ["bestehen","lulus ujian","bəˈʃteːən","be-SHTEH-en","B1","beruf","V"],
+    ["verringern","mengurangi","fɛɐ̯ˈʁɪŋɐn","fer-RING-ern","B2","buch","V"],
+    ["ausgleichen","menyeimbangkan","ˈaʊ̯sˌɡlaɪ̯çn̩","AUS-glai-khen","B2","buch","V"],
+    ["abschreiben","menyusutkan","ˈapˌʃʁaɪ̯bm̩","AP-shrai-ben","B2","buch","V"],
+    ["verbuchen","mencatat dalam jurnal","fɛɐ̯ˈbuːxn̩","fer-BOO-khen","B2","buch","V"],
+    ["erfassen","mencatat / merekam","ɛɐ̯ˈfasn̩","er-FA-sen","B2","buch","V"],
+    ["nachweisen","membuktikan","ˈnaːxˌvaɪ̯zn̩","NAHKH-vai-zen","B2","buch","V"],
+    ["feststellen","menetapkan","ˈfɛstˌʃtɛlən","FEST-shte-len","B2","buch","V"],
+    ["überschreiten","melampaui batas","ˌyːbɐˈʃʁaɪ̯tn̩","ü-ber-SHRAI-ten","B2","buch","V"],
+    ["unterschreiten","berada di bawah batas","ˌʊntɐˈʃʁaɪ̯tn̩","un-ter-SHRAI-ten","B2","buch","V"],
+    ["berücksichtigen","mempertimbangkan","bəˈʁʏkzɪçtɪɡn̩","be-RÜK-zikh-ti-gen","B2","buch","V"],
+    ["begründen","memberi alasan","bəˈɡʁʏndn̩","be-GRÜN-den","B2","beruf","V"],
+    ["verfügen","menguasai / memiliki","fɛɐ̯ˈfyːɡn̩","fer-FÜ-gen","B2","amt","V"],
+    ["genehmigen","menyetujui","ɡəˈneːmɪɡn̩","ge-NEH-mi-gen","B2","amt","V"],
+    ["veröffentlichen","mempublikasikan","fɛɐ̯ˈʔœfn̩tlɪçn̩","fer-ÖF-ent-li-khen","C1","buch","V"],
+    ["gewährleisten","menjamin","ɡəˈvɛːɐ̯ˌlaɪ̯stn̩","ge-VEHR-lais-ten","C1","buch","V"],
+
+    ["schön","indah","ʃøːn","SHÖN","A1","alltag","Adj"],
+    ["größer","lebih besar","ˈɡʁøːsɐ","GRÖ-ser","A1","alltag","Adj"],
+    ["älter","lebih tua","ˈɛltɐ","EL-ter","A1","alltag","Adj"],
+    ["jünger","lebih muda","ˈjʏŋɐ","YÜNG-er","A1","alltag","Adj"],
+    ["kälter","lebih dingin","ˈkɛltɐ","KEL-ter","A1","alltag","Adj"],
+    ["wärmer","lebih hangat","ˈvɛʁmɐ","VER-mer","A1","alltag","Adj"],
+    ["möglich","mungkin","ˈmøːklɪç","MÖK-likh","A2","alltag","Adj"],
+    ["nötig","perlu","ˈnøːtɪç","NÖ-tikh","A2","alltag","Adj"],
+    ["täglich","harian","ˈtɛːklɪç","TEH-klikh","A2","alltag","Adj"],
+    ["wöchentlich","mingguan","ˈvœçn̩tlɪç","VÖ-khent-likh","A2","alltag","Adj"],
+    ["höflich","sopan","ˈhøːflɪç","HÖF-likh","A2","alltag","Adj"],
+    ["ähnlich","mirip","ˈɛːnlɪç","EHN-likh","A2","alltag","Adj"],
+    ["kostenlos","gratis","ˈkɔstn̩loːs","KOS-ten-lohs","A2","alltag","Adj"],
+    ["schwierig","sulit","ˈʃviːʁɪç","SHVEE-rikh","A2","beruf","Adj"],
+    ["günstig","murah / menguntungkan","ˈɡʏnstɪç","GÜNS-tikh","A2","buch","Adj"],
+    ["jährlich","tahunan","ˈjɛːɐ̯lɪç","YEHR-likh","A2","buch","Adj"],
+    ["monatlich","bulanan","ˈmoːnatlɪç","MOH-nat-likh","A2","buch","Adj"],
+    ["zuständig","berwenang","ˈtsuːʃtɛndɪç","TSOO-shten-dikh","B1","amt","Adj"],
+    ["gültig","berlaku","ˈɡʏltɪç","GÜL-tikh","B1","amt","Adj"],
+    ["ungültig","tidak berlaku","ˈʊnɡʏltɪç","UN-gül-tikh","B1","amt","Adj"],
+    ["verfügbar","tersedia","fɛɐ̯ˈfyːkbaːɐ̯","fer-FÜK-bahr","B1","buero","Adj"],
+    ["zusätzlich","tambahan","ˈtsuːzɛtslɪç","TSOO-zets-likh","B1","buero","Adj"],
+    ["regelmäßig","teratur","ˈʁeːɡl̩ˌmɛːsɪç","REH-gel-meh-sikh","B1","beruf","Adj"],
+    ["befristet","berjangka waktu","bəˈfʁɪstət","be-FRIS-tet","B1","beruf","Adj"],
+    ["unbefristet","tanpa batas waktu","ˈʊnbəfʁɪstət","UN-be-fris-tet","B1","beruf","Adj"],
+    ["fällig","jatuh tempo","ˈfɛlɪç","FE-likh","B1","buch","Adj"],
+    ["erforderlich","diperlukan","ɛɐ̯ˈfɔʁdɐlɪç","er-FOR-der-likh","B2","amt","Adj"],
+    ["zulässig","diperbolehkan","ˈtsuːlɛsɪç","TSOO-le-sikh","B2","amt","Adj"],
+    ["unzulässig","tidak diperbolehkan","ˈʊntsuːlɛsɪç","UN-tsoo-le-sikh","B2","amt","Adj"],
+    ["vorläufig","sementara","ˈfoːɐ̯ˌlɔʏ̯fɪç","FOHR-loy-fikh","B2","amt","Adj"],
+    ["endgültig","final","ˈɛntˌɡʏltɪç","ENT-gül-tikh","B2","amt","Adj"],
+    ["steuerpflichtig","kena pajak","ˈʃtɔʏ̯ɐˌpflɪçtɪç","SHTOY-er-pflikh-tikh","B2","buch","Adj"],
+    ["steuerfrei","bebas pajak","ˈʃtɔʏ̯ɐˌfʁaɪ̯","SHTOY-er-frai","B2","buch","Adj"],
+    ["überfällig","lewat jatuh tempo","ˌyːbɐˈfɛlɪç","ü-ber-FE-likh","B2","buch","Adj"],
+    ["wesentlich","material / penting","ˈveːzn̩tlɪç","VEH-zent-likh","B2","buch","Adj"],
+    ["unabhängig","independen","ˈʊnʔapˌhɛŋɪç","UN-ap-heng-ikh","B2","buch","Adj"],
+    ["sorgfältig","teliti","ˈzɔʁkfɛltɪç","ZORK-fel-tikh","B2","beruf","Adj"],
+    ["flüssig","likuid / lancar","ˈflʏsɪç","FLÜ-sikh","B2","buch","Adj"],
+    ["rückwirkend","berlaku surut","ˈʁʏkˌvɪʁkənt","RÜK-vir-kent","C1","buch","Adj"],
+    ["unwesentlich","tidak material","ˈʊnveːzn̩tlɪç","UN-veh-zent-likh","C1","buch","Adj"],
+    ["ordnungsgemäß","sesuai aturan","ˈɔʁdnʊŋsɡəˌmɛːs","ORD-nungs-ge-mehs","C1","buch","Adj"],
+    ["nachvollziehbar","dapat ditelusuri","ˈnaːxfɔlˌtsiːbaːɐ̯","NAHKH-fol-tsee-bahr","C1","buch","Adj"],
+    ["glaubwürdig","kredibel","ˈɡlaʊ̯pˌvʏʁdɪç","GLAUP-vür-dikh","C1","buch","Adj"],
+
+    ["Reise","perjalanan","ˈʁaɪ̯zə","RAI-ze","A1","alltag","N"],
+    ["Meinung","pendapat","ˈmaɪ̯nʊŋ","MAI-nung","A2","alltag","N"],
+    ["Gespräch","percakapan","ɡəˈʃpʁɛːç","ge-SHPREHKH","A2","alltag","N"],
+    ["Freizeit","waktu luang","ˈfʁaɪ̯ˌtsaɪ̯t","FRAI-tsait","A2","alltag","N"],
+    ["Empfänger","penerima","ɛmˈpfɛŋɐ","em-PFENG-er","A2","buch","N"],
+    ["Absender","pengirim","ˈapˌzɛndɐ","AP-zen-der","A2","buero","N"],
+    ["Mitarbeiter","karyawan","ˈmɪtʔaʁˌbaɪ̯tɐ","MIT-ar-bai-ter","A2","beruf","N"],
+    ["Umwelt","lingkungan hidup","ˈʊmvɛlt","UM-velt","B1","alltag","N"],
+    ["Umweltschutz","perlindungan lingkungan","ˈʊmvɛltˌʃʊts","UM-velt-shuts","B1","alltag","N"],
+    ["Gesellschaft","masyarakat","ɡəˈzɛlʃaft","ge-ZEL-shaft","B1","alltag","N"],
+    ["Beziehung","hubungan","bəˈtsiːʊŋ","be-TSEE-ung","B1","alltag","N"],
+    ["Gewohnheit","kebiasaan","ɡəˈvoːnhaɪ̯t","ge-VOHN-hait","B1","alltag","N"],
+    ["Ernährung","pola makan","ɛɐ̯ˈnɛːʁʊŋ","er-NEH-rung","B1","alltag","N"],
+    ["Bewegung","gerak / olahraga","bəˈveːɡʊŋ","be-VEH-gung","B1","alltag","N"],
+    ["Erholung","istirahat / pemulihan","ɛɐ̯ˈhoːlʊŋ","er-HOH-lung","B1","alltag","N"],
+    ["Unterkunft","penginapan","ˈʊntɐˌkʊnft","UN-ter-kunft","B1","alltag","N"],
+    ["Umzug","pindahan","ˈʊmˌtsuːk","UM-tsook","B1","wohnen","N"],
+    ["Nebenkosten","biaya tambahan sewa","ˈneːbm̩ˌkɔstn̩","NEH-ben-kos-ten","B1","wohnen","N"],
+    ["Kaution","uang jaminan sewa","kaʊ̯ˈtsi̯oːn","kau-TSYOHN","B1","wohnen","N"],
+    ["Mietvertrag","kontrak sewa","ˈmiːtfɛɐ̯ˌtʁaːk","MEET-fer-trahk","B1","wohnen","N"],
+    ["Stromrechnung","tagihan listrik","ˈʃtʁoːmˌʁɛçnʊŋ","SHTROHM-rekh-nung","B1","wohnen","N"],
+    ["Vorteil","keuntungan","ˈfoːɐ̯ˌtaɪ̯l","FOHR-tail","B1","alltag","N"],
+    ["Nachteil","kerugian","ˈnaːxˌtaɪ̯l","NAHKH-tail","B1","alltag","N"],
+    ["Erfolg","keberhasilan","ɛɐ̯ˈfɔlk","er-FOLK","B1","beruf","N"],
+    ["Entscheidung","keputusan","ɛntˈʃaɪ̯dʊŋ","ent-SHAI-dung","B1","beruf","N"],
+    ["Vorgesetzter","atasan","ˈfoːɐ̯ɡəˌzɛtstɐ","FOHR-ge-zets-ter","B1","beruf","N"],
+    ["Schicht","shift kerja","ʃɪçt","SHIKHT","B1","beruf","N"],
+    ["Anlage","lampiran surat","ˈanˌlaːɡə","AN-lah-ge","B1","buero","N"],
+    ["Betreff","perihal surat","bəˈtʁɛf","be-TREF","B1","buero","N"],
+    ["Kontoauszug","rekening koran","ˈkɔntoˌʔaʊ̯stsuːk","KON-to-aus-tsook","B1","buch","N"],
+    ["Dauerauftrag","perintah bayar berkala","ˈdaʊ̯ɐˌʔaʊ̯ftʁaːk","DAU-er-auf-trahk","B1","buch","N"],
+    ["Lastschrift","debit langsung","ˈlastˌʃʁɪft","LAST-shrift","B1","buch","N"],
+    ["Bankleitzahl","kode bank","ˈbaŋklaɪ̯tˌtsaːl","BANK-lait-tsahl","B1","buch","N"],
+    ["Verwendungszweck","keterangan transfer","fɛɐ̯ˈvɛndʊŋsˌtsvɛk","fer-VEN-dungs-tsvek","B1","buch","N"],
+    ["Wirtschaft","perekonomian","ˈvɪʁtʃaft","VIRT-shaft","B1","buch","N"],
+    ["Unternehmen","perusahaan","ˌʊntɐˈneːmən","un-ter-NEH-men","B1","buch","N"],
+    ["Misserfolg","kegagalan","ˈmɪsʔɛɐ̯ˌfɔlk","MIS-er-folk","B2","beruf","N"],
+    ["Bedürfnis","kebutuhan","bəˈdʏʁfnɪs","be-DÜRF-nis","B2","alltag","N"],
+    ["Rundfunkbeitrag","iuran penyiaran","ˈʁʊntfʊŋkˌbaɪ̯tʁaːk","RUNT-funk-bai-trahk","B2","amt","N"],
+    ["Gutschrift","nota kredit","ˈɡuːtˌʃʁɪft","GOOT-shrift","B2","buch","N"],
+    ["Gewerkschaft","serikat pekerja","ɡəˈvɛʁkʃaft","ge-VERK-shaft","B2","beruf","N"],
+    ["Betriebsrat","dewan pekerja","bəˈtʁiːpsˌʁaːt","be-TREEPS-raht","B2","beruf","N"],
+    ["Tarifvertrag","perjanjian kerja bersama","taˈʁiːffɛɐ̯ˌtʁaːk","ta-REEF-fer-trahk","B2","beruf","N"],
+    ["Arbeitszeugnis","surat referensi kerja","ˈaʁbaɪ̯tsˌtsɔʏ̯knɪs","AR-baits-tsoyk-nis","B2","beruf","N"],
+    ["Fortbildung","pelatihan lanjutan","ˈfɔʁtˌbɪldʊŋ","FORT-bil-dung","B2","beruf","N"],
+    ["Prüfungsordnung","peraturan ujian","ˈpʁyːfʊŋsˌʔɔʁdnʊŋ","PRÜ-fungs-ord-nung","B2","beruf","N"],
+    ["Zwischenzeugnis","rapor sementara","ˈtsvɪʃn̩ˌtsɔʏ̯knɪs","TSVI-shen-tsoyk-nis","B2","beruf","N"],
+    ["Branche","sektor industri","ˈbʁãːʃə","BRAHN-she","B2","buch","N"],
+    ["Wettbewerb","persaingan","ˈvɛtbəˌvɛʁp","VET-be-verp","B2","buch","N"],
+    ["Marktanteil","pangsa pasar","ˈmaʁktʔanˌtaɪ̯l","MARKT-an-tail","B2","buch","N"],
+    ["Nachfrage","permintaan pasar","ˈnaːxˌfʁaːɡə","NAHKH-frah-ge","B2","buch","N"],
+    ["Preiserhöhung","kenaikan harga","ˈpʁaɪ̯sʔɛɐ̯ˌhøːʊŋ","PRAIS-er-hö-ung","B2","buch","N"],
+    ["Inflation","inflasi","ɪnflaˈtsi̯oːn","in-fla-TSYOHN","B2","buch","N"],
+    ["Haftung","tanggung gugat","ˈhaftʊŋ","HAF-tung","B2","buch","N"],
+    ["Konjunktur","siklus ekonomi","kɔnjʊŋkˈtuːɐ̯","kon-yunk-TOOR","C1","buch","N"],
+
+    ["Kopf","kepala","ˈkɔpf","KOPF","A1","alltag","N"],
+    ["Auge","mata","ˈaʊ̯ɡə","AU-ge","A1","alltag","N"],
+    ["Ohr","telinga","oːɐ̯","OHR","A1","alltag","N"],
+    ["Nase","hidung","ˈnaːzə","NAH-ze","A1","alltag","N"],
+    ["Mund","mulut","mʊnt","MUNT","A1","alltag","N"],
+    ["Zahn","gigi","tsaːn","TSAHN","A1","alltag","N"],
+    ["Zähne","gigi (jamak)","ˈtsɛːnə","TSEH-ne","A1","alltag","N"],
+    ["Hand","tangan","hant","HANT","A1","alltag","N"],
+    ["Hände","tangan (jamak)","ˈhɛndə","HEN-de","A1","alltag","N"],
+    ["Fuß","kaki","fuːs","FOOS","A1","alltag","N"],
+    ["Füße","kaki (jamak)","ˈfyːsə","FÜ-se","A1","alltag","N"],
+    ["Bein","tungkai","baɪ̯n","BAIN","A1","alltag","N"],
+    ["Arm","lengan","aʁm","ARM","A1","alltag","N"],
+    ["Rücken","punggung","ˈʁʏkn̩","RÜ-ken","A1","alltag","N"],
+    ["Bauch","perut","baʊ̯x","BAUKH","A1","alltag","N"],
+    ["Herz","jantung / hati","hɛʁts","HERTS","A1","alltag","N"],
+    ["Haar","rambut","haːɐ̯","HAHR","A1","alltag","N"],
+    ["Hals","leher","hals","HALS","A1","alltag","N"],
+    ["Finger","jari","ˈfɪŋɐ","FING-er","A1","alltag","N"],
+    ["Haut","kulit","haʊ̯t","HAUT","A1","alltag","N"],
+    ["Schmerz","rasa sakit","ʃmɛʁts","SHMERTS","A1","gesund","N"],
+    ["Eltern","orang tua","ˈɛltɐn","EL-tern","A1","alltag","N"],
+    ["Großvater","kakek","ˈɡʁoːsˌfaːtɐ","GROHS-fah-ter","A1","alltag","N"],
+    ["Großmutter","nenek","ˈɡʁoːsˌmʊtɐ","GROHS-mu-ter","A1","alltag","N"],
+    ["Onkel","paman","ˈɔŋkl̩","ONG-kel","A1","alltag","N"],
+    ["Tante","bibi","ˈtantə","TAN-te","A1","alltag","N"],
+    ["Sohn","anak laki-laki","zoːn","ZOHN","A1","alltag","N"],
+    ["Söhne","anak laki-laki (jamak)","ˈzøːnə","ZÖ-ne","A1","alltag","N"],
+    ["Tochter","anak perempuan","ˈtɔxtɐ","TOKH-ter","A1","alltag","N"],
+    ["Töchter","anak perempuan (jamak)","ˈtœçtɐ","TÖKH-ter","A1","alltag","N"],
+    ["Leute","orang-orang","ˈlɔʏ̯tə","LOY-te","A1","alltag","N"],
+    ["Mensch","manusia","mɛnʃ","MENSH","A1","alltag","N"],
+    ["Bad","kamar mandi","baːt","BAHT","A1","alltag","N"],
+    ["Garten","kebun","ˈɡaʁtn̩","GAR-ten","A1","alltag","N"],
+    ["Gärten","kebun (jamak)","ˈɡɛʁtn̩","GER-ten","A1","alltag","N"],
+    ["Keller","ruang bawah tanah","ˈkɛlɐ","KE-ler","A1","alltag","N"],
+    ["Wand","dinding","vant","VANT","A1","alltag","N"],
+    ["Wände","dinding (jamak)","ˈvɛndə","VEN-de","A1","alltag","N"],
+    ["Dach","atap","dax","DAKH","A1","alltag","N"],
+    ["Dächer","atap (jamak)","ˈdɛçɐ","DE-kher","A1","alltag","N"],
+    ["Treppe","tangga","ˈtʁɛpə","TRE-pe","A1","alltag","N"],
+    ["Lampe","lampu","ˈlampə","LAM-pe","A1","alltag","N"],
+    ["Spiegel","cermin","ˈʃpiːɡl̩","SHPEE-gel","A1","alltag","N"],
+    ["Handtuch","handuk","ˈhantˌtuːx","HANT-tookh","A1","alltag","N"],
+    ["Seife","sabun","ˈzaɪ̯fə","ZAI-fe","A1","alltag","N"],
+    ["Wecker","jam weker","ˈvɛkɐ","VE-ker","A1","alltag","N"],
+    ["Reis","nasi","ʁaɪ̯s","RAIS","A1","alltag","N"],
+    ["Nudeln","mi","ˈnuːdl̩n","NOO-deln","A1","alltag","N"],
+    ["Kartoffel","kentang","kaʁˈtɔfl̩","kar-TO-fel","A1","alltag","N"],
+    ["Tomate","tomat","toˈmaːtə","to-MAH-te","A1","alltag","N"],
+    ["Zwiebel","bawang","ˈtsviːbl̩","TSVEE-bel","A1","alltag","N"],
+    ["Salat","selada / salad","zaˈlaːt","za-LAHT","A1","alltag","N"],
+    ["Obst","buah","oːpst","OHPST","A1","alltag","N"],
+    ["Banane","pisang","baˈnaːnə","ba-NAH-ne","A1","alltag","N"],
+    ["Butter","mentega","ˈbʊtɐ","BU-ter","A1","alltag","N"],
+    ["Honig","madu","ˈhoːnɪç","HOH-nikh","A1","alltag","N"],
+    ["Kuchen","kue","ˈkuːxn̩","KOO-khen","A1","alltag","N"],
+    ["Kaffee","kopi","ˈkafe","KA-fe","A1","alltag","N"],
+    ["Saft","jus","zaft","ZAFT","A1","alltag","N"],
+    ["Getränke","minuman (jamak)","ɡəˈtʁɛŋkə","ge-TRENG-ke","A1","alltag","N"],
+    ["Jacke","jaket","ˈjakə","YA-ke","A1","alltag","N"],
+    ["Mantel","mantel","ˈmantl̩","MAN-tel","A1","alltag","N"],
+    ["Mäntel","mantel (jamak)","ˈmɛntl̩","MEN-tel","A1","alltag","N"],
+    ["Kleid","gaun","klaɪ̯t","KLAIT","A1","alltag","N"],
+    ["Socken","kaus kaki","ˈzɔkn̩","ZO-ken","A1","alltag","N"],
+    ["Mütze","topi rajut","ˈmʏtsə","MÜ-tse","A1","alltag","N"],
+    ["Handschuhe","sarung tangan","ˈhantˌʃuːə","HANT-shoo-e","A1","alltag","N"],
+    ["Gürtel","ikat pinggang","ˈɡʏʁtl̩","GÜR-tel","A1","alltag","N"],
+    ["Brille","kacamata","ˈbʁɪlə","BRI-le","A1","alltag","N"],
+    ["Bus","bus","bʊs","BUS","A1","alltag","N"],
+    ["Haltestelle","halte","ˈhaltəˌʃtɛlə","HAL-te-shte-le","A1","alltag","N"],
+    ["Straßenbahn","trem","ˈʃtʁaːsn̩ˌbaːn","SHTRAH-sen-bahn","A1","alltag","N"],
+    ["Brücke","jembatan","ˈbʁʏkə","BRÜ-ke","A1","alltag","N"],
+    ["Kirche","gereja","ˈkɪʁçə","KIR-khe","A1","alltag","N"],
+    ["Markt","pasar","maʁkt","MARKT","A1","alltag","N"],
+    ["Geschäft","toko / usaha","ɡəˈʃɛft","ge-SHEFT","A1","alltag","N"],
+    ["Post","kantor pos","pɔst","POST","A1","alltag","N"],
+    ["Bibliothek","perpustakaan","biblioˈteːk","bi-blio-TEHK","A1","alltag","N"],
+    ["Museum","museum","muˈzeːʊm","mu-ZEH-um","A1","alltag","N"],
+    ["Kino","bioskop","ˈkiːno","KEE-no","A1","alltag","N"],
+    ["Platz","tempat / alun-alun","plats","PLATS","A1","alltag","N"],
+    ["Ecke","sudut","ˈɛkə","E-ke","A1","alltag","N"],
+    ["Weg","jalan / rute","veːk","VEHK","A1","alltag","N"],
+    ["Richtung","arah","ˈʁɪçtʊŋ","RIKH-tung","A1","alltag","N"],
+    ["Baum","pohon","baʊ̯m","BAUM","A1","alltag","N"],
+    ["Bäume","pohon (jamak)","ˈbɔʏ̯mə","BOY-me","A1","alltag","N"],
+    ["Blume","bunga","ˈbluːmə","BLOO-me","A1","alltag","N"],
+    ["Wald","hutan","valt","VALT","A1","alltag","N"],
+    ["Wälder","hutan (jamak)","ˈvɛldɐ","VEL-der","A1","alltag","N"],
+    ["Berg","gunung","bɛʁk","BERK","A1","alltag","N"],
+    ["Fluss","sungai","flʊs","FLUS","A1","alltag","N"],
+    ["Flüsse","sungai (jamak)","ˈflʏsə","FLÜ-se","A1","alltag","N"],
+    ["Meer","laut","meːɐ̯","MEHR","A1","alltag","N"],
+    ["Himmel","langit","ˈhɪml̩","HI-mel","A1","alltag","N"],
+    ["Wolke","awan","ˈvɔlkə","VOL-ke","A1","alltag","N"],
+    ["Schnee","salju","ʃneː","SHNEH","A1","alltag","N"],
+    ["Wind","angin","vɪnt","VINT","A1","alltag","N"],
+    ["Luft","udara","lʊft","LUFT","A1","alltag","N"],
+    ["Erde","bumi / tanah","ˈeːɐ̯də","EHR-de","A1","alltag","N"],
+    ["Tier","hewan","tiːɐ̯","TEER","A1","alltag","N"],
+    ["Hund","anjing","hʊnt","HUNT","A1","alltag","N"],
+    ["Katze","kucing","ˈkatsə","KA-tse","A1","alltag","N"],
+    ["Vogel","burung","ˈfoːɡl̩","FOH-gel","A1","alltag","N"],
+    ["Vögel","burung (jamak)","ˈføːɡl̩","FÖ-gel","A1","alltag","N"],
+    ["Fisch","ikan","fɪʃ","FISH","A1","alltag","N"],
+    ["Pferd","kuda","pfeːɐ̯t","PFEHRT","A1","alltag","N"],
+    ["Minute","menit","miˈnuːtə","mi-NOO-te","A1","alltag","N"],
+    ["Sekunde","detik","zeˈkʊndə","ze-KUN-de","A1","alltag","N"],
+    ["Mittag","tengah hari","ˈmɪtaːk","MI-tahk","A1","alltag","N"],
+    ["Wochenende","akhir pekan","ˌvɔxn̩ˈʔɛndə","vo-khen-EN-de","A1","alltag","N"],
+    ["Geburtstag","hari ulang tahun","ɡəˈbuːɐ̯tsˌtaːk","ge-BOORTS-tahk","A1","alltag","N"],
+    ["Feiertag","hari libur nasional","ˈfaɪ̯ɐˌtaːk","FAI-er-tahk","A1","alltag","N"],
+    ["Ferien","liburan sekolah","ˈfeːʁi̯ən","FEH-ryen","A1","alltag","N"],
+    ["Heft","buku tulis","hɛft","HEFT","A1","beruf","N"],
+    ["Stift","pulpen / pensil","ʃtɪft","SHTIFT","A1","beruf","N"],
+    ["Tafel","papan tulis","ˈtaːfl̩","TAH-fel","A1","beruf","N"],
+    ["Klasse","kelas","ˈklasə","KLA-se","A1","beruf","N"],
+    ["Wort","kata","vɔʁt","VORT","A1","beruf","N"],
+    ["Wörter","kata (jamak)","ˈvœʁtɐ","VÖR-ter","A1","beruf","N"],
+    ["Satz","kalimat","zats","ZATS","A1","beruf","N"],
+    ["Sätze","kalimat (jamak)","ˈzɛtsə","ZET-se","A1","beruf","N"],
+    ["Seite","halaman","ˈzaɪ̯tə","ZAI-te","A1","beruf","N"],
+    ["Farbe","warna","ˈfaʁbə","FAR-be","A1","alltag","N"],
+    ["Bild","gambar","bɪlt","BILT","A1","alltag","N"],
+
+    ["gehen","pergi / berjalan","ˈɡeːən","GEH-en","A1","alltag","V"],
+    ["kommen","datang","ˈkɔmən","KO-men","A1","alltag","V"],
+    ["sehen","melihat","ˈzeːən","ZEH-en","A1","alltag","V"],
+    ["sprechen","berbicara","ˈʃpʁɛçn̩","SHPRE-khen","A1","alltag","V"],
+    ["lesen","membaca","ˈleːzn̩","LEH-zen","A1","alltag","V"],
+    ["schreiben","menulis","ˈʃʁaɪ̯bm̩","SHRAI-ben","A1","alltag","V"],
+    ["lernen","belajar","ˈlɛʁnən","LER-nen","A1","beruf","V"],
+    ["arbeiten","bekerja","ˈaʁbaɪ̯tn̩","AR-bai-ten","A1","beruf","V"],
+    ["wohnen","bertempat tinggal","ˈvoːnən","VOH-nen","A1","wohnen","V"],
+    ["leben","hidup","ˈleːbm̩","LEH-ben","A1","alltag","V"],
+    ["essen","makan","ˈɛsn̩","E-sen","A1","alltag","V"],
+    ["trinken","minum","ˈtʁɪŋkn̩","TRING-ken","A1","alltag","V"],
+    ["schlafen","tidur","ˈʃlaːfn̩","SHLAH-fen","A1","alltag","V"],
+    ["laufen","berlari / berjalan","ˈlaʊ̯fn̩","LAU-fen","A1","alltag","V"],
+    ["spielen","bermain","ˈʃpiːlən","SHPEE-len","A1","alltag","V"],
+    ["machen","membuat / melakukan","ˈmaxn̩","MA-khen","A1","alltag","V"],
+    ["geben","memberi","ˈɡeːbm̩","GEH-ben","A1","alltag","V"],
+    ["nehmen","mengambil","ˈneːmən","NEH-men","A1","alltag","V"],
+    ["finden","menemukan","ˈfɪndn̩","FIN-den","A1","alltag","V"],
+    ["bringen","membawa","ˈbʁɪŋən","BRING-en","A1","alltag","V"],
+    ["helfen","menolong","ˈhɛlfn̩","HEL-fen","A1","alltag","V"],
+    ["warten","menunggu","ˈvaʁtn̩","VAR-ten","A1","alltag","V"],
+    ["fragen","bertanya","ˈfʁaːɡn̩","FRAH-gen","A1","alltag","V"],
+    ["heißen","bernama","ˈhaɪ̯sn̩","HAI-sen","A1","alltag","V"],
+    ["bleiben","tinggal / tetap","ˈblaɪ̯bm̩","BLAI-ben","A1","alltag","V"],
+    ["stehen","berdiri","ˈʃteːən","SHTEH-en","A1","alltag","V"],
+    ["sitzen","duduk","ˈzɪtsn̩","ZI-tsen","A1","alltag","V"],
+    ["liegen","berbaring / terletak","ˈliːɡn̩","LEE-gen","A1","alltag","V"],
+    ["tragen","membawa / memakai","ˈtʁaːɡn̩","TRAH-gen","A1","alltag","V"],
+    ["waschen","mencuci","ˈvaʃn̩","VA-shen","A1","alltag","V"],
+    ["kochen","memasak","ˈkɔxn̩","KO-khen","A1","alltag","V"],
+    ["denken","berpikir","ˈdɛŋkn̩","DENG-ken","A1","alltag","V"],
+    ["wissen","mengetahui","ˈvɪsn̩","VI-sen","A1","alltag","V"],
+    ["glauben","percaya","ˈɡlaʊ̯bm̩","GLAU-ben","A1","alltag","V"],
+    ["brauchen","membutuhkan","ˈbʁaʊ̯xn̩","BRAU-khen","A1","alltag","V"],
+    ["suchen","mencari","ˈzuːxn̩","ZOO-khen","A1","alltag","V"],
+    ["zeigen","menunjukkan","ˈtsaɪ̯ɡn̩","TSAI-gen","A1","alltag","V"],
+    ["erzählen","menceritakan","ɛɐ̯ˈtsɛːlən","er-TSEH-len","A2","alltag","V"],
+    ["bezahlen","membayar (lunas)","bəˈtsaːlən","be-TSAH-len","A2","buch","V"],
+    ["besuchen","mengunjungi","bəˈzuːxn̩","be-ZOO-khen","A2","alltag","V"],
+    ["anrufen","menelepon","ˈanˌʁuːfn̩","AN-roo-fen","A2","buero","V"],
+    ["aufstehen","bangun tidur","ˈaʊ̯fˌʃteːən","AUF-shteh-en","A2","alltag","V"],
+    ["einkaufen","berbelanja","ˈaɪ̯nˌkaʊ̯fn̩","AIN-kau-fen","A2","alltag","V"],
+    ["frühstücken","sarapan","ˈfʁyːˌʃtʏkn̩","FRÜ-shtü-ken","A2","alltag","V"],
+    ["aufräumen","merapikan","ˈaʊ̯fˌʁɔʏ̯mən","AUF-roy-men","A2","alltag","V"],
+    ["hängen","menggantung","ˈhɛŋən","HENG-en","A2","alltag","V"],
+
+    ["gut","bagus","ɡuːt","GOOT","A1","alltag","Adj"],
+    ["schlecht","buruk","ʃlɛçt","SHLEKHT","A1","alltag","Adj"],
+    ["groß","besar","ɡʁoːs","GROHS","A1","alltag","Adj"],
+    ["klein","kecil","klaɪ̯n","KLAIN","A1","alltag","Adj"],
+    ["neu","baru","nɔʏ̯","NOY","A1","alltag","Adj"],
+    ["alt","tua / lama","alt","ALT","A1","alltag","Adj"],
+    ["jung","muda","jʊŋ","YUNG","A1","alltag","Adj"],
+    ["teuer","mahal","ˈtɔʏ̯ɐ","TOY-er","A1","buch","Adj"],
+    ["billig","murah","ˈbɪlɪç","BI-likh","A1","buch","Adj"],
+    ["schnell","cepat","ʃnɛl","SHNEL","A1","alltag","Adj"],
+    ["langsam","lambat","ˈlaŋzaːm","LANG-zahm","A1","alltag","Adj"],
+    ["laut","keras (suara)","laʊ̯t","LAUT","A1","alltag","Adj"],
+    ["leise","pelan (suara)","ˈlaɪ̯zə","LAI-ze","A1","alltag","Adj"],
+    ["warm","hangat","vaʁm","VARM","A1","alltag","Adj"],
+    ["kalt","dingin","kalt","KALT","A1","alltag","Adj"],
+    ["heiß","panas","haɪ̯s","HAIS","A1","alltag","Adj"],
+    ["hell","terang","hɛl","HEL","A1","alltag","Adj"],
+    ["dunkel","gelap","ˈdʊŋkl̩","DUNG-kel","A1","alltag","Adj"],
+    ["sauber","bersih","ˈzaʊ̯bɐ","ZAU-ber","A1","alltag","Adj"],
+    ["schmutzig","kotor","ˈʃmʊtsɪç","SHMU-tsikh","A1","alltag","Adj"],
+    ["müde","lelah","ˈmyːdə","MÜ-de","A1","alltag","Adj"],
+    ["hungrig","lapar","ˈhʊŋʁɪç","HUNG-rikh","A1","alltag","Adj"],
+    ["durstig","haus","ˈdʊʁstɪç","DURS-tikh","A1","alltag","Adj"],
+    ["glücklich","bahagia","ˈɡlʏklɪç","GLÜK-likh","A1","alltag","Adj"],
+    ["traurig","sedih","ˈtʁaʊ̯ʁɪç","TRAU-rikh","A1","alltag","Adj"],
+    ["krank","sakit","kʁaŋk","KRANK","A1","gesund","Adj"],
+    ["gesund","sehat","ɡəˈzʊnt","ge-ZUNT","A1","gesund","Adj"],
+    ["richtig","benar","ˈʁɪçtɪç","RIKH-tikh","A1","alltag","Adj"],
+    ["falsch","salah","falʃ","FALSH","A1","alltag","Adj"],
+    ["leicht","ringan / mudah","laɪ̯çt","LAIKHT","A1","alltag","Adj"],
+    ["schwer","berat / sulit","ʃveːɐ̯","SHVEHR","A1","alltag","Adj"],
+    ["früh","awal / pagi-pagi","fʁyː","FRÜ","A1","alltag","Adj"],
+    ["spät","terlambat","ʃpɛːt","SHPEHT","A1","alltag","Adj"],
+    ["voll","penuh","fɔl","FOL","A1","alltag","Adj"],
+    ["leer","kosong","leːɐ̯","LEHR","A1","alltag","Adj"],
+    ["lang","panjang","laŋ","LANG","A1","alltag","Adj"],
+    ["kurz","pendek","kʊʁts","KURTS","A1","alltag","Adj"],
+    ["hoch","tinggi","hoːx","HOHKH","A1","alltag","Adj"],
+    ["tief","dalam","tiːf","TEEF","A1","alltag","Adj"],
+
+    ["eins","satu","aɪ̯ns","AINS","A1","alltag","Num"],
+    ["zwei","dua","tsvaɪ̯","TSVAI","A1","alltag","Num"],
+    ["drei","tiga","dʁaɪ̯","DRAI","A1","alltag","Num"],
+    ["vier","empat","fiːɐ̯","FEER","A1","alltag","Num"],
+    ["fünf","lima","fʏnf","FÜNF","A1","alltag","Num"],
+    ["sechs","enam","zɛks","ZEKS","A1","alltag","Num"],
+    ["sieben","tujuh","ˈziːbm̩","ZEE-ben","A1","alltag","Num"],
+    ["acht","delapan","axt","AKHT","A1","alltag","Num"],
+    ["neun","sembilan","nɔʏ̯n","NOYN","A1","alltag","Num"],
+    ["zehn","sepuluh","tseːn","TSEHN","A1","alltag","Num"],
+    ["elf","sebelas","ɛlf","ELF","A1","alltag","Num"],
+    ["zwölf","dua belas","tsvœlf","TSVÖLF","A1","alltag","Num"],
+    ["dreizehn","tiga belas","ˈdʁaɪ̯tseːn","DRAI-tsehn","A1","alltag","Num"],
+    ["zwanzig","dua puluh","ˈtsvantsɪç","TSVAN-tsikh","A1","alltag","Num"],
+    ["dreißig","tiga puluh","ˈdʁaɪ̯sɪç","DRAI-sikh","A1","alltag","Num"],
+    ["vierzig","empat puluh","ˈfɪʁtsɪç","FIR-tsikh","A1","alltag","Num"],
+    ["fünfzig","lima puluh","ˈfʏnftsɪç","FÜNF-tsikh","A1","alltag","Num"],
+    ["hundert","seratus","ˈhʊndɐt","HUN-dert","A1","alltag","Num"],
+    ["tausend","seribu","ˈtaʊ̯zn̩t","TAU-zent","A1","alltag","Num"],
+    ["Million","satu juta","mɪˈli̯oːn","mi-LYOHN","A2","buch","Num"],
+    ["Hälfte","setengah","ˈhɛlftə","HELF-te","A2","buch","N"],
+    ["Drittel","sepertiga","ˈdʁɪtl̩","DRI-tel","A2","buch","N"],
+    ["Prozent","persen","pʁoˈtsɛnt","pro-TSENT","A2","buch","N"],
+    ["Stück","potong / buah","ʃtʏk","SHTÜK","A1","buch","N"],
+    ["Paar","pasang","paːɐ̯","PAHR","A1","alltag","N"],
+    ["Kilo","kilogram","ˈkiːlo","KEE-lo","A1","alltag","N"],
+    ["Gramm","gram","ɡʁam","GRAM","A1","alltag","N"],
+    ["Liter","liter","ˈliːtɐ","LEE-ter","A1","alltag","N"],
+    ["Meter","meter","ˈmeːtɐ","MEH-ter","A1","alltag","N"],
+
+    ["rot","merah","ʁoːt","ROHT","A1","alltag","Adj"],
+    ["blau","biru","blaʊ̯","BLAU","A1","alltag","Adj"],
+    ["grün","hijau","ɡʁyːn","GRÜN","A1","alltag","Adj"],
+    ["gelb","kuning","ɡɛlp","GELP","A1","alltag","Adj"],
+    ["schwarz","hitam","ʃvaʁts","SHVARTS","A1","alltag","Adj"],
+    ["weiß","putih","vaɪ̯s","VAIS","A1","alltag","Adj"],
+    ["braun","cokelat","bʁaʊ̯n","BRAUN","A1","alltag","Adj"],
+    ["grau","abu-abu","ɡʁaʊ̯","GRAU","A1","alltag","Adj"],
+
+    ["Montag","Senin","ˈmoːntaːk","MOHN-tahk","A1","alltag","N"],
+    ["Dienstag","Selasa","ˈdiːnstaːk","DEENS-tahk","A1","alltag","N"],
+    ["Mittwoch","Rabu","ˈmɪtvɔx","MIT-vokh","A1","alltag","N"],
+    ["Donnerstag","Kamis","ˈdɔnɐstaːk","DO-ners-tahk","A1","alltag","N"],
+    ["Freitag","Jumat","ˈfʁaɪ̯taːk","FRAI-tahk","A1","alltag","N"],
+    ["Samstag","Sabtu","ˈzamstaːk","ZAMS-tahk","A1","alltag","N"],
+    ["Sonntag","Minggu","ˈzɔntaːk","ZON-tahk","A1","alltag","N"],
+    ["Januar","Januari","ˈjanuaːɐ̯","YA-nu-ahr","A1","alltag","N"],
+    ["Februar","Februari","ˈfeːbʁuaːɐ̯","FEH-bru-ahr","A1","alltag","N"],
+    ["März","Maret","mɛʁts","MERTS","A1","alltag","N"],
+    ["April","April","aˈpʁɪl","a-PRIL","A1","alltag","N"],
+    ["Juni","Juni","ˈjuːni","YOO-ni","A1","alltag","N"],
+    ["Juli","Juli","ˈjuːli","YOO-li","A1","alltag","N"],
+    ["September","September","zɛpˈtɛmbɐ","zep-TEM-ber","A1","alltag","N"],
+    ["Oktober","Oktober","ɔkˈtoːbɐ","ok-TOH-ber","A1","alltag","N"],
+    ["November","November","noˈvɛmbɐ","no-VEM-ber","A1","alltag","N"],
+    ["Dezember","Desember","deˈtsɛmbɐ","de-TSEM-ber","A1","alltag","N"],
+
+    ["wer","siapa","veːɐ̯","VEHR","A1","alltag","Adv"],
+    ["was","apa","vas","VAS","A1","alltag","Adv"],
+    ["wo","di mana","voː","VOH","A1","alltag","Adv"],
+    ["wann","kapan","van","VAN","A1","alltag","Adv"],
+    ["warum","mengapa","vaˈʁʊm","va-RUM","A1","alltag","Adv"],
+    ["wie","bagaimana","viː","VEE","A1","alltag","Adv"],
+    ["wohin","ke mana","voˈhɪn","vo-HIN","A1","alltag","Adv"],
+    ["woher","dari mana","voˈheːɐ̯","vo-HEHR","A1","alltag","Adv"],
+    ["heute","hari ini","ˈhɔʏ̯tə","HOY-te","A1","alltag","Adv"],
+    ["gestern","kemarin","ˈɡɛstɐn","GES-tern","A1","alltag","Adv"],
+    ["morgen","besok","ˈmɔʁɡn̩","MOR-gen","A1","alltag","Adv"],
+    ["immer","selalu","ˈɪmɐ","I-mer","A1","alltag","Adv"],
+    ["nie","tidak pernah","niː","NEE","A1","alltag","Adv"],
+    ["oft","sering","ɔft","OFT","A1","alltag","Adv"],
+    ["manchmal","kadang-kadang","ˈmançmaːl","MANKH-mahl","A1","alltag","Adv"],
+    ["selten","jarang","ˈzɛltn̩","ZEL-ten","A2","alltag","Adv"],
+    ["jetzt","sekarang","jɛtst","YETST","A1","alltag","Adv"],
+    ["später","nanti","ˈʃpɛːtɐ","SHPEH-ter","A1","alltag","Adv"],
+    ["bald","segera","balt","BALT","A1","alltag","Adv"],
+    ["wieder","lagi","ˈviːdɐ","VEE-der","A1","alltag","Adv"],
+    ["zusammen","bersama","tsuˈzamən","tsu-ZA-men","A1","alltag","Adv"],
+    ["allein","sendirian","aˈlaɪ̯n","a-LAIN","A1","alltag","Adv"],
+    ["vielleicht","mungkin","fiˈlaɪ̯çt","fi-LAIKHT","A2","alltag","Adv"],
+    ["wirklich","sungguh","ˈvɪʁklɪç","VIRK-likh","A2","alltag","Adv"],
+    ["ungefähr","kira-kira","ˈʊnɡəfɛːɐ̯","UN-ge-fehr","A2","alltag","Adv"],
+    ["mindestens","paling sedikit","ˈmɪndəstn̩s","MIN-des-tens","A2","buch","Adv"],
+    ["höchstens","paling banyak","ˈhøːçstn̩s","HÖKHS-tens","A2","buch","Adv"],
+
+    ["Wohnzimmer","ruang tamu","ˈvoːnˌtsɪmɐ","VOHN-tsi-mer","A1","alltag","N"],
+    ["Schlafzimmer","kamar tidur","ˈʃlaːfˌtsɪmɐ","SHLAHF-tsi-mer","A1","alltag","N"],
+    ["Badezimmer","kamar mandi","ˈbaːdəˌtsɪmɐ","BAH-de-tsi-mer","A1","alltag","N"],
+    ["Balkon","balkon","balˈkɔŋ","bal-KONG","A1","alltag","N"],
+    ["Aufzug","lift","ˈaʊ̯fˌtsuːk","AUF-tsook","A2","alltag","N"],
+    ["Heizung","pemanas ruangan","ˈhaɪ̯tsʊŋ","HAI-tsung","A2","wohnen","N"],
+    ["Strom","listrik","ʃtʁoːm","SHTROHM","A2","wohnen","N"],
+    ["Müll","sampah","mʏl","MÜL","A1","alltag","N"],
+    ["Mülltonne","tong sampah","ˈmʏlˌtɔnə","MÜL-to-ne","A2","alltag","N"],
+    ["Hausmeister","penjaga gedung","ˈhaʊ̯sˌmaɪ̯stɐ","HAUS-mais-ter","A2","alltag","N"],
+    ["Handy","ponsel","ˈhɛndi","HEN-di","A1","alltag","N"],
+    ["Computer","komputer","kɔmˈpjuːtɐ","kom-PYOO-ter","A1","buero","N"],
+    ["Fernseher","televisi","ˈfɛʁnˌzeːɐ","FERN-zeh-er","A1","alltag","N"],
+    ["Zeitung","koran","ˈtsaɪ̯tʊŋ","TSAI-tung","A1","alltag","N"],
+    ["Zeitschrift","majalah","ˈtsaɪ̯tˌʃʁɪft","TSAIT-shrift","A2","alltag","N"],
+    ["Brief","surat","bʁiːf","BREEF","A1","buero","N"],
+    ["Postkarte","kartu pos","ˈpɔstˌkaʁtə","POST-kar-te","A1","alltag","N"],
+    ["Paket","paket","paˈkeːt","pa-KEHT","A1","alltag","N"],
+    ["Briefmarke","perangko","ˈbʁiːfˌmaʁkə","BREEF-mar-ke","A2","alltag","N"],
+    ["Umschlag","amplop","ˈʊmˌʃlaːk","UM-shlahk","A2","buero","N"],
+
+    ["Wurst","sosis","vʊʁst","VURST","A1","alltag","N"],
+    ["Würste","sosis (jamak)","ˈvʏʁstə","VÜRS-te","A1","alltag","N"],
+    ["Schinken","ham","ˈʃɪŋkn̩","SHING-ken","A1","alltag","N"],
+    ["Hähnchen","ayam","ˈhɛːnçən","HEHN-khen","A1","alltag","N"],
+    ["Gurke","timun","ˈɡʊʁkə","GUR-ke","A1","alltag","N"],
+    ["Pilz","jamur","pɪlts","PILTS","A1","alltag","N"],
+    ["Bohnen","kacang","ˈboːnən","BOH-nen","A1","alltag","N"],
+    ["Birne","pir","ˈbɪʁnə","BIR-ne","A1","alltag","N"],
+    ["Traube","anggur","ˈtʁaʊ̯bə","TRAU-be","A1","alltag","N"],
+    ["Erdbeere","stroberi","ˈeːɐ̯tˌbeːʁə","EHRT-beh-re","A1","alltag","N"],
+    ["Zitrone","lemon","tsiˈtʁoːnə","tsi-TROH-ne","A1","alltag","N"],
+    ["Nüsse","kacang-kacangan","ˈnʏsə","NÜ-se","A1","alltag","N"],
+    ["Schokolade","cokelat","ʃokoˈlaːdə","sho-ko-LAH-de","A1","alltag","N"],
+    ["Joghurt","yogurt","ˈjoːɡʊʁt","YOH-gurt","A1","alltag","N"],
+    ["Sahne","krim","ˈzaːnə","ZAH-ne","A1","alltag","N"],
+    ["Mehl","tepung","meːl","MEHL","A1","alltag","N"],
+    ["Pfeffer","merica","ˈpfɛfɐ","PFE-fer","A1","alltag","N"],
+    ["Soße","saus","ˈzoːsə","ZOH-se","A1","alltag","N"],
+    ["Pfanne","wajan","ˈpfanə","PFA-ne","A1","alltag","N"],
+    ["Topf","panci","tɔpf","TOPF","A1","alltag","N"],
+    ["Ofen","oven","ˈoːfn̩","OH-fen","A1","alltag","N"],
+    ["Kühlschrank","kulkas","ˈkyːlˌʃʁaŋk","KÜL-shrank","A1","alltag","N"],
+    ["Geschirr","peralatan makan","ɡəˈʃɪʁ","ge-SHIR","A2","alltag","N"],
+    ["Tasse","cangkir","ˈtasə","TA-se","A1","alltag","N"],
+    ["Glas","gelas","ɡlaːs","GLAHS","A1","alltag","N"],
+    ["Gläser","gelas (jamak)","ˈɡlɛːzɐ","GLEH-zer","A1","alltag","N"],
+    ["Flasche","botol","ˈflaʃə","FLA-she","A1","alltag","N"],
+    ["Tüte","kantong plastik","ˈtyːtə","TÜ-te","A1","alltag","N"],
+
+    ["wollen","ingin","ˈvɔlən","VO-len","A1","alltag","V"],
+    ["sollen","seharusnya","ˈzɔlən","ZO-len","A1","alltag","V"],
+    ["werden","menjadi","ˈveːɐ̯dn̩","VEHR-den","A1","alltag","V"],
+    ["fliegen","terbang","ˈfliːɡn̩","FLEE-gen","A1","alltag","V"],
+    ["reisen","bepergian","ˈʁaɪ̯zn̩","RAI-zen","A1","alltag","V"],
+    ["verkaufen","menjual","fɛɐ̯ˈkaʊ̯fn̩","fer-KAU-fen","A1","buch","V"],
+    ["beginnen","memulai","bəˈɡɪnən","be-GI-nen","A2","alltag","V"],
+    ["anfangen","memulai","ˈanˌfaŋən","AN-fang-en","A2","alltag","V"],
+    ["aufhören","berhenti","ˈaʊ̯fˌhøːʁən","AUF-hö-ren","A2","alltag","V"],
+    ["mitbringen","membawa serta","ˈmɪtˌbʁɪŋən","MIT-bring-en","A2","alltag","V"],
+    ["ausgehen","keluar / jalan-jalan","ˈaʊ̯sˌɡeːən","AUS-geh-en","A2","alltag","V"],
+    ["fernsehen","menonton TV","ˈfɛʁnˌzeːən","FERN-zeh-en","A2","alltag","V"],
+    ["duschen","mandi pancuran","ˈduːʃn̩","DOO-shen","A1","alltag","V"],
+    ["putzen","membersihkan","ˈpʊtsn̩","PU-tsen","A1","alltag","V"],
+    ["üben","berlatih","ˈyːbm̩","Ü-ben","A1","beruf","V"],
+    ["buchstabieren","mengeja","buːxʃtaˈbiːʁən","bookh-shta-BEE-ren","A1","beruf","V"],
+    ["antworten","menjawab","ˈantvɔʁtn̩","ANT-vor-ten","A1","alltag","V"],
+    ["telefonieren","menelepon","telefoˈniːʁən","te-le-fo-NEE-ren","A1","buero","V"],
+    ["studieren","kuliah","ʃtuˈdiːʁən","shtu-DEE-ren","A1","beruf","V"],
+    ["reparieren","memperbaiki","ʁepaˈʁiːʁən","re-pa-REE-ren","A2","alltag","V"],
+    ["probieren","mencoba","pʁoˈbiːʁən","pro-BEE-ren","A2","alltag","V"],
+    ["schmecken","terasa enak","ˈʃmɛkn̩","SHME-ken","A1","alltag","V"],
+    ["wehtun","terasa sakit","ˈveːˌtuːn","VEH-toon","A2","gesund","V"],
+    ["fühlen","merasa","ˈfyːlən","FÜ-len","A2","alltag","V"],
+    ["ärgern","menjengkelkan","ˈɛʁɡɐn","ER-gern","A2","alltag","V"],
+    ["freuen","menyenangkan / gembira","ˈfʁɔʏ̯ən","FROY-en","A2","alltag","V"],
+    ["wünschen","mengharapkan","ˈvʏnʃn̩","VÜN-shen","A2","alltag","V"],
+    ["möchten","ingin (sopan)","ˈmœçtn̩","MÖKH-ten","A1","alltag","V"],
+    ["gewinnen","menang","ɡəˈvɪnən","ge-VI-nen","A2","alltag","V"],
+    ["verlieren","kehilangan / kalah","fɛɐ̯ˈliːʁən","fer-LEE-ren","A2","alltag","V"],
+    ["vergessen","melupakan","fɛɐ̯ˈɡɛsn̩","fer-GE-sen","A2","alltag","V"],
+    ["erinnern","mengingatkan","ɛɐ̯ˈʔɪnɐn","er-I-nern","A2","alltag","V"],
+    ["entscheiden","memutuskan","ɛntˈʃaɪ̯dn̩","ent-SHAI-den","A2","beruf","V"],
+    ["versuchen","mencoba","fɛɐ̯ˈzuːxn̩","fer-ZOO-khen","A2","alltag","V"],
+    ["dauern","berlangsung","ˈdaʊ̯ɐn","DAU-ern","A2","alltag","V"],
+    ["kosten","berharga","ˈkɔstn̩","KOS-ten","A1","buch","V"],
+    ["passen","cocok / pas","ˈpasn̩","PA-sen","A2","alltag","V"],
+    ["stören","mengganggu","ˈʃtøːʁən","SHTÖ-ren","A2","alltag","V"],
+
+    ["Beruf","profesi","bəˈʁuːf","be-ROOF","A2","beruf","N"],
+    ["Stelle","posisi / lowongan","ˈʃtɛlə","SHTE-le","A2","beruf","N"],
+    ["Chef","atasan","ʃɛf","SHEF","A2","beruf","N"],
+    ["Firma","perusahaan","ˈfɪʁma","FIR-ma","A2","beruf","N"],
+    ["Lohn","upah","loːn","LOHN","A2","beruf","N"],
+    ["Rente","pensiun","ˈʁɛntə","REN-te","A2","beruf","N"],
+    ["Teilzeit","paruh waktu","ˈtaɪ̯lˌtsaɪ̯t","TAIL-tsait","A2","beruf","N"],
+    ["Vollzeit","penuh waktu","ˈfɔlˌtsaɪ̯t","FOL-tsait","A2","beruf","N"],
+    ["Feierabend","jam pulang kerja","ˈfaɪ̯ɐˌʔaːbm̩t","FAI-er-ah-bent","A2","beruf","N"],
+    ["Pause","istirahat","ˈpaʊ̯zə","PAU-ze","A2","beruf","N"],
+    ["Sitzung","rapat resmi","ˈzɪtsʊŋ","ZI-tsung","A2","buero","N"],
+    ["Protokoll","notulen","pʁotoˈkɔl","pro-to-KOL","A2","buero","N"],
+    ["Frist","tenggat","fʁɪst","FRIST","A2","buero","N"],
+    ["Vorschlag","usulan","ˈfoːɐ̯ˌʃlaːk","FOHR-shlahk","A2","buero","N"],
+    ["Arbeitsplatz","tempat kerja","ˈaʁbaɪ̯tsˌplats","AR-baits-plats","A2","beruf","N"],
+    ["Arbeitsvertrag","kontrak kerja","ˈaʁbaɪ̯tsfɛɐ̯ˌtʁaːk","AR-baits-fer-trahk","A2","beruf","N"],
+    ["Werkzeug","perkakas","ˈvɛʁkˌtsɔʏ̯k","VERK-tsoyk","A2","beruf","N"],
+    ["Maschine","mesin","maˈʃiːnə","ma-SHEE-ne","A2","beruf","N"],
+    ["Werkstatt","bengkel","ˈvɛʁkˌʃtat","VERK-shtat","A2","beruf","N"],
+    ["Lehrling","anak magang","ˈleːɐ̯lɪŋ","LEHR-ling","A2","beruf","N"],
+
+    ["Krankheit","penyakit","ˈkʁaŋkhaɪ̯t","KRANK-hait","A2","alltag","N"],
+    ["Fieber","demam","ˈfiːbɐ","FEE-ber","A2","gesund","N"],
+    ["Husten","batuk","ˈhuːstn̩","HOOS-ten","A2","gesund","N"],
+    ["Schnupfen","pilek","ˈʃnʊpfn̩","SHNUP-fen","A2","alltag","N"],
+    ["Grippe","flu","ˈɡʁɪpə","GRI-pe","A2","gesund","N"],
+    ["Erkältung","masuk angin","ɛɐ̯ˈkɛltʊŋ","er-KEL-tung","A2","gesund","N"],
+    ["Medikament","obat","medikaˈmɛnt","me-di-ka-MENT","A2","gesund","N"],
+    ["Tablette","tablet obat","taˈblɛtə","ta-BLE-te","A2","gesund","N"],
+    ["Rezept","resep dokter","ʁeˈtsɛpt","re-TSEPT","A2","gesund","N"],
+    ["Praxis","praktik dokter","ˈpʁaksɪs","PRAK-sis","A2","gesund","N"],
+    ["Krankenkasse","badan asuransi kesehatan","ˈkʁaŋkn̩ˌkasə","KRANG-ken-ka-se","A2","gesund","N"],
+    ["Impfung","vaksinasi","ˈɪmpfʊŋ","IMP-fung","A2","gesund","N"],
+    ["Verletzung","cedera","fɛɐ̯ˈlɛtsʊŋ","fer-LET-sung","A2","alltag","N"],
+    ["Unfall","kecelakaan","ˈʊnfal","UN-fal","A2","alltag","N"],
+    ["Zahnarzt","dokter gigi","ˈtsaːnˌʔaːɐ̯tst","TSAHN-ahrtst","A2","gesund","N"],
+    ["Behandlung","perawatan","bəˈhandlʊŋ","be-HAND-lung","A2","gesund","N"],
+    ["Untersuchung","pemeriksaan medis","ˌʊntɐˈzuːxʊŋ","un-ter-ZOO-khung","A2","gesund","N"],
+    ["Pflege","perawatan / keperawatan","ˈpfleːɡə","PFLEH-ge","A2","beruf","N"],
+    ["Pflaster","plester luka","ˈpflastɐ","PFLAS-ter","A2","gesund","N"],
+
+    ["Flug","penerbangan","fluːk","FLOOK","A2","alltag","N"],
+    ["Flüge","penerbangan (jamak)","ˈflyːɡə","FLÜ-ge","A2","alltag","N"],
+    ["Fahrkarte","tiket perjalanan","ˈfaːɐ̯ˌkaʁtə","FAHR-kar-te","A2","alltag","N"],
+    ["Gepäck","bagasi","ɡəˈpɛk","ge-PEK","A2","alltag","N"],
+    ["Koffer","koper","ˈkɔfɐ","KO-fer","A2","alltag","N"],
+    ["Rucksack","ransel","ˈʁʊkˌzak","RUK-zak","A2","alltag","N"],
+    ["Reisepass","paspor","ˈʁaɪ̯zəˌpas","RAI-ze-pas","A2","amt","N"],
+    ["Visum","visa","ˈviːzʊm","VEE-zum","A2","amt","N"],
+    ["Grenze","perbatasan","ˈɡʁɛntsə","GREN-tse","A2","amt","N"],
+    ["Zoll","bea cukai","tsɔl","TSOL","A2","amt","N"],
+    ["Ankunft","kedatangan","ˈankʊnft","AN-kunft","A2","alltag","N"],
+    ["Abfahrt","keberangkatan","ˈapˌfaːɐ̯t","AP-fahrt","A2","alltag","N"],
+    ["Anschluss","koneksi lanjutan","ˈanˌʃlʊs","AN-shlus","A2","alltag","N"],
+    ["Gleis","peron","ɡlaɪ̯s","GLAIS","A2","alltag","N"],
+    ["Schalter","loket","ˈʃaltɐ","SHAL-ter","A2","alltag","N"],
+    ["Fahrplan","jadwal perjalanan","ˈfaːɐ̯ˌplaːn","FAHR-plahn","A2","alltag","N"],
+    ["Hotel","hotel","hoˈtɛl","ho-TEL","A2","alltag","N"],
+    ["Rezeption","resepsionis","ʁetsɛpˈtsi̯oːn","re-tsep-TSYOHN","A2","alltag","N"],
+    ["Einzelzimmer","kamar tunggal","ˈaɪ̯ntsl̩ˌtsɪmɐ","AIN-tsel-tsi-mer","A2","alltag","N"],
+    ["Doppelzimmer","kamar ganda","ˈdɔpl̩ˌtsɪmɐ","DO-pel-tsi-mer","A2","alltag","N"],
+    ["Buchung","pemesanan","ˈbuːxʊŋ","BOO-khung","A2","alltag","N"],
+    ["Ausflug","tamasya","ˈaʊ̯sˌfluːk","AUS-flook","A2","alltag","N"],
+    ["Sehenswürdigkeit","objek wisata","ˈzeːənsˌvʏʁdɪçkaɪ̯t","ZEH-ens-vür-dikh-kait","A2","alltag","N"],
+
+    ["Umtausch","penukaran barang","ˈʊmˌtaʊ̯ʃ","UM-taush","A2","buch","N"],
+    ["Garantie","garansi","ɡaʁanˈtiː","ga-ran-TEE","A2","buch","N"],
+    ["Auswahl","pilihan","ˈaʊ̯sˌvaːl","AUS-vahl","A2","buch","N"],
+    ["Sonderangebot","penawaran khusus","ˈzɔndɐʔanɡəˌboːt","ZON-der-an-ge-boht","A2","buch","N"],
+    ["Regal","rak","ʁeˈɡaːl","re-GAHL","A2","alltag","N"],
+    ["Verkäufer","penjual","fɛɐ̯ˈkɔʏ̯fɐ","fer-KOY-fer","A2","buch","N"],
+    ["Kassierer","kasir","kaˈsiːʁɐ","ka-SEE-rer","A2","buch","N"],
+    ["Bäckerei","toko roti","bɛkəˈʁaɪ̯","be-ke-RAI","A2","alltag","N"],
+    ["Metzgerei","toko daging","mɛtsɡəˈʁaɪ̯","mets-ge-RAI","A2","alltag","N"],
+    ["Supermarkt","supermarket","ˈzuːpɐˌmaʁkt","ZOO-per-markt","A2","alltag","N"],
+    ["Kaufhaus","pusat perbelanjaan","ˈkaʊ̯fˌhaʊ̯s","KAUF-haus","A2","alltag","N"],
+    ["Passwort","kata sandi","ˈpasˌvɔʁt","PAS-vort","A2","buero","N"],
+    ["Anhang","lampiran e-mail","ˈanˌhaŋ","AN-hang","A2","buero","N"],
+    ["Anrede","sapaan surat","ˈanˌʁeːdə","AN-reh-de","A2","buero","N"],
+    ["Verbindung","sambungan","fɛɐ̯ˈbɪndʊŋ","fer-BIN-dung","A2","buero","N"],
+    ["Nummer","nomor","ˈnʊmɐ","NU-mer","A2","buero","N"],
+    ["Vorwahl","kode area","ˈfoːɐ̯ˌvaːl","FOHR-vahl","A2","buero","N"],
+
+    ["freundlich","ramah","ˈfʁɔʏ̯ntlɪç","FROYNT-likh","A2","alltag","Adj"],
+    ["nett","baik hati","nɛt","NET","A2","alltag","Adj"],
+    ["hilfsbereit","suka menolong","ˈhɪlfsbəˌʁaɪ̯t","HILFS-be-rait","A2","beruf","Adj"],
+    ["ehrlich","jujur","ˈeːɐ̯lɪç","EHR-likh","A2","beruf","Adj"],
+    ["geduldig","sabar","ɡəˈdʊldɪç","ge-DUL-dikh","A2","beruf","Adj"],
+    ["fleißig","rajin","ˈflaɪ̯sɪç","FLAI-sikh","A2","beruf","Adj"],
+    ["faul","malas","faʊ̯l","FAUL","A2","beruf","Adj"],
+    ["ruhig","tenang","ˈʁuːɪç","ROO-ikh","A2","alltag","Adj"],
+    ["nervös","gugup","nɛʁˈvøːs","ner-VÖS","A2","alltag","Adj"],
+    ["ängstlich","penakut","ˈɛŋstlɪç","ENGST-likh","A2","alltag","Adj"],
+    ["mutig","berani","ˈmuːtɪç","MOO-tikh","A2","alltag","Adj"],
+    ["stolz","bangga","ʃtɔlts","SHTOLTS","A2","alltag","Adj"],
+    ["neugierig","penasaran","ˈnɔʏ̯ˌɡiːʁɪç","NOY-gee-rikh","A2","alltag","Adj"],
+    ["zufrieden","puas","tsuˈfʁiːdn̩","tsu-FREE-den","A2","alltag","Adj"],
+    ["enttäuscht","kecewa","ɛntˈtɔʏ̯ʃt","ent-TOYSHT","A2","alltag","Adj"],
+    ["überrascht","terkejut","ˌyːbɐˈʁaʃt","ü-ber-RASHT","A2","alltag","Adj"],
+    ["wütend","marah","ˈvyːtn̩t","VÜ-tent","A2","alltag","Adj"],
+    ["sympathisch","menyenangkan (orang)","zʏmˈpaːtɪʃ","züm-PAH-tish","A2","alltag","Adj"],
+    ["langweilig","membosankan","ˈlaŋvaɪ̯lɪç","LANG-vai-likh","A2","alltag","Adj"],
+    ["interessant","menarik","ɪntəʁɛˈsant","in-te-re-SANT","A2","alltag","Adj"],
+    ["wichtig","penting","ˈvɪçtɪç","VIKH-tikh","A2","beruf","Adj"],
+    ["gefährlich","berbahaya","ɡəˈfɛːɐ̯lɪç","ge-FEHR-likh","A2","alltag","Adj"],
+    ["sicher","aman / pasti","ˈzɪçɐ","ZI-kher","A2","alltag","Adj"],
+    ["bequem","nyaman","bəˈkveːm","be-KVEHM","A2","alltag","Adj"],
+    ["modern","modern","moˈdɛʁn","mo-DERN","A2","alltag","Adj"],
+    ["lecker","enak","ˈlɛkɐ","LE-ker","A2","alltag","Adj"],
+    ["süß","manis","zyːs","ZÜS","A2","alltag","Adj"],
+    ["sauer","asam","ˈzaʊ̯ɐ","ZAU-er","A2","alltag","Adj"],
+    ["salzig","asin","ˈzaltsɪç","ZAL-tsikh","A2","alltag","Adj"],
+    ["scharf","pedas / tajam","ʃaʁf","SHARF","A2","alltag","Adj"],
+    ["frisch","segar","fʁɪʃ","FRISH","A2","alltag","Adj"],
+
+    ["mieten","menyewa","ˈmiːtn̩","MEE-ten","A2","wohnen","V"],
+    ["vermieten","menyewakan","fɛɐ̯ˈmiːtn̩","fer-MEE-ten","A2","wohnen","V"],
+    ["umziehen","pindah rumah","ˈʊmˌtsiːən","UM-tsee-en","A2","alltag","V"],
+    ["einziehen","masuk menempati","ˈaɪ̯nˌtsiːən","AIN-tsee-en","A2","wohnen","V"],
+    ["ausziehen","pindah keluar","ˈaʊ̯sˌtsiːən","AUS-tsee-en","A2","wohnen","V"],
+    ["heiraten","menikah","ˈhaɪ̯ʁaːtn̩","HAI-rah-ten","A2","alltag","V"],
+    ["kennenlernen","berkenalan","ˈkɛnənˌlɛʁnən","KE-nen-ler-nen","A2","alltag","V"],
+    ["einladen","mengundang","ˈaɪ̯nˌlaːdn̩","AIN-lah-den","A2","alltag","V"],
+    ["absagen","membatalkan","ˈapˌzaːɡn̩","AP-zah-gen","A2","buero","V"],
+    ["zusagen","menyanggupi","ˈtsuːˌzaːɡn̩","TSOO-zah-gen","A2","buero","V"],
+    ["teilnehmen","ikut serta","ˈtaɪ̯lˌneːmən","TAIL-neh-men","A2","beruf","V"],
+    ["vorbereiten","mempersiapkan","ˈfoːɐ̯bəˌʁaɪ̯tn̩","FOHR-be-rai-ten","A2","beruf","V"],
+    ["organisieren","mengatur","ɔʁɡaniˈziːʁən","or-ga-ni-ZEE-ren","A2","beruf","V"],
+    ["diskutieren","berdiskusi","dɪskuˈtiːʁən","dis-ku-TEE-ren","A2","beruf","V"],
+    ["empfehlen","merekomendasikan","ɛmˈpfeːlən","em-PFEH-len","A2","beruf","V"],
+    ["raten","menyarankan / menebak","ˈʁaːtn̩","RAH-ten","A2","alltag","V"],
+    ["warnen","memperingatkan","ˈvaʁnən","VAR-nen","A2","alltag","V"],
+    ["beschweren","mengajukan keluhan","bəˈʃveːʁən","be-SHVEH-ren","A2","buch","V"],
+    ["umtauschen","menukar barang","ˈʊmˌtaʊ̯ʃn̩","UM-tau-shen","A2","buch","V"],
+    ["sparen","menabung / menghemat","ˈʃpaːʁən","SHPAH-ren","A2","buch","V"],
+    ["ausgeben","membelanjakan","ˈaʊ̯sˌɡeːbm̩","AUS-geh-ben","A2","buch","V"],
+    ["leihen","meminjam(kan)","ˈlaɪ̯ən","LAI-en","A2","buch","V"],
+    ["schenken","memberi hadiah","ˈʃɛŋkn̩","SHENG-ken","A2","alltag","V"],
+    ["mitteilen","memberitahukan","ˈmɪtˌtaɪ̯lən","MIT-tai-len","A2","buero","V"],
+    ["berichten","melaporkan","bəˈʁɪçtn̩","be-RIKH-ten","A2","buero","V"],
+    ["melden","melapor","ˈmɛldn̩","MEL-den","A2","amt","V"],
+    ["kümmern","mengurus","ˈkʏmɐn","KÜ-mern","A2","alltag","V"],
+    ["sorgen","memperhatikan / mengkhawatirkan","ˈzɔʁɡn̩","ZOR-gen","A2","alltag","V"],
+    ["achten","memperhatikan","ˈaxtn̩","AKH-ten","A2","beruf","V"],
+    ["vermeiden","menghindari","fɛɐ̯ˈmaɪ̯dn̩","fer-MAI-den","A2","beruf","V"],
+    ["verbieten","melarang","fɛɐ̯ˈbiːtn̩","fer-BEE-ten","A2","amt","V"],
+    ["erlauben","mengizinkan","ɛɐ̯ˈlaʊ̯bm̩","er-LAU-ben","A2","amt","V"],
+    ["verlangen","menuntut","fɛɐ̯ˈlaŋən","fer-LANG-en","A2","amt","V"],
+    ["behalten","menyimpan / mempertahankan","bəˈhaltn̩","be-HAL-ten","A2","alltag","V"],
+    ["wechseln","menukar / mengganti","ˈvɛksl̩n","VEK-seln","A2","buch","V"],
+    ["wiegen","menimbang","ˈviːɡn̩","VEE-gen","A2","alltag","V"],
+    ["messen","mengukur","ˈmɛsn̩","ME-sen","A2","buch","V"],
+    ["vergleichen","membandingkan","fɛɐ̯ˈɡlaɪ̯çn̩","fer-GLAI-khen","A2","buch","V"],
+
+    ["Musik","musik","muˈziːk","mu-ZEEK","A2","alltag","N"],
+    ["Film","film","fɪlm","FILM","A2","alltag","N"],
+    ["Konzert","konser","kɔnˈtsɛʁt","kon-TSERT","A2","alltag","N"],
+    ["Theater","teater","teˈaːtɐ","te-AH-ter","A2","alltag","N"],
+    ["Sport","olahraga","ʃpɔʁt","SHPORT","A2","alltag","N"],
+    ["Fußball","sepak bola","ˈfuːsˌbal","FOOS-bal","A2","alltag","N"],
+    ["Schwimmbad","kolam renang","ˈʃvɪmˌbaːt","SHVIM-baht","A2","alltag","N"],
+    ["Verein","perkumpulan","fɛɐ̯ˈʔaɪ̯n","fer-AIN","A2","alltag","N"],
+    ["Hobby","hobi","ˈhɔbi","HO-bi","A2","alltag","N"],
+    ["Spiel","permainan","ʃpiːl","SHPEEL","A2","alltag","N"],
+    ["Roman","novel","ʁoˈmaːn","ro-MAHN","A2","alltag","N"],
+    ["Geschichte","cerita / sejarah","ɡəˈʃɪçtə","ge-SHIKH-te","A2","alltag","N"],
+    ["Foto","foto","ˈfoːto","FOH-to","A2","alltag","N"],
+    ["Ausstellung","pameran","ˈaʊ̯sˌʃtɛlʊŋ","AUS-shte-lung","A2","alltag","N"],
+    ["Regenschirm","payung","ˈʁeːɡn̩ˌʃɪʁm","REH-gen-shirm","A2","alltag","N"],
+    ["Temperatur","suhu","tɛmpəʁaˈtuːɐ̯","tem-pe-ra-TOOR","A2","alltag","N"],
+    ["Grad","derajat","ɡʁaːt","GRAHT","A2","alltag","N"],
+    ["Gewitter","badai petir","ɡəˈvɪtɐ","ge-VI-ter","A2","alltag","N"],
+    ["Nebel","kabut","ˈneːbl̩","NEH-bel","A2","alltag","N"],
+    ["Eis","es / es krim","aɪ̯s","AIS","A2","alltag","N"],
+    ["Hitze","panas terik","ˈhɪtsə","HI-tse","A2","alltag","N"],
+    ["Kälte","hawa dingin","ˈkɛltə","KEL-te","A2","alltag","N"],
+    ["Jahreszeit","musim","ˈjaːʁəsˌtsaɪ̯t","YAH-res-tsait","A2","alltag","N"],
+    ["Führerschein","SIM","ˈfyːʁɐˌʃaɪ̯n","FÜ-rer-shain","A2","amt","N"],
+    ["Tankstelle","SPBU","ˈtaŋkˌʃtɛlə","TANK-shte-le","A2","alltag","N"],
+    ["Benzin","bensin","bɛnˈtsiːn","ben-TSEEN","A2","alltag","N"],
+    ["Parkplatz","tempat parkir","ˈpaʁkˌplats","PARK-plats","A2","alltag","N"],
+    ["Stau","kemacetan","ʃtaʊ̯","SHTAU","A2","alltag","N"],
+    ["Geschwindigkeit","kecepatan","ɡəˈʃvɪndɪçkaɪ̯t","ge-SHVIN-dikh-kait","A2","alltag","N"],
+    ["Reifen","ban","ˈʁaɪ̯fn̩","RAI-fen","A2","alltag","N"],
+    ["Motor","mesin kendaraan","ˈmoːtoːɐ̯","MOH-tohr","A2","alltag","N"],
+    ["Fußgänger","pejalan kaki","ˈfuːsˌɡɛŋɐ","FOOS-geng-er","A2","alltag","N"],
+    ["Kreuzung","persimpangan","ˈkʁɔʏ̯tsʊŋ","KROY-tsung","A2","alltag","N"],
+    ["Autobahn","jalan tol","ˈaʊ̯toˌbaːn","AU-to-bahn","A2","alltag","N"],
+    ["Umgebung","lingkungan sekitar","ʊmˈɡeːbʊŋ","um-GEH-bung","A2","alltag","N"],
+    ["Stadtteil","bagian kota","ˈʃtatˌtaɪ̯l","SHTAT-tail","A2","alltag","N"],
+    ["Dorf","desa","dɔʁf","DORF","A2","alltag","N"],
+    ["Hauptstadt","ibu kota","ˈhaʊ̯ptˌʃtat","HAUPT-shtat","A2","alltag","N"],
+    ["Einwohner","penduduk","ˈaɪ̯nˌvoːnɐ","AIN-voh-ner","A2","amt","N"],
+    ["Gebäude","gedung","ɡəˈbɔʏ̯də","ge-BOY-de","A2","alltag","N"],
+    ["Etage","lantai gedung","eˈtaːʒə","e-TAH-zhe","A2","wohnen","N"],
+    ["Erdgeschoss","lantai dasar","ˈeːɐ̯tɡəˌʃɔs","EHRT-ge-shos","A2","wohnen","N"],
+
+    ["Ansicht","pandangan","ˈanˌzɪçt","AN-zikht","B1","beruf","N"],
+    ["Standpunkt","sudut pandang","ˈʃtantˌpʊŋkt","SHTANT-punkt","B1","beruf","N"],
+    ["Argument","argumen","aʁɡuˈmɛnt","ar-gu-MENT","B1","beruf","N"],
+    ["Begründung","alasan / justifikasi","bəˈɡʁʏndʊŋ","be-GRÜN-dung","B1","beruf","N"],
+    ["Zustimmung","persetujuan","ˈtsuːˌʃtɪmʊŋ","TSOO-shti-mung","B1","beruf","N"],
+    ["Ablehnung","penolakan","ˈapˌleːnʊŋ","AP-leh-nung","B1","amt","N"],
+    ["Kompromiss","kompromi","kɔmpʁoˈmɪs","kom-pro-MIS","B1","beruf","N"],
+    ["Diskussion","diskusi","dɪskuˈsi̯oːn","dis-ku-SYOHN","B1","beruf","N"],
+    ["Kritik","kritik","kʁiˈtiːk","kri-TEEK","B1","beruf","N"],
+    ["Lob","pujian","loːp","LOHP","B1","beruf","N"],
+    ["Vorurteil","prasangka","ˈfoːɐ̯ʔʊʁˌtaɪ̯l","FOHR-ur-tail","B1","alltag","N"],
+    ["Einfluss","pengaruh","ˈaɪ̯nˌflʊs","AIN-flus","B1","beruf","N"],
+    ["Wirkung","efek","ˈvɪʁkʊŋ","VIR-kung","B1","buch","N"],
+    ["Ursache","penyebab","ˈuːɐ̯ˌzaxə","OOR-za-khe","B1","buch","N"],
+    ["Folge","akibat","ˈfɔlɡə","FOL-ge","B1","buch","N"],
+    ["Zusammenhang","keterkaitan","tsuˈzamənˌhaŋ","tsu-ZA-men-hang","B1","buch","N"],
+    ["Unterschied","perbedaan","ˈʊntɐˌʃiːt","UN-ter-sheet","B1","buch","N"],
+    ["Ähnlichkeit","kemiripan","ˈɛːnlɪçkaɪ̯t","EHN-likh-kait","B1","buch","N"],
+    ["Beispiel","contoh","ˈbaɪ̯ˌʃpiːl","BAI-shpeel","B1","beruf","N"],
+    ["Grund","alasan","ɡʁʊnt","GRUNT","B1","beruf","N"],
+    ["Absicht","niat","ˈapˌzɪçt","AP-zikht","B1","beruf","N"],
+    ["Zweck","tujuan / kegunaan","tsvɛk","TSVEK","B1","beruf","N"],
+    ["Bedeutung","makna","bəˈdɔʏ̯tʊŋ","be-DOY-tung","B1","beruf","N"],
+    ["Politik","politik","poliˈtiːk","po-li-TEEK","B1","amt","N"],
+    ["Regierung","pemerintah","ʁeˈɡiːʁʊŋ","re-GEE-rung","B1","amt","N"],
+    ["Wahl","pemilihan","vaːl","VAHL","B1","amt","N"],
+    ["Gesetz","undang-undang","ɡəˈzɛts","ge-ZETS","B1","amt","N"],
+    ["Recht","hak / hukum","ʁɛçt","REKHT","B1","amt","N"],
+    ["Pflicht","kewajiban","pflɪçt","PFLIKHT","B1","amt","N"],
+    ["Freiheit","kebebasan","ˈfʁaɪ̯haɪ̯t","FRAI-hait","B1","amt","N"],
+    ["Gerechtigkeit","keadilan","ɡəˈʁɛçtɪçkaɪ̯t","ge-REKH-tikh-kait","B1","amt","N"],
+    ["Integration","integrasi","ɪnteɡʁaˈtsi̯oːn","in-te-gra-TSYOHN","B1","amt","N"],
+    ["Bevölkerung","populasi","bəˈfœlkəʁʊŋ","be-FÖL-ke-rung","B1","amt","N"],
+    ["Mehrheit","mayoritas","ˈmeːɐ̯haɪ̯t","MEHR-hait","B1","amt","N"],
+    ["Minderheit","minoritas","ˈmɪndɐhaɪ̯t","MIN-der-hait","B1","amt","N"],
+    ["Bürger","warga negara","ˈbʏʁɡɐ","BÜR-ger","B1","amt","N"],
+    ["Verwaltung","administrasi","fɛɐ̯ˈvaltʊŋ","fer-VAL-tung","B1","amt","N"],
+    ["Studium","studi kuliah","ˈʃtuːdi̯ʊm","SHTOO-dyum","B1","beruf","N"],
+    ["Universität","universitas","univɛʁziˈtɛːt","u-ni-ver-zi-TEHT","B1","beruf","N"],
+    ["Hochschule","perguruan tinggi","ˈhoːxˌʃuːlə","HOHKH-shoo-le","B1","beruf","N"],
+    ["Note","nilai","ˈnoːtə","NOH-te","B1","beruf","N"],
+    ["Stipendium","beasiswa","ʃtiˈpɛndi̯ʊm","shti-PEN-dyum","B1","beruf","N"],
+    ["Vorlesung","kuliah umum","ˈfoːɐ̯ˌleːzʊŋ","FOHR-leh-zung","B1","beruf","N"],
+    ["Seminar","seminar","zemiˈnaːɐ̯","ze-mi-NAHR","B1","beruf","N"],
+    ["Referat","presentasi tugas","ʁefeˈʁaːt","re-fe-RAHT","B1","beruf","N"],
+    ["Kenntnisse","pengetahuan","ˈkɛntnɪsə","KENT-ni-se","B1","beruf","N"],
+    ["Fortschritt","kemajuan","ˈfɔʁtˌʃʁɪt","FORT-shrit","B1","beruf","N"],
+    ["Klima","iklim","ˈkliːma","KLEE-ma","B1","alltag","N"],
+    ["Klimawandel","perubahan iklim","ˈkliːmaˌvandl̩","KLEE-ma-van-del","B1","alltag","N"],
+    ["Energie","energi","enɛʁˈɡiː","e-ner-GEE","B1","alltag","N"],
+    ["Recycling","daur ulang","ʁiˈsaɪ̯klɪŋ","ri-SAI-kling","B1","alltag","N"],
+    ["Verschmutzung","pencemaran","fɛɐ̯ˈʃmʊtsʊŋ","fer-SHMUT-sung","B1","alltag","N"],
+    ["Nachhaltigkeit","keberlanjutan","ˈnaːxhaltɪçkaɪ̯t","NAHKH-hal-tikh-kait","B1","buch","N"],
+    ["Rohstoff","bahan baku","ˈʁoːˌʃtɔf","ROH-shtof","B1","buch","N"],
+    ["Abfall","limbah","ˈapˌfal","AP-fal","B1","alltag","N"],
+    ["Verbrauch","konsumsi","fɛɐ̯ˈbʁaʊ̯x","fer-BRAUKH","B1","buch","N"],
+    ["Medien","media","ˈmeːdi̯ən","MEH-dyen","B1","alltag","N"],
+    ["Werbung","iklan","ˈvɛʁbʊŋ","VER-bung","B1","buch","N"],
+    ["Quelle","sumber","ˈkvɛlə","KVE-le","B1","buch","N"],
+    ["Datenschutz","perlindungan data","ˈdaːtn̩ˌʃʊts","DAH-ten-shuts","B1","buero","N"],
+    ["Programm","program","pʁoˈɡʁam","pro-GRAM","B1","buero","N"],
+    ["Datei","berkas digital","daˈtaɪ̯","da-TAI","B1","buero","N"],
+    ["Speicher","penyimpanan","ˈʃpaɪ̯çɐ","SHPAI-kher","B1","buero","N"],
+    ["Netzwerk","jaringan","ˈnɛtsˌvɛʁk","NETS-verk","B1","buero","N"],
+    ["Bildschirm","layar","ˈbɪltˌʃɪʁm","BILT-shirm","B1","buero","N"],
+    ["Tastatur","papan ketik","tastaˈtuːɐ̯","tas-ta-TOOR","B1","buero","N"],
+
+    ["behaupten","menyatakan / mengklaim","bəˈhaʊ̯ptn̩","be-HAUP-ten","B1","beruf","V"],
+    ["bezweifeln","meragukan","bəˈtsvaɪ̯fl̩n","be-TSVAI-feln","B1","beruf","V"],
+    ["vermuten","menduga","fɛɐ̯ˈmuːtn̩","fer-MOO-ten","B1","beruf","V"],
+    ["zustimmen","menyetujui","ˈtsuːˌʃtɪmən","TSOO-shti-men","B1","beruf","V"],
+    ["widersprechen","menyanggah","ˌviːdɐˈʃpʁɛçn̩","vee-der-SHPRE-khen","B1","beruf","V"],
+    ["überzeugen","meyakinkan","ˌyːbɐˈtsɔʏ̯ɡn̩","ü-ber-TSOY-gen","B1","beruf","V"],
+    ["beeinflussen","memengaruhi","bəˈʔaɪ̯nflʊsn̩","be-AIN-flu-sen","B1","beruf","V"],
+    ["verursachen","menyebabkan","fɛɐ̯ˈʔuːɐ̯zaxn̩","fer-OOR-za-khen","B1","buch","V"],
+    ["ermöglichen","memungkinkan","ɛɐ̯ˈmøːklɪçn̩","er-MÖK-li-khen","B1","beruf","V"],
+    ["verhindern","mencegah","fɛɐ̯ˈhɪndɐn","fer-HIN-dern","B1","beruf","V"],
+    ["erfordern","menuntut / memerlukan","ɛɐ̯ˈfɔʁdɐn","er-FOR-dern","B1","beruf","V"],
+    ["betreffen","menyangkut","bəˈtʁɛfn̩","be-TRE-fen","B1","buero","V"],
+    ["entwickeln","mengembangkan","ɛntˈvɪkl̩n","ent-VI-keln","B1","beruf","V"],
+    ["verbessern","memperbaiki","fɛɐ̯ˈbɛsɐn","fer-BE-sern","B1","beruf","V"],
+    ["zunehmen","meningkat","ˈtsuːˌneːmən","TSOO-neh-men","B1","buch","V"],
+    ["abnehmen","menurun","ˈapˌneːmən","AP-neh-men","B1","buch","V"],
+    ["steigen","naik","ˈʃtaɪ̯ɡn̩","SHTAI-gen","B1","buch","V"],
+    ["sinken","turun","ˈzɪŋkn̩","ZING-ken","B1","buch","V"],
+    ["verändern","mengubah","fɛɐ̯ˈʔɛndɐn","fer-EN-dern","B1","beruf","V"],
+    ["ersetzen","mengganti","ɛɐ̯ˈzɛtsn̩","er-ZET-sen","B1","buch","V"],
+    ["erweitern","memperluas","ɛɐ̯ˈvaɪ̯tɐn","er-VAI-tern","B1","buch","V"],
+    ["beschränken","membatasi","bəˈʃʁɛŋkn̩","be-SHRENG-ken","B1","buch","V"],
+    ["unterscheiden","membedakan","ˌʊntɐˈʃaɪ̯dn̩","un-ter-SHAI-den","B1","buch","V"],
+    ["zusammenfassen","meringkas","tsuˈzamənˌfasn̩","tsu-ZA-men-fa-sen","B1","beruf","V"],
+    ["beschreiben","menggambarkan","bəˈʃʁaɪ̯bm̩","be-SHRAI-ben","B1","beruf","V"],
+    ["erwähnen","menyebutkan","ɛɐ̯ˈvɛːnən","er-VEH-nen","B1","beruf","V"],
+    ["betonen","menekankan","bəˈtoːnən","be-TOH-nen","B1","beruf","V"],
+    ["hinweisen","menunjukkan / mengingatkan","ˈhɪnˌvaɪ̯zn̩","HIN-vai-zen","B1","buero","V"],
+    ["verzichten","merelakan / tidak menuntut","fɛɐ̯ˈtsɪçtn̩","fer-TSIKH-ten","B1","buch","V"],
+    ["bearbeiten","mengerjakan / memproses","bəˈʔaʁbaɪ̯tn̩","be-AR-bai-ten","B1","buero","V"],
+    ["überarbeiten","merevisi","ˌyːbɐˈʔaʁbaɪ̯tn̩","ü-ber-AR-bai-ten","B1","buero","V"],
+    ["durchführen","melaksanakan","ˈdʊʁçˌfyːʁən","DURKH-fü-ren","B1","beruf","V"],
+    ["übernehmen","mengambil alih","ˌyːbɐˈneːmən","ü-ber-NEH-men","B1","beruf","V"],
+    ["zurückgeben","mengembalikan","tsuˈʁʏkˌɡeːbm̩","tsu-RÜK-geh-ben","B1","buch","V"],
+
+    ["notwendig","perlu / wajib","ˈnoːtvɛndɪç","NOHT-ven-dikh","B1","beruf","Adj"],
+    ["ausreichend","memadai","ˈaʊ̯sˌʁaɪ̯çn̩t","AUS-rai-khent","B1","beruf","Adj"],
+    ["umfangreich","luas cakupannya","ˈʊmfaŋˌʁaɪ̯ç","UM-fang-raikh","B1","buch","Adj"],
+    ["deutlich","jelas","ˈdɔʏ̯tlɪç","DOYT-likh","B1","beruf","Adj"],
+    ["wahrscheinlich","kemungkinan besar","vaːɐ̯ˈʃaɪ̯nlɪç","vahr-SHAIN-likh","B1","beruf","Adj"],
+    ["tatsächlich","sebenarnya","ˈtaːtzɛçlɪç","TAHT-zekh-likh","B1","beruf","Adj"],
+    ["erfolgreich","berhasil","ɛɐ̯ˈfɔlkˌʁaɪ̯ç","er-FOLK-raikh","B1","beruf","Adj"],
+    ["verantwortlich","bertanggung jawab","fɛɐ̯ˈʔantvɔʁtlɪç","fer-ANT-vort-likh","B1","beruf","Adj"],
+    ["abhängig","bergantung","ˈaphɛŋɪç","AP-heng-ikh","B1","buch","Adj"],
+    ["üblich","lazim","ˈyːplɪç","ÜP-likh","B1","buch","Adj"],
+    ["ungewöhnlich","tidak biasa","ˈʊnɡəvøːnlɪç","UN-ge-vön-likh","B1","alltag","Adj"],
+    ["dringend","mendesak","ˈdʁɪŋənt","DRING-ent","B1","buero","Adj"],
+    ["vorsichtig","hati-hati","ˈfoːɐ̯zɪçtɪç","FOHR-zikh-tikh","B1","beruf","Adj"],
+    ["aufmerksam","penuh perhatian","ˈaʊ̯fmɛʁkzaːm","AUF-merk-zahm","B1","beruf","Adj"],
+    ["gründlich","menyeluruh","ˈɡʁʏntlɪç","GRÜNT-likh","B1","beruf","Adj"],
+    ["ordentlich","rapi / tertib","ˈɔʁdn̩tlɪç","OR-dent-likh","B1","beruf","Adj"],
+    ["viel","banyak","fiːl","FEEL","A1","alltag","Adv"],
+    ["wenig","sedikit","ˈveːnɪç","VEH-nikh","A1","alltag","Adv"],
+    ["genug","cukup","ɡəˈnuːk","ge-NOOK","A1","alltag","Adv"],
+    ["etwas","sesuatu / sedikit","ˈɛtvas","ET-vas","A1","alltag","Adv"],
+    ["nichts","tidak ada apa-apa","nɪçts","NIKHTS","A1","alltag","Adv"],
+    ["jemand","seseorang","ˈjeːmant","YEH-mant","A2","alltag","Adv"],
+    ["niemand","tidak seorang pun","ˈniːmant","NEE-mant","A2","alltag","Adv"],
+    ["mehrere","beberapa","ˈmeːʁəʁə","MEH-re-re","A2","alltag","Adv"],
+    ["besonders","terutama","bəˈzɔndɐs","be-ZON-ders","A2","beruf","Adv"],
+    ["trotzdem","meskipun begitu","ˈtʁɔtsdeːm","TROTS-dehm","B1","beruf","Adv"],
+    ["deshalb","oleh karena itu","ˈdɛshalp","DES-halp","B1","beruf","Adv"],
+    ["außerdem","selain itu","ˈaʊ̯sɐdeːm","AU-ser-dehm","B1","beruf","Adv"],
+    ["schließlich","akhirnya","ˈʃliːslɪç","SHLEES-likh","B1","beruf","Adv"],
+    ["jedoch","namun","jeˈdɔx","ye-DOKH","B1","beruf","Adv"],
+    ["zwar","memang","tsvaːɐ̯","TSVAHR","B1","beruf","Adv"],
+    ["überhaupt","sama sekali","ˌyːbɐˈhaʊ̯pt","ü-ber-HAUPT","B1","alltag","Adv"],
+    ["hauptsächlich","terutama","ˈhaʊ̯ptzɛçlɪç","HAUPT-zekh-likh","B1","buch","Adv"],
+
+    /* --- tambahan hasil audit isi: C1/B2 nyaris tanpa verba dan
+       adverbia, Büro kosong di B2, dan dua tema baru yang dibutuhkan
+       siapa pun yang benar-benar pindah: Gesundheit dan Wohnungssuche. --- */
+    ["Schmerzen","nyeri","ˈʃmɛʁtsn̩","SHMER-tsen","A2","gesund","N"],
+    ["Hausarzt","dokter umum langganan","ˈhaʊ̯sˌʔaːɐ̯tst","HAUS-ahrtst","A2","gesund","N"],
+    ["Apothekerin","apoteker perempuan","apoˈteːkəʁɪn","a-po-TEH-ke-rin","A2","gesund","N"],
+    ["Arzttermin","janji dokter","ˈaːɐ̯tstˌtɛɐ̯miːn","AHRTST-ter-meen","A2","gesund","N"],
+    ["Facharzt","dokter spesialis","ˈfaxˌʔaːɐ̯tst","FAKH-ahrtst","B1","gesund","N"],
+    ["Krankmeldung","surat pemberitahuan sakit","ˈkʁaŋkˌmɛldʊŋ","KRANK-mel-dung","B1","gesund","N"],
+    ["Versichertenkarte","kartu peserta asuransi","fɛɐ̯ˈzɪçɐtn̩ˌkaʁtə","fer-ZI-kher-ten-kar-te","B1","gesund","N"],
+    ["Notaufnahme","unit gawat darurat","ˈnoːtʔaʊ̯fˌnaːmə","NOHT-auf-nah-me","B1","gesund","N"],
+    ["Notdienst","layanan jaga darurat","ˈnoːtˌdiːnst","NOHT-deenst","B1","gesund","N"],
+    ["Nebenwirkung","efek samping","ˈneːbm̩ˌvɪʁkʊŋ","NEH-ben-vir-kung","B1","gesund","N"],
+    ["Beschwerden","keluhan","bəˈʃveːɐ̯dn̩","be-SHVEHR-den","B1","gesund","N"],
+    ["Gesundheitsamt","dinas kesehatan","ɡəˈzʊnthaɪ̯tsˌʔamt","ge-ZUNT-haits-amt","B1","gesund","N"],
+    ["untersuchen","memeriksa","ʊntɐˈzuːxn̩","un-ter-ZOO-khen","B1","gesund","V"],
+    ["behandeln","merawat","bəˈhandl̩n","be-HAN-deln","B1","gesund","V"],
+    ["verschreiben","meresepkan","fɛɐ̯ˈʃʁaɪ̯bm̩","fer-SHRAI-ben","B1","gesund","V"],
+    ["ansteckend","menular","ˈanˌʃtɛkn̩t","AN-shte-kent","B1","gesund","Adj"],
+    ["Attest","surat keterangan dokter","aˈtɛst","a-TEST","B2","gesund","N"],
+    ["Arbeitsunfähigkeit","ketidakmampuan bekerja","ˈaʁbaɪ̯tsʔʊnˌfɛːɪçkaɪ̯t","AR-baits-un-feh-ikh-kait","B2","gesund","N"],
+    ["Zuzahlung","urun biaya pasien","ˈtsuːˌtsaːlʊŋ","TSOO-tsah-lung","B2","gesund","N"],
+    ["Schweigepflicht","kewajiban merahasiakan","ˈʃvaɪ̯ɡəˌpflɪçt","SHVAI-ge-pflikht","B2","gesund","N"],
+    ["gesetzlich","menurut undang-undang","ɡəˈzɛtslɪç","ge-ZETS-likh","B1","gesund","Adj"],
+    ["Lohnfortzahlung","gaji tetap dibayar saat sakit","ˈloːnfɔʁtˌtsaːlʊŋ","LOHN-fort-tsah-lung","C1","gesund","N"],
+    ["Arbeitsunfähigkeitsbescheinigung","surat resmi tidak mampu bekerja","ˈaʁbaɪ̯tsʔʊnfɛːɪçkaɪ̯tsbəˌʃaɪ̯nɪɡʊŋ","AR-baits-un-feh-ikh-kaits-be-shai-ni-gung","C1","gesund","N"],
+    ["Mieter","penyewa","ˈmiːtɐ","MEE-ter","A2","wohnen","N"],
+    ["zentral","di pusat kota","tsɛnˈtʁaːl","tsen-TRAHL","A2","wohnen","Adj"],
+    ["Wohnungssuche","pencarian tempat tinggal","ˈvoːnʊŋsˌzuːxə","VOH-nungs-zoo-khe","B1","wohnen","N"],
+    ["Kaltmiete","sewa belum termasuk biaya","ˈkaltˌmiːtə","KALT-mee-te","B1","wohnen","N"],
+    ["Warmmiete","sewa sudah termasuk biaya","ˈvaʁmˌmiːtə","VARM-mee-te","B1","wohnen","N"],
+    ["Wohngemeinschaft","rumah berbagi","ˈvoːnɡəˌmaɪ̯nʃaft","VOHN-ge-main-shaft","B1","wohnen","N"],
+    ["Hausordnung","tata tertib rumah","ˈhaʊ̯sˌʔɔʁdnʊŋ","HAUS-ord-nung","B1","wohnen","N"],
+    ["Besichtigung","peninjauan unit","bəˈzɪçtɪɡʊŋ","be-ZIKH-ti-gung","B1","wohnen","N"],
+    ["Stromvertrag","kontrak listrik","ˈʃtʁoːmfɛɐ̯ˌtʁaːk","SHTROHM-fer-trahk","B1","wohnen","N"],
+    ["Schimmel","jamur dinding","ˈʃɪml̩","SHI-mel","B1","wohnen","N"],
+    ["Möbelwagen","truk pindahan","ˈmøːbl̩ˌvaːɡn̩","MÖ-bel-vah-gen","B1","wohnen","N"],
+    ["besichtigen","meninjau unit","bəˈzɪçtɪɡn̩","be-ZIKH-ti-gen","B1","wohnen","V"],
+    ["möbliert","sudah berperabot","møˈbliːɐ̯t","mö-BLEERT","B1","wohnen","Adj"],
+    ["Untermiete","sewa lanjutan dari penyewa","ˈʊntɐˌmiːtə","UN-ter-mee-te","B2","wohnen","N"],
+    ["Nachmieter","penyewa pengganti","ˈnaːxˌmiːtɐ","NAHKH-mee-ter","B2","wohnen","N"],
+    ["Wohnungsgeberbestätigung","konfirmasi dari pemberi tempat tinggal","ˈvoːnʊŋsɡeːbɐbəˌʃtɛːtɪɡʊŋ","VOH-nungs-geh-ber-be-shteh-ti-gung","B2","wohnen","N"],
+    ["Kündigungsschutz","perlindungan dari pengusiran","ˈkʏndɪɡʊŋsˌʃʊts","KÜN-di-gungs-shuts","B2","wohnen","N"],
+    ["Selbstauskunft","formulir data diri calon penyewa","ˈzɛlpstˌʔaʊ̯skʊnft","ZELPST-aus-kunft","B2","wohnen","N"],
+    ["renovieren","merenovasi","ʁenoˈviːʁən","re-no-VEE-ren","B2","wohnen","V"],
+    ["Staffelmiete","sewa naik bertahap","ˈʃtafl̩ˌmiːtə","SHTA-fel-mee-te","C1","wohnen","N"],
+    ["Mietschuldenfreiheitsbescheinigung","surat bebas tunggakan sewa","ˈmiːtʃʊldn̩fʁaɪ̯haɪ̯tsbəˌʃaɪ̯nɪɡʊŋ","MEET-shul-den-frai-haits-be-shai-ni-gung","C1","wohnen","N"],
+    ["Tagesordnung","agenda rapat","ˈtaːɡəsˌʔɔʁdnʊŋ","TAH-ges-ord-nung","B1","buero","N"],
+    ["Zusammenfassung","ringkasan","tsuˈzamənˌfasʊŋ","tsu-ZA-men-fa-sung","B1","buero","N"],
+    ["Ablage","penyimpanan arsip","ˈapˌlaːɡə","AP-lah-ge","B1","buero","N"],
+    ["Vorlage","templat / berkas contoh","ˈfoːɐ̯ˌlaːɡə","FOHR-lah-ge","B1","buero","N"],
+    ["Rückfrage","pertanyaan susulan","ˈʁʏkˌfʁaːɡə","RÜK-frah-ge","B1","buero","N"],
+    ["Posteingang","kotak masuk","ˈpɔstˌʔaɪ̯nɡaŋ","POST-ain-gang","B1","buero","N"],
+    ["Sachbearbeiter","petugas pelaksana berkas","ˈzaxbəˌʔaʁbaɪ̯tɐ","ZAKH-be-ar-bai-ter","B1","buero","N"],
+    ["weiterleiten","meneruskan","ˈvaɪ̯tɐˌlaɪ̯tn̩","VAI-ter-lai-ten","B1","buero","V"],
+    ["erledigen","menyelesaikan","ɛɐ̯ˈleːdɪɡn̩","er-LEH-di-gen","B1","buero","V"],
+    ["Tabellenkalkulation","lembar hitung / spreadsheet","taˈbɛlənkalkulaˌtsi̯oːn","ta-BE-len-kal-ku-la-tsyohn","B2","buero","N"],
+    ["Tabellenblatt","lembar kerja","taˈbɛlənˌblat","ta-BE-len-blat","B2","buero","N"],
+    ["Datenschutzerklärung","pernyataan perlindungan data","ˈdaːtn̩ʃʊtsʔɛɐ̯ˌklɛːʁʊŋ","DAH-ten-shuts-er-kleh-rung","B2","buero","N"],
+    ["Verteiler","daftar penerima surat","fɛɐ̯ˈtaɪ̯lɐ","fer-TAI-ler","B2","buero","N"],
+    ["Rücksprache","konsultasi singkat","ˈʁʏkˌʃpʁaːxə","RÜK-shprah-khe","B2","buero","N"],
+    ["Wiedervorlage","penjadwalan tindak lanjut","ˈviːdɐfoːɐ̯ˌlaːɡə","VEE-der-fohr-lah-ge","B2","buero","N"],
+    ["Geschäftsführung","jajaran direksi","ɡəˈʃɛftsˌfyːʁʊŋ","ge-SHEFTS-fü-rung","B2","buero","N"],
+    ["fristgerecht","tepat pada tenggat","ˈfʁɪstɡəˌʁɛçt","FRIST-ge-rekht","B2","buero","Adj"],
+    ["bilanzieren","menyajikan di neraca","bilanˈtsiːʁən","bi-lan-TSEE-ren","B2","buch","V"],
+    ["abgrenzen","memisahkan antar periode","ˈapˌɡʁɛntsn̩","AP-gren-tsen","B2","buch","V"],
+    ["ausweisen","menyajikan dalam laporan","ˈaʊ̯sˌvaɪ̯zn̩","AUS-vai-zen","B2","buch","V"],
+    ["stornieren","membatalkan jurnal","ʃtɔʁˈniːʁən","shtor-NEE-ren","B2","buch","V"],
+    ["bewerten","menilai","bəˈveːɐ̯tn̩","be-VEHR-ten","B1","buch","V"],
+    ["abstimmen","merekonsiliasi","ˈapˌʃtɪmən","AP-shti-men","B1","buch","V"],
+    ["saldieren","saling menghapus saldo","zalˈdiːʁən","zal-DEE-ren","C1","buch","V"],
+    ["offenlegen","mengungkapkan ke publik","ˈɔfn̩ˌleːɡn̩","O-fen-leh-gen","C1","buch","V"],
+    ["veranlagen","menetapkan ketetapan pajak","fɛɐ̯ˈʔanlaːɡn̩","fer-AN-lah-gen","C1","buch","V"],
+    ["einbehalten","memotong dan menahan","ˈaɪ̯nbəˌhaltn̩","AIN-be-hal-ten","C1","buch","V"],
+    ["veräußern","melepas aset","fɛɐ̯ˈʔɔʏ̯sɐn","fer-OY-sern","C1","buch","V"],
+    ["verbindlich","mengikat secara hukum","fɛɐ̯ˈbɪntlɪç","fer-BINT-likh","B2","buch","Adj"],
+    ["abzugsfähig","dapat dikurangkan","ˈaptsuːksˌfɛːɪç","AP-tsooks-feh-ikh","C1","buch","Adj"],
+    ["bilanziell","dari sisi neraca","bilanˈtsi̯ɛl","bi-lan-TSYEL","C1","buch","Adj"],
+    ["säumig","menunggak","ˈzɔʏ̯mɪç","ZOY-mikh","C1","buch","Adj"],
+    ["unverzüglich","tanpa ditunda","ˈʊnfɛɐ̯ˌtsyːklɪç","UN-fer-tsük-likh","C1","buch","Adj"],
+    ["unentgeltlich","tanpa imbalan","ˈʊnʔɛntˌɡɛltlɪç","UN-ent-gelt-likh","C1","buch","Adj"],
+    ["insgesamt","secara keseluruhan","ˈɪnsɡəˌzamt","INS-ge-zamt","B1","buch","Adv"],
+    ["spätestens","paling lambat","ˈʃpɛːtəstn̩s","SHPEH-tes-tens","B1","buero","Adv"],
+    ["frühestens","paling cepat","ˈfʁyːəstn̩s","FRÜ-es-tens","B1","buero","Adv"],
+    ["nämlich","yaitu","ˈnɛːmlɪç","NEHM-likh","B1","alltag","Adv"],
+    ["möglichst","sebisa mungkin","ˈmøːklɪçst","MÖK-likhst","B1","beruf","Adv"],
+    ["jeweils","masing-masing","ˈjeːvaɪ̯ls","YEH-vails","B2","buch","Adv"],
+    ["zuzüglich","ditambah","ˈtsuːˌtsyːklɪç","TSOO-tsük-likh","B2","buch","Adv"],
+    ["abzüglich","dikurangi","ˈaptsyːklɪç","AP-tsük-likh","B2","buch","Adv"],
+    ["einschließlich","termasuk","ˈaɪ̯nʃliːslɪç","AIN-shlees-likh","B2","buch","Adv"],
+    ["ausschließlich","semata-mata","ˈaʊ̯sʃliːslɪç","AUS-shlees-likh","B2","buch","Adv"],
+    ["grundsätzlich","pada dasarnya","ˈɡʁʊntzɛtslɪç","GRUNT-zets-likh","B2","buch","Adv"],
+    ["hinsichtlich","berkenaan dengan","ˈhɪnzɪçtlɪç","HIN-zikht-likh","B2","amt","Adv"],
+    ["üblicherweise","lazimnya","ˈyːplɪçɐˌvaɪ̯zə","Ü-plikh-er-vai-ze","B2","alltag","Adv"],
+    ["gegebenenfalls","kalau memang perlu","ɡəˈɡeːbənənˌfals","ge-GEH-be-nen-fals","C1","amt","Adv"],
+    ["vorbehaltlich","dengan syarat","ˈfoːɐ̯bəˌhaltlɪç","FOHR-be-halt-likh","C1","amt","Adv"],
+    ["dementsprechend","sejalan dengan itu","deːmʔɛntˈʃpʁɛçn̩t","dehm-ent-SHPRE-khent","C1","amt","Adv"],
+    ["vorrangig","diutamakan","ˈfoːɐ̯ˌʁaŋɪç","FOHR-rang-ikh","C1","buch","Adv"],
+    ["darüber hinaus","selain itu","daˈʁyːbɐ hɪˈnaʊ̯s","da-RÜ-ber hi-NAUS","C1","buch","Adv"],
+    ["Verständnis","pemahaman","fɛɐ̯ˈʃtɛntnɪs","fer-SHTENT-nis","B1","alltag","N"],
+    ["Enttäuschung","kekecewaan","ɛntˈtɔʏ̯ʃʊŋ","ent-TOY-shung","B1","alltag","N"],
+    ["Überraschung","kejutan","ˌyːbɐˈʁaʃʊŋ","ü-ber-RA-shung","B1","alltag","N"],
+    ["Rücksicht","tenggang rasa","ˈʁʏkˌzɪçt","RÜK-zikht","B1","alltag","N"],
+    ["Gewöhnung","pembiasaan","ɡəˈvøːnʊŋ","ge-VÖ-nung","B2","alltag","N"],
+    ["Bemühung","upaya","bəˈmyːʊŋ","be-MÜ-ung","B2","alltag","N"],
+    ["Gerücht","desas-desus","ɡəˈʁʏçt","ge-RÜKHT","B2","alltag","N"],
+    ["Öffentlichkeit","khalayak umum","ˈœfn̩tlɪçkaɪ̯t","Ö-fent-likh-kait","B2","alltag","N"],
+    ["Zugehörigkeit","keterikatan / keanggotaan","ˈtsuːɡəˌhøːʁɪçkaɪ̯t","TSOO-ge-hö-rikh-kait","C1","alltag","N"],
+    ["ärgerlich","menjengkelkan","ˈɛʁɡɐlɪç","ER-ger-likh","B1","alltag","Adj"],
+    ["gewöhnlich","biasa","ɡəˈvøːnlɪç","ge-VÖN-likh","B1","alltag","Adj"],
+    ["enttäuschen","mengecewakan","ɛntˈtɔʏ̯ʃn̩","ent-TOY-shen","B1","alltag","V"],
+    ["bemühen","mengupayakan","bəˈmyːən","be-MÜ-en","B2","alltag","V"],
+    ["gewöhnen","membiasakan","ɡəˈvøːnən","ge-VÖ-nen","B2","alltag","V"],
+    ["null","nol","nʊl","NUL","A1","buch","Num"],
+    ["erste","pertama","ˈeːɐ̯stə","EHRS-te","A1","buch","Num"],
+    ["zweite","kedua","ˈtsvaɪ̯tə","TSVAI-te","A1","buch","Num"],
+    ["dritte","ketiga","ˈdʁɪtə","DRI-te","A1","buch","Num"],
+    ["fünfte","kelima","ˈfʏnftə","FÜNF-te","A2","buch","Num"],
+    ["zwanzigste","kedua puluh","ˈtsvantsɪçstə","TSVAN-tsikhs-te","A2","buch","Num"],
+    ["Milliarde","miliar","mɪˈli̯aʁdə","mi-LYAR-de","B1","buch","Num"],
+    ["Viertel","seperempat","ˈfɪʁtl̩","FIR-tel","A2","buch","N"],
+    ["Dutzend","lusin","ˈdʊtsn̩t","DUT-sent","A2","buch","N"],
+    ["Promille","permil","pʁoˈmɪlə","pro-MI-le","B2","buch","N"],
+  ];
+
+  var LEVELS = ["all","A1","A2","B1","B2","C1"];
+  var THEMES = [["all","Semua tema"],["buch","Buchhaltung"],["amt","Behörde & Visum"],["beruf","Bewerbung & Schule"],["buero","Büro"],["gesund","Gesundheit & Arzt"],["wohnen","Wohnung & Umzug"],["alltag","Alltag"]];
+  var WAS = [["all","Semua jenis"],["N","Nomen (kata benda)"],["V","Verben (kata kerja)"],["Adj","Adjektive (kata sifat)"],["Adv","Adverbien & Fragewörter"],["Num","Zahlen (angka)"]];
+  var WANAME = {N:"NOMEN", V:"VERB", Adj:"ADJEKTIV", Adv:"ADVERB", Num:"ZAHL"};
+  var MASTER = 3;
+
+  var ALT = {"ä":"AltGr + Q","ö":"AltGr + P","ü":"AltGr + Y","Ä":"AltGr + ⇧ + Q","Ö":"AltGr + ⇧ + P","Ü":"AltGr + ⇧ + Y","ß":"AltGr + S","ẞ":"biasanya SS"};
+  var TAG = {"ä":"ae","ö":"oe","ü":"ue","Ä":"Ae","Ö":"Oe","Ü":"Ue","ß":"ss","ẞ":"SS"};
+  var SPECIAL = "äöüßÄÖÜẞ";
+
+  var field=document.getElementById("field"), wordEl=document.getElementById("word"),
+      meanEl=document.getElementById("meaning"), ipaEl=document.getElementById("ipa"),
+      respEl=document.getElementById("resp"), pronEl=document.getElementById("pron"),
+      hintEl=document.getElementById("hintline"), board=document.getElementById("board"),
+      copyBtn=document.getElementById("copy"), skipBtn=document.getElementById("skip"),
+      autoBtn=document.getElementById("auto"), spkBtn=document.getElementById("spk"),
+      slowBtn=document.getElementById("spkslow"), warnEl=document.getElementById("voicewarn"),
+      levelHost=document.getElementById("levels"), themeSel=document.getElementById("themesel"),
+      waSel=document.getElementById("wasel"), goalSel=document.getElementById("goalsel"),
+      syncEl=document.getElementById("sync"), syncText=document.getElementById("synctext");
+
+  var bannerEl = document.getElementById("banner"),
+      noteEl   = document.getElementById("filternote"),
+      umlBtn   = document.getElementById("umlonly"),
+      hideBtn  = document.getElementById("hide");
+
+  var UMLAUT = /[\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df\u1e9e]/;
+
+  var st = { mode:"latih", lv:"all", th:"all", wa:"all", i:0, done:0, keys:0, ok:0, uml:0, prev:0, lock:false, auto:false, mistakes:0, hide:true, umlonly:false };
+  var pool = [], scopeTotal = 0, scopeDone = 0, allDone = false;
+
+  /* ---------- persistence ---------- */
+  var prog = { day:"", count:0, streak:0, total:0, lastActive:"", goal:25, auto:false, hide:true, umlonly:false, words:{} };
+  /* Tanggal harus tanggal DI TEMPATMU. toISOString() memakai UTC, jadi di WIB
+     hari baru baru terhitung jam 07.00 pagi dan runtunan harian bisa putus
+     padahal kamu latihan tiap hari. */
+  function ymd(d){
+    return d.getFullYear() + "-" +
+      ("0" + (d.getMonth()+1)).slice(-2) + "-" +
+      ("0" + d.getDate()).slice(-2);
+  }
+  function today(){ return ymd(new Date()); }
+  function yesterday(){ var d=new Date(); d.setDate(d.getDate()-1); return ymd(d); }
+  function saveLocal(){ try{ localStorage.setItem("uw-prog", JSON.stringify(prog)); }catch(_){} }
+  function rollDay(){
+    if(prog.day !== today()){ prog.day = today(); prog.count = 0; }
+    if(prog.lastActive && prog.lastActive !== today() && prog.lastActive !== yesterday()) prog.streak = 0;
+    if(!prog.words || typeof prog.words !== "object") prog.words = {};
+  }
+  function load(){
+    try{ var r=localStorage.getItem("uw-prog"); if(r){ var p=JSON.parse(r); if(p&&typeof p==="object") prog=Object.assign(prog,p); } }catch(_){}
+    rollDay();
+  }
+
+  /* ---------- cloud sync (db capability) ---------- */
+  var dbRef=null, saving=false, dirty=false, saveTimer=null;
+  function setSync(state, text){
+    syncEl.className = "sync" + (state ? " " + state : "");
+    syncText.textContent = text;
+  }
+  function save(){
+    saveLocal();
+    dirty = true;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(flush, 2500);
+  }
+  function flush(){
+    if(!dbRef || saving || !dirty) return;
+    saving = true; dirty = false;
+    var body;
+    try{ body = JSON.parse(JSON.stringify(prog)); }catch(_){ saving=false; return; }
+    dbRef.set(body).then(function(){
+      saving = false;
+      setSync("ok","Progres tersimpan");
+      if(dirty) setTimeout(flush, 2000);
+    }, function(){
+      saving = false; dirty = true;
+      setSync("local","Tersimpan di browser ini");
+    });
+  }
+  function initSync(){
+    if(!(window.claude && window.claude.use)){ setSync("local","Tersimpan di browser ini"); return; }
+    Promise.all([window.claude.use("db"), window.claude.use("user")]).then(function(r){
+      var db = r[0], user = r[1];
+      if(!db || !user){ setSync("local","Tersimpan di browser ini"); return; }
+      return user.id().then(function(uid){
+        if(!uid){ setSync("local","Tersimpan di browser ini"); return; }
+        dbRef = db.doc("data/users/" + uid + "/progress");
+        return dbRef.get().then(function(snap){
+          if(snap.exists){
+            var d = snap.data();
+            if(d && typeof d === "object" && (d.total||0) >= (prog.total||0)){
+              prog = Object.assign(prog, d);
+              rollDay();
+              goalSel.value = String(prog.goal || 25);
+              st.auto = !!prog.auto;
+              autoBtn.setAttribute("aria-pressed", st.auto ? "true":"false");
+              st.hide = prog.hide !== false;
+              hideBtn.setAttribute("aria-pressed", st.hide ? "true" : "false");
+              hideBtn.textContent = st.hide ? "Sembunyikan yang dikuasai" : "Tampilkan semua kata";
+              st.umlonly = !!prog.umlonly;
+              umlBtn.setAttribute("aria-pressed", st.umlonly ? "true" : "false");
+              umlBtn.textContent = st.umlonly ? "Semua kata lagi" : "Hanya yang berumlaut";
+              paintDaily(); buildPool(); loadWord();
+            }
+          }
+          setSync("ok","Progres tersimpan");
+          if(dirty) flush();
+        });
+      });
+    }).catch(function(){ setSync("local","Tersimpan di browser ini"); });
+  }
+  document.addEventListener("visibilitychange", function(){ if(document.hidden) flush(); });
+
+  /* ---------- mastery ---------- */
+  function boxOf(w){ var r = prog.words[w[0]]; return r ? (r.l|0) : 0; }
+  function seenOf(w){ return !!prog.words[w[0]]; }
+
+  /* Typo yang langsung diperbaiki bukan kegagalan — kata tetap naik kalau
+     bersih, tertahan kalau 1–2 typo, dan baru turun kalau benar-benar kacau. */
+  function recordWord(w, mistakes){
+    var r = prog.words[w[0]] || { l:0, n:0 };
+    var d = mistakes === 0 ? 1 : (mistakes <= 2 ? 0 : -1);
+    r.n = (r.n|0) + 1;
+    r.l = Math.max(0, Math.min(MASTER, (r.l|0) + d));
+    prog.words[w[0]] = r;
+    return d;
+  }
+  function countMastered(list){
+    var n = 0;
+    for(var i=0;i<list.length;i++){ if(boxOf(list[i]) >= MASTER) n++; }
+    return n;
+  }
+  /* Satu penyaring untuk semua: chip level menghitung dengan tema, jenis kata
+     dan saringan umlaut yang sedang menyala, jadi angka di chip selalu sama
+     dengan jumlah kata yang benar-benar akan kamu ketik. */
+  function inScope(w, lv){
+    return (lv === "all" || w[4] === lv)
+        && (st.th === "all" || w[5] === st.th)
+        && (st.wa === "all" || (w[6] || "N") === st.wa)
+        && (!st.umlonly || UMLAUT.test(w[0]));
+  }
+  function wordsAt(lv){
+    return WORDS.filter(function(w){ return inScope(w, lv); });
+  }
+  function bumpDaily(){
+    var t = today();
+    if(prog.day !== t){ prog.day = t; prog.count = 0; }
+    if(prog.lastActive !== t){
+      prog.streak = (prog.lastActive === yesterday()) ? prog.streak + 1 : 1;
+      prog.lastActive = t;
+    }
+    prog.count++; prog.total++;
+    save(); paintDaily();
+  }
+  function paintDaily(){
+    document.getElementById("d-count").textContent = prog.count;
+    document.getElementById("d-goal").textContent = prog.goal;
+    var pct = Math.min(100, Math.round(prog.count / prog.goal * 100));
+    document.getElementById("d-bar").style.width = pct + "%";
+    var s = document.getElementById("d-streak");
+    s.textContent = prog.streak > 0 ? ("🔥 " + prog.streak + " hari berturut") : "Mulai hari ini";
+    document.getElementById("s-total").textContent = prog.total;
+  }
+
+  /* ---------- speech ---------- */
+  var deVoice = null, synth = window.speechSynthesis || null;
+  function pickVoice(){
+    if(!synth) return;
+    var vs = synth.getVoices() || [];
+    deVoice = null;
+    /* de-DE dulu; de-AT dan de-CH baru sesudahnya, supaya bunyinya
+       sama dengan yang ditulis di kolom Baca. */
+    for(var i=0;i<vs.length;i++){ if(/^de[-_]DE/i.test(vs[i].lang)){ deVoice = vs[i]; break; } }
+    if(!deVoice) for(var j=0;j<vs.length;j++){ if(/^de/i.test(vs[j].lang)){ deVoice = vs[j]; break; } }
+    updateVoiceNote(vs.length);
+  }
+  function updateVoiceNote(loaded){
+    if(!synth){
+      warnEl.hidden = false;
+      warnEl.textContent = "Browser ini tidak mendukung pemutar suara. Coba buka halaman ini di Chrome atau Edge.";
+      spkBtn.disabled = slowBtn.disabled = true;
+      return;
+    }
+    if(!deVoice && loaded){
+      warnEl.hidden = false;
+      warnEl.innerHTML = 'Belum ada suara bahasa Jerman di perangkat ini, jadi kata akan dibaca dengan aksen yang salah. Pasang dulu: <code>Settings → Time &amp; Language → Speech → Manage voices → Add voices → Deutsch</code>, lalu muat ulang halaman ini.';
+    } else {
+      warnEl.hidden = true;
+    }
+  }
+  if(synth){ pickVoice(); synth.addEventListener("voiceschanged", pickVoice); }
+
+  function speak(text, slow){
+    if(!synth || !text) return;
+    try{
+      synth.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "de-DE";
+      if(deVoice) u.voice = deVoice;
+      u.rate = slow ? 0.6 : 0.95;
+      synth.speak(u);
+    }catch(_){}
+  }
+
+  /* ---------- filters ---------- */
+  var chipCounts = {};
+  LEVELS.forEach(function(lv){
+    var b = document.createElement("button");
+    b.className = "chip"; b.type = "button"; b.dataset.lv = lv;
+    b.setAttribute("aria-pressed", lv === "all" ? "true" : "false");
+    b.appendChild(document.createTextNode(lv === "all" ? "Semua" : lv));
+    var s = document.createElement("span"); s.className = "n";
+    b.appendChild(s);
+    chipCounts[lv] = s;
+    levelHost.appendChild(b);
+  });
+  function paintChips(){
+    LEVELS.forEach(function(lv){
+      var list = wordsAt(lv);
+      chipCounts[lv].textContent = countMastered(list) + "/" + list.length;
+    });
+  }
+  levelHost.addEventListener("click", function(ev){
+    var b = ev.target.closest(".chip"); if(!b) return;
+    st.lv = b.dataset.lv;
+    levelHost.querySelectorAll(".chip").forEach(function(c){ c.setAttribute("aria-pressed", c === b ? "true" : "false"); });
+    buildPool(); loadWord(); field.focus();
+  });
+
+  THEMES.forEach(function(t){
+    var o = document.createElement("option"); o.value = t[0]; o.textContent = t[1]; themeSel.appendChild(o);
+  });
+  themeSel.addEventListener("change", function(){ st.th = themeSel.value; buildPool(); loadWord(); field.focus(); });
+
+  WAS.forEach(function(t){
+    var o = document.createElement("option"); o.value = t[0]; o.textContent = t[1]; waSel.appendChild(o);
+  });
+  waSel.addEventListener("change", function(){ st.wa = waSel.value; buildPool(); loadWord(); field.focus(); });
+
+  goalSel.addEventListener("change", function(){ prog.goal = parseInt(goalSel.value,10) || 25; save(); paintDaily(); });
+
+  umlBtn.addEventListener("click", function(){
+    st.umlonly = !st.umlonly; prog.umlonly = st.umlonly; save();
+    umlBtn.setAttribute("aria-pressed", st.umlonly ? "true" : "false");
+    umlBtn.textContent = st.umlonly ? "Semua kata lagi" : "Hanya yang berumlaut";
+    buildPool(); loadWord(); field.focus();
+  });
+
+  hideBtn.addEventListener("click", function(){
+    st.hide = !st.hide; prog.hide = st.hide; save();
+    hideBtn.setAttribute("aria-pressed", st.hide ? "true" : "false");
+    hideBtn.textContent = st.hide ? "Sembunyikan yang dikuasai" : "Tampilkan semua kata";
+    buildPool(); loadWord(); field.focus();
+  });
+
+  function shuffle(a){
+    for(var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  /* Antrian: yang belum dikuasai dulu. Kalau "sembunyikan yang dikuasai"
+     aktif, kata yang sudah penuh kotaknya keluar dari antrian sama sekali,
+     jadi sisa kerjanya benar-benar menyusut. */
+  var filterKosong = false;
+  function scopeWords(){
+    var base = wordsAt(st.lv);
+    filterKosong = !base.length;
+    /* Kombinasi filter bisa tidak menyisakan satu kata pun — misalnya
+       C1 + Alltag + Zahlen. Dulu halaman ini diam-diam mundur ke level saja
+       dan kamu mengetik kata yang tidak kamu minta. Sekarang dikatakan. */
+    if(!base.length) base = WORDS.filter(function(w){ return st.lv === "all" || w[4] === st.lv; });
+    if(!base.length) base = WORDS.slice();
+    return base;
+  }
+  function buildPool(){
+    var base = scopeWords();
+    scopeTotal = base.length;
+    scopeDone = countMastered(base);
+
+    var weak = [], fresh = [], warm = [], done = [];
+    base.forEach(function(w){
+      var b = boxOf(w);
+      if(b >= MASTER) done.push(w);
+      else if(!seenOf(w)) fresh.push(w);
+      else if(b === 0) weak.push(w);
+      else warm.push(w);
+    });
+    var active = shuffle(weak).concat(shuffle(fresh), shuffle(warm));
+    allDone = (active.length === 0);
+    pool = (st.hide && !allDone) ? active : active.concat(shuffle(done));
+    st.i = 0;
+    paintBanner();
+  }
+
+  function paintBanner(){
+    if(filterKosong){
+      noteEl.hidden = false;
+      noteEl.textContent = "Tidak ada satu kata pun yang cocok dengan kombinasi filter ini, "
+        + "jadi yang keluar di bawah adalah kata level " + (st.lv === "all" ? "mana saja" : st.lv)
+        + ". Longgarkan salah satu filternya.";
+    } else {
+      noteEl.hidden = true;
+    }
+    if(allDone){
+      bannerEl.hidden = false;
+      var label = st.lv === "all" ? "semua level" : "level " + st.lv;
+      bannerEl.textContent = "Selesai — " + scopeTotal + " kata di " + label
+        + " sudah dikuasai. Pilih level berikutnya di atas, atau lanjut mengulang di sini.";
+    } else {
+      bannerEl.hidden = true;
+    }
+  }
+
+  /* ---------- keyboard ---------- */
+  function key(ch, opts){
+    opts = opts || {};
+    var b = document.createElement("button");
+    b.type="button"; b.className="kbd"; b.dataset.char=ch;
+    if(opts.act) b.dataset.act = opts.act;
+    if(TAG[ch]){ var t=document.createElement("span"); t.className="tag"; t.textContent=TAG[ch]; b.appendChild(t); }
+    var f=document.createElement("span"); f.textContent = opts.label || ch; b.appendChild(f);
+    if(ALT[ch]){ var a=document.createElement("span"); a.className="alt"; a.textContent=ALT[ch]; b.appendChild(a); }
+    b.setAttribute("aria-label", opts.aria || ("Ketik " + (opts.label || ch)));
+    return b;
+  }
+  function fill(id, chars){ var h=document.getElementById(id); chars.forEach(function(c){ h.appendChild(key(c)); }); }
+  fill("bank-lo",["ä","ö","ü"]); fill("bank-up",["Ä","Ö","Ü"]); fill("bank-sz",["ß","ẞ"]);
+  var xrow=document.getElementById("bank-x");
+  var spaceKey=key(" ",{label:"Leerzeichen",aria:"Spasi"});
+  var backKey=key("Backspace",{label:"Löschen",aria:"Hapus satu huruf",act:"back"});
+  xrow.appendChild(spaceKey); xrow.appendChild(backKey);
+
+  /* ---------- render ---------- */
+  function cur(){ return pool[st.i]; }
+  function target(){ var w = cur(); return w ? w[0] : ""; }
+
+  function paint(){
+    if(st.mode === "bebas"){ wordEl.textContent = field.value || ""; return; }
+    var t = target(), v = field.value;
+    if(!t){ wordEl.textContent = ""; return; }
+    wordEl.textContent = "";
+    for(var i=0;i<t.length;i++){
+      var s=document.createElement("span");
+      s.className = "ch " + (i<v.length ? (v[i]===t[i]?"ok":"bad") : (i===v.length?"cur":"pend"));
+      s.textContent = t[i]; wordEl.appendChild(s);
+    }
+    if(v.length > t.length){
+      var x=document.createElement("span"); x.className="ch bad";
+      x.textContent="·".repeat(v.length - t.length); wordEl.appendChild(x);
+    }
+  }
+
+  function stats(){
+    document.getElementById("s-done").textContent = st.done;
+    document.getElementById("s-uml").textContent = st.uml;
+    document.getElementById("s-acc").textContent = (st.keys ? Math.round(st.ok/st.keys*100) : 100) + "%";
+    document.getElementById("s-mastered").textContent = scopeDone + " / " + scopeTotal;
+    document.getElementById("s-left").textContent = Math.max(0, scopeTotal - scopeDone);
+    paintChips();
+  }
+
+  function loadWord(){
+    var w = cur();
+    if(!w) return;
+    meanEl.textContent = "";
+    var lv = document.createElement("span"); lv.className="lv"; lv.textContent = w[4];
+    meanEl.appendChild(lv);
+    var wa = document.createElement("span"); wa.className="wa";
+    wa.textContent = WANAME[w[6] || "N"]; meanEl.appendChild(wa);
+    meanEl.appendChild(document.createTextNode("Arti — "));
+    var em = document.createElement("em"); em.textContent = w[1]; meanEl.appendChild(em);
+    var box = document.createElement("span"); box.className="box";
+    var b = boxOf(w);
+    box.textContent = b >= MASTER ? "✓ dikuasai" : ("●".repeat(b) + "○".repeat(MASTER - b));
+    meanEl.appendChild(box);
+    var pos = document.createElement("span"); pos.className="pos";
+    pos.textContent = (st.i+1) + " / " + pool.length; meanEl.appendChild(pos);
+    ipaEl.textContent = "[" + w[2] + "]";
+    respEl.textContent = w[3];
+    field.value = ""; st.prev = 0; st.lock = false; st.mistakes = 0;
+    paint(); stats();
+    if(st.auto) speak(w[0], false);
+  }
+
+  function nextWord(){
+    if(st.hide && !allDone){
+      /* kata yang baru saja dikuasai langsung keluar dari antrian,
+         supaya sisa kerjanya terlihat menyusut */
+      var w = pool[st.i];
+      if(w && boxOf(w) >= MASTER) pool.splice(st.i, 1); else st.i++;
+      while(st.i < pool.length && boxOf(pool[st.i]) >= MASTER) pool.splice(st.i, 1);
+    } else {
+      st.i++;
+    }
+    if(st.i >= pool.length || !pool.length) buildPool();
+    loadWord(); field.focus();
+  }
+
+  field.addEventListener("input", function(){
+    var v = field.value;
+    if(v.length > st.prev){
+      var c = v[v.length-1];
+      st.keys++;
+      if(SPECIAL.indexOf(c) !== -1) st.uml++;
+      if(st.mode === "latih"){
+        if(c === target()[v.length-1]) st.ok++; else st.mistakes++;
+      } else { st.ok++; }
+    }
+    st.prev = v.length;
+    paint();
+    if(st.mode === "latih" && !st.lock && v === target()){
+      st.lock = true; st.done++;
+      var w = cur();
+      var d = recordWord(w, st.mistakes);
+      var justMastered = (d > 0 && boxOf(w) >= MASTER);
+      bumpDaily();
+      var base = scopeWords();
+      scopeDone = countMastered(base); scopeTotal = base.length;
+      stats();
+      setTimeout(nextWord, justMastered ? 650 : 420);
+    } else {
+      stats();
+    }
+  });
+
+  function insert(ch){
+    var s=field.selectionStart, e=field.selectionEnd;
+    if(s===null||s===undefined){ s=e=field.value.length; }
+    field.value = field.value.slice(0,s)+ch+field.value.slice(e);
+    var p=s+ch.length; field.focus();
+    try{ field.setSelectionRange(p,p); }catch(_){}
+    field.dispatchEvent(new Event("input",{bubbles:true}));
+  }
+  function back(){
+    var s=field.selectionStart, e=field.selectionEnd;
+    if(s===null||s===undefined){ s=e=field.value.length; }
+    if(s===e && s>0){ field.value=field.value.slice(0,s-1)+field.value.slice(e); s=s-1; }
+    else if(s!==e){ field.value=field.value.slice(0,s)+field.value.slice(e); }
+    field.focus();
+    try{ field.setSelectionRange(s,s); }catch(_){}
+    st.prev = field.value.length; paint();
+  }
+  board.addEventListener("click", function(ev){
+    var b = ev.target.closest(".kbd"); if(!b) return;
+    if(b.dataset.act === "back"){ back(); return; }
+    insert(b.dataset.char);
+  });
+
+  var timers = new WeakMap();
+  function flash(el){
+    if(!el) return;
+    el.classList.add("hit");
+    clearTimeout(timers.get(el));
+    timers.set(el, setTimeout(function(){ el.classList.remove("hit"); }, 150));
+  }
+  function findKey(ch){
+    try{ return board.querySelector('.kbd[data-char="'+CSS.escape(ch)+'"]'); }catch(_){ return null; }
+  }
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Backspace"){ flash(backKey); return; }
+    /* Enter melompati kata, Esc mengosongkan yang sudah terlanjur diketik —
+       supaya tanganmu tidak perlu pindah ke tetikus di tengah latihan. */
+    if(e.key === "Enter" && st.mode === "latih"){ e.preventDefault(); nextWord(); return; }
+    if(e.key === "Escape"){
+      e.preventDefault();
+      field.value = ""; st.prev = 0; st.mistakes = 0; st.lock = false;
+      paint(); field.focus(); return;
+    }
+    if(e.key && e.key.length === 1) flash(findKey(e.key));
+  });
+
+  spkBtn.addEventListener("click", function(){ if(st.mode==="latih") speak(target(), false); else speak(field.value, false); });
+  slowBtn.addEventListener("click", function(){ if(st.mode==="latih") speak(target(), true); else speak(field.value, true); });
+  autoBtn.addEventListener("click", function(){
+    st.auto = !st.auto; prog.auto = st.auto; save();
+    autoBtn.setAttribute("aria-pressed", st.auto ? "true" : "false");
+    if(st.auto && st.mode === "latih") speak(target(), false);
+    field.focus();
+  });
+
+  function setMode(m){
+    st.mode = m;
+    document.getElementById("m-latih").setAttribute("aria-pressed", m==="latih"?"true":"false");
+    document.getElementById("m-bebas").setAttribute("aria-pressed", m==="bebas"?"true":"false");
+    copyBtn.hidden = (m!=="bebas");
+    skipBtn.hidden = (m!=="latih");
+    if(m === "bebas"){
+      meanEl.textContent = "Mode bebas — ketik apa saja, lalu tekan Dengar";
+      ipaEl.textContent = ""; respEl.textContent = "";
+      field.value=""; st.prev=0; wordEl.textContent="";
+      hintEl.textContent = "Coba tulis: Ich möchte eine Ausbildung in Deutschland machen.";
+    } else {
+      hintEl.innerHTML = '<code>AltGr + Q</code> ä · <code>AltGr + P</code> ö · <code>AltGr + Y</code> ü · <code>AltGr + S</code> ß';
+      loadWord();
+    }
+    field.focus();
+  }
+  document.getElementById("m-latih").addEventListener("click", function(){ setMode("latih"); });
+  document.getElementById("m-bebas").addEventListener("click", function(){ setMode("bebas"); });
+  skipBtn.addEventListener("click", nextWord);
+  document.getElementById("reset").addEventListener("click", function(){
+    st.done = st.keys = st.ok = st.uml = 0; stats(); field.focus();
+  });
+  copyBtn.addEventListener("click", function(){
+    var txt = field.value; if(!txt) return;
+    var ok = function(){ copyBtn.textContent="Tersalin"; setTimeout(function(){ copyBtn.textContent="Salin teks"; },1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(ok, function(){ field.select(); }); }
+    else field.select();
+  });
+
+  /* ---------- start ---------- */
+  document.getElementById("wc").textContent = WORDS.length;
+  load();
+  goalSel.value = String(prog.goal);
+  st.auto = !!prog.auto;
+  autoBtn.setAttribute("aria-pressed", st.auto ? "true" : "false");
+  st.hide = prog.hide !== false;
+  hideBtn.setAttribute("aria-pressed", st.hide ? "true" : "false");
+  hideBtn.textContent = st.hide ? "Sembunyikan yang dikuasai" : "Tampilkan semua kata";
+  st.umlonly = !!prog.umlonly;
+  umlBtn.setAttribute("aria-pressed", st.umlonly ? "true" : "false");
+  umlBtn.textContent = st.umlonly ? "Semua kata lagi" : "Hanya yang berumlaut";
+  paintDaily();
+  buildPool(); loadWord(); stats(); setMode("latih");
+  setSync("local","Tersimpan di browser ini");
+  initSync();
+})();
+</script>
+
+</body></html>

@@ -58,6 +58,10 @@ PETA = {
  "f1e55d95-3ab1-4904-b378-ff0886a08852": ("minggu1/bekal-alat-kantor.html", 63, "Bekal Alat Kantor", "5 hari"),
  "746fbb14-8c40-41a3-9882-5af02e150b66": ("minggu1/bekal-bahasa-inggris.html", 64, "Bekal Bahasa Inggris Kerja", "5 hari"),
  "2427d59c-05e9-4074-98fd-eaa65ca2758e": ("minggu1/menulis-untuk-manajemen.html", 65, "Menulis untuk Manajemen", "3 hari"),
+ # alat pelengkap — bukan modul, jadi sengaja TIDAK masuk _urutan.py:
+ # ukur.py hanya mengukur yang ada di URUTAN, dan berkas ini bukan modul
+ # bertahap yang bisa diukur terhadap _pola.md.
+ "MPrJt5MdVDHQPHpdMzyh5r": ("jerman/umlaut-werkstatt.html", 950, "Umlaut-Werkstatt — latihan mengetik kosakata Jerman", ""),
  # arsip & referensi
  "82b73f76-cd26-427b-9aee-bb7ffe05fb48": ("buku-rute-data-analyst.html",      900, "Buku Rute (versi awal)", ""),
  "83f08225-e6a6-46f9-9e63-5dc4bd9fb1f7": ("rute-data-analyst.html",           901, "Rute Data Analyst (versi awal)", ""),

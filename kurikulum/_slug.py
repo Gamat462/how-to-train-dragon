@@ -58,4 +58,5 @@ SLUG = {
  "cf300cca-518f-453d-a3fe-a356d21e09ea": "915-referensi-product-analytics",
  "5abc1987-e82a-44ca-8d96-73f1faf2220e": "916-referensi-machine-learning",
  "ddb16409-f834-4484-9434-c54682526918": "917-referensi-capstone-kerja",
+ "MPrJt5MdVDHQPHpdMzyh5r": "950-umlaut-werkstatt",
 }
