@@ -1744,7 +1744,7 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
 
   var UMLAUT = /[\u00e4\u00f6\u00fc\u00c4\u00d6\u00dc\u00df\u1e9e]/;
 
-  var st = { mode:"latih", lv:"all", th:"all", wa:"all", i:0, done:0, keys:0, ok:0, uml:0, prev:0, lock:false, auto:false, mistakes:0, hide:true, umlonly:false };
+  var st = { mode:"latih", lv:"all", th:"all", wa:"all", i:0, done:0, keys:0, ok:0, uml:0, prev:0, lock:false, auto:false, mistakes:0, hide:true, umlonly:false, sela:"", selesaiPada:0 };
   var pool = [], scopeTotal = 0, scopeDone = 0, allDone = false;
 
   /* ---------- persistence ---------- */
@@ -1771,16 +1771,23 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
   }
 
   /* ---------- cloud sync (db capability) ---------- */
-  var dbRef=null, saving=false, dirty=false, saveTimer=null;
+  var dbRef=null, saving=false, dirty=false, saveTimer=null, kotorSejak=0;
   function setSync(state, text){
     syncEl.className = "sync" + (state ? " " + state : "");
     syncText.textContent = text;
   }
+  /* Dulu tiap kata yang selesai menunda penulisan ke akun 2,5 detik LAGI.
+     Kalau kamu mengetik dengan irama tetap — dan itu justru yang dilatih di
+     sini — penundaan itu tidak pernah habis, jadi progresmu tidak pernah
+     sampai ke akun sampai kamu berhenti. Tutup tab sebelum berhenti, dan
+     semuanya tidak terhitung. Sekarang ada batas atas 8 detik. */
+  var JEDA_SIMPAN = 2500, BATAS_SIMPAN = 4000;
   function save(){
     saveLocal();
-    dirty = true;
+    if(!dirty){ dirty = true; kotorSejak = Date.now(); }
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(flush, 2500);
+    if(Date.now() - kotorSejak >= BATAS_SIMPAN) flush();
+    else saveTimer = setTimeout(flush, JEDA_SIMPAN);
   }
   function flush(){
     if(!dbRef || saving || !dirty) return;
@@ -1792,7 +1799,7 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
       setSync("ok","Progres tersimpan");
       if(dirty) setTimeout(flush, 2000);
     }, function(){
-      saving = false; dirty = true;
+      saving = false; dirty = true; kotorSejak = Date.now();
       setSync("local","Tersimpan di browser ini");
     });
   }
@@ -1807,8 +1814,9 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
         return dbRef.get().then(function(snap){
           if(snap.exists){
             var d = snap.data();
-            if(d && typeof d === "object" && (d.total||0) >= (prog.total||0)){
-              prog = Object.assign(prog, d);
+            if(d && typeof d === "object"){
+              prog = gabung(prog, d);
+              dirty = true; kotorSejak = Date.now();
               rollDay();
               goalSel.value = String(prog.goal || 25);
               st.auto = !!prog.auto;
@@ -1829,6 +1837,40 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
     }).catch(function(){ setSync("local","Tersimpan di browser ini"); });
   }
   document.addEventListener("visibilitychange", function(){ if(document.hidden) flush(); });
+  /* pagehide ikut menangkap tab yang ditutup dan tombol kembali di ponsel,
+     yang tidak selalu memicu visibilitychange. */
+  window.addEventListener("pagehide", function(){ flush(); });
+
+  /* Isi akun dulu MENIMPA seluruh catatan kata di browser ini, sekaligus:
+     prog = Object.assign(prog, d) mengganti prog.words bulat-bulat. Kata yang
+     kamu kuasai di perangkat ini tapi belum sempat terkirim langsung hilang —
+     lalu ikut tertulis balik ke akun, jadi hilang di semua perangkat sekalian.
+     Sekarang tiap kata diambil kotak tertingginya dan tidak ada yang dibuang.
+     Total diambil yang terbesar, bukan dijumlah, supaya kata yang sama tidak
+     terhitung dua kali. */
+  function gabung(lokal, awan){
+    var out = {}, i, k, a, b;
+    var kl = Object.keys(lokal.words || {});
+    for(i=0;i<kl.length;i++){ out[kl[i]] = lokal.words[kl[i]]; }
+    var ka = Object.keys((awan && awan.words) || {});
+    for(i=0;i<ka.length;i++){
+      k = ka[i]; a = awan.words[k]; b = out[k];
+      out[k] = b ? { l: Math.max(b.l|0, a.l|0), n: Math.max(b.n|0, a.n|0) } : a;
+    }
+    var h = Object.assign({}, lokal);
+    h.words  = out;
+    h.total  = Math.max(lokal.total|0,  (awan && awan.total)|0);
+    h.streak = Math.max(lokal.streak|0, (awan && awan.streak)|0);
+    if(awan && awan.goal) h.goal = awan.goal;
+    if(awan && typeof awan.auto    === "boolean") h.auto    = awan.auto;
+    if(awan && typeof awan.hide    === "boolean") h.hide    = awan.hide;
+    if(awan && typeof awan.umlonly === "boolean") h.umlonly = awan.umlonly;
+    /* hitungan harian hanya digabung kalau harinya memang hari yang sama */
+    if(awan && awan.day === lokal.day) h.count = Math.max(lokal.count|0, awan.count|0);
+    else if(awan && awan.day > (lokal.day || "")){ h.day = awan.day; h.count = awan.count|0; }
+    if(awan && awan.lastActive > (lokal.lastActive || "")) h.lastActive = awan.lastActive;
+    return h;
+  }
 
   /* ---------- mastery ---------- */
   function boxOf(w){ var r = prog.words[w[0]]; return r ? (r.l|0) : 0; }
@@ -2081,6 +2123,44 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
     paintChips();
   }
 
+  /* Papan ketik dead-key (US-International di Windows, Option-u di macOS,
+     sebagian papan ketik ponsel) mengirim ü sebagai u + tanda dua titik
+     terpisah. Di layar bentuknya sama persis dengan ü, tapi bagi JavaScript
+     itu dua huruf, jadi "öffnen" tidak pernah dianggap sama dengan "öffnen"
+     dan kata itu tidak pernah terhitung selesai — persis di kata berumlaut,
+     yang justru jadi inti halaman ini. Disatukan dulu sebelum dibandingkan. */
+  function rapikan(){
+    var v = field.value;
+    if(!v || !v.normalize) return v || "";
+    var n = v.normalize("NFC");
+    if(n !== v){
+      var diUjung = (field.selectionStart === v.length);
+      field.value = n;
+      if(diUjung){ try{ field.setSelectionRange(n.length, n.length); }catch(_){} }
+    }
+    return n;
+  }
+
+  /* Dipanggil dari mana pun isi kolom berubah — termasuk tombol Löschen di
+     layar, yang dulu tidak pernah memeriksanya. Membetulkan kelebihan huruf
+     dengan tombol itu membuat kolom berisi persis kata yang diminta, dan
+     kata itu tetap tidak terhitung. */
+  function cekSelesai(v){
+    if(st.mode !== "latih" || st.lock || !pool.length) return false;
+    if(v !== target()) return false;
+    st.lock = true; st.selesaiPada = v.length; st.sela = "";
+    st.done++;
+    var w = cur();
+    var d = recordWord(w, st.mistakes);
+    var justMastered = (d > 0 && boxOf(w) >= MASTER);
+    bumpDaily();
+    var base = scopeWords();
+    scopeDone = countMastered(base); scopeTotal = base.length;
+    stats();
+    setTimeout(nextWord, justMastered ? 650 : 420);
+    return true;
+  }
+
   function loadWord(){
     var w = cur();
     if(!w) return;
@@ -2099,9 +2179,17 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
     pos.textContent = (st.i+1) + " / " + pool.length; meanEl.appendChild(pos);
     ipaEl.textContent = "[" + w[2] + "]";
     respEl.textContent = w[3];
+    var sela = st.sela || "";
     field.value = ""; st.prev = 0; st.lock = false; st.mistakes = 0;
+    st.sela = ""; st.selesaiPada = 0;
     paint(); stats();
     if(st.auto) speak(w[0], false);
+    /* huruf yang kamu ketik selama jeda tadi dipakai untuk kata ini,
+       tidak dibuang seperti dulu */
+    if(sela){
+      field.value = sela;
+      field.dispatchEvent(new Event("input", { bubbles:true }));
+    }
   }
 
   function nextWord(){
@@ -2119,30 +2207,24 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
   }
 
   field.addEventListener("input", function(){
-    var v = field.value;
+    var v = rapikan();
+    /* Kata sebelumnya sudah selesai dan kata berikutnya sedang disiapkan.
+       Huruf yang kamu ketik di sela itu dulu DIBUANG dan dihitung salah —
+       pengetik cepat kehilangan huruf sekaligus kena potong akurasi.
+       Sekarang disimpan untuk kata berikutnya dan tidak dihitung salah. */
+    if(st.lock){ st.sela = v.slice(st.selesaiPada); return; }
+    var t = target();
     if(v.length > st.prev){
       var c = v[v.length-1];
       st.keys++;
       if(SPECIAL.indexOf(c) !== -1) st.uml++;
       if(st.mode === "latih"){
-        if(c === target()[v.length-1]) st.ok++; else st.mistakes++;
+        if(t && c === t[v.length-1]) st.ok++; else st.mistakes++;
       } else { st.ok++; }
     }
     st.prev = v.length;
     paint();
-    if(st.mode === "latih" && !st.lock && v === target()){
-      st.lock = true; st.done++;
-      var w = cur();
-      var d = recordWord(w, st.mistakes);
-      var justMastered = (d > 0 && boxOf(w) >= MASTER);
-      bumpDaily();
-      var base = scopeWords();
-      scopeDone = countMastered(base); scopeTotal = base.length;
-      stats();
-      setTimeout(nextWord, justMastered ? 650 : 420);
-    } else {
-      stats();
-    }
+    if(!cekSelesai(v)) stats();
   });
 
   function insert(ch){
@@ -2161,6 +2243,7 @@ footer code{font-family:"JetBrains Mono",monospace;font-size:12px;background:var
     field.focus();
     try{ field.setSelectionRange(s,s); }catch(_){}
     st.prev = field.value.length; paint();
+    cekSelesai(rapikan());
   }
   board.addEventListener("click", function(ev){
     var b = ev.target.closest(".kbd"); if(!b) return;
